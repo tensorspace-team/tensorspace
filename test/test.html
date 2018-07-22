@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="lib/three.min.js"></script>
+    <script src="lib/stats.min.js"></script>
+    <script src="lib/TrackballControls.js"></script>
+    <script src="../build/vis.js"></script>
+
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+
+    let container = document.getElementById("container");
+
+    let model = new VIS.model.Sequential(container);
+
+    model.add(new VIS.layers.Input({
+        shape: [32, 32, 1],
+        padding: 1,
+        name: "initInput"
+    }));
+    model.add(new VIS.layers.Conv2d({
+		kernelSize: 5,
+		filters: 8,
+		strides: 1,
+        name: "conv2d1"
+    }));
+    model.add(new VIS.layers.MaxPool2d({
+		poolSize: [2, 2],
+		strides: [2, 2],
+        name: "maxPool2d1"
+    }));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 2,
+		filters: 6,
+		strides: 1,
+        name: "conv2d2"
+	}));
+//    model.add(new VIS.layers.Flatten());
+    model.add(new VIS.layers.Dense({
+		units: 30,
+        name: "dense"
+	}));
+
+    model.init();
+
+//    setTimeout(function() {
+//		model.dispose();
+//    }, 4000)
+
+</script>
+
+</body>
+</html>
