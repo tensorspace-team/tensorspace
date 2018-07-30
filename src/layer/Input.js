@@ -24,8 +24,8 @@ Input.prototype = Object.assign( Object.create( Layer.prototype ), {
 		let initX = - this.width / 2;
 		let initY = - this.height / 2;
 
-		// let inputGroup = new THREE.Group();
-		// inputGroup.position.set(this.center.x, this.center.y, this.center.z);
+		this.neuralGroup = new THREE.Group();
+		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
 		for (let i = 0; i < this.width; i++) {
 			for (let j = 0; j < this.height; j++) {
@@ -42,18 +42,14 @@ Input.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 				this.neuralList.push(cube);
 
-				cube.position.set(1.3 * (i + initX) + this.center.x, this.center.y, 1.3 * (j + initY) + this.center.z);
+				cube.position.set(1.3 * (i + initX), 0, 1.3 * (j + initY));
 
-				// cube.position.set(1.3 * (i + initX), 0, 1.3 * (j + initY));
-
-				this.scene.add(cube);
-
-				// inputGroup.add(cube);
+				this.neuralGroup.add(cube);
 
 			}
 		}
 
-		// this.scene.add(inputGroup);
+		this.scene.add(this.neuralGroup);
 
 	},
 

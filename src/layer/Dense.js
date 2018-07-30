@@ -18,6 +18,9 @@ Dense.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let count = 0;
 
+		this.neuralGroup = new THREE.Group();
+		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
+
 		for (let i = 0; i < this.units; i++) {
 
 			let geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -32,14 +35,16 @@ Dense.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.neuralList.push(cube);
 
-			cube.position.set(1.3 * (i + initX) + this.center.x, this.center.y, this.center.z);
+			cube.position.set(1.3 * (i + initX), 0, 0);
 			cube.elementType = "neural";
 			cube.layerIndex = this.layerIndex;
 			cube.positionIndex = count;
 			count++;
 
-			this.scene.add(cube);
+			this.neuralGroup.add(cube);
 		}
+
+		this.scene.add(this.neuralGroup);
 	},
 
 	assemble: function(layerIndex) {

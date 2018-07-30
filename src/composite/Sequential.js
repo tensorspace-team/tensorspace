@@ -166,6 +166,12 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 			}
 		}
 
+	},
+
+	flatten: function() {
+
+
+
 	}
 
 });

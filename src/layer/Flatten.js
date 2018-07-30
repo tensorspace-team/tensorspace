@@ -24,16 +24,21 @@ Flatten.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let initX = - this.length / 2;
 
+		this.neuralGroup = new THREE.Group();
+		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
+
 		for (let i = 0; i < this.length; i++) {
 
 			let cube = new THREE.Mesh(geometry, material);
 
 			this.neuralList.push(cube);
 
-			cube.position.set(1.3 * (i + initX) + this.center.x, this.center.y, this.center.z);
+			cube.position.set(1.3 * (i + initX), 0, 0);
 
-			this.scene.add(cube);
+			this.neuralGroup.add(cube);
 		}
+
+		this.scene.add(this.neuralGroup);
 
 	},
 

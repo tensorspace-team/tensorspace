@@ -25,12 +25,15 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		console.log("init conv2d");
 
 		this.center = center;
-		this.fmCenters = calculateFmCenters(this.center, this.filters);
+		this.fmCenters = calculateFmCenters(this.filters);
 
 		let initX = -this.width / 2;
 		let initY = -this.height / 2;
 
 		let count = 0;
+
+		this.neuralGroup = new THREE.Group();
+		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
 		for (let i = 0; i < this.filters; i++) {
 
@@ -58,15 +61,17 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 					cube.positionIndex = count;
 					count++;
 
-					this.scene.add(cube);
+					this.neuralGroup.add(cube);
 
 				}
 
 			}
 
+			this.scene.add(this.neuralGroup);
+
 		}
 
-		function calculateFmCenters(layerCenter, filters) {
+		function calculateFmCenters(filters) {
 
 			let fmCenters = [];
 
@@ -76,9 +81,9 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 				let xTranslate = initXTranslate + 40 * i;
 				let fmCenter = {};
-				fmCenter.x = layerCenter.x + xTranslate;
-				fmCenter.y = layerCenter.y;
-				fmCenter.z = layerCenter.z;
+				fmCenter.x = xTranslate;
+				fmCenter.y = 0;
+				fmCenter.z = 0;
 				fmCenters.push(fmCenter);
 
 			}

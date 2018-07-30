@@ -10,6 +10,7 @@ function Layer(config) {
 	this.activation = undefined;
 	this.neuralNum = undefined;
 	this.outputShape = [];
+	this.neuralGroup = undefined;
 
 	this.name = config.name;
 
@@ -41,7 +42,7 @@ Layer.prototype = {
 			heightLightNeuralList.push(relativaNeruals[i]);
 		}
 
-		let startPosition = this.neuralList[positionIndex].position;
+		let startPosition = this.neuralList[positionIndex].getWorldPosition();
 
 		for (let i = 0; i < relativaNeruals.length; i++) {
 
@@ -49,7 +50,7 @@ Layer.prototype = {
 			lineColors.push(new THREE.Color( 1, 1, 1 ));
 
 			lineVertices.push(startPosition);
-			lineVertices.push(relativaNeruals[i].position);
+			lineVertices.push(relativaNeruals[i].getWorldPosition());
 
 		}
 

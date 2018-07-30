@@ -27,8 +27,8 @@ MaxPool2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		for (let i = 0; i < this.lastLayer.fmCenters.length; i++) {
 			let fmCenter = {};
 			fmCenter.x = this.lastLayer.fmCenters[i].x;
-			fmCenter.y = center.y;
-			fmCenter.z = this.lastLayer.fmCenters[i].z;
+			fmCenter.y = 0;
+			fmCenter.z = 0;
 			this.fmCenters.push(fmCenter);
 		}
 
@@ -36,6 +36,9 @@ MaxPool2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		let initY = -this.height / 2;
 
 		let count = 0;
+
+		this.neuralGroup = new THREE.Group();
+		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
 		for (let i = 0; i < this.fmNum; i++) {
 
@@ -63,13 +66,15 @@ MaxPool2d.prototype = Object.assign(Object.create(Layer.prototype), {
 					cube.positionIndex = count;
 					count++;
 
-					this.scene.add(cube);
+					this.neuralGroup.add(cube);
 
 				}
 
 			}
 
 		}
+
+		this.scene.add(this.neuralGroup);
 
 	},
 
