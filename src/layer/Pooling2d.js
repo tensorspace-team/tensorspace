@@ -1,7 +1,7 @@
 import { MinAlpha } from "../utils/Constant";
 import Layer from './Layer';
 
-function MaxPool2d(config) {
+function Pooling2d(config) {
 
 	Layer.call(this, config);
 
@@ -19,7 +19,7 @@ function MaxPool2d(config) {
 
 }
 
-MaxPool2d.prototype = Object.assign(Object.create(Layer.prototype), {
+Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function (center) {
 
@@ -130,4 +130,4 @@ MaxPool2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 });
 
-export default MaxPool2d;
+export default Pooling2d;

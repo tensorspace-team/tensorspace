@@ -5,7 +5,7 @@ import Flatten from './layer/Flatten';
 import Reshape from './layer/Reshape';
 import Input from './layer/Input';
 import Output from './layer/Output';
-import MaxPool2d from './layer/MaxPool2d';
+import Pooling2d from './layer/Pooling2d';
 
 let layers = {
 	Input: Input,
@@ -14,7 +14,7 @@ let layers = {
 	Dense: Dense,
 	Flatten: Flatten,
 	Reshape: Reshape,
-	MaxPool2d: MaxPool2d
+	Pooling2d: Pooling2d
 };
 
 let model = {
