@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="../lib/three.min.js"></script>
+    <script src="../lib/stats.min.js"></script>
+    <script src="../lib/tween.min.js"></script>
+    <script src="../lib/TrackballControls.js"></script>
+    <script src="../lib/tfjs.min.js"></script>
+    <script src="../lib/signature_pad.min.js"></script>
+    <script src="../../build/vis.js"></script>
+
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wrapper {
+            position: fixed;
+            left: 0;
+            top: 200px;
+            width: 224px;
+            height: 224px;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            z-index: 100;
+            background-color: white;
+        }
+
+        .signature-pad {
+            position: absolute;
+            left: 0;
+            top: 0;
+            border: 1px solid #000;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="wrapper">
+    <canvas id="signature-pad" class="signature-pad" width=224 height=224></canvas>
+</div>
+<div id="container"></div>
+
+<script>
+
+	var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+		minWidth: 10,
+		backgroundColor: 'rgba(255, 255, 255, 0)',
+		penColor: 'rgb(0, 0, 0)',
+		onEnd: getImage
+	});
+
+	function getImage() {
+		var canvas = document.getElementById("signature-pad");
+		var context = canvas.getContext('2d');
+		var imgData = context.getImageData(0,0,canvas.width,canvas.height);
+
+		let signatureData = [];
+
+		for (let i = 0; i < 224; i += 8) {
+
+		    for (let j = 3; j < 896; j += 32) {
+
+				signatureData.push(imgData.data[896 * i + j] / 255);
+
+			}
+
+		}
+
+		model.predict(signatureData);
+
+	}
+
+</script>
+
+<script>
+
+	let container = document.getElementById("container");
+
+	let model = new VIS.model.Sequential(container);
+
+	model.add(new VIS.layers.Input({
+		shape: [28, 28, 1],
+		padding: 1,
+		name: "initInput"
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 5,
+		filters: 6,
+		strides: 1,
+		name: "conv2d1"
+	}));
+	model.add(new VIS.layers.MaxPool2d({
+		poolSize: [2, 2],
+		strides: [2, 2],
+		name: "maxPool2d1"
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 5,
+		filters: 16,
+		strides: 1,
+		name: "conv2d2"
+	}));
+	model.add(new VIS.layers.MaxPool2d({
+		poolSize: [2, 2],
+		strides: [2, 2],
+		name: "maxPool2d2"
+	}));
+	model.add(new VIS.layers.Dense({
+		units: 120,
+		name: "dense1"
+	}));
+	model.add(new VIS.layers.Dense({
+		units: 84,
+		name: "dense2"
+	}));
+	model.add(new VIS.layers.Dense({
+		units: 10,
+		name: "dense3"
+	}));
+
+	model.load('./tfjsModel/mnist.json', {
+		type: "tfjs"
+	});
+
+	model.init();
+
+</script>
+
+</body>
+</html>
