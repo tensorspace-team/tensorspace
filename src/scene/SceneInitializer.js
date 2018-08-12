@@ -86,6 +86,7 @@ SceneInitializer.prototype = {
 
 		this.cameraControls.update(delta);
 		this.stats.update();
+		TWEEN.update();
 
 		this.renderer.render(this.scene, this.camera);
 

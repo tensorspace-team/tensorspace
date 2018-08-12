@@ -17,7 +17,6 @@ Reshape.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	}
 
-
 } );
 
 export default Reshape;

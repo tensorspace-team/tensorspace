@@ -6,7 +6,9 @@
 
     <script src="lib/three.min.js"></script>
     <script src="lib/stats.min.js"></script>
+    <script src="lib/tween.min.js"></script>
     <script src="lib/TrackballControls.js"></script>
+    <script src="lib/tfjs.min.js"></script>
     <script src="../build/vis.js"></script>
 
     <style>
@@ -64,11 +66,39 @@
         name: "dense"
 	}));
 
-    model.init();
+//    model.loadModel("./tfjsModel/mnist.json", {
+//    	type: "tfjs"
+//    });
+
+//    model.test();
+
+    model.load('./tfjsModel/mnist.json', {
+    	type: "tfjs"
+    });
+
+    model.init(predictMnist);
 
 //    setTimeout(function() {
 //		model.dispose();
 //    }, 4000)
+
+//    setTimeout(function(){
+//    	model.flatten();
+//    }, 3000);
+
+//    setTimeout(function() {
+//    	model.restoreFlatten();
+//    }, 10000);
+
+    function predictMnist() {
+
+    	setTimeout(function() {
+			let mockTensor = tf.randomNormal([1, 32, 32, 1]);
+			let inputValue = mockTensor.dataSync();
+			model.predict(inputValue);
+        }, 5000);
+
+    }
 
 </script>
 

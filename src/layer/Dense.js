@@ -1,3 +1,4 @@
+import { MinAlpha } from "../utils/Constant";
 import Layer from './Layer';
 
 function Dense(config) {
@@ -5,6 +6,7 @@ function Dense(config) {
 	Layer.call(this, config);
 
 	this.units = config.units;
+	this.depth = 1;
 
 }
 
@@ -25,9 +27,9 @@ Dense.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			let geometry = new THREE.BoxGeometry(1, 1, 1);
 			let material = new THREE.MeshBasicMaterial({
-				color: 0xffffff,
-				shading: THREE.FlatShading,
+				color: new THREE.Color( MinAlpha, MinAlpha, MinAlpha ),
 				vertexColors: THREE.VertexColors,
+				flatShading: true,
 				transparent: true
 			});
 

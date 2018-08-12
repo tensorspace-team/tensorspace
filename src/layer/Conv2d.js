@@ -1,3 +1,4 @@
+import { MinAlpha } from "../utils/Constant";
 import Layer from './Layer';
 
 function Conv2d(config) {
@@ -39,15 +40,15 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			let fmCenter = this.fmCenters[i];
 
-			for (let j = 0; j < this.width; j++) {
+			for (let j = 0; j < this.height; j++) {
 
-				for (let k = 0; k < this.height; k++) {
+				for (let k = 0; k < this.width; k++) {
 
 					let geometry = new THREE.BoxGeometry(1, 1, 1);
 					let material = new THREE.MeshBasicMaterial({
-						color: 0xffffff,
-						shading: THREE.FlatShading,
+						color: new THREE.Color( MinAlpha, MinAlpha, MinAlpha ),
 						vertexColors: THREE.VertexColors,
+						flatShading: true,
 						transparent: true
 					});
 
@@ -55,7 +56,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 					this.neuralList.push(cube);
 
-					cube.position.set(1.3 * (j + initX) + fmCenter.x, fmCenter.y, 1.3 * (k + initY) + fmCenter.z);
+					cube.position.set(1.3 * (k + initX) + fmCenter.x, fmCenter.y, 1.3 * (j + initY) + fmCenter.z);
 					cube.elementType = "neural";
 					cube.layerIndex = this.layerIndex;
 					cube.positionIndex = count;

@@ -1,3 +1,5 @@
+import colorUtils from '../Utils/ColorUtils';
+
 function Layer(config) {
 
 	this.scene = undefined;
@@ -5,7 +7,7 @@ function Layer(config) {
 	this.center = undefined;
 	this.nextLayer = undefined;
 	this.lastLayer = undefined;
-	this.neuralValue = [];
+	this.neuralValue = undefined;
 	this.neuralList = [];
 	this.activation = undefined;
 	this.neuralNum = undefined;
@@ -13,6 +15,9 @@ function Layer(config) {
 	this.neuralGroup = undefined;
 
 	this.name = config.name;
+
+	// output index to fit the layer
+	this.resourceOutputIndex = undefined;
 
 }
 
@@ -74,6 +79,21 @@ Layer.prototype = {
 		return neurals;
 
 	},
+
+	updateValue: function(value) {
+
+		this.neuralValue = value;
+
+		let colorList = colorUtils.getColors(value);
+
+		for (let i = 0; i < colorList.length; i++) {
+
+			let colorTriple = colorList[i];
+			this.neuralList[i].material.color.setRGB(colorTriple[0], colorTriple[1], colorTriple[2]);
+
+		}
+
+	}
 
 };
 

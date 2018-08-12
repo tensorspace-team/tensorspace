@@ -7,6 +7,10 @@ function Sequential(container) {
 	this.layers = [];
 	this.heightLightNeural = [];
 	this.layerHighLighted = false;
+	this.model = undefined;
+	this.loadModel = false;
+
+	this.inputValue = undefined;
 
 }
 
@@ -26,12 +30,32 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		layer.assemble(this.layers.length);
 	},
 
-	init: function () {
+	init: function (callback) {
+
+		if (this.hasLoader) {
+			let self = this;
+			this.loader.load().then(function() {
+				self.initVisModel();
+				if (callback !== undefined) {
+					callback();
+				}
+			});
+		} else {
+			this.initVisModel();
+			if (callback !== undefined) {
+				callback();
+			}
+		}
+	},
+
+	initVisModel: function() {
 		this.updateCamera(this.layers.length);
 		this.createModel();
 		this.registerModelEvent();
 		this.registerSequentialEvent();
 		this.animate();
+
+		this.isInitialized = true;
 	},
 
 	// 根据配置情况创建模型
@@ -92,6 +116,27 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 	},
 
+	initLayerOutputIndex: function() {
+
+		for (let i = 1; i < this.layers.length; i++) {
+
+			this.layers[i].resourceOutputIndex = i - 1;
+
+		}
+
+	},
+
+	initLayerOutputIndexFromName: function(outputConfig) {
+
+		for (let i = 1; i < this.layers.length; i++) {
+
+			let layerName = this.layers[i].name;
+			this.layers[i].resourceOutputIndex = outputConfig[layerName];
+
+		}
+
+	},
+
 	onMouseMove: function (event) {
 
 		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -137,8 +182,6 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 					lightLightParameters.heightLightList[j].scale.set(1.5, 1.5, 1.5);
 
-					lightLightParameters.heightLightList[j].material.color.setHex( 0x000000 );
-
 					model.heightLightNeural.push(lightLightParameters.heightLightList[j]);
 				}
 
@@ -170,7 +213,129 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 	flatten: function() {
 
+		let init = {
+			angle: 0,
+			interval: 0
+		};
+		let end = {
+			angle: Math.PI / 2,
+			interval: 1
+		};
 
+		let fmTween = new TWEEN.Tween(init)
+			.to(end, 2000);
+
+		var model = this;
+
+		fmTween.onUpdate(function () {
+
+			for (let i = 0; i < model.layers.length; i++) {
+				model.layers[i].neuralGroup.rotation.x = init.angle;
+				// 参数1待定，最好是可以动态调整
+				model.layers[i].neuralGroup.position.y += 1 * (i - Math.floor(model.layers.length / 2));
+			}
+
+		}).onStart(function () {
+			console.log("start flatten");
+		});
+
+		fmTween.start();
+
+	},
+
+	restoreFlatten: function() {
+
+		let init = {
+			angle: Math.PI / 2,
+			interval: 1
+		};
+		let end = {
+			angle: 0,
+			interval: 0
+		};
+
+		let fmTween = new TWEEN.Tween(init)
+			.to(end, 2000);
+
+		var model = this;
+
+		fmTween.onUpdate(function () {
+
+			for (let i = 0; i < model.layers.length; i++) {
+				model.layers[i].neuralGroup.rotation.x = init.angle;
+				model.layers[i].neuralGroup.position.y -= 1 * (i - Math.floor(model.layers.length / 2));
+			}
+
+		}).onStart(function () {
+			console.log("start restore flatten");
+		});
+
+		fmTween.start();
+
+	},
+
+	predict: function(input) {
+
+		this.inputValue = input;
+
+		let batchSize = [1];
+		let inputShape = this.layers[0].shape;
+		let predictTensorShape = batchSize.concat(inputShape);
+
+		let predictTensor = tf.tensor(input, predictTensorShape);
+
+		this.predictResult = this.resource.predict(predictTensor);
+		this.updateLayerVis();
+
+	},
+
+	updateLayerVis: function() {
+
+		this.updateInputVis();
+		this.updateLayerPredictVis();
+	},
+
+	updateLayerPredictVis: function() {
+
+		for (let i = 1; i < this.layers.length; i++){
+
+			let resourceOutputIndex = this.layers[i].resourceOutputIndex;
+			let resourceOutputValues = this.predictResult[resourceOutputIndex].dataSync();
+
+			let layerOutputValues;
+			if (this.layers[i].depth !== 1) {
+
+				layerOutputValues = [];
+
+				for (let j = 0; j < this.layers[i].depth; j++) {
+
+					let referredIndex = j;
+
+					while (referredIndex < resourceOutputValues.length) {
+
+						layerOutputValues.push(resourceOutputValues[referredIndex]);
+
+						referredIndex += this.layers[i].depth;
+					}
+
+				}
+
+			} else {
+
+				layerOutputValues = resourceOutputValues;
+
+			}
+
+			this.layers[i].updateValue( layerOutputValues );
+
+		}
+
+	},
+
+	updateInputVis: function() {
+
+		let inputLayer = this.layers[0];
+		inputLayer.updateValue( this.inputValue );
 
 	}
 

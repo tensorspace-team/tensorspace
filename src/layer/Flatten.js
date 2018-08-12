@@ -1,3 +1,4 @@
+import { MinAlpha } from "../utils/Constant";
 import Layer from './Layer';
 
 function Flatten() {
@@ -5,6 +6,7 @@ function Flatten() {
 	Layer.call(this, config);
 
 	this.length = undefined;
+	this.depth = 1;
 
 }
 
@@ -16,9 +18,9 @@ Flatten.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let geometry = new THREE.BoxGeometry(1, 1, 1);
 		let material = new THREE.MeshBasicMaterial({
-			color: 0xffffff,
-			shading: THREE.FlatShading,
+			color: new THREE.Color( MinAlpha, MinAlpha, MinAlpha ),
 			vertexColors: THREE.VertexColors,
+			flatShading: true,
 			transparent: true
 		});
 

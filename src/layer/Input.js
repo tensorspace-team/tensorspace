@@ -1,4 +1,5 @@
 import Layer from './Layer';
+import { MinAlpha } from "../utils/Constant";
 
 function Input(config) {
 
@@ -27,14 +28,14 @@ Input.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		for (let i = 0; i < this.width; i++) {
-			for (let j = 0; j < this.height; j++) {
+		for (let i = 0; i < this.height; i++) {
+			for (let j = 0; j < this.width; j++) {
 
 				let geometry = new THREE.BoxGeometry(1, 1, 1);
 				let material = new THREE.MeshBasicMaterial({
-					color: 0xffffff,
-					shading: THREE.FlatShading,
+					color: new THREE.Color( MinAlpha, MinAlpha, MinAlpha ),
 					vertexColors: THREE.VertexColors,
+					flatShading: true,
 					transparent: true
 				});
 
@@ -42,7 +43,7 @@ Input.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 				this.neuralList.push(cube);
 
-				cube.position.set(1.3 * (i + initX), 0, 1.3 * (j + initY));
+				cube.position.set(1.3 * (j + initX), 0, 1.3 * (i + initY));
 
 				this.neuralGroup.add(cube);
 
