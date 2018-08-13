@@ -26,7 +26,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		console.log("init conv2d");
 
 		this.center = center;
-		this.fmCenters = calculateFmCenters(this.filters);
+		this.fmCenters = calculateFmCenters(this.filters, this.width);
 
 		let initX = -this.width / 2;
 		let initY = -this.height / 2;
@@ -72,15 +72,19 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
-		function calculateFmCenters(filters) {
+		function calculateFmCenters(filters, width) {
 
 			let fmCenters = [];
 
-			let initXTranslate = -40 * (filters - 1) / 2;
+			let fmLength = 1.3 * width;
+			let fmInterval = 10;
+			let initXTranslate;
+
+			initXTranslate = - Math.floor((filters - 1) / 2) * (fmLength + fmInterval);
 
 			for (let i = 0; i < filters; i++) {
 
-				let xTranslate = initXTranslate + 40 * i;
+				let xTranslate = initXTranslate + (fmLength + fmInterval) * i;
 				let fmCenter = {};
 				fmCenter.x = xTranslate;
 				fmCenter.y = 0;
