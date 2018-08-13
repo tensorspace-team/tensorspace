@@ -1,4 +1,5 @@
 import { MinAlpha } from "../utils/Constant";
+import { NeuralBoxLength } from "../utils/Constant";
 import Layer from './Layer';
 
 function Conv2d(config) {
@@ -56,7 +57,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 					this.neuralList.push(cube);
 
-					cube.position.set(1.3 * (k + initX) + fmCenter.x, fmCenter.y, 1.3 * (j + initY) + fmCenter.z);
+					cube.position.set(NeuralBoxLength * (k + initX) + fmCenter.x, fmCenter.y, NeuralBoxLength * (j + initY) + fmCenter.z);
 					cube.elementType = "neural";
 					cube.layerIndex = this.layerIndex;
 					cube.positionIndex = count;
@@ -76,7 +77,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			let fmCenters = [];
 
-			let fmLength = 1.3 * width;
+			let fmLength = NeuralBoxLength * width;
 			let fmInterval = 10;
 			let initXTranslate;
 

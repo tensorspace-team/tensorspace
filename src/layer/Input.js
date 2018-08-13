@@ -1,4 +1,5 @@
 import Layer from './Layer';
+import { NeuralBoxLength } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
 
 function Input(config) {
@@ -43,7 +44,7 @@ Input.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 				this.neuralList.push(cube);
 
-				cube.position.set(1.3 * (j + initX), 0, 1.3 * (i + initY));
+				cube.position.set(NeuralBoxLength * (j + initX), 0, NeuralBoxLength * (i + initY));
 
 				this.neuralGroup.add(cube);
 

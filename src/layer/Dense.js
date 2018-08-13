@@ -1,4 +1,5 @@
 import { MinAlpha } from "../utils/Constant";
+import { NeuralBoxLength } from "../utils/Constant";
 import Layer from './Layer';
 
 function Dense(config) {
@@ -37,7 +38,7 @@ Dense.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.neuralList.push(cube);
 
-			cube.position.set(1.3 * (i + initX), 0, 0);
+			cube.position.set(NeuralBoxLength * (i + initX), 0, 0);
 			cube.elementType = "neural";
 			cube.layerIndex = this.layerIndex;
 			cube.positionIndex = count;
