@@ -225,7 +225,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		let fmTween = new TWEEN.Tween(init)
 			.to(end, 2000);
 
-		var model = this;
+		let model = this;
 
 		fmTween.onUpdate(function () {
 
@@ -257,7 +257,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		let fmTween = new TWEEN.Tween(init)
 			.to(end, 2000);
 
-		var model = this;
+		let model = this;
 
 		fmTween.onUpdate(function () {
 
@@ -337,6 +337,12 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		let inputLayer = this.layers[0];
 		inputLayer.updateValue( this.inputValue );
 
+	},
+
+	clear: function() {
+		for (let i = 0; i < this.layers.length; i++) {
+			this.layers[i].clear();
+		}
 	}
 
 });

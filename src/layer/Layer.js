@@ -1,3 +1,4 @@
+import { MinAlpha } from "../utils/Constant";
 import colorUtils from '../Utils/ColorUtils';
 
 function Layer(config) {
@@ -93,6 +94,12 @@ Layer.prototype = {
 
 		}
 
+	},
+
+	clear: function() {
+		for (let i = 0; i < this.neuralList.length; i++) {
+			this.neuralList[i].material.color.setRGB(MinAlpha, MinAlpha, MinAlpha);
+		}
 	}
 
 };

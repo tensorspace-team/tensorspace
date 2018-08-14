@@ -39,32 +39,32 @@
     let model = new VIS.model.Sequential(container);
 
     model.add(new VIS.layers.Input({
-        shape: [32, 32, 1],
+        shape: [150, 150, 1],
         padding: 1,
         name: "initInput"
     }));
-    model.add(new VIS.layers.Conv2d({
-		kernelSize: 5,
-		filters: 8,
-		strides: 1,
-        name: "conv2d1"
-    }));
-    model.add(new VIS.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2],
-        name: "maxPool2d1"
-    }));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 2,
-		filters: 6,
-		strides: 1,
-        name: "conv2d2"
-	}));
-//    model.add(new VIS.layers.Flatten());
-    model.add(new VIS.layers.Dense({
-		units: 30,
-        name: "dense"
-	}));
+//    model.add(new VIS.layers.Conv2d({
+//		kernelSize: 5,
+//		filters: 8,
+//		strides: 1,
+//        name: "conv2d1"
+//    }));
+//    model.add(new VIS.layers.Pooling2d({
+//		poolSize: [2, 2],
+//		strides: [2, 2],
+//        name: "maxPool2d1"
+//    }));
+//	model.add(new VIS.layers.Conv2d({
+//		kernelSize: 2,
+//		filters: 6,
+//		strides: 1,
+//        name: "conv2d2"
+//	}));
+////    model.add(new VIS.layers.Flatten());
+//    model.add(new VIS.layers.Dense({
+//		units: 30,
+//        name: "dense"
+//	}));
 
 //    model.loadModel("./tfjsModel/mnist.json", {
 //    	type: "tfjs"
@@ -72,11 +72,11 @@
 
 //    model.test();
 
-    model.load('./tfjsModel/mnist.json', {
-    	type: "tfjs"
-    });
+//    model.load('./tfjsModel/mnist.json', {
+//    	type: "tfjs"
+//    });
 
-    model.init(predictMnist);
+    model.init();
 
 //    setTimeout(function() {
 //		model.dispose();
