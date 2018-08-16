@@ -1,5 +1,5 @@
-import { MinAlpha } from "../utils/Constant";
-import colorUtils from '../Utils/ColorUtils';
+import { MinAlpha } from "../../utils/Constant";
+import colorUtils from '../../utils/ColorUtils';
 
 function Layer(config) {
 

@@ -1,22 +1,14 @@
-import Layer from './Layer';
+import PixelReshape from './pixel/PixelReshape';
+import MapReshape from './map/MapReshape';
 
 function Reshape(config) {
 
-	Layer.call(this, config);
-
-}
-
-Reshape.prototype = Object.assign( Object.create( Layer.prototype ), {
-
-	init: function() {
-
-
-	},
-
-	assemble: function(layerIndex) {
-
+	if (config.pixel) {
+		return new PixelReshape(config);
+	} else {
+		return new MapReshape(config);
 	}
 
-} );
+}
 
 export default Reshape;
