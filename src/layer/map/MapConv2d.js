@@ -45,7 +45,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 			let fmInterval = 10;
 			let initXTranslate;
 
-			initXTranslate = - Math.floor((filters - 1) / 2) * (fmLength + fmInterval);
+			initXTranslate = - (filters - 1) / 2 * (fmLength + fmInterval);
 
 			for (let i = 0; i < filters; i++) {
 

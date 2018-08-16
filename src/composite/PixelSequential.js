@@ -65,7 +65,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		let layersPos = calculateLayersPos(this.layers.length);
 
 		for (let i = 0; i < this.layers.length; i++) {
-			this.layers[i].init(layersPos[i], i + 1);
+			this.layers[i].init(layersPos[i]);
 		}
 
 		function calculateLayersPos(depth) {

@@ -16,7 +16,7 @@ function MapInput(config) {
 
 MapInput.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function(center, layerIndex) {
+	init: function(center) {
 
 		this.center = center;
 

@@ -20,10 +20,6 @@ function AbstractComposite( container ) {
 
 AbstractComposite.prototype = Object.assign(Object.create( SceneInitializer.prototype ), {
 
-	test: function() {
-		console.log(111);
-	},
-
 	load: function(url, config) {
 		if (config.type === "tfjs") {
 			this.loadTfjsModel(url, config);
