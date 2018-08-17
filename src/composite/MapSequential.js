@@ -110,11 +110,58 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 	},
 
-	predict: function() {
+	predict: function(input) {
+
+		this.inputValue = input;
+
+		let batchSize = [1];
+		let inputShape = this.layers[0].shape;
+		let predictTensorShape = batchSize.concat(inputShape);
+
+		let predictTensor = tf.tensor(input, predictTensorShape);
+
+		this.predictResult = this.resource.predict(predictTensor);
+		this.updateLayerVis();
+
+	},
+
+	updateLayerVis: function() {
+
+		this.updateInputVis();
+		this.updateLayerPredictVis();
 
 	},
 
 
+	updateInputVis: function() {
+		this.layers[0].updateValue(this.inputValue);
+	},
+
+	updateLayerPredictVis: function() {
+
+		console.log(222);
+
+		for (let i = 1; i < this.layers.length; i++) {
+
+			let predictValue = this.predictResult[i - 1].dataSync();
+
+			console.log(predictValue.length);
+
+			this.layers[i].updateValue(predictValue);
+
+		}
+
+	},
+
+	initLayerOutputIndex: function() {
+
+		for (let i = 1; i < this.layers.length; i++) {
+
+			this.layers[i].resourceOutputIndex = i - 1;
+
+		}
+
+	}
 
 });
 

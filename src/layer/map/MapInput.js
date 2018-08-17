@@ -1,5 +1,6 @@
 import MapLayer from './MapLayer';
 import FeatureMap from '../../elements/FeatureMap';
+import ColorUtils from '../../utils/ColorUtils';
 
 function MapInput(config) {
 
@@ -23,7 +24,7 @@ MapInput.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		let inputMap = new FeatureMap(this.width, this.height, this.center);
+		let inputMap = new FeatureMap(this.width, this.height, {x: 0, y: 0, z: 0});
 
 		this.fmList.push(inputMap);
 
@@ -39,7 +40,15 @@ MapInput.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.layerIndex = layerIndex;
 	},
 
-	updateValue: function() {
+	updateValue: function(value) {
+
+		let greyPixelArray = ColorUtils.getColors(value);
+
+		for (let i = 0; i < this.fmList.length; i++) {
+
+			this.fmList[i].updateGrayScale(greyPixelArray);
+
+		}
 
 	}
 

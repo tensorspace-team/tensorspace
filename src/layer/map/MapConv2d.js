@@ -1,5 +1,6 @@
 import MapLayer from './MapLayer';
 import FeatureMap from '../../elements/FeatureMap';
+import ColorUtils from '../../utils/ColorUtils';
 
 function MapConv2d(config) {
 
@@ -78,8 +79,33 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	updateValue: function() {
+	updateValue: function(value) {
 
+		let layerOutputValues = [];
+
+		for (let j = 0; j < this.depth; j++) {
+
+			let referredIndex = j;
+
+			while (referredIndex < value.length) {
+
+				layerOutputValues.push(value[referredIndex]);
+
+				referredIndex += this.depth;
+			}
+
+		}
+
+		let greyPixelArray = ColorUtils.getColors(layerOutputValues);
+
+		let featureMapSize = this.width * this.height;
+
+		for (let i = 0; i < this.depth; i++) {
+
+			let featureMap = this.fmList[i];
+			featureMap.updateGrayScale(greyPixelArray.slice(i * featureMapSize, (i + 1) * featureMapSize));
+
+		}
 	}
 
 });

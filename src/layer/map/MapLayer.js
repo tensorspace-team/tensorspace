@@ -34,21 +34,6 @@ MapLayer.prototype = {
 
 	setEnvironment: function(scene) {
 		this.scene = scene;
-	},
-
-	updateValue: function(value) {
-
-		this.neuralValue = value;
-
-		let colorList = ColorUtils.getColors(value);
-
-		for (let i = 0; i < colorList.length; i++) {
-
-			let colorTriple = colorList[i];
-			this.neuralList[i].material.color.setRGB(colorTriple[0], colorTriple[1], colorTriple[2]);
-
-		}
-
 	}
 
 };

@@ -1,3 +1,5 @@
+import ColorUtils from '../utils/ColorUtils';
+
 function FeatureMap(width, height, center) {
 
 	this.fmWidth = width;
@@ -13,7 +15,7 @@ FeatureMap.prototype = {
 
 	initFeatureMap: function() {
 
-		let geometry = new THREE.BoxGeometry(this.fmWidth, 1, this.fmHeight);
+		let geometry = new THREE.BoxGeometry(this.fmWidth, 1, this.fmHeight, this.fmWidth, 1, this.fmHeight);
 		let material = new THREE.MeshBasicMaterial({
 			vertexColors: THREE.FaceColors
 		});
@@ -33,10 +35,13 @@ FeatureMap.prototype = {
 	updateGrayScale: function(greyPixelArray) {
 
 		for ( let i = 0; i < greyPixelArray.length; i ++ ) {
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + 2 * i ].color.setRGB( greyPixelArray[i], greyPixelArray[i], greyPixelArray[i] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + 2 * i + 1 ].color.setRGB( greyPixelArray[i], greyPixelArray[i], greyPixelArray[i] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i ].color.setRGB( greyPixelArray[i], greyPixelArray[i], greyPixelArray[i] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i + 1 ].color.setRGB( greyPixelArray[i], greyPixelArray[i], greyPixelArray[i] );
+
+			let rgb = greyPixelArray[i];
+
+			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + 2 * i ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + 2 * i + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
 		}
 		this.featureMap.geometry.colorsNeedUpdate = true;
 
