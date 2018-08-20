@@ -48,6 +48,9 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 				fmCenter.z = this.lastFmCenters[i].z;
 				this.fmCenters.push(fmCenter);
 			}
+
+			let count = 0;
+
 			for (let i = 0; i < this.fmCenters.length; i++) {
 
 				for (let j = 0; j < this.width; j++) {
@@ -64,19 +67,13 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 						let cube = new THREE.Mesh(geometry, material);
 
-						if (!this.isPadding(j, i)) {
-							cube.isPadding = false;
-							this.neuralList.push(cube);
-						} else {
-							cube.isPadding = true;
-						}
-
 						cube.position.set(NeuralBoxLength * (k + initX) + this.center.x, this.center.y, NeuralBoxLength * (j + initY) + this.center.z);
 						cube.elementType = "neural";
 						cube.layerIndex = this.layerIndex;
 						cube.positionIndex = count;
 						count++;
 
+						this.neuralList.push(cube);
 						this.neuralGroup.add(cube);
 
 					}
@@ -86,6 +83,8 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 			}
 
 		} else {
+
+			let count = 0;
 
 			for (let i = 0; i < this.width; i++) {
 
@@ -101,19 +100,13 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 					let cube = new THREE.Mesh(geometry, material);
 
-					if (!this.isPadding(j, i)) {
-						cube.isPadding = false;
-						this.neuralList.push(cube);
-					} else {
-						cube.isPadding = true;
-					}
-
 					cube.position.set(NeuralBoxLength * (j + initX) + this.center.x, this.center.y, NeuralBoxLength * (i + initY) + this.center.z);
 					cube.elementType = "neural";
 					cube.layerIndex = this.layerIndex;
 					cube.positionIndex = count;
 					count++;
 
+					this.neuralList.push(cube);
 					this.neuralGroup.add(cube);
 
 				}

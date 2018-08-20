@@ -6,6 +6,7 @@ import Reshape from './layer/Reshape';
 import Input from './layer/Input';
 import Output from './layer/Output';
 import Pooling2d from './layer/Pooling2d';
+import Padding2d from './layer/Padding2d';
 
 let layers = {
 	Input: Input,
@@ -14,7 +15,8 @@ let layers = {
 	Dense: Dense,
 	Flatten: Flatten,
 	Reshape: Reshape,
-	Pooling2d: Pooling2d
+	Pooling2d: Pooling2d,
+	Padding2d: Padding2d
 };
 
 let model = {

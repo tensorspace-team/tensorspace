@@ -40,49 +40,53 @@
 	let container = document.getElementById("container");
 
     let model = new VIS.model.Sequential(container, {
-//    	pixel: true
+    	pixel: true
     });
 
     model.add(new VIS.layers.Input({
         shape: [28, 28, 1],
         padding: 1,
         name: "initInput",
-//        pixel: true
+        pixel: true
     }));
-    model.add(new VIS.layers.Conv2d({
-		kernelSize: 5,
-		filters: 6,
-		strides: 1,
-        name: "conv2d1"
-    }));
-    model.add(new VIS.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2],
-        name: "maxPool2d1"
-    }));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 5,
-		filters: 16,
-		strides: 1,
-		name: "conv2d2"
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2],
+        pixel: true
 	}));
-	model.add(new VIS.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2],
-		name: "maxPool2d2"
-	}));
-	model.add(new VIS.layers.Dense({
-		units: 120,
-		name: "dense"
-	}));
-	model.add(new VIS.layers.Dense({
-		units: 84,
-		name: "dense"
-	}));
-	model.add(new VIS.layers.Dense({
-		units: 10,
-		name: "dense"
-	}));
+//    model.add(new VIS.layers.Conv2d({
+//		kernelSize: 5,
+//		filters: 6,
+//		strides: 1,
+//        name: "conv2d1"
+//    }));
+//    model.add(new VIS.layers.Pooling2d({
+//		poolSize: [2, 2],
+//		strides: [2, 2],
+//        name: "maxPool2d1"
+//    }));
+//	model.add(new VIS.layers.Conv2d({
+//		kernelSize: 5,
+//		filters: 16,
+//		strides: 1,
+//		name: "conv2d2"
+//	}));
+//	model.add(new VIS.layers.Pooling2d({
+//		poolSize: [2, 2],
+//		strides: [2, 2],
+//		name: "maxPool2d2"
+//	}));
+//	model.add(new VIS.layers.Dense({
+//		units: 120,
+//		name: "dense"
+//	}));
+//	model.add(new VIS.layers.Dense({
+//		units: 84,
+//		name: "dense"
+//	}));
+//	model.add(new VIS.layers.Dense({
+//		units: 10,
+//		name: "dense"
+//	}));
 
 //	model.add(new VIS.layers.Conv2d({
 //		kernelSize: 2,
@@ -102,15 +106,15 @@
 
 //    model.test();
 
-    model.load('./tfjsModel/mnist.json', {
-    	type: "tfjs"
-    });
+//    model.load('./tfjsModel/mnist.json', {
+//    	type: "tfjs"
+//    });
 
     model.init(function(){
 
-    	setTimeout(function() {
-			model.predict(data);
-        }, 3000);
+//    	setTimeout(function() {
+//			model.predict(data);
+//        }, 3000);
 
     });
 
