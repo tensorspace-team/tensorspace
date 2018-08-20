@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <script src="../lib/jquery.min.js"></script>
     <script src="../lib/three.min.js"></script>
     <script src="../lib/stats.min.js"></script>
     <script src="../lib/tween.min.js"></script>
     <script src="../lib/TrackballControls.js"></script>
     <script src="../lib/tfjs.min.js"></script>
-    <script src="../lib/signature_pad.min.js"></script>
     <script src="../../build/vis.js"></script>
 
     <style>
@@ -63,54 +61,7 @@
 </head>
 <body>
 
-<div id="controlPanel">
-    <div class="wrapper">
-        <canvas id="signature-pad" class="signature-pad" width=224 height=224></canvas>
-    </div>
-    <div id="clear">clear</div>
-</div>
-
-
 <div id="container"></div>
-
-<script>
-
-	var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
-		minWidth: 10,
-		backgroundColor: 'rgba(255, 255, 255, 0)',
-		penColor: 'rgb(0, 0, 0)',
-		onEnd: getImage
-	});
-
-	function getImage() {
-		var canvas = document.getElementById("signature-pad");
-		var context = canvas.getContext('2d');
-		var imgData = context.getImageData(0,0,canvas.width,canvas.height);
-
-		let signatureData = [];
-
-		for (let i = 0; i < 224; i += 8) {
-
-		    for (let j = 3; j < 896; j += 32) {
-
-				signatureData.push(imgData.data[896 * i + j] / 255);
-
-			}
-
-		}
-
-		model.predict(signatureData);
-
-	}
-
-	$(function() {
-		$("#clear").click(function() {
-			signaturePad.clear();
-			model.clear();
-        });
-    });
-
-</script>
 
 <script>
 
@@ -118,10 +69,10 @@
 
 	let model = new VIS.model.Sequential(container, {
 		pixel: true
-    });
+	});
 
 	model.add(new VIS.layers.Input({
-		shape: [28, 28, 1],
+		shape: [448, 448, 1],
 		name: "initInput",
 		pixel: true
 	}));
@@ -167,17 +118,7 @@
 		pixel: true
 	}));
 
-	model.load('./tfjsModel/mnist.json', {
-		type: "tfjs"
-	});
-
-	model.init(function() {
-
-		setTimeout(function() {
-            model.flatten();
-        }, 3000);
-
-    });
+	model.init();
 
 </script>
 
