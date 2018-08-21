@@ -47,7 +47,7 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 			for (let i = 0; i < this.lastFmCenters.length; i++) {
 				let fmCenter = {};
 				fmCenter.x = this.lastFmCenters[i].x;
-				fmCenter.y = this.center.y;
+				fmCenter.y = this.lastFmCenters[i].y;
 				fmCenter.z = this.lastFmCenters[i].z;
 				this.fmCenters.push(fmCenter);
 			}

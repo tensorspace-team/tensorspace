@@ -81,6 +81,8 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	updateValue: function(value) {
 
+		this.neuralValue = value;
+
 		let layerOutputValues = [];
 
 		for (let j = 0; j < this.depth; j++) {
