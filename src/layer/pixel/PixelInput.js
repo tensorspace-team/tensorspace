@@ -1,6 +1,7 @@
 import Layer from './PixelLayer';
 import { NeuralBoxLength } from "../../utils/Constant";
 import { MinAlpha } from "../../utils/Constant";
+import ColorUtils from '../../utils/ColorUtils';
 
 function Input(config) {
 
@@ -62,6 +63,19 @@ Input.prototype = Object.assign( Object.create( Layer.prototype ), {
 		console.log("Assemble input layer");
 
 		this.layerIndex = layerIndex;
+	},
+
+	updateValue: function(value) {
+		this.neuralValue = value;
+
+		let colorList = ColorUtils.getColors(value);
+
+		for (let i = 0; i < colorList.length; i++) {
+
+			let colorTriple = colorList[i];
+			this.neuralList[i].material.color.setRGB(colorTriple[0], colorTriple[1], colorTriple[2]);
+
+		}
 	}
 
 } );

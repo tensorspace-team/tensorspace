@@ -175,6 +175,12 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 		return true;
 
+	},
+
+	updateValue: function(value) {
+
+
+
 	}
 
 });

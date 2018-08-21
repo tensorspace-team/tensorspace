@@ -1,5 +1,4 @@
 import { MinAlpha } from "../../utils/Constant";
-import colorUtils from '../../utils/ColorUtils';
 
 function Layer(config) {
 
@@ -78,21 +77,6 @@ Layer.prototype = {
 		}
 
 		return neurals;
-
-	},
-
-	updateValue: function(value) {
-
-		this.neuralValue = value;
-
-		let colorList = colorUtils.getColors(value);
-
-		for (let i = 0; i < colorList.length; i++) {
-
-			let colorTriple = colorList[i];
-			this.neuralList[i].material.color.setRGB(colorTriple[0], colorTriple[1], colorTriple[2]);
-
-		}
 
 	},
 

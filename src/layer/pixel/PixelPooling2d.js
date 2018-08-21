@@ -1,5 +1,6 @@
 import { MinAlpha } from "../../utils/Constant";
 import { NeuralBoxLength } from "../../utils/Constant";
+import ColorUtils from '../../utils/ColorUtils';
 import Layer from './PixelLayer';
 
 function Pooling2d(config) {
@@ -127,6 +128,19 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		return [inputXPos, inputYPos, fmNum];
 
+	},
+
+	updateValue: function(value) {
+		this.neuralValue = value;
+
+		let colorList = ColorUtils.getColors(value);
+
+		for (let i = 0; i < colorList.length; i++) {
+
+			let colorTriple = colorList[i];
+			this.neuralList[i].material.color.setRGB(colorTriple[0], colorTriple[1], colorTriple[2]);
+
+		}
 	}
 
 });

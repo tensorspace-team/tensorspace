@@ -1,5 +1,6 @@
 import { MinAlpha } from "../../utils/Constant";
 import { NeuralBoxLength } from "../../utils/Constant";
+import ColorUtils from '../../utils/ColorUtils';
 import Layer from './PixelLayer';
 
 function Flatten() {
@@ -62,6 +63,19 @@ Flatten.prototype = Object.assign( Object.create( Layer.prototype ), {
 		neuralIndexList.push(positionIndex);
 
 		return neuralIndexList;
+	},
+
+	updateValue: function(value) {
+		this.neuralValue = value;
+
+		let colorList = ColorUtils.getColors(value);
+
+		for (let i = 0; i < colorList.length; i++) {
+
+			let colorTriple = colorList[i];
+			this.neuralList[i].material.color.setRGB(colorTriple[0], colorTriple[1], colorTriple[2]);
+
+		}
 	}
 
 } );
