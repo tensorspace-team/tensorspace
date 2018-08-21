@@ -19,6 +19,8 @@ function PaddingMap(width, height, center, paddingWidth, paddingHeight) {
 
 	this.featureMap = undefined;
 
+	console.log(this.width);
+
 	this.initFeatureMap();
 
 }
@@ -27,14 +29,14 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 	initFeatureMap: function() {
 
-		let geometry = new THREE.BoxGeometry(this.fmWidth, 1, this.fmHeight, this.fmWidth, 1, this.fmHeight);
+		let geometry = new THREE.BoxGeometry(this.width, 1, this.height, this.width, 1, this.height);
 		let material = new THREE.MeshBasicMaterial({
 			vertexColors: THREE.FaceColors
 		});
 
 		let cube = new THREE.Mesh(geometry, material);
 
-		cube.position.set(this.fmCenter.x, this.fmCenter.y, this.fmCenter.z);
+		cube.position.set(this.center.x, this.center.y, this.center.z);
 
 		this.featureMap = cube;
 
@@ -45,6 +47,8 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 	},
 
 	updateGrayScale: function(greyPixelArray) {
+
+		console.log("update");
 
 		let frontStartIndex = 2 * 2 * this.height;
 		let backStartIndex = 2 * 2 * this.height + 2 * this.width * this.height;
@@ -66,10 +70,10 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 					rgb.push(MinAlpha);
 				}
 
-				this.featureMap.geometry.faces[ frontStartIndex + this.width * i + j ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-				this.featureMap.geometry.faces[ frontStartIndex + this.width * i + j + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-				this.featureMap.geometry.faces[ backStartIndex + this.width * i + j ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-				this.featureMap.geometry.faces[ backStartIndex + this.width * i + j + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+				this.featureMap.geometry.faces[ frontStartIndex + 2 * this.width * i + 2 * j ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+				this.featureMap.geometry.faces[ frontStartIndex + 2 * this.width * i + 2 * j + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+				this.featureMap.geometry.faces[ backStartIndex + 2 * this.width * i + 2 * j ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+				this.featureMap.geometry.faces[ backStartIndex + 2 * this.width * i + 2 * j + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
 
 			}
 

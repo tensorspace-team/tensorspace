@@ -24,6 +24,8 @@ function MapPadding2d(config) {
 
 	this.paddingMapList = [];
 
+	console.log(22222);
+
 	this.layerType = "padding2d";
 
 }
@@ -65,6 +67,8 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		} else {
 
+			console.log("single");
+
 			let paddingMap = new PaddingMap(
 				this.width,
 				this.height,
@@ -72,6 +76,9 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 				this.paddingWidth,
 				this.paddingHeight
 			);
+
+			console.log(paddingMap.getMapElement());
+
 			this.paddingMapList.push(paddingMap);
 			this.neuralGroup.add(paddingMap.getMapElement());
 
@@ -102,12 +109,13 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		let colorList = ColorUtils.getColors(this.neuralValue);
 
 		let nonePaddingNeuralSize = this.contentWidth * this.contentHeight;
-		let fmNum = colorList % nonePaddingNeuralSize;
+		let fmNum = colorList.length / nonePaddingNeuralSize;
 
 		for (let i = 0; i < fmNum; i++) {
 
-			let featureMap = this.fmList[i];
-			featureMap.updateGrayScale(colorList.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
+			let paddingMap = this.paddingMapList[i];
+
+			paddingMap.updateGrayScale(colorList.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
 
 		}
 
