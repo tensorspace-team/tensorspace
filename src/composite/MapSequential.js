@@ -139,13 +139,17 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 	updateLayerPredictVis: function() {
 
-		console.log(222);
+		let paddingLayerNum = 0;
 
 		for (let i = 1; i < this.layers.length; i++) {
 
-			let predictValue = this.predictResult[i - 1].dataSync();
+			if (this.layers[i].layerType === "padding2d") {
+				paddingLayerNum += 1;
+				this.layers[i].updateValue();
+				continue;
+			}
 
-			console.log(predictValue.length);
+			let predictValue = this.predictResult[i - 1 - paddingLayerNum].dataSync();
 
 			this.layers[i].updateValue(predictValue);
 
@@ -155,9 +159,15 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 	initLayerOutputIndex: function() {
 
+		let paddingLayerNum = 0;
+
 		for (let i = 1; i < this.layers.length; i++) {
 
-			this.layers[i].resourceOutputIndex = i - 1;
+			if (this.layers[i].layerType === "padding2d") {
+				paddingLayerNum += 1;
+			} else {
+				this.layers[i].resourceOutputIndex = i - 1 - paddingLayerNum;
+			}
 
 		}
 
