@@ -118,9 +118,15 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 	initLayerOutputIndex: function() {
 
+		let paddingLayerNum = 0;
+
 		for (let i = 1; i < this.layers.length; i++) {
 
-			this.layers[i].resourceOutputIndex = i - 1;
+			if (this.layers[i].layerType === "padding2d") {
+				paddingLayerNum += 1;
+			} else {
+				this.layers[i].resourceOutputIndex = i - 1 - paddingLayerNum;
+			}
 
 		}
 
@@ -298,6 +304,11 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 	updateLayerPredictVis: function() {
 
 		for (let i = 1; i < this.layers.length; i++){
+
+			if (this.layers[i].layerType === "padding2d") {
+				this.layers[i].updateValue();
+				continue;
+			}
 
 			let resourceOutputIndex = this.layers[i].resourceOutputIndex;
 			let resourceOutputValues = this.predictResult[resourceOutputIndex].dataSync();

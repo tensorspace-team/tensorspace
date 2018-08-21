@@ -106,15 +106,17 @@
 
 //    model.test();
 
-//    model.load('./tfjsModel/mnist.json', {
-//    	type: "tfjs"
-//    });
+    model.load('./tfjsModel/mnist.json', {
+    	type: "tfjs"
+    });
 
     model.init(function(){
 
 //    	setTimeout(function() {
 //			model.predict(data);
 //        }, 3000);
+
+		predictMnist();
 
     });
 
@@ -133,9 +135,9 @@
     function predictMnist() {
 
     	setTimeout(function() {
-			let mockTensor = tf.randomNormal([1, 32, 32, 1]);
-			let inputValue = mockTensor.dataSync();
-			model.predict(inputValue);
+//			let mockTensor = tf.randomNormal([1, 32, 32, 1]);
+//			let inputValue = mockTensor.dataSync();
+			model.predict(data);
         }, 5000);
 
     }

@@ -1,5 +1,6 @@
 import {MinAlpha} from "../../utils/Constant";
 import {NeuralBoxLength} from "../../utils/Constant";
+import ColorUtils from '../../utils/ColorUtils';
 import PixelLayer from './PixelLayer';
 
 function PixelPadding(config) {
@@ -21,6 +22,8 @@ function PixelPadding(config) {
 	this.lastFmCenters = undefined;
 	this.width = undefined;
 	this.height = undefined;
+
+	this.nonePaddingNeuralList = [];
 
 	this.layerType = "padding2d";
 
@@ -76,6 +79,10 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 						this.neuralList.push(cube);
 						this.neuralGroup.add(cube);
 
+						if (!this.isPadding(j, i)) {
+							this.nonePaddingNeuralList.push(cube);
+						}
+
 					}
 
 				}
@@ -108,6 +115,10 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 					this.neuralList.push(cube);
 					this.neuralGroup.add(cube);
+
+					if (!this.isPadding(j, i)) {
+						this.nonePaddingNeuralList.push(cube);
+					}
 
 				}
 
@@ -177,9 +188,18 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 	},
 
-	updateValue: function(value) {
+	updateValue: function() {
 
+		this.neuralValue = this.lastLayer.neuralValue;
 
+		let colorList = ColorUtils.getColors(this.neuralValue);
+
+		for (let i = 0; i < colorList.length; i++) {
+
+			let colorTriple = colorList[i];
+			this.nonePaddingNeuralList[i].material.color.setRGB(colorTriple[0], colorTriple[1], colorTriple[2]);
+
+		}
 
 	}
 
