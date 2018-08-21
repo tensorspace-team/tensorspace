@@ -38,10 +38,10 @@ FeatureMap.prototype = {
 
 			let rgb = greyPixelArray[i];
 
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + 2 * i ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + 2 * i + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+			this.featureMap.geometry.faces[ this.fmHeight * 2 * 2 + 2 * i ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+			this.featureMap.geometry.faces[ this.fmHeight * 2 * 2 + 2 * i + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+			this.featureMap.geometry.faces[ this.fmHeight * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i ].color.setRGB( rgb[0], rgb[1], rgb[2] );
+			this.featureMap.geometry.faces[ this.fmHeight * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
 		}
 		this.featureMap.geometry.colorsNeedUpdate = true;
 
@@ -50,10 +50,10 @@ FeatureMap.prototype = {
 	updateRGBScale: function(rgbPixelArray) {
 
 		for ( let i = 0; i < rgbPixelArray.length; i += 3 ) {
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + 2 * i ].color.setRGB( rgbPixelArray[i], rgbPixelArray[i + 1], rgbPixelArray[i + 2] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + 2 * i + 1 ].color.setRGB( rgbPixelArray[i], rgbPixelArray[i + 1], rgbPixelArray[i + 2] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i ].color.setRGB( rgbPixelArray[i], rgbPixelArray[i + 1], rgbPixelArray[i + 2] );
-			this.featureMap.geometry.faces[ this.fmWidth * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i + 1 ].color.setRGB( rgbPixelArray[i], rgbPixelArray[i + 1], rgbPixelArray[i + 2] );
+			this.featureMap.geometry.faces[ this.fmHeight * 2 * 2 + 2 * i ].color.setRGB( rgbPixelArray[i], rgbPixelArray[i + 1], rgbPixelArray[i + 2] );
+			this.featureMap.geometry.faces[ this.fmHeight * 2 * 2 + 2 * i + 1 ].color.setRGB( rgbPixelArray[i], rgbPixelArray[i + 1], rgbPixelArray[i + 2] );
+			this.featureMap.geometry.faces[ this.fmHeight * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i ].color.setRGB( rgbPixelArray[i], rgbPixelArray[i + 1], rgbPixelArray[i + 2] );
+			this.featureMap.geometry.faces[ this.fmHeight * 2 * 2 + this.fmWidth * this.fmHeight * 2 + 2 * i + 1 ].color.setRGB( rgbPixelArray[i], rgbPixelArray[i + 1], rgbPixelArray[i + 2] );
 		}
 		this.featureMap.geometry.colorsNeedUpdate = true;
 
