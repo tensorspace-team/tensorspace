@@ -42,6 +42,7 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		if (this.lastLayer.fmCenters !== undefined) {
 
 			this.lastFmCenters = this.lastLayer.fmCenters;
+			this.fmCenters = [];
 
 			for (let i = 0; i < this.lastFmCenters.length; i++) {
 				let fmCenter = {};
@@ -106,10 +107,25 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.neuralValue = this.lastLayer.neuralValue;
 
-		let colorList = ColorUtils.getColors(this.neuralValue);
-
 		let nonePaddingNeuralSize = this.contentWidth * this.contentHeight;
-		let fmNum = colorList.length / nonePaddingNeuralSize;
+		let fmNum = this.neuralValue.length / nonePaddingNeuralSize;
+
+		let layerOutputValues = [];
+
+		for (let j = 0; j < fmNum; j++) {
+
+			let referredIndex = j;
+
+			while (referredIndex < this.neuralValue.length) {
+
+				layerOutputValues.push(this.neuralValue[referredIndex]);
+
+				referredIndex += fmNum;
+			}
+
+		}
+
+		let colorList = ColorUtils.getColors(layerOutputValues);
 
 		for (let i = 0; i < fmNum; i++) {
 

@@ -44,6 +44,8 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 		if (this.lastLayer.fmCenters !== undefined) {
 
 			this.lastFmCenters = this.lastLayer.fmCenters;
+			this.fmCenters = [];
+
 			for (let i = 0; i < this.lastFmCenters.length; i++) {
 				let fmCenter = {};
 				fmCenter.x = this.lastFmCenters[i].x;
@@ -53,6 +55,10 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 			}
 
 			let count = 0;
+
+			console.log(this.fmCenters.length);
+			console.log(this.width);
+			console.log(this.height);
 
 			for (let i = 0; i < this.fmCenters.length; i++) {
 
@@ -70,7 +76,7 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 						let cube = new THREE.Mesh(geometry, material);
 
-						cube.position.set(NeuralBoxLength * (k + initX) + this.center.x, this.center.y, NeuralBoxLength * (j + initY) + this.center.z);
+						cube.position.set(NeuralBoxLength * (k + initX) + this.fmCenters[i].x, this.fmCenters[i].y, NeuralBoxLength * (j + initY) + this.fmCenters[i].z);
 						cube.elementType = "neural";
 						cube.layerIndex = this.layerIndex;
 						cube.positionIndex = count;
@@ -79,7 +85,7 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 						this.neuralList.push(cube);
 						this.neuralGroup.add(cube);
 
-						if (!this.isPadding(j, i)) {
+						if (!this.isPadding(k, j)) {
 							this.nonePaddingNeuralList.push(cube);
 						}
 
@@ -193,6 +199,8 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 		this.neuralValue = this.lastLayer.neuralValue;
 
 		let colorList = ColorUtils.getColors(this.neuralValue);
+
+		console.log(this.nonePaddingNeuralList.length);
 
 		for (let i = 0; i < colorList.length; i++) {
 
