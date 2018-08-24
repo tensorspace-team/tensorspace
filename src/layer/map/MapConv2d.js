@@ -1,6 +1,7 @@
 import MapLayer from './MapLayer';
 import FeatureMap from '../../elements/FeatureMap';
 import ColorUtils from '../../utils/ColorUtils';
+import FmCenterGenerator from '../../utils/FmCenterGenerator';
 
 function MapConv2d(config) {
 
@@ -25,7 +26,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	init: function(center) {
 
 		this.center = center;
-		this.fmCenters = calculateFmCenters(this.filters, this.width);
+		this.fmCenters = FmCenterGenerator.getLineShape(this.filters, this.width);
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -37,31 +38,6 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		}
 
 		this.scene.add(this.neuralGroup);
-
-		function calculateFmCenters(filters, width) {
-
-			let fmCenters = [];
-
-			let fmLength = width;
-			let fmInterval = 10;
-			let initXTranslate;
-
-			initXTranslate = - (filters - 1) / 2 * (fmLength + fmInterval);
-
-			for (let i = 0; i < filters; i++) {
-
-				let xTranslate = initXTranslate + (fmLength + fmInterval) * i;
-				let fmCenter = {};
-				fmCenter.x = xTranslate;
-				fmCenter.y = 0;
-				fmCenter.z = 0;
-				fmCenters.push(fmCenter);
-
-			}
-
-			return fmCenters;
-
-		}
 
 	},
 
