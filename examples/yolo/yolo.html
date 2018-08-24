@@ -71,6 +71,188 @@
 		pixel: false
 	});
 
+	model.add(new VIS.layers.Input({
+		shape: [448, 448, 1]
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [6, 6]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 7,
+		filters: 64,
+		strides: 2
+	}));
+	model.add(new VIS.layers.Pooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2]
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 192,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Pooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 128,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 256,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 256,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 512,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Pooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 256,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 512,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 256,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 512,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 256,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 512,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 256,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 512,
+		strides: 1
+	}));
+
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 512,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 1024,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Pooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2]
+	}));
+
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 512,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 1024,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 1,
+		filters: 512,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 1024,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [8, 8]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 1024,
+		strides: 3
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 1024,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [2, 2]
+	}));
+	model.add(new VIS.layers.Conv2d({
+		kernelSize: 3,
+		filters: 1024,
+		strides: 1
+	}));
+	model.add(new VIS.layers.Dense({
+		units: 4096
+	}));
+
 	model.init();
 
 </script>
