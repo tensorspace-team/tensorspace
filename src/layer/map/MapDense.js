@@ -43,9 +43,9 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.neuralValue = value;
 
-		let greyPixelArray = ColorUtils.getColors(value);
+		let colors = ColorUtils.getAdjustValues(value);
 
-		this.neuralQueue.updateGrayScale(greyPixelArray);
+		this.neuralQueue.updateGrayScale(colors);
 
 	}
 

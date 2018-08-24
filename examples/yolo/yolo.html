@@ -68,55 +68,8 @@
 	let container = document.getElementById("container");
 
 	let model = new VIS.model.Sequential(container, {
-		pixel: true
+		pixel: false
 	});
-
-	model.add(new VIS.layers.Input({
-		shape: [448, 448, 1],
-		name: "initInput",
-		pixel: true
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 5,
-		filters: 6,
-		strides: 1,
-		name: "conv2d1",
-		pixel: true
-	}));
-	model.add(new VIS.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2],
-		name: "maxPool2d1",
-		pixel: true
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 5,
-		filters: 16,
-		strides: 1,
-		name: "conv2d2",
-		pixel: true
-	}));
-	model.add(new VIS.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2],
-		name: "maxPool2d2",
-		pixel: true
-	}));
-	model.add(new VIS.layers.Dense({
-		units: 120,
-		name: "dense1",
-		pixel: true
-	}));
-	model.add(new VIS.layers.Dense({
-		units: 84,
-		name: "dense2",
-		pixel: true
-	}));
-	model.add(new VIS.layers.Output({
-		units: 10,
-		name: "output",
-		pixel: true
-	}));
 
 	model.init();
 

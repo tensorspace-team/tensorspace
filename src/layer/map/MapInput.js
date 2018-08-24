@@ -44,11 +44,11 @@ MapInput.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.neuralValue = value;
 
-		let greyPixelArray = ColorUtils.getColors(value);
+		let colors = ColorUtils.getAdjustValues(value);
 
 		for (let i = 0; i < this.fmList.length; i++) {
 
-			this.fmList[i].updateGrayScale(greyPixelArray);
+			this.fmList[i].updateGrayScale(colors);
 
 		}
 

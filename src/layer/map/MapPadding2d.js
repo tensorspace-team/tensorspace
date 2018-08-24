@@ -125,13 +125,13 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		}
 
-		let colorList = ColorUtils.getColors(layerOutputValues);
+		let colors = ColorUtils.getAdjustValues(layerOutputValues);
 
 		for (let i = 0; i < fmNum; i++) {
 
 			let paddingMap = this.paddingMapList[i];
 
-			paddingMap.updateGrayScale(colorList.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
+			paddingMap.updateGrayScale(colors.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
 
 		}
 

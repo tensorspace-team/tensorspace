@@ -84,14 +84,14 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		}
 
-		let greyPixelArray = ColorUtils.getColors(layerOutputValues);
+		let colors = ColorUtils.getAdjustValues(layerOutputValues);
 
 		let featureMapSize = this.width * this.height;
 
 		for (let i = 0; i < this.depth; i++) {
 
 			let featureMap = this.fmList[i];
-			featureMap.updateGrayScale(greyPixelArray.slice(i * featureMapSize, (i + 1) * featureMapSize));
+			featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
 
 		}
 

@@ -17,9 +17,9 @@ function PaddingMap(width, height, center, paddingWidth, paddingHeight) {
 	this.contentWidth = this.width - this.paddingWidth;
 	this.contentHeight = this.height - this.paddingHeight;
 
+	this.dataArray = undefined;
+	this.dataTexture = undefined;
 	this.featureMap = undefined;
-
-	console.log(this.width);
 
 	this.initFeatureMap();
 
@@ -29,12 +29,39 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 	initFeatureMap: function() {
 
-		let geometry = new THREE.BoxGeometry(this.width, 1, this.height, this.width, 1, this.height);
-		let material = new THREE.MeshBasicMaterial({
-			vertexColors: THREE.FaceColors
+		let amount = this.width * this.height;
+		let data = new Uint8Array(amount);
+		this.dataArray = data;
+
+		for (let i = 0; i < amount; i++) {
+			data[i] = 255 * MinAlpha;
+		}
+
+		let dataTex = new THREE.DataTexture(data, this.width, this.height, THREE.LuminanceFormat, THREE.UnsignedByteType);
+		this.dataTexture = dataTex;
+
+		dataTex.magFilter = THREE.NearestFilter;
+		dataTex.needsUpdate = true;
+
+		let boxGeometry = new THREE.BoxGeometry(this.width, 1, this.height);
+
+		// 这里设置color可以隐约显示颜色总体的感觉
+
+		let material = new THREE.MeshBasicMaterial({ color: 0xffffff, alphaMap: dataTex, transparent: true });
+		let basicMaterial = new THREE.MeshBasicMaterial({
+			color: 0xffffff
 		});
 
-		let cube = new THREE.Mesh(geometry, material);
+		let materials = [
+			basicMaterial,
+			basicMaterial,
+			material,
+			material,
+			basicMaterial,
+			basicMaterial
+		];
+
+		let cube = new THREE.Mesh(boxGeometry, materials);
 
 		cube.position.set(this.center.x, this.center.y, this.center.z);
 
@@ -46,40 +73,32 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		return this.featureMap;
 	},
 
-	updateGrayScale: function(greyPixelArray) {
+	updateGrayScale: function(colors) {
 
 		console.log("update");
 
-		let frontStartIndex = 2 * 2 * this.height;
-		let backStartIndex = 2 * 2 * this.height + 2 * this.width * this.height;
+		console.log(colors);
 
-		for (let i = 0; i < this.width; i++) {
+		for (let i = 0; i < this.height; i++) {
 
-			for (let j = 0; j < this.height; j++) {
-
-				let rgb = [];
+			for (let j = 0; j < this.width; j++) {
 
 				if (!this.isPadding(j, i)) {
 
 					let correspondingIndex = this.contentWidth * ( i - this.paddingTop) + ( j - this.paddingLeft );
-					rgb = greyPixelArray[correspondingIndex];
+					this.dataArray[this.width * i + j] = 255 * colors[correspondingIndex];
 
 				} else {
-					rgb.push(MinAlpha);
-					rgb.push(MinAlpha);
-					rgb.push(MinAlpha);
+					this.dataArray[this.width * i + j] = 255 * MinAlpha;
 				}
-
-				this.featureMap.geometry.faces[ frontStartIndex + 2 * this.width * i + 2 * j ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-				this.featureMap.geometry.faces[ frontStartIndex + 2 * this.width * i + 2 * j + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-				this.featureMap.geometry.faces[ backStartIndex + 2 * this.width * i + 2 * j ].color.setRGB( rgb[0], rgb[1], rgb[2] );
-				this.featureMap.geometry.faces[ backStartIndex + 2 * this.width * i + 2 * j + 1 ].color.setRGB( rgb[0], rgb[1], rgb[2] );
 
 			}
 
 		}
 
-		this.featureMap.geometry.colorsNeedUpdate = true;
+		console.log(this.dataArray);
+
+		this.dataTexture.needsUpdate = true;
 
 	},
 
