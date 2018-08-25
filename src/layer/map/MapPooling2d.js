@@ -51,7 +51,7 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 			}
 		} else {
 
-			let geometry = new THREE.BoxGeometry(10, 10, 10);
+			let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
 			let material = new THREE.MeshBasicMaterial({
 				color: new THREE.Color( 1, 1, 1 )
 			});

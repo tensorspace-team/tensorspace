@@ -31,31 +31,59 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		console.log("===");
-		console.log(layerStatus);
-
 		if (layerStatus) {
-			for (let i = 0; i < this.filters; i++) {
-				let featureMap = new FeatureMap(this.width, this.height, this.fmCenters[i]);
-				this.fmList.push(featureMap);
-				this.neuralGroup.add(featureMap.getMapElement());
-			}
+			this.initLayerElements();
 		} else {
-
-			let geometry = new THREE.BoxGeometry(10, 10, 10);
-			let material = new THREE.MeshBasicMaterial({
-				color: new THREE.Color( 1, 1, 1 )
-			});
-
-			let layerPlaceHolder = new THREE.Mesh(geometry, material);
-
-			layerPlaceHolder.position.set(0, 0, 0);
-
-			this.neuralGroup.add(layerPlaceHolder);
+			this.initLayerPlaceHolder();
 		}
 
-
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	initLayerElements: function() {
+
+		for (let i = 0; i < this.filters; i++) {
+			let featureMap = new FeatureMap(this.width, this.height, this.fmCenters[i]);
+			this.fmList.push(featureMap);
+			this.neuralGroup.add(featureMap.getMapElement());
+		}
+
+	},
+
+	disposeLayerElements: function() {
+
+		let fmNum = this.fmList.length;
+		for (let i = 0; i < fmNum; i++) {
+			let featureMap = this.fmList[i];
+			this.neuralGroup.remove(featureMap.getMapElement());
+		}
+
+		this.fmList = [];
+
+	},
+
+	initLayerPlaceHolder: function() {
+
+		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
+		let material = new THREE.MeshBasicMaterial({
+			color: new THREE.Color( 1, 1, 1 )
+		});
+
+		let layerPlaceHolder = new THREE.Mesh(geometry, material);
+
+		layerPlaceHolder.position.set(0, 0, 0);
+
+		this.layerPlaceHolder = layerPlaceHolder;
+
+		this.neuralGroup.add(layerPlaceHolder);
+
+	},
+
+	disposeLayerPlaceHolder: function() {
+
+		this.neuralGroup.remove(this.layerPlaceHolder);
+		this.layerPlaceHolder = undefined;
 
 	},
 

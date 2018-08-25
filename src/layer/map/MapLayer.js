@@ -16,6 +16,9 @@ function MapLayer(config) {
 	// store all 2d maps in layer
 	this.fmList = [];
 
+	// store the reference placeholder object
+	this.layerPlaceHolder = undefined;
+
 	this.name = config.name;
 
 	// output index to fit the layer
