@@ -19,6 +19,18 @@ function MapConv2d(config) {
 	this.depth = config.filters;
 	this.layerType = "map conv2d";
 
+	if (config.shape !== undefined) {
+
+		this.isShapePredefined = true;
+		this.fmShape = config.shape;
+		this.width = this.fmShape[0];
+		this.height = this.fmShape[1];
+	} else {
+		this.isShapePredefined = false;
+	}
+
+	this.isOpen = true;
+
 }
 
 MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
@@ -32,12 +44,35 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
 		if (layerStatus) {
+			this.isOpen = true;
 			this.initLayerElements();
 		} else {
+			this.isOpen = false;
 			this.initLayerPlaceHolder();
 		}
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	openLayer: function() {
+
+		if (!this.isOpen) {
+
+
+			this.isOpen = true;
+		}
+
+
+	},
+
+	closeLayer: function() {
+
+		if (this.isOpen) {
+
+
+			this.isOpen = false;
+		}
 
 	},
 
@@ -93,10 +128,15 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		this.inputShape = this.lastLayer.outputShape;
-		this.width = (this.inputShape[0] - this.kernelSize) / this.strides + 1;
-		this.height = (this.inputShape[1] - this.kernelSize) / this.strides + 1;
-		this.fmShape = [this.width, this.height];
+		if (this.isShapePredefined) {
+
+		} else {
+			this.inputShape = this.lastLayer.outputShape;
+			this.width = (this.inputShape[0] - this.kernelSize) / this.strides + 1;
+			this.height = (this.inputShape[1] - this.kernelSize) / this.strides + 1;
+			this.fmShape = [this.width, this.height];
+		}
+
 		this.outputShape = [this.width, this.height, this.filters];
 
 	},
