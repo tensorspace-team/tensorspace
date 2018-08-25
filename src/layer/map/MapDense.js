@@ -14,18 +14,34 @@ function MapDense(config) {
 
 MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function(center) {
+	init: function(center, layerStatus) {
 
 		this.center = center;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		let neuralQueue = new NeuralQueue(this.units);
+		if (layerStatus) {
 
-		this.neuralQueue = neuralQueue;
+			let neuralQueue = new NeuralQueue(this.units);
+			this.neuralQueue = neuralQueue;
+			this.neuralGroup.add(neuralQueue.getQueueElement());
 
-		this.neuralGroup.add(neuralQueue.getQueueElement());
+		} else {
+
+			let geometry = new THREE.BoxGeometry(10, 10, 10);
+			let material = new THREE.MeshBasicMaterial({
+				color: new THREE.Color( 1, 1, 1 )
+			});
+
+			let layerPlaceHolder = new THREE.Mesh(geometry, material);
+
+			layerPlaceHolder.position.set(0, 0, 0);
+
+			this.neuralGroup.add(layerPlaceHolder);
+
+		}
+
 
 		this.scene.add(this.neuralGroup);
 

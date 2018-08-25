@@ -4,9 +4,9 @@ import MapSequential from './MapSequential';
 function Sequential(container, config) {
 
 	if ( config.pixel === true ) {
-		return new PixelSequential(container);
+		return new PixelSequential(container, config);
 	} else {
-		return new MapSequential(container);
+		return new MapSequential(container, config);
 	}
 
 }

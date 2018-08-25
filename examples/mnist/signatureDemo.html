@@ -118,7 +118,8 @@
 	let container = document.getElementById("container");
 
 	let model = new VIS.model.Sequential(container, {
-		pixel: false
+		pixel: false,
+		layer: "close"
 	});
 
 	model.add(new VIS.layers.Input({

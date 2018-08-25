@@ -40,7 +40,8 @@
 	let container = document.getElementById("container");
 
     let model = new VIS.model.Sequential(container, {
-    	pixel: false
+    	pixel: false,
+        layer: "close"
     });
 
     model.add(new VIS.layers.Input({
@@ -49,14 +50,14 @@
         name: "initInput",
 //        pixel: true
     }));
-//    model.add(new VIS.layers.Conv2d({
-//        kernelSize: 5,
-//        filters: 6,
-//        strides: 1,
-//        name: "conv2d1",
-//		pixel: true
-//
-//    }));
+    model.add(new VIS.layers.Conv2d({
+        kernelSize: 5,
+        filters: 6,
+        strides: 1,
+        name: "conv2d1",
+		pixel: true
+
+    }));
 	model.add(new VIS.layers.Padding2d({
 		padding: [4, 4],
 //        pixel: true

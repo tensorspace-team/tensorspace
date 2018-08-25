@@ -1,6 +1,6 @@
 import AbstractComposite from './AbstractComposite';
 
-function MapSequential(container) {
+function MapSequential(container, config) {
 
 	AbstractComposite.call(this, container);
 
@@ -9,6 +9,14 @@ function MapSequential(container) {
 	this.layerHighLighted = false;
 	this.model = undefined;
 	this.loadModel = false;
+
+	console.log(config.layer);
+
+	if (config.layer !== "close") {
+		this.layerStatus = true;
+	} else {
+		this.layerStatus = false;
+	}
 
 	this.inputValue = undefined;
 
@@ -69,7 +77,7 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 		let layersPos = calculateLayersPos(this.layers.length);
 
 		for (let i = 0; i < this.layers.length; i++) {
-			this.layers[i].init(layersPos[i]);
+			this.layers[i].init(layersPos[i], this.layerStatus);
 		}
 
 

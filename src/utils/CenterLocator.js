@@ -28,7 +28,9 @@ CenterLocator.prototype = {
 
 	},
 
-	createSquareCenters: function() {
+	createSquareCenters: function(filters, width, height) {
+
+
 
 	}
 

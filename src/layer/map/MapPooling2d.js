@@ -22,7 +22,7 @@ function MapPooling2d(config) {
 
 MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function(center) {
+	init: function(center, layerStatus) {
 
 		this.center = center;
 
@@ -37,15 +37,30 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		for (let i = 0; i < this.fmNum; i++) {
+		if (layerStatus) {
+			for (let i = 0; i < this.fmNum; i++) {
 
-			let fmCenter = this.fmCenters[i];
+				let fmCenter = this.fmCenters[i];
 
-			let featureMap = new FeatureMap(this.width, this.height, fmCenter);
+				let featureMap = new FeatureMap(this.width, this.height, fmCenter);
 
-			this.fmList.push(featureMap);
+				this.fmList.push(featureMap);
 
-			this.neuralGroup.add(featureMap.getMapElement());
+				this.neuralGroup.add(featureMap.getMapElement());
+
+			}
+		} else {
+
+			let geometry = new THREE.BoxGeometry(10, 10, 10);
+			let material = new THREE.MeshBasicMaterial({
+				color: new THREE.Color( 1, 1, 1 )
+			});
+
+			let layerPlaceHolder = new THREE.Mesh(geometry, material);
+
+			layerPlaceHolder.position.set(0, 0, 0);
+
+			this.neuralGroup.add(layerPlaceHolder);
 
 		}
 
