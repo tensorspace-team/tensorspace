@@ -15,8 +15,21 @@ function MapConv2d(config) {
 	this.fmShape = undefined;
 	this.width = undefined;
 	this.height = undefined;
-	this.fmCenters = [];
 	this.depth = config.filters;
+
+	this.fmCenters = [];
+	this.openFmCenters = [];
+	this.closeFmCenters = [];
+
+	for (let i = 0; i < this.depth; i++) {
+		let center = {
+			x: 0,
+			y: 0,
+			z: 0
+		};
+		this.closeFmCenters.push(center);
+	}
+
 	this.layerType = "map conv2d";
 
 	if (config.shape !== undefined) {
@@ -38,14 +51,17 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	init: function(center, layerStatus) {
 
 		this.center = center;
-		this.fmCenters = FmCenterGenerator.getFmCenters("line", this.filters, this.width, this.height);
+		this.openFmCenters = FmCenterGenerator.getFmCenters("line", this.filters, this.width, this.height);
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
 		if (layerStatus) {
 			this.isOpen = true;
-			this.initLayerElements();
+			for (let i = 0; i < this.openFmCenters.length; i++) {
+				this.fmCenters.push(this.openFmCenters[i]);
+			}
+			this.initLayerElements(this.openFmCenters);
 		} else {
 			this.isOpen = false;
 			this.initLayerPlaceHolder();
@@ -57,10 +73,53 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	openLayer: function() {
 
+		console.log("open layer");
+
 		if (!this.isOpen) {
 
+			this.disposeLayerPlaceHolder();
+			this.initLayerElements(this.closeFmCenters);
 
-			this.isOpen = true;
+			let init = {
+				ratio: 0
+			};
+			let end = {
+				ratio: 1
+			};
+
+			let fmTween = new TWEEN.Tween(init)
+				.to(end, 2000);
+
+			let layer = this;
+
+			fmTween.onUpdate(function () {
+
+				layer.fmCenters = [];
+
+				for (let i = 0; i < layer.fmList.length; i++) {
+
+					let tempPos = {
+						x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
+						y: init.ratio * (layer.openFmCenters[i].y - layer.closeFmCenters[i].y),
+						z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
+					};
+
+					layer.fmList[i].updatePos(tempPos);
+
+					layer.fmCenters.push(tempPos);
+
+				}
+
+			}).onStart(function () {
+				console.log("start open layer");
+			}).onComplete(function() {
+				console.log("end open layer");
+				layer.isOpen = true;
+
+			});
+
+			fmTween.start();
+
 		}
 
 
@@ -71,15 +130,16 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		if (this.isOpen) {
 
 
+
 			this.isOpen = false;
 		}
 
 	},
 
-	initLayerElements: function() {
+	initLayerElements: function(centers) {
 
 		for (let i = 0; i < this.filters; i++) {
-			let featureMap = new FeatureMap(this.width, this.height, this.fmCenters[i]);
+			let featureMap = new FeatureMap(this.width, this.height, centers[i]);
 			this.fmList.push(featureMap);
 			this.neuralGroup.add(featureMap.getMapElement());
 		}
@@ -108,6 +168,8 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		let layerPlaceHolder = new THREE.Mesh(geometry, material);
 
 		layerPlaceHolder.position.set(0, 0, 0);
+		layerPlaceHolder.elementType = "placeholder";
+		layerPlaceHolder.layerIndex = this.layerIndex;
 
 		this.layerPlaceHolder = layerPlaceHolder;
 
@@ -143,33 +205,40 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	updateValue: function(value) {
 
-		this.neuralValue = value;
+		if (this.isOpen) {
 
-		let layerOutputValues = [];
+			this.neuralValue = value;
 
-		for (let j = 0; j < this.depth; j++) {
+			let layerOutputValues = [];
 
-			let referredIndex = j;
+			for (let j = 0; j < this.depth; j++) {
 
-			while (referredIndex < value.length) {
+				let referredIndex = j;
 
-				layerOutputValues.push(value[referredIndex]);
+				while (referredIndex < value.length) {
 
-				referredIndex += this.depth;
+					layerOutputValues.push(value[referredIndex]);
+
+					referredIndex += this.depth;
+				}
+
 			}
 
+			let colors = ColorUtils.getAdjustValues(layerOutputValues);
+
+			let featureMapSize = this.width * this.height;
+
+			for (let i = 0; i < this.depth; i++) {
+
+				let featureMap = this.fmList[i];
+				featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+
+			}
+
+		} else {
+
 		}
 
-		let colors = ColorUtils.getAdjustValues(layerOutputValues);
-
-		let featureMapSize = this.width * this.height;
-
-		for (let i = 0; i < this.depth; i++) {
-
-			let featureMap = this.fmList[i];
-			featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
-
-		}
 	}
 
 });

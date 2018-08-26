@@ -1,11 +1,16 @@
 import ColorUtils from '../utils/ColorUtils';
 import { MinAlpha } from "../utils/Constant";
 
-function FeatureMap(width, height, center) {
+function FeatureMap(width, height, initCenter) {
 
 	this.fmWidth = width;
 	this.fmHeight = height;
-	this.fmCenter = center;
+
+	this.fmCenter = {
+		x: initCenter.x,
+		y: initCenter.y,
+		z: initCenter.z
+	};
 
 	this.dataArray = undefined;
 	this.dataTexture = undefined;
@@ -68,6 +73,15 @@ FeatureMap.prototype = {
 			this.dataArray[i] = colors[i] * 255;
 		}
 		this.dataTexture.needsUpdate = true;
+
+	},
+
+	updatePos: function(pos) {
+
+		this.fmCenter.x = pos.x;
+		this.fmCenter.y = pos.y;
+		this.fmCenter.z = pos.z;
+		this.featureMap.position.set(pos.x, pos.y, pos.z);
 
 	}
 

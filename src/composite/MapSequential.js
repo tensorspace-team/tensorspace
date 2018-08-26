@@ -24,7 +24,7 @@ function MapSequential(container, config) {
 
 MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototype), {
 
-	add: function(layer) {
+	add: function (layer) {
 
 		if (this.layers.length !== 0) {
 
@@ -39,12 +39,12 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 	},
 
-	init: function(callback) {
+	init: function (callback) {
 		console.log("init map sequential model");
 
-		if (this.hasLoader){
+		if (this.hasLoader) {
 			let self = this;
-			this.loader.load().then(function() {
+			this.loader.load().then(function () {
 				self.initVisModel();
 				if (callback !== undefined) {
 					callback();
@@ -58,7 +58,120 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 		}
 	},
 
-	initVisModel: function() {
+	registerSequentialEvent: function () {
+
+		document.addEventListener('mousemove', function (event) {
+			this.onMouseMove(event);
+		}.bind(this), true);
+
+		document.addEventListener('click', function (event) {
+			this.onClick(event);
+		}.bind(this), true);
+
+	},
+
+	onMouseMove: function (event) {
+
+		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+		let model = this;
+		// pickNeural(model);
+
+		// function pickNeural(model) {
+		// 	model.raycaster.setFromCamera(model.mouse, model.camera);
+		// 	let intersects = model.raycaster.intersectObjects(model.scene.children, true);
+		//
+		// 	let picked = false;
+		//
+		// 	for (let i = 0; i < intersects.length; i++) {
+		// 		if (intersects !== null && intersects.length > 0 && intersects[i].object.type === "Mesh") {
+		// 			if (intersects[i].object.elementType === "neural") {
+		//
+		// 				picked = true;
+		//
+		// 				clearHighLight(model);
+		//
+		// 				let selectedNeural = intersects[i].object;
+		//
+		// 				highLight(model, selectedNeural);
+		// 			}
+		//
+		// 			break;
+		// 		}
+		// 	}
+		//
+		// 	if (!picked) {
+		// 		clearHighLight(model);
+		// 	}
+		//
+		// 	function highLight(model, selectedNeural) {
+		//
+		// 		let selectedLayer = model.layers[selectedNeural.layerIndex - 1];
+		//
+		// 		let lightLightParameters = selectedLayer.getHeightLightParameters(selectedNeural.positionIndex);
+		//
+		// 		for (let j = 0; j < lightLightParameters.heightLightList.length; j++) {
+		//
+		// 			lightLightParameters.heightLightList[j].scale.set(1.5, 1.5, 1.5);
+		//
+		// 			model.heightLightNeural.push(lightLightParameters.heightLightList[j]);
+		// 		}
+		//
+		// 		model.line.geometry = new THREE.Geometry();
+		// 		model.line.geometry.colors = lightLightParameters.lineColors;
+		// 		model.line.geometry.vertices = lightLightParameters.lineVertices;
+		// 		model.line.material.needsUpdate = true;
+		// 		model.line.geometry.colorsNeedUpdate = true;
+		// 		model.line.geometry.verticesNeedUpdate = true;
+		// 		model.scene.add(model.line);
+		//
+		// 	}
+		//
+		// 	function clearHighLight(model) {
+		// 		if (model.heightLightNeural.length > 0) {
+		// 			for (let i = 0; i < model.heightLightNeural.length; i++) {
+		// 				model.heightLightNeural[i].scale.set(1, 1, 1);
+		// 			}
+		// 		}
+		//
+		// 		model.heightLightNeural = [];
+		//
+		// 		model.line.geometry.dispose();
+		// 		model.scene.remove(model.line);
+		// 	}
+		// }
+
+	},
+
+	onClick: function (event) {
+
+		let model = this;
+
+		model.raycaster.setFromCamera(model.mouse, model.camera);
+		let intersects = model.raycaster.intersectObjects(model.scene.children, true);
+
+		for (let i = 0; i < intersects.length; i++) {
+			if (intersects !== null && intersects.length > 0 && intersects[i].object.type === "Mesh") {
+				if (intersects[i].object.elementType === "placeholder") {
+
+					let selectedElement = intersects[i].object;
+
+					console.log(selectedElement.layerIndex);
+
+					let selectLayer = this.layers[selectedElement.layerIndex - 1];
+
+					selectLayer.openLayer();
+
+				}
+
+				break;
+			}
+
+		}
+	},
+
+	initVisModel: function () {
 
 		this.updateCamera(this.layers.length);
 		this.createModel();
@@ -68,9 +181,10 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 		this.isInitialized = true;
 
-	},
+	}
+	,
 
-	createModel: function() {
+	createModel: function () {
 
 		console.log("creating map sequential model...");
 
@@ -104,21 +218,10 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 		}
 
-	},
+	}
+	,
 
-	registerSequentialEvent: function () {
-
-		document.addEventListener('mousemove', function (event) {
-			this.onMouseMove(event);
-		}.bind(this), true);
-
-	},
-
-	onMouseMove: function(event) {
-
-	},
-
-	predict: function(input) {
+	predict: function (input) {
 
 		this.inputValue = input;
 
@@ -131,21 +234,24 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 		this.predictResult = this.resource.predict(predictTensor);
 		this.updateLayerVis();
 
-	},
+	}
+	,
 
-	updateLayerVis: function() {
+	updateLayerVis: function () {
 
 		this.updateInputVis();
 		this.updateLayerPredictVis();
 
-	},
+	}
+	,
 
 
-	updateInputVis: function() {
+	updateInputVis: function () {
 		this.layers[0].updateValue(this.inputValue);
-	},
+	}
+	,
 
-	updateLayerPredictVis: function() {
+	updateLayerPredictVis: function () {
 
 		let paddingLayerNum = 0;
 
@@ -163,9 +269,10 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 		}
 
-	},
+	}
+	,
 
-	initLayerOutputIndex: function() {
+	initLayerOutputIndex: function () {
 
 		let paddingLayerNum = 0;
 
