@@ -2,6 +2,8 @@ import { VariableLengthObject } from "../elements/VariableLengthObject";
 
 function LayerOpen() {
 
+	this.animationTime = 2000;
+
 }
 
 LayerOpen.prototype = {
@@ -16,7 +18,7 @@ LayerOpen.prototype = {
 		};
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, 2000);
+			.to(end, this.animationTime);
 
 		fmTween.onUpdate(function () {
 
@@ -61,7 +63,7 @@ LayerOpen.prototype = {
 		let variableLengthObject = (new VariableLengthObject(1, 1, 1)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, 2000);
+			.to(end, this.animationTime);
 
 		fmTween.onUpdate(function () {
 
