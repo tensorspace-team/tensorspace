@@ -4,6 +4,7 @@ import ColorUtils from '../../utils/ColorUtils';
 import FmCenterGenerator from '../../utils/FmCenterGenerator';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
+import { MapPlaceholder } from "../../elements/MapPlaceholder";
 
 function MapConv2d(config) {
 
@@ -124,20 +125,15 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	initLayerPlaceHolder: function() {
 
-		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
-		let material = new THREE.MeshBasicMaterial({
-			color: new THREE.Color( 1, 1, 1 )
-		});
+		let placeholder = new MapPlaceholder(this.width, this.height, this.depth);
+		let placeholderElement = placeholder.getPlaceholder();
 
-		let layerPlaceHolder = new THREE.Mesh(geometry, material);
+		placeholderElement.elementType = "placeholder";
+		placeholderElement.layerIndex = this.layerIndex;
 
-		layerPlaceHolder.position.set(0, 0, 0);
-		layerPlaceHolder.elementType = "placeholder";
-		layerPlaceHolder.layerIndex = this.layerIndex;
+		this.layerPlaceHolder = placeholderElement;
 
-		this.layerPlaceHolder = layerPlaceHolder;
-
-		this.neuralGroup.add(layerPlaceHolder);
+		this.neuralGroup.add(placeholderElement);
 
 	},
 

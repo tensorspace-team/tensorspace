@@ -3,6 +3,7 @@ import FeatureMap from '../../elements/FeatureMap';
 import ColorUtils from '../../utils/ColorUtils';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
+import { MapPlaceholder } from "../../elements/MapPlaceholder";
 
 function MapPooling2d(config) {
 
@@ -119,19 +120,15 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	},
 
 	initLayerPlaceHolder: function() {
-		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
-		let material = new THREE.MeshBasicMaterial({
-			color: new THREE.Color( 1, 1, 1 )
-		});
 
-		let layerPlaceHolder = new THREE.Mesh(geometry, material);
+		let placeholder = new MapPlaceholder(this.width, this.height, this.depth);
+		let placeholderElement = placeholder.getPlaceholder();
 
-		layerPlaceHolder.position.set(0, 0, 0);
-		layerPlaceHolder.elementType = "placeholder";
-		layerPlaceHolder.layerIndex = this.layerIndex;
+		placeholderElement.elementType = "placeholder";
+		placeholderElement.layerIndex = this.layerIndex;
 
-		this.layerPlaceHolder = layerPlaceHolder;
-		this.neuralGroup.add(layerPlaceHolder);
+		this.layerPlaceHolder = placeholderElement;
+		this.neuralGroup.add(placeholderElement);
 	},
 
 	disposeLayerPlaceHolder: function() {
