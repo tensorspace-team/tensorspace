@@ -54,33 +54,11 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 				this.fmCenters.push(this.openFmCenters[i]);
 			}
 			this.initLayerElements(this.openFmCenters);
-			// for (let i = 0; i < this.fmNum; i++) {
-			//
-			// 	let fmCenter = this.fmCenters[i];
-			//
-			// 	let featureMap = new FeatureMap(this.width, this.height, fmCenter);
-			//
-			// 	this.fmList.push(featureMap);
-			//
-			// 	this.neuralGroup.add(featureMap.getMapElement());
-			//
-			// }
+
 		} else {
 
 			this.isOpen = false;
 			this.initLayerPlaceHolder();
-
-			// let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
-			// let material = new THREE.MeshBasicMaterial({
-			// 	color: new THREE.Color( 1, 1, 1 )
-			// });
-			//
-			// let layerPlaceHolder = new THREE.Mesh(geometry, material);
-			//
-			// layerPlaceHolder.position.set(0, 0, 0);
-			// layerPlaceHolder.elementType = "placeholder";
-			//
-			// this.neuralGroup.add(layerPlaceHolder);
 
 		}
 
