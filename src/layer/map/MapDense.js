@@ -117,9 +117,11 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.neuralValue = value;
 
-		let colors = ColorUtils.getAdjustValues(value);
+		if (this.isOpen) {
+			let colors = ColorUtils.getAdjustValues(value);
 
-		this.neuralQueue.updateGrayScale(colors);
+			this.neuralQueue.updateGrayScale(colors);
+		}
 
 	}
 

@@ -46,7 +46,6 @@ LayerOpen.prototype = {
 
 		fmTween.start();
 
-
 	},
 
 	openQueueLayer: function(layer) {

@@ -167,30 +167,32 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.neuralValue = value;
 
-		let layerOutputValues = [];
+		if (this.isOpen) {
+			let layerOutputValues = [];
 
-		for (let j = 0; j < this.depth; j++) {
+			for (let j = 0; j < this.depth; j++) {
 
-			let referredIndex = j;
+				let referredIndex = j;
 
-			while (referredIndex < value.length) {
+				while (referredIndex < value.length) {
 
-				layerOutputValues.push(value[referredIndex]);
+					layerOutputValues.push(value[referredIndex]);
 
-				referredIndex += this.depth;
+					referredIndex += this.depth;
+				}
+
 			}
 
-		}
+			let colors = ColorUtils.getAdjustValues(layerOutputValues);
 
-		let colors = ColorUtils.getAdjustValues(layerOutputValues);
+			let featureMapSize = this.width * this.height;
 
-		let featureMapSize = this.width * this.height;
+			for (let i = 0; i < this.depth; i++) {
 
-		for (let i = 0; i < this.depth; i++) {
+				let featureMap = this.fmList[i];
+				featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
 
-			let featureMap = this.fmList[i];
-			featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
-
+			}
 		}
 
 	}
