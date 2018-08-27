@@ -70,12 +70,14 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	initLayerElements: function() {
 
 		let neuralQueue = new NeuralQueue(this.units);
-		this.neuralQueue = neuralQueue;
-		this.neuralGroup.add(neuralQueue.getQueueElement());
+		this.neuralQueue = neuralQueue.getQueueElement();
+		this.neuralGroup.add(this.neuralQueue);
 
 	},
 
 	disposeLayerElements: function() {
+
+		console.log("dispose queue element");
 
 		this.neuralGroup.remove(this.neuralQueue);
 		this.neuralQueue = undefined;

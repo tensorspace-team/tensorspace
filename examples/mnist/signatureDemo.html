@@ -157,10 +157,12 @@
 		strides: [2, 2],
 		name: "maxPool2d2"
 	}));
-	model.add(new VIS.layers.Dense({
+
+	let denseLayer = new VIS.layers.Dense({
 		units: 120,
 		name: "dense1"
-	}));
+	});
+	model.add(denseLayer);
 	model.add(new VIS.layers.Dense({
 		units: 84,
 		name: "dense2"
@@ -178,7 +180,7 @@
 
 	setTimeout(function() {
 		console.log(333);
-		convLayer.closeLayer();
+		denseLayer.closeLayer();
     }, 10000);
 
 </script>

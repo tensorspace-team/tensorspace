@@ -51,6 +51,36 @@ LayerClose.prototype = {
 
 	closeQueueLayer: function(layer) {
 
+		let init = {
+			scale: 1
+		};
+
+		let end = {
+			scale: 1 / layer.units
+		};
+
+		let variableLengthObject = (new VariableLengthObject(layer.units, 1, 1)).getElement();
+
+		let fmTween = new TWEEN.Tween(init)
+			.to(end, 2000);
+
+		fmTween.onUpdate(function () {
+
+			variableLengthObject.scale.x = init.scale;
+
+		}).onStart(function () {
+			console.log("start close queue layer");
+			layer.disposeLayerElements();
+			layer.neuralGroup.add(variableLengthObject);
+		}).onComplete(function() {
+			console.log("end close queue layer");
+
+			layer.neuralGroup.remove(variableLengthObject);
+			layer.initLayerPlaceHolder();
+			layer.isOpen = false;
+		});
+
+		fmTween.start();
 
 	}
 
