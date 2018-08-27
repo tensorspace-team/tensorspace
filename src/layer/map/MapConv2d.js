@@ -59,14 +59,14 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		if (layerStatus) {
-			this.isOpen = true;
+		this.isOpen = layerStatus;
+
+		if (this.isOpen) {
 			for (let i = 0; i < this.openFmCenters.length; i++) {
 				this.fmCenters.push(this.openFmCenters[i]);
 			}
 			this.initLayerElements(this.openFmCenters);
 		} else {
-			this.isOpen = false;
 			this.initLayerPlaceHolder();
 		}
 

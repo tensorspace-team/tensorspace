@@ -1,6 +1,9 @@
 import MapLayer from './MapLayer';
 import PaddingMap from '../../elements/PaddingMap';
 import ColorUtils from '../../utils/ColorUtils';
+import { MapPlaceholder } from "../../elements/MapPlaceholder";
+import { LayerCloseFactory } from "../../animation/LayerClose";
+import { LayerOpenFactory } from "../../animation/LayerOpen";
 
 function MapPadding2d(config) {
 
@@ -16,15 +19,19 @@ function MapPadding2d(config) {
 	this.contentWidth = undefined;
 	this.contentHeight = undefined;
 
-	this.depth = undefined;
-	this.fmCenters = undefined;
-	this.lastFmCenters = undefined;
 	this.width = undefined;
 	this.height = undefined;
+	this.depth = undefined;
 
-	this.paddingMapList = [];
+	this.fmList = [];
 
-	console.log(22222);
+	this.lastOpenFmCenters = undefined;
+
+	this.fmCenters = [];
+	this.openFmCenters = [];
+	this.closeFmCenters = [];
+
+	this.isOpen = undefined;
 
 	this.layerType = "padding2d";
 
@@ -32,60 +39,136 @@ function MapPadding2d(config) {
 
 MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function(center) {
+	init: function(center, layerStatus) {
 
 		this.center = center;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		if (this.lastLayer.fmCenters !== undefined) {
+		this.isOpen = layerStatus;
 
-			this.lastFmCenters = this.lastLayer.fmCenters;
-			this.fmCenters = [];
+		if (this.lastLayer.openFmCenters !== undefined) {
 
-			for (let i = 0; i < this.lastFmCenters.length; i++) {
-				let fmCenter = {};
-				fmCenter.x = this.lastFmCenters[i].x;
-				fmCenter.y = this.lastFmCenters[i].y;
-				fmCenter.z = this.lastFmCenters[i].z;
-				this.fmCenters.push(fmCenter);
-			}
+			this.lastOpenFmCenters = this.lastLayer.openFmCenters;
 
-			for (let i = 0; i < this.fmCenters.length; i++) {
+			for (let i = 0; i < this.lastOpenFmCenters.length; i++) {
+				let openFmCenter = {};
+				openFmCenter.x = this.lastOpenFmCenters[i].x;
+				openFmCenter.y = this.lastOpenFmCenters[i].y;
+				openFmCenter.z = this.lastOpenFmCenters[i].z;
+				this.openFmCenters.push(openFmCenter);
 
-				let paddingMap = new PaddingMap(
-					this.width,
-					this.height,
-					this.fmCenters[i],
-					this.paddingWidth,
-					this.paddingHeight
-				);
-				this.paddingMapList.push(paddingMap);
-				this.neuralGroup.add(paddingMap.getMapElement());
+				let closeFmCenter = {};
+				closeFmCenter.x = 0;
+				closeFmCenter.y = 0;
+				closeFmCenter.z = 0;
+				this.closeFmCenters.push(closeFmCenter);
 
 			}
 
 		} else {
 
-			console.log("single");
+			let openFmCenter = {
+				x: 0,
+				y: 0,
+				z: 0
+			};
+			this.openFmCenters.push(openFmCenter);
+
+			let closeFmCenter = {
+				x: 0,
+				y: 0,
+				z: 0
+			};
+			this.closeFmCenters.push(closeFmCenter);
+
+		}
+
+		if (this.isOpen) {
+			this.initLayerElements();
+		} else {
+			this.initLayerPlaceHolder();
+		}
+
+		this.scene.add(this.neuralGroup);
+
+	},
+
+	openLayer: function() {
+
+		console.log("open layer");
+
+		if (!this.isOpen) {
+
+			this.disposeLayerPlaceHolder();
+			this.initLayerElements(this.closeFmCenters);
+			LayerOpenFactory.openMapLayer(this);
+
+		}
+
+	},
+
+	closeLayer: function() {
+
+		console.log("close layer");
+
+		if (this.isOpen) {
+
+			LayerCloseFactory.closeMapLayer(this);
+
+		}
+
+	},
+
+	initLayerElements: function() {
+
+		for (let i = 0; i < this.openFmCenters.length; i++) {
 
 			let paddingMap = new PaddingMap(
 				this.width,
 				this.height,
-				{x: 0, y: 0, z: 0},
+				this.openFmCenters[i],
 				this.paddingWidth,
 				this.paddingHeight
 			);
-
-			console.log(paddingMap.getMapElement());
-
-			this.paddingMapList.push(paddingMap);
+			this.fmList.push(paddingMap);
 			this.neuralGroup.add(paddingMap.getMapElement());
 
 		}
 
-		this.scene.add(this.neuralGroup);
+	},
+
+	disposeLayerElements: function() {
+
+		let fmNum = this.fmList.length;
+		for (let i = 0; i < fmNum; i++) {
+			let paddingMap = this.fmList[i];
+			this.neuralGroup.remove(paddingMap.getMapElement());
+		}
+
+		this.fmList = [];
+
+	},
+
+	initLayerPlaceHolder: function() {
+
+		let placeholder = new MapPlaceholder(this.width, this.height, this.depth);
+		let placeholderElement = placeholder.getPlaceholder();
+
+		placeholderElement.elementType = "placeholder";
+		placeholderElement.layerIndex = this.layerIndex;
+
+		this.layerPlaceHolder = placeholderElement;
+
+		this.neuralGroup.add(placeholderElement);
+
+	},
+
+	disposeLayerPlaceHolder: function() {
+
+		this.neuralGroup.remove(this.layerPlaceHolder);
+		this.layerPlaceHolder = undefined;
 
 	},
 
@@ -107,31 +190,35 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.neuralValue = this.lastLayer.neuralValue;
 
-		let nonePaddingNeuralSize = this.contentWidth * this.contentHeight;
-		let fmNum = this.neuralValue.length / nonePaddingNeuralSize;
+		if (this.isOpen) {
 
-		let layerOutputValues = [];
+			let nonePaddingNeuralSize = this.contentWidth * this.contentHeight;
+			let fmNum = this.neuralValue.length / nonePaddingNeuralSize;
 
-		for (let j = 0; j < fmNum; j++) {
+			let layerOutputValues = [];
 
-			let referredIndex = j;
+			for (let j = 0; j < fmNum; j++) {
 
-			while (referredIndex < this.neuralValue.length) {
+				let referredIndex = j;
 
-				layerOutputValues.push(this.neuralValue[referredIndex]);
+				while (referredIndex < this.neuralValue.length) {
 
-				referredIndex += fmNum;
+					layerOutputValues.push(this.neuralValue[referredIndex]);
+
+					referredIndex += fmNum;
+				}
+
 			}
 
-		}
+			let colors = ColorUtils.getAdjustValues(layerOutputValues);
 
-		let colors = ColorUtils.getAdjustValues(layerOutputValues);
+			for (let i = 0; i < fmNum; i++) {
 
-		for (let i = 0; i < fmNum; i++) {
+				let paddingMap = this.paddingMapList[i];
 
-			let paddingMap = this.paddingMapList[i];
+				paddingMap.updateGrayScale(colors.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
 
-			paddingMap.updateGrayScale(colors.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
+			}
 
 		}
 

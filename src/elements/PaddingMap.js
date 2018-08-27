@@ -4,7 +4,11 @@ function PaddingMap(width, height, center, paddingWidth, paddingHeight) {
 
 	this.width = width;
 	this.height = height;
-	this.center = center;
+	this.center = {
+		x: center.x,
+		y: center.y,
+		z: center.z
+	};
 
 	this.paddingWidth = paddingWidth;
 	this.paddingHeight = paddingHeight;
@@ -19,6 +23,7 @@ function PaddingMap(width, height, center, paddingWidth, paddingHeight) {
 
 	this.dataArray = undefined;
 	this.dataTexture = undefined;
+
 	this.featureMap = undefined;
 
 	this.initFeatureMap();
@@ -112,6 +117,15 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		}
 
 		return true;
+
+	},
+
+	updatePos: function(pos) {
+
+		this.center.x = pos.x;
+		this.center.y = pos.y;
+		this.center.z = pos.z;
+		this.featureMap.position.set(pos.x, pos.y, pos.z);
 
 	}
 

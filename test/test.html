@@ -41,7 +41,7 @@
 
     let model = new VIS.model.Sequential(container, {
     	pixel: false,
-//        layer: "close"
+        layer: "close"
     });
 
     model.add(new VIS.layers.Input({
@@ -59,10 +59,10 @@
 //		pixel: true
 
     }));
-//	model.add(new VIS.layers.Padding2d({
-//		padding: [4, 4],
-////        pixel: true
-//	}));
+	model.add(new VIS.layers.Padding2d({
+		padding: [4, 4],
+//        pixel: true
+	}));
 //    model.add(new VIS.layers.Conv2d({
 //		kernelSize: 5,
 //		filters: 6,
