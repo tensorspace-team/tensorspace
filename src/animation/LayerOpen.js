@@ -1,3 +1,5 @@
+import { VariableLengthObject } from "../elements/VariableLengthObject";
+
 function LayerOpen() {
 
 }
@@ -44,6 +46,41 @@ LayerOpen.prototype = {
 
 		fmTween.start();
 
+
+	},
+
+	openQueueLayer: function(layer) {
+
+		let init = {
+			scale: 1
+		};
+
+		let end = {
+			scale: layer.units
+		};
+
+		let variableLengthObject = (new VariableLengthObject(1, 1, 1)).getElement();
+
+		let fmTween = new TWEEN.Tween(init)
+			.to(end, 2000);
+
+		fmTween.onUpdate(function () {
+
+			variableLengthObject.scale.x = init.scale;
+
+		}).onStart(function () {
+			console.log("start open queue layer");
+			layer.disposeLayerPlaceHolder();
+			layer.neuralGroup.add(variableLengthObject);
+		}).onComplete(function() {
+			console.log("end open queue layer");
+
+			layer.neuralGroup.remove(variableLengthObject);
+			layer.initLayerElements();
+			layer.isOpen = true;
+		});
+
+		fmTween.start();
 
 	}
 

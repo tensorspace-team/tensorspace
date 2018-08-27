@@ -1,3 +1,5 @@
+import { VariableLengthObject } from "../elements/VariableLengthObject";
+
 function LayerClose() {
 
 }
@@ -44,6 +46,11 @@ LayerClose.prototype = {
 		});
 
 		fmTween.start();
+
+	},
+
+	closeQueueLayer: function(layer) {
+
 
 	}
 

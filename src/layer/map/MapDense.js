@@ -1,6 +1,9 @@
 import MapLayer from './MapLayer';
 import NeuralQueue from '../../elements/NeuralQueue';
 import ColorUtils from '../../utils/ColorUtils';
+import {MapPlaceholder} from "../../elements/MapPlaceholder";
+import {LayerOpenFactory} from "../../animation/LayerOpen";
+import {LayerCloseFactory} from "../../animation/LayerClose";
 
 function MapDense(config) {
 
@@ -9,6 +12,8 @@ function MapDense(config) {
 	this.units = config.units;
 	this.depth = 1;
 	this.neuralQueue = undefined;
+
+	this.isOpen = undefined;
 
 }
 
@@ -23,27 +28,78 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		if (layerStatus) {
 
-			let neuralQueue = new NeuralQueue(this.units);
-			this.neuralQueue = neuralQueue;
-			this.neuralGroup.add(neuralQueue.getQueueElement());
+			this.isOpen = true;
+
+			this.initLayerElements();
 
 		} else {
 
-			let geometry = new THREE.BoxGeometry(10, 10, 10);
-			let material = new THREE.MeshBasicMaterial({
-				color: new THREE.Color( 1, 1, 1 )
-			});
+			this.isOpen = false;
 
-			let layerPlaceHolder = new THREE.Mesh(geometry, material);
-
-			layerPlaceHolder.position.set(0, 0, 0);
-
-			this.neuralGroup.add(layerPlaceHolder);
+			this.initLayerPlaceHolder();
 
 		}
 
-
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	openLayer: function() {
+
+		if (!this.isOpen) {
+
+			LayerOpenFactory.openQueueLayer(this);
+
+			this.isOpen = true;
+
+		}
+
+	},
+
+	closeLayer: function() {
+
+		if (this.isOpen) {
+
+			LayerCloseFactory.closeQueueLayer(this);
+
+			this.isOpen = false;
+		}
+
+	},
+
+	initLayerElements: function() {
+
+		let neuralQueue = new NeuralQueue(this.units);
+		this.neuralQueue = neuralQueue;
+		this.neuralGroup.add(neuralQueue.getQueueElement());
+
+	},
+
+	disposeLayerElements: function() {
+
+		this.neuralGroup.remove(this.neuralQueue);
+		this.neuralQueue = undefined;
+
+	},
+
+	initLayerPlaceHolder: function() {
+
+		let placeholder = new MapPlaceholder(5, 5, 5);
+		let placeholderElement = placeholder.getPlaceholder();
+
+		placeholderElement.elementType = "placeholder";
+		placeholderElement.layerIndex = this.layerIndex;
+
+		this.layerPlaceHolder = placeholderElement;
+
+		this.neuralGroup.add(placeholderElement);
+
+	},
+
+	disposeLayerPlaceHolder: function() {
+
+		this.neuralGroup.remove(this.layerPlaceHolder);
+		this.layerPlaceHolder = undefined;
 
 	},
 
