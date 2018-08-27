@@ -137,6 +137,10 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		}
 
+		if (this.neuralValue !== undefined) {
+			this.updateVis();
+		}
+
 	},
 
 	disposeLayerElements: function() {
@@ -191,37 +195,39 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.neuralValue = this.lastLayer.neuralValue;
 
 		if (this.isOpen) {
+			this.updateVis();
+		}
 
-			let nonePaddingNeuralSize = this.contentWidth * this.contentHeight;
-			let fmNum = this.neuralValue.length / nonePaddingNeuralSize;
+	},
 
-			let layerOutputValues = [];
+	updateVis: function() {
+		let nonePaddingNeuralSize = this.contentWidth * this.contentHeight;
+		let fmNum = this.neuralValue.length / nonePaddingNeuralSize;
 
-			for (let j = 0; j < fmNum; j++) {
+		let layerOutputValues = [];
 
-				let referredIndex = j;
+		for (let j = 0; j < fmNum; j++) {
 
-				while (referredIndex < this.neuralValue.length) {
+			let referredIndex = j;
 
-					layerOutputValues.push(this.neuralValue[referredIndex]);
+			while (referredIndex < this.neuralValue.length) {
 
-					referredIndex += fmNum;
-				}
+				layerOutputValues.push(this.neuralValue[referredIndex]);
 
-			}
-
-			let colors = ColorUtils.getAdjustValues(layerOutputValues);
-
-			for (let i = 0; i < fmNum; i++) {
-
-				let paddingMap = this.paddingMapList[i];
-
-				paddingMap.updateGrayScale(colors.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
-
+				referredIndex += fmNum;
 			}
 
 		}
 
+		let colors = ColorUtils.getAdjustValues(layerOutputValues);
+
+		for (let i = 0; i < fmNum; i++) {
+
+			let paddingMap = this.paddingMapList[i];
+
+			paddingMap.updateGrayScale(colors.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
+
+		}
 	}
 
 });

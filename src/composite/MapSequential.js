@@ -151,8 +151,7 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 		}
 
-	}
-	,
+	},
 
 	predict: function (input) {
 
@@ -167,22 +166,19 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 		this.predictResult = this.resource.predict(predictTensor);
 		this.updateLayerVis();
 
-	}
-	,
+	},
 
 	updateLayerVis: function () {
 
 		this.updateInputVis();
 		this.updateLayerPredictVis();
 
-	}
-	,
+	},
 
 
 	updateInputVis: function () {
 		this.layers[0].updateValue(this.inputValue);
-	}
-	,
+	},
 
 	updateLayerPredictVis: function () {
 
@@ -202,8 +198,7 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 		}
 
-	}
-	,
+	},
 
 	initLayerOutputIndex: function () {
 
@@ -218,6 +213,10 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 			}
 
 		}
+
+	},
+
+	clear: function() {
 
 	}
 

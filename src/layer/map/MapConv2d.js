@@ -51,7 +51,7 @@ function MapConv2d(config) {
 
 MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function(center, layerStatus) {
+	init: function (center, layerStatus) {
 
 		this.center = center;
 		this.openFmCenters = FmCenterGenerator.getFmCenters("line", this.filters, this.width, this.height);
@@ -74,7 +74,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	openLayer: function() {
+	openLayer: function () {
 
 		console.log("open layer");
 
@@ -89,7 +89,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	closeLayer: function() {
+	closeLayer: function () {
 
 		console.log("close layer");
 
@@ -101,7 +101,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	initLayerElements: function(centers) {
+	initLayerElements: function (centers) {
 
 		for (let i = 0; i < this.filters; i++) {
 			let featureMap = new FeatureMap(this.width, this.height, centers[i]);
@@ -109,9 +109,13 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 			this.neuralGroup.add(featureMap.getMapElement());
 		}
 
+		if (this.neuralValue !== undefined) {
+			this.updateVis();
+		}
+
 	},
 
-	disposeLayerElements: function() {
+	disposeLayerElements: function () {
 
 		let fmNum = this.fmList.length;
 		for (let i = 0; i < fmNum; i++) {
@@ -123,7 +127,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	initLayerPlaceHolder: function() {
+	initLayerPlaceHolder: function () {
 
 		let placeholder = new MapPlaceholder(this.width, this.height, this.depth);
 		let placeholderElement = placeholder.getPlaceholder();
@@ -137,14 +141,14 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	disposeLayerPlaceHolder: function() {
+	disposeLayerPlaceHolder: function () {
 
 		this.neuralGroup.remove(this.layerPlaceHolder);
 		this.layerPlaceHolder = undefined;
 
 	},
 
-	assemble: function(layerIndex) {
+	assemble: function (layerIndex) {
 
 		console.log("Assemble conv2d, layer index: " + layerIndex);
 
@@ -163,39 +167,40 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	updateValue: function(value) {
+	updateValue: function (value) {
+
+		this.neuralValue = value;
 
 		if (this.isOpen) {
+			this.updateVis();
+		}
+	},
 
-			this.neuralValue = value;
+	updateVis: function () {
 
-			let layerOutputValues = [];
+		let layerOutputValues = [];
 
-			for (let j = 0; j < this.depth; j++) {
+		for (let j = 0; j < this.depth; j++) {
 
-				let referredIndex = j;
+			let referredIndex = j;
 
-				while (referredIndex < value.length) {
+			while (referredIndex < this.neuralValue.length) {
 
-					layerOutputValues.push(value[referredIndex]);
+				layerOutputValues.push(this.neuralValue[referredIndex]);
 
-					referredIndex += this.depth;
-				}
-
+				referredIndex += this.depth;
 			}
 
-			let colors = ColorUtils.getAdjustValues(layerOutputValues);
+		}
 
-			let featureMapSize = this.width * this.height;
+		let colors = ColorUtils.getAdjustValues(layerOutputValues);
 
-			for (let i = 0; i < this.depth; i++) {
+		let featureMapSize = this.width * this.height;
 
-				let featureMap = this.fmList[i];
-				featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+		for (let i = 0; i < this.depth; i++) {
 
-			}
-
-		} else {
+			let featureMap = this.fmList[i];
+			featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
 
 		}
 

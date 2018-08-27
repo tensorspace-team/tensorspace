@@ -70,8 +70,12 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	initLayerElements: function() {
 
 		let neuralQueue = new NeuralQueue(this.units);
-		this.neuralQueue = neuralQueue.getQueueElement();
-		this.neuralGroup.add(this.neuralQueue);
+		this.neuralQueue = neuralQueue;
+		this.neuralGroup.add(neuralQueue.getQueueElement());
+
+		if (this.neuralValue !== undefined) {
+			this.updateVis();
+		}
 
 	},
 
@@ -79,7 +83,7 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		console.log("dispose queue element");
 
-		this.neuralGroup.remove(this.neuralQueue);
+		this.neuralGroup.remove(this.neuralQueue.getQueueElement());
 		this.neuralQueue = undefined;
 
 	},
@@ -118,11 +122,15 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.neuralValue = value;
 
 		if (this.isOpen) {
-			let colors = ColorUtils.getAdjustValues(value);
-
-			this.neuralQueue.updateGrayScale(colors);
+			this.updateVis();
 		}
 
+	},
+
+	updateVis: function() {
+		let colors = ColorUtils.getAdjustValues(this.neuralValue);
+
+		this.neuralQueue.updateGrayScale(colors);
 	}
 
 });

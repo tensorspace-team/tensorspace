@@ -6,8 +6,11 @@ function MapLayer(config) {
 	this.center = undefined;
 	this.nextLayer = undefined;
 	this.lastLayer = undefined;
+
+	// store all neural value as an array
+
 	this.neuralValue = undefined;
-	this.neuralList = [];
+
 	this.activation = undefined;
 	this.neuralNum = undefined;
 	this.outputShape = [];
