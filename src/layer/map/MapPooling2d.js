@@ -1,6 +1,8 @@
 import MapLayer from './MapLayer';
 import FeatureMap from '../../elements/FeatureMap';
 import ColorUtils from '../../utils/ColorUtils';
+import { LayerOpenFactory } from "../../animation/LayerOpen";
+import { LayerCloseFactory } from "../../animation/LayerClose";
 
 function MapPooling2d(config) {
 
@@ -16,6 +18,14 @@ function MapPooling2d(config) {
 
 	this.depth = undefined;
 
+	this.fmList = [];
+
+	this.fmCenters = [];
+	this.openFmCenters = [];
+	this.closeFmCenters = [];
+
+	this.isOpen = undefined;
+
 	this.layerType = "maxPool2d";
 
 }
@@ -26,45 +36,130 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.center = center;
 
-		for (let i = 0; i < this.lastLayer.fmCenters.length; i++) {
+		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
 			let fmCenter = {};
-			fmCenter.x = this.lastLayer.fmCenters[i].x;
+			fmCenter.x = this.lastLayer.openFmCenters[i].x;
 			fmCenter.y = 0;
 			fmCenter.z = 0;
-			this.fmCenters.push(fmCenter);
+			this.openFmCenters.push(fmCenter);
 		}
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
 		if (layerStatus) {
-			for (let i = 0; i < this.fmNum; i++) {
 
-				let fmCenter = this.fmCenters[i];
-
-				let featureMap = new FeatureMap(this.width, this.height, fmCenter);
-
-				this.fmList.push(featureMap);
-
-				this.neuralGroup.add(featureMap.getMapElement());
-
+			this.isOpen = true;
+			for (let i = 0; i < this.openFmCenters.length; i++) {
+				this.fmCenters.push(this.openFmCenters[i]);
 			}
+			this.initLayerElements(this.openFmCenters);
+			// for (let i = 0; i < this.fmNum; i++) {
+			//
+			// 	let fmCenter = this.fmCenters[i];
+			//
+			// 	let featureMap = new FeatureMap(this.width, this.height, fmCenter);
+			//
+			// 	this.fmList.push(featureMap);
+			//
+			// 	this.neuralGroup.add(featureMap.getMapElement());
+			//
+			// }
 		} else {
 
-			let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
-			let material = new THREE.MeshBasicMaterial({
-				color: new THREE.Color( 1, 1, 1 )
-			});
+			this.isOpen = false;
+			this.initLayerPlaceHolder();
 
-			let layerPlaceHolder = new THREE.Mesh(geometry, material);
-
-			layerPlaceHolder.position.set(0, 0, 0);
-
-			this.neuralGroup.add(layerPlaceHolder);
+			// let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
+			// let material = new THREE.MeshBasicMaterial({
+			// 	color: new THREE.Color( 1, 1, 1 )
+			// });
+			//
+			// let layerPlaceHolder = new THREE.Mesh(geometry, material);
+			//
+			// layerPlaceHolder.position.set(0, 0, 0);
+			// layerPlaceHolder.elementType = "placeholder";
+			//
+			// this.neuralGroup.add(layerPlaceHolder);
 
 		}
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	openLayer: function() {
+
+		console.log("open layer");
+
+		if (!this.isOpen) {
+
+			this.disposeLayerPlaceHolder();
+			this.initLayerElements(this.closeFmCenters);
+			LayerOpenFactory.openMapLayer(this);
+
+		}
+
+	},
+
+	closeLayer: function() {
+
+		console.log("close layer");
+
+		if (this.isOpen) {
+
+			LayerCloseFactory.closeMapLayer(this);
+
+		}
+
+	},
+
+	initLayerElements: function(centers) {
+
+		for (let i = 0; i < this.fmNum; i++) {
+
+			let featureMap = new FeatureMap(this.width, this.height, centers[i]);
+
+			this.fmList.push(featureMap);
+
+			this.neuralGroup.add(featureMap.getMapElement());
+
+		}
+
+	},
+
+	disposeLayerElements: function() {
+
+		let fmNum = this.fmList.length;
+		for (let i = 0; i < fmNum; i++) {
+			let featureMap = this.fmList[i];
+			this.neuralGroup.remove(featureMap.getMapElement());
+		}
+
+		this.fmList = [];
+
+	},
+
+	initLayerPlaceHolder: function() {
+		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
+		let material = new THREE.MeshBasicMaterial({
+			color: new THREE.Color( 1, 1, 1 )
+		});
+
+		let layerPlaceHolder = new THREE.Mesh(geometry, material);
+
+		layerPlaceHolder.position.set(0, 0, 0);
+		layerPlaceHolder.elementType = "placeholder";
+		layerPlaceHolder.layerIndex = this.layerIndex;
+
+		this.layerPlaceHolder = layerPlaceHolder;
+		this.neuralGroup.add(layerPlaceHolder);
+	},
+
+	disposeLayerPlaceHolder: function() {
+
+		this.neuralGroup.remove(this.layerPlaceHolder);
+		this.layerPlaceHolder = undefined;
 
 	},
 
@@ -78,6 +173,19 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.outputShape = [this.width, this.height, this.fmNum];
 
 		this.depth = this.lastLayer.depth;
+
+		for (let i = 0; i < this.depth; i++) {
+
+			let center = {
+				x: 0,
+				y: 0,
+				z: 0
+			};
+			this.closeFmCenters.push(center);
+
+		}
+
+		console.log(this.closeFmCenters);
 	},
 
 	updateValue: function(value) {

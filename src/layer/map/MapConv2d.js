@@ -44,7 +44,7 @@ function MapConv2d(config) {
 		this.isShapePredefined = false;
 	}
 
-	this.isOpen = true;
+	this.isOpen = undefined;
 
 }
 

@@ -94,6 +94,7 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 					let selectLayer = this.layers[selectedElement.layerIndex - 1];
 
+
 					selectLayer.openLayer();
 
 				}
@@ -114,8 +115,7 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 		this.isInitialized = true;
 
-	}
-	,
+	},
 
 	createModel: function () {
 
