@@ -2,6 +2,8 @@ import MapLayer from './MapLayer';
 import FeatureMap from '../../elements/FeatureMap';
 import ColorUtils from '../../utils/ColorUtils';
 import FmCenterGenerator from '../../utils/FmCenterGenerator';
+import { LayerOpenFactory } from "../../animation/LayerOpen";
+import { LayerCloseFactory } from "../../animation/LayerClose";
 
 function MapConv2d(config) {
 
@@ -79,46 +81,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 			this.disposeLayerPlaceHolder();
 			this.initLayerElements(this.closeFmCenters);
-
-			let init = {
-				ratio: 0
-			};
-			let end = {
-				ratio: 1
-			};
-
-			let fmTween = new TWEEN.Tween(init)
-				.to(end, 2000);
-
-			let layer = this;
-
-			fmTween.onUpdate(function () {
-
-				layer.fmCenters = [];
-
-				for (let i = 0; i < layer.fmList.length; i++) {
-
-					let tempPos = {
-						x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
-						y: init.ratio * (layer.openFmCenters[i].y - layer.closeFmCenters[i].y),
-						z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
-					};
-
-					layer.fmList[i].updatePos(tempPos);
-
-					layer.fmCenters.push(tempPos);
-
-				}
-
-			}).onStart(function () {
-				console.log("start open layer");
-			}).onComplete(function() {
-				console.log("end open layer");
-				layer.isOpen = true;
-
-			});
-
-			fmTween.start();
+			LayerOpenFactory.openMapLayer(this);
 
 		}
 
@@ -131,48 +94,8 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		if (this.isOpen) {
 
-			let init = {
-				ratio: 1
-			};
-			let end = {
-				ratio: 0
-			};
+			LayerCloseFactory.closeMapLayer(this);
 
-			let fmTween = new TWEEN.Tween(init)
-				.to(end, 2000);
-
-			let layer = this;
-
-			fmTween.onUpdate(function () {
-
-				layer.fmCenters = [];
-
-				for (let i = 0; i < layer.fmList.length; i++) {
-
-					let tempPos = {
-						x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
-						y: init.ratio * (layer.openFmCenters[i].y - layer.closeFmCenters[i].y),
-						z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
-					};
-
-					layer.fmList[i].updatePos(tempPos);
-
-					layer.fmCenters.push(tempPos);
-
-				}
-
-			}).onStart(function () {
-				console.log("start open layer");
-			}).onComplete(function() {
-				console.log("end open layer");
-				layer.disposeLayerElements();
-				layer.initLayerPlaceHolder();
-				layer.isOpen = true;
-			});
-
-			fmTween.start();
-
-			this.isOpen = false;
 		}
 
 	},
