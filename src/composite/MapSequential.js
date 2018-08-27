@@ -217,7 +217,9 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 	},
 
 	clear: function() {
-
+		for (let i = 1; i < this.layers.length; i++) {
+			this.layers[i].clear();
+		}
 	}
 
 });

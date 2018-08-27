@@ -40,6 +40,23 @@ MapLayer.prototype = {
 
 	setEnvironment: function(scene) {
 		this.scene = scene;
+	},
+
+	clear: function() {
+
+		if (this.neuralValue !== undefined) {
+
+			if (this.isOpen) {
+
+				let zeroValue = new Int8Array(this.neuralValue.length);
+				this.updateValue(zeroValue);
+
+			}
+
+			this.neuralValue = undefined;
+
+		}
+
 	}
 
 };
