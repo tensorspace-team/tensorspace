@@ -127,12 +127,20 @@
 		padding: 1,
 		name: "initInput"
 	}));
-	model.add(new VIS.layers.Conv2d({
+
+	let convLayer = new VIS.layers.Conv2d({
 		kernelSize: 5,
 		filters: 6,
 		strides: 1,
 		name: "conv2d1"
-	}));
+	});
+	model.add(convLayer);
+//	model.add(new VIS.layers.Conv2d({
+//		kernelSize: 5,
+//		filters: 6,
+//		strides: 1,
+//		name: "conv2d1"
+//	}));
 	model.add(new VIS.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2],
@@ -167,6 +175,11 @@
 	});
 
 	model.init();
+
+	setTimeout(function() {
+		console.log(333);
+		convLayer.closeLayer();
+    }, 10000);
 
 </script>
 

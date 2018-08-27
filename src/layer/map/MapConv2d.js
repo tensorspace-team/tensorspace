@@ -127,9 +127,50 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	closeLayer: function() {
 
+		console.log("close layer");
+
 		if (this.isOpen) {
 
+			let init = {
+				ratio: 1
+			};
+			let end = {
+				ratio: 0
+			};
 
+			let fmTween = new TWEEN.Tween(init)
+				.to(end, 2000);
+
+			let layer = this;
+
+			fmTween.onUpdate(function () {
+
+				layer.fmCenters = [];
+
+				for (let i = 0; i < layer.fmList.length; i++) {
+
+					let tempPos = {
+						x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
+						y: init.ratio * (layer.openFmCenters[i].y - layer.closeFmCenters[i].y),
+						z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
+					};
+
+					layer.fmList[i].updatePos(tempPos);
+
+					layer.fmCenters.push(tempPos);
+
+				}
+
+			}).onStart(function () {
+				console.log("start open layer");
+			}).onComplete(function() {
+				console.log("end open layer");
+				layer.disposeLayerElements();
+				layer.initLayerPlaceHolder();
+				layer.isOpen = true;
+			});
+
+			fmTween.start();
 
 			this.isOpen = false;
 		}
