@@ -39,14 +39,12 @@ function MapPadding2d(config) {
 
 MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function(center, layerStatus) {
+	init: function(center) {
 
 		this.center = center;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
-
-		this.isOpen = layerStatus;
 
 		if (this.lastLayer.openFmCenters !== undefined) {
 
@@ -176,7 +174,7 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	assemble: function(layerIndex) {
+	assemble: function(layerIndex, modelConfig) {
 
 		this.layerIndex = layerIndex;
 
@@ -187,6 +185,10 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.height = this.contentHeight + this.paddingHeight;
 
 		this.outputShape = [this.width, this.height, this.depth];
+
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
 
 	},
 

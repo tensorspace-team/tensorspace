@@ -19,22 +19,18 @@ function MapDense(config) {
 
 MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function(center, layerStatus) {
+	init: function(center) {
 
 		this.center = center;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		if (layerStatus) {
-
-			this.isOpen = true;
+		if (this.isOpen) {
 
 			this.initLayerElements();
 
 		} else {
-
-			this.isOpen = false;
 
 			this.initLayerPlaceHolder();
 
@@ -109,11 +105,15 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	assemble: function(layerIndex) {
+	assemble: function(layerIndex, modelConfig) {
 
 		this.layerIndex = layerIndex;
 
 		this.outputShape = [this.units, 1, 1];
+
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
 
 	},
 

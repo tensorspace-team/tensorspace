@@ -51,15 +51,13 @@ function MapConv2d(config) {
 
 MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function (center, layerStatus) {
+	init: function (center) {
 
 		this.center = center;
 		this.openFmCenters = FmCenterGenerator.getFmCenters("square", this.filters, this.width, this.height);
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
-
-		this.isOpen = layerStatus;
 
 		if (this.isOpen) {
 			for (let i = 0; i < this.openFmCenters.length; i++) {
@@ -148,7 +146,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	assemble: function (layerIndex) {
+	assemble: function (layerIndex, modelConfig) {
 
 		console.log("Assemble conv2d, layer index: " + layerIndex);
 
@@ -164,6 +162,10 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		}
 
 		this.outputShape = [this.width, this.height, this.filters];
+
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
 
 	},
 

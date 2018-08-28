@@ -33,7 +33,7 @@ function MapPooling2d(config) {
 
 MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
-	init: function(center, layerStatus) {
+	init: function(center) {
 
 		this.center = center;
 
@@ -47,8 +47,6 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
-
-		this.isOpen = layerStatus;
 
 		if (this.isOpen) {
 
@@ -142,7 +140,7 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	assemble: function(layerIndex) {
+	assemble: function(layerIndex, modelConfig) {
 		this.layerIndex = layerIndex;
 
 		this.inputShape = this.lastLayer.outputShape;
@@ -164,7 +162,10 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		}
 
-		console.log(this.closeFmCenters);
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
+
 	},
 
 	updateValue: function(value) {
