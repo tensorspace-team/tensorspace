@@ -1,8 +1,12 @@
-function VariableLengthObject(width, height, depth) {
+import { BasicMaterialOpacity } from "../utils/Constant";
+
+function VariableLengthObject(width, height, depth, color) {
 
 	this.width = width;
 	this.height = height;
 	this.depth = depth;
+
+	this.color = color;
 
 	this.element = undefined;
 
@@ -15,7 +19,7 @@ VariableLengthObject.prototype = {
 
 		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
 		let material = new THREE.MeshBasicMaterial({
-			color: new THREE.Color( 1, 1, 1 )
+			color: this.color, opacity: BasicMaterialOpacity, transparent: true
 		});
 
 		let variableLengthObject = new THREE.Mesh(geometry, material);

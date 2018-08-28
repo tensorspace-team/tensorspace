@@ -86,7 +86,7 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	initLayerPlaceHolder: function() {
 
-		let placeholder = new MapPlaceholder(5, 5, 5);
+		let placeholder = new MapPlaceholder(5, 5, 5, this.color);
 		let placeholderElement = placeholder.getPlaceholder();
 
 		placeholderElement.elementType = "placeholder";

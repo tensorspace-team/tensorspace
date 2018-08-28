@@ -1,4 +1,5 @@
 import { MinAlpha } from "../utils/Constant";
+import { BasicMaterialOpacity } from "../utils/Constant";
 
 function PaddingMap(width, height, center, paddingWidth, paddingHeight, color) {
 
@@ -56,7 +57,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
-			color: this.color, transparent: true, opacity: 0.2
+			color: this.color, transparent: true, opacity: BasicMaterialOpacity
 		});
 
 		let materials = [

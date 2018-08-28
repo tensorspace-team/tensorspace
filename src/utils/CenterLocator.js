@@ -35,17 +35,17 @@ CenterLocator.prototype = {
 
 		let centerList = [];
 
-		let squareLength = MathUtils.getMaxSquareRoot(filters);
+		let squareWidth = MathUtils.getMaxSquareRoot(filters);
+		let squareHeight = Math.floor(filters / squareWidth) === filters / squareWidth ?
+			filters / squareWidth : Math.floor(filters / squareWidth) + 1;
 
-		console.log(squareLength);
+		let initXTranslate = - (squareWidth - 1) / 2 * (width + this.fmInterval);
+		let initZTranslate = - (squareHeight - 1) / 2 * (height + this.fmInterval);
 
-		let initXTranslate = - (squareLength - 1) / 2 * (width + this.fmInterval);
-		let initZTranslate = - (squareLength - 1) / 2 * (height + this.fmInterval);
+		for (let i = 0; i < squareHeight; i++) {
+			for (let j = 0; j < squareWidth; j++) {
 
-		for (let i = 0; i < squareLength; i++) {
-			for (let j = 0; j < squareLength; j++) {
-
-				if ((i * squareLength + j + 1) > filters) {
+				if ((i * squareWidth + j + 1) > filters) {
 
 					return centerList;
 				}

@@ -1,5 +1,6 @@
 import ColorUtils from '../utils/ColorUtils';
 import { MinAlpha } from "../utils/Constant";
+import { BasicMaterialOpacity } from "../utils/Constant";
 
 function FeatureMap(width, height, initCenter, color) {
 
@@ -40,11 +41,9 @@ FeatureMap.prototype = {
 
 		let boxGeometry = new THREE.BoxGeometry(this.fmWidth, 1, this.fmHeight);
 
-		// 这里设置color可以隐约显示颜色总体的感觉
-
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
-			color: this.color, transparent: true, opacity: 0.2
+			color: this.color, transparent: true, opacity: BasicMaterialOpacity
 		});
 
 		let materials = [

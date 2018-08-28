@@ -1,4 +1,5 @@
 import { MinAlpha } from "../utils/Constant";
+import { BasicMaterialOpacity } from "../utils/Constant";
 
 function NeuralQueue(length, color) {
 
@@ -35,7 +36,7 @@ NeuralQueue.prototype = {
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
-			color: this.color, transparent: true, opacity: 0.2
+			color: this.color, transparent: true, opacity: BasicMaterialOpacity
 		});
 
 		let materials = [
