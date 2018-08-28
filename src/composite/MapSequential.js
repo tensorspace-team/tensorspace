@@ -10,8 +10,6 @@ function MapSequential(container, config) {
 	this.model = undefined;
 	this.loadModel = false;
 
-	console.log(config.layer);
-
 	if (config.layer !== "close") {
 		this.layerStatus = true;
 	} else {

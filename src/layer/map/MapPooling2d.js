@@ -40,8 +40,8 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
 			let fmCenter = {};
 			fmCenter.x = this.lastLayer.openFmCenters[i].x;
-			fmCenter.y = 0;
-			fmCenter.z = 0;
+			fmCenter.y = this.lastLayer.openFmCenters[i].y;
+			fmCenter.z = this.lastLayer.openFmCenters[i].z;
 			this.openFmCenters.push(fmCenter);
 		}
 

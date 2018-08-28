@@ -54,7 +54,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	init: function (center, layerStatus) {
 
 		this.center = center;
-		this.openFmCenters = FmCenterGenerator.getFmCenters("line", this.filters, this.width, this.height);
+		this.openFmCenters = FmCenterGenerator.getFmCenters("square", this.filters, this.width, this.height);
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);

@@ -18,6 +18,11 @@ FmCenterGenerator.prototype = {
 
 		} else if (shape === "square") {
 
+			let centerList = centerLocator.createSquareCenters(filters, width, height);
+			let fmCenters = this.create3DCenters(centerList);
+
+			return fmCenters;
+
 		} else {
 			console.error("do not support shape " + shape);
 		}
