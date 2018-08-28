@@ -128,7 +128,8 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 				this.height,
 				this.openFmCenters[i],
 				this.paddingWidth,
-				this.paddingHeight
+				this.paddingHeight,
+				this.color
 			);
 			this.fmList.push(paddingMap);
 			this.neuralGroup.add(paddingMap.getMapElement());
@@ -188,6 +189,10 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.padding;
 		}
 
 	},

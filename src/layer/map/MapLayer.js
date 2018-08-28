@@ -26,6 +26,9 @@ function MapLayer(config) {
 
 	// output index to fit the layer
 	this.resourceOutputIndex = undefined;
+
+	// color for layer neural visualization
+	this.color = undefined;
 }
 
 MapLayer.prototype = {

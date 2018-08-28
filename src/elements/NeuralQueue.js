@@ -1,8 +1,9 @@
 import { MinAlpha } from "../utils/Constant";
 
-function NeuralQueue(length) {
+function NeuralQueue(length, color) {
 
 	this.queueLength = length;
+	this.color = color;
 
 	this.dataArray = undefined;
 	this.dataTexture = undefined;
@@ -14,17 +15,6 @@ function NeuralQueue(length) {
 NeuralQueue.prototype = {
 
 	initNeuralQueue: function() {
-
-		// let geometry = new THREE.BoxGeometry(this.queueLength, 1, 1, this.queueLength, 1, 1);
-		// let material = new THREE.MeshBasicMaterial({
-		// 	vertexColors: THREE.FaceColors
-		// });
-		//
-		// let cube = new THREE.Mesh(geometry, material);
-		//
-		// cube.position.set(0, 0, 0);
-		//
-		// this.queue = cube;
 
 		let data = new Uint8Array(this.queueLength);
 		this.dataArray = data;
@@ -43,9 +33,9 @@ NeuralQueue.prototype = {
 
 		// 这里设置color可以隐约显示颜色总体的感觉
 
-		let material = new THREE.MeshBasicMaterial({ color: 0xffffff, alphaMap: dataTex, transparent: true });
+		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
-			color: 0xffffff
+			color: this.color, transparent: true, opacity: 0.2
 		});
 
 		let materials = [

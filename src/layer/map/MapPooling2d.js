@@ -95,7 +95,7 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		for (let i = 0; i < this.fmNum; i++) {
 
-			let featureMap = new FeatureMap(this.width, this.height, centers[i]);
+			let featureMap = new FeatureMap(this.width, this.height, centers[i], this.color);
 
 			this.fmList.push(featureMap);
 
@@ -164,6 +164,10 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.pooling;
 		}
 
 	},

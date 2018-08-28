@@ -4,7 +4,9 @@ function MapModelConfiguration(config) {
 	this.layerInitStatus = true;
 	this.color = {
 		conv: 0xffffff,
-		pooling: 0xffffff
+		pooling: 0xffffff,
+		dense: 0xffffff,
+		padding: 0xffffff
 	};
 
 	if (config !== undefined) {
@@ -25,6 +27,14 @@ function MapModelConfiguration(config) {
 
 			if (config.color.pooling !== undefined) {
 				this.color.pooling = config.color.pooling;
+			}
+
+			if (config.color.dense !== undefined ) {
+				this.color.dense = config.color.dense;
+			}
+
+			if (config.color.padding !== undefined) {
+				this.color.padding = config.color.padding;
 			}
 
 		}

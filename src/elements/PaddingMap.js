@@ -1,6 +1,6 @@
 import { MinAlpha } from "../utils/Constant";
 
-function PaddingMap(width, height, center, paddingWidth, paddingHeight) {
+function PaddingMap(width, height, center, paddingWidth, paddingHeight, color) {
 
 	this.width = width;
 	this.height = height;
@@ -20,6 +20,8 @@ function PaddingMap(width, height, center, paddingWidth, paddingHeight) {
 
 	this.contentWidth = this.width - this.paddingWidth;
 	this.contentHeight = this.height - this.paddingHeight;
+
+	this.color = color;
 
 	this.dataArray = undefined;
 	this.dataTexture = undefined;
@@ -52,9 +54,9 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 		// 这里设置color可以隐约显示颜色总体的感觉
 
-		let material = new THREE.MeshBasicMaterial({ color: 0xffffff, alphaMap: dataTex, transparent: true });
+		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
-			color: 0xffffff
+			color: this.color, transparent: true, opacity: 0.2
 		});
 
 		let materials = [

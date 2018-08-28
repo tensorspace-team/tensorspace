@@ -102,7 +102,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	initLayerElements: function (centers) {
 
 		for (let i = 0; i < this.filters; i++) {
-			let featureMap = new FeatureMap(this.width, this.height, centers[i]);
+			let featureMap = new FeatureMap(this.width, this.height, centers[i], this.color);
 			this.fmList.push(featureMap);
 			this.neuralGroup.add(featureMap.getMapElement());
 		}
@@ -165,6 +165,10 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.conv;
 		}
 
 	},

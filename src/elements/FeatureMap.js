@@ -1,10 +1,11 @@
 import ColorUtils from '../utils/ColorUtils';
 import { MinAlpha } from "../utils/Constant";
 
-function FeatureMap(width, height, initCenter) {
+function FeatureMap(width, height, initCenter, color) {
 
 	this.fmWidth = width;
 	this.fmHeight = height;
+	this.color = color;
 
 	this.fmCenter = {
 		x: initCenter.x,
@@ -41,9 +42,9 @@ FeatureMap.prototype = {
 
 		// 这里设置color可以隐约显示颜色总体的感觉
 
-		let material = new THREE.MeshBasicMaterial({ color: 0xffffff, alphaMap: dataTex, transparent: true });
+		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
-			color: 0xffffff
+			color: this.color, transparent: true, opacity: 0.2
 		});
 
 		let materials = [

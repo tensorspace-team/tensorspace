@@ -65,7 +65,7 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	initLayerElements: function() {
 
-		let neuralQueue = new NeuralQueue(this.units);
+		let neuralQueue = new NeuralQueue(this.units, this.color);
 		this.neuralQueue = neuralQueue;
 		this.neuralGroup.add(neuralQueue.getQueueElement());
 
@@ -113,6 +113,10 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.dense;
 		}
 
 	},
