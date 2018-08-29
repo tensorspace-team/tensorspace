@@ -1,10 +1,13 @@
-function Placeholder(width, height, depth) {
+function Placeholder(width, height, depth, color) {
 
 	this.width = width;
 	this.height = height;
 	this.depth = depth;
 
+	this.color = color;
+
 	this.placeholder = undefined;
+	this.edgesLine = undefined;
 
 	this.init();
 
@@ -15,7 +18,7 @@ Placeholder.prototype = {
 	init: function() {
 		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
 		let material = new THREE.MeshBasicMaterial({
-			color: new THREE.Color( 1, 1, 1 )
+			color: this.color
 		});
 
 		let layerPlaceHolder = new THREE.Mesh(geometry, material);
@@ -23,10 +26,21 @@ Placeholder.prototype = {
 		layerPlaceHolder.position.set(0, 0, 0);
 
 		this.placeholder = layerPlaceHolder;
+
+		let edges = new THREE.EdgesGeometry(geometry);
+		let edgesLine = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
+			color: 0x000000
+		}));
+
+		this.edgesLine = edgesLine;
 	},
 
 	getPlaceholder: function() {
 		return this.placeholder;
+	},
+
+	getEdges: function() {
+		return this.edgesLine;
 	}
 
 };

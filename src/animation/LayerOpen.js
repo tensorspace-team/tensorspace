@@ -60,7 +60,7 @@ LayerOpen.prototype = {
 			scale: layer.units
 		};
 
-		let variableLengthObject = (new VariableLengthObject(1, 1, 1)).getElement();
+		let variableLengthObject = (new VariableLengthObject(1, 1, 1, layer.color)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
 			.to(end, this.animationTime);

@@ -59,7 +59,7 @@ LayerClose.prototype = {
 			scale: 1 / layer.units
 		};
 
-		let variableLengthObject = (new VariableLengthObject(layer.units, 1, 1)).getElement();
+		let variableLengthObject = (new VariableLengthObject(layer.units, 1, 1, layer.color)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
 			.to(end, 2000);

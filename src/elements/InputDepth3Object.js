@@ -1,7 +1,9 @@
+// 染色方法与depth = 1的不一样
 function InputDepth3Object(width, height, initCenter, color) {
 
 	this.width = width;
 	this.height = height;
+	this.depth = 3;
 	this.fmCenter = {
 		x: initCenter.x,
 		y: initCenter.y,
@@ -15,7 +17,7 @@ function InputDepth3Object(width, height, initCenter, color) {
 
 	this.featureMap = undefined;
 
-	this.init();
+	this.initFeatureMap();
 
 }
 

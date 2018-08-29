@@ -156,22 +156,26 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initLayerPlaceHolder: function() {
 
-		let placeholder = new Placeholder(this.width, this.height, this.depth);
+		let placeholder = new Placeholder(this.width, this.height, this.depth, this.color);
 		let placeholderElement = placeholder.getPlaceholder();
 
 		placeholderElement.elementType = "placeholder";
 		placeholderElement.layerIndex = this.layerIndex;
 
 		this.layerPlaceHolder = placeholderElement;
+		this.edgesLine = placeholder.getEdges();
 
-		this.neuralGroup.add(placeholderElement);
+		this.neuralGroup.add(this.layerPlaceHolder);
+		this.neuralGroup.add(this.edgesLine);
 
 	},
 
 	disposeLayerPlaceHolder: function() {
 
 		this.neuralGroup.remove(this.layerPlaceHolder);
+		this.neuralGroup.remove(this.edgesLine);
 		this.layerPlaceHolder = undefined;
+		this.edgesLine = undefined;
 
 	},
 

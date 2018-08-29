@@ -93,15 +93,19 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		placeholderElement.layerIndex = this.layerIndex;
 
 		this.layerPlaceHolder = placeholderElement;
+		this.edgesLine = placeholder.getEdges();
 
-		this.neuralGroup.add(placeholderElement);
+		this.neuralGroup.add(this.layerPlaceHolder);
+		this.neuralGroup.add(this.edgesLine);
 
 	},
 
 	disposeLayerPlaceHolder: function() {
 
 		this.neuralGroup.remove(this.layerPlaceHolder);
+		this.neuralGroup.remove(this.edgesLine);
 		this.layerPlaceHolder = undefined;
+		this.edgesLine = undefined;
 
 	},
 
