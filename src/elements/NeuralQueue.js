@@ -74,4 +74,4 @@ NeuralQueue.prototype = {
 
 };
 
-export default NeuralQueue;
+export { NeuralQueue };

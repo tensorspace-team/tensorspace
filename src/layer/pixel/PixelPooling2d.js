@@ -1,9 +1,9 @@
 import { MinAlpha } from "../../utils/Constant";
 import { NeuralBoxLength } from "../../utils/Constant";
-import ColorUtils from '../../utils/ColorUtils';
-import Layer from './PixelLayer';
+import { colorUtils } from '../../utils/ColorUtils';
+import { Layer } from './PixelLayer';
 
-function Pooling2d(config) {
+function PixelPooling2d(config) {
 
 	Layer.call(this, config);
 
@@ -21,7 +21,7 @@ function Pooling2d(config) {
 
 }
 
-Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
+PixelPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function (center) {
 
@@ -133,7 +133,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	updateValue: function(value) {
 		this.neuralValue = value;
 
-		let colorList = ColorUtils.getColors(value);
+		let colorList = colorUtils.getColors(value);
 
 		for (let i = 0; i < colorList.length; i++) {
 
@@ -145,4 +145,4 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 });
 
-export default Pooling2d;
+export { PixelPooling2d };

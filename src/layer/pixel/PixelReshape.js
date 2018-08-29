@@ -1,12 +1,12 @@
-import Layer from './PixelLayer';
+import { Layer } from './PixelLayer';
 
-function Reshape(config) {
+function PixelReshape(config) {
 
 	Layer.call(this, config);
 
 }
 
-Reshape.prototype = Object.assign( Object.create( Layer.prototype ), {
+PixelReshape.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	init: function() {
 
@@ -19,4 +19,4 @@ Reshape.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 } );
 
-export default Reshape;
+export { PixelReshape};

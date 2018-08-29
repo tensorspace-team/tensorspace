@@ -1,5 +1,5 @@
-function MapOutput() {
+function Output() {
 
 }
 
-export default MapOutput;
+export { Output };

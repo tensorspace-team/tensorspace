@@ -1,4 +1,4 @@
-import Loader from './Loader';
+import { Loader } from './Loader';
 
 function KerasLoader(model) {
 
@@ -12,4 +12,4 @@ KerasLoader.prototype = Object.assign(Object.create(KerasLoader.prototype), {
 
 });
 
-export default KerasLoader;
+export { KerasLoader };

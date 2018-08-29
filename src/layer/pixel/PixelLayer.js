@@ -88,4 +88,4 @@ Layer.prototype = {
 
 };
 
-export default Layer;
+export { Layer };

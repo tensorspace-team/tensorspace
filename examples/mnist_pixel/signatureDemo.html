@@ -116,55 +116,47 @@
 
 	let container = document.getElementById("container");
 
-	let model = new VIS.model.Sequential(container, {
-		pixel: true
+	let model = new VIS.model.PixelSequential(container, {
+
     });
 
-	model.add(new VIS.layers.Input({
+	model.add(new VIS.layers.PixelInput({
 		shape: [28, 28, 1],
-		name: "initInput",
-		pixel: true
+		name: "initInput"
 	}));
-	model.add(new VIS.layers.Conv2d({
+	model.add(new VIS.layers.PixelConv2d({
 		kernelSize: 5,
 		filters: 6,
 		strides: 1,
-		name: "conv2d1",
-		pixel: true
+		name: "conv2d1"
 	}));
-	model.add(new VIS.layers.Pooling2d({
+	model.add(new VIS.layers.PixelPooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2],
-		name: "maxPool2d1",
-		pixel: true
+		name: "maxPool2d1"
 	}));
-	model.add(new VIS.layers.Conv2d({
+	model.add(new VIS.layers.PixelConv2d({
 		kernelSize: 5,
 		filters: 16,
 		strides: 1,
-		name: "conv2d2",
-		pixel: true
+		name: "conv2d2"
 	}));
-	model.add(new VIS.layers.Pooling2d({
+	model.add(new VIS.layers.PixelPooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2],
-		name: "maxPool2d2",
-		pixel: true
+		name: "maxPool2d2"
 	}));
-	model.add(new VIS.layers.Dense({
+	model.add(new VIS.layers.PixelDense({
 		units: 120,
-		name: "dense1",
-		pixel: true
+		name: "dense1"
 	}));
-	model.add(new VIS.layers.Dense({
+	model.add(new VIS.layers.PixelDense({
 		units: 84,
-		name: "dense2",
-		pixel: true
+		name: "dense2"
 	}));
-	model.add(new VIS.layers.Output({
+	model.add(new VIS.layers.PixelOutput({
 		units: 10,
-		name: "output",
-		pixel: true
+		name: "output"
 	}));
 
 	model.load('./tfjsModel/mnist.json', {
@@ -174,7 +166,7 @@
 	model.init(function() {
 
 		setTimeout(function() {
-			model.flatten();
+//			model.flatten();
 		}, 3000);
 
     });

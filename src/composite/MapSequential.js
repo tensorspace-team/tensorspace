@@ -1,7 +1,7 @@
-import AbstractComposite from './AbstractComposite';
+import { AbstractComposite } from './AbstractComposite';
 import { MapModelConfiguration } from "../configure/MapModelConfiguration";
 
-function MapSequential(container, config) {
+function Sequential(container, config) {
 
 	AbstractComposite.call(this, container);
 
@@ -17,7 +17,7 @@ function MapSequential(container, config) {
 
 }
 
-MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototype), {
+Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype), {
 
 	add: function (layer) {
 
@@ -219,4 +219,4 @@ MapSequential.prototype = Object.assign(Object.create(AbstractComposite.prototyp
 
 });
 
-export default MapSequential;
+export { Sequential };

@@ -1,6 +1,6 @@
-import AbstractComposite from './AbstractComposite';
+import { AbstractComposite } from './AbstractComposite';
 
-function Sequential(container) {
+function PixelSequential(container, config) {
 
 	AbstractComposite.call(this, container);
 
@@ -14,7 +14,7 @@ function Sequential(container) {
 
 }
 
-Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype), {
+PixelSequential.prototype = Object.assign(Object.create(AbstractComposite.prototype), {
 
 	add: function (layer) {
 
@@ -358,4 +358,4 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 });
 
-export default Sequential;
+export { PixelSequential };

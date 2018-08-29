@@ -1,11 +1,11 @@
-import MapLayer from './MapLayer';
-import NeuralQueue from '../../elements/NeuralQueue';
-import ColorUtils from '../../utils/ColorUtils';
+import { MapLayer } from './MapLayer';
+import { NeuralQueue } from '../../elements/NeuralQueue';
+import { colorUtils } from '../../utils/ColorUtils';
 import {MapPlaceholder} from "../../elements/MapPlaceholder";
 import {LayerOpenFactory} from "../../animation/LayerOpen";
 import {LayerCloseFactory} from "../../animation/LayerClose";
 
-function MapDense(config) {
+function Dense(config) {
 
 	MapLayer.call(this, config);
 
@@ -17,7 +17,7 @@ function MapDense(config) {
 
 }
 
-MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Dense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	init: function(center) {
 
@@ -132,7 +132,7 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	},
 
 	updateVis: function() {
-		let colors = ColorUtils.getAdjustValues(this.neuralValue);
+		let colors = colorUtils.getAdjustValues(this.neuralValue);
 
 		this.neuralQueue.updateGrayScale(colors);
 	}
@@ -140,4 +140,4 @@ MapDense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 });
 
 
-export default MapDense;
+export { Dense };

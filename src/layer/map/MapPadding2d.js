@@ -1,11 +1,11 @@
-import MapLayer from './MapLayer';
-import PaddingMap from '../../elements/PaddingMap';
-import ColorUtils from '../../utils/ColorUtils';
+import { MapLayer } from './MapLayer';
+import { PaddingMap } from '../../elements/PaddingMap';
+import { colorUtils } from '../../utils/ColorUtils';
 import { MapPlaceholder } from "../../elements/MapPlaceholder";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 
-function MapPadding2d(config) {
+function Padding2d(config) {
 
 	MapLayer.call(this, config);
 
@@ -37,7 +37,7 @@ function MapPadding2d(config) {
 
 }
 
-MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Padding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	init: function(center) {
 
@@ -226,7 +226,7 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		}
 
-		let colors = ColorUtils.getAdjustValues(layerOutputValues);
+		let colors = colorUtils.getAdjustValues(layerOutputValues);
 
 		for (let i = 0; i < fmNum; i++) {
 
@@ -239,4 +239,4 @@ MapPadding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 });
 
-export default MapPadding2d;
+export { Padding2d };

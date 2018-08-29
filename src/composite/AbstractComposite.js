@@ -1,5 +1,5 @@
-import SceneInitializer from '../scene/SceneInitializer';
-import TfjsLoader from '../loader/TfjsLoader';
+import { SceneInitializer } from '../scene/SceneInitializer';
+import { TfjsLoader } from '../loader/TfjsLoader';
 
 function AbstractComposite( container ) {
 
@@ -39,4 +39,4 @@ AbstractComposite.prototype = Object.assign(Object.create( SceneInitializer.prot
 
 });
 
-export default AbstractComposite;
+export { AbstractComposite };

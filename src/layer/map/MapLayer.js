@@ -1,5 +1,3 @@
-import ColorUtils from '../../utils/ColorUtils';
-
 function MapLayer(config) {
 	this.scene = undefined;
 	this.layerIndex = undefined;
@@ -65,4 +63,4 @@ MapLayer.prototype = {
 };
 
 
-export default MapLayer;
+export { MapLayer };

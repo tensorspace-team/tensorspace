@@ -11,4 +11,4 @@ Loader.prototype = {
 
 };
 
-export default Loader;
+export { Loader };

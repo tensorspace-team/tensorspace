@@ -1,5 +1,5 @@
-function MapReshape() {
+function Reshape() {
 
 }
 
-export default MapReshape;
+export { Reshape };

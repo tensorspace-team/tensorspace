@@ -1,9 +1,9 @@
 import { MinAlpha } from "../../utils/Constant";
 import { NeuralBoxLength } from "../../utils/Constant";
-import ColorUtils from '../../utils/ColorUtils';
-import Layer from './PixelLayer';
+import { colorUtils } from '../../utils/ColorUtils';
+import { Layer } from './PixelLayer';
 
-function Dense(config) {
+function PixelDense(config) {
 
 	Layer.call(this, config);
 
@@ -12,7 +12,7 @@ function Dense(config) {
 
 }
 
-Dense.prototype = Object.assign( Object.create( Layer.prototype ), {
+PixelDense.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	init: function(center) {
 
@@ -73,7 +73,7 @@ Dense.prototype = Object.assign( Object.create( Layer.prototype ), {
 	updateValue: function(value) {
 		this.neuralValue = value;
 
-		let colorList = ColorUtils.getColors(value);
+		let colorList = colorUtils.getColors(value);
 
 		for (let i = 0; i < colorList.length; i++) {
 
@@ -85,4 +85,4 @@ Dense.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 } );
 
-export default Dense;
+export { PixelDense };

@@ -1,12 +1,12 @@
-import MapLayer from './MapLayer';
-import FeatureMap from '../../elements/FeatureMap';
-import ColorUtils from '../../utils/ColorUtils';
-import FmCenterGenerator from '../../utils/FmCenterGenerator';
+import { MapLayer } from './MapLayer';
+import { FeatureMap } from '../../elements/FeatureMap';
+import { colorUtils } from '../../utils/ColorUtils';
+import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { MapPlaceholder } from "../../elements/MapPlaceholder";
 
-function MapConv2d(config) {
+function Conv2d(config) {
 
 	MapLayer.call(this, config);
 
@@ -49,12 +49,12 @@ function MapConv2d(config) {
 
 }
 
-MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Conv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	init: function (center) {
 
 		this.center = center;
-		this.openFmCenters = FmCenterGenerator.getFmCenters("square", this.filters, this.width, this.height);
+		this.openFmCenters = fmCenterGenerator.getFmCenters("square", this.filters, this.width, this.height);
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -199,7 +199,7 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		}
 
-		let colors = ColorUtils.getAdjustValues(layerOutputValues);
+		let colors = colorUtils.getAdjustValues(layerOutputValues);
 
 		let featureMapSize = this.width * this.height;
 
@@ -214,4 +214,4 @@ MapConv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 });
 
-export default MapConv2d;
+export { Conv2d };

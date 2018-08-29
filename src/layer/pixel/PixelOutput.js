@@ -1,8 +1,8 @@
 import { MinAlpha } from "../../utils/Constant";
-import ColorUtils from '../../utils/ColorUtils';
-import Layer from './PixelLayer';
+import { colorUtils } from '../../utils/ColorUtils';
+import { Layer } from './PixelLayer';
 
-function Output(config) {
+function PixelOutput(config) {
 
 	Layer.call(this, config);
 
@@ -11,7 +11,7 @@ function Output(config) {
 
 }
 
-Output.prototype = Object.assign( Object.create( Layer.prototype ), {
+PixelOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	init: function(center) {
 
@@ -72,7 +72,7 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 	updateValue: function(value) {
 		this.neuralValue = value;
 
-		let colorList = ColorUtils.getColors(value);
+		let colorList = colorUtils.getColors(value);
 
 		for (let i = 0; i < colorList.length; i++) {
 
@@ -84,4 +84,4 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 } );
 
-export default Output;
+export { PixelOutput };

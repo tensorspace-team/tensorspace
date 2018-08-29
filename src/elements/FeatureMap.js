@@ -1,4 +1,3 @@
-import ColorUtils from '../utils/ColorUtils';
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 
@@ -87,4 +86,4 @@ FeatureMap.prototype = {
 
 };
 
-export default FeatureMap;
+export { FeatureMap };

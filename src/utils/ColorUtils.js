@@ -57,4 +57,4 @@ ColorUtils.prototype = {
 
 let colorUtils = new ColorUtils();
 
-export default colorUtils;
+export { colorUtils };

@@ -117,4 +117,4 @@ SceneInitializer.prototype = {
 
 };
 
-export default SceneInitializer;
+export { SceneInitializer };

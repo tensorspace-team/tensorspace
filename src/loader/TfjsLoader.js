@@ -1,4 +1,4 @@
-import Loader from './Loader';
+import { Loader } from './Loader';
 
 function TfjsLoader( model ) {
 
@@ -54,4 +54,4 @@ TfjsLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
 });
 
-export default TfjsLoader;
+export { TfjsLoader };

@@ -1,8 +1,8 @@
-import MapLayer from './MapLayer';
-import FeatureMap from '../../elements/FeatureMap';
-import ColorUtils from '../../utils/ColorUtils';
+import { MapLayer } from './MapLayer';
+import { FeatureMap } from '../../elements/FeatureMap';
+import { colorUtils } from '../../utils/ColorUtils';
 
-function MapInput(config) {
+function Input(config) {
 
 	MapLayer.call(this, config);
 
@@ -15,7 +15,7 @@ function MapInput(config) {
 	this.layerType = "input";
 }
 
-MapInput.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Input.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	init: function(center) {
 
@@ -44,7 +44,7 @@ MapInput.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		this.neuralValue = value;
 
-		let colors = ColorUtils.getAdjustValues(value);
+		let colors = colorUtils.getAdjustValues(value);
 
 		for (let i = 0; i < this.fmList.length; i++) {
 
@@ -56,4 +56,4 @@ MapInput.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 });
 
-export default MapInput;
+export { Input };

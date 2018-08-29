@@ -1,9 +1,9 @@
-import Layer from './PixelLayer';
+import { Layer } from './PixelLayer';
 import { NeuralBoxLength } from "../../utils/Constant";
 import { MinAlpha } from "../../utils/Constant";
-import ColorUtils from '../../utils/ColorUtils';
+import { colorUtils } from '../../utils/ColorUtils';
 
-function Input(config) {
+function PixelInput(config) {
 
 	Layer.call(this, config);
 
@@ -17,7 +17,7 @@ function Input(config) {
 
 }
 
-Input.prototype = Object.assign( Object.create( Layer.prototype ), {
+PixelInput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	init: function(center) {
 
@@ -68,7 +68,7 @@ Input.prototype = Object.assign( Object.create( Layer.prototype ), {
 	updateValue: function(value) {
 		this.neuralValue = value;
 
-		let colorList = ColorUtils.getColors(value);
+		let colorList = colorUtils.getColors(value);
 
 		for (let i = 0; i < colorList.length; i++) {
 
@@ -80,4 +80,4 @@ Input.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 } );
 
-export default Input;
+export { PixelInput };

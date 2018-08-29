@@ -1,5 +1,5 @@
-function MapFlatten() {
+function Flatten() {
 
 }
 
-export default MapFlatten;
+export { Flatten };

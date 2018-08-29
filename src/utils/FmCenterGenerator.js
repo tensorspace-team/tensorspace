@@ -51,4 +51,4 @@ FmCenterGenerator.prototype = {
 
 let fmCenterGenerator = new FmCenterGenerator();
 
-export default fmCenterGenerator;
+export { fmCenterGenerator };

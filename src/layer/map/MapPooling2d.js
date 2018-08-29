@@ -1,11 +1,11 @@
-import MapLayer from './MapLayer';
-import FeatureMap from '../../elements/FeatureMap';
-import ColorUtils from '../../utils/ColorUtils';
+import { MapLayer } from './MapLayer';
+import { FeatureMap } from '../../elements/FeatureMap';
+import { colorUtils } from '../../utils/ColorUtils';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { MapPlaceholder } from "../../elements/MapPlaceholder";
 
-function MapPooling2d(config) {
+function Pooling2d(config) {
 
 	MapLayer.call(this, config);
 
@@ -31,7 +31,7 @@ function MapPooling2d(config) {
 
 }
 
-MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Pooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	init: function(center) {
 
@@ -199,7 +199,7 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		}
 
-		let colors = ColorUtils.getAdjustValues(layerOutputValues);
+		let colors = colorUtils.getAdjustValues(layerOutputValues);
 
 		let featureMapSize = this.width * this.height;
 
@@ -213,4 +213,4 @@ MapPooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 });
 
-export default MapPooling2d;
+export { Pooling2d };
