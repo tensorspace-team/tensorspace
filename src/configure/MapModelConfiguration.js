@@ -3,6 +3,7 @@ function MapModelConfiguration(config) {
 	this.layerShape = "line";
 	this.layerInitStatus = true;
 	this.color = {
+		input: 0xffffff,
 		conv: 0xffffff,
 		pooling: 0xffffff,
 		dense: 0xffffff,
@@ -16,10 +17,22 @@ function MapModelConfiguration(config) {
 		}
 
 		if (config.layerInitStatus !== undefined) {
-			this.layerInitStatus = config.layerInitStatus;
+
+			if (config.layerInitStatus === "close") {
+				this.layerInitStatus = false;
+			} else if (config.layerInitStatus === "open") {
+				this.layerInitStatus = true;
+			} else {
+				console.error("LayerInitStatus " + config.layerInitStatus +" is not support.");
+			}
+
 		}
 
 		if (config.color !== undefined) {
+
+			if (config.color.input !== undefined) {
+				this.color.input = config.color.input;
+			}
 
 			if (config.color.conv !== undefined) {
 				this.color.conv = config.color.conv;

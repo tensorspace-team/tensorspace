@@ -13,6 +13,8 @@ function Sequential(container, config) {
 
 	this.configuration = new MapModelConfiguration(config);
 
+	console.log(this.configuration);
+
 	this.inputValue = undefined;
 
 }
@@ -212,6 +214,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 	},
 
 	clear: function() {
+		this.layers[0].clear();
 		for (let i = 1; i < this.layers.length; i++) {
 			this.layers[i].clear();
 		}

@@ -46,6 +46,7 @@ function Conv2d(config) {
 	}
 
 	this.isOpen = undefined;
+	this.layerShape = undefined;
 
 }
 
@@ -54,7 +55,7 @@ Conv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 	init: function (center) {
 
 		this.center = center;
-		this.openFmCenters = fmCenterGenerator.getFmCenters("square", this.filters, this.width, this.height);
+		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.width, this.height);
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -164,11 +165,16 @@ Conv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 		this.outputShape = [this.width, this.height, this.filters];
 
 		if (this.isOpen === undefined) {
+
 			this.isOpen = modelConfig.layerInitStatus;
 		}
 
 		if (this.color === undefined) {
 			this.color = modelConfig.color.conv;
+		}
+
+		if (this.layerShape === undefined) {
+			this.layerShape = modelConfig.layerShape;
 		}
 
 	},

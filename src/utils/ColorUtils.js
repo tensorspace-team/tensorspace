@@ -27,6 +27,12 @@ ColorUtils.prototype = {
 			adjustValues.push( (values[i] - min) / distance );
 		}
 
+		for (let i = 0; i < adjustValues.length; i++) {
+
+			adjustValues[i] = MinAlpha + adjustValues[i] * (1 - MinAlpha);
+
+		}
+
 		return adjustValues;
 
 	},
@@ -40,9 +46,8 @@ ColorUtils.prototype = {
 		for (let i = 0; i < adjustValues.length; i++) {
 
 			let rgbTriple = [];
-			let tempAlpha = MinAlpha + adjustValues[i] * (1 - MinAlpha);
 			for (let j = 0; j < 3; j++) {
-				rgbTriple.push(tempAlpha);
+				rgbTriple.push(adjustValues[i]);
 			}
 
 			colorList.push(rgbTriple);

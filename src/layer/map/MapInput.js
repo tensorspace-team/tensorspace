@@ -34,7 +34,7 @@ Input.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	},
 
-	assemble: function(layerIndex) {
+	assemble: function(layerIndex, config) {
 		console.log("Assemble input layer");
 
 		this.layerIndex = layerIndex;
@@ -52,6 +52,13 @@ Input.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 		}
 
+	},
+
+	clear: function() {
+		console.log("clear input data");
+
+		let zeroValue = new Int8Array(this.neuralValue.length);
+		this.updateValue(zeroValue);
 	}
 
 });
