@@ -38,6 +38,7 @@ LayerClose.prototype = {
 
 		}).onStart(function () {
 			console.log("start close layer");
+			layer.disposeCloseButton();
 		}).onComplete(function() {
 			console.log("end close layer");
 			layer.disposeLayerElements();
@@ -72,6 +73,7 @@ LayerClose.prototype = {
 			console.log("start close queue layer");
 			layer.disposeLayerElements();
 			layer.neuralGroup.add(variableLengthObject);
+			layer.disposeCloseButton();
 		}).onComplete(function() {
 			console.log("end close queue layer");
 

@@ -4,6 +4,8 @@ import { colorUtils } from '../../utils/ColorUtils';
 import { Placeholder } from "../../elements/Placeholder";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { LayerOpenFactory } from "../../animation/LayerOpen";
+import { CloseButton } from "../../elements/CloseButton";
+import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Padding2d(config) {
 
@@ -32,6 +34,7 @@ function Padding2d(config) {
 	this.closeFmCenters = [];
 
 	this.isOpen = undefined;
+	this.closeButton = undefined;
 
 	this.layerType = "padding2d";
 
@@ -85,6 +88,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 			this.initLayerElements();
+			this.initCloseButton();
 		} else {
 			this.initLayerPlaceHolder();
 		}
@@ -151,6 +155,26 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.fmList = [];
+
+	},
+
+	initCloseButton: function() {
+
+		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.openFmCenters[0], this.width);
+
+		let closeButton = new CloseButton(closeButtonPos, this.color);
+		let closeButtonElement = closeButton.getButton();
+		closeButtonElement.layerIndex = this.layerIndex;
+
+		this.closeButton = closeButtonElement;
+		this.neuralGroup.add(closeButtonElement);
+
+	},
+
+	disposeCloseButton: function() {
+
+		this.neuralGroup.remove(this.closeButton);
+		this.closeButton = undefined;
 
 	},
 

@@ -5,6 +5,8 @@ import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { Placeholder } from "../../elements/Placeholder";
+import { CloseButton } from "../../elements/CloseButton";
+import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Conv2d(config) {
 
@@ -47,6 +49,7 @@ function Conv2d(config) {
 
 	this.isOpen = undefined;
 	this.layerShape = undefined;
+	this.closeButton = undefined;
 
 }
 
@@ -65,6 +68,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 				this.fmCenters.push(this.openFmCenters[i]);
 			}
 			this.initLayerElements(this.openFmCenters);
+			this.initCloseButton();
 		} else {
 			this.initLayerPlaceHolder();
 		}
@@ -123,6 +127,26 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.fmList = [];
+
+	},
+
+	initCloseButton: function() {
+
+		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.openFmCenters[0], this.width);
+
+		let closeButton = new CloseButton(closeButtonPos, this.color);
+		let closeButtonElement = closeButton.getButton();
+		closeButtonElement.layerIndex = this.layerIndex;
+
+		this.closeButton = closeButtonElement;
+		this.neuralGroup.add(closeButtonElement);
+
+	},
+
+	disposeCloseButton: function() {
+
+		this.neuralGroup.remove(this.closeButton);
+		this.closeButton = undefined;
 
 	},
 

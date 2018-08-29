@@ -42,6 +42,7 @@ LayerOpen.prototype = {
 			console.log("start open layer");
 		}).onComplete(function() {
 			console.log("end open layer");
+			layer.initCloseButton();
 			layer.isOpen = true;
 
 		});
@@ -78,6 +79,7 @@ LayerOpen.prototype = {
 
 			layer.neuralGroup.remove(variableLengthObject);
 			layer.initLayerElements();
+			layer.initCloseButton();
 			layer.isOpen = true;
 		});
 

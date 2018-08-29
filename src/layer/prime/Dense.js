@@ -4,12 +4,15 @@ import { colorUtils } from '../../utils/ColorUtils';
 import {Placeholder} from "../../elements/Placeholder";
 import {LayerOpenFactory} from "../../animation/LayerOpen";
 import {LayerCloseFactory} from "../../animation/LayerClose";
+import { CloseButton } from "../../elements/CloseButton";
+import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Dense(config) {
 
 	Layer.call(this, config);
 
 	this.units = config.units;
+	this.width = config.units;
 	this.depth = 1;
 	this.neuralQueue = undefined;
 
@@ -29,6 +32,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.isOpen) {
 
 			this.initLayerElements();
+			this.initCloseButton();
 
 		} else {
 
@@ -81,6 +85,28 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.neuralGroup.remove(this.neuralQueue.getQueueElement());
 		this.neuralQueue = undefined;
+
+	},
+
+	initCloseButton: function() {
+
+		console.log("init dense close button");
+
+		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.center, this.width);
+
+		let closeButton = new CloseButton(closeButtonPos, this.color);
+		let closeButtonElement = closeButton.getButton();
+		closeButtonElement.layerIndex = this.layerIndex;
+
+		this.closeButton = closeButtonElement;
+		this.neuralGroup.add(closeButtonElement);
+
+	},
+
+	disposeCloseButton: function() {
+
+		this.neuralGroup.remove(this.closeButton);
+		this.closeButton = undefined;
 
 	},
 

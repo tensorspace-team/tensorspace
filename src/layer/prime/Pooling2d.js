@@ -4,6 +4,8 @@ import { colorUtils } from '../../utils/ColorUtils';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { Placeholder } from "../../elements/Placeholder";
+import { CloseButton } from "../../elements/CloseButton";
+import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Pooling2d(config) {
 
@@ -26,6 +28,7 @@ function Pooling2d(config) {
 	this.closeFmCenters = [];
 
 	this.isOpen = undefined;
+	this.closeButton = undefined;
 
 	this.layerType = "maxPool2d";
 
@@ -54,6 +57,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 				this.fmCenters.push(this.openFmCenters[i]);
 			}
 			this.initLayerElements(this.openFmCenters);
+			this.initCloseButton();
 
 		} else {
 
@@ -118,6 +122,26 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.fmList = [];
+
+	},
+
+	initCloseButton: function() {
+
+		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.openFmCenters[0], this.width);
+
+		let closeButton = new CloseButton(closeButtonPos, this.color);
+		let closeButtonElement = closeButton.getButton();
+		closeButtonElement.layerIndex = this.layerIndex;
+
+		this.closeButton = closeButtonElement;
+		this.neuralGroup.add(closeButtonElement);
+
+	},
+
+	disposeCloseButton: function() {
+
+		this.neuralGroup.remove(this.closeButton);
+		this.closeButton = undefined;
 
 	},
 

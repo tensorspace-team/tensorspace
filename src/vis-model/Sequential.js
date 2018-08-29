@@ -83,20 +83,27 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 		for (let i = 0; i < intersects.length; i++) {
 			if (intersects !== null && intersects.length > 0 && intersects[i].object.type === "Mesh") {
-				if (intersects[i].object.elementType === "placeholder") {
 
-					let selectedElement = intersects[i].object;
+				let selectedElement = intersects[i].object;
 
-					console.log(selectedElement.layerIndex);
+				if (selectedElement.elementType === "placeholder") {
 
 					let selectLayer = this.layers[selectedElement.layerIndex - 1];
 
-
 					selectLayer.openLayer();
+
+					break;
 
 				}
 
-				break;
+				if (selectedElement.elementType === "closeButton") {
+
+					let selectedLayer = this.layers[selectedElement.layerIndex - 1];
+
+					selectedLayer.closeLayer();
+
+					break;
+				}
 			}
 
 		}
