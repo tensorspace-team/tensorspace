@@ -24,7 +24,11 @@ ColorUtils.prototype = {
 		let adjustValues = [];
 		let distance = max - min;
 		for (let i = 0; i < values.length; i++) {
-			adjustValues.push( (values[i] - min) / distance );
+			if (distance === 0) {
+				adjustValues.push(0);
+			} else {
+				adjustValues.push( (values[i] - min) / distance );
+			}
 		}
 
 		for (let i = 0; i < adjustValues.length; i++) {

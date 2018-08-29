@@ -1,3 +1,5 @@
+import { colorUtils } from "../../utils/ColorUtils";
+
 function MapLayer(config) {
 	this.scene = undefined;
 	this.layerIndex = undefined;
@@ -50,7 +52,8 @@ MapLayer.prototype = {
 			if (this.isOpen) {
 
 				let zeroValue = new Int8Array(this.neuralValue.length);
-				this.updateValue(zeroValue);
+				let zeroColors = colorUtils.getAdjustValues(zeroValue);
+				this.updateValue(zeroColors);
 
 			}
 
