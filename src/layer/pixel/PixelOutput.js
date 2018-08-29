@@ -1,17 +1,17 @@
 import { MinAlpha } from "../../utils/Constant";
 import { colorUtils } from '../../utils/ColorUtils';
-import { Layer } from './PixelLayer';
+import { PixelLayer } from './PixelLayer';
 
 function PixelOutput(config) {
 
-	Layer.call(this, config);
+	PixelLayer.call(this, config);
 
 	this.units = config.units;
 	this.depth = 1;
 
 }
 
-PixelOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
+PixelOutput.prototype = Object.assign( Object.create( PixelLayer.prototype ), {
 
 	init: function(center) {
 

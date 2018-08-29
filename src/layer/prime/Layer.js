@@ -1,6 +1,6 @@
 import { colorUtils } from "../../utils/ColorUtils";
 
-function MapLayer(config) {
+function Layer(config) {
 	this.scene = undefined;
 	this.layerIndex = undefined;
 	this.center = undefined;
@@ -31,7 +31,7 @@ function MapLayer(config) {
 	this.color = undefined;
 }
 
-MapLayer.prototype = {
+Layer.prototype = {
 
 	setNextLayer: function(layer) {
 		this.nextLayer = layer;
@@ -66,4 +66,4 @@ MapLayer.prototype = {
 };
 
 
-export { MapLayer };
+export { Layer };

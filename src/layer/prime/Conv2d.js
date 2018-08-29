@@ -1,16 +1,16 @@
-import { MapLayer } from './MapLayer';
+import { Layer } from './Layer';
 import { FeatureMap } from '../../elements/FeatureMap';
 import { colorUtils } from '../../utils/ColorUtils';
 import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
-import { MapPlaceholder } from "../../elements/MapPlaceholder";
+import { Placeholder } from "../../elements/Placeholder";
 
 function Conv2d(config) {
 
-	MapLayer.call(this, config);
+	Layer.call(this, config);
 
-	console.log("construct map Conv2d");
+	console.log("construct prime Conv2d");
 
 	this.kernelSize = config.kernelSize;
 	this.filters = config.filters;
@@ -33,7 +33,7 @@ function Conv2d(config) {
 		this.closeFmCenters.push(center);
 	}
 
-	this.layerType = "map conv2d";
+	this.layerType = "prime conv2d";
 
 	if (config.shape !== undefined) {
 
@@ -50,7 +50,7 @@ function Conv2d(config) {
 
 }
 
-Conv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function (center) {
 
@@ -128,7 +128,7 @@ Conv2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	initLayerPlaceHolder: function () {
 
-		let placeholder = new MapPlaceholder(this.width, this.height, this.depth);
+		let placeholder = new Placeholder(this.width, this.height, this.depth);
 		let placeholderElement = placeholder.getPlaceholder();
 
 		placeholderElement.elementType = "placeholder";

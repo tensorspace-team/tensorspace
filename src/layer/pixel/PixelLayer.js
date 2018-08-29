@@ -1,6 +1,6 @@
 import { MinAlpha } from "../../utils/Constant";
 
-function Layer(config) {
+function PixelLayer(config) {
 
 	this.scene = undefined;
 	this.layerIndex = undefined;
@@ -21,7 +21,7 @@ function Layer(config) {
 
 }
 
-Layer.prototype = {
+PixelLayer.prototype = {
 
 	setNextLayer: function(layer) {
 		this.nextLayer = layer;
@@ -88,4 +88,4 @@ Layer.prototype = {
 
 };
 
-export { Layer };
+export { PixelLayer };

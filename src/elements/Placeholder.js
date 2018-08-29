@@ -1,4 +1,4 @@
-function MapPlaceholder(width, height, depth) {
+function Placeholder(width, height, depth) {
 
 	this.width = width;
 	this.height = height;
@@ -10,7 +10,7 @@ function MapPlaceholder(width, height, depth) {
 
 }
 
-MapPlaceholder.prototype = {
+Placeholder.prototype = {
 
 	init: function() {
 		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
@@ -31,4 +31,4 @@ MapPlaceholder.prototype = {
 
 };
 
-export { MapPlaceholder };
+export { Placeholder };

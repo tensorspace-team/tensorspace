@@ -1,14 +1,14 @@
-import { Sequential } from "./composite/MapSequential";
-import { PixelSequential } from "./composite/PixelSequential";
+import { Sequential } from "./vis-model/Sequential";
+import { PixelSequential } from "./vis-model/PixelSequential";
 
-import { Conv2d } from "./layer/map/MapConv2d";
-import { Input } from "./layer/map/MapInput";
-import { Output } from "./layer/map/MapOutput";
-import { Flatten } from "./layer/map/MapFlatten";
-import { Pooling2d } from "./layer/map/MapPooling2d";
-import { Reshape } from "./layer/map/MapReshape";
-import { Dense } from "./layer/map/MapDense";
-import { Padding2d } from "./layer/map/MapPadding2d";
+import { Conv2d } from "./layer/prime/Conv2d";
+import { Input } from "./layer/prime/Input";
+import { Output } from "./layer/prime/Output";
+import { Flatten } from "./layer/prime/Flatten";
+import { Pooling2d } from "./layer/prime/Pooling2d";
+import { Reshape } from "./layer/prime/Reshape";
+import { Dense } from "./layer/prime/Dense";
+import { Padding2d } from "./layer/prime/Padding2d";
 
 import { PixelConv2d } from "./layer/pixel/PixelConv2d";
 import { PixelPadding } from "./layer/pixel/PixelPadding2d";

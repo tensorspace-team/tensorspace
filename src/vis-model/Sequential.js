@@ -37,7 +37,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 	},
 
 	init: function (callback) {
-		console.log("init map sequential model");
+		console.log("init prime sequential model");
 
 		if (this.hasLoader) {
 			let self = this;
@@ -116,7 +116,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 	createModel: function () {
 
-		console.log("creating map sequential model...");
+		console.log("creating prime sequential model...");
 
 		let layersPos = calculateLayersPos(this.layers.length);
 

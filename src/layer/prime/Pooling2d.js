@@ -1,13 +1,13 @@
-import { MapLayer } from './MapLayer';
+import { Layer } from './Layer';
 import { FeatureMap } from '../../elements/FeatureMap';
 import { colorUtils } from '../../utils/ColorUtils';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
-import { MapPlaceholder } from "../../elements/MapPlaceholder";
+import { Placeholder } from "../../elements/Placeholder";
 
 function Pooling2d(config) {
 
-	MapLayer.call(this, config);
+	Layer.call(this, config);
 
 	this.fmCenters = [];
 	this.inputShape = undefined;
@@ -31,7 +31,7 @@ function Pooling2d(config) {
 
 }
 
-Pooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function(center) {
 
@@ -123,7 +123,7 @@ Pooling2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	initLayerPlaceHolder: function() {
 
-		let placeholder = new MapPlaceholder(this.width, this.height, this.depth);
+		let placeholder = new Placeholder(this.width, this.height, this.depth);
 		let placeholderElement = placeholder.getPlaceholder();
 
 		placeholderElement.elementType = "placeholder";

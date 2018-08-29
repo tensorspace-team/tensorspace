@@ -1,13 +1,13 @@
-import { MapLayer } from './MapLayer';
+import { Layer } from './Layer';
 import { NeuralQueue } from '../../elements/NeuralQueue';
 import { colorUtils } from '../../utils/ColorUtils';
-import {MapPlaceholder} from "../../elements/MapPlaceholder";
+import {Placeholder} from "../../elements/Placeholder";
 import {LayerOpenFactory} from "../../animation/LayerOpen";
 import {LayerCloseFactory} from "../../animation/LayerClose";
 
 function Dense(config) {
 
-	MapLayer.call(this, config);
+	Layer.call(this, config);
 
 	this.units = config.units;
 	this.depth = 1;
@@ -17,7 +17,7 @@ function Dense(config) {
 
 }
 
-Dense.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function(center) {
 
@@ -86,7 +86,7 @@ Dense.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	initLayerPlaceHolder: function() {
 
-		let placeholder = new MapPlaceholder(5, 5, 5, this.color);
+		let placeholder = new Placeholder(5, 5, 5, this.color);
 		let placeholderElement = placeholder.getPlaceholder();
 
 		placeholderElement.elementType = "placeholder";

@@ -1,11 +1,11 @@
 import { MinAlpha } from "../../utils/Constant";
 import { NeuralBoxLength } from "../../utils/Constant";
 import { colorUtils } from '../../utils/ColorUtils';
-import { Layer } from './PixelLayer';
+import { PixelLayer } from './PixelLayer';
 
 function PixelConv2d(config) {
 
-	Layer.call(this, config);
+	PixelLayer.call(this, config);
 
 	console.log("construct Conv2d");
 
@@ -21,7 +21,7 @@ function PixelConv2d(config) {
 
 }
 
-PixelConv2d.prototype = Object.assign(Object.create(Layer.prototype), {
+PixelConv2d.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 	init: function (center) {
 

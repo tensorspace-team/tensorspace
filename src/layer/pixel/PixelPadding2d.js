@@ -1,11 +1,11 @@
 import {MinAlpha} from "../../utils/Constant";
 import {NeuralBoxLength} from "../../utils/Constant";
 import { colorUtils } from '../../utils/ColorUtils';
-import { Layer } from './PixelLayer';
+import { PixelLayer } from './PixelLayer';
 
 function PixelPadding(config) {
 
-	Layer.call(this, config);
+	PixelLayer.call(this, config);
 
 	this.paddingWidth = config.padding[0];
 	this.paddingHeight = config.padding[1];
@@ -29,7 +29,7 @@ function PixelPadding(config) {
 
 }
 
-PixelPadding.prototype = Object.assign(Object.create(Layer.prototype), {
+PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 	init: function (center) {
 

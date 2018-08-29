@@ -1,10 +1,10 @@
-import { MapLayer } from './MapLayer';
+import { Layer } from './Layer';
 import { InputDepth1Object } from "../../elements/InputDepth1Object";
 import { InputDepth3Object } from "../../elements/InputDepth3Object";
 
 function Input(config) {
 
-	MapLayer.call(this, config);
+	Layer.call(this, config);
 
 	this.shape = config.shape;
 	this.width = config.shape[0];
@@ -22,7 +22,7 @@ function Input(config) {
 	this.layerType = "input";
 }
 
-Input.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function(center) {
 

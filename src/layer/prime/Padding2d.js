@@ -1,13 +1,13 @@
-import { MapLayer } from './MapLayer';
+import { Layer } from './Layer';
 import { PaddingMap } from '../../elements/PaddingMap';
 import { colorUtils } from '../../utils/ColorUtils';
-import { MapPlaceholder } from "../../elements/MapPlaceholder";
+import { Placeholder } from "../../elements/Placeholder";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 
 function Padding2d(config) {
 
-	MapLayer.call(this, config);
+	Layer.call(this, config);
 
 	this.paddingWidth = config.padding[0];
 	this.paddingHeight = config.padding[1];
@@ -37,7 +37,7 @@ function Padding2d(config) {
 
 }
 
-Padding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
+Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function(center) {
 
@@ -156,7 +156,7 @@ Padding2d.prototype = Object.assign(Object.create(MapLayer.prototype), {
 
 	initLayerPlaceHolder: function() {
 
-		let placeholder = new MapPlaceholder(this.width, this.height, this.depth);
+		let placeholder = new Placeholder(this.width, this.height, this.depth);
 		let placeholderElement = placeholder.getPlaceholder();
 
 		placeholderElement.elementType = "placeholder";

@@ -1,11 +1,11 @@
-import { Layer } from './PixelLayer';
+import { PixelLayer } from './PixelLayer';
 import { NeuralBoxLength } from "../../utils/Constant";
 import { MinAlpha } from "../../utils/Constant";
 import { colorUtils } from '../../utils/ColorUtils';
 
 function PixelInput(config) {
 
-	Layer.call(this, config);
+	PixelLayer.call(this, config);
 
 	this.shape = config.shape;
 	this.width = config.shape[0];
@@ -17,7 +17,7 @@ function PixelInput(config) {
 
 }
 
-PixelInput.prototype = Object.assign( Object.create( Layer.prototype ), {
+PixelInput.prototype = Object.assign( Object.create( PixelLayer.prototype ), {
 
 	init: function(center) {
 

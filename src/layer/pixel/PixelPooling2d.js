@@ -1,11 +1,11 @@
 import { MinAlpha } from "../../utils/Constant";
 import { NeuralBoxLength } from "../../utils/Constant";
 import { colorUtils } from '../../utils/ColorUtils';
-import { Layer } from './PixelLayer';
+import { PixelLayer } from './PixelLayer';
 
 function PixelPooling2d(config) {
 
-	Layer.call(this, config);
+	PixelLayer.call(this, config);
 
 	this.fmCenters = [];
 	this.inputShape = undefined;
@@ -21,7 +21,7 @@ function PixelPooling2d(config) {
 
 }
 
-PixelPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
+PixelPooling2d.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 	init: function (center) {
 
