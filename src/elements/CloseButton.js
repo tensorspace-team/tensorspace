@@ -19,7 +19,9 @@ CloseButton.prototype = {
 	init: function() {
 		let geometry = new THREE.SphereGeometry( 3, 32, 32 );
 		let material = new THREE.MeshBasicMaterial({
-			color: this.color
+			color: this.color,
+			opacity: 0.3,
+			transparent: true
 		});
 
 		let button = new THREE.Mesh(geometry, material);

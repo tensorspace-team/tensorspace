@@ -18,7 +18,7 @@ Placeholder.prototype = {
 	init: function() {
 		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
 		let material = new THREE.MeshBasicMaterial({
-			color: this.color
+			color: this.color, opacity: 0.3, transparent: true
 		});
 
 		let layerPlaceHolder = new THREE.Mesh(geometry, material);
@@ -29,7 +29,7 @@ Placeholder.prototype = {
 
 		let edges = new THREE.EdgesGeometry(geometry);
 		let edgesLine = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
-			color: 0x000000
+			color: 0xA5A5A5
 		}));
 
 		this.edgesLine = edgesLine;
