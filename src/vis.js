@@ -3,6 +3,7 @@ import { PixelSequential } from "./vis-model/PixelSequential";
 
 import { Conv2d } from "./layer/prime/Conv2d";
 import { Input } from "./layer/prime/Input";
+import { Input3d } from "./layer/prime/Input3d";
 import { Output } from "./layer/prime/Output";
 import { Flatten } from "./layer/prime/Flatten";
 import { Pooling2d } from "./layer/prime/Pooling2d";
@@ -21,6 +22,7 @@ import { PixelOutput } from "./layer/pixel/PixelOutput";
 
 let layers = {
 	Input: Input,
+	Input3d: Input3d,
 	Output: Output,
 	Conv2d: Conv2d,
 	Dense: Dense,

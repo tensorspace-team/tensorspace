@@ -161,13 +161,16 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 		this.inputValue = input;
 
-		let batchSize = [1];
-		let inputShape = this.layers[0].shape;
-		let predictTensorShape = batchSize.concat(inputShape);
+		if (this.resource !== undefined) {
+			let batchSize = [1];
+			let inputShape = this.layers[0].shape;
+			let predictTensorShape = batchSize.concat(inputShape);
 
-		let predictTensor = tf.tensor(input, predictTensorShape);
+			let predictTensor = tf.tensor(input, predictTensorShape);
 
-		this.predictResult = this.resource.predict(predictTensor);
+			this.predictResult = this.resource.predict(predictTensor);
+		}
+
 		this.updateLayerVis();
 
 	},
