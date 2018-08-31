@@ -134,6 +134,10 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		let colors = colorUtils.getAdjustValues(zeroData);
 
 		this.updateVis(colors);
+	},
+
+	setLayerIndex: function(layerIndex) {
+		this.featureMap.layerIndex = layerIndex;
 	}
 
 });

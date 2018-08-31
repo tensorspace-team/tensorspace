@@ -80,6 +80,10 @@ NeuralQueue.prototype = {
 
 		this.updateVis(colors);
 
+	},
+
+	setLayerIndex: function(layerIndex) {
+		this.queue.layerIndex = layerIndex;
 	}
 
 };

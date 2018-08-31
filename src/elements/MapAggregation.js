@@ -2,7 +2,7 @@ function MapAggregation(width, height, depth, color) {
 
 	this.width = width;
 	this.height = height;
-	this.depth = depth;
+	this.depth = 2;
 
 	this.color = color;
 

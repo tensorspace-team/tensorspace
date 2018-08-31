@@ -96,12 +96,15 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let colorfulMap = new InputMap3d(this.width, this.height, this.center, this.color);
-		let mapElement = colorfulMap.getElement();
+		let aggregationHandler = new InputMap3d(this.width, this.height, {
+			x: 0,
+			y: 0,
+			z: 0
+		}, this.color);
 
-		mapElement.layerIndex = this.layerIndex;
-		this.aggregationHandler = colorfulMap;
+		aggregationHandler.setLayerIndex(this.layerIndex);
 
+		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add(this.aggregationHandler.getElement());
 
 		if (this.neuralValue !== undefined) {

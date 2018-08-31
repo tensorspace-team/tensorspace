@@ -95,6 +95,10 @@ FeatureMap.prototype = {
 
 		this.updateVis(colors);
 
+	},
+
+	setLayerIndex: function(layerIndex) {
+		this.featureMap.layerIndex = layerIndex;
 	}
 
 };

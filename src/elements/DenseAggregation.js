@@ -1,8 +1,10 @@
+import { MinAlpha } from "../utils/Constant";
+
 function DenseAggregation(width, height, depth, color) {
 
 	this.width = width;
 	this.height = height;
-	this.depth = depth;
+	this.depth = 2;
 
 	this.color = color;
 
@@ -18,7 +20,7 @@ DenseAggregation.prototype = {
 	init: function() {
 		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
 		let material = new THREE.MeshBasicMaterial({
-			color: this.color, opacity: 0.3, transparent: true
+			color: this.color, opacity: MinAlpha, transparent: true
 		});
 
 		let cube = new THREE.Mesh(geometry, material);

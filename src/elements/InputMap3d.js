@@ -67,6 +67,7 @@ InputMap3d.prototype = {
 		let cube = new THREE.Mesh(boxGeometry, materials);
 
 		cube.position.set(this.fmCenter.x, this.fmCenter.y, this.fmCenter.z);
+		cube.elementType = "aggregationElement";
 
 		this.colorMap = cube;
 
@@ -96,6 +97,10 @@ InputMap3d.prototype = {
 
 		this.dataTexture.needsUpdate = true;
 
+	},
+
+	setLayerIndex: function(layerIndex) {
+		this.colorMap.layerIndex = layerIndex;
 	}
 
 };
