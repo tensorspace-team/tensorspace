@@ -21,6 +21,16 @@ function Pooling2d(config) {
 
 	this.depth = undefined;
 
+	if (config.shape !== undefined) {
+
+		this.isShapePredefined = true;
+		this.fmShape = config.shape;
+		this.width = this.fmShape[0];
+		this.height = this.fmShape[1];
+	} else {
+		this.isShapePredefined = false;
+	}
+
 	this.fmList = [];
 
 	this.fmCenters = [];
@@ -172,11 +182,15 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	assemble: function(layerIndex, modelConfig) {
 		this.layerIndex = layerIndex;
 
-		this.inputShape = this.lastLayer.outputShape;
-		this.width = (this.inputShape[0] - this.poolSize[0]) / this.strides[0] + 1;
-		this.height = (this.inputShape[1] - this.poolSize[1]) / this.strides[1] + 1;
-		this.fmNum = this.inputShape[2];
-		this.outputShape = [this.width, this.height, this.fmNum];
+		if (this.isShapePredefined) {
+
+		} else {
+			this.inputShape = this.lastLayer.outputShape;
+			this.width = (this.inputShape[0] - this.poolSize[0]) / this.strides[0] + 1;
+			this.height = (this.inputShape[1] - this.poolSize[1]) / this.strides[1] + 1;
+			this.fmNum = this.inputShape[2];
+			this.outputShape = [this.width, this.height, this.fmNum];
+		}
 
 		this.depth = this.lastLayer.depth;
 
