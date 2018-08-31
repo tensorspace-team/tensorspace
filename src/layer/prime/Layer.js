@@ -19,8 +19,8 @@ function Layer(config) {
 	// store all 2d maps in layer
 	this.fmList = [];
 
-	// store the reference placeholder object
-	this.layerPlaceHolder = undefined;
+	// store the reference aggregationElement object
+	this.aggregationElement = undefined;
 
 	this.name = config.name;
 

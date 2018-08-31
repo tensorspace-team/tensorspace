@@ -72,13 +72,13 @@ LayerOpen.prototype = {
 
 		}).onStart(function () {
 			console.log("start open queue layer");
-			layer.disposeLayerPlaceHolder();
+			layer.disposeAggregationElement();
 			layer.neuralGroup.add(variableLengthObject);
 		}).onComplete(function() {
 			console.log("end open queue layer");
 
 			layer.neuralGroup.remove(variableLengthObject);
-			layer.initLayerElements();
+			layer.initSegregationElements();
 			layer.initCloseButton();
 			layer.isOpen = true;
 		});

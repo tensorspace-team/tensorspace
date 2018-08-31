@@ -86,7 +86,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 				let selectedElement = intersects[i].object;
 
-				if (selectedElement.elementType === "placeholder") {
+				if (selectedElement.elementType === "aggregationElement") {
 
 					let selectLayer = this.layers[selectedElement.layerIndex - 1];
 

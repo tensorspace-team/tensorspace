@@ -99,7 +99,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let colorfulMap = new InputDepth3Object(this.width, this.height, this.center, this.color);
 		let mapElement = colorfulMap.getMapElement();
-		mapElement.elementType = "placeholder";
+		mapElement.elementType = "aggregationElement";
 		mapElement.layerIndex = this.layerIndex;
 		this.colorfulMapHandler = colorfulMap;
 

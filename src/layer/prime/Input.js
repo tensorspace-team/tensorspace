@@ -31,13 +31,13 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		this.initLayerElements();
+		this.initSegregationElements();
 
 		this.scene.add(this.neuralGroup);
 
 	},
 
-	initLayerElements: function() {
+	initSegregationElements: function() {
 
 		let inputElement;
 

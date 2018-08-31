@@ -41,8 +41,8 @@ LayerClose.prototype = {
 			layer.disposeCloseButton();
 		}).onComplete(function() {
 			console.log("end close layer");
-			layer.disposeLayerElements();
-			layer.initLayerPlaceHolder();
+			layer.disposeSegregationElements();
+			layer.initAggregationElement();
 			layer.isOpen = false;
 		});
 
@@ -71,14 +71,14 @@ LayerClose.prototype = {
 
 		}).onStart(function () {
 			console.log("start close queue layer");
-			layer.disposeLayerElements();
+			layer.disposeSegregationElements();
 			layer.neuralGroup.add(variableLengthObject);
 			layer.disposeCloseButton();
 		}).onComplete(function() {
 			console.log("end close queue layer");
 
 			layer.neuralGroup.remove(variableLengthObject);
-			layer.initLayerPlaceHolder();
+			layer.initAggregationElement();
 			layer.isOpen = false;
 		});
 

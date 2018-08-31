@@ -1,4 +1,4 @@
-function Placeholder(width, height, depth, color) {
+function DenseAggregation(width, height, depth, color) {
 
 	this.width = width;
 	this.height = height;
@@ -6,14 +6,14 @@ function Placeholder(width, height, depth, color) {
 
 	this.color = color;
 
-	this.placeholder = undefined;
-	this.edgesLine = undefined;
+	this.aggregationElement = undefined;
+	this.aggregationEdges = undefined;
 
 	this.init();
 
 }
 
-Placeholder.prototype = {
+DenseAggregation.prototype = {
 
 	init: function() {
 		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
@@ -25,24 +25,24 @@ Placeholder.prototype = {
 
 		layerPlaceHolder.position.set(0, 0, 0);
 
-		this.placeholder = layerPlaceHolder;
+		this.aggregationElement = layerPlaceHolder;
 
 		let edges = new THREE.EdgesGeometry(geometry);
 		let edgesLine = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
 			color: 0xA5A5A5
 		}));
 
-		this.edgesLine = edgesLine;
+		this.aggregationEdges = edgesLine;
 	},
 
-	getPlaceholder: function() {
-		return this.placeholder;
+	getAggregationElement: function() {
+		return this.aggregationElement;
 	},
 
 	getEdges: function() {
-		return this.edgesLine;
+		return this.aggregationEdges;
 	}
 
 };
 
-export { Placeholder };
+export { DenseAggregation };

@@ -4,7 +4,7 @@ import { colorUtils } from '../../utils/ColorUtils';
 import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
-import { Placeholder } from "../../elements/Placeholder";
+import { MapAggregation } from "../../elements/MapAggregation";
 import { CloseButton } from "../../elements/CloseButton";
 import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
@@ -67,10 +67,10 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			for (let i = 0; i < this.openFmCenters.length; i++) {
 				this.fmCenters.push(this.openFmCenters[i]);
 			}
-			this.initLayerElements(this.openFmCenters);
+			this.initSegregationElements(this.openFmCenters);
 			this.initCloseButton();
 		} else {
-			this.initLayerPlaceHolder();
+			this.initAggregationElement();
 		}
 
 		this.scene.add(this.neuralGroup);
@@ -83,8 +83,8 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (!this.isOpen) {
 
-			this.disposeLayerPlaceHolder();
-			this.initLayerElements(this.closeFmCenters);
+			this.disposeAggregationElement();
+			this.initSegregationElements(this.closeFmCenters);
 			LayerOpenFactory.openMapLayer(this);
 
 		}
@@ -104,7 +104,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	initLayerElements: function (centers) {
+	initSegregationElements: function (centers) {
 
 		for (let i = 0; i < this.filters; i++) {
 			let featureMap = new FeatureMap(this.width, this.height, centers[i], this.color);
@@ -113,12 +113,12 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.neuralValue !== undefined) {
-			this.updateVis();
+			this.updateSegregationVis();
 		}
 
 	},
 
-	disposeLayerElements: function () {
+	disposeSegregationElements: function () {
 
 		let fmNum = this.fmList.length;
 		for (let i = 0; i < fmNum; i++) {
@@ -150,28 +150,28 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	initLayerPlaceHolder: function () {
+	initAggregationElement: function () {
 
-		let placeholder = new Placeholder(this.width, this.height, this.depth, this.color);
+		let placeholder = new MapAggregation(this.width, this.height, this.depth, this.color);
 		let placeholderElement = placeholder.getPlaceholder();
 
-		placeholderElement.elementType = "placeholder";
+		placeholderElement.elementType = "aggregationElement";
 		placeholderElement.layerIndex = this.layerIndex;
 
-		this.layerPlaceHolder = placeholderElement;
-		this.edgesLine = placeholder.getEdges();
+		this.aggregationElement = placeholderElement;
+		this.aggregationEdges = placeholder.getEdges();
 
-		this.neuralGroup.add(this.layerPlaceHolder);
-		this.neuralGroup.add(this.edgesLine);
+		this.neuralGroup.add(this.aggregationElement);
+		this.neuralGroup.add(this.aggregationEdges);
 
 	},
 
-	disposeLayerPlaceHolder: function () {
+	disposeAggregationElement: function () {
 
-		this.neuralGroup.remove(this.layerPlaceHolder);
-		this.neuralGroup.remove(this.edgesLine);
-		this.layerPlaceHolder = undefined;
-		this.edgesLine = undefined;
+		this.neuralGroup.remove(this.aggregationElement);
+		this.neuralGroup.remove(this.aggregationEdges);
+		this.aggregationElement = undefined;
+		this.aggregationEdges = undefined;
 
 	},
 
@@ -212,11 +212,17 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.neuralValue = value;
 
 		if (this.isOpen) {
-			this.updateVis();
+			this.updateSegregationVis();
+		} else {
+			this.updateAggregationVis();
 		}
 	},
 
-	updateVis: function () {
+	updateAggregationVis: function() {
+
+	},
+
+	updateSegregationVis: function() {
 
 		let layerOutputValues = [];
 

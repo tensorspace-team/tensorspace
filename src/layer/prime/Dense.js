@@ -1,7 +1,7 @@
 import { Layer } from './Layer';
 import { NeuralQueue } from '../../elements/NeuralQueue';
 import { colorUtils } from '../../utils/ColorUtils';
-import {Placeholder} from "../../elements/Placeholder";
+import { DenseAggregation } from "../../elements/DenseAggregation";
 import {LayerOpenFactory} from "../../animation/LayerOpen";
 import {LayerCloseFactory} from "../../animation/LayerClose";
 import { CloseButton } from "../../elements/CloseButton";
@@ -31,12 +31,12 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 
-			this.initLayerElements();
+			this.initSegregationElements();
 			this.initCloseButton();
 
 		} else {
 
-			this.initLayerPlaceHolder();
+			this.initAggregationElement();
 
 		}
 
@@ -67,19 +67,19 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	initLayerElements: function() {
+	initSegregationElements: function() {
 
 		let neuralQueue = new NeuralQueue(this.units, this.color);
 		this.neuralQueue = neuralQueue;
 		this.neuralGroup.add(neuralQueue.getQueueElement());
 
 		if (this.neuralValue !== undefined) {
-			this.updateVis();
+			this.updateSegregationVis();
 		}
 
 	},
 
-	disposeLayerElements: function() {
+	disposeSegregationElements: function() {
 
 		console.log("dispose queue element");
 
@@ -110,28 +110,28 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	initLayerPlaceHolder: function() {
+	initAggregationElement: function() {
 
-		let placeholder = new Placeholder(5, 5, 5, this.color);
-		let placeholderElement = placeholder.getPlaceholder();
+		let placeholder = new DenseAggregation(5, 5, 5, this.color);
+		let placeholderElement = placeholder.getAggregationElement();
 
-		placeholderElement.elementType = "placeholder";
+		placeholderElement.elementType = "aggregationElement";
 		placeholderElement.layerIndex = this.layerIndex;
 
-		this.layerPlaceHolder = placeholderElement;
-		this.edgesLine = placeholder.getEdges();
+		this.aggregationElement = placeholderElement;
+		this.aggregationEdges = placeholder.getEdges();
 
-		this.neuralGroup.add(this.layerPlaceHolder);
-		this.neuralGroup.add(this.edgesLine);
+		this.neuralGroup.add(this.aggregationElement);
+		this.neuralGroup.add(this.aggregationEdges);
 
 	},
 
-	disposeLayerPlaceHolder: function() {
+	disposeAggregationElement: function() {
 
-		this.neuralGroup.remove(this.layerPlaceHolder);
-		this.neuralGroup.remove(this.edgesLine);
-		this.layerPlaceHolder = undefined;
-		this.edgesLine = undefined;
+		this.neuralGroup.remove(this.aggregationElement);
+		this.neuralGroup.remove(this.aggregationEdges);
+		this.aggregationElement = undefined;
+		this.aggregationEdges = undefined;
 
 	},
 
@@ -156,12 +156,18 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.neuralValue = value;
 
 		if (this.isOpen) {
-			this.updateVis();
+			this.updateSegregationVis();
+		} else {
+			this.updateAggregationVis();
 		}
 
 	},
 
-	updateVis: function() {
+	updateAggregationVis: function() {
+
+	},
+
+	updateSegregationVis: function() {
 		let colors = colorUtils.getAdjustValues(this.neuralValue);
 
 		this.neuralQueue.updateGrayScale(colors);

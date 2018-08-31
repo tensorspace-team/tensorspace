@@ -1,7 +1,7 @@
 import { Layer } from './Layer';
 import { PaddingMap } from '../../elements/PaddingMap';
 import { colorUtils } from '../../utils/ColorUtils';
-import { Placeholder } from "../../elements/Placeholder";
+import { MapAggregation } from "../../elements/MapAggregation";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { CloseButton } from "../../elements/CloseButton";
@@ -87,10 +87,10 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.isOpen) {
-			this.initLayerElements();
+			this.initSegregationElements();
 			this.initCloseButton();
 		} else {
-			this.initLayerPlaceHolder();
+			this.initAggregationElement();
 		}
 
 		this.scene.add(this.neuralGroup);
@@ -103,8 +103,8 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (!this.isOpen) {
 
-			this.disposeLayerPlaceHolder();
-			this.initLayerElements(this.closeFmCenters);
+			this.disposeAggregationElement();
+			this.initSegregationElements(this.closeFmCenters);
 			LayerOpenFactory.openMapLayer(this);
 
 		}
@@ -123,7 +123,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	initLayerElements: function() {
+	initSegregationElements: function() {
 
 		for (let i = 0; i < this.openFmCenters.length; i++) {
 
@@ -141,12 +141,12 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.neuralValue !== undefined) {
-			this.updateVis();
+			this.updateSegregationVis();
 		}
 
 	},
 
-	disposeLayerElements: function() {
+	disposeSegregationElements: function() {
 
 		let fmNum = this.fmList.length;
 		for (let i = 0; i < fmNum; i++) {
@@ -178,28 +178,28 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	initLayerPlaceHolder: function() {
+	initAggregationElement: function() {
 
-		let placeholder = new Placeholder(this.width, this.height, this.depth, this.color);
+		let placeholder = new MapAggregation(this.width, this.height, this.depth, this.color);
 		let placeholderElement = placeholder.getPlaceholder();
 
-		placeholderElement.elementType = "placeholder";
+		placeholderElement.elementType = "aggregationElement";
 		placeholderElement.layerIndex = this.layerIndex;
 
-		this.layerPlaceHolder = placeholderElement;
-		this.edgesLine = placeholder.getEdges();
+		this.aggregationElement = placeholderElement;
+		this.aggregationEdges = placeholder.getEdges();
 
-		this.neuralGroup.add(this.layerPlaceHolder);
-		this.neuralGroup.add(this.edgesLine);
+		this.neuralGroup.add(this.aggregationElement);
+		this.neuralGroup.add(this.aggregationEdges);
 
 	},
 
-	disposeLayerPlaceHolder: function() {
+	disposeAggregationElement: function() {
 
-		this.neuralGroup.remove(this.layerPlaceHolder);
-		this.neuralGroup.remove(this.edgesLine);
-		this.layerPlaceHolder = undefined;
-		this.edgesLine = undefined;
+		this.neuralGroup.remove(this.aggregationElement);
+		this.neuralGroup.remove(this.aggregationEdges);
+		this.aggregationElement = undefined;
+		this.aggregationEdges = undefined;
 
 	},
 
@@ -230,12 +230,18 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.neuralValue = this.lastLayer.neuralValue;
 
 		if (this.isOpen) {
-			this.updateVis();
+			this.updateSegregationVis();
+		} else {
+			this.updateAggregationVis();
 		}
 
 	},
 
-	updateVis: function() {
+	updateAggregationVis: function() {
+
+	},
+
+	updateSegregationVis: function() {
 		let nonePaddingNeuralSize = this.contentWidth * this.contentHeight;
 		let fmNum = this.neuralValue.length / nonePaddingNeuralSize;
 
