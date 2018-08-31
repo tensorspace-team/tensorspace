@@ -223,24 +223,6 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
-	},
-
-	clear: function() {
-
-		if (this.neuralValue !== undefined) {
-
-			if (this.isOpen) {
-
-				let zeroValue = new Int8Array(this.neuralValue.length);
-				let zeroColors = colorUtils.getAdjustValues(zeroValue);
-				this.updateValue(zeroColors);
-
-			}
-
-			this.neuralValue = undefined;
-
-		}
-
 	}
 
 });

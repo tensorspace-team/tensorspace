@@ -73,9 +73,11 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initSegregationElements: function() {
 
-		let neuralQueue = new NeuralQueue(this.units, this.color);
-		this.neuralQueue = neuralQueue;
-		this.neuralGroup.add(neuralQueue.getElement());
+		let segregationHandler = new NeuralQueue(this.units, this.color);
+		// this.neuralQueue = segregationHandler;
+
+		this.segregationHandlers.push(segregationHandler);
+		this.neuralGroup.add(segregationHandler.getElement());
 
 		if (this.neuralValue !== undefined) {
 			this.updateSegregationVis();
@@ -87,8 +89,8 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		console.log("dispose queue element");
 
-		this.neuralGroup.remove(this.neuralQueue.getElement());
-		this.neuralQueue = undefined;
+		this.neuralGroup.remove(this.segregationHandlers[0].getElement());
+		this.segregationHandlers = [];
 
 	},
 
@@ -144,25 +146,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 	updateSegregationVis: function() {
 		let colors = colorUtils.getAdjustValues(this.neuralValue);
 
-		this.neuralQueue.updateVis(colors);
-	},
-
-	clear: function() {
-
-		if (this.neuralValue !== undefined) {
-
-			if (this.isOpen) {
-
-				let zeroValue = new Int8Array(this.neuralValue.length);
-				let zeroColors = colorUtils.getAdjustValues(zeroValue);
-				this.updateValue(zeroColors);
-
-			}
-
-			this.neuralValue = undefined;
-
-		}
-
+		this.segregationHandlers[0].updateVis(colors);
 	}
 
 });

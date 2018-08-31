@@ -26,7 +26,7 @@ RGBChannelTween.prototype = {
 
 			layer.fmCenters = [];
 
-			let rChannel = layer.channelHandlerList[0];
+			let rChannel = layer.segregationHandlers[0];
 			let rCloseFmCenter = layer.closeFmCenters[0];
 			let separateTopPos = layer.separateTopPos;
 
@@ -45,7 +45,7 @@ RGBChannelTween.prototype = {
 				z: 0
 			});
 
-			let bChannel = layer.channelHandlerList[2];
+			let bChannel = layer.segregationHandlers[2];
 			let bCloseFmCenter = layer.closeFmCenters[2];
 			let separateBottomPos = layer.separateBottomPos;
 
@@ -81,7 +81,7 @@ RGBChannelTween.prototype = {
 
 			layer.fmCenters = [];
 
-			let rChannel = layer.channelHandlerList[0];
+			let rChannel = layer.segregationHandlers[0];
 			let separateTopPos = layer.separateTopPos;
 			let rOpenFmCenter = layer.openFmCenters[0];
 
@@ -100,7 +100,7 @@ RGBChannelTween.prototype = {
 				z: 0
 			});
 
-			let bChannel = layer.channelHandlerList[2];
+			let bChannel = layer.segregationHandlers[2];
 			let separateBottomPos = layer.separateBottomPos;
 			let bOpenFmCenter = layer.openFmCenters[2];
 
@@ -143,7 +143,7 @@ RGBChannelTween.prototype = {
 
 			layer.fmCenters = [];
 
-			let rChannel = layer.channelHandlerList[0];
+			let rChannel = layer.segregationHandlers[0];
 			let separateTopPos = layer.separateTopPos;
 			let rOpenFmCenter = layer.openFmCenters[0];
 
@@ -162,7 +162,7 @@ RGBChannelTween.prototype = {
 				z: 0
 			});
 
-			let bChannel = layer.channelHandlerList[2];
+			let bChannel = layer.segregationHandlers[2];
 			let separateBottomPos = layer.separateBottomPos;
 			let bOpenFmCenter = layer.openFmCenters[2];
 
@@ -196,7 +196,7 @@ RGBChannelTween.prototype = {
 
 			layer.fmCenters = [];
 
-			let rChannel = layer.channelHandlerList[0];
+			let rChannel = layer.segregationHandlers[0];
 			let rCloseFmCenter = layer.closeFmCenters[0];
 			let separateTopPos = layer.separateTopPos;
 
@@ -215,7 +215,7 @@ RGBChannelTween.prototype = {
 				z: 0
 			});
 
-			let bChannel = layer.channelHandlerList[2];
+			let bChannel = layer.segregationHandlers[2];
 			let bCloseFmCenter = layer.closeFmCenters[2];
 			let separateBottomPos = layer.separateBottomPos;
 

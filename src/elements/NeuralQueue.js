@@ -1,5 +1,6 @@
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
+import { colorUtils } from "../utils/ColorUtils";
 
 function NeuralQueue(length, color) {
 
@@ -69,6 +70,15 @@ NeuralQueue.prototype = {
 		}
 
 		this.dataTexture.needsUpdate = true;
+
+	},
+
+	clear: function() {
+
+		let zeroData = new Uint8Array(this.queueLength);
+		let colors = colorUtils.getAdjustValues(zeroData);
+
+		this.updateVis(colors);
 
 	}
 

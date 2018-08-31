@@ -1,5 +1,6 @@
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
+import { colorUtils } from "../utils/ColorUtils";
 
 function PaddingMap(width, height, center, paddingWidth, paddingHeight, color) {
 
@@ -21,6 +22,8 @@ function PaddingMap(width, height, center, paddingWidth, paddingHeight, color) {
 
 	this.contentWidth = this.width - this.paddingWidth;
 	this.contentHeight = this.height - this.paddingHeight;
+
+	this.neuralLength = width * height;
 
 	this.color = color;
 
@@ -124,6 +127,13 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		this.center.z = pos.z;
 		this.featureMap.position.set(pos.x, pos.y, pos.z);
 
+	},
+
+	clear: function() {
+		let zeroData = new Uint8Array(this.neuralLength);
+		let colors = colorUtils.getAdjustValues(zeroData);
+
+		this.updateVis(colors);
 	}
 
 });

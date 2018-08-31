@@ -73,6 +73,21 @@ Layer.prototype = {
 
 	},
 
+	clear: function() {
+
+		if (this.neuralValue !== undefined) {
+			if (this.isOpen) {
+				for (let i = 0; i < this.segregationHandlers.length; i++) {
+					this.segregationHandlers[i].clear();
+				}
+			} else {
+				this.aggregationHandler.clear();
+			}
+			this.neuralValue = undefined;
+		}
+
+	}
+
 };
 
 

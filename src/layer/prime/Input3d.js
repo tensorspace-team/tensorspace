@@ -43,9 +43,9 @@ function Input3d(config) {
 
 	this.isOpen = false;
 
-	this.colorfulMapHandler = undefined;
+	this.aggregationHandler = undefined;
 
-	this.channelHandlerList = [];
+	this.segregationHandlers = [];
 
 	this.layerType = "input3d";
 
@@ -100,9 +100,9 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 		let mapElement = colorfulMap.getElement();
 
 		mapElement.layerIndex = this.layerIndex;
-		this.colorfulMapHandler = colorfulMap;
+		this.aggregationHandler = colorfulMap;
 
-		this.neuralGroup.add(this.colorfulMapHandler.getElement());
+		this.neuralGroup.add(this.aggregationHandler.getElement());
 
 		if (this.neuralValue !== undefined) {
 			this.updateAggregationVis();
@@ -112,8 +112,8 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	disposeAggregationElement: function() {
 
-		this.neuralGroup.remove(this.colorfulMapHandler.getElement());
-		this.colorfulMapHandler = undefined;
+		this.neuralGroup.remove(this.aggregationHandler.getElement());
+		this.aggregationHandler = undefined;
 
 	},
 
@@ -123,9 +123,9 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 		let gChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[1], this.color, "G");
 		let bChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[2], this.color, "B");
 
-		this.channelHandlerList.push(rChannel);
-		this.channelHandlerList.push(gChannel);
-		this.channelHandlerList.push(bChannel);
+		this.segregationHandlers.push(rChannel);
+		this.segregationHandlers.push(gChannel);
+		this.segregationHandlers.push(bChannel);
 
 		if (this.neuralValue !== undefined) {
 
@@ -140,10 +140,10 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	disposeSegregationElements: function() {
 
-		for (let i = 0; i < this.channelHandlerList.length; i++) {
-			this.neuralGroup.remove(this.channelHandlerList[i].getElement());
+		for (let i = 0; i < this.segregationHandlers.length; i++) {
+			this.neuralGroup.remove(this.segregationHandlers[i].getElement());
 		}
-		this.channelHandlerList = [];
+		this.segregationHandlers = [];
 
 	},
 
@@ -166,7 +166,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 	updateAggregationVis: function() {
 
 		let colors = colorUtils.getAdjustValues(this.neuralValue);
-		this.colorfulMapHandler.updateVis(colors);
+		this.aggregationHandler.updateVis(colors);
 	},
 
 	updateSegregationVis: function() {
@@ -189,16 +189,11 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
-		this.channelHandlerList[0].updateVis(rVal);
-		this.channelHandlerList[1].updateVis(gVal);
-		this.channelHandlerList[2].updateVis(bVal);
-
-	},
-
-	clear: function() {
+		this.segregationHandlers[0].updateVis(rVal);
+		this.segregationHandlers[1].updateVis(gVal);
+		this.segregationHandlers[2].updateVis(bVal);
 
 	}
-
 });
 
 export { Input3d };
