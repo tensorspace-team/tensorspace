@@ -25,37 +25,6 @@
             height: 100%;
         }
 
-        #controlPanel {
-            position: fixed;
-            left: 0;
-            top: 200px;
-            width: 224px;
-        }
-
-        #clear {
-            width: 224px;
-            height: 100px;
-            background-color: red;
-        }
-
-        .wrapper {
-            width: 224px;
-            height: 224px;
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            z-index: 100;
-            background-color: white;
-        }
-
-        .signature-pad {
-            position: absolute;
-            left: 0;
-            top: 0;
-            border: 1px solid #000;
-        }
-
     </style>
 
 </head>
@@ -68,190 +37,111 @@
 	let container = document.getElementById("container");
 
 	let model = new VIS.model.Sequential(container, {
-		pixel: false
+		layerShape: "square",
+		layerInitStatus: "close"
 	});
 
-	model.add(new VIS.layers.Input({
-		shape: [448, 448, 1]
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [6, 6]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 7,
-		filters: 64,
-		strides: 2
-	}));
-	model.add(new VIS.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2]
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
+    model.add(new VIS.layers.Input3d({
+        shape: [416, 416, 3]
+    }));
+    // 0
+    model.add(new VIS.layers.Conv2d({
+        shape: [416, 416],
 		kernelSize: 3,
-		filters: 192,
+		filters: 16,
 		strides: 1
-	}));
-	model.add(new VIS.layers.Pooling2d({
+    }));
+    // 1
+    model.add(new VIS.layers.Pooling2d({
+        poolSize: [2, 2],
+		strides: [2, 2]
+    }));
+    // 2
+    model.add(new VIS.layers.Conv2d({
+		shape: [208, 208],
+		kernelSize: 3,
+		filters: 32,
+		strides: 1
+    }));
+    // 3
+    model.add(new VIS.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
+    }));
+    // 4
+    model.add(new VIS.layers.Conv2d({
+		shape: [104, 104],
+		kernelSize: 3,
+		filters: 64,
+		strides: 1
+    }));
+    // 5
+    model.add(new VIS.layers.Pooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2]
+    }));
+    // 6
+    model.add(new VIS.layers.Conv2d({
+		shape: [52, 52],
+		kernelSize: 3,
 		filters: 128,
 		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 256,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
-		filters: 256,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 512,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Pooling2d({
+    }));
+    // 7
+    model.add(new VIS.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
+    }));
+    // 8
+    model.add(new VIS.layers.Conv2d({
+		shape: [26, 26],
+		kernelSize: 3,
 		filters: 256,
 		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 512,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
-		filters: 256,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 512,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
-		filters: 256,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 512,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
-		filters: 256,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 512,
-		strides: 1
-	}));
-
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
-		filters: 512,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 1024,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Pooling2d({
+    }));
+    // 9
+    model.add(new VIS.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2]
-	}));
+    }));
+    // 10
+    model.add(new VIS.layers.Conv2d({
+		shape: [13, 13],
+		kernelSize: 3,
+		filters: 512,
+		strides: 1
+    }));
+    // 11
+    model.add(new VIS.layers.Pooling2d({
+        shape: [13, 13],
+		poolSize: [2, 2],
+		strides: [2, 2]
+    }));
+    // 12
+    model.add(new VIS.layers.Conv2d({
+		shape: [13, 13],
+		kernelSize: 3,
+		filters: 1024,
+		strides: 1
+    }));
+    // 13
+    model.add(new VIS.layers.Conv2d({
+		shape: [13, 13],
+		kernelSize: 3,
+		filters: 512,
+		strides: 1
+    }));
+    // 14
+    model.add(new VIS.layers.Conv2d({
+		shape: [13, 13],
+		kernelSize: 1,
+		filters: 425,
+		strides: 1
+    }));
 
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
-		filters: 512,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 1024,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 1,
-		filters: 512,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 1024,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [8, 8]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 1024,
-		strides: 3
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 1024,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Padding2d({
-		padding: [2, 2]
-	}));
-	model.add(new VIS.layers.Conv2d({
-		kernelSize: 3,
-		filters: 1024,
-		strides: 1
-	}));
-	model.add(new VIS.layers.Dense({
-		units: 4096
-	}));
+//	model.load("", {
+//		type: "tfjs"
+//	});
 
 	model.init();
 
