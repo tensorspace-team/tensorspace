@@ -102,7 +102,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initSegregationElements: function(centers) {
 
-		for (let i = 0; i < this.fmNum; i++) {
+		for (let i = 0; i < this.depth; i++) {
 
 			let segregationHandler = new FeatureMap(this.width, this.height, centers[i], this.color);
 
@@ -147,17 +147,16 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	assemble: function(layerIndex, modelConfig) {
 		this.layerIndex = layerIndex;
 
+		this.depth = this.lastLayer.depth;
+
 		if (this.isShapePredefined) {
 
 		} else {
 			this.inputShape = this.lastLayer.outputShape;
 			this.width = (this.inputShape[0] - this.poolSize[0]) / this.strides[0] + 1;
 			this.height = (this.inputShape[1] - this.poolSize[1]) / this.strides[1] + 1;
-			this.fmNum = this.inputShape[2];
-			this.outputShape = [this.width, this.height, this.fmNum];
+			this.outputShape = [this.width, this.height, this.depth];
 		}
-
-		this.depth = this.lastLayer.depth;
 
 		for (let i = 0; i < this.depth; i++) {
 
