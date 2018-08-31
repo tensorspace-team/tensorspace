@@ -3,6 +3,9 @@ import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
 import { InputDepth3Object } from "../../elements/InputDepth3Object";
 import { ChannelMap } from "../../elements/ChannelMap";
 import { colorUtils } from "../../utils/ColorUtils";
+import { RGBTweenFactory } from "../../animation/RGBChannelTween";
+import { CloseButton } from "../../elements/CloseButton";
+import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Input3d(config) {
 
@@ -29,19 +32,18 @@ function Input3d(config) {
 
 	this.separateTopPos = {
 		x: 0,
-		y: 5,
+		y: 20,
 		z: 0
 	};
 
 	this.separateBottomPos = {
 		x: 0,
-		y: -5,
+		y: -20,
 		z: 0
 	};
 
 	this.isOpen = false;
 
-	this.mapElement = undefined;
 	this.colorfulMapHandler = undefined;
 
 	this.channelHandlerList = [];
@@ -77,17 +79,35 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
+	openLayer: function() {
+
+		if (!this.isOpen) {
+			RGBTweenFactory.separate(this);
+		}
+
+	},
+
+	closeLayer: function() {
+
+		if (this.isOpen) {
+			RGBTweenFactory.aggregate(this);
+		}
+
+	},
+
 	initColorfulMap: function() {
 
 		let colorfulMap = new InputDepth3Object(this.width, this.height, this.center, this.color);
 		let mapElement = colorfulMap.getMapElement();
-		mapElement.elementType = "colorfulMap";
+		mapElement.elementType = "placeholder";
 		mapElement.layerIndex = this.layerIndex;
 		this.colorfulMapHandler = colorfulMap;
 
 		this.neuralGroup.add(this.colorfulMapHandler.getMapElement());
 
-		console.log(this.neuralGroup);
+		if (this.neuralValue !== undefined) {
+			this.updateAggregationVis();
+		}
 
 	},
 
@@ -102,11 +122,16 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let rChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[0], this.color, "R");
 		let gChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[1], this.color, "G");
-		let bChannel = new ChannelMap(this.widht, this.height, this.closeFmCenters[2], this.color, "B");
+		let bChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[2], this.color, "B");
 
 		this.channelHandlerList.push(rChannel);
 		this.channelHandlerList.push(gChannel);
 		this.channelHandlerList.push(bChannel);
+
+		if (this.neuralValue !== undefined) {
+
+			this.updateSegregationVis();
+		}
 
 		this.neuralGroup.add(rChannel.getMapElement());
 		this.neuralGroup.add(gChannel.getMapElement());
@@ -123,43 +148,71 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
+	initCloseButton: function() {
+
+		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.openFmCenters[0], this.width);
+
+		let closeButton = new CloseButton(closeButtonPos, this.color);
+		let closeButtonElement = closeButton.getButton();
+		closeButtonElement.layerIndex = this.layerIndex;
+
+		this.closeButton = closeButtonElement;
+		this.neuralGroup.add(closeButtonElement);
+
+	},
+
+	disposeCloseButton: function() {
+
+		this.neuralGroup.remove(this.closeButton);
+		this.closeButton = undefined;
+
+	},
+
 	updateValue: function(value) {
 
 		this.neuralValue = value;
 
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
-
 		if (this.isOpen) {
 
-			let rVal = [];
-			let gVal = [];
-			let bVal = [];
-
-			for (let i = 0; i < colors; i++) {
-
-				if (i % 3 === 0) {
-					rVal.push(colors[i]);
-				} else if (i % 3 === 1) {
-					gVal.push(colors[i]);
-				} else {
-					bVal.push(colors[i]);
-				}
-
-			}
-
-			this.channelHandlerList[0].updateVis(rVal);
-			this.channelHandlerList[1].updateVis(gVal);
-			this.channelHandlerList[2].updateVis(bVal);
+			this.updateSegregationVis();
 
 		} else {
 
-			this.colorfulMapHandler.updateVis(colors);
+			this.updateAggregationVis();
 
 		}
 
 	},
 
-	updateVis: function() {
+	updateAggregationVis: function() {
+
+		let colors = colorUtils.getAdjustValues(this.neuralValue);
+		this.colorfulMapHandler.updateVis(colors);
+	},
+
+	updateSegregationVis: function() {
+
+		let colors = colorUtils.getAdjustValues(this.neuralValue);
+
+		let rVal = [];
+		let gVal = [];
+		let bVal = [];
+
+		for (let i = 0; i < colors.length; i++) {
+
+			if (i % 3 === 0) {
+				rVal.push(colors[i]);
+			} else if (i % 3 === 1) {
+				gVal.push(colors[i]);
+			} else {
+				bVal.push(colors[i]);
+			}
+
+		}
+
+		this.channelHandlerList[0].updateVis(rVal);
+		this.channelHandlerList[1].updateVis(gVal);
+		this.channelHandlerList[2].updateVis(bVal);
 
 	}
 

@@ -24,7 +24,7 @@ ChannelMap.prototype = {
 
 	init: function() {
 
-		let amount = 3 * this.fmWidth * this.fmHeight;
+		let amount = 3 * this.width * this.height;
 		let data = new Uint8Array(amount);
 		this.dataArray = data;
 
@@ -51,13 +51,13 @@ ChannelMap.prototype = {
 			}
 		}
 
-		let dataTex = new THREE.DataTexture(data, this.fmWidth, this.fmHeight, THREE.RGBFormat);
+		let dataTex = new THREE.DataTexture(data, this.width, this.height, THREE.RGBFormat);
 		this.dataTexture = dataTex;
 
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.fmWidth, 1, this.fmHeight);
+		let boxGeometry = new THREE.BoxGeometry(this.width, 1, this.height);
 
 		let material = new THREE.MeshBasicMaterial({ map: dataTex });
 		let basicMaterial = new THREE.MeshBasicMaterial({
@@ -75,7 +75,7 @@ ChannelMap.prototype = {
 
 		let cube = new THREE.Mesh(boxGeometry, materials);
 
-		cube.position.set(this.fmCenter.x, this.fmCenter.y, this.fmCenter.z);
+		cube.position.set(this.center.x, this.center.y, this.center.z);
 
 		this.channelMap = cube;
 
@@ -95,7 +95,7 @@ ChannelMap.prototype = {
 					this.dataArray[3 * i + 2] = colors[i] * 255;
 					break;
 				default:
-					console.log("do not support such channel type.");
+					console.error("do not support such channel type.");
 			}
 		}
 
@@ -128,11 +128,20 @@ ChannelMap.prototype = {
 					}
 					break;
 				default:
-					console.log("do not support such channel type.");
+					console.error("do not support such channel type.");
 			}
 		}
 
 		this.dataTexture.needsUpdate = true;
+
+	},
+
+	updatePos: function(pos) {
+
+		this.center.x = pos.x;
+		this.center.y = pos.y;
+		this.center.z = pos.z;
+		this.channelMap.position.set(pos.x, pos.y, pos.z);
 
 	}
 };
