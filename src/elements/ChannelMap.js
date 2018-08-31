@@ -103,7 +103,7 @@ ChannelMap.prototype = {
 
 	},
 
-	getMapElement: function() {
+	getElement: function() {
 		return this.channelMap;
 	},
 

@@ -1,5 +1,6 @@
 import { Layer } from './Layer';
-import { InputMap2d } from "../../elements/InputMap2d";
+import { FeatureMap } from "../../elements/FeatureMap";
+import { colorUtils } from "../../utils/ColorUtils";
 
 function Input(config) {
 
@@ -12,11 +13,11 @@ function Input(config) {
 	this.neuralNum = config.shape[0] * config.shape[1];
 	this.outputShape = config.shape;
 
-	this.fmCenters = [{
+	this.fmCenter = {
 		x: 0,
 		y: 0,
 		z: 0
-	}];
+	};
 
 	this.layerType = "input";
 }
@@ -30,21 +31,18 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		this.initSegregationElements();
+		this.initAggregationElement();
 
 		this.scene.add(this.neuralGroup);
 
 	},
 
-	initSegregationElements: function() {
+	initAggregationElement: function() {
 
-		let inputElement;
+		let aggregationHandler = new FeatureMap(this.width, this.height, this.fmCenter, this.color);
 
-		inputElement = new InputMap2d(this.width, this.height, this.fmCenters[0], this.color);
-		this.fmList.push(inputElement);
-
-		this.fmList.push(inputElement);
-		this.neuralGroup.add(inputElement.getMapElement());
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add(aggregationHandler.getElement());
 
 	},
 
@@ -62,13 +60,15 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.neuralValue = value;
 
-		this.fmList[0].updateVis(value);
+		let colors = colorUtils.getAdjustValues(value);
+
+		this.aggregationHandler.updateVis(colors);
 	},
 
 	clear: function() {
 		console.log("clear input data");
 
-		this.fmList[0].clear();
+		this.aggregationHandler.clear();
 	}
 
 });

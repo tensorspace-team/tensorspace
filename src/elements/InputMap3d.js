@@ -21,13 +21,13 @@ function InputMap3d(width, height, initCenter, color) {
 
 	this.colorMap = undefined;
 
-	this.initFeatureMap();
+	this.init();
 
 }
 
 InputMap3d.prototype = {
 
-	initFeatureMap: function() {
+	init: function() {
 
 		let amount = 3 * this.width * this.height;
 
@@ -72,7 +72,7 @@ InputMap3d.prototype = {
 
 	},
 
-	getMapElement: function() {
+	getElement: function() {
 		return this.colorMap;
 	},
 

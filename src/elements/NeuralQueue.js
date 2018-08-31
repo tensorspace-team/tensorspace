@@ -10,12 +10,12 @@ function NeuralQueue(length, color) {
 	this.dataTexture = undefined;
 	this.queue = undefined;
 
-	this.initNeuralQueue();
+	this.init();
 }
 
 NeuralQueue.prototype = {
 
-	initNeuralQueue: function() {
+	init: function() {
 
 		let data = new Uint8Array(this.queueLength);
 		this.dataArray = data;
@@ -56,13 +56,13 @@ NeuralQueue.prototype = {
 
 	},
 
-	getQueueElement: function() {
+	getElement: function() {
 
 		return this.queue;
 
 	},
 
-	updateGrayScale: function(colors) {
+	updateVis: function(colors) {
 
 		for (let i = 0; i < colors.length; i++) {
 			this.dataArray[i] = 255 * colors[i];

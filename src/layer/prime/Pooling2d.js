@@ -4,8 +4,6 @@ import { colorUtils } from '../../utils/ColorUtils';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { MapAggregation } from "../../elements/MapAggregation";
-import { CloseButton } from "../../elements/CloseButton";
-import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Pooling2d(config) {
 
@@ -17,8 +15,6 @@ function Pooling2d(config) {
 	this.height = undefined;
 	this.poolSize = config.poolSize;
 	this.strides = config.strides;
-	this.fmNum = undefined;
-
 	this.depth = undefined;
 
 	if (config.shape !== undefined) {
@@ -31,14 +27,11 @@ function Pooling2d(config) {
 		this.isShapePredefined = false;
 	}
 
-	this.fmList = [];
-
 	this.fmCenters = [];
 	this.openFmCenters = [];
 	this.closeFmCenters = [];
 
 	this.isOpen = undefined;
-	this.closeButton = undefined;
 
 	this.layerType = "maxPool2d";
 
@@ -57,6 +50,8 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			fmCenter.z = this.lastLayer.openFmCenters[i].z;
 			this.openFmCenters.push(fmCenter);
 		}
+
+		this.leftMostCenter = this.openFmCenters[0];
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -109,11 +104,11 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < this.fmNum; i++) {
 
-			let featureMap = new FeatureMap(this.width, this.height, centers[i], this.color);
+			let segregationHandler = new FeatureMap(this.width, this.height, centers[i], this.color);
 
-			this.fmList.push(featureMap);
+			this.segregationHandlers.push(segregationHandler);
 
-			this.neuralGroup.add(featureMap.getMapElement());
+			this.neuralGroup.add(segregationHandler.getElement());
 
 		}
 
@@ -125,57 +120,27 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	disposeSegregationElements: function() {
 
-		let fmNum = this.fmList.length;
-		for (let i = 0; i < fmNum; i++) {
-			let featureMap = this.fmList[i];
-			this.neuralGroup.remove(featureMap.getMapElement());
+		for (let i = 0; i < this.segregationHandlers.length; i++) {
+			this.neuralGroup.remove(this.segregationHandlers[i].getElement());
 		}
 
-		this.fmList = [];
-
-	},
-
-	initCloseButton: function() {
-
-		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.openFmCenters[0], this.width);
-
-		let closeButton = new CloseButton(closeButtonPos, this.color);
-		let closeButtonElement = closeButton.getButton();
-		closeButtonElement.layerIndex = this.layerIndex;
-
-		this.closeButton = closeButtonElement;
-		this.neuralGroup.add(closeButtonElement);
-
-	},
-
-	disposeCloseButton: function() {
-
-		this.neuralGroup.remove(this.closeButton);
-		this.closeButton = undefined;
+		this.segregationHandlers = [];
 
 	},
 
 	initAggregationElement: function() {
 
-		let placeholder = new MapAggregation(this.width, this.height, this.depth, this.color);
-		let placeholderElement = placeholder.getPlaceholder();
+		let aggregationHandler = new MapAggregation(this.width, this.height, this.depth, this.color);
+		aggregationHandler.setLayerIndex(this.layerIndex);
 
-		placeholderElement.elementType = "aggregationElement";
-		placeholderElement.layerIndex = this.layerIndex;
-
-		this.aggregationElement = placeholderElement;
-		this.aggregationEdges = placeholder.getEdges();
-
-		this.neuralGroup.add(this.aggregationElement);
-		this.neuralGroup.add(this.aggregationEdges);
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add(aggregationHandler.getElement());
 	},
 
 	disposeAggregationElement: function() {
 
-		this.neuralGroup.remove(this.aggregationElement);
-		this.neuralGroup.remove(this.aggregationEdges);
-		this.aggregationElement = undefined;
-		this.aggregationEdges = undefined;
+		this.neuralGroup.remove(this.aggregationHandler.getElement());
+		this.aggregationHandler = undefined;
 
 	},
 
@@ -254,8 +219,25 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < this.depth; i++) {
 
-			let featureMap = this.fmList[i];
-			featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+			this.segregationHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+
+		}
+
+	},
+
+	clear: function() {
+
+		if (this.neuralValue !== undefined) {
+
+			if (this.isOpen) {
+
+				let zeroValue = new Int8Array(this.neuralValue.length);
+				let zeroColors = colorUtils.getAdjustValues(zeroValue);
+				this.updateValue(zeroColors);
+
+			}
+
+			this.neuralValue = undefined;
 
 		}
 

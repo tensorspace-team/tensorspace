@@ -5,8 +5,6 @@ import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { LayerOpenFactory } from "../../animation/LayerOpen";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { MapAggregation } from "../../elements/MapAggregation";
-import { CloseButton } from "../../elements/CloseButton";
-import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Conv2d(config) {
 
@@ -59,6 +57,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.center = center;
 		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.width, this.height);
+		this.leftMostCenter = this.openFmCenters[0];
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -107,9 +106,9 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	initSegregationElements: function (centers) {
 
 		for (let i = 0; i < this.filters; i++) {
-			let featureMap = new FeatureMap(this.width, this.height, centers[i], this.color);
-			this.fmList.push(featureMap);
-			this.neuralGroup.add(featureMap.getMapElement());
+			let segregationHandler = new FeatureMap(this.width, this.height, centers[i], this.color);
+			this.segregationHandlers.push(segregationHandler);
+			this.neuralGroup.add(segregationHandler.getElement());
 		}
 
 		if (this.neuralValue !== undefined) {
@@ -120,58 +119,29 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	disposeSegregationElements: function () {
 
-		let fmNum = this.fmList.length;
-		for (let i = 0; i < fmNum; i++) {
-			let featureMap = this.fmList[i];
-			this.neuralGroup.remove(featureMap.getMapElement());
+		for (let i = 0; i < this.segregationHandlers.length; i++) {
+			let segregationHandler = this.segregationHandlers[i];
+			this.neuralGroup.remove(segregationHandler.getElement());
 		}
 
-		this.fmList = [];
-
-	},
-
-	initCloseButton: function() {
-
-		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.openFmCenters[0], this.width);
-
-		let closeButton = new CloseButton(closeButtonPos, this.color);
-		let closeButtonElement = closeButton.getButton();
-		closeButtonElement.layerIndex = this.layerIndex;
-
-		this.closeButton = closeButtonElement;
-		this.neuralGroup.add(closeButtonElement);
-
-	},
-
-	disposeCloseButton: function() {
-
-		this.neuralGroup.remove(this.closeButton);
-		this.closeButton = undefined;
+		this.segregationHandlers = [];
 
 	},
 
 	initAggregationElement: function () {
 
-		let placeholder = new MapAggregation(this.width, this.height, this.depth, this.color);
-		let placeholderElement = placeholder.getPlaceholder();
+		let aggregationHandler = new MapAggregation(this.width, this.height, this.depth, this.color);
+		aggregationHandler.setLayerIndex(this.layerIndex);
 
-		placeholderElement.elementType = "aggregationElement";
-		placeholderElement.layerIndex = this.layerIndex;
-
-		this.aggregationElement = placeholderElement;
-		this.aggregationEdges = placeholder.getEdges();
-
-		this.neuralGroup.add(this.aggregationElement);
-		this.neuralGroup.add(this.aggregationEdges);
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add(this.aggregationHandler.getElement());
 
 	},
 
 	disposeAggregationElement: function () {
 
-		this.neuralGroup.remove(this.aggregationElement);
-		this.neuralGroup.remove(this.aggregationEdges);
-		this.aggregationElement = undefined;
-		this.aggregationEdges = undefined;
+		this.neuralGroup.remove(this.aggregationHandler.getElement());
+		this.aggregationHandler = undefined;
 
 	},
 
@@ -245,8 +215,25 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < this.depth; i++) {
 
-			let featureMap = this.fmList[i];
-			featureMap.updateGrayScale(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+			this.segregationHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+
+		}
+
+	},
+
+	clear: function() {
+
+		if (this.neuralValue !== undefined) {
+
+			if (this.isOpen) {
+
+				let zeroValue = new Int8Array(this.neuralValue.length);
+				let zeroColors = colorUtils.getAdjustValues(zeroValue);
+				this.updateValue(zeroColors);
+
+			}
+
+			this.neuralValue = undefined;
 
 		}
 

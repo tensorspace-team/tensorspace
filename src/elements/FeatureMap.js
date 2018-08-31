@@ -1,11 +1,14 @@
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
+import { colorUtils } from "../utils/ColorUtils";
 
 function FeatureMap(width, height, initCenter, color) {
 
 	this.fmWidth = width;
 	this.fmHeight = height;
 	this.color = color;
+
+	this.neuralLength = width * height;
 
 	this.fmCenter = {
 		x: initCenter.x,
@@ -17,12 +20,12 @@ function FeatureMap(width, height, initCenter, color) {
 	this.dataTexture = undefined;
 	this.featureMap = undefined;
 
-	this.initFeatureMap();
+	this.init();
 }
 
 FeatureMap.prototype = {
 
-	initFeatureMap: function() {
+	init: function() {
 
 		let amount = this.fmWidth * this.fmHeight;
 		let data = new Uint8Array(amount);
@@ -62,11 +65,11 @@ FeatureMap.prototype = {
 
 	},
 
-	getMapElement: function() {
+	getElement: function() {
 		return this.featureMap;
 	},
 
-	updateGrayScale: function(colors) {
+	updateVis: function(colors) {
 
 		for (let i = 0; i < colors.length; i++) {
 			this.dataArray[i] = colors[i] * 255;
@@ -81,6 +84,16 @@ FeatureMap.prototype = {
 		this.fmCenter.y = pos.y;
 		this.fmCenter.z = pos.z;
 		this.featureMap.position.set(pos.x, pos.y, pos.z);
+
+	},
+
+	clear: function() {
+
+		let zeroValue = new Int8Array(this.neuralLength);
+
+		let colors = colorUtils.getAdjustValues(zeroValue);
+
+		this.updateVis(colors);
 
 	}
 

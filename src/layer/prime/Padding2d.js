@@ -4,8 +4,6 @@ import { colorUtils } from '../../utils/ColorUtils';
 import { MapAggregation } from "../../elements/MapAggregation";
 import { LayerCloseFactory } from "../../animation/LayerClose";
 import { LayerOpenFactory } from "../../animation/LayerOpen";
-import { CloseButton } from "../../elements/CloseButton";
-import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Padding2d(config) {
 
@@ -25,8 +23,6 @@ function Padding2d(config) {
 	this.height = undefined;
 	this.depth = undefined;
 
-	this.fmList = [];
-
 	this.lastOpenFmCenters = undefined;
 
 	this.fmCenters = [];
@@ -34,7 +30,6 @@ function Padding2d(config) {
 	this.closeFmCenters = [];
 
 	this.isOpen = undefined;
-	this.closeButton = undefined;
 
 	this.layerType = "padding2d";
 
@@ -86,6 +81,8 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
+		this.leftMostCenter = this.openFmCenters[0];
+
 		if (this.isOpen) {
 			this.initSegregationElements();
 			this.initCloseButton();
@@ -127,7 +124,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < this.openFmCenters.length; i++) {
 
-			let paddingMap = new PaddingMap(
+			let segregationHandler = new PaddingMap(
 				this.width,
 				this.height,
 				this.openFmCenters[i],
@@ -135,8 +132,8 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 				this.paddingHeight,
 				this.color
 			);
-			this.fmList.push(paddingMap);
-			this.neuralGroup.add(paddingMap.getMapElement());
+			this.segregationHandlers.push(segregationHandler);
+			this.neuralGroup.add(segregationHandler.getElement());
 
 		}
 
@@ -148,58 +145,28 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	disposeSegregationElements: function() {
 
-		let fmNum = this.fmList.length;
-		for (let i = 0; i < fmNum; i++) {
-			let paddingMap = this.fmList[i];
-			this.neuralGroup.remove(paddingMap.getMapElement());
+		for (let i = 0; i < this.segregationHandlers.length; i++) {
+			this.neuralGroup.remove(this.segregationHandlers[i].getElement());
 		}
 
-		this.fmList = [];
-
-	},
-
-	initCloseButton: function() {
-
-		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.openFmCenters[0], this.width);
-
-		let closeButton = new CloseButton(closeButtonPos, this.color);
-		let closeButtonElement = closeButton.getButton();
-		closeButtonElement.layerIndex = this.layerIndex;
-
-		this.closeButton = closeButtonElement;
-		this.neuralGroup.add(closeButtonElement);
-
-	},
-
-	disposeCloseButton: function() {
-
-		this.neuralGroup.remove(this.closeButton);
-		this.closeButton = undefined;
+		this.segregationHandlers = [];
 
 	},
 
 	initAggregationElement: function() {
 
-		let placeholder = new MapAggregation(this.width, this.height, this.depth, this.color);
-		let placeholderElement = placeholder.getPlaceholder();
+		let aggregationHandler = new MapAggregation(this.width, this.height, this.depth, this.color);
+		aggregationHandler.setLayerIndex(this.layerIndex);
 
-		placeholderElement.elementType = "aggregationElement";
-		placeholderElement.layerIndex = this.layerIndex;
-
-		this.aggregationElement = placeholderElement;
-		this.aggregationEdges = placeholder.getEdges();
-
-		this.neuralGroup.add(this.aggregationElement);
-		this.neuralGroup.add(this.aggregationEdges);
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add(this.aggregationHandler.getElement());
 
 	},
 
 	disposeAggregationElement: function() {
 
-		this.neuralGroup.remove(this.aggregationElement);
-		this.neuralGroup.remove(this.aggregationEdges);
-		this.aggregationElement = undefined;
-		this.aggregationEdges = undefined;
+		this.neuralGroup.remove(this.aggregationHandler.getElement());
+		this.aggregationHandler = undefined;
 
 	},
 
@@ -264,11 +231,27 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < fmNum; i++) {
 
-			let paddingMap = this.paddingMapList[i];
-
-			paddingMap.updateGrayScale(colors.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
+			this.segregationHandlers[i].updateVis(colors.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
 
 		}
+	},
+
+	clear: function() {
+
+		if (this.neuralValue !== undefined) {
+
+			if (this.isOpen) {
+
+				let zeroValue = new Int8Array(this.neuralValue.length);
+				let zeroColors = colorUtils.getAdjustValues(zeroValue);
+				this.updateValue(zeroColors);
+
+			}
+
+			this.neuralValue = undefined;
+
+		}
+
 	}
 
 });

@@ -4,8 +4,6 @@ import { InputMap3d } from "../../elements/InputMap3d";
 import { ChannelMap } from "../../elements/ChannelMap";
 import { colorUtils } from "../../utils/ColorUtils";
 import { RGBTweenFactory } from "../../animation/RGBChannelTween";
-import { CloseButton } from "../../elements/CloseButton";
-import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Input3d(config) {
 
@@ -21,6 +19,7 @@ function Input3d(config) {
 	this.fmCenters = [];
 	this.closeFmCenters = [];
 	this.openFmCenters = fmCenterGenerator.getFmCenters("line", 3, this.width, this.height);
+	this.leftMostCenter = this.openFmCenters[0];
 
 	for (let i = 0; i < 3; i++) {
 		this.closeFmCenters.push({
@@ -98,12 +97,12 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 	initAggregationElement: function() {
 
 		let colorfulMap = new InputMap3d(this.width, this.height, this.center, this.color);
-		let mapElement = colorfulMap.getMapElement();
-		mapElement.elementType = "aggregationElement";
+		let mapElement = colorfulMap.getElement();
+
 		mapElement.layerIndex = this.layerIndex;
 		this.colorfulMapHandler = colorfulMap;
 
-		this.neuralGroup.add(this.colorfulMapHandler.getMapElement());
+		this.neuralGroup.add(this.colorfulMapHandler.getElement());
 
 		if (this.neuralValue !== undefined) {
 			this.updateAggregationVis();
@@ -113,7 +112,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	disposeAggregationElement: function() {
 
-		this.neuralGroup.remove(this.colorfulMapHandler.getMapElement());
+		this.neuralGroup.remove(this.colorfulMapHandler.getElement());
 		this.colorfulMapHandler = undefined;
 
 	},
@@ -133,38 +132,18 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.updateSegregationVis();
 		}
 
-		this.neuralGroup.add(rChannel.getMapElement());
-		this.neuralGroup.add(gChannel.getMapElement());
-		this.neuralGroup.add(bChannel.getMapElement());
+		this.neuralGroup.add(rChannel.getElement());
+		this.neuralGroup.add(gChannel.getElement());
+		this.neuralGroup.add(bChannel.getElement());
 
 	},
 
 	disposeSegregationElements: function() {
 
 		for (let i = 0; i < this.channelHandlerList.length; i++) {
-			this.neuralGroup.remove(this.channelHandlerList[i].getMapElement());
+			this.neuralGroup.remove(this.channelHandlerList[i].getElement());
 		}
 		this.channelHandlerList = [];
-
-	},
-
-	initCloseButton: function() {
-
-		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.openFmCenters[0], this.width);
-
-		let closeButton = new CloseButton(closeButtonPos, this.color);
-		let closeButtonElement = closeButton.getButton();
-		closeButtonElement.layerIndex = this.layerIndex;
-
-		this.closeButton = closeButtonElement;
-		this.neuralGroup.add(closeButtonElement);
-
-	},
-
-	disposeCloseButton: function() {
-
-		this.neuralGroup.remove(this.closeButton);
-		this.closeButton = undefined;
 
 	},
 
@@ -213,6 +192,10 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.channelHandlerList[0].updateVis(rVal);
 		this.channelHandlerList[1].updateVis(gVal);
 		this.channelHandlerList[2].updateVis(bVal);
+
+	},
+
+	clear: function() {
 
 	}
 

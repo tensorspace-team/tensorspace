@@ -6,8 +6,8 @@ function DenseAggregation(width, height, depth, color) {
 
 	this.color = color;
 
+	this.cube = undefined;
 	this.aggregationElement = undefined;
-	this.aggregationEdges = undefined;
 
 	this.init();
 
@@ -21,26 +21,31 @@ DenseAggregation.prototype = {
 			color: this.color, opacity: 0.3, transparent: true
 		});
 
-		let layerPlaceHolder = new THREE.Mesh(geometry, material);
+		let cube = new THREE.Mesh(geometry, material);
 
-		layerPlaceHolder.position.set(0, 0, 0);
+		cube.position.set(0, 0, 0);
+		cube.elementType = "aggregationElement";
 
-		this.aggregationElement = layerPlaceHolder;
+		this.cube = cube;
 
-		let edges = new THREE.EdgesGeometry(geometry);
-		let edgesLine = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
+		let edgesGeometry = new THREE.EdgesGeometry(geometry);
+		let edgesLine = new THREE.LineSegments(edgesGeometry, new THREE.LineBasicMaterial({
 			color: 0xA5A5A5
 		}));
 
-		this.aggregationEdges = edgesLine;
+		let aggregationGroup = new THREE.Object3D();
+		aggregationGroup.add(cube);
+		aggregationGroup.add(edgesLine);
+
+		this.aggregationElement = aggregationGroup;
 	},
 
-	getAggregationElement: function() {
+	getElement: function() {
 		return this.aggregationElement;
 	},
 
-	getEdges: function() {
-		return this.aggregationEdges;
+	setLayerIndex: function(layerIndex) {
+		this.cube.layerIndex = layerIndex;
 	}
 
 };

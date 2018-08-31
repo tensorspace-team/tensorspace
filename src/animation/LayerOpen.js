@@ -24,7 +24,7 @@ LayerOpen.prototype = {
 
 			layer.fmCenters = [];
 
-			for (let i = 0; i < layer.fmList.length; i++) {
+			for (let i = 0; i < layer.segregationHandlers.length; i++) {
 
 				let tempPos = {
 					x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
@@ -32,7 +32,7 @@ LayerOpen.prototype = {
 					z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
 				};
 
-				layer.fmList[i].updatePos(tempPos);
+				layer.segregationHandlers[i].updatePos(tempPos);
 
 				layer.fmCenters.push(tempPos);
 

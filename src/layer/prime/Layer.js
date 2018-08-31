@@ -1,4 +1,5 @@
-import { colorUtils } from "../../utils/ColorUtils";
+import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
+import { CloseButton } from "../../elements/CloseButton";
 
 function Layer(config) {
 	this.scene = undefined;
@@ -16,9 +17,6 @@ function Layer(config) {
 	this.outputShape = [];
 	this.neuralGroup = undefined;
 
-	// store all 2d maps in layer
-	this.fmList = [];
-
 	// store the reference aggregationElement object
 	this.aggregationElement = undefined;
 
@@ -29,6 +27,18 @@ function Layer(config) {
 
 	// color for layer neural visualization
 	this.color = undefined;
+
+	// store the reference for layer aggregation
+	this.aggregationHandler = undefined;
+
+	// store all layer segregation references as a list
+	this.segregationHandlers = [];
+
+	// store the reference for close button
+	this.closeButtonHandler = undefined;
+
+	// center position is the left-most for layer, type: {x: value , y: value, z: value}
+	this.leftMostCenter = undefined;
 }
 
 Layer.prototype = {
@@ -45,23 +55,23 @@ Layer.prototype = {
 		this.scene = scene;
 	},
 
-	clear: function() {
+	initCloseButton: function() {
 
-		if (this.neuralValue !== undefined) {
+		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.leftMostCenter, this.width);
+		let closeButtonHandler = new CloseButton(closeButtonPos, this.color);
+		closeButtonHandler.setLayerIndex(this.layerIndex);
 
-			if (this.isOpen) {
+		this.closeButtonHandler = closeButtonHandler;
+		this.neuralGroup.add(this.closeButtonHandler.getElement());
 
-				let zeroValue = new Int8Array(this.neuralValue.length);
-				let zeroColors = colorUtils.getAdjustValues(zeroValue);
-				this.updateValue(zeroColors);
+	},
 
-			}
+	disposeCloseButton: function() {
 
-			this.neuralValue = undefined;
+		this.neuralGroup.remove(this.closeButtonHandler.getElement());
+		this.closeButtonHandler = undefined;
 
-		}
-
-	}
+	},
 
 };
 

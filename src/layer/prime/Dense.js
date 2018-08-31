@@ -4,8 +4,6 @@ import { colorUtils } from '../../utils/ColorUtils';
 import { DenseAggregation } from "../../elements/DenseAggregation";
 import {LayerOpenFactory} from "../../animation/LayerOpen";
 import {LayerCloseFactory} from "../../animation/LayerClose";
-import { CloseButton } from "../../elements/CloseButton";
-import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 
 function Dense(config) {
 
@@ -15,6 +13,12 @@ function Dense(config) {
 	this.width = config.units;
 	this.depth = 1;
 	this.neuralQueue = undefined;
+
+	this.leftMostCenter = {
+		x: 0,
+		y: 0,
+		z: 0
+	};
 
 	this.isOpen = undefined;
 
@@ -71,7 +75,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let neuralQueue = new NeuralQueue(this.units, this.color);
 		this.neuralQueue = neuralQueue;
-		this.neuralGroup.add(neuralQueue.getQueueElement());
+		this.neuralGroup.add(neuralQueue.getElement());
 
 		if (this.neuralValue !== undefined) {
 			this.updateSegregationVis();
@@ -83,55 +87,25 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		console.log("dispose queue element");
 
-		this.neuralGroup.remove(this.neuralQueue.getQueueElement());
+		this.neuralGroup.remove(this.neuralQueue.getElement());
 		this.neuralQueue = undefined;
-
-	},
-
-	initCloseButton: function() {
-
-		console.log("init dense close button");
-
-		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.center, this.width);
-
-		let closeButton = new CloseButton(closeButtonPos, this.color);
-		let closeButtonElement = closeButton.getButton();
-		closeButtonElement.layerIndex = this.layerIndex;
-
-		this.closeButton = closeButtonElement;
-		this.neuralGroup.add(closeButtonElement);
-
-	},
-
-	disposeCloseButton: function() {
-
-		this.neuralGroup.remove(this.closeButton);
-		this.closeButton = undefined;
 
 	},
 
 	initAggregationElement: function() {
 
-		let placeholder = new DenseAggregation(5, 5, 5, this.color);
-		let placeholderElement = placeholder.getAggregationElement();
+		let aggregationHandler = new DenseAggregation(5, 5, 5, this.color);
+		aggregationHandler.setLayerIndex(this.layerIndex);
 
-		placeholderElement.elementType = "aggregationElement";
-		placeholderElement.layerIndex = this.layerIndex;
-
-		this.aggregationElement = placeholderElement;
-		this.aggregationEdges = placeholder.getEdges();
-
-		this.neuralGroup.add(this.aggregationElement);
-		this.neuralGroup.add(this.aggregationEdges);
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add(this.aggregationHandler.getElement());
 
 	},
 
 	disposeAggregationElement: function() {
 
-		this.neuralGroup.remove(this.aggregationElement);
-		this.neuralGroup.remove(this.aggregationEdges);
-		this.aggregationElement = undefined;
-		this.aggregationEdges = undefined;
+		this.neuralGroup.remove(this.aggregationHandler.getElement());
+		this.aggregationHandler = undefined;
 
 	},
 
@@ -170,7 +144,25 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 	updateSegregationVis: function() {
 		let colors = colorUtils.getAdjustValues(this.neuralValue);
 
-		this.neuralQueue.updateGrayScale(colors);
+		this.neuralQueue.updateVis(colors);
+	},
+
+	clear: function() {
+
+		if (this.neuralValue !== undefined) {
+
+			if (this.isOpen) {
+
+				let zeroValue = new Int8Array(this.neuralValue.length);
+				let zeroColors = colorUtils.getAdjustValues(zeroValue);
+				this.updateValue(zeroColors);
+
+			}
+
+			this.neuralValue = undefined;
+
+		}
+
 	}
 
 });

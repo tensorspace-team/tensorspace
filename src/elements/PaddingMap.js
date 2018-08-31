@@ -29,13 +29,13 @@ function PaddingMap(width, height, center, paddingWidth, paddingHeight, color) {
 
 	this.featureMap = undefined;
 
-	this.initFeatureMap();
+	this.init();
 
 }
 
 PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
-	initFeatureMap: function() {
+	init: function() {
 
 		let amount = this.width * this.height;
 		let data = new Uint8Array(amount);
@@ -77,15 +77,11 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 	},
 
-	getMapElement: function() {
+	getElement: function() {
 		return this.featureMap;
 	},
 
-	updateGrayScale: function(colors) {
-
-		console.log("update");
-
-		console.log(colors);
+	updateVis: function(colors) {
 
 		for (let i = 0; i < this.height; i++) {
 
@@ -103,8 +99,6 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 			}
 
 		}
-
-		console.log(this.dataArray);
 
 		this.dataTexture.needsUpdate = true;
 
