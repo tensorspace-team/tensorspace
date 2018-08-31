@@ -1,4 +1,4 @@
-function RGBTween() {
+function RGBChannelTween() {
 
 	this.separateTime = 1000;
 	this.journeyTime = 2000;
@@ -8,7 +8,7 @@ function RGBTween() {
 
 }
 
-RGBTween.prototype = {
+RGBChannelTween.prototype = {
 
 	separate: function(layer) {
 
@@ -60,8 +60,8 @@ RGBTween.prototype = {
 
 		}).onStart(function () {
 			console.log("start separate layer");
-			layer.disposeColorfulMap();
-			layer.initChannelMap();
+			layer.disposeAggregationElement();
+			layer.initSegregationElements();
 		}).onComplete(function() {
 			console.log("end separate layer");
 		});
@@ -232,8 +232,8 @@ RGBTween.prototype = {
 			console.log("start aggregate layer");
 		}).onComplete(function() {
 			console.log("end aggregate layer");
-			layer.disposeChannelMap();
-			layer.initColorfulMap();
+			layer.disposeSegregationElements();
+			layer.initAggregationElement();
 			layer.isOpen = false;
 		});
 
@@ -244,6 +244,6 @@ RGBTween.prototype = {
 
 };
 
-let RGBTweenFactory = new RGBTween();
+let RGBTweenFactory = new RGBChannelTween();
 
 export { RGBTweenFactory };

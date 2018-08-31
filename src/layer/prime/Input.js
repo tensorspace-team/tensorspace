@@ -1,6 +1,5 @@
 import { Layer } from './Layer';
-import { InputDepth1Object } from "../../elements/InputDepth1Object";
-import { InputDepth3Object } from "../../elements/InputDepth3Object";
+import { InputMap2d } from "../../elements/InputMap2d";
 
 function Input(config) {
 
@@ -41,16 +40,8 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let inputElement;
 
-		if (this.depth === 1) {
-			inputElement = new InputDepth1Object(this.width, this.height, this.fmCenters[0], this.color);
-			this.fmList.push(inputElement);
-		} else if (this.depth === 3) {
-			inputElement = new InputDepth3Object(this.width, this.height, this.fmCenters[0], this.color);
-			this.fmList.push(inputElement);
-		} else {
-			// do we need to create a default element ?
-			console.log("layer depth must 1 or 3 for image");
-		}
+		inputElement = new InputMap2d(this.width, this.height, this.fmCenters[0], this.color);
+		this.fmList.push(inputElement);
 
 		this.fmList.push(inputElement);
 		this.neuralGroup.add(inputElement.getMapElement());

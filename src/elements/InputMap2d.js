@@ -1,14 +1,14 @@
 import { FeatureMap } from "./FeatureMap";
 import { colorUtils } from "../utils/ColorUtils";
 
-function InputDepth1Object(width, height, initCenter, color) {
+function InputMap2d(width, height, initCenter, color) {
 
 	FeatureMap.call(this, width, height, initCenter, color);
 
 	this.neuralLength = width * height;
 }
 
-InputDepth1Object.prototype = Object.assign(Object.create(FeatureMap.prototype), {
+InputMap2d.prototype = Object.assign(Object.create(FeatureMap.prototype), {
 
 	updateVis: function(value) {
 
@@ -28,4 +28,4 @@ InputDepth1Object.prototype = Object.assign(Object.create(FeatureMap.prototype),
 
 });
 
-export { InputDepth1Object };
+export { InputMap2d };

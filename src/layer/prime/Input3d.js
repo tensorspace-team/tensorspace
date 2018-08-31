@@ -1,6 +1,6 @@
 import { Layer } from "./Layer";
 import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
-import { InputDepth3Object } from "../../elements/InputDepth3Object";
+import { InputMap3d } from "../../elements/InputMap3d";
 import { ChannelMap } from "../../elements/ChannelMap";
 import { colorUtils } from "../../utils/ColorUtils";
 import { RGBTweenFactory } from "../../animation/RGBChannelTween";
@@ -61,7 +61,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		this.initColorfulMap();
+		this.initAggregationElement();
 
 		this.scene.add(this.neuralGroup);
 
@@ -95,9 +95,9 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	initColorfulMap: function() {
+	initAggregationElement: function() {
 
-		let colorfulMap = new InputDepth3Object(this.width, this.height, this.center, this.color);
+		let colorfulMap = new InputMap3d(this.width, this.height, this.center, this.color);
 		let mapElement = colorfulMap.getMapElement();
 		mapElement.elementType = "aggregationElement";
 		mapElement.layerIndex = this.layerIndex;
@@ -111,14 +111,14 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	disposeColorfulMap: function() {
+	disposeAggregationElement: function() {
 
 		this.neuralGroup.remove(this.colorfulMapHandler.getMapElement());
 		this.colorfulMapHandler = undefined;
 
 	},
 
-	initChannelMap: function() {
+	initSegregationElements: function() {
 
 		let rChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[0], this.color, "R");
 		let gChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[1], this.color, "G");
@@ -139,7 +139,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	disposeChannelMap: function() {
+	disposeSegregationElements: function() {
 
 		for (let i = 0; i < this.channelHandlerList.length; i++) {
 			this.neuralGroup.remove(this.channelHandlerList[i].getMapElement());

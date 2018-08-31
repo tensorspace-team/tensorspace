@@ -1,7 +1,7 @@
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
 
-function InputDepth3Object(width, height, initCenter, color) {
+function InputMap3d(width, height, initCenter, color) {
 
 	this.width = width;
 	this.height = height;
@@ -25,7 +25,7 @@ function InputDepth3Object(width, height, initCenter, color) {
 
 }
 
-InputDepth3Object.prototype = {
+InputMap3d.prototype = {
 
 	initFeatureMap: function() {
 
@@ -100,4 +100,4 @@ InputDepth3Object.prototype = {
 
 };
 
-export { InputDepth3Object };
+export { InputMap3d };
