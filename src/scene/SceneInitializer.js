@@ -1,3 +1,6 @@
+import { DefaultCameraPos } from "../utils/Constant";
+import { DefaultLayerDepth } from "../utils/Constant";
+
 function SceneInitializer(container ) {
 
 	this.container = container;
@@ -49,8 +52,8 @@ SceneInitializer.prototype = {
 		this.camera.fov = 45;
 		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
 		this.camera.near = 0.1;
-		this.camera.far = 100000;
-		this.camera.position.set(0, 0, 10000);
+		this.camera.far = 10000;
+
 		this.camera.updateProjectionMatrix();
 		this.camera.name = 'defaultCamera';
 
@@ -79,8 +82,12 @@ SceneInitializer.prototype = {
 
 	},
 
-	updateCamera: function(modelDepth) {
+	updateCamera: function() {
 		console.log("update camera.");
+
+		let modelDepth = this.layers.length;
+		this.camera.position.set(0, 0, 600 * (modelDepth - 1) / (DefaultLayerDepth - 1));
+
 	},
 
 	// 使用animate scene
