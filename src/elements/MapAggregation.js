@@ -1,7 +1,11 @@
-function MapAggregation(width, height, depth, color) {
+import { MinAlpha } from "../utils/Constant";
+
+function MapAggregation(width, height, actualWidth, actualHeight, depth, color) {
 
 	this.width = width;
 	this.height = height;
+	this.actualWidth = actualWidth;
+	this.actualHeight = actualHeight;
 	this.depth = 2;
 
 	this.color = color;
@@ -16,9 +20,9 @@ function MapAggregation(width, height, depth, color) {
 MapAggregation.prototype = {
 
 	init: function() {
-		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
+		let geometry = new THREE.BoxGeometry(this.actualWidth, this.depth, this.actualHeight);
 		let material = new THREE.MeshBasicMaterial({
-			color: this.color, opacity: 0.3, transparent: true
+			color: this.color, opacity: MinAlpha, transparent: true
 		});
 
 		let cube = new THREE.Mesh(geometry, material);

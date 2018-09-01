@@ -2,9 +2,11 @@ import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
 
-function NeuralQueue(length, color) {
+function NeuralQueue(length, actualWidth, actualHeight, color) {
 
 	this.queueLength = length;
+	this.actualWidth = actualWidth;
+	this.actualHeight = actualHeight;
 	this.color = color;
 
 	this.dataArray = undefined;
@@ -31,7 +33,7 @@ NeuralQueue.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.queueLength, 1, 1);
+		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.queueLength, this.actualHeight);
 
 		// 这里设置color可以隐约显示颜色总体的感觉
 

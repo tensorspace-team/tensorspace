@@ -39,6 +39,10 @@ function Layer(config) {
 
 	// center position is the left-most for layer, type: {x: value , y: value, z: value}
 	this.leftMostCenter = undefined;
+
+	// actual width and height in three.js scene
+	this.actualWidth = undefined;
+	this.actualHeight = undefined;
 }
 
 Layer.prototype = {
@@ -57,7 +61,7 @@ Layer.prototype = {
 
 	initCloseButton: function() {
 
-		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.leftMostCenter, this.width);
+		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.leftMostCenter, this.actualWidth);
 		let closeButtonHandler = new CloseButton(closeButtonPos, this.color);
 		closeButtonHandler.setLayerIndex(this.layerIndex);
 

@@ -1,6 +1,7 @@
 import { Layer } from './Layer';
 import { FeatureMap } from "../../elements/FeatureMap";
 import { colorUtils } from "../../utils/ColorUtils";
+import { ModelInitWidth } from "../../utils/Constant";
 
 function Input(config) {
 
@@ -13,6 +14,10 @@ function Input(config) {
 	this.neuralNum = config.shape[0] * config.shape[1];
 	this.outputShape = config.shape;
 
+	this.actualWidth = ModelInitWidth;
+	this.actualHeight = ModelInitWidth / this.width * this.height;
+	this.realVirtualRatio = this.actualWidth / this.width;
+
 	this.fmCenter = {
 		x: 0,
 		y: 0,
@@ -20,6 +25,8 @@ function Input(config) {
 	};
 
 	this.layerType = "input";
+
+
 }
 
 Input.prototype = Object.assign(Object.create(Layer.prototype), {
@@ -39,7 +46,14 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new FeatureMap(this.width, this.height, this.fmCenter, this.color);
+		let aggregationHandler = new FeatureMap(
+			this.width,
+			this.height,
+			this.actualWidth,
+			this.actualHeight,
+			this.fmCenter,
+			this.color
+		);
 
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add(aggregationHandler.getElement());

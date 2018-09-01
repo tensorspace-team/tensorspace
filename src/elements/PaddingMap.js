@@ -2,10 +2,12 @@ import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
 
-function PaddingMap(width, height, center, paddingWidth, paddingHeight, color) {
+function PaddingMap(width, height, actualWidth, actualHeight, center, paddingWidth, paddingHeight, color) {
 
 	this.width = width;
 	this.height = height;
+	this.actualWidth = actualWidth;
+	this.actualHeight = actualHeight;
 	this.center = {
 		x: center.x,
 		y: center.y,
@@ -54,7 +56,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.width, 1, this.height);
+		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.width, this.actualHeight);
 
 		// 这里设置color可以隐约显示颜色总体的感觉
 

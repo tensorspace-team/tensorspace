@@ -32,7 +32,7 @@ TfjsLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 		if (this.model.isInitialized) {
 
 			// 执行异步加载模型
-			this.load.then(function() {
+			this.load().then(function() {
 				console.log("Have stored the resource into visualization model.");
 			});
 

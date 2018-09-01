@@ -4,6 +4,7 @@ import { InputMap3d } from "../../elements/InputMap3d";
 import { ChannelMap } from "../../elements/ChannelMap";
 import { colorUtils } from "../../utils/ColorUtils";
 import { RGBTweenFactory } from "../../animation/RGBChannelTween";
+import { ModelInitWidth } from "../../utils/Constant";
 
 function Input3d(config) {
 
@@ -44,8 +45,11 @@ function Input3d(config) {
 	this.isOpen = false;
 
 	this.aggregationHandler = undefined;
-
 	this.segregationHandlers = [];
+
+	this.actualWidth = ModelInitWidth;
+	this.actualHeight = this.actualWidth / this.width * this.height;
+	this.realVirtualRatio = this.actualWidth / this.width;
 
 	this.layerType = "input3d";
 
@@ -96,11 +100,17 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new InputMap3d(this.width, this.height, {
-			x: 0,
-			y: 0,
-			z: 0
-		}, this.color);
+		let aggregationHandler = new InputMap3d(this.width,
+			this.height,
+			this.actualWidth,
+			this.actualHeight,
+			{
+				x: 0,
+				y: 0,
+				z: 0
+			},
+			this.color
+		);
 
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
@@ -122,9 +132,33 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initSegregationElements: function() {
 
-		let rChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[0], this.color, "R");
-		let gChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[1], this.color, "G");
-		let bChannel = new ChannelMap(this.width, this.height, this.closeFmCenters[2], this.color, "B");
+		let rChannel = new ChannelMap(
+			this.width,
+			this.height,
+			this.actualWidth,
+			this.actualHeight,
+			this.closeFmCenters[0],
+			this.color,
+			"R"
+		);
+		let gChannel = new ChannelMap(
+			this.width,
+			this.height,
+			this.actualWidth,
+			this.actualHeight,
+			this.closeFmCenters[1],
+			this.color,
+			"G"
+		);
+		let bChannel = new ChannelMap(
+			this.width,
+			this.height,
+			this.actualWidth,
+			this.actualHeight,
+			this.closeFmCenters[2],
+			this.color,
+			"B"
+		);
 
 		this.segregationHandlers.push(rChannel);
 		this.segregationHandlers.push(gChannel);

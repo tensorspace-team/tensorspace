@@ -1,10 +1,12 @@
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
 
-function InputMap3d(width, height, initCenter, color) {
+function InputMap3d(width, height, actualWidth, actualHeight, initCenter, color) {
 
 	this.width = width;
 	this.height = height;
+	this.actualWidth = actualWidth;
+	this.actualHeight = actualHeight;
 	this.depth = 3;
 	this.fmCenter = {
 		x: initCenter.x,
@@ -48,7 +50,7 @@ InputMap3d.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.width, 1, this.height);
+		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.width, this.actualHeight);
 
 		let material = new THREE.MeshBasicMaterial({ map: dataTex });
 		let basicMaterial = new THREE.MeshBasicMaterial({

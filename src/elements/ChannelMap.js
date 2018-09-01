@@ -1,10 +1,12 @@
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
 
-function ChannelMap(width, height, center, color, type) {
+function ChannelMap(width, height, actualWidth, actualHeight, center, color, type) {
 
 	this.width = width;
 	this.height = height;
+	this.actualWidth = actualWidth;
+	this.actualHeight = actualHeight;
 	this.center = {
 		x: center.x,
 		y: center.y,
@@ -57,7 +59,7 @@ ChannelMap.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.width, 1, this.height);
+		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.width, this.actualHeight);
 
 		let material = new THREE.MeshBasicMaterial({ map: dataTex });
 		let basicMaterial = new THREE.MeshBasicMaterial({

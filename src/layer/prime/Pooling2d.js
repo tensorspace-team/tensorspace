@@ -104,7 +104,14 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < this.depth; i++) {
 
-			let segregationHandler = new FeatureMap(this.width, this.height, centers[i], this.color);
+			let segregationHandler = new FeatureMap(
+				this.width,
+				this.height,
+				this.actualWidth,
+				this.actualHeight,
+				centers[i],
+				this.color
+			);
 
 			this.segregationHandlers.push(segregationHandler);
 
@@ -130,7 +137,14 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new MapAggregation(this.width, this.height, this.depth, this.color);
+		let aggregationHandler = new MapAggregation(
+			this.width,
+			this.height,
+			this.actualWidth,
+			this.actualHeight,
+			this.depth,
+			this.color
+		);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
@@ -168,6 +182,10 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.closeFmCenters.push(center);
 
 		}
+
+		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
+		this.actualWidth = this.width * this.realVirtualRatio;
+		this.actualHeight = this.height * this.realVirtualRatio;
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;

@@ -127,6 +127,8 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			let segregationHandler = new PaddingMap(
 				this.width,
 				this.height,
+				this.actualWidth,
+				this.actualHeight,
 				this.openFmCenters[i],
 				this.paddingWidth,
 				this.paddingHeight,
@@ -155,7 +157,14 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new MapAggregation(this.width, this.height, this.depth, this.color);
+		let aggregationHandler = new MapAggregation(
+			this.width,
+			this.height,
+			this.actualWidth,
+			this.actualHeight,
+			this.depth,
+			this.color
+		);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
@@ -181,6 +190,10 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.height = this.contentHeight + this.paddingHeight;
 
 		this.outputShape = [this.width, this.height, this.depth];
+
+		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
+		this.actualWidth = this.width * this.realVirtualRatio;
+		this.actualHeight = this.height * this.realVirtualRatio;
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;

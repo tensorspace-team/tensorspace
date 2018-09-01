@@ -11,6 +11,7 @@ function Dense(config) {
 
 	this.units = config.units;
 	this.width = config.units;
+	this.height = 1;
 	this.depth = 1;
 	this.neuralQueue = undefined;
 
@@ -73,8 +74,12 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initSegregationElements: function() {
 
-		let segregationHandler = new NeuralQueue(this.units, this.color);
-		// this.neuralQueue = segregationHandler;
+		let segregationHandler = new NeuralQueue(
+			this.width,
+			this.actualWidth,
+			this.actualHeight,
+			this.color
+		);
 
 		this.segregationHandlers.push(segregationHandler);
 		this.neuralGroup.add(segregationHandler.getElement());
@@ -96,7 +101,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new DenseAggregation(5, 5, 5, this.color);
+		let aggregationHandler = new DenseAggregation(5, 5, this.actualWidth, this.actualHeight, 5, this.color);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
@@ -116,6 +121,10 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.layerIndex = layerIndex;
 
 		this.outputShape = [this.units, 1, 1];
+
+		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
+		this.actualWidth = this.width * this.realVirtualRatio;
+		this.actualHeight = this.height * this.realVirtualRatio;
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;

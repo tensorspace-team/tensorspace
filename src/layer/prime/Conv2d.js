@@ -41,6 +41,7 @@ function Conv2d(config) {
 		this.fmShape = config.shape;
 		this.width = this.fmShape[0];
 		this.height = this.fmShape[1];
+
 	} else {
 		this.isShapePredefined = false;
 	}
@@ -56,7 +57,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	init: function (center) {
 
 		this.center = center;
-		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.width, this.height);
+		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.actualWidth, this.actualHeight);
 		this.leftMostCenter = this.openFmCenters[0];
 
 		this.neuralGroup = new THREE.Group();
@@ -106,7 +107,14 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	initSegregationElements: function (centers) {
 
 		for (let i = 0; i < this.filters; i++) {
-			let segregationHandler = new FeatureMap(this.width, this.height, centers[i], this.color);
+			let segregationHandler = new FeatureMap(
+				this.width,
+				this.height,
+				this.actualWidth,
+				this.actualHeight,
+				centers[i],
+				this.color
+			);
 			this.segregationHandlers.push(segregationHandler);
 			this.neuralGroup.add(segregationHandler.getElement());
 		}
@@ -130,7 +138,14 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function () {
 
-		let aggregationHandler = new MapAggregation(this.width, this.height, this.depth, this.color);
+		let aggregationHandler = new MapAggregation(
+			this.width,
+			this.height,
+			this.actualWidth,
+			this.actualHeight,
+			this.depth,
+			this.color
+		);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
@@ -161,6 +176,10 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.outputShape = [this.width, this.height, this.filters];
+
+		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
+		this.actualWidth = this.width * this.realVirtualRatio;
+		this.actualHeight = this.height * this.realVirtualRatio;
 
 		if (this.isOpen === undefined) {
 

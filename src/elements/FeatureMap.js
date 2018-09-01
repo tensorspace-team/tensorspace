@@ -2,10 +2,12 @@ import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
 
-function FeatureMap(width, height, initCenter, color) {
+function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color) {
 
 	this.fmWidth = width;
 	this.fmHeight = height;
+	this.actualWidth = actualWidth;
+	this.actualHeight = actualHeight;
 	this.color = color;
 
 	this.neuralLength = width * height;
@@ -41,7 +43,7 @@ FeatureMap.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.fmWidth, 1, this.fmHeight);
+		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.fmWidth, this.actualHeight);
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
