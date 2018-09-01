@@ -54,6 +54,10 @@ MapAggregation.prototype = {
 
 	clear: function() {
 
+	},
+
+	updateVis: function() {
+
 	}
 
 };

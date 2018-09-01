@@ -5,7 +5,6 @@ function DenseAggregation(actualWidth, actualHeight, actualDepth, color) {
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
 	this.actualDepth = actualDepth;
-	this.depth = 2;
 
 	this.color = color;
 
@@ -52,6 +51,10 @@ DenseAggregation.prototype = {
 	},
 
 	clear: function() {
+
+	},
+
+	updateVis: function() {
 
 	}
 
