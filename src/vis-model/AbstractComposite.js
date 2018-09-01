@@ -1,5 +1,6 @@
 import { SceneInitializer } from '../scene/SceneInitializer';
 import { TfjsLoader } from '../loader/TfjsLoader';
+import {FrozenModelLoader} from "../loader/FrozenModelLoader";
 
 function AbstractComposite( container ) {
 
@@ -21,9 +22,17 @@ function AbstractComposite( container ) {
 AbstractComposite.prototype = Object.assign(Object.create( SceneInitializer.prototype ), {
 
 	load: function(url, config) {
+
 		if (config.type === "tfjs") {
 			this.loadTfjsModel(url, config);
 		}
+	},
+
+	loadFrozen: function(modelUrl, weightUrl, config) {
+
+		let loader = new FrozenModelLoader(this);
+		loader.preload(modelUrl, weightUrl, config);
+
 	},
 
 	loadTfjsModel: function(url, config) {
