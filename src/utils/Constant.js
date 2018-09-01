@@ -4,4 +4,5 @@ export let BasicMaterialOpacity = 0.2;
 export let ModelInitWidth = 100;
 export let ModelLayerInterval = 50;
 export let FeatureMapIntervalRatio = 0.5;
-export let CloseButtonRatio = 0.1;
+export let CloseButtonRatio = 0.03;
+export let MaxDepthInLayer = 30;

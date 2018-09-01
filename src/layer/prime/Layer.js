@@ -1,5 +1,6 @@
 import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
 import { CloseButton } from "../../elements/CloseButton";
+import { CloseButtonRatio } from "../../utils/Constant";
 
 function Layer(config) {
 	this.scene = undefined;
@@ -43,6 +44,12 @@ function Layer(config) {
 	// actual width and height in three.js scene
 	this.actualWidth = undefined;
 	this.actualHeight = undefined;
+
+	// actual depth for layer aggregation
+	this.actualDepth = undefined;
+
+	// used to define close sphere size
+	this.openHeight = undefined;
 }
 
 Layer.prototype = {
@@ -62,7 +69,7 @@ Layer.prototype = {
 	initCloseButton: function() {
 
 		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.leftMostCenter, this.actualWidth);
-		let closeButtonHandler = new CloseButton(closeButtonPos, this.color);
+		let closeButtonHandler = new CloseButton(this.openHeight * CloseButtonRatio, closeButtonPos, this.color);
 		closeButtonHandler.setLayerIndex(this.layerIndex);
 
 		this.closeButtonHandler = closeButtonHandler;

@@ -1,5 +1,7 @@
 import { AbstractComposite } from './AbstractComposite';
 import { MapModelConfiguration } from "../configure/MapModelConfiguration";
+import { ModelLayerInterval } from "../utils/Constant";
+import { MaxDepthInLayer } from "../utils/Constant";
 
 function Sequential(container, config) {
 
@@ -126,9 +128,10 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		console.log("creating prime sequential model...");
 
 		let layersPos = calculateLayersPos(this.layers.length);
+		let layerActualDepth = calculateDepths(this);
 
 		for (let i = 0; i < this.layers.length; i++) {
-			this.layers[i].init(layersPos[i]);
+			this.layers[i].init(layersPos[i], layerActualDepth[i]);
 		}
 
 
@@ -138,9 +141,9 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 			let initPos;
 			if (depth % 2 === 1) {
-				initPos = -20 * ((depth - 1) / 2);
+				initPos = - ModelLayerInterval * ((depth - 1) / 2);
 			} else {
-				initPos = -20 * (depth / 2) + 10;
+				initPos = - ModelLayerInterval * (depth / 2) + ModelLayerInterval / 2;
 			}
 			for (let i = 0; i < depth; i++) {
 				layersPos.push({
@@ -148,10 +151,39 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 					y: initPos,
 					z: 0
 				});
-				initPos += 20;
+				initPos += ModelLayerInterval;
 			}
 
 			return layersPos;
+
+		}
+
+		function calculateDepths(model) {
+
+			let depthList = [];
+			let maxDepthValue = 0;
+			let actualDepthList = [];
+
+			for (let i = 0; i < model.layers.length; i++) {
+				let layerDepth = model.layers[i].depth;
+
+				maxDepthValue = maxDepthValue > layerDepth ? maxDepthValue : layerDepth;
+				depthList.push(layerDepth);
+
+			}
+
+			for (let i = 0; i < model.layers.length; i++) {
+
+				if (depthList[i] / maxDepthValue * MaxDepthInLayer > 1) {
+					actualDepthList.push(depthList[i] / maxDepthValue * MaxDepthInLayer);
+				} else {
+					actualDepthList.push(1);
+				}
+
+
+			}
+
+			return actualDepthList;
 
 		}
 

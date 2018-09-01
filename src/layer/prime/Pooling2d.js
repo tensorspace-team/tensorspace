@@ -39,9 +39,10 @@ function Pooling2d(config) {
 
 Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function(center) {
+	init: function(center, actualDepth) {
 
 		this.center = center;
+		this.actualDepth = actualDepth;
 
 		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
 			let fmCenter = {};
@@ -52,6 +53,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.leftMostCenter = this.openFmCenters[0];
+		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -142,7 +144,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.height,
 			this.actualWidth,
 			this.actualHeight,
-			this.depth,
+			this.actualDepth,
 			this.color
 		);
 		aggregationHandler.setLayerIndex(this.layerIndex);

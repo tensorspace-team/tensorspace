@@ -6,7 +6,7 @@ function MapAggregation(width, height, actualWidth, actualHeight, depth, color) 
 	this.height = height;
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
-	this.depth = 2;
+	this.depth = depth;
 
 	this.color = color;
 

@@ -31,9 +31,10 @@ function Input(config) {
 
 Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function(center) {
+	init: function(center, actualDepth) {
 
 		this.center = center;
+		this.actualDepth = actualDepth;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);

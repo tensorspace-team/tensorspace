@@ -23,13 +23,16 @@ function Dense(config) {
 
 	this.isOpen = undefined;
 
+	this.layerType = "dense";
+
 }
 
 Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function(center) {
+	init: function(center, actualDepth) {
 
 		this.center = center;
+		this.actualDepth = actualDepth;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -101,7 +104,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new DenseAggregation(5, 5, this.actualWidth, this.actualHeight, 5, this.color);
+		let aggregationHandler = new DenseAggregation(this.lastActualWidth, this.lastActualHeight, this.actualDepth, this.color);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
@@ -125,6 +128,16 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
+
+		if (this.lastLayer.layerType === "dense") {
+			this.lastActualWidth = this.lastLayer.lastActualWidth;
+			this.lastActualHeight = this.lastLayer.lastActualHeight;
+		} else {
+			this.lastActualWidth = this.lastLayer.actualWidth;
+			this.lastActualHeight = this.lastLayer.actualHeight;
+		}
+
+		this.openHeight = 100;
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;

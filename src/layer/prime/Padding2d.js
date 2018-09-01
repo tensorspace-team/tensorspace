@@ -37,9 +37,10 @@ function Padding2d(config) {
 
 Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function(center) {
+	init: function(center, actualDepth) {
 
 		this.center = center;
+		this.actualDepth = actualDepth;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -82,6 +83,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.leftMostCenter = this.openFmCenters[0];
+		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
 
 		if (this.isOpen) {
 			this.initSegregationElements();
@@ -162,7 +164,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.height,
 			this.actualWidth,
 			this.actualHeight,
-			this.depth,
+			this.actualDepth,
 			this.color
 		);
 		aggregationHandler.setLayerIndex(this.layerIndex);

@@ -54,11 +54,13 @@ function Conv2d(config) {
 
 Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function (center) {
+	init: function (center, actualDepth) {
 
 		this.center = center;
+		this.actualDepth = actualDepth;
 		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.actualWidth, this.actualHeight);
 		this.leftMostCenter = this.openFmCenters[0];
+		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -143,7 +145,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.height,
 			this.actualWidth,
 			this.actualHeight,
-			this.depth,
+			this.actualDepth,
 			this.color
 		);
 		aggregationHandler.setLayerIndex(this.layerIndex);

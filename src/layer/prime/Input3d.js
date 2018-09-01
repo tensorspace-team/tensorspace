@@ -17,10 +17,16 @@ function Input3d(config) {
 	this.neuralNum = config.shape[0] * config.shape[1];
 	this.outputShape = config.shape;
 
+	this.actualWidth = ModelInitWidth;
+	this.actualHeight = this.actualWidth / this.width * this.height;
+	this.realVirtualRatio = this.actualWidth / this.width;
+
 	this.fmCenters = [];
 	this.closeFmCenters = [];
-	this.openFmCenters = fmCenterGenerator.getFmCenters("line", 3, this.width, this.height);
+	this.openFmCenters = fmCenterGenerator.getFmCenters("line", 3, this.actualWidth, this.actualHeight);
 	this.leftMostCenter = this.openFmCenters[0];
+
+	this.openHeight = 1 * this.actualHeight;
 
 	for (let i = 0; i < 3; i++) {
 		this.closeFmCenters.push({
@@ -47,19 +53,16 @@ function Input3d(config) {
 	this.aggregationHandler = undefined;
 	this.segregationHandlers = [];
 
-	this.actualWidth = ModelInitWidth;
-	this.actualHeight = this.actualWidth / this.width * this.height;
-	this.realVirtualRatio = this.actualWidth / this.width;
-
 	this.layerType = "input3d";
 
 }
 
 Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function(center) {
+	init: function(center, actualDepth) {
 
 		this.center = center;
+		this.actualDepth = actualDepth;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -104,6 +107,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.height,
 			this.actualWidth,
 			this.actualHeight,
+			this.actualDepth,
 			{
 				x: 0,
 				y: 0,
@@ -137,6 +141,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.height,
 			this.actualWidth,
 			this.actualHeight,
+			this.actualDepth,
 			this.closeFmCenters[0],
 			this.color,
 			"R"
@@ -146,6 +151,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.height,
 			this.actualWidth,
 			this.actualHeight,
+			this.actualDepth,
 			this.closeFmCenters[1],
 			this.color,
 			"G"
@@ -155,6 +161,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.height,
 			this.actualWidth,
 			this.actualHeight,
+			this.actualDepth,
 			this.closeFmCenters[2],
 			this.color,
 			"B"
