@@ -146,6 +146,10 @@ ChannelMap.prototype = {
 		this.center.z = pos.z;
 		this.channelMap.position.set(pos.x, pos.y, pos.z);
 
+	},
+
+	setLayerIndex: function(layerIndex) {
+		this.channelMap.layerIndex = layerIndex;
 	}
 };
 
