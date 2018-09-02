@@ -120,6 +120,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 				this.color
 			);
 			segregationHandler.setLayerIndex(this.layerIndex);
+			segregationHandler.setFmIndex(i);
 			this.segregationHandlers.push(segregationHandler);
 			this.neuralGroup.add(segregationHandler.getElement());
 		}
@@ -246,6 +247,19 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	getRelativeElements: function(selectedElement) {
+
+		if (selectedElement.elementType === "featureMap" && this.isOpen) {
+
+			console.log("tttt");
+
+			console.log(selectedElement.fmIndex);
+
+			let elementHandler = this.segregationHandlers[selectedElement.fmIndex];
+
+			console.log(elementHandler);
+
+			elementHandler.showTextResult();
+		}
 
 		let relativeElements = [];
 

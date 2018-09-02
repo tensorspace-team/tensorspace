@@ -13,3 +13,5 @@ export let DefaultLayerDepth = 8;
 export let HookPosRatio = 0.95;
 // neural interval is exact the same as neural length now
 export let OutputNeuralInterval = 1;
+
+export let FeatureMapTextRatio = 0.1;

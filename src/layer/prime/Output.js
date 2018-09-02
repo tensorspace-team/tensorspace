@@ -89,7 +89,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initSegregationElements: function(positions) {
 
-		let textSize = TextHelper.calculateOutputTextSize(this.unitLength);
+		let textSize = TextHelper.calcOutputTextSize(this.unitLength);
 
 		for (let i = 0; i < this.units; i++) {
 

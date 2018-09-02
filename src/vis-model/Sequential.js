@@ -92,7 +92,8 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 				if (selectedElement.elementType === "aggregationElement" ||
 					selectedElement.elementType === "featureMap" ||
-					selectedElement.elementType === "featureLine") {
+					selectedElement.elementType === "featureLine" ||
+					selectedElement.elementType === "outputNeural") {
 
 					picked = true;
 					heightLight(model, selectedElement);
@@ -165,7 +166,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 					break;
 				}
 
-				if (selectedElement.elementType === "resultNeural") {
+				if (selectedElement.elementType === "outputNeural") {
 
 					let resultLayer = this.layers[this.layers.length - 1];
 

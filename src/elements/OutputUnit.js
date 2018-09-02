@@ -50,7 +50,7 @@ OutputUnit.prototype = {
 		});
 
 		let cube = new THREE.Mesh(boxGeometry, material);
-		cube.elementType = "resultNeural";
+		cube.elementType = "outputNeural";
 
 		cube.position.set(
 			this.initPosition.x,
@@ -89,7 +89,7 @@ OutputUnit.prototype = {
 
 		let text = new THREE.Mesh(geometry, material);
 
-		let textPos = TextHelper.calculateOutputTextPos(
+		let textPos = TextHelper.calcOutputTextPos(
 			this.output.length,
 			this.textSize,
 			this.cubeSize,

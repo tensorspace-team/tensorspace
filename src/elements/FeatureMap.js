@@ -1,6 +1,8 @@
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
+import { TextHelper } from "../utils/TextHelper";
+import { TextFont } from "../fonts/TextFont";
 
 function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color) {
 
@@ -21,6 +23,11 @@ function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color)
 	this.dataArray = undefined;
 	this.dataTexture = undefined;
 	this.featureMap = undefined;
+	this.featureGroup = undefined;
+
+	this.font = TextFont;
+
+	this.textSize = TextHelper.calcFmTextSize(this.actualWidth);
 
 	this.init();
 }
@@ -28,6 +35,8 @@ function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color)
 FeatureMap.prototype = {
 
 	init: function() {
+
+		let featureGroup = new THREE.Object3D();
 
 		let amount = this.fmWidth * this.fmHeight;
 		let data = new Uint8Array(amount);
@@ -65,10 +74,14 @@ FeatureMap.prototype = {
 
 		this.featureMap = cube;
 
+		featureGroup.add(cube);
+
+		this.featureGroup = featureGroup;
+
 	},
 
 	getElement: function() {
-		return this.featureMap;
+		return this.featureGroup;
 	},
 
 	updateVis: function(colors) {
@@ -105,6 +118,87 @@ FeatureMap.prototype = {
 
 	setFmIndex: function(fmIndex) {
 		this.featureMap.fmIndex = fmIndex;
+	},
+
+	showTextResult: function() {
+
+		let widthInString = this.fmWidth.toString();
+		let heightInString = this.fmHeight.toString();
+
+		let material = new THREE.MeshBasicMaterial( { color: this.color } );
+
+		let widthGeometry = new THREE.TextGeometry( widthInString, {
+			font: this.font,
+			size: this.textSize,
+			height: 1,
+			curveSegments: 8,
+		} );
+
+		let widthText = new THREE.Mesh(widthGeometry, material);
+
+		let widthTextPos = TextHelper.calcFmWidthTextPos(
+			widthInString.length,
+			this.textSize,
+			this.actualWidth,
+			{
+				x: this.featureMap.position.x,
+				y: this.featureMap.position.y,
+				z: this.featureMap.position.z
+			}
+		);
+
+		widthText.position.set(
+			widthTextPos.x,
+			widthTextPos.y,
+			widthTextPos.z
+		);
+
+		widthText.rotateX( - Math.PI / 2 );
+
+		let heightGeometry = new THREE.TextGeometry( heightInString, {
+			font: this.font,
+			size: this.textSize,
+			height: 1,
+			curveSegments: 8,
+		} );
+
+		let heightText = new THREE.Mesh(heightGeometry, material);
+
+		let heightTextPos = TextHelper.calcFmHeightTextPos(
+			heightInString.length,
+			this.textSize,
+			this.actualHeight,
+			{
+				x: this.featureMap.position.x,
+				y: this.featureMap.position.y,
+				z: this.featureMap.position.z
+			}
+		);
+
+		heightText.position.set(
+			heightTextPos.x,
+			heightTextPos.y,
+			heightTextPos.z
+		);
+
+		heightText.rotateX( - Math.PI / 2 );
+
+		this.widthText = widthText;
+		this.heightText = heightText;
+
+		this.featureGroup.add(widthText);
+		this.featureGroup.add(heightText);
+		this.isTextShown = true;
+
+	},
+
+	hideTextResult: function() {
+
+		this.featureGroup.remove(this.widthText);
+		this.featureGroup.remove(this.heightText);
+		this.widthText = undefined;
+		this.heightText = undefined;
+
 	}
 
 };
