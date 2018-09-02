@@ -2,6 +2,7 @@ import { AbstractComposite } from './AbstractComposite';
 import { MapModelConfiguration } from "../configure/MapModelConfiguration";
 import { ModelLayerInterval } from "../utils/Constant";
 import { MaxDepthInLayer } from "../utils/Constant";
+import { LineGroupGeometry } from "../elements/LineGroupGeometry";
 
 function Sequential(container, config) {
 
@@ -74,6 +75,61 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
 		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
+		let model = this;
+
+		model.raycaster.setFromCamera(model.mouse, model.camera);
+		let intersects = model.raycaster.intersectObjects(model.scene.children, true);
+
+		let picked = false;
+
+		for (let i = 0; i < intersects.length; i++) {
+
+			if (intersects !== null && intersects.length > 0 && intersects[i].object.type === "Mesh") {
+
+				let selectedElement = intersects[i].object;
+
+				if (selectedElement.elementType === "aggregationElement" ||
+					selectedElement.elementType === "featureMap" ||
+					selectedElement.elementType === "featureLine") {
+
+					picked = true;
+					heightLight(model, selectedElement);
+					break;
+
+				}
+
+			}
+		}
+
+		if (!picked) {
+			clearHeightLight(model);
+		}
+
+		function heightLight(model, selectedElement) {
+
+			let selectedLayer = model.layers[selectedElement.layerIndex - 1];
+
+			let lineGroupParameters = selectedLayer.getLineGroupParameters(selectedElement);
+
+			let lineGroupGeometryHandler = new LineGroupGeometry(
+				lineGroupParameters.lineVertices,
+				lineGroupParameters.lineColors
+			);
+			model.line.geometry = lineGroupGeometryHandler.getElement();
+			model.line.material.needsUpdate = true;
+
+			model.scene.add(model.line);
+
+		}
+
+		function clearHeightLight(model) {
+
+			model.line.geometry.dispose();
+			model.scene.remove(model.line);
+
+
+		}
+
 	},
 
 	onClick: function (event) {
@@ -90,9 +146,9 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 				if (selectedElement.elementType === "aggregationElement") {
 
-					let selectLayer = this.layers[selectedElement.layerIndex - 1];
+					let selectedLayer = this.layers[selectedElement.layerIndex - 1];
 
-					selectLayer.openLayer();
+					selectedLayer.openLayer();
 
 					break;
 

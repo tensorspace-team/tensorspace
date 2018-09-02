@@ -167,6 +167,10 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			"B"
 		);
 
+		rChannel.setLayerIndex(this.layerIndex);
+		gChannel.setLayerIndex(this.layerIndex);
+		bChannel.setLayerIndex(this.layerIndex);
+
 		this.segregationHandlers.push(rChannel);
 		this.segregationHandlers.push(gChannel);
 		this.segregationHandlers.push(bChannel);
@@ -237,6 +241,11 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.segregationHandlers[1].updateVis(gVal);
 		this.segregationHandlers[2].updateVis(bVal);
 
+	},
+
+	getRelativeElements: function(selectedElement) {
+
+		return [];
 	}
 });
 

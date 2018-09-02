@@ -84,6 +84,32 @@ Layer.prototype = {
 
 	},
 
+	getLineGroupParameters: function(selectedElement) {
+
+		let lineColors = [];
+		let lineVertices = [];
+
+		let relatedElements = this.getRelativeElements(selectedElement);
+
+		let startPosition = selectedElement.getWorldPosition();
+
+		for (let i = 0; i < relatedElements.length; i++) {
+
+			lineColors.push(new THREE.Color(this.color));
+			lineColors.push(new THREE.Color(this.color));
+
+			lineVertices.push(startPosition);
+			lineVertices.push(relatedElements[i].getWorldPosition());
+
+		}
+
+		return {
+			lineColors: lineColors,
+			lineVertices: lineVertices
+		}
+
+	},
+
 	clear: function() {
 
 		if (this.neuralValue !== undefined) {

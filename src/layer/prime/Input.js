@@ -55,6 +55,7 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.fmCenter,
 			this.color
 		);
+		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add(aggregationHandler.getElement());
@@ -84,6 +85,11 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 		console.log("clear input data");
 
 		this.aggregationHandler.clear();
+	},
+
+	getRelativeElements: function(selectedElement) {
+
+		return [];
 	}
 
 });

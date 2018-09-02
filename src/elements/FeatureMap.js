@@ -60,8 +60,8 @@ FeatureMap.prototype = {
 		];
 
 		let cube = new THREE.Mesh(boxGeometry, materials);
-
 		cube.position.set(this.fmCenter.x, this.fmCenter.y, this.fmCenter.z);
+		cube.elementType = "featureMap";
 
 		this.featureMap = cube;
 
@@ -101,6 +101,10 @@ FeatureMap.prototype = {
 
 	setLayerIndex: function(layerIndex) {
 		this.featureMap.layerIndex = layerIndex;
+	},
+
+	setFmIndex: function(fmIndex) {
+		this.featureMap.fmIndex = fmIndex;
 	}
 
 };

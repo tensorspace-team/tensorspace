@@ -54,6 +54,7 @@ NeuralQueue.prototype = {
 		let cube = new THREE.Mesh(boxGeometry, materials);
 
 		cube.position.set(0, 0, 0);
+		cube.elementType = "featureLine";
 
 		this.queue = cube;
 

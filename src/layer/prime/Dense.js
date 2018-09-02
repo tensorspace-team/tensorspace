@@ -84,6 +84,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.color
 		);
 
+		segregationHandler.setLayerIndex(this.layerIndex);
 		this.segregationHandlers.push(segregationHandler);
 		this.neuralGroup.add(segregationHandler.getElement());
 
@@ -169,6 +170,25 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		let colors = colorUtils.getAdjustValues(this.neuralValue);
 
 		this.segregationHandlers[0].updateVis(colors);
+	},
+
+	getRelativeElements: function(selectedElement) {
+
+		let relativeElements = [];
+
+		if (this.lastLayer.isOpen) {
+
+			for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
+				relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
+			}
+
+		} else {
+
+			relativeElements.push(this.lastLayer.aggregationHandler.getElement());
+
+		}
+
+		return relativeElements;
 	}
 
 });
