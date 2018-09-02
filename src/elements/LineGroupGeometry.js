@@ -1,3 +1,5 @@
+import { BasicMaterialOpacity } from "../utils/Constant";
+
 function LineGroupGeometry(lineVertices, lineColors) {
 
 	this.lineVertices = lineVertices;
@@ -12,7 +14,9 @@ LineGroupGeometry.prototype = {
 
 	init: function() {
 
-		let geometry = new THREE.Geometry();
+		let geometry = new THREE.Geometry({
+			transparent:true, opacity: BasicMaterialOpacity
+		});
 		geometry.colors = this.lineColors;
 		geometry.vertices = this.lineVertices;
 		geometry.colorsNeedUpdate = true;

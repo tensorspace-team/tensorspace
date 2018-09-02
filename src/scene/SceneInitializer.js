@@ -1,5 +1,6 @@
 import { DefaultCameraPos } from "../utils/Constant";
 import { DefaultLayerDepth } from "../utils/Constant";
+import { BasicMaterialOpacity } from "../utils/Constant";
 
 function SceneInitializer(container ) {
 
@@ -69,7 +70,12 @@ SceneInitializer.prototype = {
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
 
-		let lineMat = new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 1, linewidth: 20, vertexColors: THREE.VertexColors } );
+		let lineMat = new THREE.LineBasicMaterial( {
+			color: 0xffffff,
+			opacity: BasicMaterialOpacity,
+			transparent:true,
+			vertexColors: THREE.VertexColors
+		} );
 		let lineGeom = new THREE.Geometry();
 		lineGeom.dynamic = true;
 		this.line = new THREE.Line(lineGeom, lineMat);
@@ -86,7 +92,7 @@ SceneInitializer.prototype = {
 		console.log("update camera.");
 
 		let modelDepth = this.layers.length;
-		this.camera.position.set(0, 0, 600 * (modelDepth - 1) / (DefaultLayerDepth - 1));
+		this.camera.position.set(0, 0, DefaultCameraPos * (modelDepth - 1) / (DefaultLayerDepth - 1));
 
 	},
 

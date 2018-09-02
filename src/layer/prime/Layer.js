@@ -96,7 +96,8 @@ Layer.prototype = {
 		for (let i = 0; i < relatedElements.length; i++) {
 
 			lineColors.push(new THREE.Color(this.color));
-			lineColors.push(new THREE.Color(this.color));
+			// lineColors.push(new THREE.Color(this.color));
+			lineColors.push(new THREE.Color(this.lastLayer.color));
 
 			lineVertices.push(startPosition);
 			lineVertices.push(relatedElements[i].getWorldPosition());
