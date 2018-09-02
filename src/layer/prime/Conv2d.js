@@ -54,10 +54,13 @@ function Conv2d(config) {
 
 Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function (center, actualDepth) {
+	init: function (center, actualDepth, nextHookHandler) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
+		this.nextHookHandler = nextHookHandler;
+		this.lastHookHandler = this.lastLayer.nextHookHandler;
+
 		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.actualWidth, this.actualHeight);
 		this.leftMostCenter = this.openFmCenters[0];
 		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;

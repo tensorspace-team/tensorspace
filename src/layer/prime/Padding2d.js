@@ -37,10 +37,12 @@ function Padding2d(config) {
 
 Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function(center, actualDepth) {
+	init: function(center, actualDepth, nextHookHandler) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
+		this.nextHookHandler = nextHookHandler;
+		this.lastHookHandler = this.lastLayer.nextHookHandler;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -255,7 +257,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let relativeElements = [];
 
-		if (selectedElement.elementType === "") {
+		if (selectedElement.elementType === "aggregationElement") {
 
 			if (this.lastLayer.isOpen) {
 
@@ -269,7 +271,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			}
 
-		} else if (selectedElement.elementType === "") {
+		} else if (selectedElement.elementType === "featureMap") {
 
 			if (this.lastLayer.isOpen) {
 

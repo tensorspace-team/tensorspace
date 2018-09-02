@@ -22,14 +22,14 @@ LineHook.prototype = {
 
 	init: function() {
 
-		let geometry = new THREE.BoxGeometry(1, 1, 1);
+		let geometry = new THREE.BoxGeometry(0.01, 0.01, 0.01);
 		let material = new THREE.MeshBasicMaterial({
-			color: 0x000000, opacity: 0, transparent: true
+			color: 0xffffff, opacity: 0, transparent: true
 		});
 
 		let hook = new THREE.Mesh(geometry, material);
 
-		hook.position.set(0, 0, 0);
+		hook.position.set(this.initPos.x, this.initPos.y, this.initPos.z);
 		hook.elementType = "hook";
 
 		this.hookElement = hook;

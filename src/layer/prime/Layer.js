@@ -52,8 +52,8 @@ function Layer(config) {
 	this.openHeight = undefined;
 
 	// store hook between layers
-	this.nextHook = undefined;
-	this.lastHook = undefined;
+	this.nextHookHandler = undefined;
+	this.lastHookHandler = undefined;
 
 
 }
@@ -102,11 +102,10 @@ Layer.prototype = {
 		for (let i = 0; i < relatedElements.length; i++) {
 
 			lineColors.push(new THREE.Color(this.color));
-			// lineColors.push(new THREE.Color(this.color));
-			lineColors.push(new THREE.Color(this.lastLayer.color));
+			lineColors.push(new THREE.Color(this.color));
 
-			lineVertices.push(startPosition);
 			lineVertices.push(relatedElements[i].getWorldPosition());
+			lineVertices.push(startPosition);
 
 		}
 

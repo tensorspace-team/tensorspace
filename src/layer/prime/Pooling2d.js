@@ -39,10 +39,12 @@ function Pooling2d(config) {
 
 Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function(center, actualDepth) {
+	init: function(center, actualDepth, nextHookHandler) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
+		this.nextHookHandler = nextHookHandler;
+		this.lastHookHandler = this.lastLayer.nextHookHandler;
 
 		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
 			let fmCenter = {};

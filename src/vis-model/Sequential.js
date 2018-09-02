@@ -3,6 +3,8 @@ import { MapModelConfiguration } from "../configure/MapModelConfiguration";
 import { ModelLayerInterval } from "../utils/Constant";
 import { MaxDepthInLayer } from "../utils/Constant";
 import { LineGroupGeometry } from "../elements/LineGroupGeometry";
+import { HookPosRatio } from "../utils/Constant";
+import { LineHook } from "../elements/LineHook";
 
 function Sequential(container, config) {
 
@@ -184,10 +186,11 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		console.log("creating prime sequential model...");
 
 		let layersPos = calculateLayersPos(this.layers.length);
+		let hookHandlerList = calculateHookList(this, layersPos);
 		let layerActualDepth = calculateDepths(this);
 
 		for (let i = 0; i < this.layers.length; i++) {
-			this.layers[i].init(layersPos[i], layerActualDepth[i]);
+			this.layers[i].init(layersPos[i], layerActualDepth[i], hookHandlerList[i]);
 		}
 
 
@@ -241,6 +244,28 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 			return actualDepthList;
 
+		}
+
+		function calculateHookList(model, layersPos) {
+
+			let hookHandlerList = [];
+
+			for (let i = 0; i < layersPos.length; i++) {
+
+				let hookPos = {
+					x: layersPos[i].x,
+					y: layersPos[i].y + HookPosRatio * ModelLayerInterval,
+					z: layersPos[i].z
+				};
+
+				let hookHandler = new LineHook(hookPos);
+				model.scene.add(hookHandler.getElement());
+
+				hookHandlerList.push(hookHandler);
+
+			}
+
+			return hookHandlerList;
 		}
 
 	},
