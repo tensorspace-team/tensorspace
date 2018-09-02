@@ -2,8 +2,7 @@ import { Layer } from './Layer';
 import { FeatureMap } from '../../elements/FeatureMap';
 import { colorUtils } from '../../utils/ColorUtils';
 import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
-import { LayerOpenFactory } from "../../animation/LayerOpen";
-import { LayerCloseFactory } from "../../animation/LayerClose";
+import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { MapAggregation } from "../../elements/MapAggregation";
 
 function Conv2d(config) {
@@ -90,7 +89,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			this.disposeAggregationElement();
 			this.initSegregationElements(this.closeFmCenters);
-			LayerOpenFactory.openMapLayer(this);
+			MapTransitionFactory.openLayer(this);
 
 		}
 
@@ -103,7 +102,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 
-			LayerCloseFactory.closeMapLayer(this);
+			MapTransitionFactory.closeLayer(this);
 
 		}
 

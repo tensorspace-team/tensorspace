@@ -1,14 +1,12 @@
-import { VariableLengthObject } from "../elements/VariableLengthObject";
-
-function LayerOpen() {
+function MapTransitionTween() {
 
 	this.animationTime = 2000;
 
 }
 
-LayerOpen.prototype = {
+MapTransitionTween.prototype = {
 
-	openMapLayer: function(layer) {
+	openLayer: function(layer) {
 
 		let init = {
 			ratio: 0
@@ -51,36 +49,44 @@ LayerOpen.prototype = {
 
 	},
 
-	openQueueLayer: function(layer) {
+	closeLayer: function(layer) {
 
 		let init = {
-			scale: 1
+			ratio: 1
 		};
-
 		let end = {
-			scale: layer.width
+			ratio: 0
 		};
-
-		let variableLengthObject = (new VariableLengthObject(layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.color)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, this.animationTime);
+			.to(end, 2000);
 
 		fmTween.onUpdate(function () {
 
-			variableLengthObject.scale.x = init.scale;
+			layer.fmCenters = [];
+
+			for (let i = 0; i < layer.segregationHandlers.length; i++) {
+
+				let tempPos = {
+					x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
+					y: init.ratio * (layer.openFmCenters[i].y - layer.closeFmCenters[i].y),
+					z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
+				};
+
+				layer.segregationHandlers[i].updatePos(tempPos);
+
+				layer.fmCenters.push(tempPos);
+
+			}
 
 		}).onStart(function () {
-			console.log("start open queue layer");
-			layer.disposeAggregationElement();
-			layer.neuralGroup.add(variableLengthObject);
+			console.log("start close layer");
+			layer.disposeCloseButton();
 		}).onComplete(function() {
-			console.log("end open queue layer");
-
-			layer.neuralGroup.remove(variableLengthObject);
-			layer.initSegregationElements();
-			layer.initCloseButton();
-			layer.isOpen = true;
+			console.log("end close layer");
+			layer.disposeSegregationElements();
+			layer.initAggregationElement();
+			layer.isOpen = false;
 		});
 
 		fmTween.start();
@@ -89,6 +95,6 @@ LayerOpen.prototype = {
 
 };
 
-let LayerOpenFactory = new LayerOpen();
+let MapTransitionFactory = new MapTransitionTween();
 
-export { LayerOpenFactory };
+export { MapTransitionFactory };

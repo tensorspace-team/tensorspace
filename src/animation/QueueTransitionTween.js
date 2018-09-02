@@ -1,56 +1,50 @@
 import { VariableLengthObject } from "../elements/VariableLengthObject";
 
-function LayerClose() {
+function QueueTransitionTween() {
+
+	this.animationTime = 2000;
 
 }
 
-LayerClose.prototype = {
+QueueTransitionTween.prototype = {
 
-	closeMapLayer: function(layer) {
+	openLayer: function(layer) {
 
 		let init = {
-			ratio: 1
-		};
-		let end = {
-			ratio: 0
+			scale: 1
 		};
 
+		let end = {
+			scale: layer.width
+		};
+
+		let variableLengthObject = (new VariableLengthObject(layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.color)).getElement();
+
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, 2000);
+			.to(end, this.animationTime);
 
 		fmTween.onUpdate(function () {
 
-			layer.fmCenters = [];
-
-			for (let i = 0; i < layer.segregationHandlers.length; i++) {
-
-				let tempPos = {
-					x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
-					y: init.ratio * (layer.openFmCenters[i].y - layer.closeFmCenters[i].y),
-					z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
-				};
-
-				layer.segregationHandlers[i].updatePos(tempPos);
-
-				layer.fmCenters.push(tempPos);
-
-			}
+			variableLengthObject.scale.x = init.scale;
 
 		}).onStart(function () {
-			console.log("start close layer");
-			layer.disposeCloseButton();
+			console.log("start open queue layer");
+			layer.disposeAggregationElement();
+			layer.neuralGroup.add(variableLengthObject);
 		}).onComplete(function() {
-			console.log("end close layer");
-			layer.disposeSegregationElements();
-			layer.initAggregationElement();
-			layer.isOpen = false;
+			console.log("end open queue layer");
+
+			layer.neuralGroup.remove(variableLengthObject);
+			layer.initSegregationElements();
+			layer.initCloseButton();
+			layer.isOpen = true;
 		});
 
 		fmTween.start();
 
 	},
 
-	closeQueueLayer: function(layer) {
+	closeLayer: function(layer) {
 
 		let init = {
 			scale: 1
@@ -88,6 +82,6 @@ LayerClose.prototype = {
 
 };
 
-let LayerCloseFactory = new LayerClose();
+let QueueTransitionFactory = new QueueTransitionTween();
 
-export { LayerCloseFactory }
+export { QueueTransitionFactory };

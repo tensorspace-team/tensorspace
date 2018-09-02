@@ -2,8 +2,7 @@ import { Layer } from './Layer';
 import { NeuralQueue } from '../../elements/NeuralQueue';
 import { colorUtils } from '../../utils/ColorUtils';
 import { DenseAggregation } from "../../elements/DenseAggregation";
-import {LayerOpenFactory} from "../../animation/LayerOpen";
-import {LayerCloseFactory} from "../../animation/LayerClose";
+import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
 
 function Dense(config) {
 
@@ -58,7 +57,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (!this.isOpen) {
 
-			LayerOpenFactory.openQueueLayer(this);
+			QueueTransitionFactory.openLayer(this);
 
 			this.isOpen = true;
 
@@ -70,7 +69,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 
-			LayerCloseFactory.closeQueueLayer(this);
+			QueueTransitionFactory.closeLayer(this);
 
 			this.isOpen = false;
 		}

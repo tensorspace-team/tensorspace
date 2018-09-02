@@ -2,8 +2,7 @@ import { Layer } from './Layer';
 import { PaddingMap } from '../../elements/PaddingMap';
 import { colorUtils } from '../../utils/ColorUtils';
 import { MapAggregation } from "../../elements/MapAggregation";
-import { LayerCloseFactory } from "../../animation/LayerClose";
-import { LayerOpenFactory } from "../../animation/LayerOpen";
+import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 
 function Padding2d(config) {
 
@@ -106,7 +105,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			this.disposeAggregationElement();
 			this.initSegregationElements(this.closeFmCenters);
-			LayerOpenFactory.openMapLayer(this);
+			MapTransitionFactory.openLayer(this);
 
 		}
 
@@ -118,7 +117,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 
-			LayerCloseFactory.closeMapLayer(this);
+			MapTransitionFactory.closeLayer(this);
 
 		}
 

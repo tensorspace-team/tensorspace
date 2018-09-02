@@ -1,10 +1,10 @@
 import { Layer } from './Layer';
-import { NeuralQueue } from '../../elements/NeuralQueue';
 import { colorUtils } from '../../utils/ColorUtils';
 import { DenseAggregation } from "../../elements/DenseAggregation";
-import {LayerOpenFactory} from "../../animation/LayerOpen";
-import {LayerCloseFactory} from "../../animation/LayerClose";
-import { TextFont } from "../../fonts/TextFont";
+import { OutputUnit } from "../../elements/OutputUnit";
+import { OutputNeuralPosGenerator } from "../../utils/OutputNeuralPosGenerator";
+import {TextHelper} from "../../utils/TextHelper";
+import { OutputTransitionFactory } from "../../animation/OutputTransitionTween";
 
 function Output(config) {
 
@@ -14,7 +14,8 @@ function Output(config) {
 	this.width = config.units;
 	this.height = 1;
 	this.depth = 1;
-	this.neuralQueue = undefined;
+
+	this.unitLength = undefined;
 
 	this.leftMostCenter = {
 		x: 0,
@@ -23,6 +24,17 @@ function Output(config) {
 	};
 
 	this.outputs = config.outputs;
+
+	this.closeResultPos = [];
+	this.openResultPos = [];
+
+	for (let i = 0; i < this.units; i++) {
+		this.closeResultPos.push({
+			x: 0,
+			y: 0,
+			z: 0
+		})
+	}
 
 	this.isOpen = undefined;
 
@@ -42,7 +54,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 
-			this.initSegregationElements();
+			this.initSegregationElements(this.openResultPos);
 			this.initCloseButton();
 
 		} else {
@@ -59,9 +71,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (!this.isOpen) {
 
-			LayerOpenFactory.openQueueLayer(this);
-
-			this.isOpen = true;
+			OutputTransitionFactory.openLayer(this);
 
 		}
 
@@ -71,25 +81,32 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 
-			LayerCloseFactory.closeQueueLayer(this);
+			OutputTransitionFactory.closeLayer(this);
 
-			this.isOpen = false;
 		}
 
 	},
 
-	initSegregationElements: function() {
+	initSegregationElements: function(positions) {
 
-		let segregationHandler = new NeuralQueue(
-			this.width,
-			this.actualWidth,
-			this.actualHeight,
-			this.color
-		);
+		let textSize = TextHelper.calculateOutputTextSize(this.unitLength);
 
-		segregationHandler.setLayerIndex(this.layerIndex);
-		this.segregationHandlers.push(segregationHandler);
-		this.neuralGroup.add(segregationHandler.getElement());
+		for (let i = 0; i < this.units; i++) {
+
+			let segregationHandler = new OutputUnit(
+				this.unitLength,
+				textSize,
+				this.outputs[i],
+				positions[i],
+				this.color
+			);
+
+			segregationHandler.setLayerIndex(this.layerIndex);
+			segregationHandler.setOutputIndex(i);
+			this.segregationHandlers.push(segregationHandler);
+			this.neuralGroup.add(segregationHandler.getElement());
+
+		}
 
 		if (this.neuralValue !== undefined) {
 			this.updateSegregationVis();
@@ -99,9 +116,12 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	disposeSegregationElements: function() {
 
-		console.log("dispose queue element");
+		console.log("dispose output element");
 
-		this.neuralGroup.remove(this.segregationHandlers[0].getElement());
+		for (let i = 0; i < this.segregationHandlers.length; i++) {
+			this.neuralGroup.remove(this.segregationHandlers[i].getElement());
+		}
+
 		this.segregationHandlers = [];
 
 	},
@@ -143,6 +163,14 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.openHeight = 100;
 
+		this.unitLength = this.actualWidth / this.width;
+		this.openResultPos = OutputNeuralPosGenerator.getLinePos(this.units, this.actualWidth / this.width);
+
+		console.log("===");
+		console.log(this.openResultPos);
+		console.log("===");
+
+
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;
 		}
@@ -172,7 +200,11 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 	updateSegregationVis: function() {
 		let colors = colorUtils.getAdjustValues(this.neuralValue);
 
-		this.segregationHandlers[0].updateVis(colors);
+		for (let i = 0; i < this.segregationHandlers.length; i++) {
+
+			this.segregationHandlers[i].updateVis([colors[i]]);
+
+		}
 	},
 
 	getRelativeElements: function(selectedElement) {
@@ -192,6 +224,21 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		return relativeElements;
+	},
+
+	showResultText: function(selectedNeural) {
+
+		for (let i = 0; i < this.segregationHandlers.length; i++) {
+			if (this.segregationHandlers[i].isSelected()) {
+				this.segregationHandlers[i].hideTextResult();
+				break;
+			}
+		}
+
+		let selectedIndex = selectedNeural.outputIndex;
+
+		this.segregationHandlers[selectedIndex].showTextResult();
+
 	}
 
 

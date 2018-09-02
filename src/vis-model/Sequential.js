@@ -164,6 +164,16 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 					break;
 				}
+
+				if (selectedElement.elementType === "resultNeural") {
+
+					let resultLayer = this.layers[this.layers.length - 1];
+
+					resultLayer.showResultText(selectedElement);
+
+					break;
+
+				}
 			}
 
 		}

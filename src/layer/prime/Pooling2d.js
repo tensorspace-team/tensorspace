@@ -1,8 +1,7 @@
 import { Layer } from './Layer';
 import { FeatureMap } from '../../elements/FeatureMap';
 import { colorUtils } from '../../utils/ColorUtils';
-import { LayerOpenFactory } from "../../animation/LayerOpen";
-import { LayerCloseFactory } from "../../animation/LayerClose";
+import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { MapAggregation } from "../../elements/MapAggregation";
 
 function Pooling2d(config) {
@@ -86,7 +85,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			this.disposeAggregationElement();
 			this.initSegregationElements(this.closeFmCenters);
-			LayerOpenFactory.openMapLayer(this);
+			MapTransitionFactory.openLayer(this);
 
 		}
 
@@ -98,7 +97,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 
-			LayerCloseFactory.closeMapLayer(this);
+			MapTransitionFactory.closeLayer(this);
 
 		}
 

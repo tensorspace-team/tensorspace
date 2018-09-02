@@ -11,3 +11,5 @@ export let DefaultCameraPos = 600;
 export let DefaultLayerDepth = 8;
 // ratio of layer distance from previous layer
 export let HookPosRatio = 0.95;
+// neural interval is exact the same as neural length now
+export let OutputNeuralInterval = 1;
