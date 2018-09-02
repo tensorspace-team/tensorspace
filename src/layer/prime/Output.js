@@ -4,6 +4,7 @@ import { colorUtils } from '../../utils/ColorUtils';
 import { DenseAggregation } from "../../elements/DenseAggregation";
 import {LayerOpenFactory} from "../../animation/LayerOpen";
 import {LayerCloseFactory} from "../../animation/LayerClose";
+import { TextFont } from "../../fonts/TextFont";
 
 function Output(config) {
 
@@ -20,6 +21,8 @@ function Output(config) {
 		y: 0,
 		z: 0
 	};
+
+	this.outputs = config.outputs;
 
 	this.isOpen = undefined;
 
