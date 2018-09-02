@@ -50,6 +50,12 @@ function Layer(config) {
 
 	// used to define close sphere size
 	this.openHeight = undefined;
+
+	// store hook between layers
+	this.nextHook = undefined;
+	this.lastHook = undefined;
+
+
 }
 
 Layer.prototype = {
