@@ -205,6 +205,18 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
+	},
+
+	handleHoverIn: function(hoveredElement) {
+
+		this.initLineGroup(hoveredElement);
+
+	},
+
+	handleHoverOut: function() {
+
+		this.disposeLineGroup();
+
 	}
 
 });

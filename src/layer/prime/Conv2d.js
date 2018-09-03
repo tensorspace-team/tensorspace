@@ -248,19 +248,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	getRelativeElements: function(selectedElement) {
 
-		if (selectedElement.elementType === "featureMap" && this.isOpen) {
-
-			console.log("tttt");
-
-			console.log(selectedElement.fmIndex);
-
-			let elementHandler = this.segregationHandlers[selectedElement.fmIndex];
-
-			console.log(elementHandler);
-
-			elementHandler.showTextResult();
-		}
-
 		let relativeElements = [];
 
 		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureMap") {
@@ -268,7 +255,9 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			if (this.lastLayer.isOpen) {
 
 				for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
+
 					relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
+
 				}
 
 			} else {
@@ -280,6 +269,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		} else {
 			console.error("Oops, why raycaster selected this element?");
 		}
+
 
 		return relativeElements;
 
@@ -296,6 +286,40 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			this.closeLayer();
 
+		}
+
+	},
+
+	handleHoverIn: function(hoveredElement) {
+
+		this.initLineGroup(hoveredElement);
+		this.showTextResult(hoveredElement);
+
+	},
+
+	handleHoverOut: function() {
+
+		this.disposeLineGroup();
+		this.hideTextResult();
+
+	},
+
+	showTextResult: function(element) {
+		if (element.elementType === "featureMap") {
+
+			let fmIndex = element.fmIndex;
+			this.segregationHandlers[fmIndex].showTextResult();
+			this.textElementHandler = this.segregationHandlers[fmIndex];
+
+		}
+	},
+
+	hideTextResult: function() {
+
+		if (this.textElementHandler !== undefined) {
+
+			this.textElementHandler.hideTextResult();
+			this.textElementHandler = undefined;
 		}
 
 	}

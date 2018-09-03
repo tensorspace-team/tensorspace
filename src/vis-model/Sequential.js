@@ -18,6 +18,8 @@ function Sequential(container, config) {
 
 	this.configuration = new MapModelConfiguration(config);
 
+	this.hoveredLayer = undefined;
+
 	console.log(this.configuration);
 
 	this.inputValue = undefined;
@@ -82,7 +84,12 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		model.raycaster.setFromCamera(model.mouse, model.camera);
 		let intersects = model.raycaster.intersectObjects(model.scene.children, true);
 
-		let picked = false;
+		if (model.hoveredLayer !== undefined) {
+
+			model.hoveredLayer.handleHoverOut();
+			model.hoveredLayer = undefined;
+
+		}
 
 		for (let i = 0; i < intersects.length; i++) {
 
@@ -90,47 +97,19 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 				let selectedElement = intersects[i].object;
 
-				if (selectedElement.elementType === "aggregationElement" ||
-					selectedElement.elementType === "featureMap" ||
-					selectedElement.elementType === "featureLine" ||
-					selectedElement.elementType === "outputNeural") {
+				if (selectedElement.hoverable === true) {
 
-					picked = true;
-					heightLight(model, selectedElement);
+					let selectedLayer = this.layers[selectedElement.layerIndex - 1];
+
+					selectedLayer.handleHoverIn(selectedElement);
+
+					this.hoveredLayer = selectedLayer;
+
 					break;
 
 				}
 
 			}
-		}
-
-		if (!picked) {
-			clearHeightLight(model);
-		}
-
-		function heightLight(model, selectedElement) {
-
-			let selectedLayer = model.layers[selectedElement.layerIndex - 1];
-
-			let lineGroupParameters = selectedLayer.getLineGroupParameters(selectedElement);
-
-			let lineGroupGeometryHandler = new LineGroupGeometry(
-				lineGroupParameters.lineVertices,
-				lineGroupParameters.lineColors
-			);
-			model.line.geometry = lineGroupGeometryHandler.getElement();
-			model.line.material.needsUpdate = true;
-
-			model.scene.add(model.line);
-
-		}
-
-		function clearHeightLight(model) {
-
-			model.line.geometry.dispose();
-			model.scene.remove(model.line);
-
-
 		}
 
 	},

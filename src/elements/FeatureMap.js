@@ -29,6 +29,9 @@ function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color)
 
 	this.textSize = TextHelper.calcFmTextSize(this.actualWidth);
 
+	this.widthText = undefined;
+	this.heightText = undefined;
+
 	this.init();
 }
 
@@ -99,7 +102,7 @@ FeatureMap.prototype = {
 		this.fmCenter.x = pos.x;
 		this.fmCenter.y = pos.y;
 		this.fmCenter.z = pos.z;
-		this.featureMap.position.set(pos.x, pos.y, pos.z);
+		this.featureGroup.position.set(pos.x, pos.y, pos.z);
 
 	},
 
@@ -187,8 +190,8 @@ FeatureMap.prototype = {
 		this.widthText = widthText;
 		this.heightText = heightText;
 
-		this.featureGroup.add(widthText);
-		this.featureGroup.add(heightText);
+		this.featureGroup.add(this.widthText);
+		this.featureGroup.add(this.heightText);
 		this.isTextShown = true;
 
 	},
@@ -199,6 +202,8 @@ FeatureMap.prototype = {
 		this.featureGroup.remove(this.heightText);
 		this.widthText = undefined;
 		this.heightText = undefined;
+
+		this.isTextShown = false;
 
 	}
 

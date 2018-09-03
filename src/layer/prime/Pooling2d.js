@@ -304,6 +304,42 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
+	},
+
+	handleHoverIn: function(hoveredElement) {
+
+		this.initLineGroup(hoveredElement);
+		this.showTextResult(hoveredElement);
+
+	},
+
+	handleHoverOut: function() {
+
+		this.disposeLineGroup();
+		this.hideTextResult();
+
+	},
+
+	showTextResult: function(element) {
+
+		if (element.elementType === "featureMap") {
+
+			let fmIndex = element.fmIndex;
+			this.segregationHandlers[fmIndex].showTextResult();
+			this.textElementHandler = this.segregationHandlers[fmIndex];
+
+		}
+
+	},
+
+	hideTextResult: function() {
+
+		if (this.textElementHandler !== undefined) {
+
+			this.textElementHandler.hideTextResult();
+			this.textElementHandler = undefined;
+		}
+
 	}
 
 });
