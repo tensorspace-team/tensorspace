@@ -166,11 +166,6 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.unitLength = this.actualWidth / this.width;
 		this.openResultPos = OutputNeuralPosGenerator.getLinePos(this.units, this.actualWidth / this.width);
 
-		console.log("===");
-		console.log(this.openResultPos);
-		console.log("===");
-
-
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;
 		}
@@ -211,33 +206,35 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let relativeElements = [];
 
-		if (this.lastLayer.isOpen) {
+		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputNeural") {
+			if (this.lastLayer.isOpen) {
 
-			for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-				relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
+				for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
+					relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
+				}
+
+			} else {
+
+				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
+
 			}
-
-		} else {
-
-			relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
 		}
 
 		return relativeElements;
 	},
 
-	showResultText: function(selectedNeural) {
+	showText: function(selectedNeural) {
 
 		for (let i = 0; i < this.segregationHandlers.length; i++) {
 			if (this.segregationHandlers[i].isSelected()) {
-				this.segregationHandlers[i].hideTextResult();
+				this.segregationHandlers[i].hideText();
 				break;
 			}
 		}
 
 		let selectedIndex = selectedNeural.outputIndex;
 
-		this.segregationHandlers[selectedIndex].showTextResult();
+		this.segregationHandlers[selectedIndex].showText();
 
 	},
 
@@ -248,7 +245,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
 		} else if (clickedElement.elementType === "outputNeural") {
-			this.showResultText(clickedElement);
+			this.showText(clickedElement);
 		}
 
 	},

@@ -286,32 +286,32 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	handleHoverIn: function(hoveredElement) {
 
 		this.initLineGroup(hoveredElement);
-		this.showTextResult(hoveredElement);
+		this.showText(hoveredElement);
 
 	},
 
 	handleHoverOut: function() {
 
 		this.disposeLineGroup();
-		this.hideTextResult();
+		this.hideText();
 
 	},
 
-	showTextResult: function(element) {
+	showText: function(element) {
 		if (element.elementType === "featureMap") {
 
 			let fmIndex = element.fmIndex;
-			this.segregationHandlers[fmIndex].showTextResult();
+			this.segregationHandlers[fmIndex].showText();
 			this.textElementHandler = this.segregationHandlers[fmIndex];
 
 		}
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		if (this.textElementHandler !== undefined) {
 
-			this.textElementHandler.hideTextResult();
+			this.textElementHandler.hideText();
 			this.textElementHandler = undefined;
 		}
 

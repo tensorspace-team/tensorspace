@@ -78,7 +78,7 @@ OutputUnit.prototype = {
 
 	},
 
-	showTextResult: function() {
+	showText: function() {
 
 		let geometry = new THREE.TextGeometry( this.output, {
 			font: this.font,
@@ -115,7 +115,7 @@ OutputUnit.prototype = {
 
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		console.log("hide text for index " + this.outputNeural.outputIndex);
 
@@ -132,7 +132,7 @@ OutputUnit.prototype = {
 		this.updateVis(colors);
 
 		if (this.outputText !== undefined) {
-			this.hideTextResult();
+			this.hideText();
 		}
 
 	},

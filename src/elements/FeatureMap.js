@@ -122,7 +122,7 @@ FeatureMap.prototype = {
 		this.featureMap.fmIndex = fmIndex;
 	},
 
-	showTextResult: function() {
+	showText: function() {
 
 		let widthInString = this.fmWidth.toString();
 		let heightInString = this.fmHeight.toString();
@@ -194,7 +194,7 @@ FeatureMap.prototype = {
 
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		this.featureGroup.remove(this.widthText);
 		this.featureGroup.remove(this.heightText);

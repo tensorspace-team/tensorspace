@@ -172,7 +172,7 @@ ChannelMap.prototype = {
 		this.channelMap.fmIndex = fmIndex;
 	},
 
-	showTextResult: function() {
+	showText: function() {
 
 		let widthInString = this.width.toString();
 		let heightInString = this.height.toString();
@@ -244,7 +244,7 @@ ChannelMap.prototype = {
 
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		this.channelGroup.remove(this.widthText);
 		this.channelGroup.remove(this.heightText);

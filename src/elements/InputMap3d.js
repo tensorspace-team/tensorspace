@@ -119,7 +119,7 @@ InputMap3d.prototype = {
 		this.colorMap.layerIndex = layerIndex;
 	},
 
-	showTextResult: function() {
+	showText: function() {
 
 		let widthInString = this.width.toString();
 		let heightInString = this.height.toString();
@@ -191,7 +191,7 @@ InputMap3d.prototype = {
 
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		this.colorGroup.remove(this.widthText);
 		this.colorGroup.remove(this.heightText);

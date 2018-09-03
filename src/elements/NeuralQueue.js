@@ -103,7 +103,7 @@ NeuralQueue.prototype = {
 		this.queue.layerIndex = layerIndex;
 	},
 
-	showTextResult: function() {
+	showText: function() {
 
 		let lengthTextContent = this.queueLength.toString();
 
@@ -142,7 +142,7 @@ NeuralQueue.prototype = {
 
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		this.queueGroup.remove(this.lengthText);
 		this.lengthText = undefined;

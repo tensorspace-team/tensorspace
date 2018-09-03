@@ -1,6 +1,6 @@
 let CloseButtonHelper = (function() {
 
-	let distance = 20;
+	let distance = 30;
 
 	return {
 

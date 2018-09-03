@@ -161,7 +161,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		this.paddingMap.fmIndex = fmIndex;
 	},
 
-	showTextResult: function() {
+	showText: function() {
 
 		let widthInString = this.width.toString();
 		let heightInString = this.height.toString();
@@ -233,7 +233,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		this.paddingGroup.remove(this.widthText);
 		this.paddingGroup.remove(this.heightText);

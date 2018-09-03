@@ -68,7 +68,7 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		if (this.color !== undefined) {
+		if (this.color === undefined) {
 			this.color = modelConfig.color.input;
 		}
 	},
@@ -90,31 +90,31 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	handleHoverIn: function(hoveredElement) {
 
-		this.showTextResult(hoveredElement);
+		this.showText(hoveredElement);
 
 	},
 
 	handleHoverOut: function() {
 
-		this.hideTextResult();
+		this.hideText();
 
 	},
 
-	showTextResult: function(element) {
+	showText: function(element) {
 
 		if (element.elementType === "featureMap") {
 
-			this.aggregationHandler.showTextResult();
+			this.aggregationHandler.showText();
 			this.textElementHandler = this.aggregationHandler;
 
 		}
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		if (this.textElementHandler !== undefined) {
 
-			this.textElementHandler.hideTextResult();
+			this.textElementHandler.hideText();
 			this.textElementHandler = undefined;
 		}
 

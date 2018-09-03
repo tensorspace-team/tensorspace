@@ -177,16 +177,18 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let relativeElements = [];
 
-		if (this.lastLayer.isOpen) {
+		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureLine") {
+			if (this.lastLayer.isOpen) {
 
-			for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-				relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
+				for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
+					relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
+				}
+
+			} else {
+
+				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
+
 			}
-
-		} else {
-
-			relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
 		}
 
 		return relativeElements;
@@ -205,31 +207,31 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 	handleHoverIn: function(hoveredElement) {
 
 		this.initLineGroup(hoveredElement);
-		this.showTextResult(hoveredElement);
+		this.showText(hoveredElement);
 
 	},
 
 	handleHoverOut: function() {
 
 		this.disposeLineGroup();
-		this.hideTextResult();
+		this.hideText();
 
 	},
 
-	showTextResult: function(element) {
+	showText: function(element) {
 
 		if (element.elementType === "featureLine") {
-			this.segregationHandlers[0].showTextResult();
+			this.segregationHandlers[0].showText();
 			this.textElementHandler = this.segregationHandlers[0];
 		}
 
 	},
 
-	hideTextResult: function() {
+	hideText: function() {
 
 		if (this.textElementHandler !== undefined) {
 
-			this.textElementHandler.hideTextResult();
+			this.textElementHandler.hideText();
 			this.textElementHandler = undefined;
 		}
 
