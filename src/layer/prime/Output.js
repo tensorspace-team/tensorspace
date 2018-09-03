@@ -239,6 +239,27 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.segregationHandlers[selectedIndex].showTextResult();
 
+	},
+
+	handleClick: function(clickedElement) {
+
+		if (clickedElement.elementType === "aggregationElement") {
+
+			this.openLayer();
+		}
+
+		if (clickedElement.elementType === "closeButton") {
+
+			this.closeLayer();
+
+		}
+
+		if (clickedElement.elementType === "outputNeural") {
+
+			this.showResultText(clickedElement);
+
+		}
+
 	}
 
 

@@ -147,35 +147,16 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 				let selectedElement = intersects[i].object;
 
-				if (selectedElement.elementType === "aggregationElement") {
+				if (selectedElement.clickable === true) {
 
 					let selectedLayer = this.layers[selectedElement.layerIndex - 1];
 
-					selectedLayer.openLayer();
+					selectedLayer.handleClick(selectedElement);
 
 					break;
 
 				}
-
-				if (selectedElement.elementType === "closeButton") {
-
-					let selectedLayer = this.layers[selectedElement.layerIndex - 1];
-
-					selectedLayer.closeLayer();
-
-					break;
-				}
-
-				if (selectedElement.elementType === "outputNeural") {
-
-					let resultLayer = this.layers[this.layers.length - 1];
-
-					resultLayer.showResultText(selectedElement);
-
-					break;
-
-				}
-			}
+ 			}
 
 		}
 	},

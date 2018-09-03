@@ -190,6 +190,21 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		return relativeElements;
+	},
+
+	handleClick: function(clickedElement) {
+
+		if (clickedElement.elementType === "aggregationElement") {
+
+			this.openLayer();
+		}
+
+		if (clickedElement.elementType === "closeButton") {
+
+			this.closeLayer();
+
+		}
+
 	}
 
 });
