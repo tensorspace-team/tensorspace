@@ -169,8 +169,11 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 		);
 
 		rChannel.setLayerIndex(this.layerIndex);
+		rChannel.setFmIndex(0);
 		gChannel.setLayerIndex(this.layerIndex);
+		gChannel.setFmIndex(1);
 		bChannel.setLayerIndex(this.layerIndex);
+		bChannel.setFmIndex(2);
 
 		this.segregationHandlers.push(rChannel);
 		this.segregationHandlers.push(gChannel);
@@ -251,15 +254,50 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	handleClick: function(clickedElement) {
 
-		if (clickedElement.elementType === "aggregationElement") {
+		if (clickedElement.elementType === "input3dElement") {
 
 			this.openLayer();
+		} else if (clickedElement.elementType === "closeButton") {
+			this.closeLayer();
 		}
 
-		if (clickedElement.elementType === "closeButton") {
+	},
 
-			this.closeLayer();
+	handleHoverIn: function(hoveredElement) {
 
+		this.showTextResult(hoveredElement);
+
+	},
+
+	handleHoverOut: function() {
+
+		this.hideTextResult();
+
+	},
+
+	showTextResult: function(element) {
+
+		if (element.elementType === "channelMap") {
+
+			let fmIndex = element.fmIndex;
+
+			this.segregationHandlers[fmIndex].showTextResult();
+			this.textElementHandler = this.segregationHandlers[fmIndex];
+
+		} else if (element.elementType === "input3dElement") {
+
+			this.aggregationHandler.showTextResult();
+			this.textElementHandler = this.aggregationHandler;
+
+		}
+	},
+
+	hideTextResult: function() {
+
+		if (this.textElementHandler !== undefined) {
+
+			this.textElementHandler.hideTextResult();
+			this.textElementHandler = undefined;
 		}
 
 	}

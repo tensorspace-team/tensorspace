@@ -1,6 +1,8 @@
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
+import { TextFont } from "../fonts/TextFont";
+import { TextHelper } from "../utils/TextHelper";
 
 function NeuralQueue(length, actualWidth, actualHeight, color) {
 
@@ -12,6 +14,15 @@ function NeuralQueue(length, actualWidth, actualHeight, color) {
 	this.dataArray = undefined;
 	this.dataTexture = undefined;
 	this.queue = undefined;
+
+	this.queueGroup = undefined;
+
+	this.unitLength = this.actualWidth / this.queueLength;
+
+	this.font = TextFont;
+	this.textSize = TextHelper.calcQueueTextSize(this.unitLength);
+
+	this.lengthText = undefined;
 
 	this.init();
 }
@@ -33,9 +44,7 @@ NeuralQueue.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.queueLength, this.actualHeight);
-
-		// 这里设置color可以隐约显示颜色总体的感觉
+		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.unitLength, this.unitLength);
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
@@ -59,11 +68,15 @@ NeuralQueue.prototype = {
 
 		this.queue = cube;
 
+		let queueGroup = new THREE.Object3D();
+		queueGroup.add(this.queue);
+		this.queueGroup = queueGroup;
+
 	},
 
 	getElement: function() {
 
-		return this.queue;
+		return this.queueGroup;
 
 	},
 
@@ -88,6 +101,53 @@ NeuralQueue.prototype = {
 
 	setLayerIndex: function(layerIndex) {
 		this.queue.layerIndex = layerIndex;
+	},
+
+	showTextResult: function() {
+
+		let lengthTextContent = this.queueLength.toString();
+
+		let geometry = new THREE.TextGeometry( lengthTextContent, {
+			font: this.font,
+			size: this.textSize,
+			height: 1,
+			curveSegments: 8,
+		} );
+
+		let material = new THREE.MeshBasicMaterial( { color: this.color } );
+
+		let text = new THREE.Mesh(geometry, material);
+
+		let textPos = TextHelper.calcQueueTextPos(
+			lengthTextContent.length,
+			this.textSize,
+			this.unitLength,
+			{
+				x: this.queue.position.x,
+				y: this.queue.position.y,
+				z: this.queue.position.z
+			}
+		);
+
+		text.position.set(
+			textPos.x,
+			textPos.y,
+			textPos.z
+		);
+
+		this.lengthText = text;
+
+		this.queueGroup.add(this.lengthText);
+		this.isTextShown = true;
+
+	},
+
+	hideTextResult: function() {
+
+		this.queueGroup.remove(this.lengthText);
+		this.lengthText = undefined;
+		this.isTextShown = false;
+
 	}
 
 };

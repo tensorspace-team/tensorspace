@@ -266,8 +266,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			}
 
-		} else {
-			console.error("Oops, why raycaster selected this element?");
 		}
 
 
@@ -278,14 +276,9 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	handleClick: function(clickedElement) {
 
 		if (clickedElement.elementType === "aggregationElement") {
-
 			this.openLayer();
-		}
-
-		if (clickedElement.elementType === "closeButton") {
-
+		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
-
 		}
 
 	},

@@ -281,10 +281,6 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			}
 
-		} else {
-
-			console.error("Oops, why raycaster selected this element?");
-
 		}
 
 		return relativeElements;
@@ -296,12 +292,8 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (clickedElement.elementType === "aggregationElement") {
 
 			this.openLayer();
-		}
-
-		if (clickedElement.elementType === "closeButton") {
-
+		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
-
 		}
 
 	},

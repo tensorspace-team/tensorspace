@@ -1,4 +1,5 @@
 import { FeatureMapTextRatio } from "./Constant";
+import { FeatureQueueTextRatio } from "./Constant";
 
 let TextHelper = (function() {
 
@@ -42,6 +43,22 @@ let TextHelper = (function() {
 
 	}
 
+	function calcQueueTextSize(unitLength) {
+
+		return FeatureQueueTextRatio * unitLength;
+
+	}
+
+	function calcQueueTextPos(textLength, textSize, unitLength, queueCenter) {
+
+		return {
+			x: queueCenter.x - textLength * textSize / 2,
+			y: queueCenter.y + 2 * unitLength,
+			z: queueCenter.z
+		}
+
+	}
+
 	return {
 
 		calcOutputTextPos: calcOutputTextPos,
@@ -52,7 +69,11 @@ let TextHelper = (function() {
 
 		calcFmWidthTextPos: calcFmWidthTextPos,
 
-		calcFmHeightTextPos: calcFmHeightTextPos
+		calcFmHeightTextPos: calcFmHeightTextPos,
+
+		calcQueueTextSize: calcQueueTextSize,
+
+		calcQueueTextPos: calcQueueTextPos
 
 	}
 

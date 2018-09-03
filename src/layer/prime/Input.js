@@ -88,9 +88,36 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.aggregationHandler.clear();
 	},
 
-	getRelativeElements: function(selectedElement) {
+	handleHoverIn: function(hoveredElement) {
 
-		return [];
+		this.showTextResult(hoveredElement);
+
+	},
+
+	handleHoverOut: function() {
+
+		this.hideTextResult();
+
+	},
+
+	showTextResult: function(element) {
+
+		if (element.elementType === "featureMap") {
+
+			this.aggregationHandler.showTextResult();
+			this.textElementHandler = this.aggregationHandler;
+
+		}
+	},
+
+	hideTextResult: function() {
+
+		if (this.textElementHandler !== undefined) {
+
+			this.textElementHandler.hideTextResult();
+			this.textElementHandler = undefined;
+		}
+
 	}
 
 });

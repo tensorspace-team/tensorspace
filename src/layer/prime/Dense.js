@@ -197,25 +197,41 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (clickedElement.elementType === "aggregationElement") {
 
 			this.openLayer();
-		}
-
-		if (clickedElement.elementType === "closeButton") {
-
+		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
-
 		}
-
 	},
 
 	handleHoverIn: function(hoveredElement) {
 
 		this.initLineGroup(hoveredElement);
+		this.showTextResult(hoveredElement);
 
 	},
 
 	handleHoverOut: function() {
 
 		this.disposeLineGroup();
+		this.hideTextResult();
+
+	},
+
+	showTextResult: function(element) {
+
+		if (element.elementType === "featureLine") {
+			this.segregationHandlers[0].showTextResult();
+			this.textElementHandler = this.segregationHandlers[0];
+		}
+
+	},
+
+	hideTextResult: function() {
+
+		if (this.textElementHandler !== undefined) {
+
+			this.textElementHandler.hideTextResult();
+			this.textElementHandler = undefined;
+		}
 
 	}
 

@@ -15,3 +15,5 @@ export let HookPosRatio = 0.95;
 export let OutputNeuralInterval = 1;
 
 export let FeatureMapTextRatio = 0.1;
+
+export let FeatureQueueTextRatio = 1.5;

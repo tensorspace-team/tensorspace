@@ -1,5 +1,7 @@
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
+import { TextHelper } from "../utils/TextHelper";
+import {TextFont} from "../fonts/TextFont";
 
 function ChannelMap(width, height, actualWidth, actualHeight, actualDepth, center, color, type) {
 
@@ -19,6 +21,13 @@ function ChannelMap(width, height, actualWidth, actualHeight, actualDepth, cente
 	this.dataArray = undefined;
 	this.dataTexture = undefined;
 	this.channelMap = undefined;
+	this.channelGroup = undefined;
+
+	this.font = TextFont;
+	this.textSize = TextHelper.calcFmTextSize(actualWidth);
+
+	this.widthText = undefined;
+	this.heightText = undefined;
 
 	this.init();
 }
@@ -78,10 +87,16 @@ ChannelMap.prototype = {
 
 		let cube = new THREE.Mesh(boxGeometry, materials);
 
-		cube.position.set(this.center.x, this.center.y, this.center.z);
 		cube.hoverable = true;
+		cube.elementType = "channelMap";
 
 		this.channelMap = cube;
+
+		let channelGroup = new THREE.Object3D();
+		channelGroup.position.set(this.center.x, this.center.y, this.center.z);
+
+		this.channelGroup = channelGroup;
+		this.channelGroup.add(this.channelMap);
 
 	},
 
@@ -108,7 +123,7 @@ ChannelMap.prototype = {
 	},
 
 	getElement: function() {
-		return this.channelMap;
+		return this.channelGroup;
 	},
 
 	clear: function() {
@@ -145,13 +160,102 @@ ChannelMap.prototype = {
 		this.center.x = pos.x;
 		this.center.y = pos.y;
 		this.center.z = pos.z;
-		this.channelMap.position.set(pos.x, pos.y, pos.z);
+		this.channelGroup.position.set(pos.x, pos.y, pos.z);
 
 	},
 
 	setLayerIndex: function(layerIndex) {
 		this.channelMap.layerIndex = layerIndex;
+	},
+
+	setFmIndex: function(fmIndex) {
+		this.channelMap.fmIndex = fmIndex;
+	},
+
+	showTextResult: function() {
+
+		let widthInString = this.width.toString();
+		let heightInString = this.height.toString();
+
+		let material = new THREE.MeshBasicMaterial( { color: this.color } );
+
+		let widthGeometry = new THREE.TextGeometry( widthInString, {
+			font: this.font,
+			size: this.textSize,
+			height: 1,
+			curveSegments: 8,
+		} );
+
+		let widthText = new THREE.Mesh(widthGeometry, material);
+
+		let widthTextPos = TextHelper.calcFmWidthTextPos(
+			widthInString.length,
+			this.textSize,
+			this.actualWidth,
+			{
+				x: this.channelMap.position.x,
+				y: this.channelMap.position.y,
+				z: this.channelMap.position.z
+			}
+		);
+
+		widthText.position.set(
+			widthTextPos.x,
+			widthTextPos.y,
+			widthTextPos.z
+		);
+
+		widthText.rotateX( - Math.PI / 2 );
+
+		let heightGeometry = new THREE.TextGeometry( heightInString, {
+			font: this.font,
+			size: this.textSize,
+			height: 1,
+			curveSegments: 8,
+		} );
+
+		let heightText = new THREE.Mesh(heightGeometry, material);
+
+		let heightTextPos = TextHelper.calcFmHeightTextPos(
+			heightInString.length,
+			this.textSize,
+			this.actualHeight,
+			{
+				x: this.channelMap.position.x,
+				y: this.channelMap.position.y,
+				z: this.channelMap.position.z
+			}
+		);
+
+		heightText.position.set(
+			heightTextPos.x,
+			heightTextPos.y,
+			heightTextPos.z
+		);
+
+		heightText.rotateX( - Math.PI / 2 );
+
+		this.widthText = widthText;
+		this.heightText = heightText;
+
+		this.channelGroup.add(this.widthText);
+		this.channelGroup.add(this.heightText);
+		this.isTextShown = true;
+
+	},
+
+	hideTextResult: function() {
+
+		this.channelGroup.remove(this.widthText);
+		this.channelGroup.remove(this.heightText);
+		this.widthText = undefined;
+		this.heightText = undefined;
+
+		this.isTextShown = false;
+
 	}
+
+
 };
 
 export { ChannelMap };

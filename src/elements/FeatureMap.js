@@ -39,8 +39,6 @@ FeatureMap.prototype = {
 
 	init: function() {
 
-		let featureGroup = new THREE.Object3D();
-
 		let amount = this.fmWidth * this.fmHeight;
 		let data = new Uint8Array(amount);
 		this.dataArray = data;
@@ -72,14 +70,14 @@ FeatureMap.prototype = {
 		];
 
 		let cube = new THREE.Mesh(boxGeometry, materials);
-		cube.position.set(this.fmCenter.x, this.fmCenter.y, this.fmCenter.z);
 		cube.elementType = "featureMap";
 		cube.hoverable = true;
 
 		this.featureMap = cube;
 
+		let featureGroup = new THREE.Object3D();
+		featureGroup.position.set(this.fmCenter.x, this.fmCenter.y, this.fmCenter.z);
 		featureGroup.add(cube);
-
 		this.featureGroup = featureGroup;
 
 	},

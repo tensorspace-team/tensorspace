@@ -244,20 +244,11 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 	handleClick: function(clickedElement) {
 
 		if (clickedElement.elementType === "aggregationElement") {
-
 			this.openLayer();
-		}
-
-		if (clickedElement.elementType === "closeButton") {
-
+		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
-
-		}
-
-		if (clickedElement.elementType === "outputNeural") {
-
+		} else if (clickedElement.elementType === "outputNeural") {
 			this.showResultText(clickedElement);
-
 		}
 
 	},
