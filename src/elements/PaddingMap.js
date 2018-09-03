@@ -1,6 +1,8 @@
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
+import { TextHelper } from "../utils/TextHelper";
+import { TextFont } from "../fonts/TextFont";
 
 function PaddingMap(width, height, actualWidth, actualHeight, center, paddingWidth, paddingHeight, color) {
 
@@ -13,6 +15,9 @@ function PaddingMap(width, height, actualWidth, actualHeight, center, paddingWid
 		y: center.y,
 		z: center.z
 	};
+
+	this.font = TextFont;
+	this.textSize = TextHelper.calcFmTextSize(this.actualWidth);
 
 	this.paddingWidth = paddingWidth;
 	this.paddingHeight = paddingHeight;
@@ -32,7 +37,13 @@ function PaddingMap(width, height, actualWidth, actualHeight, center, paddingWid
 	this.dataArray = undefined;
 	this.dataTexture = undefined;
 
-	this.featureMap = undefined;
+	this.paddingMap = undefined;
+	this.widthText = undefined;
+	this.heightText = undefined;
+
+	this.paddingGroup = undefined;
+
+	this.isTextShown = false;
 
 	this.init();
 
@@ -41,6 +52,8 @@ function PaddingMap(width, height, actualWidth, actualHeight, center, paddingWid
 PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 	init: function() {
+
+		let paddingGroup = new THREE.Object3D();
 
 		let amount = this.width * this.height;
 		let data = new Uint8Array(amount);
@@ -58,8 +71,6 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.width, this.actualHeight);
 
-		// 这里设置color可以隐约显示颜色总体的感觉
-
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
 			color: this.color, transparent: true, opacity: BasicMaterialOpacity
@@ -75,18 +86,19 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		];
 
 		let cube = new THREE.Mesh(boxGeometry, materials);
-
-		cube.position.set(this.center.x, this.center.y, this.center.z);
-
 		cube.hoverable = true;
-		cube.elementType = "featureMap";
+		cube.elementType = "paddingMap";
 
-		this.featureMap = cube;
+		this.paddingMap = cube;
+
+		this.paddingGroup = paddingGroup;
+		this.paddingGroup.position.set(this.center.x, this.center.y, this.center.z);
+		this.paddingGroup.add(this.paddingMap);
 
 	},
 
 	getElement: function() {
-		return this.featureMap;
+		return this.paddingGroup;
 	},
 
 	updateVis: function(colors) {
@@ -130,7 +142,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		this.center.x = pos.x;
 		this.center.y = pos.y;
 		this.center.z = pos.z;
-		this.featureMap.position.set(pos.x, pos.y, pos.z);
+		this.paddingGroup.position.set(pos.x, pos.y, pos.z);
 
 	},
 
@@ -142,7 +154,94 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 	},
 
 	setLayerIndex: function(layerIndex) {
-		this.featureMap.layerIndex = layerIndex;
+		this.paddingMap.layerIndex = layerIndex;
+	},
+
+	setFmIndex: function(fmIndex) {
+		this.paddingMap.fmIndex = fmIndex;
+	},
+
+	showTextResult: function() {
+
+		let widthInString = this.width.toString();
+		let heightInString = this.height.toString();
+
+		let material = new THREE.MeshBasicMaterial( { color: this.color } );
+
+		let widthGeometry = new THREE.TextGeometry( widthInString, {
+			font: this.font,
+			size: this.textSize,
+			height: 1,
+			curveSegments: 8,
+		} );
+
+		let widthText = new THREE.Mesh(widthGeometry, material);
+
+		let widthTextPos = TextHelper.calcFmWidthTextPos(
+			widthInString.length,
+			this.textSize,
+			this.actualWidth,
+			{
+				x: this.paddingMap.position.x,
+				y: this.paddingMap.position.y,
+				z: this.paddingMap.position.z
+			}
+		);
+
+		widthText.position.set(
+			widthTextPos.x,
+			widthTextPos.y,
+			widthTextPos.z
+		);
+
+		widthText.rotateX( - Math.PI / 2 );
+
+		let heightGeometry = new THREE.TextGeometry( heightInString, {
+			font: this.font,
+			size: this.textSize,
+			height: 1,
+			curveSegments: 8,
+		} );
+
+		let heightText = new THREE.Mesh(heightGeometry, material);
+
+		let heightTextPos = TextHelper.calcFmHeightTextPos(
+			heightInString.length,
+			this.textSize,
+			this.actualHeight,
+			{
+				x: this.paddingMap.position.x,
+				y: this.paddingMap.position.y,
+				z: this.paddingMap.position.z
+			}
+		);
+
+		heightText.position.set(
+			heightTextPos.x,
+			heightTextPos.y,
+			heightTextPos.z
+		);
+
+		heightText.rotateX( - Math.PI / 2 );
+
+		this.widthText = widthText;
+		this.heightText = heightText;
+
+		this.paddingGroup.add(this.widthText);
+		this.paddingGroup.add(this.heightText);
+		this.isTextShown = true;
+
+	},
+
+	hideTextResult: function() {
+
+		this.paddingGroup.remove(this.widthText);
+		this.paddingGroup.remove(this.heightText);
+		this.widthText = undefined;
+		this.heightText = undefined;
+
+		this.isTextShown = false;
+
 	}
 
 });

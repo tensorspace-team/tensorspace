@@ -42,8 +42,18 @@
 		layerInitStatus: "close"
     });
 
-    model.add(new VIS.layers.Input3d({
-        shape: [416, 416, 3]
+    model.add(new VIS.layers.Input({
+        shape: [28, 28, 1]
+    }));
+
+    model.add(new VIS.layers.Conv2d({
+        kernelSize: 5,
+        filters: 6,
+        strides: 1,
+    }));
+
+    model.add(new VIS.layers.Padding2d({
+        padding: [4, 4]
     }));
 
 //    model.add(new VIS.layers.Input({
@@ -149,7 +159,7 @@
     	setTimeout(function() {
 //			let mockTensor = tf.randomNormal([1, 32, 32, 1]);
 //			let inputValue = mockTensor.dataSync();
-			model.predict(data);
+//			model.predict(data);
         }, 5000);
 
     }

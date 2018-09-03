@@ -137,6 +137,10 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 				this.paddingHeight,
 				this.color
 			);
+
+			segregationHandler.setLayerIndex(this.layerIndex);
+			segregationHandler.setFmIndex(i);
+
 			this.segregationHandlers.push(segregationHandler);
 			this.neuralGroup.add(segregationHandler.getElement());
 
@@ -270,7 +274,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			}
 
-		} else if (selectedElement.elementType === "featureMap") {
+		} else if (selectedElement.elementType === "paddingMap") {
 
 			if (this.lastLayer.isOpen) {
 
@@ -310,12 +314,36 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	handleHoverIn: function(hoveredElement) {
 
 		this.initLineGroup(hoveredElement);
+		this.showTextResult(hoveredElement);
 
 	},
 
 	handleHoverOut: function() {
 
 		this.disposeLineGroup();
+		this.hideTextResult();
+
+	},
+
+	showTextResult: function(element) {
+
+		if (element.elementType === "paddingMap") {
+
+			let fmIndex = element.fmIndex;
+			this.segregationHandlers[fmIndex].showTextResult();
+			this.textElementHandler = this.segregationHandlers[fmIndex];
+
+		}
+
+	},
+
+	hideTextResult: function() {
+
+		if (this.textElementHandler !== undefined) {
+
+			this.textElementHandler.hideTextResult();
+			this.textElementHandler = undefined;
+		}
 
 	}
 
