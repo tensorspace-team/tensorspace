@@ -29,6 +29,8 @@ MapAggregation.prototype = {
 
 		cube.position.set(0, 0, 0);
 		cube.elementType = "aggregationElement";
+		cube.clickable = true;
+		cube.hoverable = true;
 
 		this.cube = cube;
 

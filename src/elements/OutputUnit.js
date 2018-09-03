@@ -51,6 +51,8 @@ OutputUnit.prototype = {
 
 		let cube = new THREE.Mesh(boxGeometry, material);
 		cube.elementType = "outputNeural";
+		cube.hoverable = true;
+		cube.clickable = true;
 
 		cube.position.set(
 			this.initPosition.x,

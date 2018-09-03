@@ -71,6 +71,8 @@ InputMap3d.prototype = {
 
 		cube.position.set(this.fmCenter.x, this.fmCenter.y, this.fmCenter.z);
 		cube.elementType = "aggregationElement";
+		cube.clickable = true;
+		cube.hoverable = true;
 
 		this.colorMap = cube;
 

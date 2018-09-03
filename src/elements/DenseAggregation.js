@@ -26,6 +26,8 @@ DenseAggregation.prototype = {
 		let cube = new THREE.Mesh(geometry, material);
 
 		cube.position.set(0, 0, 0);
+		cube.clickable = true;
+		cube.hoverable = true;
 		cube.elementType = "aggregationElement";
 
 		this.cube = cube;

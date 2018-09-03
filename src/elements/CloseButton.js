@@ -31,6 +31,8 @@ CloseButton.prototype = {
 		let button = new THREE.Mesh(geometry, material);
 
 		button.position.set(this.position.x, this.position.y, this.position.z);
+		button.clickable = true;
+		button.hoverable = true;
 		button.elementType = "closeButton";
 
 		this.button = button;

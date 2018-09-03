@@ -71,6 +71,7 @@ FeatureMap.prototype = {
 		let cube = new THREE.Mesh(boxGeometry, materials);
 		cube.position.set(this.fmCenter.x, this.fmCenter.y, this.fmCenter.z);
 		cube.elementType = "featureMap";
+		cube.hoverable = true;
 
 		this.featureMap = cube;
 

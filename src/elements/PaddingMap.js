@@ -78,6 +78,9 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 		cube.position.set(this.center.x, this.center.y, this.center.z);
 
+		cube.hoverable = true;
+		cube.elementType = "featureMap";
+
 		this.featureMap = cube;
 
 	},

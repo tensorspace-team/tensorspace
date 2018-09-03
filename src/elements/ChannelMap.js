@@ -79,6 +79,7 @@ ChannelMap.prototype = {
 		let cube = new THREE.Mesh(boxGeometry, materials);
 
 		cube.position.set(this.center.x, this.center.y, this.center.z);
+		cube.hoverable = true;
 
 		this.channelMap = cube;
 
