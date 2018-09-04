@@ -2,6 +2,7 @@ import { BasicMaterialOpacity } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
 import { TextHelper } from "../utils/TextHelper";
 import {TextFont} from "../fonts/TextFont";
+import {RenderPreprocessor} from "../utils/RenderPreprocessor";
 
 function ChannelMap(width, height, actualWidth, actualHeight, actualDepth, center, color, type) {
 
@@ -105,16 +106,18 @@ ChannelMap.prototype = {
 
 	updateVis: function(colors) {
 
-		for (let i = 0; i < colors.length; i++) {
+		let renderColor = RenderPreprocessor.preProcessChannelColor(colors, this.width, this.height);
+
+		for (let i = 0; i < renderColor.length; i++) {
 			switch (this.type) {
 				case 'R':
-					this.dataArray[3 * i] = colors[i] * 255;
+					this.dataArray[3 * i] = renderColor[i] * 255;
 					break;
 				case 'G':
-					this.dataArray[3 * i + 1] = colors[i] * 255;
+					this.dataArray[3 * i + 1] = renderColor[i] * 255;
 					break;
 				case 'B':
-					this.dataArray[3 * i + 2] = colors[i] * 255;
+					this.dataArray[3 * i + 2] = renderColor[i] * 255;
 					break;
 				default:
 					console.error("do not support such channel type.");

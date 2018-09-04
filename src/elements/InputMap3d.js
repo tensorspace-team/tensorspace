@@ -2,6 +2,7 @@ import { BasicMaterialOpacity } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
 import { TextFont } from "../fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
+import {RenderPreprocessor} from "../utils/RenderPreprocessor";
 
 function InputMap3d(width, height, actualWidth, actualHeight, actualDepth, initCenter, color) {
 
@@ -98,8 +99,10 @@ InputMap3d.prototype = {
 
 	updateVis: function(colors) {
 
+		let renderData = RenderPreprocessor.preProcessInput3dColor(colors, this.width, this.height);
+
 		for (let i = 0; i < this.dataArray.length; i++) {
-			this.dataArray[i] = 255 * colors[i];
+			this.dataArray[i] = 255 * renderData[i];
 		}
 
 		this.dataTexture.needsUpdate = true;

@@ -3,6 +3,7 @@ import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
 import { TextHelper } from "../utils/TextHelper";
 import { TextFont } from "../fonts/TextFont";
+import {RenderPreprocessor} from "../utils/RenderPreprocessor";
 
 function PaddingMap(width, height, actualWidth, actualHeight, center, paddingWidth, paddingHeight, color) {
 
@@ -105,6 +106,8 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 	updateVis: function(colors) {
 
+		let renderColor = RenderPreprocessor.preProcessPaddingColor(colors, this.contentWidth, this.contentHeight);
+
 		for (let i = 0; i < this.height; i++) {
 
 			for (let j = 0; j < this.width; j++) {
@@ -112,7 +115,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 				if (!this.isPadding(j, i)) {
 
 					let correspondingIndex = this.contentWidth * ( i - this.paddingTop) + ( j - this.paddingLeft );
-					this.dataArray[this.width * i + j] = 255 * colors[correspondingIndex];
+					this.dataArray[this.width * i + j] = 255 * renderColor[correspondingIndex];
 
 				} else {
 					this.dataArray[this.width * i + j] = 255 * MinAlpha;

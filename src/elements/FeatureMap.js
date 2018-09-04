@@ -3,6 +3,7 @@ import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
 import { TextHelper } from "../utils/TextHelper";
 import { TextFont } from "../fonts/TextFont";
+import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
 function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color) {
 
@@ -90,8 +91,9 @@ FeatureMap.prototype = {
 
 	updateVis: function(colors) {
 
-		for (let i = 0; i < colors.length; i++) {
-			this.dataArray[i] = colors[i] * 255;
+		let renderColor = RenderPreprocessor.preProcessFmColor(colors, this.fmWidth, this.fmHeight);
+		for (let i = 0; i < renderColor.length; i++) {
+			this.dataArray[i] = renderColor[i] * 255;
 		}
 		this.dataTexture.needsUpdate = true;
 
