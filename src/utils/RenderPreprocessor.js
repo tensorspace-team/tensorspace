@@ -26,6 +26,17 @@ let RenderPreprocessor = (function() {
 
 	}
 
+	function preProcessQueueBackColor(colors) {
+
+		let renderData = [];
+
+		for (let i = colors.length - 1; i >= 0; i--) {
+			renderData.push(colors[i]);
+		}
+
+		return renderData;
+	}
+
 	return {
 
 		preProcessFmColor: preProcessMapColor,
@@ -34,7 +45,9 @@ let RenderPreprocessor = (function() {
 
 		preProcessPaddingColor: preProcessMapColor,
 
-		preProcessInput3dColor: preProcessMap3dColor
+		preProcessInput3dColor: preProcessMap3dColor,
+
+		preProcessQueueBackColor: preProcessQueueBackColor
 
 	}
 

@@ -3,6 +3,7 @@ import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
+import {RenderPreprocessor} from "../utils/RenderPreprocessor";
 
 function NeuralQueue(length, actualWidth, actualHeight, color) {
 
@@ -12,7 +13,9 @@ function NeuralQueue(length, actualWidth, actualHeight, color) {
 	this.color = color;
 
 	this.dataArray = undefined;
+	this.backDataArray = undefined;
 	this.dataTexture = undefined;
+	this.backDataTexture = undefined;
 	this.queue = undefined;
 
 	this.queueGroup = undefined;
@@ -33,6 +36,8 @@ NeuralQueue.prototype = {
 
 		let data = new Uint8Array(this.queueLength);
 		this.dataArray = data;
+		let backData = new Uint8Array(this.queueLength);
+		this.backDataArray = backData;
 
 		for (let i = 0; i < this.queueLength; i++) {
 			data[i] = 255 * MinAlpha;
@@ -44,9 +49,16 @@ NeuralQueue.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
+		let backDataTex = new THREE.DataTexture(backData, this.queueLength, 1, THREE.LuminanceFormat, THREE.UnsignedByteType);
+		this.backDataTexture = backDataTex;
+
+		backDataTex.magFilter = THREE.NearestFilter;
+		backDataTex.needsUpdate = true;
+
 		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.unitLength, this.unitLength);
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
+		let backMaterial = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: backDataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
 			color: this.color, transparent: true, opacity: BasicMaterialOpacity
 		});
@@ -57,7 +69,7 @@ NeuralQueue.prototype = {
 			material,
 			material,
 			material,
-			material
+			backMaterial
 		];
 
 		let cube = new THREE.Mesh(boxGeometry, materials);
@@ -82,11 +94,15 @@ NeuralQueue.prototype = {
 
 	updateVis: function(colors) {
 
+		let backColor = RenderPreprocessor.preProcessQueueBackColor(colors);
+
 		for (let i = 0; i < colors.length; i++) {
 			this.dataArray[i] = 255 * colors[i];
+			this.backDataArray[i] = 255 * backColor[i];
 		}
 
 		this.dataTexture.needsUpdate = true;
+		this.backDataTexture.needsUpdate = true;
 
 	},
 
