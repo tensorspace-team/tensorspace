@@ -10,6 +10,9 @@ function ChannelMap(width, height, actualWidth, actualHeight, actualDepth, cente
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
 	this.actualDepth = actualDepth;
+
+	this.unitLength = this.actualWidth / this.width;
+
 	this.center = {
 		x: center.x,
 		y: center.y,
@@ -69,7 +72,7 @@ ChannelMap.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualDepth, this.actualHeight);
+		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.unitLength, this.actualHeight);
 
 		let material = new THREE.MeshBasicMaterial({ map: dataTex });
 		let basicMaterial = new THREE.MeshBasicMaterial({
@@ -182,7 +185,7 @@ ChannelMap.prototype = {
 		let widthGeometry = new THREE.TextGeometry( widthInString, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 
@@ -210,7 +213,7 @@ ChannelMap.prototype = {
 		let heightGeometry = new THREE.TextGeometry( heightInString, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 

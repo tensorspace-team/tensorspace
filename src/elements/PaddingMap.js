@@ -16,6 +16,8 @@ function PaddingMap(width, height, actualWidth, actualHeight, center, paddingWid
 		z: center.z
 	};
 
+	this.unitLength = this.actualWidth / this.width;
+
 	this.font = TextFont;
 	this.textSize = TextHelper.calcFmTextSize(this.actualWidth);
 
@@ -171,7 +173,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		let widthGeometry = new THREE.TextGeometry( widthInString, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 
@@ -199,7 +201,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		let heightGeometry = new THREE.TextGeometry( heightInString, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 

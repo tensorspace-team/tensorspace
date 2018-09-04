@@ -14,6 +14,8 @@ function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color)
 
 	this.neuralLength = width * height;
 
+	this.unitLength = this.actualWidth / this.fmWidth;
+
 	this.fmCenter = {
 		x: initCenter.x,
 		y: initCenter.y,
@@ -53,7 +55,7 @@ FeatureMap.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.fmWidth, this.actualHeight);
+		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.unitLength, this.actualHeight);
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({
@@ -132,7 +134,7 @@ FeatureMap.prototype = {
 		let widthGeometry = new THREE.TextGeometry( widthInString, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 
@@ -160,7 +162,7 @@ FeatureMap.prototype = {
 		let heightGeometry = new THREE.TextGeometry( heightInString, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 

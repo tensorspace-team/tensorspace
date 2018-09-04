@@ -11,6 +11,9 @@ function InputMap3d(width, height, actualWidth, actualHeight, actualDepth, initC
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
 	this.actualDepth = actualDepth;
+
+	this.unitLength = this.actualWidth / this.width;
+
 	this.fmCenter = {
 		x: initCenter.x,
 		y: initCenter.y,
@@ -129,7 +132,7 @@ InputMap3d.prototype = {
 		let widthGeometry = new THREE.TextGeometry( widthInString, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 
@@ -157,7 +160,7 @@ InputMap3d.prototype = {
 		let heightGeometry = new THREE.TextGeometry( heightInString, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 

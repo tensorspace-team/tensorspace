@@ -110,7 +110,7 @@ NeuralQueue.prototype = {
 		let geometry = new THREE.TextGeometry( lengthTextContent, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 

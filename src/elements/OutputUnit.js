@@ -9,6 +9,8 @@ function OutputUnit(cubeSize, textSize, output, initPositions, color) {
 	this.textSize = textSize;
 	this.output = output;
 
+	this.unitLength = cubeSize;
+
 	this.color = color;
 
 	this.initPosition = {
@@ -83,7 +85,7 @@ OutputUnit.prototype = {
 		let geometry = new THREE.TextGeometry( this.output, {
 			font: this.font,
 			size: this.textSize,
-			height: 1,
+			height: Math.min(this.unitLength, 1),
 			curveSegments: 8,
 		} );
 
