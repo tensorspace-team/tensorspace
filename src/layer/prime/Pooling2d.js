@@ -16,6 +16,10 @@ function Pooling2d(config) {
 	this.strides = config.strides;
 	this.depth = undefined;
 
+	if (config.color !== undefined) {
+		this.color = config.color;
+	}
+
 	if (config.shape !== undefined) {
 
 		this.isShapePredefined = true;

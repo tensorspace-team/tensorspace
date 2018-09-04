@@ -15,6 +15,10 @@ function Padding2d(config) {
 	this.paddingTop = Math.floor(config.padding[1] / 2);
 	this.paddingBottom = config.padding[1] - this.paddingTop;
 
+	if (config.color !== undefined) {
+		this.color = config.color;
+	}
+
 	this.contentWidth = undefined;
 	this.contentHeight = undefined;
 
