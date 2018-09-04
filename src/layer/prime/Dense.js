@@ -20,12 +20,6 @@ function Dense(config) {
 		z: 0
 	};
 
-	if (config.color !== undefined) {
-		this.color = config.color;
-	}
-
-	this.isOpen = undefined;
-
 	this.layerType = "dense";
 
 }

@@ -21,10 +21,6 @@ function Input3d(config) {
 	this.actualHeight = this.actualWidth / this.width * this.height;
 	this.realVirtualRatio = this.actualWidth / this.width;
 
-	if (config.color !== undefined) {
-		this.color = config.color;
-	}
-
 	this.fmCenters = [];
 	this.closeFmCenters = [];
 	this.openFmCenters = fmCenterGenerator.getFmCenters("line", 3, this.actualWidth, this.actualHeight);
@@ -51,8 +47,6 @@ function Input3d(config) {
 		y: -20,
 		z: 0
 	};
-
-	this.isOpen = false;
 
 	this.aggregationHandler = undefined;
 	this.segregationHandlers = [];

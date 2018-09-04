@@ -34,10 +34,6 @@ function Conv2d(config) {
 
 	this.layerType = "prime conv2d";
 
-	if (config.color !== undefined) {
-		this.color = config.color;
-	}
-
 	if (config.shape !== undefined) {
 
 		this.isShapePredefined = true;
@@ -49,7 +45,6 @@ function Conv2d(config) {
 		this.isShapePredefined = false;
 	}
 
-	this.isOpen = undefined;
 	this.layerShape = undefined;
 	this.closeButton = undefined;
 

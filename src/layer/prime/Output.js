@@ -37,12 +37,6 @@ function Output(config) {
 		})
 	}
 
-	if (config.color !== undefined) {
-		this.color = config.color;
-	}
-
-	this.isOpen = undefined;
-
 	this.layerType = "output";
 
 }

@@ -75,6 +75,26 @@ function Layer(config) {
 	this.textSystem = undefined;
 	this.relationSystem = undefined;
 
+	if (config.color !== undefined) {
+		this.color = config.color;
+	}
+
+	this.isopen = undefined;
+
+	if (config.initStatus !== undefined) {
+
+		console.log("=====+++");
+		console.log(config.initStatus);
+
+		if (config.initStatus === "open") {
+			this.isOpen = true;
+		} else if (config.initStatus === "close") {
+			this.isOpen = false;
+		} else {
+			console.error("\"initStatus\" property do not support for " + config.initStatus + ", use \"open\" or \"close\" instead.");
+		}
+	}
+
 }
 
 Layer.prototype = {
