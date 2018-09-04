@@ -175,6 +175,10 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add(this.aggregationHandler.getElement());
 
+		if (this.neuralValue !== undefined) {
+			this.updateAggregationVis();
+		}
+
 	},
 
 	disposeAggregationElement: function() {
@@ -232,15 +236,33 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
+		let aggregationUpdateValue = [];
+
+		for (let i = 0; i < this.neuralValue.length; i += this.depth) {
+
+			let channelSum = 0;
+
+			for (let j = 0; j < this.depth; j++) {
+
+				channelSum += this.neuralValue[i];
+
+			}
+
+			aggregationUpdateValue.push(channelSum / this.depth);
+
+		}
+
+		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
+
+		this.aggregationHandler.updateVis(colors);
+
 	},
 
 	updateSegregationVis: function() {
-		let nonePaddingNeuralSize = this.contentWidth * this.contentHeight;
-		let fmNum = this.neuralValue.length / nonePaddingNeuralSize;
 
 		let layerOutputValues = [];
 
-		for (let j = 0; j < fmNum; j++) {
+		for (let j = 0; j < this.depth; j++) {
 
 			let referredIndex = j;
 
@@ -248,16 +270,16 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 				layerOutputValues.push(this.neuralValue[referredIndex]);
 
-				referredIndex += fmNum;
+				referredIndex += this.depth;
 			}
 
 		}
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 
-		for (let i = 0; i < fmNum; i++) {
+		for (let i = 0; i < this.segregationHandlers.length; i++) {
 
-			this.segregationHandlers[i].updateVis(colors.slice(i * nonePaddingNeuralSize, (i + 1) * nonePaddingNeuralSize));
+			this.segregationHandlers[i].updateVis(colors.slice(i * this.contentWidth * this.contentHeight, (i + 1) * this.contentWidth * this.contentHeight));
 
 		}
 	},

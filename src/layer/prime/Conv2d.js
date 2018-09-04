@@ -156,6 +156,10 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add(this.aggregationHandler.getElement());
 
+		if (this.neuralValue !== undefined) {
+			this.updateAggregationVis();
+		}
+
 	},
 
 	disposeAggregationElement: function () {
@@ -221,6 +225,26 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	updateAggregationVis: function() {
+
+		let aggregationUpdateValue = [];
+
+		for (let i = 0; i < this.neuralValue.length; i += this.depth) {
+
+			let channelSum = 0;
+
+			for (let j = 0; j < this.depth; j++) {
+
+				channelSum += this.neuralValue[i];
+
+			}
+
+			aggregationUpdateValue.push(channelSum / this.depth);
+
+		}
+
+		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
+
+		this.aggregationHandler.updateVis(colors);
 
 	},
 

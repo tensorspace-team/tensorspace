@@ -17,3 +17,5 @@ export let OutputNeuralInterval = 1;
 export let FeatureMapTextRatio = 0.1;
 
 export let FeatureQueueTextRatio = 1.5;
+
+export let FrameColor = 0xA5A5A5;
