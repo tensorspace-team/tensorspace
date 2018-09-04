@@ -175,6 +175,14 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.color = modelConfig.color.dense;
 		}
 
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+
 	},
 
 	updateValue: function(value) {
@@ -186,9 +194,11 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			let maxConfidenceIndex = OutputExtractor.getMaxConfidenceIndex(value);
 
-			this.hideText();
-			this.segregationHandlers[maxConfidenceIndex].showText();
-			this.textElementHandler = this.segregationHandlers[maxConfidenceIndex];
+			if (this.textSystem !== undefined && this.textSystem) {
+				this.hideText();
+				this.segregationHandlers[maxConfidenceIndex].showText();
+				this.textElementHandler = this.segregationHandlers[maxConfidenceIndex];
+			}
 
 		} else {
 			this.updateAggregationVis();
@@ -235,8 +245,6 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let selectedIndex = selectedNeural.outputIndex;
 
-		console.log(selectedIndex);
-
 		this.segregationHandlers[selectedIndex].showText();
 		this.textElementHandler = this.segregationHandlers[selectedIndex];
 
@@ -258,21 +266,28 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
 		} else if (clickedElement.elementType === "outputNeural") {
-			this.hideText();
-			this.showText(clickedElement);
+			if (this.textSystem !== undefined && this.textSystem) {
+				this.hideText();
+				this.showText(clickedElement);
+			}
+
 		}
 
 	},
 
 	handleHoverIn: function(hoveredElement) {
 
-		this.initLineGroup(hoveredElement);
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.initLineGroup(hoveredElement);
+		}
 
 	},
 
 	handleHoverOut: function() {
 
-		this.disposeLineGroup();
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.disposeLineGroup();
+		}
 
 	}
 

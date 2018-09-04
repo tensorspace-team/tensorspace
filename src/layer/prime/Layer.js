@@ -71,6 +71,10 @@ function Layer(config) {
 	// handler for element showing text
 	this.textElementHandler = undefined;
 
+	// config for text and relation line
+	this.textSystem = undefined;
+	this.relationSystem = undefined;
+
 }
 
 Layer.prototype = {

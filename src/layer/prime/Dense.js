@@ -149,6 +149,14 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.color = modelConfig.color.dense;
 		}
 
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+
 	},
 
 	updateValue: function(value) {
@@ -206,15 +214,25 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	handleHoverIn: function(hoveredElement) {
 
-		this.initLineGroup(hoveredElement);
-		this.showText(hoveredElement);
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.initLineGroup(hoveredElement);
+		}
+
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.showText(hoveredElement);
+		}
 
 	},
 
 	handleHoverOut: function() {
 
-		this.disposeLineGroup();
-		this.hideText();
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.disposeLineGroup();
+		}
+
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.hideText();
+		}
 
 	},
 

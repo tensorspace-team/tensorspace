@@ -71,6 +71,14 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.color === undefined) {
 			this.color = modelConfig.color.input;
 		}
+
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
 	},
 
 	updateValue: function(value) {
@@ -90,13 +98,17 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	handleHoverIn: function(hoveredElement) {
 
-		this.showText(hoveredElement);
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.showText(hoveredElement);
+		}
 
 	},
 
 	handleHoverOut: function() {
 
-		this.hideText();
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.hideText();
+		}
 
 	},
 

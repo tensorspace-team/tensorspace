@@ -120,11 +120,13 @@
 	let model = new VIS.model.Sequential(container, {
 		layerInitStatus: "close",
         layerShape: "square",
+        textSystem: "enable",
+        relationSystem: "enable",
         color: {
-			conv: 0xff00ff,
-			pooling: 0x00ffff,
+			conv2d: 0xff00ff,
+			pooling2d: 0x00ffff,
 			dense: 0x00ff00,
-			padding: 0xffff00
+			padding2d: 0xffff00
         }
 	});
 

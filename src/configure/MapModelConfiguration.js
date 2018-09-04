@@ -2,18 +2,46 @@ function MapModelConfiguration(config) {
 
 	this.layerShape = "line";
 	this.layerInitStatus = true;
+	this.relationSystem = true;
+	this.textSystem = true;
 	this.color = {
 		input: 0xffffff,
-		conv: 0xffffff,
-		pooling: 0xffffff,
+		input3d: 0xffffff,
+		conv2d: 0xffffff,
+		pooling2d: 0xffffff,
 		dense: 0xffffff,
-		padding: 0xffffff
+		padding2d: 0xffffff,
+		output: 0xffffff
 	};
 
 	if (config !== undefined) {
 
 		if (config.layerShape !== undefined) {
 			this.layerShape = config.layerShape;
+		}
+
+		if (config.relationSystem !== undefined) {
+
+			if (config.relationSystem === "enable") {
+				this.relationSystem = true;
+			} else if (config.relationSystem === "disable") {
+				this.relationSystem = false;
+			} else {
+				console.error("\"relationSystem\" property do not support config for " + config.relationSystem + " use \"enable\" or \"disable\" instead.");
+			}
+
+		}
+
+		if (config.textSystem !== undefined) {
+
+			if (config.textSystem === "enable") {
+				this.textSystem = true;
+			} else if (config.textSystem === "disable") {
+				this.textSystem = false;
+			} else {
+				console.error("\"textSystem\" property do not support config for " + config.textSystem + " use \"enable\" or \"disable\" instead.");
+			}
+
 		}
 
 		if (config.layerInitStatus !== undefined) {
@@ -34,20 +62,20 @@ function MapModelConfiguration(config) {
 				this.color.input = config.color.input;
 			}
 
-			if (config.color.conv !== undefined) {
-				this.color.conv = config.color.conv;
+			if (config.color.conv2d !== undefined) {
+				this.color.conv2d = config.color.conv2d;
 			}
 
-			if (config.color.pooling !== undefined) {
-				this.color.pooling = config.color.pooling;
+			if (config.color.pooling2d !== undefined) {
+				this.color.pooling2d = config.color.pooling2d;
 			}
 
 			if (config.color.dense !== undefined ) {
 				this.color.dense = config.color.dense;
 			}
 
-			if (config.color.padding !== undefined) {
-				this.color.padding = config.color.padding;
+			if (config.color.padding2d !== undefined) {
+				this.color.padding2d = config.color.padding2d;
 			}
 
 		}

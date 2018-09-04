@@ -84,6 +84,14 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.color = modelConfig.color.input;
 		}
 
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+
 	},
 
 	openLayer: function() {
@@ -265,13 +273,17 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	handleHoverIn: function(hoveredElement) {
 
-		this.showText(hoveredElement);
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.showText(hoveredElement);
+		}
 
 	},
 
 	handleHoverOut: function() {
 
-		this.hideText();
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.hideText();
+		}
 
 	},
 

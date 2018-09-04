@@ -193,11 +193,19 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.conv;
+			this.color = modelConfig.color.conv2d;
 		}
 
 		if (this.layerShape === undefined) {
 			this.layerShape = modelConfig.layerShape;
+		}
+
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
 		}
 
 	},
@@ -285,15 +293,25 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	handleHoverIn: function(hoveredElement) {
 
-		this.initLineGroup(hoveredElement);
-		this.showText(hoveredElement);
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.initLineGroup(hoveredElement);
+		}
+
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.showText(hoveredElement);
+		}
 
 	},
 
 	handleHoverOut: function() {
 
-		this.disposeLineGroup();
-		this.hideText();
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.disposeLineGroup();
+		}
+
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.hideText();
+		}
 
 	},
 
