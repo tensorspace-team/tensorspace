@@ -5,6 +5,7 @@ import { OutputUnit } from "../../elements/OutputUnit";
 import { OutputNeuralPosGenerator } from "../../utils/OutputNeuralPosGenerator";
 import {TextHelper} from "../../utils/TextHelper";
 import { OutputTransitionFactory } from "../../animation/OutputTransitionTween";
+import { OutputExtractor } from "../../utils/OutputExtractor";
 
 function Output(config) {
 
@@ -182,6 +183,13 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 			this.updateSegregationVis();
+
+			let maxConfidenceIndex = OutputExtractor.getMaxConfidenceIndex(value);
+
+			this.hideText();
+			this.segregationHandlers[maxConfidenceIndex].showText();
+			this.textElementHandler = this.segregationHandlers[maxConfidenceIndex];
+
 		} else {
 			this.updateAggregationVis();
 		}
@@ -225,16 +233,21 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	showText: function(selectedNeural) {
 
-		for (let i = 0; i < this.segregationHandlers.length; i++) {
-			if (this.segregationHandlers[i].isSelected()) {
-				this.segregationHandlers[i].hideText();
-				break;
-			}
-		}
-
 		let selectedIndex = selectedNeural.outputIndex;
 
+		console.log(selectedIndex);
+
 		this.segregationHandlers[selectedIndex].showText();
+		this.textElementHandler = this.segregationHandlers[selectedIndex];
+
+	},
+
+	hideText: function() {
+
+		if(this.textElementHandler !== undefined) {
+			this.textElementHandler.hideText();
+			this.textElementHandler = undefined;
+		}
 
 	},
 
@@ -245,6 +258,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
 		} else if (clickedElement.elementType === "outputNeural") {
+			this.hideText();
 			this.showText(clickedElement);
 		}
 
