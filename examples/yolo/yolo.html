@@ -40,7 +40,11 @@
 
 	let model = new VIS.model.Sequential(container, {
 		layerShape: "square",
-		layerInitStatus: "close"
+		layerInitStatus: "close",
+		color: {
+			conv2d: 0xff00ff,
+			pooling2d: 0x00ffff
+		}
 	});
 
     model.add(new VIS.layers.Input3d({
@@ -141,9 +145,9 @@
 		strides: 1
     }));
 
-//	model.load("", {
-//		type: "tfjs"
-//	});
+	model.loadFrozen("./yoloModel/tensorflowjs_model.pb", "./yoloModel/weights_manifest.json", {
+		type: "tfjs"
+	});
 
 	model.init(function() {
 		model.predict(data);
