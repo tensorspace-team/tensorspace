@@ -246,7 +246,12 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 		this.inputValue = input;
 
+		console.log(this.resource);
+		console.log("=======");
+
 		if (this.resource !== undefined) {
+
+			console.log("have resource...");
 
 			let inputShape = this.layers[0].shape;
 
@@ -280,6 +285,8 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 				this.layers[i].updateValue();
 				continue;
 			}
+
+
 
 			let predictValue = this.predictResult[i - 1 - paddingLayerNum].dataSync();
 

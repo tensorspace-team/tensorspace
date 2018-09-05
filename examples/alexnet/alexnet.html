@@ -8,8 +8,10 @@
     <script src="../lib/stats.min.js"></script>
     <script src="../lib/tween.min.js"></script>
     <script src="../lib/TrackballControls.js"></script>
-    <script src="../lib/tfjs.min.js"></script>
+    <script src="../lib/tf.min.js"></script>
     <script src="../../build/vis.js"></script>
+
+    <script src="data/pikapika.js"></script>
 
     <style>
 
@@ -46,8 +48,8 @@
 		}
 	});
 
-	model.add(new VIS.layers.Input({
-		shape: [224, 224, 3]
+	model.add(new VIS.layers.Input3d({
+		shape: [227, 227, 3]
 	}));
 	model.add(new VIS.layers.Conv2d({
         shape: [55, 55],
@@ -104,7 +106,16 @@
 		units: 1000
 	}));
 
-	model.init();
+	model.load({
+		type: "tensorflow",
+		modelUrl: "./alexnet/tensorflowjs_model.pb",
+		weightUrl: "./alexnet/weights_manifest.json",
+		outputsName: ["norm1", "pool1", "norm2", "pool2", "conv3_1", "conv4_1", "conv5_1", "pool5", "Relu", "Relu_1", "Softmax"]
+	});
+
+	model.init(function() {
+		model.predict(data);
+    });
 
 </script>
 

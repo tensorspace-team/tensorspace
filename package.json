@@ -8,6 +8,9 @@
     "build": "rollup -c"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^0.12.7",
+    "install": "^0.12.1",
+    "npm": "^6.4.1",
     "three": "^0.90.0"
   },
   "devDependencies": {
