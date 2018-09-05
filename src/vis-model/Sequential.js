@@ -38,8 +38,9 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 		}
 
 		layer.setEnvironment(this.scene);
+		layer.loadModelConfig(this.configuration);
 		this.layers.push(layer);
-		layer.assemble(this.layers.length, this.configuration);
+		layer.assemble(this.layers.length);
 
 	},
 

@@ -142,7 +142,27 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	assemble: function(layerIndex, modelConfig) {
+	loadModelConfig: function(modelConfig) {
+
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.dense;
+		}
+
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+
+	},
+
+	assemble: function(layerIndex) {
 
 		this.layerIndex = layerIndex;
 
@@ -164,22 +184,6 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.unitLength = this.actualWidth / this.width;
 		this.openResultPos = OutputNeuralPosGenerator.getLinePos(this.units, this.actualWidth / this.width);
-
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
-
-		if (this.color === undefined) {
-			this.color = modelConfig.color.dense;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
-		}
 
 	},
 

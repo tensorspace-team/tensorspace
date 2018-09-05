@@ -63,11 +63,7 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	assemble: function(layerIndex, modelConfig) {
-		console.log("Assemble input layer");
-
-		this.layerIndex = layerIndex;
-
+	loadModelConfig: function(modelConfig) {
 		if (this.color === undefined) {
 			this.color = modelConfig.color.input;
 		}
@@ -79,6 +75,12 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.textSystem === undefined) {
 			this.textSystem = modelConfig.textSystem;
 		}
+	},
+
+	assemble: function(layerIndex) {
+		console.log("Assemble input layer");
+
+		this.layerIndex = layerIndex;
 	},
 
 	updateValue: function(value) {

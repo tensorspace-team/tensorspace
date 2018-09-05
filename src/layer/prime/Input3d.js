@@ -72,12 +72,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	assemble: function(layerIndex, modelConfig) {
-
-		console.log("Assemble input3d layer");
-
-		this.layerIndex = layerIndex;
-
+	loadModelConfig: function(modelConfig) {
 		if (this.color === undefined) {
 			this.color = modelConfig.color.input;
 		}
@@ -90,6 +85,13 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.textSystem = modelConfig.textSystem;
 		}
 
+	},
+
+	assemble: function(layerIndex) {
+
+		console.log("Assemble input3d layer");
+
+		this.layerIndex = layerIndex;
 	},
 
 	openLayer: function() {

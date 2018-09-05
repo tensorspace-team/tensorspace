@@ -166,7 +166,30 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	assemble: function (layerIndex, modelConfig) {
+	loadModelConfig: function(modelConfig) {
+
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.conv2d;
+		}
+
+		if (this.layerShape === undefined) {
+			this.layerShape = modelConfig.layerShape;
+		}
+
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+	},
+
+	assemble: function (layerIndex) {
 
 		console.log("Assemble conv2d, layer index: " + layerIndex);
 
@@ -186,27 +209,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
-
-		if (this.isOpen === undefined) {
-
-			this.isOpen = modelConfig.layerInitStatus;
-		}
-
-		if (this.color === undefined) {
-			this.color = modelConfig.color.conv2d;
-		}
-
-		if (this.layerShape === undefined) {
-			this.layerShape = modelConfig.layerShape;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
-		}
 
 		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.actualWidth, this.actualHeight);
 

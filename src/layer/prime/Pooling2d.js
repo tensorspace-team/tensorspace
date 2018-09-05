@@ -156,7 +156,25 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	assemble: function(layerIndex, modelConfig) {
+	loadModelConfig: function(modelConfig) {
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.pooling2d;
+		}
+
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+	},
+
+	assemble: function(layerIndex) {
 		this.layerIndex = layerIndex;
 
 		this.depth = this.lastLayer.depth;
@@ -197,23 +215,6 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.leftMostCenter = this.openFmCenters[0];
 		// layer total height in z-axis
 		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
-
-
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
-
-		if (this.color === undefined) {
-			this.color = modelConfig.color.pooling2d;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
-		}
 
 	},
 

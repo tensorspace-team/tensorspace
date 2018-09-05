@@ -189,22 +189,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	assemble: function(layerIndex, modelConfig) {
-
-		this.layerIndex = layerIndex;
-
-		this.contentWidth = this.lastLayer.width;
-		this.contentHeight = this.lastLayer.height;
-		this.depth = this.lastLayer.depth;
-		this.width = this.contentWidth + this.paddingWidth;
-		this.height = this.contentHeight + this.paddingHeight;
-
-		this.outputShape = [this.width, this.height, this.depth];
-
-		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
-		this.actualWidth = this.width * this.realVirtualRatio;
-		this.actualHeight = this.height * this.realVirtualRatio;
-
+	loadModelConfig: function(modelConfig) {
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;
 		}
@@ -220,6 +205,23 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.textSystem === undefined) {
 			this.textSystem = modelConfig.textSystem;
 		}
+	},
+
+	assemble: function(layerIndex) {
+
+		this.layerIndex = layerIndex;
+
+		this.contentWidth = this.lastLayer.width;
+		this.contentHeight = this.lastLayer.height;
+		this.depth = this.lastLayer.depth;
+		this.width = this.contentWidth + this.paddingWidth;
+		this.height = this.contentHeight + this.paddingHeight;
+
+		this.outputShape = [this.width, this.height, this.depth];
+
+		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
+		this.actualWidth = this.width * this.realVirtualRatio;
+		this.actualHeight = this.height * this.realVirtualRatio;
 
 	},
 
