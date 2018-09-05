@@ -1,4 +1,8 @@
-function Reshape() {
+import {Layer } from "./Layer";
+
+function Reshape(config) {
+
+
 
 }
 
