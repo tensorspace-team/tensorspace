@@ -8,6 +8,12 @@ function TfLoader(model, config) {
 	this.weightUrl = config.weightUrl;
 	this.output = config.output;
 
+	this.outputsName = undefined;
+
+	if (config.outputsName !== undefined) {
+		this.outputsName = config.outputsName;
+	}
+
 	this.type = "tensorflowLoader";
 
 }
@@ -48,9 +54,34 @@ TfLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
 	load: async function() {
 
-		const loadedModel = await tf.loadFrozenModel(this.modelUrl, this.weightUrl);
-		this.model.resource = loadedModel;
-		this.model.isFit = true;
+		if (this.outputsName !== undefined) {
+
+
+
+		} else {
+			const loadedModel = await tf.loadFrozenModel(this.modelUrl, this.weightUrl);
+			this.model.resource = loadedModel;
+			this.model.isFit = true;
+		}
+
+	},
+
+	predict: function(data, inputShape) {
+
+		let batchSize = [1];
+		let predictTensorShape = batchSize.concat(inputShape);
+
+		let predictTensor = tf.tensor(data, predictTensorShape);
+
+		let predictResult;
+
+		if (this.outputsName !== undefined) {
+			predictResult = this.model.resource.execute(predictTensor, this.names);
+		} else {
+			predictResult = this.model.resource.predict(predictTensor);
+		}
+
+		return predictResult;
 
 	}
 

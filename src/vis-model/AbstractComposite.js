@@ -1,6 +1,5 @@
 import { SceneInitializer } from '../scene/SceneInitializer';
 import { TfjsLoader } from '../loader/TfjsLoader';
-import {FrozenModelLoader} from "../loader/FrozenModelLoader";
 import {KerasLoader} from "../loader/KerasLoader";
 import {TfLoader} from "../loader/TfLoader";
 

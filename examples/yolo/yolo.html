@@ -161,7 +161,8 @@
 	model.load({
 		type: "tensorflow",
 		modelUrl: "./yoloModel/tensorflowjs_model.pb",
-		weightUrl: "./yoloModel/weights_manifest.json"
+		weightUrl: "./yoloModel/weights_manifest.json",
+        outputNames: ["1-leaky","2-maxpool","4-leaky","5-maxpool","7-leaky","8-maxpool","10-leaky","11-maxpool","13-leaky","14-maxpool","16-leaky","17-maxpool","19-leaky","21-leaky","BiasAdd_8"]
 	});
 
 	model.init(function() {

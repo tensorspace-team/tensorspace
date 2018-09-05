@@ -50,6 +50,19 @@ TfjsLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 		this.model.resource = loadedModel;
 		this.model.isFit = true;
 
+	},
+
+	predict: function(data, inputShape) {
+
+		let batchSize = [1];
+		let predictTensorShape = batchSize.concat(inputShape);
+
+		let predictTensor = tf.tensor(data, predictTensorShape);
+
+		let predictResult = this.model.resource.predict(predictTensor);
+
+		return predictResult;
+
 	}
 
 });
