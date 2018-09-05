@@ -3,6 +3,7 @@ import { FeatureMap } from '../../elements/FeatureMap';
 import { colorUtils } from '../../utils/ColorUtils';
 import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { MapAggregation } from "../../elements/MapAggregation";
+import {MapDataGenerator} from "../../utils/MapDataGenerator";
 
 function Pooling2d(config) {
 
@@ -227,21 +228,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
-		let aggregationUpdateValue = [];
-
-		for (let i = 0; i < this.neuralValue.length; i += this.depth) {
-
-			let channelSum = 0;
-
-			for (let j = 0; j < this.depth; j++) {
-
-				channelSum += this.neuralValue[i];
-
-			}
-
-			aggregationUpdateValue.push(channelSum / this.depth);
-
-		}
+		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
 
@@ -251,20 +238,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateSegregationVis: function() {
 
-		let layerOutputValues = [];
-
-		for (let j = 0; j < this.depth; j++) {
-
-			let referredIndex = j;
-
-			while (referredIndex < this.neuralValue.length) {
-
-				layerOutputValues.push(this.neuralValue[referredIndex]);
-
-				referredIndex += this.depth;
-			}
-
-		}
+		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 
