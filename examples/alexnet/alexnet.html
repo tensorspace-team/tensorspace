@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <script src="../lib/jquery.min.js"></script>
     <script src="../lib/three.min.js"></script>
     <script src="../lib/stats.min.js"></script>
     <script src="../lib/tween.min.js"></script>
@@ -27,12 +28,32 @@
             height: 100%;
         }
 
+        #loadingPanel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        #loading {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            top: 200px;
+            left: 400px;
+        }
+
     </style>
 
 </head>
 <body>
 
 <div id="container"></div>
+<div id="loadingPanel">
+    <img id="loading" src="./assets/loading.gif">
+</div>
 
 <script>
 
@@ -115,6 +136,8 @@
 
 	model.init(function() {
 		model.predict(data);
+		$("#loadingPanel").hide();
+
     });
 
 </script>
