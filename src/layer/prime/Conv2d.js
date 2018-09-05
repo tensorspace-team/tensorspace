@@ -60,10 +60,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.nextHookHandler = nextHookHandler;
 		this.lastHookHandler = this.lastLayer.nextHookHandler;
 
-		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.actualWidth, this.actualHeight);
-		this.leftMostCenter = this.openFmCenters[0];
-		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
-
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
@@ -211,6 +207,11 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.textSystem === undefined) {
 			this.textSystem = modelConfig.textSystem;
 		}
+
+		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.actualWidth, this.actualHeight);
+
+		this.leftMostCenter = this.openFmCenters[0];
+		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
 
 	},
 

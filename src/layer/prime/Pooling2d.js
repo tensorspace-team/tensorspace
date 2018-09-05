@@ -44,17 +44,6 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.nextHookHandler = nextHookHandler;
 		this.lastHookHandler = this.lastLayer.nextHookHandler;
 
-		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
-			let fmCenter = {};
-			fmCenter.x = this.lastLayer.openFmCenters[i].x;
-			fmCenter.y = this.lastLayer.openFmCenters[i].y;
-			fmCenter.z = this.lastLayer.openFmCenters[i].z;
-			this.openFmCenters.push(fmCenter);
-		}
-
-		this.leftMostCenter = this.openFmCenters[0];
-		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
-
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
@@ -195,6 +184,20 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
+
+		// as conv2d layer init its openFmCenters in init() process, the pooling layer need to do it here too
+		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
+			let fmCenter = {};
+			fmCenter.x = this.lastLayer.openFmCenters[i].x;
+			fmCenter.y = this.lastLayer.openFmCenters[i].y;
+			fmCenter.z = this.lastLayer.openFmCenters[i].z;
+			this.openFmCenters.push(fmCenter);
+		}
+
+		this.leftMostCenter = this.openFmCenters[0];
+		// layer total height in z-axis
+		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
+
 
 		if (this.isOpen === undefined) {
 			this.isOpen = modelConfig.layerInitStatus;
