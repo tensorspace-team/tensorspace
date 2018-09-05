@@ -1,28 +1,23 @@
 import { Loader } from './Loader';
 
-function FrozenModelLoader(model) {
+function KerasLoader( model, config ) {
 
 	Loader.call(this, model);
-
-	this.modelUrl = undefined;
-	this.weightUrl = undefined;
-
-	this.type = "FrozenModelLoader";
+	this.url = config.url;
+	this.output = config.output;
+	this.type = "KerasLoader"
 
 }
 
-FrozenModelLoader.prototype = Object.assign(Object.create(Loader.prototype), {
+KerasLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
-	preload: function(modelUrl, weightUrl, config) {
-
-		this.modelUrl = modelUrl;
-		this.weightUrl = weightUrl;
+	preLoad: function() {
 
 		// undefined 还是null？
-		if (config.output !== undefined && config.output !== null) {
+		if (this.output !== undefined && this.output !== null) {
 
 			// 根据name来设置output的序列
-			let outputConfig = config.output;
+			let outputConfig = this.output;
 
 			this.model.initLayerOutputIndexFromName(outputConfig);
 
@@ -45,12 +40,13 @@ FrozenModelLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
 		this.model.loader = this;
 		this.model.hasLoader = true;
-
 	},
 
+
+	// 异步加载模型
 	load: async function() {
 
-		const loadedModel = await tf.loadFrozenModel(this.modelUrl, this.weightUrl);
+		const loadedModel = await tf.loadModel(this.url);
 		this.model.resource = loadedModel;
 		this.model.isFit = true;
 
@@ -58,4 +54,4 @@ FrozenModelLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
 });
 
-export { FrozenModelLoader };
+export { KerasLoader };

@@ -1,15 +1,18 @@
 import { Loader } from './Loader';
 
-function TfjsLoader( model, config ) {
+function TfLoader(model, config) {
 
 	Loader.call(this, model);
-	this.url = config.url;
+
+	this.modelUrl = config.modelUrl;
+	this.weightUrl = config.weightUrl;
 	this.output = config.output;
-	this.type = "TfjsLoader"
+
+	this.type = "tensorflowLoader";
 
 }
 
-TfjsLoader.prototype = Object.assign(Object.create(Loader.prototype), {
+TfLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
 	preLoad: function() {
 
@@ -40,13 +43,12 @@ TfjsLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
 		this.model.loader = this;
 		this.model.hasLoader = true;
+
 	},
 
-
-	// 异步加载模型
 	load: async function() {
 
-		const loadedModel = await tf.loadModel(this.url);
+		const loadedModel = await tf.loadFrozenModel(this.modelUrl, this.weightUrl);
 		this.model.resource = loadedModel;
 		this.model.isFit = true;
 
@@ -54,4 +56,4 @@ TfjsLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
 });
 
-export { TfjsLoader };
+export { TfLoader };

@@ -43,7 +43,9 @@
 <body>
 
 <div id="container"></div>
-<img id="loading" src="./assets/loading.gif">
+<div id="loadingPad">
+    <img id="loading" src="./assets/loading.gif">
+</div>
 
 <script>
 
@@ -156,8 +158,10 @@
 		strides: 1
     }));
 
-	model.loadFrozen("./yoloModel/tensorflowjs_model.pb", "./yoloModel/weights_manifest.json", {
-		type: "tfjs"
+	model.load({
+		type: "tensorflow",
+		modelUrl: "./yoloModel/tensorflowjs_model.pb",
+		weightUrl: "./yoloModel/weights_manifest.json"
 	});
 
 	model.init(function() {

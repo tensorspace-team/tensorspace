@@ -183,8 +183,9 @@
 		name: "output"
 	}));
 
-	model.load('./tfjsModel/mnist.json', {
-		type: "tfjs"
+	model.load({
+		type: "tfjs",
+        url: './tfjsModel/mnist.json'
 	});
 
 	model.init();
