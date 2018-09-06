@@ -12,6 +12,13 @@ function Dense(config) {
 	this.width = config.units;
 	this.height = 1;
 	this.depth = 1;
+
+	if (config.segments !== undefined) {
+		this.segments = config.segments;
+	} else {
+		this.segments = 1;
+	}
+
 	this.neuralQueue = undefined;
 
 	this.leftMostCenter = {

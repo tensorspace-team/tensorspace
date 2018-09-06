@@ -49,6 +49,12 @@ let TextHelper = (function() {
 
 	}
 
+	function calcGlobalPoolingSize(unitLength) {
+
+		return unitLength;
+
+	}
+
 	function calcQueueTextPos(textLength, textSize, unitLength, queueCenter) {
 
 		return {
@@ -73,7 +79,9 @@ let TextHelper = (function() {
 
 		calcQueueTextSize: calcQueueTextSize,
 
-		calcQueueTextPos: calcQueueTextPos
+		calcQueueTextPos: calcQueueTextPos,
+
+		calcGlobalPoolingSize: calcGlobalPoolingSize
 
 	}
 

@@ -4,6 +4,7 @@ import {MapDataGenerator} from "../../utils/MapDataGenerator";
 import {colorUtils} from "../../utils/ColorUtils";
 import {FeatureMap} from "../../elements/FeatureMap";
 import {MapAggregation} from "../../elements/MapAggregation";
+import { GlobalPoolingElement } from "../../elements/GlobalPoolingElement";
 
 function GlobalPooling2d(config) {
 
@@ -171,11 +172,8 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < this.depth; i++) {
 
-			let segregationHandler = new FeatureMap(
-				this.width,
-				this.height,
+			let segregationHandler = new GlobalPoolingElement(
 				this.actualWidth,
-				this.actualHeight,
 				centers[i],
 				this.color
 			);
@@ -221,6 +219,7 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.textSystem !== undefined && this.textSystem) {
+
 			this.showText(hoveredElement);
 		}
 
@@ -235,7 +234,7 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	showText: function(element) {
 
-		if (element.elementType === "featureMap") {
+		if (element.elementType === "globalPoolingElement") {
 
 			let fmIndex = element.fmIndex;
 			this.segregationHandlers[fmIndex].showText();
