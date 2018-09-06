@@ -4,6 +4,7 @@ import {colorUtils} from "../../utils/ColorUtils";
 import {MapDataGenerator} from "../../utils/MapDataGenerator";
 import { FeatureMap } from "../../elements/FeatureMap";
 import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
+import {MapAggregation} from "../../elements/MapAggregation";
 
 function UpSampling2d(config) {
 
@@ -122,7 +123,8 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
 
-		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.filters, this.actualWidth, this.actualHeight);
+		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
+
 		this.leftMostCenter = this.openFmCenters[0];
 		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
 
@@ -346,3 +348,5 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	}
 
 });
+
+export { UpSampling2d }

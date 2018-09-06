@@ -51,7 +51,10 @@
         strides: 1,
     }));
 
-    model.add(new VIS.layers.GlobalPooling2d());
+//    model.add(new VIS.layers.GlobalPooling2d());
+    model.add(new VIS.layers.UpSampling2d({
+        size: [2, 2]
+    }));
 
     model.init(function(){
 

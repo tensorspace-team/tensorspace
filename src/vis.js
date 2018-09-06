@@ -10,6 +10,8 @@ import { Pooling2d } from "./layer/prime/Pooling2d";
 import { Reshape } from "./layer/prime/Reshape";
 import { Dense } from "./layer/prime/Dense";
 import { Padding2d } from "./layer/prime/Padding2d";
+import { UpSampling2d } from "./layer/prime/UpSampling2d";
+import { GlobalPooling2d } from "./layer/prime/GlobalPooling2d";
 
 import { PixelConv2d } from "./layer/pixel/PixelConv2d";
 import { PixelPadding } from "./layer/pixel/PixelPadding2d";
@@ -19,7 +21,6 @@ import { PixelFlatten } from "./layer/pixel/PixelFlatten";
 import { PixelDense } from "./layer/pixel/PixelDense";
 import { PixelReshape } from "./layer/pixel/PixelReshape";
 import { PixelOutput } from "./layer/pixel/PixelOutput";
-import {GlobalPooling2d} from "./layer/prime/GlobalPooling2d";
 
 let layers = {
 	Input: Input,
@@ -32,6 +33,7 @@ let layers = {
 	Pooling2d: Pooling2d,
 	Padding2d: Padding2d,
 	GlobalPooling2d: GlobalPooling2d,
+	UpSampling2d: UpSampling2d,
 	PixelConv2d: PixelConv2d,
 	PixelPadding: PixelPadding,
 	PixelInput: PixelInput,
