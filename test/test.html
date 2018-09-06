@@ -10,7 +10,6 @@
     <script src="lib/TrackballControls.js"></script>
     <script src="lib/tf.min.js"></script>
     <script src="../build/vis.js"></script>
-    <script src="data/5.js"></script>
 
     <style>
 
@@ -54,113 +53,10 @@
 
     model.add(new VIS.layers.GlobalPooling2d());
 
-//    model.add(new VIS.layers.Input({
-//        shape: [28, 28, 1],
-////        padding: 1,
-//        name: "initInput",
-////        pixel: true
-//    }));
-//    model.add(new VIS.layers.Conv2d({
-//        shape: [40, 40],
-//        kernelSize: 5,
-//        filters: 1024,
-//        strides: 1,
-//        name: "conv2d1",
-////		pixel: true
-//
-//    }));
-//	model.add(new VIS.layers.Padding2d({
-//		padding: [4, 4],
-////        pixel: true
-//	}));
-//    model.add(new VIS.layers.Conv2d({
-//		kernelSize: 5,
-//		filters: 6,
-//		strides: 1,
-//        name: "conv2d1"
-//    }));
-//    model.add(new VIS.layers.Pooling2d({
-//		poolSize: [2, 2],
-//		strides: [2, 2],
-//        name: "maxPool2d1"
-//    }));
-//	model.add(new VIS.layers.Conv2d({
-//		kernelSize: 5,
-//		filters: 16,
-//		strides: 1,
-//		name: "conv2d2"
-//	}));
-//	model.add(new VIS.layers.Pooling2d({
-//		poolSize: [2, 2],
-//		strides: [2, 2],
-//		name: "maxPool2d2"
-//	}));
-//	model.add(new VIS.layers.Dense({
-//		units: 120,
-//		name: "dense"
-//	}));
-//	model.add(new VIS.layers.Dense({
-//		units: 84,
-//		name: "dense"
-//	}));
-//	model.add(new VIS.layers.Dense({
-//		units: 10,
-//		name: "dense"
-//	}));
-
-//	model.add(new VIS.layers.Conv2d({
-//		kernelSize: 2,
-//		filters: 6,
-//		strides: 1,
-//        name: "conv2d2"
-//	}));
-////    model.add(new VIS.layers.Flatten());
-//    model.add(new VIS.layers.Dense({
-//		units: 30,
-//        name: "dense"
-//	}));
-
-//    model.load("./tfjsModel/mnist_pixel.json", {
-//    	type: "tfjs"
-//    });
-
-//    model.test();
-
-//    model.load('./tfjsModel/mnist.json', {
-//    	type: "tfjs"
-//    });
-
     model.init(function(){
 
-    	setTimeout(function() {
-			model.predict(data);
-        }, 3000);
-
-		predictMnist();
 
     });
-
-//    setTimeout(function() {
-//		model.dispose();
-//    }, 4000)
-
-//    setTimeout(function(){
-//    	model.flatten();
-//    }, 3000);
-
-//    setTimeout(function() {
-//    	model.restoreFlatten();
-//    }, 10000);
-
-    function predictMnist() {
-
-    	setTimeout(function() {
-//			let mockTensor = tf.randomNormal([1, 32, 32, 1]);
-//			let inputValue = mockTensor.dataSync();
-//			model.predict(data);
-        }, 5000);
-
-    }
 
 </script>
 
