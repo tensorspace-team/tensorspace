@@ -28,13 +28,21 @@
             height: 100%;
         }
 
-        #loading {
+        #loadingPad {
             position: fixed;
+            height: 100%;
+            width: 100%;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            display: block;
+            background-color: #031D32;
+        }
+
+        #loading {
+            position: fixed;
+            width: 400px;
+            height: 300px;
+            top: 200px;
+            left: 500px;
         }
 
     </style>
@@ -52,7 +60,7 @@
 	let container = document.getElementById("container");
 
 	let model = new VIS.model.Sequential(container, {
-		aggregationStrategy: "max",
+		aggregationStrategy: "average",
 		layerShape: "square",
 		layerInitStatus: "close",
 		color: {
@@ -170,7 +178,7 @@
 
 		setTimeout(function() {
 			model.predict(data);
-			$("#loading").hide();
+			$("#loadingPad").hide();
         }, 4000);
 
     });
