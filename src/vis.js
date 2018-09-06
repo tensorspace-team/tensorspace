@@ -19,6 +19,7 @@ import { PixelFlatten } from "./layer/pixel/PixelFlatten";
 import { PixelDense } from "./layer/pixel/PixelDense";
 import { PixelReshape } from "./layer/pixel/PixelReshape";
 import { PixelOutput } from "./layer/pixel/PixelOutput";
+import {GlobalPooling2d} from "./layer/prime/GlobalPooling2d";
 
 let layers = {
 	Input: Input,
@@ -30,6 +31,7 @@ let layers = {
 	Reshape: Reshape,
 	Pooling2d: Pooling2d,
 	Padding2d: Padding2d,
+	GlobalPooling2d: GlobalPooling2d,
 	PixelConv2d: PixelConv2d,
 	PixelPadding: PixelPadding,
 	PixelInput: PixelInput,

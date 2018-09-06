@@ -9,7 +9,6 @@ function Pooling2d(config) {
 
 	Layer.call(this, config);
 
-	this.fmCenters = [];
 	this.inputShape = undefined;
 	this.width = undefined;
 	this.height = undefined;
@@ -209,7 +208,6 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
 
-		// as conv2d layer init its openFmCenters in init() process, the pooling layer need to do it here too
 		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
 			let fmCenter = {};
 			fmCenter.x = this.lastLayer.openFmCenters[i].x;

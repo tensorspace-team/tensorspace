@@ -23,7 +23,9 @@ function Layer(config) {
 	// store the reference aggregationElement object
 	this.aggregationElement = undefined;
 
-	this.name = config.name;
+	if (config !== undefined && config.name !== undefined) {
+		this.name = config.name;
+	}
 
 	// output index to fit the layer
 	this.resourceOutputIndex = undefined;
@@ -75,13 +77,13 @@ function Layer(config) {
 	this.textSystem = undefined;
 	this.relationSystem = undefined;
 
-	if (config.color !== undefined) {
+	if (config!== undefined && config.color !== undefined) {
 		this.color = config.color;
 	}
 
 	this.isopen = undefined;
 
-	if (config.initStatus !== undefined) {
+	if (config !== undefined && config.initStatus !== undefined) {
 
 		console.log("=====+++");
 		console.log(config.initStatus);

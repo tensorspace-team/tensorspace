@@ -52,9 +52,7 @@
         strides: 1,
     }));
 
-    model.add(new VIS.layers.Padding2d({
-        padding: [4, 4]
-    }));
+    model.add(new VIS.layers.GlobalPooling2d());
 
 //    model.add(new VIS.layers.Input({
 //        shape: [28, 28, 1],
