@@ -22,7 +22,7 @@ let MapDataGenerator = (function() {
 	}
 
 	// generate channel average data for aggregation
-	function generateAggregationData(rawValue, depth) {
+	function generateMaxAggregationData(rawValue, depth) {
 
 		let aggregationValue = [];
 
@@ -32,7 +32,7 @@ let MapDataGenerator = (function() {
 
 			for (let j = 0; j < depth; j++) {
 
-				channelSum += rawValue[i];
+				channelSum += rawValue[i + j];
 
 			}
 
@@ -41,6 +41,41 @@ let MapDataGenerator = (function() {
 		}
 
 		return aggregationValue;
+
+	}
+
+	// generate channel max data for aggregation
+	function generateAverageAggregationData(rawValue, depth) {
+
+		let aggregationValue = [];
+
+		for (let i = 0; i < rawValue.length; i += depth) {
+
+			let max = rawValue[i];
+
+			for (let j = 0; j < depth; j++) {
+
+				max = max > rawValue[i + j] ? max : rawValue[i + j];
+
+			}
+
+			aggregationValue.push(max);
+
+		}
+
+		return aggregationValue;
+
+	}
+
+	function generateAggregationData(rawValue, depth, strategy) {
+
+		if (strategy === "average") {
+			return generateAverageAggregationData(rawValue, depth);
+		} else if (strategy === "max") {
+			return generateMaxAggregationData(rawValue, depth);
+		} else {
+			console.error("Do not support \"aggregationStrategy\": " + strategy + ", use \"average\" or \"max\" max instead.");
+		}
 
 	}
 

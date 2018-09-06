@@ -31,6 +31,8 @@ function Pooling2d(config) {
 	this.openFmCenters = [];
 	this.closeFmCenters = [];
 
+	this.aggregationStrategy = undefined;
+
 	this.layerType = "maxPool2d";
 
 }
@@ -172,6 +174,10 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.textSystem === undefined) {
 			this.textSystem = modelConfig.textSystem;
 		}
+
+		if (this.aggregationStrategy === undefined) {
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
+		}
 	},
 
 	assemble: function(layerIndex) {
@@ -232,7 +238,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
-		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth);
+		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
 
 		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
 

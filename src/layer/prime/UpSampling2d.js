@@ -31,6 +31,7 @@ function UpSampling2d(config) {
 		this.isShapePredefined = false;
 	}
 
+	this.aggregationStrategy = undefined;
 
 	this.layerType = "prime upSampling2d";
 
@@ -85,6 +86,10 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.textSystem === undefined) {
 			this.textSystem = modelConfig.textSystem;
+		}
+
+		if (this.aggregationStrategy === undefined) {
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
 		}
 	},
 
@@ -203,7 +208,7 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
-		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth);
+		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
 
 		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
 

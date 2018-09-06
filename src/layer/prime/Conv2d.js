@@ -49,6 +49,8 @@ function Conv2d(config) {
 	this.layerShape = undefined;
 	this.closeButton = undefined;
 
+	this.aggregationStrategy = undefined;
+
 }
 
 Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
@@ -187,6 +189,10 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.textSystem === undefined) {
 			this.textSystem = modelConfig.textSystem;
 		}
+
+		if (this.aggregationStrategy === undefined) {
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
+		}
 	},
 
 	assemble: function (layerIndex) {
@@ -230,7 +236,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
-		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth);
+		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
 
 		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
 

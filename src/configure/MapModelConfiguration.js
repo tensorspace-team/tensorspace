@@ -1,6 +1,7 @@
 function MapModelConfiguration(config) {
 
 	this.layerShape = "line";
+	this.aggregationStrategy = "average";
 	this.layerInitStatus = true;
 	this.relationSystem = true;
 	this.textSystem = true;
@@ -18,6 +19,15 @@ function MapModelConfiguration(config) {
 
 		if (config.layerShape !== undefined) {
 			this.layerShape = config.layerShape;
+		}
+
+		if (config.aggregationStrategy !== undefined) {
+			if (config.aggregationStrategy === "average" || config.aggregationStrategy === "max") {
+				this.aggregationStrategy = config.aggregationStrategy;
+			} else {
+				console.error("\"aggregationStrategy\" property do not support config for " + config.aggregationStrategy + " use \"average\" or \"max\" instead.");
+			}
+
 		}
 
 		if (config.relationSystem !== undefined) {

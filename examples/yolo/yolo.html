@@ -52,6 +52,7 @@
 	let container = document.getElementById("container");
 
 	let model = new VIS.model.Sequential(container, {
+		aggregationStrategy: "max",
 		layerShape: "square",
 		layerInitStatus: "close",
 		color: {
