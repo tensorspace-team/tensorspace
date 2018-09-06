@@ -55,7 +55,7 @@ NeuralQueue.prototype = {
 		backDataTex.magFilter = THREE.NearestFilter;
 		backDataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.unitLength, this.unitLength);
+		let boxGeometry = new THREE.BoxBufferGeometry(this.actualWidth, this.unitLength, this.unitLength);
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let backMaterial = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: backDataTex, transparent: true });

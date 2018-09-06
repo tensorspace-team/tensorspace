@@ -17,7 +17,7 @@ VariableLengthObject.prototype = {
 
 	init: function() {
 
-		let geometry = new THREE.BoxGeometry(this.width, this.depth, this.height);
+		let geometry = new THREE.BoxBufferGeometry(this.width, this.depth, this.height);
 		let material = new THREE.MeshBasicMaterial({
 			color: this.color, opacity: BasicMaterialOpacity, transparent: true
 		});

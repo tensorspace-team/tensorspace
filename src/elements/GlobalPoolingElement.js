@@ -37,7 +37,7 @@ GlobalPoolingElement.prototype = {
 
 	init: function() {
 
-		let geometry = new THREE.BoxGeometry(this.actualLength, this.actualLength, this.actualLength);
+		let geometry = new THREE.BoxBufferGeometry(this.actualLength, this.actualLength, this.actualLength);
 		let material = new THREE.MeshBasicMaterial({
 			color: this.color, opacity: MinAlpha, transparent: true
 		});

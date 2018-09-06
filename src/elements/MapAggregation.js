@@ -38,7 +38,7 @@ MapAggregation.prototype = {
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 
-		let geometry = new THREE.BoxGeometry(this.actualWidth, this.depth, this.actualHeight);
+		let geometry = new THREE.BoxBufferGeometry(this.actualWidth, this.depth, this.actualHeight);
 		let basicMaterial = new THREE.MeshBasicMaterial({
 			color: this.color, opacity: MinAlpha, transparent: true
 		});

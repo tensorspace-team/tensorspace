@@ -56,7 +56,7 @@ FeatureMap.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.unitLength, this.actualHeight);
+		let boxGeometry = new THREE.BoxBufferGeometry(this.actualWidth, this.unitLength, this.actualHeight);
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({

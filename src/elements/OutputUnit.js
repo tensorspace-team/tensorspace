@@ -43,7 +43,7 @@ OutputUnit.prototype = {
 		let outputGroup = new THREE.Object3D();
 		outputGroup.position.set(0, 0, 0);
 
-		let boxGeometry = new THREE.BoxGeometry(this.cubeSize, this.cubeSize, this.cubeSize);
+		let boxGeometry = new THREE.BoxBufferGeometry(this.cubeSize, this.cubeSize, this.cubeSize);
 
 		let material = new THREE.MeshBasicMaterial({
 			color: this.color,

@@ -21,7 +21,7 @@ function CloseButton(size, position, color) {
 CloseButton.prototype = {
 
 	init: function() {
-		let geometry = new THREE.SphereGeometry( this.size, 32, 32 );
+		let geometry = new THREE.SphereBufferGeometry( this.size, 32, 32 );
 		let material = new THREE.MeshBasicMaterial({
 			color: this.color,
 			opacity: MinAlpha,

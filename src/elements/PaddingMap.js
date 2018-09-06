@@ -72,7 +72,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.actualWidth / this.width, this.actualHeight);
+		let boxGeometry = new THREE.BoxBufferGeometry(this.actualWidth, this.actualWidth / this.width, this.actualHeight);
 
 		let material = new THREE.MeshBasicMaterial({ color: this.color, alphaMap: dataTex, transparent: true });
 		let basicMaterial = new THREE.MeshBasicMaterial({

@@ -18,7 +18,7 @@ function DenseAggregation(actualWidth, actualHeight, actualDepth, color) {
 DenseAggregation.prototype = {
 
 	init: function() {
-		let geometry = new THREE.BoxGeometry(this.actualWidth, this.actualDepth, this.actualHeight);
+		let geometry = new THREE.BoxBufferGeometry(this.actualWidth, this.actualDepth, this.actualHeight);
 		let material = new THREE.MeshBasicMaterial({
 			color: this.color, opacity: MinAlpha, transparent: true
 		});

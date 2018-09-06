@@ -73,7 +73,7 @@ ChannelMap.prototype = {
 		dataTex.magFilter = THREE.NearestFilter;
 		dataTex.needsUpdate = true;
 
-		let boxGeometry = new THREE.BoxGeometry(this.actualWidth, this.unitLength, this.actualHeight);
+		let boxGeometry = new THREE.BoxBufferGeometry(this.actualWidth, this.unitLength, this.actualHeight);
 
 		let material = new THREE.MeshBasicMaterial({ map: dataTex });
 		let basicMaterial = new THREE.MeshBasicMaterial({

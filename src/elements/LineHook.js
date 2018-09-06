@@ -22,7 +22,7 @@ LineHook.prototype = {
 
 	init: function() {
 
-		let geometry = new THREE.BoxGeometry(0.01, 0.01, 0.01);
+		let geometry = new THREE.BoxBufferGeometry(0.01, 0.01, 0.01);
 		let material = new THREE.MeshBasicMaterial({
 			color: 0xffffff, opacity: 0, transparent: true
 		});
