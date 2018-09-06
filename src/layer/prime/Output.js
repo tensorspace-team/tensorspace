@@ -11,20 +11,21 @@ function Output(config) {
 
 	Layer.call(this, config);
 
-	this.units = config.units;
-	this.width = config.units;
+	this.units = undefined;
+	this.width = undefined;
+	this.outputs = undefined;
 	this.height = 1;
 	this.depth = 1;
 
 	this.unitLength = undefined;
+
+	this.loadLayerConfig(config);
 
 	this.leftMostCenter = {
 		x: 0,
 		y: 0,
 		z: 0
 	};
-
-	this.outputs = config.outputs;
 
 	this.closeResultPos = [];
 	this.openResultPos = [];
@@ -63,6 +64,16 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+			this.units = layerConfig.units;
+			this.width = layerConfig.units;
+			this.outputs = layerConfig.outputs;
+		}
 
 	},
 

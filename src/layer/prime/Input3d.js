@@ -10,12 +10,13 @@ function Input3d(config) {
 
 	Layer.call(this, config);
 
-	this.shape = config.shape;
-	this.width = config.shape[0];
-	this.height = config.shape[1];
+	this.shape = undefined;
+	this.width = undefined;
+	this.height = undefined;
 	this.depth = 3;
-	this.neuralNum = config.shape[0] * config.shape[1];
-	this.outputShape = config.shape;
+	this.outputShape = undefined;
+
+	this.loadLayerConfig(config);
 
 	this.actualWidth = ModelInitWidth;
 	this.actualHeight = this.actualWidth / this.width * this.height;
@@ -69,6 +70,19 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.initAggregationElement();
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+			this.shape = layerConfig.shape;
+			this.width = layerConfig.shape[0];
+			this.height = layerConfig.shape[1];
+			this.outputShape = layerConfig.shape;
+		} else {
+			console.error("\"shape\" property is require for Input3d layer");
+		}
 
 	},
 

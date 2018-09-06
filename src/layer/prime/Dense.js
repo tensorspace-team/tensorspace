@@ -8,18 +8,17 @@ function Dense(config) {
 
 	Layer.call(this, config);
 
-	this.units = config.units;
-	this.width = config.units;
+	this.units = undefined;
+	this.width = undefined;
 	this.height = 1;
 	this.depth = 1;
 
-	if (config.segments !== undefined) {
-		this.segments = config.segments;
-	} else {
-		this.segments = 1;
-	}
+	// the default segment is 1
+	this.segments = 1;
 
 	this.neuralQueue = undefined;
+
+	this.loadLayerConfig(config);
 
 	this.leftMostCenter = {
 		x: 0,
@@ -55,6 +54,24 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+
+			if (layerConfig.units !== undefined) {
+				this.units = layerConfig.units;
+				this.width = layerConfig.units;
+			} else {
+				console.error("The \"unit\" property is required for dense layer.");
+			}
+
+			if (layerConfig.segments !== undefined) {
+				this.segments = layerConfig.segments;
+			}
+		}
 
 	},
 

@@ -12,25 +12,19 @@ function Pooling2d(config) {
 	this.inputShape = undefined;
 	this.width = undefined;
 	this.height = undefined;
-	this.poolSize = config.poolSize;
-	this.strides = config.strides;
+	this.poolSize = undefined;
+	this.strides = undefined;
 	this.depth = undefined;
 
-	if (config.shape !== undefined) {
-
-		this.isShapePredefined = true;
-		this.fmShape = config.shape;
-		this.width = this.fmShape[0];
-		this.height = this.fmShape[1];
-	} else {
-		this.isShapePredefined = false;
-	}
+	this.isShapePredefined = false;
 
 	this.fmCenters = [];
 	this.openFmCenters = [];
 	this.closeFmCenters = [];
 
 	this.aggregationStrategy = undefined;
+
+	this.loadLayerConfig(config);
 
 	this.layerType = "maxPool2d";
 
@@ -63,6 +57,34 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+
+			if (layerConfig.poolSize !== undefined) {
+				this.poolSize = layerConfig.poolSize;
+			} else {
+				console.error("\"poolSize\" is required for Pooling2d layer");
+			}
+
+			if (layerConfig.strides !== undefined) {
+				this.strides = layerConfig.strides;
+			} else {
+				console.error("\"strides\" is required for Pooling2d layer");
+			}
+
+			if (layerConfig.shape !== undefined) {
+
+				this.isShapePredefined = true;
+				this.fmShape = layerConfig.shape;
+				this.width = this.fmShape[0];
+				this.height = this.fmShape[1];
+			}
+
+		}
 
 	},
 

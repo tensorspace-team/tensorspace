@@ -7,12 +7,13 @@ function Input(config) {
 
 	Layer.call(this, config);
 
-	this.shape = config.shape;
-	this.width = config.shape[0];
-	this.height = config.shape[1];
-	this.depth = config.shape[2];
-	this.neuralNum = config.shape[0] * config.shape[1];
-	this.outputShape = config.shape;
+	this.shape = undefined;
+	this.width = undefined;
+	this.height = undefined;
+	this.depth = undefined;
+	this.outputShape = undefined;
+
+	this.loadLayerConfig(config);
 
 	this.actualWidth = ModelInitWidth;
 	this.actualHeight = ModelInitWidth / this.width * this.height;
@@ -25,7 +26,6 @@ function Input(config) {
 	};
 
 	this.layerType = "input";
-
 
 }
 
@@ -43,6 +43,24 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.initAggregationElement();
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+
+			if (layerConfig.shape !== undefined) {
+				this.shape = layerConfig.shape;
+				this.width = layerConfig.shape[0];
+				this.height = layerConfig.shape[1];
+				this.depth = layerConfig.shape[2];
+				this.outputShape = layerConfig.shape;
+			} else {
+				console.error("\"shape\" property is required for input layer");
+			}
+
+		}
 
 	},
 

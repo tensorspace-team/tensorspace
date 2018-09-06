@@ -23,10 +23,6 @@ function Layer(config) {
 	// store the reference aggregationElement object
 	this.aggregationElement = undefined;
 
-	if (config !== undefined && config.name !== undefined) {
-		this.name = config.name;
-	}
-
 	// output index to fit the layer
 	this.resourceOutputIndex = undefined;
 
@@ -77,29 +73,41 @@ function Layer(config) {
 	this.textSystem = undefined;
 	this.relationSystem = undefined;
 
-	if (config!== undefined && config.color !== undefined) {
-		this.color = config.color;
-	}
-
 	this.isopen = undefined;
 
-	if (config !== undefined && config.initStatus !== undefined) {
-
-		console.log("=====+++");
-		console.log(config.initStatus);
-
-		if (config.initStatus === "open") {
-			this.isOpen = true;
-		} else if (config.initStatus === "close") {
-			this.isOpen = false;
-		} else {
-			console.error("\"initStatus\" property do not support for " + config.initStatus + ", use \"open\" or \"close\" instead.");
-		}
-	}
+	this.loadBasicLayerConfig(config);
 
 }
 
 Layer.prototype = {
+
+	loadBasicLayerConfig: function(config) {
+
+		if (config !== undefined) {
+
+			if (config.initStatus !== undefined) {
+
+				if (config.initStatus === "open") {
+					this.isOpen = true;
+				} else if (config.initStatus === "close") {
+					this.isOpen = false;
+				} else {
+					console.error("\"initStatus\" property do not support for " + config.initStatus + ", use \"open\" or \"close\" instead.");
+				}
+
+			}
+
+			if (config.color !== undefined) {
+				this.color = config.color;
+			}
+
+			if (config.name !== undefined) {
+				this.name = config.name;
+			}
+
+		}
+
+	},
 
 	setNextLayer: function(layer) {
 		this.nextLayer = layer;

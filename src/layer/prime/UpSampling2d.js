@@ -23,16 +23,11 @@ function UpSampling2d(config) {
 	this.openFmCenters = [];
 	this.closeFmCenters = [];
 
-	if (config.shape !== undefined) {
-		this.isShapePredefined = true;
-		this.fmShape = config.shape;
-		this.width = config.shape[0];
-		this.height = config.shape[1];
-	} else {
-		this.isShapePredefined = false;
-	}
+	this.isShapePredefined = false;
 
 	this.aggregationStrategy = undefined;
+
+	this.loadLayerConfig(config);
 
 	this.layerType = "prime upSampling2d";
 
@@ -65,6 +60,29 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+
+			if (layerConfig.size !== undefined) {
+				this.size = layerConfig.size;
+				this.widthSize = layerConfig.size[0];
+				this.heightSize = layerConfig.size[1];
+			} else {
+				console.error("\"size\" property is required for UpSampling layer");
+			}
+
+			if (layerConfig.shape !== undefined) {
+				this.isShapePredefined = true;
+				this.fmShape = layerConfig.shape;
+				this.width = layerConfig.shape[0];
+				this.height = layerConfig.shape[1];
+			}
+
+		}
 
 	},
 

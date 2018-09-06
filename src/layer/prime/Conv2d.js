@@ -12,17 +12,26 @@ function Conv2d(config) {
 
 	console.log("construct prime Conv2d");
 
-	this.kernelSize = config.kernelSize;
-	this.filters = config.filters;
-	this.strides = config.strides;
+	this.kernelSize = undefined;
+	this.filters = undefined;
+	this.strides = undefined;
 	this.fmShape = undefined;
 	this.width = undefined;
 	this.height = undefined;
-	this.depth = config.filters;
+	this.depth = undefined;
 
 	this.fmCenters = [];
 	this.openFmCenters = [];
 	this.closeFmCenters = [];
+
+	this.isShapePredefined = false;
+
+	this.layerShape = undefined;
+	this.closeButton = undefined;
+
+	this.aggregationStrategy = undefined;
+
+	this.loadLayerConfig(config);
 
 	for (let i = 0; i < this.depth; i++) {
 		let center = {
@@ -34,22 +43,6 @@ function Conv2d(config) {
 	}
 
 	this.layerType = "prime conv2d";
-
-	if (config.shape !== undefined) {
-
-		this.isShapePredefined = true;
-		this.fmShape = config.shape;
-		this.width = this.fmShape[0];
-		this.height = this.fmShape[1];
-
-	} else {
-		this.isShapePredefined = false;
-	}
-
-	this.layerShape = undefined;
-	this.closeButton = undefined;
-
-	this.aggregationStrategy = undefined;
 
 }
 
@@ -76,6 +69,28 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		this.scene.add(this.neuralGroup);
+
+	},
+
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+
+			this.kernelSize = layerConfig.kernelSize;
+			this.filters = layerConfig.filters;
+			this.strides = layerConfig.strides;
+			this.depth = layerConfig.filters;
+
+			if (layerConfig.shape !== undefined) {
+
+				this.isShapePredefined = true;
+				this.fmShape = layerConfig.shape;
+				this.width = this.fmShape[0];
+				this.height = this.fmShape[1];
+
+			}
+
+		}
 
 	},
 
