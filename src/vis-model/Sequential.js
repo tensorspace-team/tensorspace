@@ -246,12 +246,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 		this.inputValue = input;
 
-		console.log(this.resource);
-		console.log("=======");
-
 		if (this.resource !== undefined) {
-
-			console.log("have resource...");
 
 			let inputShape = this.layers[0].shape;
 

@@ -69,20 +69,14 @@ TfLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
 		let predictResult;
 
-		console.log("++++");
-		console.log("predict in tensorflow loader");
-
 		if (this.outputsName !== undefined) {
-
-			console.log("predict with outputsName");
-			console.log(this.outputsName);
 
 			predictResult = this.model.resource.execute(predictTensor, this.outputsName);
 
-			console.log(predictResult);
-
 		} else {
+
 			predictResult = this.model.resource.predict(predictTensor);
+
 		}
 
 		return predictResult;

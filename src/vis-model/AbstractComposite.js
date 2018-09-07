@@ -33,14 +33,8 @@ AbstractComposite.prototype = Object.assign(Object.create( SceneInitializer.prot
 		} else {
 			console.error("Do not support to load model type " + config.type)
 		}
-	},
 
-	// loadFrozen: function(modelUrl, weightUrl, config) {
-	//
-	// 	let loader = new FrozenModelLoader(this);
-	// 	loader.preload(modelUrl, weightUrl, config);
-	//
-	// },
+	},
 
 	loadTfjsModel: function(config) {
 
@@ -50,16 +44,17 @@ AbstractComposite.prototype = Object.assign(Object.create( SceneInitializer.prot
 	},
 
 	loadKerasModel: function(config) {
+
 		let loader = new KerasLoader(this, config);
 		loader.preLoad();
+
 	},
 
 	loadTfModel: function(config) {
+
 		let loader = new TfLoader(this, config);
-
-		console.log(loader);
-
 		loader.preLoad();
+
 	},
 
 	setLoader: function(loader) {
