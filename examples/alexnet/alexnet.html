@@ -73,11 +73,11 @@
 		shape: [227, 227, 3]
 	}));
 	model.add(new VIS.layers.Conv2d({
-        shape: [55, 55],
-        filters: 96,
+		shape: [55, 55],
+		filters: 96,
 		kernelSize: 11,
-        strides: 4
-    }));
+		strides: 4
+	}));
 	model.add(new VIS.layers.Pooling2d({
         shape: [27, 27],
 		poolSize: [3, 3],
