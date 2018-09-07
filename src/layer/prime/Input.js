@@ -19,6 +19,8 @@ function Input(config) {
 	this.actualHeight = ModelInitWidth / this.width * this.height;
 	this.realVirtualRatio = this.actualWidth / this.width;
 
+	this.unitLength = this.actualWidth / this.width;
+
 	this.fmCenter = {
 		x: 0,
 		y: 0,

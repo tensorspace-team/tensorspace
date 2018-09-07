@@ -141,6 +141,8 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
 
+		this.unitLength = this.actualWidth / this.width;
+
 		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
 
 		this.leftMostCenter = this.openFmCenters[0];

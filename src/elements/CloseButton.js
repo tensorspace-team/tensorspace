@@ -1,8 +1,10 @@
 import { MinAlpha } from "../utils/Constant";
+import { CloseData } from "../assets/CloseData";
 
-function CloseButton(size, position, color) {
+function CloseButton(size, thickness, position, color) {
 
 	this.size = size;
+	this.thickness = thickness;
 
 	this.position = {
 		x: position.x,
@@ -21,21 +23,28 @@ function CloseButton(size, position, color) {
 CloseButton.prototype = {
 
 	init: function() {
-		let geometry = new THREE.SphereBufferGeometry( this.size, 32, 32 );
-		let material = new THREE.MeshBasicMaterial({
-			color: this.color,
-			opacity: MinAlpha,
-			transparent: true
-		});
 
-		let button = new THREE.Mesh(geometry, material);
+		let texture = new THREE.TextureLoader().load( CloseData );
 
-		button.position.set(this.position.x, this.position.y, this.position.z);
-		button.clickable = true;
-		button.hoverable = true;
-		button.elementType = "closeButton";
+		let materialSide = new THREE.MeshBasicMaterial( { color: this.color, opacity: MinAlpha, transparent: true } );
+		let materialTop = new THREE.MeshBasicMaterial( { color: this.color, alphaMap: texture, transparent: true } );
 
-		this.button = button;
+		let materials = [];
+
+		materials.push(materialSide);
+		materials.push(materialTop);
+		materials.push(materialTop);
+
+		let geometry = new THREE.CylinderBufferGeometry( this.size, this.size, 2 * this.thickness, 32 );
+		let cylinderButton = new THREE.Mesh( geometry, materials );
+
+		cylinderButton.position.set(this.position.x, this.position.y, this.position.z);
+		cylinderButton.clickable = true;
+		cylinderButton.hoverable = true;
+		cylinderButton.elementType = "closeButton";
+		cylinderButton.rotateY(- Math.PI / 2);
+
+		this.button = cylinderButton;
 	},
 
 	getElement: function() {

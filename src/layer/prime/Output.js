@@ -17,8 +17,6 @@ function Output(config) {
 	this.height = 1;
 	this.depth = 1;
 
-	this.unitLength = undefined;
-
 	this.loadLayerConfig(config);
 
 	this.leftMostCenter = {

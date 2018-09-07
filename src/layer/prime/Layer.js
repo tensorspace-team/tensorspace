@@ -48,6 +48,9 @@ function Layer(config) {
 	// actual depth for layer aggregation
 	this.actualDepth = undefined;
 
+	// actualWidth / width
+	this.unitLength = undefined;
+
 	// used to define close sphere size
 	this.openHeight = undefined;
 
@@ -124,7 +127,7 @@ Layer.prototype = {
 	initCloseButton: function() {
 
 		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.leftMostCenter, this.actualWidth);
-		let closeButtonHandler = new CloseButton(this.openHeight * CloseButtonRatio, closeButtonPos, this.color);
+		let closeButtonHandler = new CloseButton(this.openHeight * CloseButtonRatio, this.unitLength, closeButtonPos, this.color);
 		closeButtonHandler.setLayerIndex(this.layerIndex);
 
 		this.closeButtonHandler = closeButtonHandler;

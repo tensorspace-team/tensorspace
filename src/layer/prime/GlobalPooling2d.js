@@ -99,6 +99,8 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
 
+		this.unitLength = this.actualWidth / this.width;
+
 		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
 			let fmCenter = {};
 			fmCenter.x = this.lastLayer.openFmCenters[i].x;

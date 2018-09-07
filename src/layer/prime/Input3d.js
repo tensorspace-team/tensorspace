@@ -22,6 +22,8 @@ function Input3d(config) {
 	this.actualHeight = this.actualWidth / this.width * this.height;
 	this.realVirtualRatio = this.actualWidth / this.width;
 
+	this.unitLength =  this.actualWidth / this.width;
+
 	this.fmCenters = [];
 	this.closeFmCenters = [];
 	this.openFmCenters = fmCenterGenerator.getFmCenters("line", 3, this.actualWidth, this.actualHeight);

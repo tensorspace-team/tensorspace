@@ -13,6 +13,7 @@ function Dense(config) {
 	this.height = 1;
 	this.depth = 1;
 
+
 	// the default segment is 1
 	this.segments = 1;
 
@@ -170,6 +171,8 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
+
+		this.unitLength = this.actualWidth / this.width;
 
 		if (this.lastLayer.layerType === "dense") {
 			this.lastActualWidth = this.lastLayer.lastActualWidth;

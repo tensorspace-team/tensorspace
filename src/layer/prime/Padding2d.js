@@ -249,6 +249,8 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
 
+		this.unitLength = this.actualWidth / this.width;
+
 	},
 
 	updateValue: function() {
