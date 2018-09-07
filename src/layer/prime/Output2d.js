@@ -164,6 +164,6 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	}
 
-});
+});	
 
 export { Output2d };
