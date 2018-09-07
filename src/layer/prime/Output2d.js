@@ -1,9 +1,8 @@
-import { Layer } from './Layer';
-import { FeatureMap } from "../../elements/FeatureMap";
-import { colorUtils } from "../../utils/ColorUtils";
-import { ModelInitWidth } from "../../utils/Constant";
+import {Layer} from "./Layer";
+import {colorUtils} from "../../utils/ColorUtils";
+import {FeatureMap} from "../../elements/FeatureMap";
 
-function Input(config) {
+function Output2d(config) {
 
 	Layer.call(this, config);
 
@@ -13,13 +12,9 @@ function Input(config) {
 	this.depth = 1;
 	this.outputShape = undefined;
 
+	this.isShapePredefined = false;
+
 	this.loadLayerConfig(config);
-
-	this.actualWidth = ModelInitWidth;
-	this.actualHeight = ModelInitWidth / this.width * this.height;
-	this.realVirtualRatio = this.actualWidth / this.width;
-
-	this.unitLength = this.actualWidth / this.width;
 
 	this.fmCenter = {
 		x: 0,
@@ -27,11 +22,11 @@ function Input(config) {
 		z: 0
 	};
 
-	this.layerType = "input";
+	this.layerType = "output2d";
 
 }
 
-Input.prototype = Object.assign(Object.create(Layer.prototype), {
+Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -53,16 +48,41 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (layerConfig !== undefined) {
 
 			if (layerConfig.shape !== undefined) {
+
+				this.isShapePredefined = true;
 				this.shape = layerConfig.shape;
 				this.width = layerConfig.shape[0];
 				this.height = layerConfig.shape[1];
-				this.depth = layerConfig.shape[2];
 				this.outputShape = layerConfig.shape;
-			} else {
-				console.error("\"shape\" property is required for input layer");
+
 			}
 
 		}
+
+	},
+
+	loadModelConfig: function(modelConfig) {
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.input;
+		}
+
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+
+	},
+
+	assemble: function(layerIndex) {
+
+		this.layerIndex = layerIndex;
+
+		// TODO
+		// how to infer output size from last layer?
 
 	},
 
@@ -83,42 +103,27 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	loadModelConfig: function(modelConfig) {
-		if (this.color === undefined) {
-			this.color = modelConfig.color.input;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
-		}
-	},
-
-	assemble: function(layerIndex) {
-		console.log("Assemble input layer");
-
-		this.layerIndex = layerIndex;
-	},
-
 	updateValue: function(value) {
 
 		this.neuralValue = value;
 
-		let colors = colorUtils.getAdjustValues(value);
+		this.updateAggregationVis();
 
-		this.aggregationHandler.updateVis(colors);
 	},
 
-	clear: function() {
-		console.log("clear input data");
+	updateAggregationVis: function() {
 
-		this.aggregationHandler.clear();
+		let colors = colorUtils.getAdjustValues(this.neuralValue);
+
+		this.aggregationHandler.updateVis(colors);
+
 	},
 
 	handleHoverIn: function(hoveredElement) {
+
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.initLineGroup(hoveredElement);
+		}
 
 		if (this.textSystem !== undefined && this.textSystem) {
 			this.showText(hoveredElement);
@@ -127,6 +132,10 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	handleHoverOut: function() {
+
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.disposeLineGroup();
+		}
 
 		if (this.textSystem !== undefined && this.textSystem) {
 			this.hideText();
@@ -142,6 +151,7 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.textElementHandler = this.aggregationHandler;
 
 		}
+
 	},
 
 	hideText: function() {
@@ -156,4 +166,4 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 });
 
-export { Input };
+export { Output2d };

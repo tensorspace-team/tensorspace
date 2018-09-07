@@ -4,7 +4,7 @@ import { PixelSequential } from "./vis-model/PixelSequential";
 import { Conv2d } from "./layer/prime/Conv2d";
 import { Input } from "./layer/prime/Input";
 import { Input3d } from "./layer/prime/Input3d";
-import { Output } from "./layer/prime/Output";
+import { Output } from "./layer/prime/Output1d";
 import { Flatten } from "./layer/prime/Flatten";
 import { Pooling2d } from "./layer/prime/Pooling2d";
 import { Reshape } from "./layer/prime/Reshape";
@@ -12,6 +12,7 @@ import { Dense } from "./layer/prime/Dense";
 import { Padding2d } from "./layer/prime/Padding2d";
 import { UpSampling2d } from "./layer/prime/UpSampling2d";
 import { GlobalPooling2d } from "./layer/prime/GlobalPooling2d";
+import { Output2d } from "./layer/prime/Output2d";
 
 import { PixelConv2d } from "./layer/pixel/PixelConv2d";
 import { PixelPadding } from "./layer/pixel/PixelPadding2d";
@@ -34,6 +35,7 @@ let layers = {
 	Padding2d: Padding2d,
 	GlobalPooling2d: GlobalPooling2d,
 	UpSampling2d: UpSampling2d,
+	Output2d: Output2d,
 	PixelConv2d: PixelConv2d,
 	PixelPadding: PixelPadding,
 	PixelInput: PixelInput,
