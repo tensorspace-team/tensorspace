@@ -51,8 +51,12 @@
         strides: 1,
     }));
 
+    model.add(new VIS.layers.Dense({
+        units: 32
+    }));
+
     model.add(new VIS.layers.Reshape({
-        targetShape: [8, 8]
+        targetShape: [4, 4]
     }));
 
 //    model.add(new VIS.layers.GlobalPooling2d());
