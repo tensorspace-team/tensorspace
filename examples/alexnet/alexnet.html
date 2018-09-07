@@ -72,48 +72,52 @@
 	model.add(new VIS.layers.Input3d({
 		shape: [227, 227, 3]
 	}));
+	// shape: [55, 55]
 	model.add(new VIS.layers.Conv2d({
-		shape: [55, 55],
 		filters: 96,
 		kernelSize: 11,
 		strides: 4
 	}));
+	// shape: [27, 27]
 	model.add(new VIS.layers.Pooling2d({
-        shape: [27, 27],
 		poolSize: [3, 3],
 		strides: [2, 2]
     }));
+	// shape [27, 27]
 	model.add(new VIS.layers.Conv2d({
-        shape: [27, 27],
         filters: 256,
         kernelSize: 5,
-        strides: [1, 1]
+        strides: 1,
+        padding: "same"
     }));
+	// shape: [13, 13]
 	model.add(new VIS.layers.Pooling2d({
-        shape: [13, 13],
 		poolSize: [3, 3],
 		strides: [2, 2]
     }));
+	// shape [13, 13]
     model.add(new VIS.layers.Conv2d({
-        shape: [13, 13],
         filters: 384,
         kernelSize: 3,
-        strides: [1, 1]
+        strides: 1,
+        padding: "same"
     }));
+	// shape [13, 13]
     model.add(new VIS.layers.Conv2d({
-        shape: [13, 13],
         filters: 384,
 		kernelSize: 3,
-		strides: [1, 1]
+		strides: 1,
+		padding: "same"
     }));
+	// shape [13, 13]
     model.add(new VIS.layers.Conv2d({
-        shape: [13, 13],
         filters: 256,
 		kernelSize: 3,
-		strides: [1, 1]
+		strides: 1,
+        padding: "same"
     }));
+    // shape: [6, 6]
     model.add(new VIS.layers.Pooling2d({
-        shape: [6, 6],
 		poolSize: [3, 3],
 		strides: [2, 2]
     }));

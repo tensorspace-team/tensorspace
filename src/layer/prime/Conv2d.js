@@ -31,6 +31,8 @@ function Conv2d(config) {
 
 	this.aggregationStrategy = undefined;
 
+	this.padding = "valid";
+
 	this.loadLayerConfig(config);
 
 	for (let i = 0; i < this.depth; i++) {
@@ -87,6 +89,18 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 				this.fmShape = layerConfig.shape;
 				this.width = this.fmShape[0];
 				this.height = this.fmShape[1];
+
+			}
+
+			if (layerConfig.padding !== undefined) {
+
+				if (layerConfig.padding.toLowerCase() === "valid") {
+					this.padding = "valid";
+				} else if (layerConfig.padding.toLowerCase() === "same") {
+					this.padding = "same";
+				} else {
+					console.error("\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead.");
+				}
 
 			}
 
@@ -219,10 +233,26 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.isShapePredefined) {
 
 		} else {
+
 			this.inputShape = this.lastLayer.outputShape;
-			this.width = (this.inputShape[0] - this.kernelSize) / this.strides + 1;
-			this.height = (this.inputShape[1] - this.kernelSize) / this.strides + 1;
+
+			if (this.padding === "valid") {
+
+				this.width = (this.inputShape[0] - this.kernelSize) / this.strides + 1;
+				this.height = (this.inputShape[1] - this.kernelSize) / this.strides + 1;
+
+			} else if (this.padding === "same") {
+
+				this.width = Math.ceil(this.inputShape[0] / this.strides);
+				this.height = Math.ceil(this.inputShape[1] / this.strides);
+
+			} else {
+				console.error("Why padding property will be set to such value?");
+			}
+
 			this.fmShape = [this.width, this.height];
+
+
 		}
 
 		this.outputShape = [this.width, this.height, this.filters];

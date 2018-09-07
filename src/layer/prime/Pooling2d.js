@@ -24,6 +24,8 @@ function Pooling2d(config) {
 
 	this.aggregationStrategy = undefined;
 
+	this.padding = "valid";
+
 	this.loadLayerConfig(config);
 
 	this.layerType = "maxPool2d";
@@ -82,6 +84,19 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 				this.fmShape = layerConfig.shape;
 				this.width = this.fmShape[0];
 				this.height = this.fmShape[1];
+				this.outputShape = [this.width, this.height, this.depth];
+			}
+
+			if (layerConfig.padding !== undefined) {
+
+				if (layerConfig.padding.toLowerCase() === "valid") {
+					this.padding = "valid";
+				} else if (layerConfig.padding.toLowerCase() === "same") {
+					this.padding = "same";
+				} else {
+					console.error("\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead.");
+				}
+
 			}
 
 		}
@@ -210,8 +225,21 @@ Pooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		} else {
 			this.inputShape = this.lastLayer.outputShape;
-			this.width = (this.inputShape[0] - this.poolSize[0]) / this.strides[0] + 1;
-			this.height = (this.inputShape[1] - this.poolSize[1]) / this.strides[1] + 1;
+
+			if (this.padding === "valid") {
+
+				this.width = (this.inputShape[0] - this.poolSize[0]) / this.strides[0] + 1;
+				this.height = (this.inputShape[1] - this.poolSize[1]) / this.strides[1] + 1;
+
+			} else if (this.padding === "same") {
+
+				this.width = Math.ceil(this.inputShape[0] / this.strides[0]);
+				this.height = Math.ceil(this.inputShape[1] / this.strides[1]);
+
+			} else {
+				console.error("Why padding property will be set to such value?");
+			}
+
 			this.outputShape = [this.width, this.height, this.depth];
 		}
 

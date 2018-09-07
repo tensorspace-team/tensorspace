@@ -73,11 +73,12 @@
         shape: [416, 416, 3]
     }));
     // 0
+    //  shape: [416, 416]
     model.add(new VIS.layers.Conv2d({
-        shape: [416, 416],
 		kernelSize: 3,
 		filters: 16,
-		strides: 1
+		strides: 1,
+        padding: "same"
     }));
     // 1
     model.add(new VIS.layers.Pooling2d({
@@ -85,11 +86,12 @@
 		strides: [2, 2]
     }));
     // 2
+    // shape: [208, 208]
     model.add(new VIS.layers.Conv2d({
-		shape: [208, 208],
 		kernelSize: 3,
 		filters: 32,
-		strides: 1
+		strides: 1,
+        padding: "same"
     }));
     // 3
     model.add(new VIS.layers.Pooling2d({
@@ -97,11 +99,12 @@
 		strides: [2, 2]
     }));
     // 4
+    // shape: [104, 104]
     model.add(new VIS.layers.Conv2d({
-		shape: [104, 104],
 		kernelSize: 3,
 		filters: 64,
-		strides: 1
+		strides: 1,
+		padding: "same"
     }));
     // 5
     model.add(new VIS.layers.Pooling2d({
@@ -109,11 +112,12 @@
 		strides: [2, 2]
     }));
     // 6
+    // shape: [52, 52]
     model.add(new VIS.layers.Conv2d({
-		shape: [52, 52],
 		kernelSize: 3,
 		filters: 128,
-		strides: 1
+		strides: 1,
+		padding: "same"
     }));
     // 7
     model.add(new VIS.layers.Pooling2d({
@@ -121,11 +125,12 @@
 		strides: [2, 2]
     }));
     // 8
+    // shape: [26, 26]
     model.add(new VIS.layers.Conv2d({
-		shape: [26, 26],
 		kernelSize: 3,
 		filters: 256,
-		strides: 1
+		strides: 1,
+		padding: "same"
     }));
     // 9
     model.add(new VIS.layers.Pooling2d({
@@ -133,35 +138,39 @@
 		strides: [2, 2]
     }));
     // 10
+    // shape: [13, 13]
     model.add(new VIS.layers.Conv2d({
-		shape: [13, 13],
 		kernelSize: 3,
 		filters: 512,
-		strides: 1
+		strides: 1,
+		padding: "same"
     }));
     // 11
+    // shape: [13, 13]
     model.add(new VIS.layers.Pooling2d({
-        shape: [13, 13],
 		poolSize: [2, 2],
-		strides: [2, 2]
+		strides: [1, 1],
+		padding: "same"
     }));
     // 12
+    // shape: [13, 13]
     model.add(new VIS.layers.Conv2d({
-		shape: [13, 13],
 		kernelSize: 3,
 		filters: 1024,
-		strides: 1
+		strides: 1,
+		padding: "same"
     }));
     // 13
+    // shape: [13, 13]
     model.add(new VIS.layers.Conv2d({
-		shape: [13, 13],
 		kernelSize: 3,
 		filters: 512,
-		strides: 1
+		strides: 1,
+		padding: "same"
     }));
     // 14
+    // shape: [13, 13]
     model.add(new VIS.layers.Conv2d({
-		shape: [13, 13],
 		kernelSize: 1,
 		filters: 425,
 		strides: 1
