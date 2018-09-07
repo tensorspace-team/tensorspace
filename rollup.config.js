@@ -6,14 +6,14 @@ export default [
 
     {
 
-        input: 'src/vis.js',
+        input: 'src/tensorspace.js',
         output: [
 
             {
 
                 format: 'iife',
-                file: 'build/vis.js',
-                name: "VIS"
+                file: 'build/tensorspace.js',
+                name: "TSP"
 
             }
 

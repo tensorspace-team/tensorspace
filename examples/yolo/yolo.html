@@ -51,7 +51,7 @@
 <script src="../lib/tween.min.js"></script>
 <script src="../lib/TrackballControls.js"></script>
 <script src="../lib/tf.min.js"></script>
-<script src="../../build/vis.js"></script>
+<script src="../../build/tensorspace.js"></script>
 
 <script src="../../test/data/rgbData.js"></script>
 
@@ -59,7 +59,7 @@
 
 	let container = document.getElementById("container");
 
-	let model = new VIS.model.Sequential(container, {
+	let model = new TSP.model.Sequential(container, {
 		aggregationStrategy: "average",
 		layerShape: "square",
 		layerInitStatus: "close",
@@ -69,77 +69,77 @@
 		}
 	});
 
-    model.add(new VIS.layers.Input3d({
+    model.add(new TSP.layers.Input3d({
         shape: [416, 416, 3]
     }));
     // 0
     //  shape: [416, 416]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 3,
 		filters: 16,
 		strides: 1,
         padding: "same"
     }));
     // 1
-    model.add(new VIS.layers.Pooling2d({
+    model.add(new TSP.layers.Pooling2d({
         poolSize: [2, 2],
 		strides: [2, 2]
     }));
     // 2
     // shape: [208, 208]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 3,
 		filters: 32,
 		strides: 1,
         padding: "same"
     }));
     // 3
-    model.add(new VIS.layers.Pooling2d({
+    model.add(new TSP.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2]
     }));
     // 4
     // shape: [104, 104]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 3,
 		filters: 64,
 		strides: 1,
 		padding: "same"
     }));
     // 5
-    model.add(new VIS.layers.Pooling2d({
+    model.add(new TSP.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2]
     }));
     // 6
     // shape: [52, 52]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 3,
 		filters: 128,
 		strides: 1,
 		padding: "same"
     }));
     // 7
-    model.add(new VIS.layers.Pooling2d({
+    model.add(new TSP.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2]
     }));
     // 8
     // shape: [26, 26]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 3,
 		filters: 256,
 		strides: 1,
 		padding: "same"
     }));
     // 9
-    model.add(new VIS.layers.Pooling2d({
+    model.add(new TSP.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2]
     }));
     // 10
     // shape: [13, 13]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 3,
 		filters: 512,
 		strides: 1,
@@ -147,14 +147,14 @@
     }));
     // 11
     // shape: [13, 13]
-    model.add(new VIS.layers.Pooling2d({
+    model.add(new TSP.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [1, 1],
 		padding: "same"
     }));
     // 12
     // shape: [13, 13]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 3,
 		filters: 1024,
 		strides: 1,
@@ -162,7 +162,7 @@
     }));
     // 13
     // shape: [13, 13]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 3,
 		filters: 512,
 		strides: 1,
@@ -170,7 +170,7 @@
     }));
     // 14
     // shape: [13, 13]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 1,
 		filters: 425,
 		strides: 1

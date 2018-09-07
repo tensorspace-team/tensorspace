@@ -12,7 +12,7 @@
     <script src="../lib/tf.min.js"></script>
     <script src="../lib/signature_pad.min.js"></script>
 
-    <script src="../../build/vis.js"></script>
+    <script src="../../build/tensorspace.js"></script>
 
     <style>
 
@@ -117,7 +117,7 @@
 
 	let container = document.getElementById("container");
 
-	let model = new VIS.model.Sequential(container, {
+	let model = new TSP.model.Sequential(container, {
 		layerInitStatus: "close",
 		aggregationStrategy: "max",
         layerShape: "square",
@@ -131,14 +131,14 @@
         }
 	});
 
-	model.add(new VIS.layers.Input({
+	model.add(new TSP.layers.Input({
 		shape: [28, 28, 1],
 		padding: 1,
 		name: "initInput",
         color: 0x0000ff
 	}));
 
-	let convLayer = new VIS.layers.Conv2d({
+	let convLayer = new TSP.layers.Conv2d({
 		kernelSize: 5,
 		filters: 6,
 		strides: 1,
@@ -146,39 +146,39 @@
 //        initStatus: "open"
 	});
 	model.add(convLayer);
-//	model.add(new VIS.layers.Conv2d({
+//	model.add(new TSP.layers.Conv2d({
 //		kernelSize: 5,
 //		filters: 6,
 //		strides: 1,
 //		name: "conv2d1"
 //	}));
-	model.add(new VIS.layers.Pooling2d({
+	model.add(new TSP.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2],
 		name: "maxPool2d1"
 	}));
-	model.add(new VIS.layers.Conv2d({
+	model.add(new TSP.layers.Conv2d({
 		kernelSize: 5,
 		filters: 16,
 		strides: 1,
 		name: "conv2d2"
 	}));
-	model.add(new VIS.layers.Pooling2d({
+	model.add(new TSP.layers.Pooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2],
 		name: "maxPool2d2"
 	}));
 
-	let denseLayer = new VIS.layers.Dense({
+	let denseLayer = new TSP.layers.Dense({
 		units: 120,
 		name: "dense1"
 	});
 	model.add(denseLayer);
-	model.add(new VIS.layers.Dense({
+	model.add(new TSP.layers.Dense({
 		units: 84,
 		name: "dense2"
 	}));
-	model.add(new VIS.layers.Output({
+	model.add(new TSP.layers.Output({
 		units: 10,
 		outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
 		name: "output"

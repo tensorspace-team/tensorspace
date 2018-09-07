@@ -11,7 +11,7 @@
     <script src="../lib/TrackballControls.js"></script>
     <script src="../lib/tf.min.js"></script>
     <script src="../lib/signature_pad.min.js"></script>
-    <script src="../../build/vis.js"></script>
+    <script src="../../build/tensorspace.js"></script>
 
     <style>
 
@@ -116,45 +116,45 @@
 
 	let container = document.getElementById("container");
 
-	let model = new VIS.model.PixelSequential(container, {
+	let model = new TSP.model.PixelSequential(container, {
 
     });
 
-	model.add(new VIS.layers.PixelInput({
+	model.add(new TSP.layers.PixelInput({
 		shape: [28, 28, 1],
 		name: "initInput"
 	}));
-	model.add(new VIS.layers.PixelConv2d({
+	model.add(new TSP.layers.PixelConv2d({
 		kernelSize: 5,
 		filters: 6,
 		strides: 1,
 		name: "conv2d1"
 	}));
-	model.add(new VIS.layers.PixelPooling2d({
+	model.add(new TSP.layers.PixelPooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2],
 		name: "maxPool2d1"
 	}));
-	model.add(new VIS.layers.PixelConv2d({
+	model.add(new TSP.layers.PixelConv2d({
 		kernelSize: 5,
 		filters: 16,
 		strides: 1,
 		name: "conv2d2"
 	}));
-	model.add(new VIS.layers.PixelPooling2d({
+	model.add(new TSP.layers.PixelPooling2d({
 		poolSize: [2, 2],
 		strides: [2, 2],
 		name: "maxPool2d2"
 	}));
-	model.add(new VIS.layers.PixelDense({
+	model.add(new TSP.layers.PixelDense({
 		units: 120,
 		name: "dense1"
 	}));
-	model.add(new VIS.layers.PixelDense({
+	model.add(new TSP.layers.PixelDense({
 		units: 84,
 		name: "dense2"
 	}));
-	model.add(new VIS.layers.PixelOutput({
+	model.add(new TSP.layers.PixelOutput({
 		units: 10,
 		name: "output"
 	}));

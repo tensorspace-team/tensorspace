@@ -51,7 +51,7 @@
 <script src="../lib/tween.min.js"></script>
 <script src="../lib/TrackballControls.js"></script>
 <script src="../lib/tf.min.js"></script>
-<script src="../../build/vis.js"></script>
+<script src="../../build/tensorspace.js"></script>
 
 <script src="data/pikapika.js"></script>
 
@@ -59,7 +59,7 @@
 
 	let container = document.getElementById("container");
 
-	let model = new VIS.model.Sequential(container, {
+	let model = new TSP.model.Sequential(container, {
 		layerShape: "square",
 		layerInitStatus: "close",
 		color: {
@@ -69,65 +69,65 @@
 		}
 	});
 
-	model.add(new VIS.layers.Input3d({
+	model.add(new TSP.layers.Input3d({
 		shape: [227, 227, 3]
 	}));
 	// shape: [55, 55]
-	model.add(new VIS.layers.Conv2d({
+	model.add(new TSP.layers.Conv2d({
 		filters: 96,
 		kernelSize: 11,
 		strides: 4
 	}));
 	// shape: [27, 27]
-	model.add(new VIS.layers.Pooling2d({
+	model.add(new TSP.layers.Pooling2d({
 		poolSize: [3, 3],
 		strides: [2, 2]
     }));
 	// shape [27, 27]
-	model.add(new VIS.layers.Conv2d({
+	model.add(new TSP.layers.Conv2d({
         filters: 256,
         kernelSize: 5,
         strides: 1,
         padding: "same"
     }));
 	// shape: [13, 13]
-	model.add(new VIS.layers.Pooling2d({
+	model.add(new TSP.layers.Pooling2d({
 		poolSize: [3, 3],
 		strides: [2, 2]
     }));
 	// shape [13, 13]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
         filters: 384,
         kernelSize: 3,
         strides: 1,
         padding: "same"
     }));
 	// shape [13, 13]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
         filters: 384,
 		kernelSize: 3,
 		strides: 1,
 		padding: "same"
     }));
 	// shape [13, 13]
-    model.add(new VIS.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
         filters: 256,
 		kernelSize: 3,
 		strides: 1,
         padding: "same"
     }));
     // shape: [6, 6]
-    model.add(new VIS.layers.Pooling2d({
+    model.add(new TSP.layers.Pooling2d({
 		poolSize: [3, 3],
 		strides: [2, 2]
     }));
-    model.add(new VIS.layers.Dense({
+    model.add(new TSP.layers.Dense({
         units: 4096
     }));
-	model.add(new VIS.layers.Dense({
+	model.add(new TSP.layers.Dense({
 		units: 4096
 	}));
-	model.add(new VIS.layers.Dense({
+	model.add(new TSP.layers.Dense({
 		units: 1000
 	}));
 
