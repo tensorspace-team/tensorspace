@@ -198,8 +198,12 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 			for (let i = 0; i < model.layers.length; i++) {
 				let layerDepth = model.layers[i].depth;
 
-				maxDepthValue = maxDepthValue > layerDepth ? maxDepthValue : layerDepth;
-				depthList.push(layerDepth);
+				if (layerDepth !== undefined) {
+					maxDepthValue = maxDepthValue > layerDepth ? maxDepthValue : layerDepth;
+					depthList.push(layerDepth);
+				} else {
+					depthList.push(1);
+				}
 
 			}
 

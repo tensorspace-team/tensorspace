@@ -20,9 +20,6 @@ function Layer(config) {
 	this.outputShape = [];
 	this.neuralGroup = undefined;
 
-	// store the reference aggregationElement object
-	this.aggregationElement = undefined;
-
 	// output index to fit the layer
 	this.resourceOutputIndex = undefined;
 
@@ -31,9 +28,6 @@ function Layer(config) {
 
 	// store the reference for layer aggregation
 	this.aggregationHandler = undefined;
-
-	// store all layer segregation references as a list
-	this.segregationHandlers = [];
 
 	// store the reference for close button
 	this.closeButtonHandler = undefined;

@@ -50,14 +50,6 @@ DenseAggregation.prototype = {
 
 	setLayerIndex: function(layerIndex) {
 		this.cube.layerIndex = layerIndex;
-	},
-
-	clear: function() {
-
-	},
-
-	updateVis: function() {
-
 	}
 
 };

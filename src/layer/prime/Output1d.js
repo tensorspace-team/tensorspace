@@ -17,6 +17,8 @@ function Output(config) {
 	this.height = 1;
 	this.depth = 1;
 
+	this.segregationHandlers = [];
+
 	this.loadLayerConfig(config);
 
 	this.leftMostCenter = {
@@ -181,7 +183,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.actualWidth = this.width * this.realVirtualRatio;
 		this.actualHeight = this.height * this.realVirtualRatio;
 
-		if (this.lastLayer.layerType === "dense") {
+		if (this.lastLayer.layerDimension === 1) {
 			this.lastActualWidth = this.lastLayer.lastActualWidth;
 			this.lastActualHeight = this.lastLayer.lastActualHeight;
 		} else {

@@ -1,22 +1,17 @@
-import { Layer } from './abstract/Layer';
 import { NeuralQueue } from '../../elements/NeuralQueue';
 import { colorUtils } from '../../utils/ColorUtils';
 import { DenseAggregation } from "../../elements/DenseAggregation";
-import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
+import { Layer1d } from "./abstract/Layer1d";
 
 function Dense(config) {
 
-	Layer.call(this, config);
+	Layer1d.call(this, config);
 
 	this.units = undefined;
 	this.width = undefined;
-	this.height = 1;
-	this.depth = 1;
 
 	// the default segment is 1
 	this.segments = 1;
-
-	this.neuralQueue = undefined;
 
 	this.loadLayerConfig(config);
 
@@ -30,7 +25,7 @@ function Dense(config) {
 
 }
 
-Dense.prototype = Object.assign(Object.create(Layer.prototype), {
+Dense.prototype = Object.assign(Object.create(Layer1d.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -44,7 +39,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		if (this.isOpen) {
 
-			this.initSegregationElements();
+			this.initQueueElement();
 			this.initCloseButton();
 
 		} else {
@@ -64,6 +59,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 			if (layerConfig.units !== undefined) {
 				this.units = layerConfig.units;
 				this.width = layerConfig.units;
+				this.outputShape = [layerConfig.units];
 			} else {
 				console.error("The \"unit\" property is required for dense layer.");
 			}
@@ -75,41 +71,18 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	openLayer: function() {
+	initQueueElement: function() {
 
-		if (!this.isOpen) {
-
-			QueueTransitionFactory.openLayer(this);
-
-			this.isOpen = true;
-
-		}
-
-	},
-
-	closeLayer: function() {
-
-		if (this.isOpen) {
-
-			QueueTransitionFactory.closeLayer(this);
-
-			this.isOpen = false;
-		}
-
-	},
-
-	initSegregationElements: function() {
-
-		let segregationHandler = new NeuralQueue(
+		let queueHandler = new NeuralQueue(
 			this.width,
 			this.actualWidth,
-			this.actualHeight,
+			this.unitLength,
 			this.color
 		);
 
-		segregationHandler.setLayerIndex(this.layerIndex);
-		this.segregationHandlers.push(segregationHandler);
-		this.neuralGroup.add(segregationHandler.getElement());
+		queueHandler.setLayerIndex(this.layerIndex);
+		this.queueHandler = queueHandler;
+		this.neuralGroup.add(queueHandler.getElement());
 
 		if (this.neuralValue !== undefined) {
 			this.updateSegregationVis();
@@ -117,29 +90,13 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	disposeSegregationElements: function() {
-
-		console.log("dispose queue element");
-
-		this.neuralGroup.remove(this.segregationHandlers[0].getElement());
-		this.segregationHandlers = [];
-
-	},
-
 	initAggregationElement: function() {
 
-		let aggregationHandler = new DenseAggregation(this.lastActualWidth, this.lastActualHeight, this.actualHeight, this.color);
+		let aggregationHandler = new DenseAggregation(this.lastActualWidth, this.lastActualHeight, this.unitLength, this.color);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add(this.aggregationHandler.getElement());
-
-	},
-
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
 
 	},
 
@@ -165,15 +122,13 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		this.outputShape = [this.units, 1, 1];
-
 		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
 		this.actualWidth = this.width * this.realVirtualRatio;
-		this.actualHeight = this.height * this.realVirtualRatio;
 
 		this.unitLength = this.actualWidth / this.width;
 
-		if (this.lastLayer.layerType === "dense") {
+		if (this.lastLayer.layerDimension === 1) {
+
 			this.lastActualWidth = this.lastLayer.lastActualWidth;
 			this.lastActualHeight = this.lastLayer.lastActualHeight;
 		} else {
@@ -183,28 +138,6 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.openHeight = 100;
 
-	},
-
-	updateValue: function(value) {
-
-		this.neuralValue = value;
-
-		if (this.isOpen) {
-			this.updateSegregationVis();
-		} else {
-			this.updateAggregationVis();
-		}
-
-	},
-
-	updateAggregationVis: function() {
-
-	},
-
-	updateSegregationVis: function() {
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
-
-		this.segregationHandlers[0].updateVis(colors);
 	},
 
 	getRelativeElements: function(selectedElement) {
@@ -231,52 +164,17 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 	handleClick: function(clickedElement) {
 
 		if (clickedElement.elementType === "aggregationElement") {
-
 			this.openLayer();
 		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
 		}
 	},
 
-	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
-		}
-
-	},
-
-	handleHoverOut: function() {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.disposeLineGroup();
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.hideText();
-		}
-
-	},
-
 	showText: function(element) {
 
 		if (element.elementType === "featureLine") {
-			this.segregationHandlers[0].showText();
-			this.textElementHandler = this.segregationHandlers[0];
-		}
-
-	},
-
-	hideText: function() {
-
-		if (this.textElementHandler !== undefined) {
-
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
+			this.queueHandler.showText();
+			this.textElementHandler = this.queueHandler;
 		}
 
 	}

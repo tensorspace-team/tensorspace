@@ -52,6 +52,9 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 	init: function (center, actualDepth, nextHookHandler) {
 
 		this.center = center;
+
+		console.log(actualDepth);
+
 		this.actualDepth = actualDepth;
 		this.nextHookHandler = nextHookHandler;
 		this.lastHookHandler = this.lastLayer.nextHookHandler;

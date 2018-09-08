@@ -35,7 +35,7 @@ QueueTransitionTween.prototype = {
 			console.log("end open queue layer");
 
 			layer.neuralGroup.remove(variableLengthObject);
-			layer.initSegregationElements();
+			layer.initQueueElement();
 			layer.initCloseButton();
 			layer.isOpen = true;
 		});
@@ -65,7 +65,7 @@ QueueTransitionTween.prototype = {
 
 		}).onStart(function () {
 			console.log("start close queue layer");
-			layer.disposeSegregationElements();
+			layer.disposeQueueElement();
 			layer.neuralGroup.add(variableLengthObject);
 			layer.disposeCloseButton();
 		}).onComplete(function() {

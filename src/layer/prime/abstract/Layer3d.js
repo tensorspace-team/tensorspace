@@ -7,6 +7,11 @@ function Layer3d(config) {
 
 	Layer.call(this, config);
 
+	this.layerDimension = 3;
+
+	// store all layer segregation references as a list
+	this.segregationHandlers = [];
+
 }
 
 Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {

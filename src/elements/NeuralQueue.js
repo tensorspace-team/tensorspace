@@ -5,12 +5,12 @@ import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import {RenderPreprocessor} from "../utils/RenderPreprocessor";
 
-function NeuralQueue(length, actualWidth, actualHeight, color) {
+function NeuralQueue(length, actualWidth, unitLength, color) {
 
 	this.queueLength = length;
 	this.actualWidth = actualWidth;
-	this.actualHeight = actualHeight;
 	this.color = color;
+	this.unitLength = unitLength;
 
 	this.dataArray = undefined;
 	this.backDataArray = undefined;
@@ -19,8 +19,6 @@ function NeuralQueue(length, actualWidth, actualHeight, color) {
 	this.queue = undefined;
 
 	this.queueGroup = undefined;
-
-	this.unitLength = this.actualWidth / this.queueLength;
 
 	this.font = TextFont;
 	this.textSize = TextHelper.calcQueueTextSize(this.unitLength);
