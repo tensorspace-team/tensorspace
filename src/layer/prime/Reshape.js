@@ -115,6 +115,8 @@ Reshape.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		this.depth = this.totalSize / (this.width * this.height);
 
+		this.outputShape = [this.width, this.height, this.depth];
+
 		for (let i = 0; i < this.depth; i++) {
 			let closeFmCenter = {
 				x: 0,
