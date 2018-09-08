@@ -1,13 +1,12 @@
-import { Layer } from './Layer';
 import { PaddingMap } from '../../elements/PaddingMap';
 import { colorUtils } from '../../utils/ColorUtils';
 import { MapAggregation } from "../../elements/MapAggregation";
-import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import {MapDataGenerator} from "../../utils/MapDataGenerator";
+import { Layer2d } from "./abstract/Layer2d";
 
 function Padding2d(config) {
 
-	Layer.call(this, config);
+	Layer2d.call(this, config);
 
 	this.paddingWidth = undefined;
 	this.paddingHeight = undefined;
@@ -36,7 +35,7 @@ function Padding2d(config) {
 
 }
 
-Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
+Padding2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -118,32 +117,6 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	openLayer: function() {
-
-		console.log("open layer");
-
-		if (!this.isOpen) {
-
-			this.disposeAggregationElement();
-			this.initSegregationElements(this.closeFmCenters);
-			MapTransitionFactory.openLayer(this);
-
-		}
-
-	},
-
-	closeLayer: function() {
-
-		console.log("close layer");
-
-		if (this.isOpen) {
-
-			MapTransitionFactory.closeLayer(this);
-
-		}
-
-	},
-
 	initSegregationElements: function() {
 
 		for (let i = 0; i < this.openFmCenters.length; i++) {
@@ -173,16 +146,6 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	disposeSegregationElements: function() {
-
-		for (let i = 0; i < this.segregationHandlers.length; i++) {
-			this.neuralGroup.remove(this.segregationHandlers[i].getElement());
-		}
-
-		this.segregationHandlers = [];
-
-	},
-
 	initAggregationElement: function() {
 
 		let aggregationHandler = new MapAggregation(
@@ -201,13 +164,6 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.neuralValue !== undefined) {
 			this.updateAggregationVis();
 		}
-
-	},
-
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
 
 	},
 
@@ -250,28 +206,6 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.actualHeight = this.height * this.realVirtualRatio;
 
 		this.unitLength = this.actualWidth / this.width;
-
-	},
-
-	updateValue: function() {
-
-		this.neuralValue = this.lastLayer.neuralValue;
-
-		if (this.isOpen) {
-			this.updateSegregationVis();
-		} else {
-			this.updateAggregationVis();
-		}
-
-	},
-
-	updateAggregationVis: function() {
-
-		let aggregationUpdateValue = MapDataGenerator.generateChannelData(this.neuralValue, this.depth, this.aggregationStrategy);
-
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
-
-		this.aggregationHandler.updateVis(colors);
 
 	},
 
@@ -337,30 +271,6 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
-		}
-
-	},
-
-	handleHoverOut: function() {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.disposeLineGroup();
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.hideText();
-		}
-
-	},
-
 	showText: function(element) {
 
 		if (element.elementType === "paddingMap") {
@@ -369,16 +279,6 @@ Padding2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.segregationHandlers[fmIndex].showText();
 			this.textElementHandler = this.segregationHandlers[fmIndex];
 
-		}
-
-	},
-
-	hideText: function() {
-
-		if (this.textElementHandler !== undefined) {
-
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
 		}
 
 	}

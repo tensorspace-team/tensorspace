@@ -1,4 +1,4 @@
-import { Layer } from "./Layer";
+import { Layer } from "./abstract/Layer";
 import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
 import { InputMap3d } from "../../elements/InputMap3d";
 import { ChannelMap } from "../../elements/ChannelMap";

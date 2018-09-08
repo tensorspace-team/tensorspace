@@ -1,4 +1,4 @@
-import {Layer} from "./Layer";
+import {Layer} from "./abstract/Layer";
 
 function UpSampling1d(config) {
 

@@ -1,4 +1,4 @@
-import { Layer } from './Layer';
+import { Layer } from './abstract/Layer';
 import { NeuralQueue } from '../../elements/NeuralQueue';
 import { colorUtils } from '../../utils/ColorUtils';
 import { DenseAggregation } from "../../elements/DenseAggregation";

@@ -1,4 +1,4 @@
-import {Layer} from "./Layer";
+import {Layer} from "./abstract/Layer";
 
 function GlobalPooling1d(config) {
 

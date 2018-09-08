@@ -1,4 +1,4 @@
-import { Layer } from './Layer';
+import { Layer } from './abstract/Layer';
 import { colorUtils } from '../../utils/ColorUtils';
 import { DenseAggregation } from "../../elements/DenseAggregation";
 import { OutputUnit } from "../../elements/OutputUnit";

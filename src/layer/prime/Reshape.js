@@ -1,4 +1,4 @@
-import {Layer } from "./Layer";
+import {Layer } from "./abstract/Layer";
 import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
 import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import {FeatureMap} from "../../elements/FeatureMap";

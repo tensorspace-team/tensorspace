@@ -1,4 +1,4 @@
-import {Layer} from "./Layer";
+import {Layer} from "./abstract/Layer";
 import {colorUtils} from "../../utils/ColorUtils";
 import {FeatureMap} from "../../elements/FeatureMap";
 
@@ -164,6 +164,6 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	}
 
-});	
+});
 
 export { Output2d };

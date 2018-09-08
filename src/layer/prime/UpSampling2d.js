@@ -1,14 +1,14 @@
-import { Layer } from "./Layer";
-import {MapTransitionFactory} from "../../animation/MapTransitionTween";
 import {colorUtils} from "../../utils/ColorUtils";
 import {MapDataGenerator} from "../../utils/MapDataGenerator";
 import { FeatureMap } from "../../elements/FeatureMap";
 import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
 import {MapAggregation} from "../../elements/MapAggregation";
+import { Layer2d } from "./abstract/Layer2d";
+
 
 function UpSampling2d(config) {
 
-	Layer.call(this, config);
+	Layer2d.call(this, config);
 
 	console.log("construct upSampling layer");
 
@@ -33,7 +33,7 @@ function UpSampling2d(config) {
 
 }
 
-UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
+UpSampling2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -150,18 +150,6 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	updateValue: function(value) {
-
-		this.neuralValue = value;
-
-		if (this.isOpen) {
-			this.updateSegregationVis();
-		} else {
-			this.updateAggregationVis();
-		}
-
-	},
-
 	initAggregationElement: function() {
 
 		let aggregationHandler = new MapAggregation(
@@ -180,13 +168,6 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.neuralValue !== undefined) {
 			this.updateAggregationVis();
 		}
-
-	},
-
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
 
 	},
 
@@ -215,26 +196,6 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.neuralValue !== undefined) {
 			this.updateSegregationVis();
 		}
-
-	},
-
-	disposeSegregationElements: function() {
-
-		for (let i = 0; i < this.segregationHandlers.length; i++) {
-			this.neuralGroup.remove(this.segregationHandlers[i].getElement());
-		}
-
-		this.segregationHandlers = [];
-
-	},
-
-	updateAggregationVis: function() {
-
-		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
-
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
-
-		this.aggregationHandler.updateVis(colors);
 
 	},
 
@@ -303,25 +264,6 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
-		}
-
-	},
-
-	handleHoverOut: function() {
-
-		this.disposeLineGroup();
-		this.hideText();
-
-	},
-
 	showText: function(element) {
 
 		if (element.elementType === "featureMap") {
@@ -329,40 +271,6 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			let fmIndex = element.fmIndex;
 			this.segregationHandlers[fmIndex].showText();
 			this.textElementHandler = this.segregationHandlers[fmIndex];
-		}
-
-	},
-
-	hideText: function() {
-
-		if (this.textElementHandler !== undefined) {
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
-		}
-
-	},
-
-	openLayer: function() {
-
-		console.log("open layer");
-
-		if (!this.isOpen) {
-
-			this.disposeAggregationElement();
-			this.initSegregationElements(this.closeFmCenters);
-			MapTransitionFactory.openLayer(this);
-		}
-
-	},
-
-	closeLayer: function() {
-
-		console.log("close layer");
-
-		if (this.isOpen) {
-
-			MapTransitionFactory.closeLayer(this);
-
 		}
 
 	}

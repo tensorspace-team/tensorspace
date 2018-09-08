@@ -1,4 +1,4 @@
-import { Layer } from './Layer';
+import { Layer } from './abstract/Layer';
 import { FeatureMap } from "../../elements/FeatureMap";
 import { colorUtils } from "../../utils/ColorUtils";
 import { ModelInitWidth } from "../../utils/Constant";

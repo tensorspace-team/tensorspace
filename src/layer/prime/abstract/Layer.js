@@ -1,8 +1,8 @@
-import { CloseButtonHelper } from "../../utils/CloseButtonHelper";
-import { CloseButton } from "../../elements/CloseButton";
-import { CloseButtonRatio } from "../../utils/Constant";
-import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
-import { BasicMaterialOpacity } from "../../utils/Constant";
+import { CloseButtonHelper } from "../../../utils/CloseButtonHelper";
+import { CloseButton } from "../../../elements/CloseButton";
+import { CloseButtonRatio } from "../../../utils/Constant";
+import { LineGroupGeometry } from "../../../elements/LineGroupGeometry";
+import { BasicMaterialOpacity } from "../../../utils/Constant";
 
 function Layer(config) {
 	this.scene = undefined;
