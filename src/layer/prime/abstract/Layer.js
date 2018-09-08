@@ -76,7 +76,10 @@ function Layer(config) {
 	this.textSystem = undefined;
 	this.relationSystem = undefined;
 
-	this.isopen = undefined;
+	this.isOpen = undefined;
+
+	// actualWidth / width
+	this.unitLength = undefined;
 
 	this.loadBasicLayerConfig(config);
 
