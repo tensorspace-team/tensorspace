@@ -64,7 +64,7 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	loadModelConfig: function(modelConfig) {
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.input;
+			this.color = modelConfig.color.output2d;
 		}
 
 		if (this.relationSystem === undefined) {

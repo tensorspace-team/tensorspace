@@ -127,7 +127,7 @@ Flatten.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.dense;
+			this.color = modelConfig.color.flatten;
 		}
 
 		if (this.relationSystem === undefined) {

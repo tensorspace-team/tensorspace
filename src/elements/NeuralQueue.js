@@ -1,7 +1,7 @@
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
-import { TextFont } from "../fonts/TextFont";
+import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import {RenderPreprocessor} from "../utils/RenderPreprocessor";
 

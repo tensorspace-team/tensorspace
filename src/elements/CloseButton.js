@@ -1,5 +1,5 @@
 import { MinAlpha } from "../utils/Constant";
-import { CloseData } from "../assets/CloseData";
+import { CloseData } from "../assets/image/CloseData";
 
 function CloseButton(size, thickness, position, color) {
 

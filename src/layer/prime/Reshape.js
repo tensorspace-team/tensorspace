@@ -82,7 +82,7 @@ Reshape.prototype = Object.assign(Object.create(Layer2d.prototype), {
 		}
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.pooling2d;
+			this.color = modelConfig.color.reshape;
 		}
 
 		if (this.layerShape === undefined) {

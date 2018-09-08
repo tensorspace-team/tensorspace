@@ -85,7 +85,7 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	loadModelConfig: function(modelConfig) {
 		if (this.color === undefined) {
-			this.color = modelConfig.color.input;
+			this.color = modelConfig.color.input2d;
 		}
 
 		if (this.relationSystem === undefined) {

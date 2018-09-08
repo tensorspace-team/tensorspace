@@ -1,7 +1,7 @@
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
 import { TextHelper } from "../utils/TextHelper";
-import {TextFont} from "../fonts/TextFont";
+import {TextFont} from "../assets/fonts/TextFont";
 import {RenderPreprocessor} from "../utils/RenderPreprocessor";
 
 function ChannelMap(width, height, actualWidth, actualHeight, actualDepth, center, color, type) {
