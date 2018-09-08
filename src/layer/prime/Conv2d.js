@@ -1,13 +1,13 @@
 import { FeatureMap } from '../../elements/FeatureMap';
 import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { MapAggregation } from "../../elements/MapAggregation";
-import { Layer2d } from "./abstract/Layer2d";
+import { Layer3d } from "./abstract/Layer3d";
 import { MapDataGenerator } from "../../utils/MapDataGenerator";
 import { colorUtils } from "../../utils/ColorUtils";
 
 function Conv2d(config) {
 
-	Layer2d.call(this, config);
+	Layer3d.call(this, config);
 
 	console.log("construct prime Conv2d");
 
@@ -47,7 +47,7 @@ function Conv2d(config) {
 
 }
 
-Conv2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
+Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	init: function (center, actualDepth, nextHookHandler) {
 

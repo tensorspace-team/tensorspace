@@ -2,11 +2,11 @@ import { PaddingMap } from '../../elements/PaddingMap';
 import { colorUtils } from '../../utils/ColorUtils';
 import { MapAggregation } from "../../elements/MapAggregation";
 import {MapDataGenerator} from "../../utils/MapDataGenerator";
-import { Layer2d } from "./abstract/Layer2d";
+import { Layer3d } from "./abstract/Layer3d";
 
 function Padding2d(config) {
 
-	Layer2d.call(this, config);
+	Layer3d.call(this, config);
 
 	this.paddingWidth = undefined;
 	this.paddingHeight = undefined;
@@ -35,7 +35,7 @@ function Padding2d(config) {
 
 }
 
-Padding2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
+Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 

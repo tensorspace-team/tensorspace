@@ -1,12 +1,12 @@
-import {Layer} from "./abstract/Layer";
+import { Layer2d } from "./abstract/Layer2d";
 
 function GlobalPooling1d(config) {
 
-	Layer.call(this, config);
+	Layer2d.call(this, config);
 
 }
 
-GlobalPooling1d.prototype = Object.assign(Object.create(Layer.prototype), {
+GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 });
 

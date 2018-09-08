@@ -1,12 +1,12 @@
 import { FeatureMap } from '../../elements/FeatureMap';
 import { MapAggregation } from "../../elements/MapAggregation";
-import { Layer2d } from "./abstract/Layer2d";
+import { Layer3d } from "./abstract/Layer3d";
 import { MapDataGenerator } from "../../utils/MapDataGenerator";
 import { colorUtils } from "../../utils/ColorUtils";
 
 function Pooling2d(config) {
 
-	Layer2d.call(this, config);
+	Layer3d.call(this, config);
 
 	this.inputShape = undefined;
 	this.width = undefined;
@@ -31,7 +31,7 @@ function Pooling2d(config) {
 
 }
 
-Pooling2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
+Pooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 

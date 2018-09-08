@@ -1,28 +1,35 @@
-import {MapDataGenerator} from "../../utils/MapDataGenerator";
-import {colorUtils} from "../../utils/ColorUtils";
+import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
+import {FeatureMap} from "../../elements/FeatureMap";
 import {MapAggregation} from "../../elements/MapAggregation";
-import { GlobalPoolingElement } from "../../elements/GlobalPoolingElement";
+import {colorUtils} from "../../utils/ColorUtils";
+import {MapDataGenerator} from "../../utils/MapDataGenerator";
 import { Layer3d } from "./abstract/Layer3d";
 
-function GlobalPooling2d(config) {
+function Reshape2d(config) {
 
 	Layer3d.call(this, config);
 
-	this.width = 1;
-	this.height = 1;
+	this.targetShape = undefined;
+	this.width = undefined;
+	this.height = undefined;
 	this.depth = undefined;
+
+	// set init size to be 1
+	this.totalSize = 1;
+	this.inputShape = undefined;
 
 	this.fmCenters = [];
 	this.openFmCenters = [];
 	this.closeFmCenters = [];
-
 	this.aggregationStrategy = undefined;
 
-	this.layerType = "globalPooling2d";
+	this.loadLayerConfig(config);
+
+	this.layerType = "reshape";
 
 }
 
-GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
+Reshape2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -52,6 +59,22 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	},
 
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+
+			if (layerConfig.targetShape !== undefined) {
+				this.targetShape = layerConfig.targetShape;
+				this.width = layerConfig.targetShape[0];
+				this.height = layerConfig.targetShape[1];
+			} else {
+				console.error("\"targetShape\" property is required for reshape layer");
+			}
+
+		}
+
+	},
+
 	loadModelConfig: function(modelConfig) {
 
 		if (this.isOpen === undefined) {
@@ -59,7 +82,11 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 		}
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.globalPooling2d;
+			this.color = modelConfig.color.reshape;
+		}
+
+		if (this.layerShape === undefined) {
+			this.layerShape = modelConfig.layerShape;
 		}
 
 		if (this.relationSystem === undefined) {
@@ -80,17 +107,23 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		this.depth = this.lastLayer.depth;
+		this.inputShape = this.lastLayer.outputShape;
+
+		for (let i = 0; i < this.inputShape.length; i++) {
+			this.totalSize *= this.inputShape[i];
+		}
+
+		this.depth = this.totalSize / (this.width * this.height);
+
+		this.outputShape = [this.width, this.height, this.depth];
 
 		for (let i = 0; i < this.depth; i++) {
-
-			let center = {
+			let closeFmCenter = {
 				x: 0,
 				y: 0,
 				z: 0
 			};
-			this.closeFmCenters.push(center);
-
+			this.closeFmCenters.push(closeFmCenter);
 		}
 
 		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
@@ -99,16 +132,9 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.unitLength = this.actualWidth / this.width;
 
-		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
-			let fmCenter = {};
-			fmCenter.x = this.lastLayer.openFmCenters[i].x;
-			fmCenter.y = this.lastLayer.openFmCenters[i].y;
-			fmCenter.z = this.lastLayer.openFmCenters[i].z;
-			this.openFmCenters.push(fmCenter);
-		}
+		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
 
 		this.leftMostCenter = this.openFmCenters[0];
-		// layer total height in z-axis
 		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
 
 	},
@@ -131,15 +157,17 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 		if (this.neuralValue !== undefined) {
 			this.updateAggregationVis();
 		}
-
 	},
 
 	initSegregationElements: function(centers) {
 
 		for (let i = 0; i < this.depth; i++) {
 
-			let segregationHandler = new GlobalPoolingElement(
+			let segregationHandler = new FeatureMap(
+				this.width,
+				this.height,
 				this.actualWidth,
+				this.actualHeight,
 				centers[i],
 				this.color
 			);
@@ -159,23 +187,28 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	},
 
-	handleClick: function(clickedElement) {
-		if (clickedElement.elementType === "aggregationElement") {
-			this.openLayer();
-		} else if (clickedElement.elementType === "closeButton") {
-			this.closeLayer();
+	updateSegregationVis: function() {
+
+		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+
+		let colors = colorUtils.getAdjustValues(layerOutputValues);
+
+		let featureMapSize = this.width * this.height;
+
+		for (let i = 0; i < this.depth; i++) {
+
+			this.segregationHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+
 		}
 
 	},
 
-	showText: function(element) {
+	handleClick: function(clickedElement) {
 
-		if (element.elementType === "globalPoolingElement") {
-
-			let fmIndex = element.fmIndex;
-			this.segregationHandlers[fmIndex].showText();
-			this.textElementHandler = this.segregationHandlers[fmIndex];
-
+		if (clickedElement.elementType === "aggregationElement") {
+			this.openLayer();
+		} else if (clickedElement.elementType === "closeButton") {
+			this.closeLayer();
 		}
 
 	},
@@ -200,14 +233,9 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		} else if (selectedElement.elementType === "featureMap") {
 
-			if (this.lastLayer.isOpen) {
+			// as reshape layer's feature map number is different with last layer, so if last layer is opened, will not show relation lines
 
-				let relativeElement = this.lastLayer.segregationHandlers[
-					selectedElement.fmIndex
-					].getElement();
-				relativeElements.push(relativeElement);
-
-			} else {
+			if (!this.lastLayer.isOpen) {
 
 				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
 
@@ -217,22 +245,20 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		return relativeElements;
 
+
 	},
 
-	updateSegregationVis: function() {
-		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+	showText: function(element) {
 
-		let colors = colorUtils.getAdjustValues(layerOutputValues);
+		if (element.elementType === "featureMap") {
 
-		let featureMapSize = this.width * this.height;
-
-		for (let i = 0; i < this.depth; i++) {
-
-			this.segregationHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
-
+			let fmIndex = element.fmIndex;
+			this.segregationHandlers[fmIndex].showText();
+			this.textElementHandler = this.segregationHandlers[fmIndex];
 		}
+
 	}
 
 });
 
-export { GlobalPooling2d }
+export { Reshape2d };

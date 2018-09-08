@@ -1,12 +1,12 @@
-import {Layer} from "./abstract/Layer";
+import { Layer2d } from "./abstract/Layer2d";
 
 function Padding1d(config) {
 
-	Layer.call(this, config);
+	Layer2d.call(this, config);
 
 }
 
-Padding1d.prototype = Object.assign(Object.create(Layer.prototype), {
+Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 });
 
