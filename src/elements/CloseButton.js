@@ -1,10 +1,11 @@
 import { MinAlpha } from "../utils/Constant";
-import { CloseData } from "../assets/CloseData";
+import { CloseData } from "../assets/image/CloseData";
 
-function CloseButton(size, thickness, position, color) {
+function CloseButton(size, unitLength, position, color) {
 
 	this.size = size;
-	this.thickness = thickness;
+	this.thickness = 2 * unitLength;
+	this.unitLength = unitLength;
 
 	this.position = {
 		x: position.x,
@@ -35,7 +36,9 @@ CloseButton.prototype = {
 		materials.push(materialTop);
 		materials.push(materialTop);
 
-		let geometry = new THREE.CylinderBufferGeometry( this.size, this.size, 2 * this.thickness, 32 );
+		let cylinderRadius = this.size < 10 ? 2 * this.unitLength : this.size;
+
+		let geometry = new THREE.CylinderBufferGeometry( cylinderRadius, cylinderRadius, this.thickness, 32 );
 		let cylinderButton = new THREE.Mesh( geometry, materials );
 
 		cylinderButton.position.set(this.position.x, this.position.y, this.position.z);

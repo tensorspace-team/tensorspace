@@ -1,14 +1,13 @@
-import { Layer } from './Layer';
 import { FeatureMap } from '../../elements/FeatureMap';
-import { colorUtils } from '../../utils/ColorUtils';
 import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
-import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { MapAggregation } from "../../elements/MapAggregation";
-import {MapDataGenerator} from "../../utils/MapDataGenerator";
+import { Layer2d } from "./abstract/Layer2d";
+import { MapDataGenerator } from "../../utils/MapDataGenerator";
+import { colorUtils } from "../../utils/ColorUtils";
 
 function Conv2d(config) {
 
-	Layer.call(this, config);
+	Layer2d.call(this, config);
 
 	console.log("construct prime Conv2d");
 
@@ -48,7 +47,7 @@ function Conv2d(config) {
 
 }
 
-Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
+Conv2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	init: function (center, actualDepth, nextHookHandler) {
 
@@ -108,33 +107,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	openLayer: function () {
-
-		console.log("open layer");
-
-		if (!this.isOpen) {
-
-			this.disposeAggregationElement();
-			this.initSegregationElements(this.closeFmCenters);
-			MapTransitionFactory.openLayer(this);
-
-		}
-
-
-	},
-
-	closeLayer: function () {
-
-		console.log("close layer");
-
-		if (this.isOpen) {
-
-			MapTransitionFactory.closeLayer(this);
-
-		}
-
-	},
-
 	initSegregationElements: function (centers) {
 
 		for (let i = 0; i < this.filters; i++) {
@@ -158,17 +130,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	disposeSegregationElements: function () {
-
-		for (let i = 0; i < this.segregationHandlers.length; i++) {
-			let segregationHandler = this.segregationHandlers[i];
-			this.neuralGroup.remove(segregationHandler.getElement());
-		}
-
-		this.segregationHandlers = [];
-
-	},
-
 	initAggregationElement: function () {
 
 		let aggregationHandler = new MapAggregation(
@@ -187,13 +148,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.neuralValue !== undefined) {
 			this.updateAggregationVis();
 		}
-
-	},
-
-	disposeAggregationElement: function () {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
 
 	},
 
@@ -269,27 +223,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	updateValue: function (value) {
-
-		this.neuralValue = value;
-
-		if (this.isOpen) {
-			this.updateSegregationVis();
-		} else {
-			this.updateAggregationVis();
-		}
-	},
-
-	updateAggregationVis: function() {
-
-		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
-
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
-
-		this.aggregationHandler.updateVis(colors);
-
-	},
-
 	updateSegregationVis: function() {
 
 		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
@@ -328,7 +261,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
-
 		return relativeElements;
 
 	},
@@ -343,30 +275,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
-		}
-
-	},
-
-	handleHoverOut: function() {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.disposeLineGroup();
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.hideText();
-		}
-
-	},
-
 	showText: function(element) {
 		if (element.elementType === "featureMap") {
 
@@ -375,16 +283,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.textElementHandler = this.segregationHandlers[fmIndex];
 
 		}
-	},
-
-	hideText: function() {
-
-		if (this.textElementHandler !== undefined) {
-
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
-		}
-
 	}
 
 });

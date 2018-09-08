@@ -1,4 +1,4 @@
-import { Layer } from "./Layer";
+import { Layer } from "./abstract/Layer";
 import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
 import { InputMap3d } from "../../elements/InputMap3d";
 import { ChannelMap } from "../../elements/ChannelMap";
@@ -90,7 +90,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	loadModelConfig: function(modelConfig) {
 		if (this.color === undefined) {
-			this.color = modelConfig.color.input;
+			this.color = modelConfig.color.input3d;
 		}
 
 		if (this.relationSystem === undefined) {

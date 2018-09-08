@@ -1,14 +1,12 @@
-import {Layer} from "./Layer";
-import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import {MapDataGenerator} from "../../utils/MapDataGenerator";
 import {colorUtils} from "../../utils/ColorUtils";
-import {FeatureMap} from "../../elements/FeatureMap";
 import {MapAggregation} from "../../elements/MapAggregation";
 import { GlobalPoolingElement } from "../../elements/GlobalPoolingElement";
+import { Layer2d } from "./abstract/Layer2d";
 
 function GlobalPooling2d(config) {
 
-	Layer.call(this, config);
+	Layer2d.call(this, config);
 
 	this.width = 1;
 	this.height = 1;
@@ -24,7 +22,7 @@ function GlobalPooling2d(config) {
 
 }
 
-GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
+GlobalPooling2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -61,7 +59,7 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.pooling2d;
+			this.color = modelConfig.color.globalPooling2d;
 		}
 
 		if (this.relationSystem === undefined) {
@@ -115,33 +113,6 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	openLayer: function() {
-
-		console.log("open layer");
-
-		if (!this.isOpen) {
-
-			this.disposeAggregationElement();
-			this.initSegregationElements(this.closeFmCenters);
-			MapTransitionFactory.openLayer(this);
-
-		}
-
-
-	},
-
-	closeLayer: function() {
-
-		console.log("close layer");
-
-		if (this.isOpen) {
-
-			MapTransitionFactory.closeLayer(this);
-
-		}
-
-	},
-
 	initAggregationElement: function() {
 
 		let aggregationHandler = new MapAggregation(
@@ -160,13 +131,6 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.neuralValue !== undefined) {
 			this.updateAggregationVis();
 		}
-
-	},
-
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
 
 	},
 
@@ -195,42 +159,12 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	disposeSegregationElements: function() {
-
-		for (let i = 0; i < this.segregationHandlers.length; i++) {
-			this.neuralGroup.remove(this.segregationHandlers[i].getElement());
-		}
-
-		this.segregationHandlers = [];
-
-	},
-
 	handleClick: function(clickedElement) {
 		if (clickedElement.elementType === "aggregationElement") {
 			this.openLayer();
 		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
 		}
-
-	},
-
-	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-
-			this.showText(hoveredElement);
-		}
-
-	},
-
-	handleHoverOut: function() {
-
-		this.disposeLineGroup();
-		this.hideText();
 
 	},
 
@@ -242,16 +176,6 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.segregationHandlers[fmIndex].showText();
 			this.textElementHandler = this.segregationHandlers[fmIndex];
 
-		}
-
-	},
-
-	hideText: function() {
-
-		if (this.textElementHandler !== undefined) {
-
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
 		}
 
 	},
@@ -292,26 +216,6 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		return relativeElements;
-
-	},
-
-	updateValue: function(value) {
-		this.neuralValue = value;
-
-		if (this.isOpen) {
-			this.updateSegregationVis();
-		} else {
-			this.updateAggregationVis();
-		}
-	},
-
-	updateAggregationVis: function() {
-
-		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
-
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
-
-		this.aggregationHandler.updateVis(colors);
 
 	},
 

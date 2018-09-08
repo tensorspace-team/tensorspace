@@ -41,23 +41,29 @@
 		layerInitStatus: "close"
     });
 
-    model.add(new TSP.layers.Input({
-        shape: [28, 28, 1]
+//    model.add(new TSP.layers.Input({
+//        shape: [28, 28, 1]
+//    }));
+
+    model.add(new TSP.layers.Input1d({
+        shape: [20]
     }));
 
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 5,
-        filters: 6,
-        strides: 1,
-    }));
+//    model.add(new TSP.layers.Conv2d({
+//        kernelSize: 5,
+//        filters: 6,
+//        strides: 1,
+//    }));
 
     model.add(new TSP.layers.Dense({
         units: 32
     }));
 
-    model.add(new TSP.layers.Reshape({
-        targetShape: [4, 4]
-    }));
+//    model.add(new TSP.layers.Reshape({
+//        targetShape: [4, 4]
+//    }));
+//
+//    model.add(new TSP.layers.Flatten());
 
 //    model.add(new TSP.layers.GlobalPooling2d());
 //    model.add(new TSP.layers.UpSampling2d({

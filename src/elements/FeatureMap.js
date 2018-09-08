@@ -2,7 +2,7 @@ import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
 import { TextHelper } from "../utils/TextHelper";
-import { TextFont } from "../fonts/TextFont";
+import { TextFont } from "../assets/fonts/TextFont";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
 function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color) {

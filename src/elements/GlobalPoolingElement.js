@@ -1,4 +1,4 @@
-import { TextFont } from "../fonts/TextFont";
+import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import { MinAlpha } from "../utils/Constant";
 import { FrameColor } from "../utils/Constant";

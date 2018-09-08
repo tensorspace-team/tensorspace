@@ -1,4 +1,4 @@
-import { Layer } from './Layer';
+import { Layer } from './abstract/Layer';
 import { colorUtils } from '../../utils/ColorUtils';
 import { DenseAggregation } from "../../elements/DenseAggregation";
 import { OutputUnit } from "../../elements/OutputUnit";
@@ -158,7 +158,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.dense;
+			this.color = modelConfig.color.output1d;
 		}
 
 		if (this.relationSystem === undefined) {

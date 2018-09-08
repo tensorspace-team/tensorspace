@@ -1,20 +1,25 @@
 import {Layer} from "./abstract/Layer";
+import { ModelInitWidth } from "../../utils/Constant";
 import {colorUtils} from "../../utils/ColorUtils";
-import {FeatureMap} from "../../elements/FeatureMap";
+import {NeuralQueue} from "../../elements/NeuralQueue";
 
-function Output2d(config) {
+function Input1d(config) {
 
 	Layer.call(this, config);
 
 	this.shape = undefined;
 	this.width = undefined;
-	this.height = undefined;
+	this.height = 1;
 	this.depth = 1;
 	this.outputShape = undefined;
 
-	this.isShapePredefined = false;
-
 	this.loadLayerConfig(config);
+
+	this.actualWidth = ModelInitWidth;
+	this.actualHeight = ModelInitWidth / this.width * this.height;
+	this.realVirtualRatio = this.actualWidth / this.width;
+
+	this.unitLength = this.actualWidth / this.width;
 
 	this.fmCenter = {
 		x: 0,
@@ -22,11 +27,11 @@ function Output2d(config) {
 		z: 0
 	};
 
-	this.layerType = "output2d";
+	this.layerType = "input1d";
 
 }
 
-Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
+Input1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -49,14 +54,14 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 			if (layerConfig.shape !== undefined) {
 
-				this.isShapePredefined = true;
 				this.shape = layerConfig.shape;
 				this.width = layerConfig.shape[0];
-				this.height = layerConfig.shape[1];
 				this.outputShape = layerConfig.shape;
 
 			}
 
+		} else {
+			console.error("\"shape\" is required for input1d layer.");
 		}
 
 	},
@@ -64,7 +69,7 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	loadModelConfig: function(modelConfig) {
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.output2d;
+			this.color = modelConfig.color.input1d;
 		}
 
 		if (this.relationSystem === undefined) {
@@ -81,25 +86,27 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		// TODO
-		// how to infer output size from last layer?
+		console.log("put first input1d layer into model.");
 
 	},
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new FeatureMap(
+		let aggregationHandler = new NeuralQueue(
 			this.width,
-			this.height,
 			this.actualWidth,
 			this.actualHeight,
-			this.fmCenter,
 			this.color
 		);
+
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add(aggregationHandler.getElement());
+
+		if (this.neuralValue !== undefined) {
+			this.updateAggregationVis();
+		}
 
 	},
 
@@ -107,23 +114,13 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.neuralValue = value;
 
-		this.updateAggregationVis();
-
-	},
-
-	updateAggregationVis: function() {
-
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
+		let colors = colorUtils.getAdjustValues(value);
 
 		this.aggregationHandler.updateVis(colors);
 
 	},
 
 	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
 
 		if (this.textSystem !== undefined && this.textSystem) {
 			this.showText(hoveredElement);
@@ -133,10 +130,6 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	handleHoverOut: function() {
 
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.disposeLineGroup();
-		}
-
 		if (this.textSystem !== undefined && this.textSystem) {
 			this.hideText();
 		}
@@ -145,11 +138,9 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	showText: function(element) {
 
-		if (element.elementType === "featureMap") {
-
+		if (element.elementType === "featureLine") {
 			this.aggregationHandler.showText();
 			this.textElementHandler = this.aggregationHandler;
-
 		}
 
 	},
@@ -166,4 +157,4 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 });
 
-export { Output2d };
+export { Input1d };

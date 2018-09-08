@@ -1,6 +1,6 @@
 import { MinAlpha } from "../utils/Constant";
 import { colorUtils } from "../utils/ColorUtils";
-import { TextFont } from "../fonts/TextFont";
+import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 
 function OutputUnit(cubeSize, textSize, output, initPositions, color) {

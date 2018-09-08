@@ -1,4 +1,4 @@
-import {Layer} from "./Layer";
+import {Layer} from "./abstract/Layer";
 
 function Pooling1d(config) {
 
@@ -7,6 +7,8 @@ function Pooling1d(config) {
 }
 
 Pooling1d.prototype = Object.assign(Object.create(Layer.prototype), {
+
+
 
 });
 

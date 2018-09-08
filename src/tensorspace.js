@@ -3,7 +3,8 @@ import { PixelSequential } from "./vis-model/PixelSequential";
 
 import { Conv1d } from "./layer/prime/Conv1d";
 import { Conv2d } from "./layer/prime/Conv2d";
-import { Input } from "./layer/prime/Input";
+import { Input1d } from "./layer/prime/Input1d";
+import { Input2d } from "./layer/prime/Input2d";
 import { Input3d } from "./layer/prime/Input3d";
 import { Output } from "./layer/prime/Output1d";
 import { Output2d } from "./layer/prime/Output2d";
@@ -29,7 +30,8 @@ import { PixelReshape } from "./layer/pixel/PixelReshape";
 import { PixelOutput } from "./layer/pixel/PixelOutput";
 
 let layers = {
-	Input: Input,
+	Input1d: Input1d,
+	Input2d: Input2d,
 	Input3d: Input3d,
 	Output: Output,
 	Output2d: Output2d,

@@ -1,14 +1,13 @@
-import {Layer } from "./Layer";
 import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
-import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import {FeatureMap} from "../../elements/FeatureMap";
 import {MapAggregation} from "../../elements/MapAggregation";
 import {colorUtils} from "../../utils/ColorUtils";
 import {MapDataGenerator} from "../../utils/MapDataGenerator";
+import { Layer2d } from "./abstract/Layer2d";
 
 function Reshape(config) {
 
-	Layer.call(this, config);
+	Layer2d.call(this, config);
 
 	this.targetShape = undefined;
 	this.width = undefined;
@@ -30,7 +29,7 @@ function Reshape(config) {
 
 }
 
-Reshape.prototype = Object.assign(Object.create(Layer.prototype), {
+Reshape.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -83,7 +82,7 @@ Reshape.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		if (this.color === undefined) {
-			this.color = modelConfig.color.pooling2d;
+			this.color = modelConfig.color.reshape;
 		}
 
 		if (this.layerShape === undefined) {
@@ -116,6 +115,8 @@ Reshape.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.depth = this.totalSize / (this.width * this.height);
 
+		this.outputShape = [this.width, this.height, this.depth];
+
 		for (let i = 0; i < this.depth; i++) {
 			let closeFmCenter = {
 				x: 0,
@@ -138,31 +139,6 @@ Reshape.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	openLayer: function() {
-
-		console.log("open layer");
-
-		if (!this.isOpen) {
-
-			this.disposeAggregationElement();
-			this.initSegregationElements(this.closeFmCenters);
-			MapTransitionFactory.openLayer(this);
-		}
-
-	},
-
-	closeLayer: function() {
-
-		console.log("close layer");
-
-		if (this.isOpen) {
-
-			MapTransitionFactory.closeLayer(this);
-
-		}
-
-	},
-
 	initAggregationElement: function() {
 
 		let aggregationHandler = new MapAggregation(
@@ -181,13 +157,6 @@ Reshape.prototype = Object.assign(Object.create(Layer.prototype), {
 		if (this.neuralValue !== undefined) {
 			this.updateAggregationVis();
 		}
-	},
-
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
-
 	},
 
 	initSegregationElements: function(centers) {
@@ -218,38 +187,6 @@ Reshape.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	disposeSegregationElements: function() {
-
-		for (let i = 0; i < this.segregationHandlers.length; i++) {
-			this.neuralGroup.remove(this.segregationHandlers[i].getElement());
-		}
-
-		this.segregationHandlers = [];
-
-	},
-
-	updateValue: function(value) {
-
-		this.neuralValue = value;
-
-		if (this.isOpen) {
-			this.updateSegregationVis();
-		} else {
-			this.updateAggregationVis();
-		}
-
-	},
-
-	updateAggregationVis: function() {
-
-		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
-
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
-
-		this.aggregationHandler.updateVis(colors);
-
-	},
-
 	updateSegregationVis: function() {
 
 		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
@@ -273,25 +210,6 @@ Reshape.prototype = Object.assign(Object.create(Layer.prototype), {
 		} else if (clickedElement.elementType === "closeButton") {
 			this.closeLayer();
 		}
-
-	},
-
-	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
-		}
-
-	},
-
-	handleHoverOut: function() {
-
-		this.disposeLineGroup();
-		this.hideText();
 
 	},
 
@@ -337,15 +255,6 @@ Reshape.prototype = Object.assign(Object.create(Layer.prototype), {
 			let fmIndex = element.fmIndex;
 			this.segregationHandlers[fmIndex].showText();
 			this.textElementHandler = this.segregationHandlers[fmIndex];
-		}
-
-	},
-
-	hideText: function() {
-
-		if (this.textElementHandler !== undefined) {
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
 		}
 
 	}
