@@ -3,7 +3,7 @@ import { FeatureMap } from "../../elements/FeatureMap";
 import { colorUtils } from "../../utils/ColorUtils";
 import { ModelInitWidth } from "../../utils/Constant";
 
-function Input(config) {
+function Input2d(config) {
 
 	Layer.call(this, config);
 
@@ -31,7 +31,7 @@ function Input(config) {
 
 }
 
-Input.prototype = Object.assign(Object.create(Layer.prototype), {
+Input2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	init: function(center, actualDepth, nextHookHandler) {
 
@@ -156,4 +156,4 @@ Input.prototype = Object.assign(Object.create(Layer.prototype), {
 
 });
 
-export { Input };
+export { Input2d };

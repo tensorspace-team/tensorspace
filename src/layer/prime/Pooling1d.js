@@ -8,6 +8,8 @@ function Pooling1d(config) {
 
 Pooling1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
+
+
 });
 
 export { Pooling1d };

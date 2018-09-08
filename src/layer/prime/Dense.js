@@ -13,7 +13,6 @@ function Dense(config) {
 	this.height = 1;
 	this.depth = 1;
 
-
 	// the default segment is 1
 	this.segments = 1;
 
@@ -129,7 +128,7 @@ Dense.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new DenseAggregation(this.lastActualWidth, this.lastActualHeight, this.actualDepth, this.color);
+		let aggregationHandler = new DenseAggregation(this.lastActualWidth, this.lastActualHeight, this.actualHeight, this.color);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
