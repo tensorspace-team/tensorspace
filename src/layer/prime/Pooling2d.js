@@ -1,7 +1,7 @@
 import { FeatureMap } from '../../elements/FeatureMap';
 import { MapAggregation } from "../../elements/MapAggregation";
 import { Layer3d } from "./abstract/Layer3d";
-import { MapDataGenerator } from "../../utils/MapDataGenerator";
+import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { colorUtils } from "../../utils/ColorUtils";
 
 function Pooling2d(config) {
@@ -271,7 +271,7 @@ Pooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	updateSegregationVis: function() {
 
-		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 

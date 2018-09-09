@@ -92,11 +92,11 @@ NeuralQueue.prototype = {
 
 	updateVis: function(colors) {
 
-		let backColor = RenderPreprocessor.preProcessQueueBackColor(colors);
+		let backColors = RenderPreprocessor.preProcessQueueBackColor(colors);
 
 		for (let i = 0; i < colors.length; i++) {
 			this.dataArray[i] = 255 * colors[i];
-			this.backDataArray[i] = 255 * backColor[i];
+			this.backDataArray[i] = 255 * backColors[i];
 		}
 
 		this.dataTexture.needsUpdate = true;

@@ -1,6 +1,6 @@
 import { MinAlpha } from "../utils/Constant";
 
-function DenseAggregation(actualWidth, actualHeight, actualDepth, color) {
+function QueueAggregation(actualWidth, actualHeight, actualDepth, color) {
 
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
@@ -15,7 +15,7 @@ function DenseAggregation(actualWidth, actualHeight, actualDepth, color) {
 
 }
 
-DenseAggregation.prototype = {
+QueueAggregation.prototype = {
 
 	init: function() {
 		let geometry = new THREE.BoxBufferGeometry(this.actualWidth, this.actualDepth, this.actualHeight);
@@ -54,4 +54,4 @@ DenseAggregation.prototype = {
 
 };
 
-export { DenseAggregation };
+export { QueueAggregation };

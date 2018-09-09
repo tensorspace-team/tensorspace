@@ -2,7 +2,7 @@ import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
 import {FeatureMap} from "../../elements/FeatureMap";
 import {MapAggregation} from "../../elements/MapAggregation";
 import {colorUtils} from "../../utils/ColorUtils";
-import {MapDataGenerator} from "../../utils/MapDataGenerator";
+import {ChannelDataGenerator} from "../../utils/ChannelDataGenerator";
 import { Layer3d } from "./abstract/Layer3d";
 
 function Reshape2d(config) {
@@ -113,6 +113,10 @@ Reshape2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 			this.totalSize *= this.inputShape[i];
 		}
 
+		if (this.totalSize % (this.width * this.height) !== 0) {
+			console.error("input size " + this.totalSize + " can not be reshape to [" + this.width + ", " + this.height + "]");
+		}
+
 		this.depth = this.totalSize / (this.width * this.height);
 
 		this.outputShape = [this.width, this.height, this.depth];
@@ -189,7 +193,7 @@ Reshape2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	updateSegregationVis: function() {
 
-		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 

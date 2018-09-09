@@ -1,5 +1,5 @@
 import {colorUtils} from "../../utils/ColorUtils";
-import {MapDataGenerator} from "../../utils/MapDataGenerator";
+import {ChannelDataGenerator} from "../../utils/ChannelDataGenerator";
 import { FeatureMap } from "../../elements/FeatureMap";
 import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
 import {MapAggregation} from "../../elements/MapAggregation";
@@ -201,7 +201,7 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	updateSegregationVis: function() {
 
-		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 

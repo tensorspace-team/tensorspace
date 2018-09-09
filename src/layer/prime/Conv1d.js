@@ -1,14 +1,15 @@
-import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
-import {NeuralQueue} from "../../elements/NeuralQueue";
 import { colorUtils } from "../../utils/ColorUtils";
 import { Layer2d } from "./abstract/Layer2d";
+import { QueueCenterGenerator } from "../../utils/QueueCenterGenerator";
+import { GridAggregation } from "../../elements/GridAggregation";
+import {GridLine} from "../../elements/GridLine";
+import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 
 function Conv1d(config) {
 
 	Layer2d.call(this, config);
 
 	this.width = undefined;
-	this.height = undefined;
 	this.depth = undefined;
 
 	this.shape = undefined;
@@ -20,6 +21,22 @@ function Conv1d(config) {
 	this.isShapePredefined = false;
 
 	this.loadLayerConfig(config);
+
+	this.closeCenterList = [];
+	this.openCenterList = [];
+
+	this.centerList = [];
+
+	for (let i = 0; i < this.depth; i++) {
+		let center = {
+			x: 0,
+			y: 0,
+			z: 0
+		};
+
+		this.closeCenterList.push(center);
+
+	}
 
 }
 
@@ -56,6 +73,9 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 			if (layerConfig.filters !== undefined) {
 				this.filters = layerConfig.filters;
+				this.depth = layerConfig.filters;
+			} else {
+				console.error("\"filters\" property is required for conv1d layer.");
 			}
 
 			if (layerConfig.strides !== undefined) {
@@ -108,6 +128,10 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 			this.textSystem = modelConfig.textSystem;
 		}
 
+		if (this.aggregationStrategy === undefined) {
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
+		}
+
 	},
 
 	assemble: function(layerIndex) {
@@ -135,30 +159,57 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
 		this.actualWidth = this.width * this.realVirtualRatio;
-		this.actualHeight = this.height * this.realVirtualRatio;
 		this.unitLength = this.actualWidth / this.width;
+
+		this.openCenterList = QueueCenterGenerator.getCenterList(this.actualWidth, this.depth);
 	},
 
 	initAggregationElement: function() {
+
+		let aggregationHandler = new GridAggregation(
+			this.width,
+			this.actualWidth,
+			this.unitLength,
+			this.color
+		);
+		aggregationHandler.setLayerIndex(this.layerIndex);
+
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add(this.aggregationHandler.getElement());
+
+		if (this.neuralValue !== undefined) {
+			this.updateAggregationVis();
+		}
 
 	},
 
 	disposeAggregationElement: function() {
 
+		this.neuralGroup.remove(this.aggregationHandler.getElement());
+		this.aggregationHandler = undefined;
+
 	},
 
-	initSegregationElements: function() {
+	initSegregationElements: function(centers) {
 
-		let segregationHandler = new NeuralQueue(
-			this.width,
-			this.actualWidth,
-			this.actualHeight,
-			this.color
-		);
+		this.queueHandlers = [];
 
-		segregationHandler.setLayerIndex(this.layerIndex);
-		this.segregationHandlers.push(segregationHandler);
-		this.neuralGroup.add(segregationHandler.getElement());
+		for (let i = 0; i < this.depth; i++) {
+
+			let queueHandler = new GridLine(
+				this.width,
+				this.actualWidth,
+				this.unitLength,
+				centers[i],
+				this.color
+			);
+
+			queueHandler.setLayerIndex(this.layerIndex);
+			queueHandler.setGridIndex(i);
+			this.queueHandlers.push(queueHandler);
+			this.neuralGroup.add(queueHandler.getElement());
+
+		}
 
 		if (this.neuralValue !== undefined) {
 			this.updateSegregationVis();
@@ -168,8 +219,10 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	disposeSegregationElements: function() {
 
-		this.neuralGroup.remove(this.segregationHandlers[0].getElement());
-		this.segregationHandlers = [];
+		for (let i = 0; i < this.depth; i++) {
+			this.neuralGroup.remove(this.queueHandlers[i].getElement());
+		}
+		this.queueHandlers = [];
 
 	},
 
@@ -178,57 +231,116 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 		this.neuralValue = value;
 
 		if (this.isOpen) {
-			let colors = colorUtils.getAdjustValues(this.neuralValue);
-
-			this.segregationHandlers[0].updateVis(colors);
+			this.updateSegregationVis();
+		} else {
+			this.updateAggregationVis();
 		}
 
 	},
 
-	handleClick: function() {
+	updateSegregationVis: function() {
+
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
+
+		let colors = colorUtils.getAdjustValues(layerOutputValues);
+
+		let featureMapSize = this.width;
+
+		for (let i = 0; i < this.depth; i++) {
+
+			this.queueHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+
+		}
+	},
+
+	updateAggregationVis: function() {
+
+		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
+
+		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
+
+		this.aggregationHandler.updateVis(colors);
 
 	},
 
-	handleHoverIn: function() {
+	handleClick: function(clickedElement) {
 
+		if (clickedElement.elementType === "aggregationElement") {
+			this.openLayer();
+		} else if (clickedElement.elementType === "closeButton") {
+			this.closeLayer();
+		}
+
+	},
+
+	handleHoverIn: function(hoveredElement) {
+
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.initLineGroup(hoveredElement);
+		}
+
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.showText(hoveredElement);
+		}
 	},
 
 	handleHoverOut: function() {
 
+		if (this.relationSystem !== undefined && this.relationSystem) {
+			this.disposeLineGroup();
+		}
+
+		if (this.textSystem !== undefined && this.textSystem) {
+			this.hideText();
+		}
+
 	},
 
-	showText: function() {
+	showText: function(element) {
+
+		if (element.elementType === "gridLine") {
+
+			let gridIndex = element.gridIndex;
+
+			this.queueHandlers[gridIndex].showText();
+			this.textElementHandler = this.queueHandlers[gridIndex];
+		}
 
 	},
 
 	hideText: function() {
 
-	},
+		if (this.textElementHandler !== undefined) {
 
-	openLayer: function() {
-
-		if (!this.isOpen) {
-
-			QueueTransitionFactory.openLayer(this);
-
-			this.isOpen = true;
-
-		}
-
-	},
-
-	closeLayer: function() {
-
-		if (this.isOpen) {
-
-			QueueTransitionFactory.closeLayer(this);
-
-			this.isOpen = false;
+			this.textElementHandler.hideText();
+			this.textElementHandler = undefined;
 		}
 
 	},
 
 	getRelativeElements: function(selectedElement) {
+
+		let relativeElements = [];
+
+		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "gridLine") {
+
+			if (this.lastLayer.isOpen) {
+
+				// for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
+				//
+				// 	relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
+				//
+				// }
+
+			} else {
+
+				// relativeElements.push(this.lastLayer.aggregationHandler.getElement());
+
+			}
+
+		}
+
+		return relativeElements;
 
 	}
 

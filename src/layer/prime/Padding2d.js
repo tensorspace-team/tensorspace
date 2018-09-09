@@ -1,7 +1,7 @@
 import { PaddingMap } from '../../elements/PaddingMap';
 import { colorUtils } from '../../utils/ColorUtils';
 import { MapAggregation } from "../../elements/MapAggregation";
-import {MapDataGenerator} from "../../utils/MapDataGenerator";
+import {ChannelDataGenerator} from "../../utils/ChannelDataGenerator";
 import { Layer3d } from "./abstract/Layer3d";
 
 function Padding2d(config) {
@@ -211,7 +211,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	updateSegregationVis: function() {
 
-		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 

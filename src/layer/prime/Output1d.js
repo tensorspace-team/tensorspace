@@ -1,6 +1,6 @@
 import { Layer } from './abstract/Layer';
 import { colorUtils } from '../../utils/ColorUtils';
-import { DenseAggregation } from "../../elements/DenseAggregation";
+import { QueueAggregation } from "../../elements/QueueAggregation";
 import { OutputUnit } from "../../elements/OutputUnit";
 import { OutputNeuralPosGenerator } from "../../utils/OutputNeuralPosGenerator";
 import {TextHelper} from "../../utils/TextHelper";
@@ -138,7 +138,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new DenseAggregation(this.lastActualWidth, this.lastActualHeight, this.actualDepth, this.color);
+		let aggregationHandler = new QueueAggregation(this.lastActualWidth, this.lastActualHeight, this.actualDepth, this.color);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;
@@ -302,6 +302,18 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.disposeLineGroup();
 		}
 
+	},
+
+	calcCloseButtonSize: function() {
+		return 2 * this.unitLength;
+	},
+
+	calcCloseButtonPos: function() {
+		return {
+			x: - this.actualWidth / 2 - 30,
+			y: 0,
+			z: 0
+		};
 	}
 
 

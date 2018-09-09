@@ -1,4 +1,4 @@
-import { DenseAggregation } from "../../elements/DenseAggregation";
+import { QueueAggregation } from "../../elements/QueueAggregation";
 import { NeuralQueue } from "../../elements/NeuralQueue";
 import { Layer1d } from "./abstract/Layer1d";
 import { colorUtils } from "../../utils/ColorUtils";
@@ -72,7 +72,7 @@ Flatten.prototype = Object.assign(Object.create(Layer1d.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new DenseAggregation(this.lastActualWidth, this.lastActualHeight, this.actualDepth, this.color);
+		let aggregationHandler = new QueueAggregation(this.lastActualWidth, this.lastActualHeight, this.actualDepth, this.color);
 		aggregationHandler.setLayerIndex(this.layerIndex);
 
 		this.aggregationHandler = aggregationHandler;

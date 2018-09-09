@@ -2,7 +2,7 @@ import { FeatureMap } from '../../elements/FeatureMap';
 import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { MapAggregation } from "../../elements/MapAggregation";
 import { Layer3d } from "./abstract/Layer3d";
-import { MapDataGenerator } from "../../utils/MapDataGenerator";
+import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { colorUtils } from "../../utils/ColorUtils";
 
 function Conv2d(config) {
@@ -52,9 +52,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 	init: function (center, actualDepth, nextHookHandler) {
 
 		this.center = center;
-
-		console.log(actualDepth);
-
 		this.actualDepth = actualDepth;
 		this.nextHookHandler = nextHookHandler;
 		this.lastHookHandler = this.lastLayer.nextHookHandler;
@@ -228,7 +225,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	updateSegregationVis: function() {
 
-		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 

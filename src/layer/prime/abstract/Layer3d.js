@@ -1,7 +1,8 @@
 import {Layer} from "./Layer";
-import { MapDataGenerator } from "../../../utils/MapDataGenerator";
+import { ChannelDataGenerator } from "../../../utils/ChannelDataGenerator";
 import { colorUtils } from "../../../utils/ColorUtils";
 import { MapTransitionFactory } from "../../../animation/MapTransitionTween";
+import { CloseButtonRatio } from "../../../utils/Constant";
 
 function Layer3d(config) {
 
@@ -73,7 +74,7 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
-		let aggregationUpdateValue = MapDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
+		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
 
 		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
 
@@ -83,7 +84,7 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateSegregationVis: function() {
 
-		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 
@@ -129,8 +130,25 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.textElementHandler = undefined;
 		}
 
-	}
+	},
 
+	calcCloseButtonSize: function() {
+		return this.openHeight * CloseButtonRatio;
+	},
+
+	calcCloseButtonPos: function() {
+
+		let leftMostCenter = this.openFmCenters[0];
+
+		return {
+
+			x: leftMostCenter.x - this.actualWidth/ 2 - 30,
+			y: 0,
+			z: 0
+
+		};
+
+	}
 
 });
 

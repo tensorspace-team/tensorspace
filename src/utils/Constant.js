@@ -22,3 +22,6 @@ export let FrameColor = 0xA5A5A5;
 
 // interval / segmentLength for adjacent segments in dense layer
 export let segmentsIntervalRatio = 0.2;
+
+// interval ratio for grid group
+export let GridIntervalRatio = 0.3;

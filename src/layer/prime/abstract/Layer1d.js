@@ -1,5 +1,6 @@
 import {Layer} from "./Layer";
 import { QueueTransitionFactory } from "../../../animation/QueueTransitionTween";
+import { colorUtils } from "../../../utils/ColorUtils";
 
 function Layer1d(config) {
 
@@ -104,6 +105,18 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.queueHandler = undefined;
 
 	},
+
+	calcCloseButtonSize: function() {
+		return 2 * this.unitLength;
+	},
+
+	calcCloseButtonPos: function() {
+		return {
+			x: - this.actualWidth / 2 - 30,
+			y: 0,
+			z: 0
+		};
+	}
 
 });
 

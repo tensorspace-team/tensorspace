@@ -5,6 +5,7 @@ import { ChannelMap } from "../../elements/ChannelMap";
 import { colorUtils } from "../../utils/ColorUtils";
 import { RGBTweenFactory } from "../../animation/RGBChannelTween";
 import { ModelInitWidth } from "../../utils/Constant";
+import { CloseButtonRatio } from "../../utils/Constant";
 
 function Input3d(config) {
 
@@ -327,6 +328,25 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.textElementHandler.hideText();
 			this.textElementHandler = undefined;
 		}
+
+	},
+
+	calcCloseButtonSize: function() {
+
+		return 5 * this.openHeight * CloseButtonRatio;
+	},
+
+	calcCloseButtonPos: function() {
+
+		let leftMostCenter = this.openFmCenters[0];
+
+		return {
+
+			x: leftMostCenter.x - this.actualWidth/ 2 - 30,
+			y: 0,
+			z: 0
+
+		};
 
 	}
 });

@@ -1,6 +1,4 @@
-import { CloseButtonHelper } from "../../../utils/CloseButtonHelper";
 import { CloseButton } from "../../../elements/CloseButton";
-import { CloseButtonRatio } from "../../../utils/Constant";
 import { LineGroupGeometry } from "../../../elements/LineGroupGeometry";
 import { BasicMaterialOpacity } from "../../../utils/Constant";
 
@@ -123,8 +121,9 @@ Layer.prototype = {
 
 	initCloseButton: function() {
 
-		let closeButtonPos = CloseButtonHelper.getPosInLayer(this.leftMostCenter, this.actualWidth);
-		let closeButtonHandler = new CloseButton(this.openHeight * CloseButtonRatio, this.unitLength, closeButtonPos, this.color);
+		let closeButtonPos = this.calcCloseButtonPos();
+		let closeButtonSize = this.calcCloseButtonSize();
+		let closeButtonHandler = new CloseButton(closeButtonSize, this.unitLength, closeButtonPos, this.color);
 		closeButtonHandler.setLayerIndex(this.layerIndex);
 
 		this.closeButtonHandler = closeButtonHandler;

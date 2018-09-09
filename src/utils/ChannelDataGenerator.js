@@ -1,4 +1,4 @@
-let MapDataGenerator = (function() {
+let ChannelDataGenerator = (function() {
 
 	function generateChannelData(rawValue, depth) {
 
@@ -89,4 +89,4 @@ let MapDataGenerator = (function() {
 
 })();
 
-export { MapDataGenerator }
+export { ChannelDataGenerator }

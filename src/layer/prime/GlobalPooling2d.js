@@ -1,4 +1,4 @@
-import {MapDataGenerator} from "../../utils/MapDataGenerator";
+import {ChannelDataGenerator} from "../../utils/ChannelDataGenerator";
 import {colorUtils} from "../../utils/ColorUtils";
 import {MapAggregation} from "../../elements/MapAggregation";
 import { GlobalPoolingElement } from "../../elements/GlobalPoolingElement";
@@ -220,7 +220,7 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 	},
 
 	updateSegregationVis: function() {
-		let layerOutputValues = MapDataGenerator.generateChannelData(this.neuralValue, this.depth);
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
 		let colors = colorUtils.getAdjustValues(layerOutputValues);
 
