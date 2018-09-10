@@ -85,7 +85,7 @@ Dense.prototype = Object.assign(Object.create(Layer1d.prototype), {
 		this.neuralGroup.add(queueHandler.getElement());
 
 		if (this.neuralValue !== undefined) {
-			this.updateSegregationVis();
+			this.updateQueueVis();
 		}
 
 	},
@@ -135,8 +135,6 @@ Dense.prototype = Object.assign(Object.create(Layer1d.prototype), {
 			this.lastActualWidth = this.lastLayer.actualWidth;
 			this.lastActualHeight = this.lastLayer.actualHeight;
 		}
-
-		this.openHeight = 100;
 
 	},
 

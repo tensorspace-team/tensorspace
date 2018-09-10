@@ -314,7 +314,20 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 			y: 0,
 			z: 0
 		};
-	}
+	},
+
+	clear: function() {
+
+		if (this.neuralValue !== undefined) {
+			if (this.isOpen) {
+				for (let i = 0; i < this.segregationHandlers.length; i++) {
+					this.segregationHandlers[i].clear();
+				}
+			}
+			this.neuralValue = undefined;
+		}
+
+	},
 
 
 });

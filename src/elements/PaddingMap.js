@@ -104,7 +104,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 		return this.paddingGroup;
 	},
 
-	updateVis: function(colors) {
+	autoUpdateVis: function(colors) {
 
 		let renderColor = RenderPreprocessor.preProcessPaddingColor(colors, this.contentWidth, this.contentHeight);
 
@@ -125,6 +125,17 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 
 		}
 
+		this.dataTexture.needsUpdate = true;
+
+	},
+
+	updateVis: function(colors) {
+
+		let renderColor = RenderPreprocessor.preProcessFmColor(colors, this.width, this.height);
+
+		for(let i = 0; i < renderColor.length; i++) {
+			this.dataArray[i] = 255 * renderColor[i];
+		}
 		this.dataTexture.needsUpdate = true;
 
 	},
@@ -152,7 +163,7 @@ PaddingMap.prototype = Object.assign(Object.create(PaddingMap.prototype), {
 	},
 
 	clear: function() {
-		let zeroData = new Uint8Array(this.neuralLength);
+		let zeroData = new Uint8Array(this.width * this.height);
 		let colors = colorUtils.getAdjustValues(zeroData);
 
 		this.updateVis(colors);

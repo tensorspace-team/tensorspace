@@ -116,7 +116,18 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 			y: 0,
 			z: 0
 		};
-	}
+	},
+
+	clear: function() {
+
+		if (this.neuralValue !== undefined) {
+			if (this.isOpen) {
+				this.queueHandler.clear();
+			}
+			this.neuralValue = undefined;
+		}
+
+	},
 
 });
 

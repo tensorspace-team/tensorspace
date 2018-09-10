@@ -2,7 +2,6 @@ import { AbstractComposite } from './AbstractComposite';
 import { MapModelConfiguration } from "../configure/MapModelConfiguration";
 import { ModelLayerInterval } from "../utils/Constant";
 import { MaxDepthInLayer } from "../utils/Constant";
-import { LineGroupGeometry } from "../elements/LineGroupGeometry";
 import { HookPosRatio } from "../utils/Constant";
 import { LineHook } from "../elements/LineHook";
 
@@ -19,8 +18,6 @@ function Sequential(container, config) {
 	this.configuration = new MapModelConfiguration(config);
 
 	this.hoveredLayer = undefined;
-
-	console.log(this.configuration);
 
 	this.inputValue = undefined;
 
@@ -268,26 +265,15 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 	},
 
-
 	updateInputVis: function () {
 		this.layers[0].updateValue(this.inputValue);
 	},
 
 	updateLayerPredictVis: function () {
 
-		let paddingLayerNum = 0;
-
 		for (let i = 1; i < this.layers.length; i++) {
 
-			if (this.layers[i].layerType === "padding2d") {
-				paddingLayerNum += 1;
-				this.layers[i].updateValue();
-				continue;
-			}
-
-
-
-			let predictValue = this.predictResult[i - 1 - paddingLayerNum].dataSync();
+			let predictValue = this.predictResult[i - 1].dataSync();
 
 			this.layers[i].updateValue(predictValue);
 
@@ -297,15 +283,9 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 	initLayerOutputIndex: function () {
 
-		let paddingLayerNum = 0;
-
 		for (let i = 1; i < this.layers.length; i++) {
 
-			if (this.layers[i].layerType === "padding2d") {
-				paddingLayerNum += 1;
-			} else {
-				this.layers[i].resourceOutputIndex = i - 1 - paddingLayerNum;
-			}
+			this.layers[i].resourceOutputIndex = i - 1;
 
 		}
 

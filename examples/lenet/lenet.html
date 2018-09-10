@@ -138,6 +138,10 @@
         color: 0x0000ff
 	}));
 
+	model.add(new TSP.layers.Padding2d({
+        padding: [2, 2]
+    }));
+
 	let convLayer = new TSP.layers.Conv2d({
 		kernelSize: 5,
 		filters: 6,

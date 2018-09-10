@@ -43,18 +43,23 @@ Pooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		if (this.isOpen) {
-
-			for (let i = 0; i < this.openFmCenters.length; i++) {
-				this.fmCenters.push(this.openFmCenters[i]);
-			}
+		if (this.depth === 1) {
+			this.isOpen = true;
 			this.initSegregationElements(this.openFmCenters);
-			this.initCloseButton();
-
 		} else {
+			if (this.isOpen) {
 
-			this.initAggregationElement();
+				for (let i = 0; i < this.openFmCenters.length; i++) {
+					this.fmCenters.push(this.openFmCenters[i]);
+				}
+				this.initSegregationElements(this.openFmCenters);
+				this.initCloseButton();
 
+			} else {
+
+				this.initAggregationElement();
+
+			}
 		}
 
 		this.scene.add(this.neuralGroup);

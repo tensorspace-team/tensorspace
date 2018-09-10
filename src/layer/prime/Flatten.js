@@ -132,8 +132,6 @@ Flatten.prototype = Object.assign(Object.create(Layer1d.prototype), {
 			this.lastActualHeight = this.lastLayer.actualHeight;
 		}
 
-		this.openHeight = 100;
-
 	},
 
 	getRelativeElements: function(selectedElement) {

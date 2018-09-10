@@ -47,51 +47,16 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 
-		if (this.lastLayer.openFmCenters !== undefined) {
-
-			this.lastOpenFmCenters = this.lastLayer.openFmCenters;
-
-			for (let i = 0; i < this.lastOpenFmCenters.length; i++) {
-				let openFmCenter = {};
-				openFmCenter.x = this.lastOpenFmCenters[i].x;
-				openFmCenter.y = this.lastOpenFmCenters[i].y;
-				openFmCenter.z = this.lastOpenFmCenters[i].z;
-				this.openFmCenters.push(openFmCenter);
-
-				let closeFmCenter = {};
-				closeFmCenter.x = 0;
-				closeFmCenter.y = 0;
-				closeFmCenter.z = 0;
-				this.closeFmCenters.push(closeFmCenter);
-
+		if (this.depth === 1) {
+			this.isOpen = true;
+			this.initSegregationElements(this.openFmCenters);
+		} else {
+			if (this.isOpen) {
+				this.initSegregationElements(this.openFmCenters);
+				this.initCloseButton();
+			} else {
+				this.initAggregationElement();
 			}
-
-		} else {
-
-			let openFmCenter = {
-				x: 0,
-				y: 0,
-				z: 0
-			};
-			this.openFmCenters.push(openFmCenter);
-
-			let closeFmCenter = {
-				x: 0,
-				y: 0,
-				z: 0
-			};
-			this.closeFmCenters.push(closeFmCenter);
-
-		}
-
-		this.leftMostCenter = this.openFmCenters[0];
-		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
-
-		if (this.isOpen) {
-			this.initSegregationElements();
-			this.initCloseButton();
-		} else {
-			this.initAggregationElement();
 		}
 
 		this.scene.add(this.neuralGroup);
@@ -102,13 +67,16 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		if (layerConfig !== undefined) {
 
-			if (config.padding !== undefined) {
-				this.paddingWidth = config.padding[0];
-				this.paddingHeight = config.padding[1];
-				this.paddingLeft = Math.floor(config.padding[0] / 2);
-				this.paddingRight = config.padding[0] - this.paddingLeft;
-				this.paddingTop = Math.floor(config.padding[1] / 2);
-				this.paddingBottom = config.padding[1] - this.paddingTop;
+			if (layerConfig.padding !== undefined) {
+
+				this.paddingTop = layerConfig.padding[0];
+				this.paddingBottom = layerConfig.padding[0];
+				this.paddingLeft = layerConfig.padding[1];
+				this.paddingRight = layerConfig.padding[1];
+
+				this.paddingHeight = this.paddingTop + this.paddingBottom;
+				this.paddingWidth = this.paddingLeft + this.paddingRight;
+
 			} else {
 				console.error("\npadding\" property is required for padding layer");
 			}
@@ -117,16 +85,16 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	},
 
-	initSegregationElements: function() {
+	initSegregationElements: function(centers) {
 
-		for (let i = 0; i < this.openFmCenters.length; i++) {
+		for (let i = 0; i < centers.length; i++) {
 
 			let segregationHandler = new PaddingMap(
 				this.width,
 				this.height,
 				this.actualWidth,
 				this.actualHeight,
-				this.openFmCenters[i],
+				centers[i],
 				this.paddingWidth,
 				this.paddingHeight,
 				this.color
@@ -207,6 +175,46 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.unitLength = this.actualWidth / this.width;
 
+		if (this.lastLayer.openFmCenters !== undefined) {
+
+			this.lastOpenFmCenters = this.lastLayer.openFmCenters;
+
+			for (let i = 0; i < this.lastOpenFmCenters.length; i++) {
+				let openFmCenter = {};
+				openFmCenter.x = this.lastOpenFmCenters[i].x;
+				openFmCenter.y = this.lastOpenFmCenters[i].y;
+				openFmCenter.z = this.lastOpenFmCenters[i].z;
+				this.openFmCenters.push(openFmCenter);
+
+				let closeFmCenter = {};
+				closeFmCenter.x = 0;
+				closeFmCenter.y = 0;
+				closeFmCenter.z = 0;
+				this.closeFmCenters.push(closeFmCenter);
+
+			}
+
+		} else {
+
+			let openFmCenter = {
+				x: 0,
+				y: 0,
+				z: 0
+			};
+			this.openFmCenters.push(openFmCenter);
+
+			let closeFmCenter = {
+				x: 0,
+				y: 0,
+				z: 0
+			};
+			this.closeFmCenters.push(closeFmCenter);
+
+		}
+
+		this.leftMostCenter = this.openFmCenters[0];
+		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
+
 	},
 
 	updateSegregationVis: function() {
@@ -217,7 +225,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		for (let i = 0; i < this.segregationHandlers.length; i++) {
 
-			this.segregationHandlers[i].updateVis(colors.slice(i * this.contentWidth * this.contentHeight, (i + 1) * this.contentWidth * this.contentHeight));
+			this.segregationHandlers[i].updateVis(colors.slice(i * this.width * this.height, (i + 1) * this.width * this.height));
 
 		}
 	},

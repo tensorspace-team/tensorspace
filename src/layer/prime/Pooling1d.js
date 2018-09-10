@@ -25,7 +25,6 @@ function Pooling1d(config) {
 	this.loadLayerConfig(config);
 
 	this.layerType = "pooling1d";
-
 }
 
 Pooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
