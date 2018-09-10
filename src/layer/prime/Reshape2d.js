@@ -225,32 +225,19 @@ Reshape2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		if (selectedElement.elementType === "aggregationElement") {
 
-			if (this.lastLayer.isOpen) {
+			let request = {
+				all: true
+			};
 
-				for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-					relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
-				}
-
-			} else {
-
-				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 
 		} else if (selectedElement.elementType === "featureMap") {
 
-			// as reshape layer's feature map number is different with last layer, so if last layer is opened, will not show relation lines
-
-			if (!this.lastLayer.isOpen) {
-
-				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
+			// as reshape layer's feature map number is different with last layer, will not show relation lines
 
 		}
 
 		return relativeElements;
-
 
 	},
 

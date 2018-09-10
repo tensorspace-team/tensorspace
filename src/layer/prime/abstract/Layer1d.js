@@ -129,6 +129,20 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
+	provideRelativeElements: function(request) {
+
+		let relativeElements = [];
+
+		if (this.isOpen) {
+			relativeElements.push(this.queueHandler.getElement());
+		} else {
+			relativeElements.push(this.aggregationHandler.getElement());
+		}
+
+		return relativeElements;
+
+	}
+
 });
 
 export { Layer1d };

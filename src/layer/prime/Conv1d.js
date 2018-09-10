@@ -243,19 +243,10 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "gridLine") {
 
-			if (this.lastLayer.isOpen) {
-
-				// for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-				//
-				// 	relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
-				//
-				// }
-
-			} else {
-
-				// relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
+			let request = {
+				all: true
+			};
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 
 		}
 

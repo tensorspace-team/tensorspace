@@ -249,19 +249,11 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureMap") {
 
-			if (this.lastLayer.isOpen) {
+			let request = {
+				all: true
+			};
 
-				for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-
-					relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
-
-				}
-
-			} else {
-
-				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 
 		}
 

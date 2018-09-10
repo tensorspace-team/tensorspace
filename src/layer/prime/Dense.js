@@ -141,17 +141,13 @@ Dense.prototype = Object.assign(Object.create(Layer1d.prototype), {
 		let relativeElements = [];
 
 		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureLine") {
-			if (this.lastLayer.isOpen) {
 
-				for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-					relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
-				}
+			let request = {
+				all: true
+			};
 
-			} else {
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 
-				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
 		}
 
 		return relativeElements;

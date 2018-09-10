@@ -150,6 +150,16 @@ Input1d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.textElementHandler = undefined;
 		}
 
+	},
+
+	provideRelativeElements: function(request) {
+
+		let relativeElements = [];
+
+		relativeElements.push(this.aggregationHandler.getElement());
+
+		return relativeElements;
+
 	}
 
 });

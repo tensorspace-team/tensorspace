@@ -168,6 +168,40 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
+	provideRelativeElements: function(request) {
+
+		let relativeElements = [];
+
+		if (request.all !== undefined && request.all) {
+
+			if (this.isOpen) {
+
+				for (let i = 0; i < this.segregationHandlers.length; i++) {
+					relativeElements.push(this.segregationHandlers[i].getElement());
+				}
+
+			} else {
+
+				relativeElements.push(this.aggregationHandler.getElement());
+
+			}
+
+		} else {
+			if (request.index !== undefined) {
+
+				if (this.isOpen) {
+					relativeElements.push(this.segregationHandlers[request.index].getElement());
+				} else {
+					relativeElements.push(this.aggregationHandler.getElement());
+				}
+
+			}
+		}
+
+		return relativeElements;
+
+	}
+
 });
 
 export { Layer3d };

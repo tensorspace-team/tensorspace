@@ -234,32 +234,19 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		if (selectedElement.elementType === "aggregationElement") {
 
-			if (this.lastLayer.isOpen) {
+			let request = {
+				all: true
+			};
 
-				for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-					relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
-				}
-
-			} else {
-
-				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 
 		} else if (selectedElement.elementType === "paddingMap") {
 
-			if (this.lastLayer.isOpen) {
-
-				let relativeElement = this.lastLayer.segregationHandlers[
-					selectedElement.fmIndex
-					].getElement();
-				relativeElements.push(relativeElement);
-
-			} else {
-
-				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
+			let fmIndex = selectedElement.fmIndex;
+			let request = {
+				index: fmIndex
+			};
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 
 		}
 

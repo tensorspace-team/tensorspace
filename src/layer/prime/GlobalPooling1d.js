@@ -183,21 +183,20 @@ GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		let relativeElements = [];
 
-		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "globalPoolingElement") {
+		if (selectedElement.elementType === "aggregationElement") {
 
-			if (this.lastLayer.isOpen) {
+			let request = {
+				all: true
+			};
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 
-				// for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-				//
-				// 	relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
-				//
-				// }
+		} else if (selectedElement.elementType === "gridLine") {
 
-			} else {
-
-				// relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
+			let gridIndex = selectedElement.gridIndex;
+			let request = {
+				index: gridIndex
+			};
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 
 		}
 

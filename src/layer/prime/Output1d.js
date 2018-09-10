@@ -237,17 +237,12 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 		let relativeElements = [];
 
 		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputNeural") {
-			if (this.lastLayer.isOpen) {
 
-				for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
-					relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
-				}
+			let request = {
+				all: true
+			};
 
-			} else {
-
-				relativeElements.push(this.lastLayer.aggregationHandler.getElement());
-
-			}
+			relativeElements = this.lastLayer.provideRelativeElements(request);
 		}
 
 		return relativeElements;
