@@ -9,14 +9,12 @@ function Input1d(config) {
 
 	this.shape = undefined;
 	this.width = undefined;
-	this.height = 1;
 	this.depth = 1;
 	this.outputShape = undefined;
 
 	this.loadLayerConfig(config);
 
 	this.actualWidth = ModelInitWidth;
-	this.actualHeight = ModelInitWidth / this.width * this.height;
 
 	this.unitLength = this.actualWidth / this.width;
 
@@ -55,7 +53,7 @@ Input1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 				this.shape = layerConfig.shape;
 				this.width = layerConfig.shape[0];
-				this.outputShape = [layerConfig.shape, 1];
+				this.outputShape = [this.width, 1];
 
 			}
 
@@ -94,7 +92,7 @@ Input1d.prototype = Object.assign(Object.create(Layer.prototype), {
 		let aggregationHandler = new NeuralQueue(
 			this.width,
 			this.actualWidth,
-			this.actualHeight,
+			this.unitLength,
 			this.color
 		);
 

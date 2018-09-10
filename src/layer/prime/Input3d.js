@@ -81,7 +81,7 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.shape = layerConfig.shape;
 			this.width = layerConfig.shape[0];
 			this.height = layerConfig.shape[1];
-			this.outputShape = layerConfig.shape;
+			this.outputShape = [this.width, this.height, this.depth];
 		} else {
 			console.error("\"shape\" property is require for Input3d layer");
 		}

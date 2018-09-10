@@ -1,5 +1,8 @@
 import { Layer2d } from "./abstract/Layer2d";
 import {MapAggregation} from "../../elements/MapAggregation";
+import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
+import { colorUtils } from "../../utils/ColorUtils";
+import {GlobalPoolingElement} from "../../elements/GlobalPoolingElement";
 
 function GlobalPooling1d(config) {
 
@@ -7,7 +10,6 @@ function GlobalPooling1d(config) {
 
 	this.width = 1;
 	this.depth = undefined;
-
 
 	this.closeCenterList = [];
 	this.openCenterList = [];
@@ -73,7 +75,10 @@ GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		this.depth = this.lastLayer.depth;
+		this.inputShape = this.lastLayer.outputShape;
+		this.depth = this.inputShape[1];
+
+		this.outputShape = [1, this.depth];
 
 		for (let i = 0; i < this.depth; i++) {
 			let closeCenter = {
@@ -131,7 +136,26 @@ GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	initSegregationElements: function(centers) {
 
+		for (let i = 0; i < centers.length; i++) {
 
+			let queueHandler = new GlobalPoolingElement(
+				this.actualWidth,
+				centers[i],
+				this.color
+			);
+
+			queueHandler.setLayerIndex(this.layerIndex);
+			queueHandler.setFmIndex(i);
+
+			this.queueHandlers.push(queueHandler);
+
+			this.neuralGroup.add(queueHandler.getElement());
+
+		}
+
+		if (this.neuralValue !== undefined) {
+			this.updateSegregationVis();
+		}
 
 	},
 
@@ -158,13 +182,38 @@ GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	updateAggregationVis: function() {
 
+		let aggregationHandler = new MapAggregation(
+			1,
+			1,
+			this.unitLength,
+			this.unitLength,
+			this.actualDepth,
+			this.color
+		);
+		aggregationHandler.setLayerIndex(this.layerIndex);
 
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add(aggregationHandler.getElement());
+
+		if (this.neuralValue !== undefined) {
+			this.updateAggregationVis();
+		}
 
 	},
 
 	updateSegregationVis: function() {
 
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
+		let colors = colorUtils.getAdjustValues(layerOutputValues);
+
+		let featureMapSize = this.width * this.height;
+
+		for (let i = 0; i < this.depth; i++) {
+
+			this.queueHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+
+		}
 
 	},
 
@@ -204,6 +253,14 @@ GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	showText: function(element) {
 
+		if (element.elementType === "globalPoolingElement") {
+
+			let fmIndex = element.fmIndex;
+			this.queueHandlers[fmIndex].showText();
+			this.textElementHandler = this.queueHandlers[fmIndex];
+
+		}
+
 	},
 
 	hideText: function() {
@@ -216,7 +273,29 @@ GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	},
 
-	getRelativeElements: function() {
+	getRelativeElements: function(selectedElement) {
+
+		let relativeElements = [];
+
+		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "globalPoolingElement") {
+
+			if (this.lastLayer.isOpen) {
+
+				// for (let i = 0; i < this.lastLayer.segregationHandlers.length; i++) {
+				//
+				// 	relativeElements.push(this.lastLayer.segregationHandlers[i].getElement());
+				//
+				// }
+
+			} else {
+
+				// relativeElements.push(this.lastLayer.aggregationHandler.getElement());
+
+			}
+
+		}
+
+		return relativeElements;
 
 	}
 
