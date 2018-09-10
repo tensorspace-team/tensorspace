@@ -9,6 +9,7 @@ function FeatureMap(width, height, actualWidth, actualHeight, initCenter, color)
 
 	this.fmWidth = width;
 	this.fmHeight = height;
+
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
 	this.color = color;
@@ -145,7 +146,7 @@ FeatureMap.prototype = {
 		let widthTextPos = TextHelper.calcFmWidthTextPos(
 			widthInString.length,
 			this.textSize,
-			this.actualWidth,
+			this.actualHeight,
 			{
 				x: this.featureMap.position.x,
 				y: this.featureMap.position.y,
@@ -173,7 +174,7 @@ FeatureMap.prototype = {
 		let heightTextPos = TextHelper.calcFmHeightTextPos(
 			heightInString.length,
 			this.textSize,
-			this.actualHeight,
+			this.actualWidth,
 			{
 				x: this.featureMap.position.x,
 				y: this.featureMap.position.y,

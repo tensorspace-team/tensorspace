@@ -1,6 +1,4 @@
 import { Layer2d } from "./abstract/Layer2d";
-import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
-import { colorUtils } from "../../utils/ColorUtils";
 import {GridAggregation} from "../../elements/GridAggregation";
 import {GridLine} from "../../elements/GridLine";
 
@@ -18,9 +16,6 @@ function Padding1d(config) {
 	this.contentWidth = undefined;
 
 	this.padding = undefined;
-	this.closeCenterList = [];
-	this.openCenterList = [];
-	this.centerList = [];
 
 	this.loadLayerConfig(config);
 
@@ -161,13 +156,6 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	},
 
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
-
-	},
-
 	initSegregationElements: function(centers) {
 
 		this.queueHandlers = [];
@@ -195,15 +183,6 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	},
 
-	disposeSegregationElements: function() {
-
-		for (let i = 0; i < this.depth; i++) {
-			this.neuralGroup.remove(this.queueHandlers[i].getElement());
-		}
-		this.queueHandlers = [];
-
-	},
-
 	handleClick: function(clickedElement) {
 
 		if (clickedElement.elementType === "aggregationElement") {
@@ -226,18 +205,6 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	},
 
-	handleHoverOut: function() {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.disposeLineGroup();
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.hideText();
-		}
-
-	},
-
 	showText: function(element) {
 
 		if (element.elementType === "gridLine") {
@@ -246,16 +213,6 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 			this.queueHandlers[gridIndex].showText();
 			this.textElementHandler = this.queueHandlers[gridIndex];
-		}
-
-	},
-
-	hideText: function() {
-
-		if (this.textElementHandler !== undefined) {
-
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
 		}
 
 	},
@@ -283,42 +240,6 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 		}
 
 		return relativeElements;
-
-	},
-
-	updateValue: function(value) {
-
-		this.neuralValue = value;
-
-		if (this.isOpen) {
-			this.updateSegregationVis();
-		} else {
-			this.updateAggregationVis();
-		}
-
-	},
-
-	updateAggregationVis: function() {
-		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
-
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
-
-		this.aggregationHandler.updateVis(colors);
-	},
-
-	updateSegregationVis: function() {
-
-		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
-
-		let colors = colorUtils.getAdjustValues(layerOutputValues);
-
-		let featureMapSize = this.width;
-
-		for (let i = 0; i < this.depth; i++) {
-
-			this.queueHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
-
-		}
 
 	}
 

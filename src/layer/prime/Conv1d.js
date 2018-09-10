@@ -1,9 +1,7 @@
-import { colorUtils } from "../../utils/ColorUtils";
 import { Layer2d } from "./abstract/Layer2d";
 import { QueueCenterGenerator } from "../../utils/QueueCenterGenerator";
 import { GridAggregation } from "../../elements/GridAggregation";
 import {GridLine} from "../../elements/GridLine";
-import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 
 function Conv1d(config) {
 
@@ -21,11 +19,6 @@ function Conv1d(config) {
 	this.isShapePredefined = false;
 
 	this.loadLayerConfig(config);
-
-	this.closeCenterList = [];
-	this.openCenterList = [];
-
-	this.centerList = [];
 
 	for (let i = 0; i < this.depth; i++) {
 		let center = {
@@ -184,13 +177,6 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	},
 
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
-
-	},
-
 	initSegregationElements: function(centers) {
 
 		this.queueHandlers = [];
@@ -218,52 +204,6 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	},
 
-	disposeSegregationElements: function() {
-
-		for (let i = 0; i < this.depth; i++) {
-			this.neuralGroup.remove(this.queueHandlers[i].getElement());
-		}
-		this.queueHandlers = [];
-
-	},
-
-	updateValue: function(value) {
-
-		this.neuralValue = value;
-
-		if (this.isOpen) {
-			this.updateSegregationVis();
-		} else {
-			this.updateAggregationVis();
-		}
-
-	},
-
-	updateSegregationVis: function() {
-
-		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
-
-		let colors = colorUtils.getAdjustValues(layerOutputValues);
-
-		let featureMapSize = this.width;
-
-		for (let i = 0; i < this.depth; i++) {
-
-			this.queueHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
-
-		}
-	},
-
-	updateAggregationVis: function() {
-
-		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
-
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
-
-		this.aggregationHandler.updateVis(colors);
-
-	},
-
 	handleClick: function(clickedElement) {
 
 		if (clickedElement.elementType === "aggregationElement") {
@@ -285,18 +225,6 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 		}
 	},
 
-	handleHoverOut: function() {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.disposeLineGroup();
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.hideText();
-		}
-
-	},
-
 	showText: function(element) {
 
 		if (element.elementType === "gridLine") {
@@ -305,16 +233,6 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 			this.queueHandlers[gridIndex].showText();
 			this.textElementHandler = this.queueHandlers[gridIndex];
-		}
-
-	},
-
-	hideText: function() {
-
-		if (this.textElementHandler !== undefined) {
-
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
 		}
 
 	},

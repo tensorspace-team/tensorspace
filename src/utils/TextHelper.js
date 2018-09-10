@@ -23,7 +23,7 @@ let TextHelper = (function() {
 		return FeatureMapTextRatio * actualFmWidth;
 	}
 
-	function calcFmWidthTextPos(textLength, textSize, actualFmWidth, fmPos) {
+	function calcFmHeightTextPos(textLength, textSize, actualFmWidth, fmPos) {
 
 		return {
 			x: fmPos.x - actualFmWidth / 2 - textLength * textSize,
@@ -33,7 +33,7 @@ let TextHelper = (function() {
 
 	}
 
-	function calcFmHeightTextPos(textLength, textSize, actualFmHeight, fmPos) {
+	function calcFmWidthTextPos(textLength, textSize, actualFmHeight, fmPos) {
 
 		return {
 			x: fmPos.x - textLength * textSize / 2,
