@@ -13,6 +13,9 @@ function Layer3d(config) {
 	// store all layer segregation references as a list
 	this.segregationHandlers = [];
 
+	// used to define close sphere size
+	this.openHeight = undefined;
+
 }
 
 Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {

@@ -70,7 +70,13 @@
 		padding: 2
 	}));
 
-	model.add(new TSP.layers.GlobalPooling1d());
+	model.add(new TSP.layers.Reshape({
+        targetShape: [8, 3]
+    }));
+
+	model.add(new TSP.layers.Reshape({
+        targetShape: [8]
+    }));
 
 //
 //    model.add(new TSP.layers.Pooling1d({

@@ -16,7 +16,6 @@ function Reshape2d(config) {
 
 	// set init size to be 1
 	this.totalSize = 1;
-	this.inputShape = undefined;
 
 	this.fmCenters = [];
 	this.openFmCenters = [];
@@ -25,7 +24,7 @@ function Reshape2d(config) {
 
 	this.loadLayerConfig(config);
 
-	this.layerType = "reshape";
+	this.layerType = "reshape2d";
 
 }
 
@@ -74,6 +73,8 @@ Reshape2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 				console.error("\"targetShape\" property is required for reshape layer");
 			}
 
+		} else {
+			console.error("\"Lack config for reshape layer.");
 		}
 
 	},

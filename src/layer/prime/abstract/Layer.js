@@ -15,6 +15,7 @@ function Layer(config) {
 
 	this.activation = undefined;
 	this.neuralNum = undefined;
+	this.inputShape = [];
 	this.outputShape = [];
 	this.neuralGroup = undefined;
 
@@ -42,9 +43,6 @@ function Layer(config) {
 
 	// actualWidth / width
 	this.unitLength = undefined;
-
-	// used to define close sphere size
-	this.openHeight = undefined;
 
 	// store hook between layers
 	this.nextHookHandler = undefined;
