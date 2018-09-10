@@ -7,6 +7,12 @@ function Padding1d(config) {
 	this.width = undefined;
 	this.depth = undefined;
 
+	this.paddingLeft = undefined;
+	this.paddingRight = undefined;
+	this.paddingWidth = undefined;
+
+	this.contentWidth = undefined;
+
 	this.padding = undefined;
 	this.closeCenterList = [];
 	this.openCenterList = [];
@@ -40,7 +46,9 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		if (layerConfig !== undefined) {
 			if (layerConfig.padding !== undefined) {
-				this.padding = layerConfig.padding;
+				this.paddingLeft = layerConfig.padding;
+				this.paddingRight = layerConfig.padding;
+				this.paddingWidth = this.paddingLeft + this.paddingRight;
 			} else {
 				console.error("\"padding\" property is required for padding layer.");
 			}
@@ -80,13 +88,14 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		this.width = this.inputShape[0] + this.padding;
+		this.contentWidth = this.inputShape[0];
+		this.width = this.contentWidth + this.paddingWidth;
 		this.depth = this.inputShape[1];
 
 		this.outputShape = [this.width, this.depth];
-		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
-		this.actualWidth = this.width * this.realVirtualRatio;
-		this.unitLength = this.actualWidth / this.width;
+
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
 
 		for (let i = 0; i < this.depth; i++) {
 			let closeCenter = {
@@ -97,13 +106,25 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 			this.closeCenterList.push(closeCenter);
 		}
 
-		for (let i = 0; i < this.lastLayer.openCenterList.length; i++) {
-			let openCenter = {
-				x: this.lastLayer.openCenterList[i].x,
-				y: this.lastLayer.openCenterList[i].y,
-				z: this.lastLayer.openCenterList[i].z
+		if (this.lastLayer.openCenterList !== undefined) {
+			for (let i = 0; i < this.lastLayer.openCenterList.length; i++) {
+				let openCenter = {
+					x: this.lastLayer.openCenterList[i].x,
+					y: this.lastLayer.openCenterList[i].y,
+					z: this.lastLayer.openCenterList[i].z
+				};
+				this.openCenterList.push(openCenter);
+			}
+		} else {
+
+			let openCenter= {
+				x: 0,
+				y: 0,
+				z: 0
 			};
+
 			this.openCenterList.push(openCenter);
+
 		}
 
 	},
@@ -116,7 +137,7 @@ Padding1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	},
 
-	initSegregationElements: function() {
+	initSegregationElements: function(centers) {
 
 	},
 

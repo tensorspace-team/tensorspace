@@ -169,11 +169,9 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.outputShape = [this.width, this.height, this.depth];
 
-		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
-		this.actualWidth = this.width * this.realVirtualRatio;
-		this.actualHeight = this.height * this.realVirtualRatio;
-
-		this.unitLength = this.actualWidth / this.width;
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
+		this.actualHeight = this.height * this.unitLength;
 
 		if (this.lastLayer.openFmCenters !== undefined) {
 

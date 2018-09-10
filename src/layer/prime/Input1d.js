@@ -17,7 +17,6 @@ function Input1d(config) {
 
 	this.actualWidth = ModelInitWidth;
 	this.actualHeight = ModelInitWidth / this.width * this.height;
-	this.realVirtualRatio = this.actualWidth / this.width;
 
 	this.unitLength = this.actualWidth / this.width;
 
@@ -56,7 +55,7 @@ Input1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 				this.shape = layerConfig.shape;
 				this.width = layerConfig.shape[0];
-				this.outputShape = layerConfig.shape;
+				this.outputShape = [layerConfig.shape, 1];
 
 			}
 

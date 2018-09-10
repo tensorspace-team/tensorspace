@@ -179,9 +179,9 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.outputShape = [this.units, 1, 1];
 
-		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
-		this.actualWidth = this.width * this.realVirtualRatio;
-		this.actualHeight = this.height * this.realVirtualRatio;
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
+		this.actualHeight = this.height * this.unitLength;
 
 		if (this.lastLayer.layerDimension === 1) {
 			this.lastActualWidth = this.lastLayer.lastActualWidth;
@@ -193,7 +193,6 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.openHeight = 100;
 
-		this.unitLength = this.actualWidth / this.width;
 		this.openResultPos = OutputNeuralPosGenerator.getLinePos(this.units, this.actualWidth / this.width);
 
 	},

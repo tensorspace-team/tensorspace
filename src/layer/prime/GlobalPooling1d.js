@@ -96,9 +96,8 @@ GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		}
 
-		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
-		this.actualWidth = this.width * this.realVirtualRatio;
-		this.unitLength = this.actualWidth / this.width;
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
 
 	},
 

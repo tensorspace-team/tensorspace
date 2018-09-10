@@ -216,10 +216,9 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.outputShape = [this.width, this.height, this.filters];
 
-		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
-		this.actualWidth = this.width * this.realVirtualRatio;
-		this.actualHeight = this.height * this.realVirtualRatio;
-		this.unitLength = this.actualWidth / this.width;
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
+		this.actualHeight = this.height * this.unitLength;
 
 		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
 

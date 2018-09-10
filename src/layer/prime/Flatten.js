@@ -119,10 +119,8 @@ Flatten.prototype = Object.assign(Object.create(Layer1d.prototype), {
 
 		this.outputShape = [this.units];
 
-		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
-		this.actualWidth = this.width * this.realVirtualRatio;
-
-		this.unitLength = this.actualWidth / this.width;
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
 
 		if (this.lastLayer.layerDimension === 1) {
 			this.lastActualWidth = this.lastLayer.lastActualWidth;

@@ -122,10 +122,8 @@ Dense.prototype = Object.assign(Object.create(Layer1d.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
-		this.actualWidth = this.width * this.realVirtualRatio;
-
-		this.unitLength = this.actualWidth / this.width;
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
 
 		if (this.lastLayer.layerDimension === 1) {
 
