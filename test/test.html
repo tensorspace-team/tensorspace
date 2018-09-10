@@ -66,11 +66,21 @@
         padding: "same"
     }));
 
-    model.add(new TSP.layers.Reshape({
-        targetShape: [4, 4]
+    model.add(new TSP.layers.Pooling1d({
+        poolSize: 2,
+        strides: 2,
+        padding: "same"
     }));
-//
-    model.add(new TSP.layers.Flatten());
+
+    model.add(new TSP.layers.UpSampling1d({
+        size: 2
+    }));
+
+//    model.add(new TSP.layers.Reshape({
+//        targetShape: [4, 4]
+//    }));
+////
+//    model.add(new TSP.layers.Flatten());
 
 //    model.add(new TSP.layers.GlobalPooling2d());
 //    model.add(new TSP.layers.UpSampling2d({

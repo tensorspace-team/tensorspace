@@ -50,8 +50,6 @@
 <script src="../lib/tf.min.js"></script>
 <script src="../../build/tensorspace.js"></script>
 
-<!--<script src="data/dilingdiling.js"></script>-->
-
 <script>
 
     let container = document.getElementById("container");
@@ -67,12 +65,8 @@
     });
 
     // input_1: [1,100]
-    model.add(new TSP.layers.Input2d({
-        shape: [1,100]
-    }));
-    // input_2: [1,1]
-    model.add(new TSP.layers.Input2d({
-        shape: [1,1]
+    model.add(new TSP.layers.Input1d({
+        shape: [100]
     }));
 
     // 0
@@ -84,13 +78,13 @@
     // 1
     // output: 128*7*7 = 6272
     model.add(new TSP.layers.Reshape({
-        shape: [128, 7, 7]
+        targetShape: [7, 7]
     }));
 
     // 2
     // output: 128*14*14 = 25088
     model.add(new TSP.layers.UpSampling2d({
-
+		size: [2, 2]
     }));
 
     // 3
@@ -105,7 +99,7 @@
     // 4
     // output: 128*28*28 = 100352
     model.add(new TSP.layers.UpSampling2d({
-
+		size: [2, 2]
     }));
 
     // 5
@@ -133,10 +127,8 @@
 
     model.init(function() {
 
-        setTimeout(function() {
-            model.predict(data);
-            $("#loadingPad").hide();
-        }, 4000);
+        model.predict([inputData, label]);
+		$("#loadingPad").hide();
 
     });
 

@@ -38,6 +38,8 @@ function Conv1d(config) {
 
 	}
 
+	this.layerType = "conv1d";
+
 }
 
 Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
@@ -54,7 +56,7 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		if (this.isOpen) {
 
-			this.initSegregationElements();
+			this.initSegregationElements(this.openCenterList);
 			this.initCloseButton();
 
 		} else {
@@ -155,7 +157,7 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 			}
 		}
 
-		this.outputShape = [this.width];
+		this.outputShape = [this.width, this.depth];
 
 		this.realVirtualRatio = this.lastLayer.realVirtualRatio;
 		this.actualWidth = this.width * this.realVirtualRatio;
