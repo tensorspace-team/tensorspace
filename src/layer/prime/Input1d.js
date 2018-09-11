@@ -18,6 +18,12 @@ function Input1d(config) {
 
 	this.unitLength = this.actualWidth / this.width;
 
+	this.openCenterList = [{
+		x: 0,
+		y: 0,
+		z: 0
+	}];
+
 	this.fmCenter = {
 		x: 0,
 		y: 0,
