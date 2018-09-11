@@ -3,6 +3,9 @@ import { PixelSequential } from "./vis-model/PixelSequential";
 
 import { Conv1d } from "./layer/prime/Conv1d";
 import { Conv2d } from "./layer/prime/Conv2d";
+import { Conv2dTranspose } from "./layer/prime/Conv2dTranspose";
+import { Cropping1d } from "./layer/prime/Cropping1d";
+import { Cropping2d } from "./layer/prime/Cropping2d";
 import { Input1d } from "./layer/prime/Input1d";
 import { Input2d } from "./layer/prime/Input2d";
 import { Input3d } from "./layer/prime/Input3d";
@@ -37,6 +40,9 @@ let layers = {
 	Output2d: Output2d,
 	Conv1d: Conv1d,
 	Conv2d: Conv2d,
+	Conv2dTranspose: Conv2dTranspose,
+	Cropping1d: Cropping1d,
+	Cropping2d: Cropping2d,
 	Dense: Dense,
 	Flatten: Flatten,
 	Reshape: Reshape,

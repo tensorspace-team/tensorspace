@@ -1,11 +1,11 @@
-import { FeatureMap } from '../../elements/FeatureMap';
-import { fmCenterGenerator } from '../../utils/FmCenterGenerator';
-import { MapAggregation } from "../../elements/MapAggregation";
-import { Layer3d } from "./abstract/Layer3d";
+import {Layer3d} from "./abstract/Layer3d";
+import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { colorUtils } from "../../utils/ColorUtils";
+import {MapAggregation} from "../../elements/MapAggregation";
+import {FeatureMap} from "../../elements/FeatureMap";
 
-function Conv2d(config) {
+function Conv2dTranspose(config) {
 
 	Layer3d.call(this, config);
 
@@ -26,7 +26,6 @@ function Conv2d(config) {
 	this.isShapePredefined = false;
 
 	this.layerShape = undefined;
-
 	this.aggregationStrategy = undefined;
 
 	this.padding = "valid";
@@ -42,13 +41,13 @@ function Conv2d(config) {
 		this.closeFmCenters.push(center);
 	}
 
-	this.layerType = "prime conv2d";
+	this.layerType = "conv2dTranspose";
 
 }
 
-Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
+Conv2dTranspose.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
-	init: function (center, actualDepth, nextHookHandler) {
+	init: function(center, actualDepth, nextHookHandler) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
@@ -81,10 +80,32 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		if (layerConfig !== undefined) {
 
-			this.kernelSize = layerConfig.kernelSize;
-			this.filters = layerConfig.filters;
-			this.strides = layerConfig.strides;
-			this.depth = layerConfig.filters;
+			if (layerConfig.filters !== undefined) {
+				this.filters = layerConfig.filters;
+				this.depth = layerConfig.filters;
+			} else {
+				console.error("\"filters\" property is required for Conv2dTranspose layer.");
+			}
+
+			if (layerConfig.kernelSize !== undefined) {
+				this.kernelSize = layerConfig.kernelSize;
+			}
+
+			if (layerConfig.strides !== undefined) {
+				this.strides = layerConfig.strides;
+			}
+
+			if (layerConfig.padding !== undefined) {
+
+				if (layerConfig.padding === "same") {
+					this.padding = "same";
+				} else if (layerConfig.padding === "valid") {
+					this.padding = "valid";
+				} else {
+					console.error("\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead.");
+				}
+
+			}
 
 			if (layerConfig.shape !== undefined) {
 
@@ -95,23 +116,79 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 			}
 
-			if (layerConfig.padding !== undefined) {
-
-				if (layerConfig.padding.toLowerCase() === "valid") {
-					this.padding = "valid";
-				} else if (layerConfig.padding.toLowerCase() === "same") {
-					this.padding = "same";
-				} else {
-					console.error("\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead.");
-				}
-
-			}
-
+		} else {
+			console.error("Lack config for Conv2dTranspose layer.");
 		}
 
 	},
 
-	initSegregationElements: function (centers) {
+	loadModelConfig: function(modelConfig) {
+
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color.conv2dTranspose;
+		}
+
+		if (this.layerShape === undefined) {
+			this.layerShape = modelConfig.layerShape;
+		}
+
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+
+		if (this.aggregationStrategy === undefined) {
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
+		}
+
+	},
+
+	assemble: function(layerIndex) {
+
+		this.layerIndex = layerIndex;
+
+		if (!this.isShapePredefined) {
+
+			this.inputShape = this.lastLayer.outputShape;
+
+			if (this.padding === "same") {
+
+				this.width = this.inputShape[0] * this.strides[0];
+				this.height = this.inputShape[1] * this.strides[1];
+
+			} else if (this.padding === "valid") {
+
+				this.width = (this.inputShape[0] - 1) * this.strides + this.kernelSize;
+				this.height = (this.inputShape[1] - 1) * this.strides + this.kernelSize;
+
+			} else {
+				console.error("Why padding property will be set to such value?");
+			}
+
+			this.fmShape = [this.width, this.height];
+		}
+
+		this.outputShape = [this.width, this.height, this.filters];
+
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
+		this.actualHeight = this.height * this.unitLength;
+
+		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
+
+		this.leftMostCenter = this.openFmCenters[0];
+		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
+
+	},
+
+	initSegregationElements: function(centers) {
 
 		for (let i = 0; i < this.filters; i++) {
 			let segregationHandler = new FeatureMap(
@@ -134,7 +211,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	},
 
-	initAggregationElement: function () {
+	initAggregationElement: function() {
 
 		let aggregationHandler = new MapAggregation(
 			this.width,
@@ -155,88 +232,12 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	},
 
-	loadModelConfig: function(modelConfig) {
+	handleClick: function(clickedElement) {
 
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
-
-		if (this.color === undefined) {
-			this.color = modelConfig.color.conv2d;
-		}
-
-		if (this.layerShape === undefined) {
-			this.layerShape = modelConfig.layerShape;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
-		}
-
-		if (this.aggregationStrategy === undefined) {
-			this.aggregationStrategy = modelConfig.aggregationStrategy;
-		}
-	},
-
-	assemble: function (layerIndex) {
-
-		console.log("Assemble conv2d, layer index: " + layerIndex);
-
-		this.layerIndex = layerIndex;
-
-		if (this.isShapePredefined) {
-
-		} else {
-
-			this.inputShape = this.lastLayer.outputShape;
-
-			if (this.padding === "valid") {
-
-				this.width = (this.inputShape[0] - this.kernelSize) / this.strides + 1;
-				this.height = (this.inputShape[1] - this.kernelSize) / this.strides + 1;
-
-			} else if (this.padding === "same") {
-
-				this.width = Math.ceil(this.inputShape[0] / this.strides);
-				this.height = Math.ceil(this.inputShape[1] / this.strides);
-
-			} else {
-				console.error("Why padding property will be set to such value?");
-			}
-
-			this.fmShape = [this.width, this.height];
-
-		}
-
-		this.outputShape = [this.width, this.height, this.filters];
-
-		this.unitLength = this.lastLayer.unitLength;
-		this.actualWidth = this.width * this.unitLength;
-		this.actualHeight = this.height * this.unitLength;
-
-		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
-
-		this.leftMostCenter = this.openFmCenters[0];
-		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
-
-	},
-
-	updateSegregationVis: function() {
-
-		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
-
-		let colors = colorUtils.getAdjustValues(layerOutputValues);
-
-		let featureMapSize = this.width * this.height;
-
-		for (let i = 0; i < this.depth; i++) {
-
-			this.segregationHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
-
+		if (clickedElement.elementType === "aggregationElement") {
+			this.openLayer();
+		} else if (clickedElement.elementType === "closeButton") {
+			this.closeLayer();
 		}
 
 	},
@@ -259,17 +260,8 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	},
 
-	handleClick: function(clickedElement) {
-
-		if (clickedElement.elementType === "aggregationElement") {
-			this.openLayer();
-		} else if (clickedElement.elementType === "closeButton") {
-			this.closeLayer();
-		}
-
-	},
-
 	showText: function(element) {
+
 		if (element.elementType === "featureMap") {
 
 			let fmIndex = element.fmIndex;
@@ -277,8 +269,25 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 			this.textElementHandler = this.segregationHandlers[fmIndex];
 
 		}
+
+	},
+
+	updateSegregationVis: function() {
+
+		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
+
+		let colors = colorUtils.getAdjustValues(layerOutputValues);
+
+		let featureMapSize = this.width * this.height;
+
+		for (let i = 0; i < this.depth; i++) {
+
+			this.segregationHandlers[i].updateVis(colors.slice(i * featureMapSize, (i + 1) * featureMapSize));
+
+		}
+
 	}
 
 });
 
-export { Conv2d };
+export { Conv2dTranspose };

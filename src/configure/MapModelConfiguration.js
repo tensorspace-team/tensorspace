@@ -11,6 +11,9 @@ function MapModelConfiguration(config) {
 		input3d: 0xffffff,
 		conv1d: 0xffffff,
 		conv2d: 0xffffff,
+		conv2dTranspose: 0xffffff,
+		cropping1d: 0xffffff,
+		cropping2d: 0xffffff,
 		pooling1d: 0xffffff,
 		pooling2d: 0xffffff,
 		dense: 0xffffff,
@@ -98,6 +101,18 @@ function MapModelConfiguration(config) {
 
 			if (config.color.conv2d !== undefined) {
 				this.color.conv2d = config.color.conv2d;
+			}
+
+			if (config.color.conv2dTranspose !== undefined) {
+				this.color.conv2dTranspose = config.color.conv2dTranspose;
+			}
+
+			if (config.color.cropping1d !== undefined) {
+				this.color.cropping1d = config.color.cropping1d;
+			}
+
+			if (config.color.cropping2d !== undefined) {
+				this.color.cropping2d = config.color.cropping2d;
 			}
 
 			if (config.color.pooling1d !== undefined) {
