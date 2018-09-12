@@ -22,8 +22,6 @@ let QueueCenterGenerator = (function() {
 
 		}
 
-		console.log(centerList);
-
 		return centerList;
 
 	}

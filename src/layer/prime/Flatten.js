@@ -1,84 +1,18 @@
-import { QueueAggregation } from "../../elements/QueueAggregation";
-import { NeuralQueue } from "../../elements/NeuralQueue";
 import { Layer1d } from "../abstract/Layer1d";
-import { colorUtils } from "../../utils/ColorUtils";
 
 function Flatten(config) {
 
 	Layer1d.call(this, config);
 
-	this.units = undefined;
-	this.width = undefined;
-
-	this.unitLength = undefined;
-
 	this.segments = 1;
 
 	this.loadLayerConfig(config);
 
-	this.leftMostCenter = {
-		x: 0,
-		y: 0,
-		z: 0
-	};
+	this.layerType = "flatten";
 
 }
 
 Flatten.prototype = Object.assign(Object.create(Layer1d.prototype), {
-
-	init: function(center, actualDepth, nextHookHandler) {
-
-		this.center = center;
-		this.actualDepth = actualDepth;
-		this.nextHookHandler = nextHookHandler;
-		this.lastHookHandler = this.lastLayer.nextHookHandler;
-
-		this.neuralGroup = new THREE.Group();
-		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
-
-		if (this.isOpen) {
-
-			this.initQueueElement();
-			this.initCloseButton();
-
-		} else {
-
-			this.initAggregationElement();
-
-		}
-
-		this.scene.add(this.neuralGroup);
-
-	},
-
-	initQueueElement: function() {
-
-		let queueHandler = new NeuralQueue(
-			this.width,
-			this.actualWidth,
-			this.unitLength,
-			this.color
-		);
-
-		queueHandler.setLayerIndex(this.layerIndex);
-		this.queueHandler = queueHandler;
-		this.neuralGroup.add(this.queueHandler.getElement());
-
-		if (this.neuralValue !== undefined) {
-			this.updateSegregationVis();
-		}
-
-	},
-
-	initAggregationElement: function() {
-
-		let aggregationHandler = new QueueAggregation(this.lastActualWidth, this.lastActualHeight, this.actualDepth, this.color);
-		aggregationHandler.setLayerIndex(this.layerIndex);
-
-		this.aggregationHandler = aggregationHandler;
-		this.neuralGroup.add(this.aggregationHandler.getElement());
-
-	},
 
 	loadModelConfig: function(modelConfig) {
 		if (this.isOpen === undefined) {
@@ -96,12 +30,6 @@ Flatten.prototype = Object.assign(Object.create(Layer1d.prototype), {
 		if (this.textSystem === undefined) {
 			this.textSystem = modelConfig.textSystem;
 		}
-	},
-
-	loadLayerConfig: function(layerConfig) {
-
-
-
 	},
 
 	assemble: function(layerIndex) {
@@ -146,25 +74,6 @@ Flatten.prototype = Object.assign(Object.create(Layer1d.prototype), {
 		}
 
 		return relativeElements;
-	},
-
-	handleClick: function(clickedElement) {
-
-		if (clickedElement.elementType === "aggregationElement") {
-
-			this.openLayer();
-		} else if (clickedElement.elementType === "closeButton") {
-			this.closeLayer();
-		}
-	},
-
-	showText: function(element) {
-
-		if (element.elementType === "featureLine") {
-			this.queueHandler.showText();
-			this.textElementHandler = this.queueHandler;
-		}
-
 	}
 
 });

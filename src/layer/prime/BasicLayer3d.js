@@ -1,4 +1,4 @@
-import {Layer3d} from "./Layer3d";
+import {Layer3d} from "../abstract/Layer3d";
 import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
 
 function BasicLayer3d(config) {
@@ -10,15 +10,6 @@ function BasicLayer3d(config) {
 	this.color = 0xffffff;
 
 	this.loadLayerConfig(config);
-
-	for (let i = 0; i < this.depth; i++) {
-		let center = {
-			x: 0,
-			y: 0,
-			z: 0
-		};
-		this.closeFmCenters.push(center);
-	}
 
 	this.layerType = "basicLayer3d";
 
@@ -35,6 +26,15 @@ BasicLayer3d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 				this.height = layerConfig.shape[1];
 				this.depth = layerConfig.shape[2];
 				this.outputShape = [this.width, this.height, this.depth];
+
+				for (let i = 0; i < this.depth; i++) {
+					let center = {
+						x: 0,
+						y: 0,
+						z: 0
+					};
+					this.closeFmCenters.push(center);
+				}
 
 			} else {
 				console.error("\"shape\" property is required for basicLayer3d.");
@@ -81,12 +81,6 @@ BasicLayer3d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.leftMostCenter = this.openFmCenters[0];
 		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
-
-	},
-
-	getRelativeElements: function(selectedElement) {
-
-		return [];
 
 	}
 

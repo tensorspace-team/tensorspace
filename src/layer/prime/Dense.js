@@ -1,56 +1,19 @@
-import { NeuralQueue } from '../../elements/NeuralQueue';
-import { colorUtils } from '../../utils/ColorUtils';
-import { QueueAggregation } from "../../elements/QueueAggregation";
 import { Layer1d } from "../abstract/Layer1d";
 
 function Dense(config) {
 
 	Layer1d.call(this, config);
 
-	this.units = undefined;
-	this.width = undefined;
-
 	// the default segment is 1
 	this.segments = 1;
 
 	this.loadLayerConfig(config);
-
-	this.leftMostCenter = {
-		x: 0,
-		y: 0,
-		z: 0
-	};
 
 	this.layerType = "dense";
 
 }
 
 Dense.prototype = Object.assign(Object.create(Layer1d.prototype), {
-
-	init: function(center, actualDepth, nextHookHandler) {
-
-		this.center = center;
-		this.actualDepth = actualDepth;
-		this.nextHookHandler = nextHookHandler;
-		this.lastHookHandler = this.lastLayer.nextHookHandler;
-
-		this.neuralGroup = new THREE.Group();
-		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
-
-		if (this.isOpen) {
-
-			this.initQueueElement();
-			this.initCloseButton();
-
-		} else {
-
-			this.initAggregationElement();
-
-		}
-
-		this.scene.add(this.neuralGroup);
-
-	},
 
 	loadLayerConfig: function(layerConfig) {
 
@@ -68,35 +31,6 @@ Dense.prototype = Object.assign(Object.create(Layer1d.prototype), {
 				this.segments = layerConfig.segments;
 			}
 		}
-
-	},
-
-	initQueueElement: function() {
-
-		let queueHandler = new NeuralQueue(
-			this.width,
-			this.actualWidth,
-			this.unitLength,
-			this.color
-		);
-
-		queueHandler.setLayerIndex(this.layerIndex);
-		this.queueHandler = queueHandler;
-		this.neuralGroup.add(queueHandler.getElement());
-
-		if (this.neuralValue !== undefined) {
-			this.updateQueueVis();
-		}
-
-	},
-
-	initAggregationElement: function() {
-
-		let aggregationHandler = new QueueAggregation(this.lastActualWidth, this.lastActualHeight, this.unitLength, this.color);
-		aggregationHandler.setLayerIndex(this.layerIndex);
-
-		this.aggregationHandler = aggregationHandler;
-		this.neuralGroup.add(this.aggregationHandler.getElement());
 
 	},
 
@@ -151,24 +85,6 @@ Dense.prototype = Object.assign(Object.create(Layer1d.prototype), {
 		}
 
 		return relativeElements;
-	},
-
-	handleClick: function(clickedElement) {
-
-		if (clickedElement.elementType === "aggregationElement") {
-			this.openLayer();
-		} else if (clickedElement.elementType === "closeButton") {
-			this.closeLayer();
-		}
-	},
-
-	showText: function(element) {
-
-		if (element.elementType === "featureLine") {
-			this.queueHandler.showText();
-			this.textElementHandler = this.queueHandler;
-		}
-
 	}
 
 });

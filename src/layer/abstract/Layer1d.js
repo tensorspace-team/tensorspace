@@ -1,12 +1,17 @@
 import {Layer} from "./Layer";
 import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
 import { colorUtils } from "../../utils/ColorUtils";
+import {QueueAggregation} from "../../elements/QueueAggregation";
+import {NeuralQueue} from "../../elements/NeuralQueue";
 
 function Layer1d(config) {
 
 	Layer.call(this, config);
 
 	this.layerDimension = 1;
+
+	this.units = undefined;
+	this.width = undefined;
 
 	this.lastActualWidth = undefined;
 	this.lastActualHeight = undefined;
@@ -16,6 +21,31 @@ function Layer1d(config) {
 }
 
 Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
+
+	init: function(center, actualDepth, nextHookHandler) {
+
+		this.center = center;
+		this.actualDepth = actualDepth;
+		this.nextHookHandler = nextHookHandler;
+		this.lastHookHandler = this.lastLayer.nextHookHandler;
+
+		this.neuralGroup = new THREE.Group();
+		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
+
+		if (this.isOpen) {
+
+			this.initQueueElement();
+			this.initCloseButton();
+
+		} else {
+
+			this.initAggregationElement();
+
+		}
+
+		this.scene.add(this.neuralGroup);
+
+	},
 
 	openLayer: function() {
 
@@ -29,6 +59,51 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
+	initQueueElement: function() {
+
+		let queueHandler = new NeuralQueue(
+			this.width,
+			this.actualWidth,
+			this.unitLength,
+			this.color
+		);
+
+		queueHandler.setLayerIndex(this.layerIndex);
+		this.queueHandler = queueHandler;
+		this.neuralGroup.add(queueHandler.getElement());
+
+		if (this.neuralValue !== undefined) {
+			this.updateQueueVis();
+		}
+
+	},
+
+	disposeQueueElement: function() {
+
+		console.log("dispose queue element");
+
+		this.neuralGroup.remove(this.queueHandler.getElement());
+		this.queueHandler = undefined;
+
+	},
+
+	initAggregationElement: function() {
+
+		let aggregationHandler = new QueueAggregation(this.lastActualWidth, this.lastActualHeight, this.unitLength, this.color);
+		aggregationHandler.setLayerIndex(this.layerIndex);
+
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add(this.aggregationHandler.getElement());
+
+	},
+
+	disposeAggregationElement: function() {
+
+		this.neuralGroup.remove(this.aggregationHandler.getElement());
+		this.aggregationHandler = undefined;
+
+	},
+
 	closeLayer: function() {
 
 		if (this.isOpen) {
@@ -36,6 +111,15 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 			QueueTransitionFactory.closeLayer(this);
 
 			this.isOpen = false;
+		}
+
+	},
+
+	showText: function(element) {
+
+		if (element.elementType === "featureLine") {
+			this.queueHandler.showText();
+			this.textElementHandler = this.queueHandler;
 		}
 
 	},
@@ -90,22 +174,6 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 		this.queueHandler.updateVis(colors);
 	},
 
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
-		this.aggregationHandler = undefined;
-
-	},
-
-	disposeQueueElement: function() {
-
-		console.log("dispose queue element");
-
-		this.neuralGroup.remove(this.queueHandler.getElement());
-		this.queueHandler = undefined;
-
-	},
-
 	calcCloseButtonSize: function() {
 		return 2 * this.unitLength;
 	},
@@ -140,6 +208,39 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 		}
 
 		return relativeElements;
+
+	},
+
+	handleClick: function(clickedElement) {
+
+		if (clickedElement.elementType === "aggregationElement") {
+			this.openLayer();
+		} else if (clickedElement.elementType === "closeButton") {
+			this.closeLayer();
+		}
+	},
+
+	// override this function to load user's layer config for layer2d object
+	loadLayerConfig: function(layerConfig) {
+
+	},
+
+	// override this function to load user's model config to layer2d object
+	loadModelConfig: function(modelConfig) {
+
+	},
+
+	// override this function to get information from previous layer
+	assemble: function(layerIndex) {
+
+	},
+
+	// override this function to define relative element from previous layer
+	getRelativeElements: function(selectedElement) {
+
+		let relativeElements = [];
+
+		return [];
 
 	}
 

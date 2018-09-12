@@ -41,84 +41,24 @@
 		layerInitStatus: "close"
     });
 
-//    model.add(new TSP.layers.Input({
-//        shape: [28, 28, 1]
-//    }));
-
     model.add(new TSP.layers.Input2d({
-        shape: [20, 20]
+        shape: [28, 28, 1]
     }));
 
-    model.add(new TSP.layers.Layer3d({
-        shape: [20, 20, 6]
+    model.add(new TSP.layers.Layer1d({
+       shape: [20]
     }));
 
-//	    model.add(new TSP.layers.Conv1d({
-//	        kernelSize: 2,
-//	        filters: 3,
-//	        strides: 1,
-//	        padding: "same"
-//	    }));
-//
-//    model.add(new TSP.layers.Cropping1d({
-//        cropping: [2, 2]
-//    }));
+    model.add(new TSP.layers.Conv1d({
+        kernelSize: 2,
+        filters: 3,
+        strides: 1,
+        padding: "same"
+    }));
 
-
-//    model.add(new TSP.layers.Conv2d({
-//        kernelSize: 5,
-//        filters: 6,
-//        strides: 1,
-//    }));
-//
-//    model.add(new TSP.layers.Cropping2d({
-//        cropping: [[2, 2], [2, 3]]
-//    }));
-
-//    model.add(new TSP.layers.Dense({
-//        units: 32
-//    }));
-
-//    model.add(new TSP.layers.Conv1d({
-//        kernelSize: 2,
-//        filters: 3,
-//        strides: 1,
-//        padding: "same"
-//    }));
-//
-//	model.add(new TSP.layers.Padding1d({
-//		padding: 2
-//	}));
-//
-//	model.add(new TSP.layers.Reshape({
-//        targetShape: [8, 3]
-//    }));
-//
-//	model.add(new TSP.layers.Reshape({
-//        targetShape: [8]
-//    }));
-
-//
-//    model.add(new TSP.layers.Pooling1d({
-//        poolSize: 2,
-//        strides: 2,
-//        padding: "same"
-//    }));
-//
-//    model.add(new TSP.layers.UpSampling1d({
-//        size: 2
-//    }));
-
-//    model.add(new TSP.layers.Reshape({
-//        targetShape: [4, 4]
-//    }));
-////
-//    model.add(new TSP.layers.Flatten());
-
-//    model.add(new TSP.layers.GlobalPooling2d());
-//    model.add(new TSP.layers.UpSampling2d({
-//        size: [2, 2]
-//    }));
+    model.add(new TSP.layers.Cropping1d({
+        cropping: [2, 2]
+    }));
 
     model.init(function(){
 

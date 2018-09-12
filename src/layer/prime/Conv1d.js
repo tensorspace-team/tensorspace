@@ -1,14 +1,9 @@
 import { Layer2d } from "../abstract/Layer2d";
 import { QueueCenterGenerator } from "../../utils/QueueCenterGenerator";
-import { GridAggregation } from "../../elements/GridAggregation";
-import {GridLine} from "../../elements/GridLine";
 
 function Conv1d(config) {
 
 	Layer2d.call(this, config);
-
-	this.width = undefined;
-	this.depth = undefined;
 
 	this.shape = undefined;
 	this.filters = undefined;
@@ -36,31 +31,6 @@ function Conv1d(config) {
 }
 
 Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
-
-	init: function(center, actualDepth, nextHookHandler) {
-
-		this.center = center;
-		this.actualDepth = actualDepth;
-		this.nextHookHandler = nextHookHandler;
-		this.lastHookHandler = this.lastLayer.nextHookHandler;
-
-		this.neuralGroup = new THREE.Group();
-		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
-
-		if (this.isOpen) {
-
-			this.initSegregationElements(this.openCenterList);
-			this.initCloseButton();
-
-		} else {
-
-			this.initAggregationElement();
-
-		}
-
-		this.scene.add(this.neuralGroup);
-
-	},
 
 	loadLayerConfig: function(layerConfig) {
 
@@ -156,85 +126,6 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 		this.actualWidth = this.width * this.unitLength;
 
 		this.openCenterList = QueueCenterGenerator.getCenterList(this.actualWidth, this.depth);
-	},
-
-	initAggregationElement: function() {
-
-		let aggregationHandler = new GridAggregation(
-			this.width,
-			this.actualWidth,
-			this.unitLength,
-			this.color
-		);
-		aggregationHandler.setLayerIndex(this.layerIndex);
-
-		this.aggregationHandler = aggregationHandler;
-		this.neuralGroup.add(this.aggregationHandler.getElement());
-
-		if (this.neuralValue !== undefined) {
-			this.updateAggregationVis();
-		}
-
-	},
-
-	initSegregationElements: function(centers) {
-
-		this.queueHandlers = [];
-
-		for (let i = 0; i < this.depth; i++) {
-
-			let queueHandler = new GridLine(
-				this.width,
-				this.actualWidth,
-				this.unitLength,
-				centers[i],
-				this.color
-			);
-
-			queueHandler.setLayerIndex(this.layerIndex);
-			queueHandler.setGridIndex(i);
-			this.queueHandlers.push(queueHandler);
-			this.neuralGroup.add(queueHandler.getElement());
-
-		}
-
-		if (this.neuralValue !== undefined) {
-			this.updateSegregationVis();
-		}
-
-	},
-
-	handleClick: function(clickedElement) {
-
-		if (clickedElement.elementType === "aggregationElement") {
-			this.openLayer();
-		} else if (clickedElement.elementType === "closeButton") {
-			this.closeLayer();
-		}
-
-	},
-
-	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
-		}
-	},
-
-	showText: function(element) {
-
-		if (element.elementType === "gridLine") {
-
-			let gridIndex = element.gridIndex;
-
-			this.queueHandlers[gridIndex].showText();
-			this.textElementHandler = this.queueHandlers[gridIndex];
-		}
-
 	},
 
 	getRelativeElements: function(selectedElement) {

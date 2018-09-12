@@ -7,38 +7,12 @@ function GlobalPooling1d(config) {
 	Layer2d.call(this, config);
 
 	this.width = 1;
-	this.depth = undefined;
 
 	this.layerType = "globalPooling1d";
 
 }
 
 GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
-
-	init: function(center, actualDepth, nextHookHandler) {
-
-		this.center = center;
-		this.actualDepth = actualDepth;
-		this.nextHookHandler = nextHookHandler;
-		this.lastHookHandler = this.lastLayer.nextHookHandler;
-
-		this.neuralGroup = new THREE.Group();
-		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
-
-		if (this.isOpen) {
-
-			this.initSegregationElements(this.openCenterList);
-			this.initCloseButton();
-
-		} else {
-
-			this.initAggregationElement();
-
-		}
-
-		this.scene.add(this.neuralGroup);
-
-	},
 
 	loadModelConfig: function(modelConfig) {
 
@@ -141,28 +115,6 @@ GlobalPooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		if (this.neuralValue !== undefined) {
 			this.updateSegregationVis();
-		}
-
-	},
-
-	handleClick: function(clickedElement) {
-
-		if (clickedElement.elementType === "aggregationElement") {
-			this.openLayer();
-		} else if (clickedElement.elementType === "closeButton") {
-			this.closeLayer();
-		}
-
-	},
-
-	handleHoverIn: function(hoveredElement) {
-
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
-		}
-
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
 		}
 
 	},

@@ -312,6 +312,30 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			this.textElementHandler = undefined;
 		}
 
+	},
+
+	// override this function to load user's layer config for layer2d object
+	loadLayerConfig: function(layerConfig) {
+
+	},
+
+	// override this function to load user's model config to layer2d object
+	loadModelConfig: function(modelConfig) {
+
+	},
+
+	// override this function to get information from previous layer
+	assemble: function(layerIndex) {
+
+	},
+
+	// override this function to define relative element from previous layer
+	getRelativeElements: function(selectedElement) {
+
+		let relativeElements = [];
+
+		return [];
+
 	}
 
 });
