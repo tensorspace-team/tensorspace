@@ -25,6 +25,9 @@ import { GlobalPooling2d } from "./layer/prime/GlobalPooling2d";
 import { BasicLayer1d } from "./layer/prime/BasicLayer1d";
 import { BasicLayer2d } from "./layer/prime/BasicLayer2d";
 import { BasicLayer3d } from "./layer/prime/BasicLayer3d";
+import { Activation1d } from "./layer/prime/Activation1d";
+import { Activation2d } from "./layer/prime/Activation2d";
+import { Activation3d } from "./layer/prime/Activation3d";
 
 import { PixelConv2d } from "./layer/pixel/PixelConv2d";
 import { PixelPadding } from "./layer/pixel/PixelPadding2d";
@@ -60,6 +63,9 @@ let layers = {
 	Layer1d: BasicLayer1d,
 	Layer2d: BasicLayer2d,
 	Layer3d: BasicLayer3d,
+	Activation1d: Activation1d,
+	Activation2d: Activation2d,
+	Activation3d: Activation3d,
 
 	PixelConv2d: PixelConv2d,
 	PixelPadding: PixelPadding,

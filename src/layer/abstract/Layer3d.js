@@ -85,6 +85,8 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < this.depth; i++) {
 
+			console.log(centers[i]);
+
 			let segregationHandler = new FeatureMap(
 				this.width,
 				this.height,

@@ -27,7 +27,10 @@ function MapModelConfiguration(config) {
 		globalPooling2d: 0xffffff,
 		upSampling1d: 0xffffff,
 		upSampling2d: 0xffffff,
-		reshape: 0xffffff
+		reshape: 0xffffff,
+		activation1d: 0xffffff,
+		activation2d: 0xffffff,
+		activation3d: 0xffffff
 	};
 
 	if (config !== undefined) {
@@ -169,6 +172,18 @@ function MapModelConfiguration(config) {
 
 			if (config.color.reshape !== undefined) {
 				this.color.reshape = config.color.reshape;
+			}
+
+			if (config.color.activation1d !== undefined) {
+				this.color.activation1d = config.color.activation1d;
+			}
+
+			if (config.color.activation2d !== undefined) {
+				this.color.activation2d = config.color.activation2d;
+			}
+
+			if (config.color.activation3d !== undefined) {
+				this.color.activation3d = config.color.activation3d;
 			}
 
 		}

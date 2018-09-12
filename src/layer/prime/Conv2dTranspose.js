@@ -64,15 +64,6 @@ Conv2dTranspose.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 			}
 
-			if (layerConfig.shape !== undefined) {
-
-				this.isShapePredefined = true;
-				this.fmShape = layerConfig.shape;
-				this.width = this.fmShape[0];
-				this.height = this.fmShape[1];
-
-			}
-
 		} else {
 			console.error("Lack config for Conv2dTranspose layer.");
 		}
@@ -101,26 +92,23 @@ Conv2dTranspose.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		if (!this.isShapePredefined) {
+		this.inputShape = this.lastLayer.outputShape;
 
-			this.inputShape = this.lastLayer.outputShape;
+		if (this.padding === "same") {
 
-			if (this.padding === "same") {
+			this.width = this.inputShape[0] * this.strides[0];
+			this.height = this.inputShape[1] * this.strides[1];
 
-				this.width = this.inputShape[0] * this.strides[0];
-				this.height = this.inputShape[1] * this.strides[1];
+		} else if (this.padding === "valid") {
 
-			} else if (this.padding === "valid") {
+			this.width = (this.inputShape[0] - 1) * this.strides + this.kernelSize;
+			this.height = (this.inputShape[1] - 1) * this.strides + this.kernelSize;
 
-				this.width = (this.inputShape[0] - 1) * this.strides + this.kernelSize;
-				this.height = (this.inputShape[1] - 1) * this.strides + this.kernelSize;
-
-			} else {
-				console.error("Why padding property will be set to such value?");
-			}
-
-			this.fmShape = [this.width, this.height];
+		} else {
+			console.error("Why padding property will be set to such value?");
 		}
+
+		this.fmShape = [this.width, this.height];
 
 		this.outputShape = [this.width, this.height, this.filters];
 
