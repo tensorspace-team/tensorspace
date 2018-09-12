@@ -1,6 +1,6 @@
-import { CloseButton } from "../../../elements/CloseButton";
-import { LineGroupGeometry } from "../../../elements/LineGroupGeometry";
-import { BasicMaterialOpacity } from "../../../utils/Constant";
+import { CloseButton } from "../../elements/CloseButton";
+import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
+import { BasicMaterialOpacity } from "../../utils/Constant";
 
 function Layer(config) {
 	this.scene = undefined;

@@ -1,7 +1,7 @@
 import {Layer} from "./Layer";
-import { QueueGroupTweenFactory } from "../../../animation/QueueGroupTransitionTween";
-import { ChannelDataGenerator } from "../../../utils/ChannelDataGenerator";
-import { colorUtils } from "../../../utils/ColorUtils";
+import { QueueGroupTweenFactory } from "../../animation/QueueGroupTransitionTween";
+import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
+import { colorUtils } from "../../utils/ColorUtils";
 
 function Layer2d(config) {
 

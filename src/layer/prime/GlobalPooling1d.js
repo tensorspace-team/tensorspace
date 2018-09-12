@@ -1,4 +1,4 @@
-import { Layer2d } from "./abstract/Layer2d";
+import { Layer2d } from "../abstract/Layer2d";
 import {MapAggregation} from "../../elements/MapAggregation";
 import {GlobalPoolingElement} from "../../elements/GlobalPoolingElement";
 

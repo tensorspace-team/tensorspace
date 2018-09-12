@@ -1,4 +1,4 @@
-import {Layer} from "./abstract/Layer";
+import {Layer} from "../abstract/Layer";
 import { ModelInitWidth } from "../../utils/Constant";
 import {colorUtils} from "../../utils/ColorUtils";
 import {NeuralQueue} from "../../elements/NeuralQueue";

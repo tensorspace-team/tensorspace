@@ -49,6 +49,10 @@
         shape: [20, 20]
     }));
 
+    model.add(new TSP.layers.Layer3d({
+        shape: [20, 20, 6]
+    }));
+
 //	    model.add(new TSP.layers.Conv1d({
 //	        kernelSize: 2,
 //	        filters: 3,
@@ -61,15 +65,15 @@
 //    }));
 
 
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 5,
-        filters: 6,
-        strides: 1,
-    }));
-
-    model.add(new TSP.layers.Cropping2d({
-        cropping: [[2, 2], [2, 3]]
-    }));
+//    model.add(new TSP.layers.Conv2d({
+//        kernelSize: 5,
+//        filters: 6,
+//        strides: 1,
+//    }));
+//
+//    model.add(new TSP.layers.Cropping2d({
+//        cropping: [[2, 2], [2, 3]]
+//    }));
 
 //    model.add(new TSP.layers.Dense({
 //        units: 32

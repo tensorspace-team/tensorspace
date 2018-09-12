@@ -1,6 +1,6 @@
 import {GridLine} from "../../elements/GridLine";
 import {GridAggregation} from "../../elements/GridAggregation";
-import {Layer2d} from "./abstract/Layer2d";
+import {Layer2d} from "../abstract/Layer2d";
 
 function UpSampling1d(config) {
 

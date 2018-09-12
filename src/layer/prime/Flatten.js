@@ -1,6 +1,6 @@
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { NeuralQueue } from "../../elements/NeuralQueue";
-import { Layer1d } from "./abstract/Layer1d";
+import { Layer1d } from "../abstract/Layer1d";
 import { colorUtils } from "../../utils/ColorUtils";
 
 function Flatten(config) {

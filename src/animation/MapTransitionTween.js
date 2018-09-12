@@ -20,8 +20,6 @@ MapTransitionTween.prototype = {
 
 		fmTween.onUpdate(function () {
 
-			layer.fmCenters = [];
-
 			for (let i = 0; i < layer.segregationHandlers.length; i++) {
 
 				let tempPos = {
@@ -31,8 +29,6 @@ MapTransitionTween.prototype = {
 				};
 
 				layer.segregationHandlers[i].updatePos(tempPos);
-
-				layer.fmCenters.push(tempPos);
 
 			}
 
@@ -63,8 +59,6 @@ MapTransitionTween.prototype = {
 
 		fmTween.onUpdate(function () {
 
-			layer.fmCenters = [];
-
 			for (let i = 0; i < layer.segregationHandlers.length; i++) {
 
 				let tempPos = {
@@ -74,8 +68,6 @@ MapTransitionTween.prototype = {
 				};
 
 				layer.segregationHandlers[i].updatePos(tempPos);
-
-				layer.fmCenters.push(tempPos);
 
 			}
 

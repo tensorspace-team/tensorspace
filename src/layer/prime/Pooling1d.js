@@ -1,4 +1,4 @@
-import { Layer2d } from "./abstract/Layer2d";
+import { Layer2d } from "../abstract/Layer2d";
 import {GridAggregation} from "../../elements/GridAggregation";
 import {GridLine} from "../../elements/GridLine";
 

@@ -1,6 +1,6 @@
 import {Layer} from "./Layer";
-import { QueueTransitionFactory } from "../../../animation/QueueTransitionTween";
-import { colorUtils } from "../../../utils/ColorUtils";
+import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
+import { colorUtils } from "../../utils/ColorUtils";
 
 function Layer1d(config) {
 

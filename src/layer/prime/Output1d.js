@@ -1,4 +1,4 @@
-import { Layer } from './abstract/Layer';
+import { Layer } from '../abstract/Layer';
 import { colorUtils } from '../../utils/ColorUtils';
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { OutputUnit } from "../../elements/OutputUnit";

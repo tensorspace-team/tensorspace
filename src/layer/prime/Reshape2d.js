@@ -3,7 +3,7 @@ import {FeatureMap} from "../../elements/FeatureMap";
 import {MapAggregation} from "../../elements/MapAggregation";
 import {colorUtils} from "../../utils/ColorUtils";
 import {ChannelDataGenerator} from "../../utils/ChannelDataGenerator";
-import { Layer3d } from "./abstract/Layer3d";
+import { Layer3d } from "../abstract/Layer3d";
 
 function Reshape2d(config) {
 

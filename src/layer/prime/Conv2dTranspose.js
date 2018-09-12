@@ -1,4 +1,4 @@
-import {Layer3d} from "./abstract/Layer3d";
+import {Layer3d} from "../abstract/Layer3d";
 import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { colorUtils } from "../../utils/ColorUtils";

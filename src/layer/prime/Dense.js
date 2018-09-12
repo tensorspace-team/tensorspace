@@ -1,7 +1,7 @@
 import { NeuralQueue } from '../../elements/NeuralQueue';
 import { colorUtils } from '../../utils/ColorUtils';
 import { QueueAggregation } from "../../elements/QueueAggregation";
-import { Layer1d } from "./abstract/Layer1d";
+import { Layer1d } from "../abstract/Layer1d";
 
 function Dense(config) {
 

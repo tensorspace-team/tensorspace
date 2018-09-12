@@ -22,6 +22,7 @@ import { UpSampling1d } from "./layer/prime/UpSampling1d";
 import { UpSampling2d } from "./layer/prime/UpSampling2d";
 import { GlobalPooling1d } from "./layer/prime/GlobalPooling1d";
 import { GlobalPooling2d } from "./layer/prime/GlobalPooling2d";
+import { BasicLayer3d } from "./layer/abstract/BasicLayer3d";
 
 import { PixelConv2d } from "./layer/pixel/PixelConv2d";
 import { PixelPadding } from "./layer/pixel/PixelPadding2d";
@@ -54,6 +55,7 @@ let layers = {
 	GlobalPooling2d: GlobalPooling2d,
 	UpSampling1d: UpSampling1d,
 	UpSampling2d: UpSampling2d,
+	Layer3d: BasicLayer3d,
 
 	PixelConv2d: PixelConv2d,
 	PixelPadding: PixelPadding,
