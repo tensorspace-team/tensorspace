@@ -1,4 +1,4 @@
-##1.2 Preprocessing a tf.keras Model
+## 1.2 Preprocessing a tf.keras Model
 
 In this chapter, we will introduce how to preprocess a tf.keras model to adapt the multiple intermediate layer outputs for applying TensorSpace.
 
