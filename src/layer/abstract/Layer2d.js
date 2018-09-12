@@ -18,7 +18,6 @@ function Layer2d(config) {
 
 	this.closeCenterList = [];
 	this.openCenterList = [];
-	this.centerList = [];
 
 }
 

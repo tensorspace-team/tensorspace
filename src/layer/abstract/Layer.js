@@ -105,6 +105,22 @@ Layer.prototype = {
 
 	},
 
+	loadBasicModelConfig: function(modelConfig) {
+
+		if (this.isOpen === undefined) {
+			this.isOpen = modelConfig.layerInitStatus;
+		}
+
+		if (this.relationSystem === undefined) {
+			this.relationSystem = modelConfig.relationSystem;
+		}
+
+		if (this.textSystem === undefined) {
+			this.textSystem = modelConfig.textSystem;
+		}
+
+	},
+
 	setNextLayer: function(layer) {
 		this.nextLayer = layer;
 	},

@@ -44,20 +44,10 @@ BasicLayer2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	loadModelConfig: function(modelConfig) {
 
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.layerShape === undefined) {
 			this.layerShape = modelConfig.layerShape;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
 		}
 
 		if (this.aggregationStrategy === undefined) {

@@ -1,6 +1,5 @@
 import { DefaultCameraPos } from "../utils/Constant";
 import { DefaultLayerDepth } from "../utils/Constant";
-import { BasicMaterialOpacity } from "../utils/Constant";
 
 function SceneInitializer(container ) {
 
@@ -15,7 +14,6 @@ function SceneInitializer(container ) {
 	this.cameraControls = undefined;
 	this.raycaster = undefined;
 	this.mouse = undefined;
-	this.lines = undefined;
 
 	this.createScene();
 
@@ -70,18 +68,6 @@ SceneInitializer.prototype = {
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
 
-		let lineMat = new THREE.LineBasicMaterial( {
-			color: 0xffffff,
-			opacity: BasicMaterialOpacity,
-			transparent:true,
-			vertexColors: THREE.VertexColors
-		} );
-		let lineGeom = new THREE.Geometry();
-		lineGeom.dynamic = true;
-		this.line = new THREE.Line(lineGeom, lineMat);
-
-		this.scene.add(this.line);
-
 		let fogColor = new THREE.Color(0xffffff);
 
 		this.scene.fog = new THREE.Fog(fogColor, 0.0025, 5000);
@@ -96,7 +82,7 @@ SceneInitializer.prototype = {
 
 	},
 
-	// 使用animate scene
+	// use animate scene
 	animate: function() {
 
 		let delta = this.clock.getDelta();

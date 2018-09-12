@@ -71,16 +71,10 @@ Input1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	loadModelConfig: function(modelConfig) {
 
+		this.loadBasicModelConfig(modelConfig);
+
 		if (this.color === undefined) {
 			this.color = modelConfig.color.input1d;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
 		}
 
 	},

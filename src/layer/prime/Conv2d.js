@@ -5,8 +5,6 @@ function Conv2d(config) {
 
 	Layer3d.call(this, config);
 
-	console.log("construct prime Conv2d");
-
 	this.kernelSize = undefined;
 	this.filters = undefined;
 	this.strides = undefined;
@@ -71,9 +69,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	loadModelConfig: function(modelConfig) {
 
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.color === undefined) {
 			this.color = modelConfig.color.conv2d;
@@ -81,14 +77,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		if (this.layerShape === undefined) {
 			this.layerShape = modelConfig.layerShape;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
 		}
 
 		if (this.aggregationStrategy === undefined) {
@@ -102,10 +90,7 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.layerIndex = layerIndex;
 
-		if (this.isShapePredefined) {
-
-		} else {
-
+		if (!this.isShapePredefined) {
 			this.inputShape = this.lastLayer.outputShape;
 
 			if (this.padding === "valid") {
@@ -123,7 +108,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 			}
 
 			this.fmShape = [this.width, this.height];
-
 		}
 
 		this.outputShape = [this.width, this.height, this.filters];

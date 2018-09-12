@@ -14,8 +14,6 @@ function Padding2d(config) {
 	this.contentWidth = undefined;
 	this.contentHeight = undefined;
 
-	this.lastOpenFmCenters = undefined;
-
 	this.loadLayerConfig(config);
 
 	this.layerType = "padding2d";
@@ -47,20 +45,11 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 	},
 
 	loadModelConfig: function(modelConfig) {
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
+
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.color === undefined) {
 			this.color = modelConfig.color.padding2d;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
 		}
 
 		if (this.aggregationStrategy === undefined) {
@@ -84,33 +73,7 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 		this.actualWidth = this.width * this.unitLength;
 		this.actualHeight = this.height * this.unitLength;
 
-		if (this.lastLayer.openFmCenters !== undefined) {
-
-			this.lastOpenFmCenters = this.lastLayer.openFmCenters;
-
-			for (let i = 0; i < this.lastOpenFmCenters.length; i++) {
-				let openFmCenter = {};
-				openFmCenter.x = this.lastOpenFmCenters[i].x;
-				openFmCenter.y = this.lastOpenFmCenters[i].y;
-				openFmCenter.z = this.lastOpenFmCenters[i].z;
-				this.openFmCenters.push(openFmCenter);
-
-				let closeFmCenter = {};
-				closeFmCenter.x = 0;
-				closeFmCenter.y = 0;
-				closeFmCenter.z = 0;
-				this.closeFmCenters.push(closeFmCenter);
-
-			}
-
-		} else {
-
-			let openFmCenter = {
-				x: 0,
-				y: 0,
-				z: 0
-			};
-			this.openFmCenters.push(openFmCenter);
+		for (let i = 0; i < this.depth; i++) {
 
 			let closeFmCenter = {
 				x: 0,
@@ -118,6 +81,13 @@ Padding2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 				z: 0
 			};
 			this.closeFmCenters.push(closeFmCenter);
+
+			let openFmCenter = {
+				x: this.lastLayer.openFmCenters[i].x,
+				y: this.lastLayer.openFmCenters[i].y,
+				z: this.lastLayer.openFmCenters[i].z
+			};
+			this.openFmCenters.push(openFmCenter);
 
 		}
 

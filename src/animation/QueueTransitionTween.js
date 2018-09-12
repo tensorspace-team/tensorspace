@@ -57,20 +57,17 @@ QueueTransitionTween.prototype = {
 		let variableLengthObject = (new VariableLengthObject(layer.actualWidth, layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.color)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, 2000);
+			.to(end, this.animationTime);
 
 		fmTween.onUpdate(function () {
 
 			variableLengthObject.scale.x = init.scale;
 
 		}).onStart(function () {
-			console.log("start close queue layer");
 			layer.disposeQueueElement();
 			layer.neuralGroup.add(variableLengthObject);
 			layer.disposeCloseButton();
 		}).onComplete(function() {
-			console.log("end close queue layer");
-
 			layer.neuralGroup.remove(variableLengthObject);
 			layer.initAggregationElement();
 			layer.isOpen = false;

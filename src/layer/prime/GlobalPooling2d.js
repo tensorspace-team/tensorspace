@@ -15,26 +15,12 @@ function GlobalPooling2d(config) {
 
 GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
-	loadLayerConfig: function(layerConfig) {
-		// globalPooling do not have layer config
-	},
-
 	loadModelConfig: function(modelConfig) {
 
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.color === undefined) {
 			this.color = modelConfig.color.globalPooling2d;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
 		}
 
 		if (this.aggregationStrategy === undefined) {
@@ -48,6 +34,11 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 		this.layerIndex = layerIndex;
 
 		this.depth = this.lastLayer.depth;
+		this.outputShape = [1, 1, this.depth];
+
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
+		this.actualHeight = this.height * this.unitLength;
 
 		for (let i = 0; i < this.depth; i++) {
 
@@ -58,19 +49,13 @@ GlobalPooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 			};
 			this.closeFmCenters.push(center);
 
-		}
-
-
-		this.unitLength = this.lastLayer.unitLength;
-		this.actualWidth = this.width * this.unitLength;
-		this.actualHeight = this.height * this.unitLength;
-
-		for (let i = 0; i < this.lastLayer.openFmCenters.length; i++) {
-			let fmCenter = {};
-			fmCenter.x = this.lastLayer.openFmCenters[i].x;
-			fmCenter.y = this.lastLayer.openFmCenters[i].y;
-			fmCenter.z = this.lastLayer.openFmCenters[i].z;
+			let fmCenter = {
+				x: this.lastLayer.openFmCenters[i].x,
+				y: this.lastLayer.openFmCenters[i].y,
+				z: this.lastLayer.openFmCenters[i].z
+			};
 			this.openFmCenters.push(fmCenter);
+
 		}
 
 		this.leftMostCenter = this.openFmCenters[0];

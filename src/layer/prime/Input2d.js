@@ -17,8 +17,6 @@ function Input2d(config) {
 
 	this.actualWidth = ModelInitWidth;
 	this.actualHeight = ModelInitWidth / this.width * this.height;
-	this.realVirtualRatio = this.actualWidth / this.width;
-
 	this.unitLength = this.actualWidth / this.width;
 
 	this.fmCenter = {
@@ -26,6 +24,12 @@ function Input2d(config) {
 		y: 0,
 		z: 0
 	};
+
+	this.openFmCenters = [{
+		x: 0,
+		y: 0,
+		z: 0
+	}];
 
 	this.layerType = "input";
 
@@ -84,17 +88,13 @@ Input2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	loadModelConfig: function(modelConfig) {
+
+		this.loadBasicModelConfig(modelConfig);
+
 		if (this.color === undefined) {
 			this.color = modelConfig.color.input2d;
 		}
 
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
-		}
 	},
 
 	assemble: function(layerIndex) {

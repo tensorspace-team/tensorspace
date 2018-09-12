@@ -41,24 +41,24 @@
 		layerInitStatus: "close"
     });
 
-    model.add(new TSP.layers.Input2d({
+    model.add(new TSP.layers.Input1d({
         shape: [28, 28, 1]
     }));
 
-    model.add(new TSP.layers.Layer1d({
-       shape: [20]
+    model.add(new TSP.layers.Padding1d({
+        padding: 3
     }));
 
-    model.add(new TSP.layers.Conv1d({
-        kernelSize: 2,
-        filters: 3,
-        strides: 1,
-        padding: "same"
-    }));
-
-    model.add(new TSP.layers.Cropping1d({
-        cropping: [2, 2]
-    }));
+//    model.add(new TSP.layers.Conv1d({
+//        kernelSize: 2,
+//        filters: 3,
+//        strides: 1,
+//        padding: "same"
+//    }));
+//
+//    model.add(new TSP.layers.Cropping1d({
+//        cropping: [2, 2]
+//    }));
 
     model.init(function(){
 

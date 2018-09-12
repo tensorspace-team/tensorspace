@@ -76,7 +76,7 @@
 
 <script>
 
-	var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+	let signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
 		minWidth: 10,
 		backgroundColor: 'rgba(255, 255, 255, 0)',
 		penColor: 'rgb(0, 0, 0)',
@@ -84,9 +84,9 @@
 	});
 
 	function getImage() {
-		var canvas = document.getElementById("signature-pad");
-		var context = canvas.getContext('2d');
-		var imgData = context.getImageData(0,0,canvas.width,canvas.height);
+		let canvas = document.getElementById("signature-pad");
+		let context = canvas.getContext('2d');
+		let imgData = context.getImageData(0,0,canvas.width,canvas.height);
 
 		let signatureData = [];
 
@@ -194,11 +194,6 @@
 	});
 
 	model.init();
-
-//	setTimeout(function() {
-//		console.log(333);
-////		denseLayer.closeLayer();
-//    }, 10000);
 
 </script>
 

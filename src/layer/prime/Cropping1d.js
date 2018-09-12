@@ -34,20 +34,10 @@ Cropping1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 	loadModelConfig: function(modelConfig) {
 
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.color === undefined) {
 			this.color = modelConfig.color.cropping1d;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
 		}
 
 		if (this.aggregationStrategy === undefined) {
@@ -71,21 +61,21 @@ Cropping1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 		this.actualWidth = this.width * this.unitLength;
 
 		for (let i = 0; i < this.depth; i++) {
+
 			let closeCenter = {
 				x: 0,
 				y: 0,
 				z: 0
 			};
 			this.closeCenterList.push(closeCenter);
-		}
 
-		for (let i = 0; i < this.lastLayer.openCenterList.length; i++) {
 			let openCenter = {
 				x: this.lastLayer.openCenterList[i].x,
 				y: this.lastLayer.openCenterList[i].y,
 				z: this.lastLayer.openCenterList[i].z
 			};
 			this.openCenterList.push(openCenter);
+
 		}
 	},
 

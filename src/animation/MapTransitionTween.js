@@ -33,9 +33,9 @@ MapTransitionTween.prototype = {
 			}
 
 		}).onStart(function () {
-			console.log("start open layer");
+			layer.disposeAggregationElement();
+			layer.initSegregationElements(layer.closeFmCenters);
 		}).onComplete(function() {
-			console.log("end open layer");
 			layer.initCloseButton();
 			layer.isOpen = true;
 
@@ -55,7 +55,7 @@ MapTransitionTween.prototype = {
 		};
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, 2000);
+			.to(end, this.animationTime);
 
 		fmTween.onUpdate(function () {
 
@@ -72,10 +72,8 @@ MapTransitionTween.prototype = {
 			}
 
 		}).onStart(function () {
-			console.log("start close layer");
 			layer.disposeCloseButton();
 		}).onComplete(function() {
-			console.log("end close layer");
 			layer.disposeSegregationElements();
 			layer.initAggregationElement();
 			layer.isOpen = false;

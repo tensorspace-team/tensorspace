@@ -15,21 +15,13 @@ function Flatten(config) {
 Flatten.prototype = Object.assign(Object.create(Layer1d.prototype), {
 
 	loadModelConfig: function(modelConfig) {
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
+
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.color === undefined) {
 			this.color = modelConfig.color.flatten;
 		}
 
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
-		}
 	},
 
 	assemble: function(layerIndex) {

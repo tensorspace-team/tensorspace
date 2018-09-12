@@ -5,8 +5,6 @@ function Conv2dTranspose(config) {
 
 	Layer3d.call(this, config);
 
-	console.log("construct Conv2dTranspose");
-
 	this.kernelSize = undefined;
 	this.filters = undefined;
 	this.strides = undefined;
@@ -83,9 +81,7 @@ Conv2dTranspose.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	loadModelConfig: function(modelConfig) {
 
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.color === undefined) {
 			this.color = modelConfig.color.conv2dTranspose;
@@ -93,14 +89,6 @@ Conv2dTranspose.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		if (this.layerShape === undefined) {
 			this.layerShape = modelConfig.layerShape;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
 		}
 
 		if (this.aggregationStrategy === undefined) {

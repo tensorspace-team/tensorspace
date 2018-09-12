@@ -1,12 +1,9 @@
 import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
 import { Layer3d } from "../abstract/Layer3d";
 
-
 function UpSampling2d(config) {
 
 	Layer3d.call(this, config);
-
-	console.log("construct upSampling layer");
 
 	this.size = config.size;
 	this.widthSize = config.size[0];
@@ -46,9 +43,8 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 	},
 
 	loadModelConfig: function(modelConfig) {
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
+
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.color === undefined) {
 			this.color = modelConfig.color.upSampling2d;
@@ -56,14 +52,6 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		if (this.layerShape === undefined) {
 			this.layerShape = modelConfig.layerShape;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
 		}
 
 		if (this.aggregationStrategy === undefined) {
@@ -77,9 +65,7 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 		this.depth = this.lastLayer.depth;
 
-		if (this.isShapePredefined) {
-
-		} else {
+		if (!this.isShapePredefined) {
 			this.inputShape = this.lastLayer.outputShape;
 			this.width = this.lastLayer.width * this.widthSize;
 			this.height = this.lastLayer.height * this.heightSize;

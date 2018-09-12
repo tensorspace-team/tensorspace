@@ -20,8 +20,6 @@ QueueGroupTransitionTween.prototype = {
 
 		openTween.onUpdate(function () {
 
-			layer.centerList = [];
-
 			for (let i = 0; i < layer.queueHandlers.length; i++) {
 
 				let tempPos = {
@@ -31,8 +29,6 @@ QueueGroupTransitionTween.prototype = {
 				};
 
 				layer.queueHandlers[i].updatePos(tempPos);
-
-				layer.centerList.push(tempPos);
 
 			}
 
@@ -65,8 +61,6 @@ QueueGroupTransitionTween.prototype = {
 
 		fmTween.onUpdate(function () {
 
-			layer.centerList = [];
-
 			for (let i = 0; i < layer.queueHandlers.length; i++) {
 
 				let tempPos = {
@@ -76,8 +70,6 @@ QueueGroupTransitionTween.prototype = {
 				};
 
 				layer.queueHandlers[i].updatePos(tempPos);
-
-				layer.centerList.push(tempPos);
 
 			}
 

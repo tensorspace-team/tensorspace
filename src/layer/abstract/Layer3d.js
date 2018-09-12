@@ -63,12 +63,8 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	openLayer: function () {
 
-		console.log("open layer");
-
 		if (!this.isOpen) {
 
-			this.disposeAggregationElement();
-			this.initSegregationElements(this.closeFmCenters);
 			MapTransitionFactory.openLayer(this);
 
 		}
@@ -76,8 +72,6 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	closeLayer: function () {
-
-		console.log("close layer");
 
 		if (this.isOpen) {
 

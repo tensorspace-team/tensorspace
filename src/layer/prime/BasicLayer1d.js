@@ -34,17 +34,7 @@ BasicLayer1d.prototype = Object.assign(Object.create(Layer1d.prototype), {
 
 	loadModelConfig: function(modelConfig) {
 
-		if (this.isOpen === undefined) {
-			this.isOpen = modelConfig.layerInitStatus;
-		}
-
-		if (this.relationSystem === undefined) {
-			this.relationSystem = modelConfig.relationSystem;
-		}
-
-		if (this.textSystem === undefined) {
-			this.textSystem = modelConfig.textSystem;
-		}
+		this.loadBasicModelConfig(modelConfig);
 
 		if (this.aggregationStrategy === undefined) {
 			this.aggregationStrategy = modelConfig.aggregationStrategy;
