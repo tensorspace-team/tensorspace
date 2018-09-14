@@ -160,7 +160,10 @@ Input2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		relativeElements.push(this.aggregationHandler.getElement());
 
-		return relativeElements;
+		return {
+			isOpen: this.isOpen,
+			elementList: relativeElements
+		};
 
 	}
 

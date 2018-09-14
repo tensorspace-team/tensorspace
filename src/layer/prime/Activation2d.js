@@ -83,7 +83,7 @@ Activation2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 				all: true
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		} else if (selectedElement.elementType === "featureMap") {
 
@@ -91,7 +91,7 @@ Activation2d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 			let request = {
 				index: fmIndex
 			};
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		}
 

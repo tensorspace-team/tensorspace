@@ -370,7 +370,10 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
-		return relativeElements;
+		return {
+			isOpen: this.isOpen,
+			elementList: relativeElements
+		};
 
 	}
 

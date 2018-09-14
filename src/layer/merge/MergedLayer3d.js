@@ -385,6 +385,88 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 			this.textElementHandler = undefined;
 		}
 
+	},
+
+	getRelativeElements: function(selectedElement) {
+
+		let curveElements = [];
+		let straightElements = [];
+
+		if (selectedElement.elementType === "aggregationElement") {
+
+			let request = {
+				all: true
+			};
+
+			for (let i = 0; i < this.mergedElements.length; i++) {
+				let relativeResult = this.mergedElements[i].provideRelativeElements(request);
+				let relativeElements = relativeResult.elementList;
+				if (this.mergedElements[i].layerIndex === this.layerIndex - 1) {
+
+					// console.log("get last layer.");
+					// console.log(relativeElements);
+
+					for (let j = 0; j < relativeElements.length; j++) {
+						straightElements.push(relativeElements[j]);
+					}
+
+				} else {
+
+					if (relativeResult.isOpen) {
+						for (let j = 0; j < relativeElements.length; j++) {
+							straightElements.push(relativeElements[j]);
+						}
+					} else {
+						for (let j = 0; j < relativeElements.length; j++) {
+							curveElements.push(relativeElements[j]);
+						}
+					}
+
+				}
+			}
+
+		} else if (selectedElement.elementType === "featureMap") {
+
+			let fmIndex = selectedElement.fmIndex;
+			let request = {
+				index: fmIndex
+			};
+
+			for (let i = 0; i < this.mergedElements.length; i++) {
+				let relativeResult = this.mergedElements[i].provideRelativeElements(request);
+				let relativeElements = relativeResult.elementList;
+
+				if (this.mergedElements[i].layerIndex === this.layerIndex - 1) {
+
+					// console.log("get last layer");
+
+					for (let j = 0; j < relativeElements.length; j++) {
+						straightElements.push(relativeElements[j]);
+					}
+
+				} else {
+
+					if (relativeResult.isOpen) {
+						for (let j = 0; j < relativeElements.length; j++) {
+							straightElements.push(relativeElements[j]);
+						}
+					} else {
+						for (let j = 0; j < relativeElements.length; j++) {
+							curveElements.push(relativeElements[j]);
+						}
+					}
+
+				}
+
+			}
+
+		}
+
+		return {
+			straight: straightElements,
+			curve: curveElements
+		};
+
 	}
 
 });

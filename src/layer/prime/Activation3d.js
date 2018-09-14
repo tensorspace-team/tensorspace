@@ -89,7 +89,7 @@ Activation3d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 				all: true
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		} else if (selectedElement.elementType === "featureMap") {
 
@@ -97,7 +97,7 @@ Activation3d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 			let request = {
 				index: fmIndex
 			};
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		}
 

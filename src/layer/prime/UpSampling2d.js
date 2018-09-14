@@ -103,7 +103,7 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 				all: true
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 
 		} else if (selectedElement.elementType === "featureMap") {
@@ -113,7 +113,7 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 				index: fmIndex
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		}
 

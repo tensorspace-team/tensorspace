@@ -265,6 +265,7 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 				if (this.isOpen) {
 					relativeElements.push(this.segregationHandlers[request.index].getElement());
+
 				} else {
 					relativeElements.push(this.aggregationHandler.getElement());
 				}
@@ -272,7 +273,10 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 			}
 		}
 
-		return relativeElements;
+		return {
+			isOpen: this.isOpen,
+			elementList: relativeElements
+		};
 
 	},
 

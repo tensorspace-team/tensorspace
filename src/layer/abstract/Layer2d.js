@@ -281,7 +281,11 @@ Layer2d.prototype = Object.assign(Object.create(Layer.prototype), {
 			}
 		}
 
-		return relativeElements;
+		return {
+			isOpen: this.isOpen,
+			elementList: relativeElements
+		};
+
 	},
 
 	// override this function to load user's layer config for layer2d object

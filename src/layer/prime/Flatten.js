@@ -62,7 +62,7 @@ Flatten.prototype = Object.assign(Object.create(Layer1d.prototype), {
 				all: true
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 		}
 
 		return relativeElements;

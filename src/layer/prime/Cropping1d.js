@@ -89,7 +89,7 @@ Cropping1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 				all: true
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		} else if (selectedElement.elementType === "gridLine") {
 
@@ -98,7 +98,7 @@ Cropping1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 				index: gridIndex
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		}
 

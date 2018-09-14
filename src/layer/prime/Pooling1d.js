@@ -123,7 +123,7 @@ Pooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 			let request = {
 				all: true
 			};
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		} else if (selectedElement.elementType === "gridLine") {
 
@@ -131,7 +131,7 @@ Pooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 			let request = {
 				index: gridIndex
 			};
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		}
 

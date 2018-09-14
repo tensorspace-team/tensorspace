@@ -127,7 +127,7 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 			let request = {
 				all: true
 			};
-			relativeElements = this.lastLayer.provideRelativeElements(request);
+			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
 
 		}
 
