@@ -1,8 +1,12 @@
 import { CloseButton } from "../../elements/CloseButton";
 import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
 import { BasicMaterialOpacity } from "../../utils/Constant";
+import { BasicLineGroupController } from "./BasicLineGroupController";
 
 function Layer(config) {
+
+	BasicLineGroupController.call(this);
+
 	this.scene = undefined;
 	this.layerIndex = undefined;
 	this.center = undefined;
@@ -48,17 +52,6 @@ function Layer(config) {
 	this.nextHookHandler = undefined;
 	this.lastHookHandler = undefined;
 
-	// store the line group system element
-	let lineMat = new THREE.LineBasicMaterial( {
-		color: 0xffffff,
-		opacity: BasicMaterialOpacity,
-		transparent:true,
-		vertexColors: THREE.VertexColors
-	} );
-	let lineGeom = new THREE.Geometry();
-	lineGeom.dynamic = true;
-	this.lineGroup = new THREE.Line(lineGeom, lineMat);
-
 	// handler for element showing text
 	this.textElementHandler = undefined;
 
@@ -78,7 +71,7 @@ function Layer(config) {
 
 }
 
-Layer.prototype = {
+Layer.prototype = Object.assign(Object.create(BasicLineGroupController.prototype), {
 
 	loadBasicLayerConfig: function(config) {
 
@@ -149,59 +142,9 @@ Layer.prototype = {
 		this.neuralGroup.remove(this.closeButtonHandler.getElement());
 		this.closeButtonHandler = undefined;
 
-	},
-
-	getLineGroupParameters: function(selectedElement) {
-
-		this.scene.updateMatrixWorld();
-
-		let lineColors = [];
-		let lineVertices = [];
-
-		let relatedElements = this.getRelativeElements(selectedElement);
-
-		let startPosition = selectedElement.getWorldPosition().sub(this.neuralGroup.getWorldPosition());
-
-		for (let i = 0; i < relatedElements.length; i++) {
-
-			lineColors.push(new THREE.Color(this.color));
-			lineColors.push(new THREE.Color(this.color));
-
-			lineVertices.push(relatedElements[i].getWorldPosition().sub(this.neuralGroup.getWorldPosition()));
-			lineVertices.push(startPosition);
-
-		}
-
-		return {
-			lineColors: lineColors,
-			lineVertices: lineVertices
-		}
-
-	},
-
-	initLineGroup: function(selectedElement) {
-
-		let lineGroupParameters = this.getLineGroupParameters(selectedElement);
-
-		let lineGroupGeometryHandler = new LineGroupGeometry(
-			lineGroupParameters.lineVertices,
-			lineGroupParameters.lineColors
-		);
-		this.lineGroup.geometry = lineGroupGeometryHandler.getElement();
-		this.lineGroup.material.needsUpdate = true;
-
-		this.neuralGroup.add(this.lineGroup);
-
-	},
-
-	disposeLineGroup: function() {
-
-		this.lineGroup.geometry.dispose();
-		this.neuralGroup.remove(this.lineGroup);
-
 	}
 
-};
+});
 
 
 export { Layer };

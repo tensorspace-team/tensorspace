@@ -297,15 +297,6 @@ Layer2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	// override this function to get information from previous layer
 	assemble: function(layerIndex) {
 
-	},
-
-	// override this function to define relative element from previous layer
-	getRelativeElements: function(selectedElement) {
-
-		let relativeElements = [];
-
-		return [];
-
 	}
 
 });

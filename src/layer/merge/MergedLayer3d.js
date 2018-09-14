@@ -385,15 +385,6 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 			this.textElementHandler = undefined;
 		}
 
-	},
-
-	// override this function to define relative element from previous layer
-	getRelativeElements: function(selectedElement) {
-
-		let relativeElements = [];
-
-		return [];
-
 	}
 
 });
