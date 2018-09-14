@@ -45,21 +45,39 @@
         shape: [28, 28, 1]
     }));
 
-	    model.add(new TSP.layers.Conv2d({
-	        kernelSize: 2,
-	        filters: 3,
-	        strides: 1,
-	        padding: "same"
-	    }));
+    let layer1 = new TSP.layers.Conv2d({
+		kernelSize: 2,
+		filters: 3,
+		strides: 1,
+		padding: "same"
+	});
 
-	model.add(new TSP.layers.Activation3d({
-		activation: "test"
-	}));
+    let layer2 = new TSP.layers.Conv2d({
+		kernelSize: 2,
+		filters: 3,
+		strides: 1,
+		padding: "same"
+	});
+
+    let addLayer = TSP.Add([layer1, layer2]);
+
+//    console.log(addLayer);
+//
+    model.add(layer1);
+    model.add(layer2);
+
+    model.add(addLayer);
+
+//	model.add(new TSP.layers.Activation3d({
+//		activation: "test"
+//	}));
 
     model.init(function(){
 
 
     });
+
+//    console.log(TSP.Add(1, 2));
 
 </script>
 

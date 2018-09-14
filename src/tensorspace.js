@@ -38,6 +38,8 @@ import { PixelDense } from "./layer/pixel/PixelDense";
 import { PixelReshape } from "./layer/pixel/PixelReshape";
 import { PixelOutput } from "./layer/pixel/PixelOutput";
 
+import { Add } from "./layer/merge/Add";
+
 let layers = {
 	Input1d: Input1d,
 	Input2d: Input2d,
@@ -82,4 +84,4 @@ let model = {
 	PixelSequential: PixelSequential
 };
 
-export {model, layers};
+export {model, layers, Add};

@@ -1,20 +1,27 @@
-import {Layer} from "./Layer";
+import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
+import {MergedLayer} from "./MergedLayer";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { colorUtils } from "../../utils/ColorUtils";
 import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { CloseButtonRatio } from "../../utils/Constant";
-import {FeatureMap} from "../../elements/FeatureMap";
-import {MapAggregation} from "../../elements/MapAggregation";
+import { MergedAggregation } from "../../elements/MergedAggregation";
+import { MergedFeatureMap } from "../../elements/MergedFeatureMap";
+import { MergedLayerValidator } from "../../utils/MergedLayerValidator";
+import { MergedShapeGenerator } from "../../utils/MergedShapeGenerator";
 
-function Layer3d(config) {
+function MergedLayer3d(config) {
 
-	Layer.call(this, config);
+	MergedLayer.call(this, config);
+
+	console.log("construct merged layer 3d.");
 
 	this.width = undefined;
 	this.height = undefined;
 	this.depth = undefined;
 
 	this.layerDimension = 3;
+
+	this.color = 0xff0000;
 
 	// store all layer segregation references as a list
 	this.segregationHandlers = [];
@@ -27,16 +34,86 @@ function Layer3d(config) {
 
 	this.aggregationStrategy = undefined;
 
+	this.mergedElements = [];
+
+	this.layerType = "mergedLayer3d";
+
+	this.loadLayerConfig(config);
+
 }
 
-Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
+MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
+
+	loadLayerConfig: function(layerConfig) {
+
+		if (layerConfig !== undefined) {
+			if (layerConfig.operator !== undefined) {
+				this.operator = layerConfig.operator;
+			}
+		}
+
+	},
+
+	loadModelConfig: function(modelConfig) {
+
+		this.loadBasicModelConfig(modelConfig);
+
+		if (this.layerShape === undefined) {
+			this.layerShape = modelConfig.layerShape;
+		}
+
+		if (this.aggregationStrategy === undefined) {
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
+		}
+
+	},
+
+	assemble: function(layerIndex) {
+
+		this.layerIndex = layerIndex;
+
+		console.log("validate");
+
+		if(!MergedLayerValidator.validate(this.operator, this.mergedElements)) {
+			console.error("input shape is not valid for " + this.operator + " merge function.");
+		}
+
+		console.log("generate");
+
+		this.inputShape = MergedShapeGenerator.getShape(this.operator, this.mergedElements);
+
+		this.width = this.inputShape[0];
+		this.height = this.inputShape[1];
+		this.depth = this.inputShape[2];
+
+		this.outputShape = [this.width, this.height, this.depth];
+
+		this.unitLength = this.mergedElements[0].unitLength;
+		this.actualWidth = this.unitLength * this.width;
+		this.actualHeight = this.unitLength * this.height;
+
+		for (let i = 0; i < this.depth; i++) {
+			let center = {
+				x: 0,
+				y: 0,
+				z: 0
+			};
+			this.closeFmCenters.push(center);
+		}
+
+		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
+
+		this.leftMostCenter = this.openFmCenters[0];
+		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
+
+	},
 
 	init: function(center, actualDepth, nextHookHandler) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
 		this.nextHookHandler = nextHookHandler;
-		this.lastHookHandler = this.lastLayer.nextHookHandler;
+		// this.lastHookHandler = this.lastLayer.nextHookHandler;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -85,7 +162,8 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		for (let i = 0; i < this.depth; i++) {
 
-			let segregationHandler = new FeatureMap(
+			let segregationHandler = new MergedFeatureMap(
+				this.operator,
 				this.width,
 				this.height,
 				this.actualWidth,
@@ -122,7 +200,8 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new MapAggregation(
+		let aggregationHandler = new MergedAggregation(
+			this.operator,
 			this.width,
 			this.height,
 			this.actualWidth,
@@ -308,21 +387,6 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	// override this function to load user's layer config for layer2d object
-	loadLayerConfig: function(layerConfig) {
-
-	},
-
-	// override this function to load user's model config to layer2d object
-	loadModelConfig: function(modelConfig) {
-
-	},
-
-	// override this function to get information from previous layer
-	assemble: function(layerIndex) {
-
-	},
-
 	// override this function to define relative element from previous layer
 	getRelativeElements: function(selectedElement) {
 
@@ -334,4 +398,4 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 });
 
-export { Layer3d };
+export { MergedLayer3d };

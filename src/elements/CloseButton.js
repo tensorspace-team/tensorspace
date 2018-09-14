@@ -1,5 +1,5 @@
 import { MinAlpha } from "../utils/Constant";
-import { CloseData } from "../assets/image/CloseData";
+import { TextureProvider } from "../utils/TextureProvider";
 
 function CloseButton(size, unitLength, position, color) {
 
@@ -25,7 +25,7 @@ CloseButton.prototype = {
 
 	init: function() {
 
-		let texture = new THREE.TextureLoader().load( CloseData );
+		let texture = new THREE.TextureLoader().load( TextureProvider.getTexture("close") );
 
 		let materialSide = new THREE.MeshBasicMaterial( { color: this.color, opacity: MinAlpha, transparent: true } );
 		let materialTop = new THREE.MeshBasicMaterial( { color: this.color, alphaMap: texture, transparent: true } );

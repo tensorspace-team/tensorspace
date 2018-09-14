@@ -2,7 +2,8 @@ import { CloseButton } from "../../elements/CloseButton";
 import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
 import { BasicMaterialOpacity } from "../../utils/Constant";
 
-function Layer(config) {
+function MergedLayer(config) {
+
 	this.scene = undefined;
 	this.layerIndex = undefined;
 	this.center = undefined;
@@ -72,13 +73,17 @@ function Layer(config) {
 	this.unitLength = undefined;
 
 	// identify whether is merged layer
-	this.isMerged = false;
+	this.isMerged = true;
+
+	this.operator = undefined;
+
 
 	this.loadBasicLayerConfig(config);
 
+
 }
 
-Layer.prototype = {
+MergedLayer.prototype = {
 
 	loadBasicLayerConfig: function(config) {
 
@@ -124,8 +129,12 @@ Layer.prototype = {
 
 	},
 
-	setLastLayer: function(layer) {
-		this.lastLayer = layer;
+	setMergedElements: function(mergedElements) {
+
+		for (let i = 0; i < mergedElements.length; i++) {
+			this.mergedElements.push(mergedElements[i]);
+		}
+
 	},
 
 	setEnvironment: function(scene) {
@@ -203,5 +212,4 @@ Layer.prototype = {
 
 };
 
-
-export { Layer };
+export { MergedLayer };

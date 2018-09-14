@@ -29,9 +29,11 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 		if (this.layers.length !== 0) {
 
-			let tailLayer = this.layers[this.layers.length - 1];
-			layer.setLastLayer(tailLayer);
-			tailLayer.setNextLayer(layer);
+			if (!layer.isMerged) {
+				let tailLayer = this.layers[this.layers.length - 1];
+				layer.setLastLayer(tailLayer);
+			}
+
 		}
 
 		layer.setEnvironment(this.scene);
@@ -232,7 +234,8 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 				};
 
 				let hookHandler = new LineHook(hookPos);
-				model.scene.add(hookHandler.getElement());
+				// 暂时先不把hook加到场景中
+				// model.scene.add(hookHandler.getElement());
 
 				hookHandlerList.push(hookHandler);
 

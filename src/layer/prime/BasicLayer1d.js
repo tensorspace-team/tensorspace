@@ -36,10 +36,6 @@ BasicLayer1d.prototype = Object.assign(Object.create(Layer1d.prototype), {
 
 		this.loadBasicModelConfig(modelConfig);
 
-		if (this.aggregationStrategy === undefined) {
-			this.aggregationStrategy = modelConfig.aggregationStrategy;
-		}
-
 	},
 
 	assemble: function(layerIndex) {
