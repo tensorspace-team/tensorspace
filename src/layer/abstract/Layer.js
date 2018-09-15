@@ -48,10 +48,6 @@ function Layer(config) {
 	// actualWidth / width
 	this.unitLength = undefined;
 
-	// store hook between layers
-	this.nextHookHandler = undefined;
-	this.lastHookHandler = undefined;
-
 	// handler for element showing text
 	this.textElementHandler = undefined;
 

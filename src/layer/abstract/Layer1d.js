@@ -22,12 +22,10 @@ function Layer1d(config) {
 
 Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
-	init: function(center, actualDepth, nextHookHandler) {
+	init: function(center, actualDepth) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
-		this.nextHookHandler = nextHookHandler;
-		this.lastHookHandler = this.lastLayer.nextHookHandler;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);

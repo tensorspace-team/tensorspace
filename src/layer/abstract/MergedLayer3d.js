@@ -127,12 +127,10 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 
 	},
 
-	init: function(center, actualDepth, nextHookHandler) {
+	init: function(center, actualDepth) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
-		this.nextHookHandler = nextHookHandler;
-		// this.lastHookHandler = this.lastLayer.nextHookHandler;
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
