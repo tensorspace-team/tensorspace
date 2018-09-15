@@ -56,12 +56,20 @@
 		kernelSize: 2,
 		filters: 4,
 		strides: 1,
-		padding: "same"
+		padding: "same",
+		closeButton: {
+			ratio: 1,
+			display: true
+		}
 	});
 
     let addLayer = TSP.Average([layer1, layer2], {
     	color: 0x0000ff,
-        name: "addLayer"
+        name: "addLayer",
+		closeButton: {
+			ratio: 1,
+			display: true
+		}
     });
 
     console.log(addLayer);

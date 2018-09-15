@@ -58,17 +58,9 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 
 			this.operationStrategy = StrategyFactory.getOperationStrategy(this.operator, 3, this.mergedElements);
 
-			if (layerConfig.userConfig !== undefined) {
-				if (layerConfig.userConfig.color !== undefined) {
-					this.color = layerConfig.userConfig.color;
-				}
-
-				if (layerConfig.userConfig.name !== undefined) {
-					this.name = layerConfig.userConfig.name;
-				}
-			}
-
 		}
+
+		this.loadBasicLayerConfig(layerConfig.userConfig);
 
 	},
 

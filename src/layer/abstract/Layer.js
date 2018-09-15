@@ -34,6 +34,8 @@ function Layer(config) {
 
 	// store the reference for close button
 	this.closeButtonHandler = undefined;
+	this.hasCloseButton = true;
+	this.closeButtonSizeRatio = 1;
 
 	// center position is the left-most for layer, type: {x: value , y: value, z: value}
 	this.leftMostCenter = undefined;
@@ -93,6 +95,18 @@ Layer.prototype = Object.assign(Object.create(BasicLineGroupController.prototype
 				this.name = config.name;
 			}
 
+			if (config.closeButton !== undefined) {
+
+				if (config.closeButton.display !== undefined) {
+					this.hasCloseButton = config.closeButton.display;
+				}
+
+				if (config.closeButton.ratio !== undefined) {
+					this.closeButtonSizeRatio = config.closeButton.ratio;
+				}
+
+			}
+
 		}
 
 	},
@@ -123,13 +137,15 @@ Layer.prototype = Object.assign(Object.create(BasicLineGroupController.prototype
 
 	initCloseButton: function() {
 
-		let closeButtonPos = this.calcCloseButtonPos();
-		let closeButtonSize = this.calcCloseButtonSize();
-		let closeButtonHandler = new CloseButton(closeButtonSize, this.unitLength, closeButtonPos, this.color);
-		closeButtonHandler.setLayerIndex(this.layerIndex);
+		if (this.hasCloseButton) {
+			let closeButtonPos = this.calcCloseButtonPos();
+			let closeButtonSize = this.closeButtonSizeRatio * this.calcCloseButtonSize();
+			let closeButtonHandler = new CloseButton(closeButtonSize, this.unitLength, closeButtonPos, this.color);
+			closeButtonHandler.setLayerIndex(this.layerIndex);
 
-		this.closeButtonHandler = closeButtonHandler;
-		this.neuralGroup.add(this.closeButtonHandler.getElement());
+			this.closeButtonHandler = closeButtonHandler;
+			this.neuralGroup.add(this.closeButtonHandler.getElement());
+		}
 
 	},
 
