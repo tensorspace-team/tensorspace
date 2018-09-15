@@ -1,11 +1,11 @@
-function AddStrategy3d(mergedElements) {
+function Concatenate3d(mergedElements) {
 
 	this.mergedElements = mergedElements;
 	this.layerIndex = undefined;
 
 }
 
-AddStrategy3d.prototype = {
+Concatenate3d.prototype = {
 
 	setLayerIndex: function(layerIndex) {
 		this.layerIndex = layerIndex;
@@ -13,24 +13,13 @@ AddStrategy3d.prototype = {
 
 	validate: function() {
 
-		let inputShape;
-
-		if (this.mergedElements.length > 0) {
-			inputShape = this.mergedElements[0].outputShape;
-		} else {
-			console.error("Merge Layer missing elements.");
-		}
+		let inputShape = this.mergedElements[0].outputShape;
 
 		for (let i = 0; i < this.mergedElements.length; i++) {
 
-			let outputShape = this.mergedElements[i].outputShape;
-
-			for (let j = 0; j < inputShape.length; j++) {
-
-				if (outputShape[j] !== inputShape[j]) {
-					return false;
-				}
-
+			let layerShape = this.mergedElements[i].outputShape;
+			if (layerShape[0] !== inputShape[0] || layerShape[1] !== inputShape[1]) {
+				return false;
 			}
 
 		}
@@ -41,7 +30,17 @@ AddStrategy3d.prototype = {
 
 	getShape: function() {
 
-		return this.mergedElements[0].outputShape;
+		let width = this.mergedElements[0].outputShape[0];
+		let height = this.mergedElements[0].outputShape[1];
+
+		let depth = 0;
+		for (let i = 0; i < this.mergedElements.length; i++) {
+
+			depth += this.mergedElements[i].outputShape[2];
+
+		}
+
+		return [width, height, depth];
 
 	},
 
@@ -83,32 +82,43 @@ AddStrategy3d.prototype = {
 		} else if (selectedElement.elementType === "featureMap") {
 
 			let fmIndex = selectedElement.fmIndex;
+
+			let relativeLayer;
+
+			for (let i = 0; i < this.mergedElements.length; i++) {
+
+				let layerDepth = this.mergedElements[i].outputShape[2];
+				if (layerDepth >= fmIndex) {
+					relativeLayer = this.mergedElements[i];
+					break;
+				} else {
+					fmIndex -= layerDepth;
+				}
+
+			}
+
 			let request = {
 				index: fmIndex
 			};
 
-			for (let i = 0; i < this.mergedElements.length; i++) {
-				let relativeResult = this.mergedElements[i].provideRelativeElements(request);
-				let relativeElements = relativeResult.elementList;
+			let relativeResult = relativeLayer.provideRelativeElements(request);
+			let relativeElements = relativeResult.elementList;
+			if (relativeLayer.layerIndex === this.layerIndex - 1) {
 
-				if (this.mergedElements[i].layerIndex === this.layerIndex - 1) {
+				for (let i = 0; i < relativeElements.length; i++) {
+					straightElements.push(relativeElements[i]);
+				}
 
-					for (let j = 0; j < relativeElements.length; j++) {
-						straightElements.push(relativeElements[j]);
+			} else {
+
+				if (relativeResult.isOpen) {
+					for (let i = 0; i < relativeElements.length; i++) {
+						straightElements.push(relativeElements[i]);
 					}
-
 				} else {
-
-					if (relativeResult.isOpen) {
-						for (let j = 0; j < relativeElements.length; j++) {
-							straightElements.push(relativeElements[j]);
-						}
-					} else {
-						for (let j = 0; j < relativeElements.length; j++) {
-							curveElements.push(relativeElements[j]);
-						}
+					for (let i = 0; i < relativeElements.length; i++) {
+						curveElements.push(relativeElements[i]);
 					}
-
 				}
 
 			}
@@ -124,4 +134,4 @@ AddStrategy3d.prototype = {
 
 };
 
-export { AddStrategy3d };
+export { Concatenate3d };

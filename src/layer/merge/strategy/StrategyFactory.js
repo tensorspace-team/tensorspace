@@ -1,4 +1,5 @@
-import {AddStrategy3d} from "./AddStrategy3d";
+import {Add3d} from "./Add3d";
+import {Concatenate3d} from "./Concatenate3d";
 
 let StrategyFactory = (function() {
 
@@ -7,7 +8,9 @@ let StrategyFactory = (function() {
 		if (dimension === 3) {
 
 			if (operator === "add") {
-				return new AddStrategy3d(mergedElements);
+				return new Add3d(mergedElements);
+			} else if (operator === "concatenate") {
+				return new Concatenate3d(mergedElements);
 			}
 
 		}

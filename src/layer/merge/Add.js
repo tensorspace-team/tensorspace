@@ -1,4 +1,4 @@
-import {MergedLayer3d} from "./MergedLayer3d";
+import {MergedLayer3d} from "../abstract/MergedLayer3d";
 
 function Add(layerList) {
 

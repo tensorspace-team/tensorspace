@@ -1,7 +1,7 @@
 import { CloseButton } from "../../elements/CloseButton";
 import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
 import { BasicMaterialOpacity } from "../../utils/Constant";
-import { MergeLineGroupController } from "./MergeLineGroupController";
+import { MergeLineGroupController } from "./MergedLineGroupController";
 
 function MergedLayer(config) {
 

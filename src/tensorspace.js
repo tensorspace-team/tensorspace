@@ -39,6 +39,7 @@ import { PixelReshape } from "./layer/pixel/PixelReshape";
 import { PixelOutput } from "./layer/pixel/PixelOutput";
 
 import { Add } from "./layer/merge/Add";
+import { Concatenate } from "./layer/merge/Concatenate";
 
 let layers = {
 	Input1d: Input1d,
@@ -84,4 +85,4 @@ let model = {
 	PixelSequential: PixelSequential
 };
 
-export {model, layers, Add};
+export {model, layers, Add, Concatenate};
