@@ -1,6 +1,11 @@
 import { CloseData } from "../assets/image/CloseData";
 import { PlusData } from "../assets/image/Plus";
 import { ConcatenateData } from "../assets/image/Concatenate";
+import {SubtractData} from "../assets/image/Subtract";
+import {MultiplyData} from "../assets/image/Multiply";
+import {MaximumData} from "../assets/image/Maximum";
+import {AverageData} from "../assets/image/Average";
+import {DotData} from "../assets/image/Dot";
 
 let TextureProvider = (function() {
 
@@ -12,6 +17,16 @@ let TextureProvider = (function() {
 			return PlusData;
 		} else if (name === "concatenate") {
 			return ConcatenateData;
+		} else if (name === "subtract") {
+			return SubtractData;
+		} else if (name === "multiply") {
+			return MultiplyData;
+		} else if (name === "maximum") {
+			return MaximumData;
+		} else if (name === "average") {
+			return AverageData;
+		} else if (name === "dot") {
+			return DotData;
 		}
 
 	}

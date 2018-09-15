@@ -6,7 +6,7 @@ import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { CloseButtonRatio } from "../../utils/Constant";
 import { MergedAggregation } from "../../elements/MergedAggregation";
 import { MergedFeatureMap } from "../../elements/MergedFeatureMap";
-import {StrategyFactory} from "../merge/strategy/StrategyFactory";
+import {StrategyFactory} from "../../merge/strategy/StrategyFactory";
 
 function MergedLayer3d(config) {
 

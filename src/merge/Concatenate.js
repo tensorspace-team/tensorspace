@@ -1,4 +1,4 @@
-import { MergedLayer3d } from "../abstract/MergedLayer3d";
+import { MergedLayer3d } from "../layer/abstract/MergedLayer3d";
 
 function Concatenate(layerList) {
 

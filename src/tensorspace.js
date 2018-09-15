@@ -38,8 +38,13 @@ import { PixelDense } from "./layer/pixel/PixelDense";
 import { PixelReshape } from "./layer/pixel/PixelReshape";
 import { PixelOutput } from "./layer/pixel/PixelOutput";
 
-import { Add } from "./layer/merge/Add";
-import { Concatenate } from "./layer/merge/Concatenate";
+import { Add } from "./merge/Add";
+import { Concatenate } from "./merge/Concatenate";
+import { Subtract } from "./merge/Subtract";
+import { Maximum } from "./merge/Maximum";
+import { Average } from "./merge/Average";
+import { Dot } from "./merge/Dot";
+import { Multiply } from "./merge/Multiply";
 
 let layers = {
 	Input1d: Input1d,
@@ -85,4 +90,4 @@ let model = {
 	PixelSequential: PixelSequential
 };
 
-export {model, layers, Add, Concatenate};
+export {model, layers, Add, Concatenate, Subtract, Dot, Multiply, Average, Maximum};
