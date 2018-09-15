@@ -31,9 +31,9 @@ function Add(layerList) {
 	} else if (mergedElements[0].layerDimension === 3) {
 
 		let mergedLayer = new MergedLayer3d({
-			operator: "add"
+			operator: "add",
+			mergedElements: mergedElements
 		});
-		mergedLayer.setMergedElements(mergedElements);
 
 		return mergedLayer;
 	} else {

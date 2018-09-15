@@ -6,8 +6,7 @@ import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { CloseButtonRatio } from "../../utils/Constant";
 import { MergedAggregation } from "../../elements/MergedAggregation";
 import { MergedFeatureMap } from "../../elements/MergedFeatureMap";
-import { MergedLayerValidator } from "../../utils/MergedLayerValidator";
-import { MergedShapeGenerator } from "../../utils/MergedShapeGenerator";
+import {StrategyFactory} from "./strategy/StrategyFactory";
 
 function MergedLayer3d(config) {
 
@@ -36,9 +35,12 @@ function MergedLayer3d(config) {
 
 	this.mergedElements = [];
 
+	this.operationStrategy = undefined;
+
 	this.layerType = "mergedLayer3d";
 
 	this.loadLayerConfig(config);
+
 
 }
 
@@ -50,6 +52,16 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 			if (layerConfig.operator !== undefined) {
 				this.operator = layerConfig.operator;
 			}
+
+			if (layerConfig.mergedElements !== undefined) {
+				for (let i = 0; i < layerConfig.mergedElements.length; i++) {
+					this.mergedElements.push(layerConfig.mergedElements[i]);
+				}
+			}
+
+			this.operationStrategy = StrategyFactory.getOperationStrategy(this.operator, 3, this.mergedElements);
+
+
 		}
 
 	},
@@ -71,16 +83,13 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 	assemble: function(layerIndex) {
 
 		this.layerIndex = layerIndex;
+		this.operationStrategy.setLayerIndex(this.layerIndex);
 
-		console.log("validate");
-
-		if(!MergedLayerValidator.validate(this.operator, this.mergedElements)) {
+		if(!this.operationStrategy.validate()) {
 			console.error("input shape is not valid for " + this.operator + " merge function.");
 		}
 
-		console.log("generate");
-
-		this.inputShape = MergedShapeGenerator.getShape(this.operator, this.mergedElements);
+		this.inputShape = this.operationStrategy.getShape();
 
 		this.width = this.inputShape[0];
 		this.height = this.inputShape[1];
@@ -389,83 +398,7 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 
 	getRelativeElements: function(selectedElement) {
 
-		let curveElements = [];
-		let straightElements = [];
-
-		if (selectedElement.elementType === "aggregationElement") {
-
-			let request = {
-				all: true
-			};
-
-			for (let i = 0; i < this.mergedElements.length; i++) {
-				let relativeResult = this.mergedElements[i].provideRelativeElements(request);
-				let relativeElements = relativeResult.elementList;
-				if (this.mergedElements[i].layerIndex === this.layerIndex - 1) {
-
-					// console.log("get last layer.");
-					// console.log(relativeElements);
-
-					for (let j = 0; j < relativeElements.length; j++) {
-						straightElements.push(relativeElements[j]);
-					}
-
-				} else {
-
-					if (relativeResult.isOpen) {
-						for (let j = 0; j < relativeElements.length; j++) {
-							straightElements.push(relativeElements[j]);
-						}
-					} else {
-						for (let j = 0; j < relativeElements.length; j++) {
-							curveElements.push(relativeElements[j]);
-						}
-					}
-
-				}
-			}
-
-		} else if (selectedElement.elementType === "featureMap") {
-
-			let fmIndex = selectedElement.fmIndex;
-			let request = {
-				index: fmIndex
-			};
-
-			for (let i = 0; i < this.mergedElements.length; i++) {
-				let relativeResult = this.mergedElements[i].provideRelativeElements(request);
-				let relativeElements = relativeResult.elementList;
-
-				if (this.mergedElements[i].layerIndex === this.layerIndex - 1) {
-
-					// console.log("get last layer");
-
-					for (let j = 0; j < relativeElements.length; j++) {
-						straightElements.push(relativeElements[j]);
-					}
-
-				} else {
-
-					if (relativeResult.isOpen) {
-						for (let j = 0; j < relativeElements.length; j++) {
-							straightElements.push(relativeElements[j]);
-						}
-					} else {
-						for (let j = 0; j < relativeElements.length; j++) {
-							curveElements.push(relativeElements[j]);
-						}
-					}
-
-				}
-
-			}
-
-		}
-
-		return {
-			straight: straightElements,
-			curve: curveElements
-		};
+		return this.operationStrategy.getRelativeElements(selectedElement);
 
 	}
 

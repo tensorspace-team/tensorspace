@@ -121,14 +121,6 @@ MergedLayer.prototype = Object.assign(Object.create(MergeLineGroupController.pro
 
 	},
 
-	setMergedElements: function(mergedElements) {
-
-		for (let i = 0; i < mergedElements.length; i++) {
-			this.mergedElements.push(mergedElements[i]);
-		}
-
-	},
-
 	setEnvironment: function(scene) {
 		this.scene = scene;
 	},

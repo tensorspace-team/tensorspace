@@ -63,10 +63,10 @@ MergeLineGroupController.prototype = {
 		for (let i = 0; i < curveElements.length; i++) {
 
 			let startPos = startPosition;
-			let firstControlPointPos = startPos.clone().add(new THREE.Vector3(4 * this.width, 0, 0));
+			let firstControlPointPos = startPos.clone().add(new THREE.Vector3(1.5 * this.actualWidth, 0, 0));
 
 			let endPos = curveElements[i].getWorldPosition().sub(this.neuralGroup.getWorldPosition());
-			let secondControlPointPos = endPos.clone().add(new THREE.Vector3(4 * this.width, 0, 0));
+			let secondControlPointPos = endPos.clone().add(new THREE.Vector3(1.5 * this.actualWidth, 0, 0));
 
 			let curve = new THREE.CubicBezierCurve3(
 				startPos,
@@ -88,7 +88,7 @@ MergeLineGroupController.prototype = {
 
 			} else {
 
-				for (let i = this.points.length - 1; i >= 0; i--) {
+				for (let i = points.length - 1; i >= 0; i--) {
 
 					curveLineVertices.push(points[i]);
 					curveLineColors.push(new THREE.Color(this.color));
