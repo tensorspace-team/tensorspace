@@ -1,49 +1,52 @@
-import { BasicLayer1d } from "../prime/BasicLayer1d";
-import { BasicLayer2d } from "../prime/BasicLayer2d";
-import { BasicLayer3d } from "../prime/BasicLayer3d";
 import {MergedLayer3d} from "./MergedLayer3d";
 
 function Add(layerList) {
 
-	let mergedElements = [];
+	let operatorType = "add";
 
-	let depth;
+	validate(layerList);
 
-	if (layerList.length > 0) {
-		depth = layerList[0].layerDimension;
-	} else {
-		console.error("Merge Layer missing elements.");
-	}
+	return createMergedLayer(layerList);
 
-	for (let i = 0; i < layerList.length; i++) {
+	function validate(layerList) {
 
-		if (layerList[i].layerDimension !== depth) {
-			console.error("Can not add layer with different depth.");
+		let depth;
+
+		if (layerList.length > 0) {
+			depth = layerList[0].layerDimension;
+		} else {
+			console.error("Merge Layer missing elements.");
 		}
 
-		mergedElements.push(layerList[i]);
+		for (let i = 0; i < layerList.length; i++) {
+
+			if (layerList[i].layerDimension !== depth) {
+				console.error("Can not add layer with different depth.");
+			}
+
+		}
+
 	}
 
-	if (mergedElements[0].layerDimension === 1) {
-		return ;
-	} else if (mergedElements[0].layerDimension === 2) {
-		return new BasicLayer2d({shape: [100, 100]});
-	} else if (mergedElements[0].layerDimension === 3) {
+	function createMergedLayer(layerList) {
 
-		let mergedLayer = new MergedLayer3d({
-			operator: "add",
-			mergedElements: mergedElements
-		});
+		if (layerList[0].layerDimension === 1) {
 
-		return mergedLayer;
-	} else {
+		} else if (layerList[0].layerDimension === 2) {
+
+		} else if (layerList[0].layerDimension === 3) {
+
+			return new MergedLayer3d({
+				operator: operatorType,
+				mergedElements: layerList
+			});
+
+		} else {
+			console.error("Do not support layer add operation more than 4 dimension.");
+		}
 
 	}
 
 }
-
-Add.prototype = {
-
-};
 
 export { Add };
