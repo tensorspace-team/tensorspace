@@ -20,8 +20,6 @@ function MergedLayer3d(config) {
 
 	this.layerDimension = 3;
 
-	this.color = 0xff0000;
-
 	// store all layer segregation references as a list
 	this.segregationHandlers = [];
 
@@ -40,7 +38,6 @@ function MergedLayer3d(config) {
 	this.layerType = "mergedLayer3d";
 
 	this.loadLayerConfig(config);
-
 
 }
 
@@ -61,6 +58,15 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 
 			this.operationStrategy = StrategyFactory.getOperationStrategy(this.operator, 3, this.mergedElements);
 
+			if (layerConfig.userConfig !== undefined) {
+				if (layerConfig.userConfig.color !== undefined) {
+					this.color = layerConfig.userConfig.color;
+				}
+
+				if (layerConfig.userConfig.name !== undefined) {
+					this.name = layerConfig.userConfig.name;
+				}
+			}
 
 		}
 
@@ -76,6 +82,10 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 
 		if (this.aggregationStrategy === undefined) {
 			this.aggregationStrategy = modelConfig.aggregationStrategy;
+		}
+
+		if (this.color === undefined) {
+			this.color = modelConfig.color[this.operator];
 		}
 
 	},

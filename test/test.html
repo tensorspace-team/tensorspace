@@ -59,7 +59,10 @@
 		padding: "same"
 	});
 
-    let addLayer = TSP.Average([layer1, layer2]);
+    let addLayer = TSP.Average([layer1, layer2], {
+    	color: 0x0000ff,
+        name: "addLayer"
+    });
 
     console.log(addLayer);
 

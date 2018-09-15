@@ -30,7 +30,14 @@ function MapModelConfiguration(config) {
 		reshape: 0xffffff,
 		activation1d: 0xffffff,
 		activation2d: 0xffffff,
-		activation3d: 0xffffff
+		activation3d: 0xffffff,
+		add: 0xffffff,
+		subtract: 0xffffff,
+		multiply: 0xffffff,
+		maximum: 0xffffff,
+		average: 0xffffff,
+		dot: 0xffffff,
+		concatenate: 0xffffff
 	};
 
 	if (config !== undefined) {
@@ -184,6 +191,34 @@ function MapModelConfiguration(config) {
 
 			if (config.color.activation3d !== undefined) {
 				this.color.activation3d = config.color.activation3d;
+			}
+
+			if (config.color.add !== undefined) {
+				this.color.add = config.color.add;
+			}
+
+			if (config.color.subtract !== undefined) {
+				this.color.subtract = config.color.subtract;
+			}
+
+			if (config.color.multiply !== undefined) {
+				this.color.multiply = config.color.multiply;
+			}
+
+			if (config.color.maximum !== undefined) {
+				this.color.maximum = config.color.maximum;
+			}
+
+			if (config.color.average !== undefined) {
+				this.color.average = config.color.average;
+			}
+
+			if (config.color.dot !== undefined) {
+				this.color.dot = config.color.dot;
+			}
+
+			if (config.color.concatenate !== undefined) {
+				this.color.concatenate = config.color.concatenate;
 			}
 
 		}

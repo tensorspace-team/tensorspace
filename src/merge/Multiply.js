@@ -1,12 +1,12 @@
 import {MergedLayer3d} from "../layer/abstract/MergedLayer3d";
 
-function Multiply(layerList) {
+function Multiply(layerList, config) {
 
 	let operatorType = "multiply";
 
 	validate(layerList);
 
-	return createMergedLayer(layerList);
+	return createMergedLayer(layerList, config);
 
 	function validate(layerList) {
 
@@ -28,7 +28,7 @@ function Multiply(layerList) {
 
 	}
 
-	function createMergedLayer(layerList) {
+	function createMergedLayer(layerList, userConfig) {
 
 		if (layerList[0].layerDimension === 1) {
 
@@ -38,7 +38,8 @@ function Multiply(layerList) {
 
 			return new MergedLayer3d({
 				operator: operatorType,
-				mergedElements: layerList
+				mergedElements: layerList,
+				userConfig: userConfig
 			});
 
 		} else {
