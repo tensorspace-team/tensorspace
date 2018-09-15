@@ -28,6 +28,10 @@ let StrategyFactory = (function() {
 				return new Average3d(mergedElements);
 			}
 
+		} else if (dimension === 2) {
+
+		} else if (dimension === 1) {
+
 		}
 
 	}
