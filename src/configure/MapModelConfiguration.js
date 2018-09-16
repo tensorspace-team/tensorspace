@@ -7,6 +7,7 @@ function MapModelConfiguration(config) {
 	this.textSystem = true;
 	this.stats = false;
 	this.color = {
+		background: 0x000000,
 		input1d: 0xffffff,
 		input2d: 0xffffff,
 		input3d: 0xffffff,
@@ -97,6 +98,10 @@ function MapModelConfiguration(config) {
 		}
 
 		if (config.color !== undefined) {
+
+			if (config.color.background !== undefined) {
+				this.color.background = config.color.background;
+			}
 
 			if (config.color.input1d !== undefined) {
 				this.color.input1d = config.color.input1d;

@@ -18,6 +18,8 @@ function SceneInitializer(container) {
 	// control whether to show Stats panel, configured by Model Configuration
 	this.hasStats = undefined;
 
+	this.backgroundColor = undefined;
+
 }
 
 SceneInitializer.prototype = {
@@ -25,6 +27,7 @@ SceneInitializer.prototype = {
 	loadSceneConfig: function(config) {
 
 		this.hasStats = config.stats;
+		this.backgroundColor = config.color.background;
 
 	},
 
@@ -47,7 +50,10 @@ SceneInitializer.prototype = {
 
 		sceneArea.width = this.container.clientWidth - paddingX - borderX;
 		sceneArea.height = this.container.clientHeight - paddingY - borderY;
-		sceneArea.style.backgroundColor = "#ffffff";
+
+		console.log(this.backgroundColor);
+
+		sceneArea.style.backgroundColor = this.backgroundColor;
 
 		this.clock = new THREE.Clock();
 		this.renderer = new THREE.WebGLRenderer({canvas: sceneArea, antialias: true});
@@ -64,6 +70,7 @@ SceneInitializer.prototype = {
 		this.camera.name = 'defaultCamera';
 
 		this.scene = new THREE.Scene();
+		this.scene.background = new THREE.Color( this.backgroundColor );
 
 		if (this.hasStats) {
 
