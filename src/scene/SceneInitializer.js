@@ -95,7 +95,21 @@ SceneInitializer.prototype = {
 		console.log("update camera.");
 
 		let modelDepth = this.layers.length;
-		this.camera.position.set(0, 0, DefaultCameraPos * (modelDepth - 1) / (DefaultLayerDepth - 1));
+		let controlRatio = getControlRatio(modelDepth);
+		this.camera.position.set(0, 0, controlRatio * DefaultCameraPos * modelDepth / DefaultLayerDepth);
+
+		// as strategy can not directly be applied to model when layer depth is too small, add a control ratio to move camera farther
+		function getControlRatio(depth) {
+
+			if (depth > 5) {
+				return 1;
+			} else if (depth >= 3 && depth < 5) {
+				return 1.5;
+			} else {
+				return 2;
+			}
+
+		}
 
 	},
 
