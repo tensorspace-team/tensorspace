@@ -1,6 +1,6 @@
 import { MinAlpha } from "../utils/Constant";
 import { BasicMaterialOpacity } from "../utils/Constant";
-import { colorUtils } from "../utils/ColorUtils";
+import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import {RenderPreprocessor} from "../utils/RenderPreprocessor";
@@ -107,7 +107,7 @@ NeuralQueue.prototype = {
 	clear: function() {
 
 		let zeroData = new Uint8Array(this.queueLength);
-		let colors = colorUtils.getAdjustValues(zeroData);
+		let colors = ColorUtils.getAdjustValues(zeroData);
 
 		this.updateVis(colors);
 

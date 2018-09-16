@@ -1,12 +1,8 @@
 import { MinAlpha } from "./Constant";
 
-function ColorUtils() {
+let ColorUtils = (function() {
 
-}
-
-ColorUtils.prototype = {
-
-	getAdjustValues: function(values) {
+	function getAdjustValues(values) {
 
 		let max = values[0], min = values[0];
 		for (let i = 1; i < values.length; i++) {
@@ -39,9 +35,9 @@ ColorUtils.prototype = {
 
 		return adjustValues;
 
-	},
+	}
 
-	getColors: function(values) {
+	function getColors(values) {
 
 		let adjustValues = this.getAdjustValues(values);
 
@@ -62,8 +58,14 @@ ColorUtils.prototype = {
 
 	}
 
-};
+	return {
 
-let colorUtils = new ColorUtils();
+		getAdjustValues: getAdjustValues,
 
-export { colorUtils };
+		getColors: getColors
+
+	}
+
+})();
+
+export { ColorUtils };

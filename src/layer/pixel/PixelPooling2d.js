@@ -1,6 +1,6 @@
 import { MinAlpha } from "../../utils/Constant";
 import { NeuralBoxLength } from "../../utils/Constant";
-import { colorUtils } from '../../utils/ColorUtils';
+import { ColorUtils } from '../../utils/ColorUtils';
 import { PixelLayer } from './PixelLayer';
 
 function PixelPooling2d(config) {
@@ -133,7 +133,7 @@ PixelPooling2d.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 	updateValue: function(value) {
 		this.neuralValue = value;
 
-		let colorList = colorUtils.getColors(value);
+		let colorList = ColorUtils.getColors(value);
 
 		for (let i = 0; i < colorList.length; i++) {
 

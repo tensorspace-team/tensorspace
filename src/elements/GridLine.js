@@ -1,6 +1,6 @@
 import { MinAlpha } from "../utils/Constant";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
-import { colorUtils } from "../utils/ColorUtils";
+import { ColorUtils } from "../utils/ColorUtils";
 import {TextFont} from "../assets/fonts/TextFont";
 import {TextHelper} from "../utils/TextHelper";
 
@@ -133,7 +133,7 @@ GridLine.prototype = {
 	clear: function() {
 
 		let zeroData = new Uint8Array(this.width);
-		let colors = colorUtils.getAdjustValues(zeroData);
+		let colors = ColorUtils.getAdjustValues(zeroData);
 		this.updateVis(colors);
 
 	},

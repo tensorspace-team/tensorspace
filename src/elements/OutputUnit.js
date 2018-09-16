@@ -1,5 +1,5 @@
 import { MinAlpha } from "../utils/Constant";
-import { colorUtils } from "../utils/ColorUtils";
+import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 
@@ -129,7 +129,7 @@ OutputUnit.prototype = {
 
 	clear: function() {
 
-		let colors = colorUtils.getAdjustValues([0]);
+		let colors = ColorUtils.getAdjustValues([0]);
 
 		this.updateVis(colors);
 

@@ -1,4 +1,4 @@
-import {fmCenterGenerator} from "../../utils/FmCenterGenerator";
+import {FmCenterGenerator} from "../../utils/FmCenterGenerator";
 import { Layer3d } from "../abstract/Layer3d";
 
 function UpSampling2d(config) {
@@ -86,7 +86,7 @@ UpSampling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 		this.actualWidth = this.width * this.unitLength;
 		this.actualHeight = this.height * this.unitLength;
 
-		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
+		this.openFmCenters = FmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
 
 		this.leftMostCenter = this.openFmCenters[0];
 		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;

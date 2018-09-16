@@ -1,5 +1,5 @@
 import { BasicMaterialOpacity } from "../utils/Constant";
-import { colorUtils } from "../utils/ColorUtils";
+import { ColorUtils } from "../utils/ColorUtils";
 import { TextHelper } from "../utils/TextHelper";
 import { TextFont } from "../assets/fonts/TextFont";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
@@ -135,7 +135,7 @@ MergedFeatureMap.prototype = {
 
 		let zeroValue = new Int8Array(this.neuralLength);
 
-		let colors = colorUtils.getAdjustValues(zeroValue);
+		let colors = ColorUtils.getAdjustValues(zeroValue);
 
 		this.updateVis(colors);
 

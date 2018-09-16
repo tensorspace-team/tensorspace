@@ -1,6 +1,6 @@
 import {Layer} from "./Layer";
 import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
-import { colorUtils } from "../../utils/ColorUtils";
+import { ColorUtils } from "../../utils/ColorUtils";
 import {QueueAggregation} from "../../elements/QueueAggregation";
 import {NeuralQueue} from "../../elements/NeuralQueue";
 
@@ -169,7 +169,7 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	updateQueueVis: function() {
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
+		let colors = ColorUtils.getAdjustValues(this.neuralValue);
 
 		this.queueHandler.updateVis(colors);
 	},

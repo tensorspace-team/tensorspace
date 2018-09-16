@@ -1,6 +1,6 @@
 import { MinAlpha } from "../utils/Constant";
 import { FrameColor } from "../utils/Constant";
-import { colorUtils } from "../utils/ColorUtils";
+import { ColorUtils } from "../utils/ColorUtils";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 import { TextureProvider } from "../utils/TextureProvider";
 
@@ -108,7 +108,7 @@ MergedAggregation.prototype = {
 	clear: function() {
 
 		let zeroValue = new Int8Array(this.width * this.height);
-		let colors = colorUtils.getAdjustValues(zeroValue);
+		let colors = ColorUtils.getAdjustValues(zeroValue);
 
 		this.updateVis(colors);
 		this.cube.material = this.clearMaterial;

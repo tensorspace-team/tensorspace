@@ -1,7 +1,7 @@
-import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
+import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
 import {MergedLayer} from "./MergedLayer";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
-import { colorUtils } from "../../utils/ColorUtils";
+import { ColorUtils } from "../../utils/ColorUtils";
 import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { CloseButtonRatio } from "../../utils/Constant";
 import { MergedAggregation } from "../../elements/MergedAggregation";
@@ -112,7 +112,7 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 			this.closeFmCenters.push(center);
 		}
 
-		this.openFmCenters = fmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
+		this.openFmCenters = FmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
 
 		this.leftMostCenter = this.openFmCenters[0];
 		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
@@ -251,7 +251,7 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 
 		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
 
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
+		let colors = ColorUtils.getAdjustValues(aggregationUpdateValue);
 
 		this.aggregationHandler.updateVis(colors);
 
@@ -261,7 +261,7 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
-		let colors = colorUtils.getAdjustValues(layerOutputValues);
+		let colors = ColorUtils.getAdjustValues(layerOutputValues);
 
 		let featureMapSize = this.width * this.height;
 

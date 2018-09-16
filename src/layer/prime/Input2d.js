@@ -1,6 +1,6 @@
 import { Layer } from '../abstract/Layer';
 import { FeatureMap } from "../../elements/FeatureMap";
-import { colorUtils } from "../../utils/ColorUtils";
+import { ColorUtils } from "../../utils/ColorUtils";
 import { ModelInitWidth } from "../../utils/Constant";
 
 function Input2d(config) {
@@ -107,7 +107,7 @@ Input2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.neuralValue = value;
 
-		let colors = colorUtils.getAdjustValues(value);
+		let colors = ColorUtils.getAdjustValues(value);
 
 		this.aggregationHandler.updateVis(colors);
 	},
