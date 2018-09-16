@@ -38,11 +38,10 @@ OutputTransitionTween.prototype = {
 			console.log("start open output layer");
 			layer.disposeAggregationElement();
 			layer.initSegregationElements(layer.closeResultPos);
+			layer.isOpen = true;
 		}).onComplete(function() {
 			console.log("finish open output layer");
 			layer.initCloseButton();
-			layer.isOpen = true;
-
 		});
 
 		openTween.start();

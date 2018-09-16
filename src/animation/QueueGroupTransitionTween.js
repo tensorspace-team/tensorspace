@@ -36,11 +36,10 @@ QueueGroupTransitionTween.prototype = {
 			console.log("start open layer");
 			layer.disposeAggregationElement();
 			layer.initSegregationElements(layer.closeCenterList);
+			layer.isOpen = true;
 		}).onComplete(function() {
 			console.log("end open layer");
 			layer.initCloseButton();
-			layer.isOpen = true;
-
 		});
 
 		openTween.start();

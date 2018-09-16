@@ -18,6 +18,8 @@ function Layer1d(config) {
 
 	this.queueHandler = undefined;
 
+	this.isTransition = false;
+
 }
 
 Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
@@ -199,10 +201,12 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let relativeElements = [];
 
-		if (this.isOpen) {
-			relativeElements.push(this.queueHandler.getElement());
-		} else {
-			relativeElements.push(this.aggregationHandler.getElement());
+		if (!this.isTransition) {
+			if (this.isOpen) {
+				relativeElements.push(this.queueHandler.getElement());
+			} else {
+				relativeElements.push(this.aggregationHandler.getElement());
+			}
 		}
 
 		return {
