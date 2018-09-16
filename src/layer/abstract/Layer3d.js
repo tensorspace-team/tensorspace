@@ -25,6 +25,9 @@ function Layer3d(config) {
 	this.openFmCenters = [];
 	this.closeFmCenters = [];
 
+	// center position is the left-most for layer, type: {x: value , y: value, z: value}
+	this.leftMostCenter = undefined;
+
 	this.aggregationStrategy = undefined;
 
 }

@@ -5,6 +5,7 @@ function MapModelConfiguration(config) {
 	this.layerInitStatus = true;
 	this.relationSystem = true;
 	this.textSystem = true;
+	this.stats = false;
 	this.color = {
 		input1d: 0xffffff,
 		input2d: 0xffffff,
@@ -89,6 +90,10 @@ function MapModelConfiguration(config) {
 				console.error("LayerInitStatus " + config.layerInitStatus +" is not support.");
 			}
 
+		}
+
+		if (config.stats !== undefined) {
+			this.stats = config.stats;
 		}
 
 		if (config.color !== undefined) {

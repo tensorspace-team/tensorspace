@@ -1,19 +1,13 @@
-import { AbstractComposite } from './AbstractComposite';
+import { AbstractModel } from './AbstractModel';
 import { MapModelConfiguration } from "../configure/MapModelConfiguration";
 import { ModelLayerInterval } from "../utils/Constant";
 import { MaxDepthInLayer } from "../utils/Constant";
-import { HookPosRatio } from "../utils/Constant";
-import { LineHook } from "../elements/LineHook";
 
 function Sequential(container, config) {
 
-	AbstractComposite.call(this, container);
+	AbstractModel.call(this, container);
 
 	this.layers = [];
-	this.heightLightNeural = [];
-	this.layerHighLighted = false;
-	this.model = undefined;
-	this.loadModel = false;
 
 	this.configuration = new MapModelConfiguration(config);
 
@@ -23,7 +17,7 @@ function Sequential(container, config) {
 
 }
 
-Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype), {
+Sequential.prototype = Object.assign(Object.create(AbstractModel.prototype), {
 
 	add: function (layer) {
 
@@ -259,19 +253,8 @@ Sequential.prototype = Object.assign(Object.create(AbstractComposite.prototype),
 
 	},
 
-	initLayerOutputIndex: function () {
-
-		for (let i = 1; i < this.layers.length; i++) {
-
-			this.layers[i].resourceOutputIndex = i - 1;
-
-		}
-
-	},
-
 	clear: function() {
-		this.layers[0].clear();
-		for (let i = 1; i < this.layers.length; i++) {
+		for (let i = 0; i < this.layers.length; i++) {
 			this.layers[i].clear();
 		}
 	}

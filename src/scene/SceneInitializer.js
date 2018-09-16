@@ -1,7 +1,7 @@
 import { DefaultCameraPos } from "../utils/Constant";
 import { DefaultLayerDepth } from "../utils/Constant";
 
-function SceneInitializer(container ) {
+function SceneInitializer(container) {
 
 	this.container = container;
 	this.animateFrame = undefined;

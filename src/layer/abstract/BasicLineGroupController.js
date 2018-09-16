@@ -3,20 +3,28 @@ import {LineGroupGeometry} from "../../elements/LineGroupGeometry";
 
 function BasicLineGroupController() {
 
-	// store the line group system element
-	let lineMat = new THREE.LineBasicMaterial( {
-		color: 0xffffff,
-		opacity: BasicMaterialOpacity,
-		transparent:true,
-		vertexColors: THREE.VertexColors
-	} );
-	let lineGeom = new THREE.Geometry();
-	lineGeom.dynamic = true;
-	this.lineGroup = new THREE.Line(lineGeom, lineMat);
+	this.lineGroup = undefined;
+
+	this.createBasicLineElement();
 
 }
 
 BasicLineGroupController.prototype = {
+
+	createBasicLineElement: function() {
+
+		// store the line group system element
+		let lineMat = new THREE.LineBasicMaterial( {
+			color: 0xffffff,
+			opacity: BasicMaterialOpacity,
+			transparent:true,
+			vertexColors: THREE.VertexColors
+		} );
+		let lineGeom = new THREE.Geometry();
+		lineGeom.dynamic = true;
+		this.lineGroup = new THREE.Line(lineGeom, lineMat);
+
+	},
 
 	getLineGroupParameters: function(selectedElement) {
 

@@ -1,5 +1,4 @@
 import { MinAlpha } from "../utils/Constant";
-import { FrameColor } from "../utils/Constant";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 import { colorUtils } from "../utils/ColorUtils";
 import {TextFont} from "../assets/fonts/TextFont";
