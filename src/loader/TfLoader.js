@@ -1,4 +1,5 @@
 import { Loader } from './Loader';
+import {TfPredictor} from "../predictor/TfPredictor";
 
 function TfLoader(model, config) {
 
@@ -48,33 +49,18 @@ TfLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 		this.model.resource = loadedModel;
 		this.model.isFit = true;
 
+		this.model.modelType = "tensorflow";
+		this.setPredictor();
+
 		if (this.onCompleteCallback !== undefined) {
 			this.onCompleteCallback();
 		}
 
 	},
 
-	predict: function(data, inputShape) {
-
-		let batchSize = [1];
-		let predictTensorShape = batchSize.concat(inputShape);
-
-		let predictTensor = tf.tensor(data, predictTensorShape);
-
-		let predictResult;
-
-		if (this.outputsName !== undefined) {
-
-			predictResult = this.model.resource.execute(predictTensor, this.outputsName);
-
-		} else {
-
-			predictResult = this.model.resource.predict(predictTensor);
-
-		}
-
-		return predictResult;
-
+	setPredictor: function() {
+		this.model.predictor = new TfPredictor(this.model);
+		this.model.predictor.setOutputsName(this.outputsName);
 	}
 
 });

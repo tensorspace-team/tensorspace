@@ -219,7 +219,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractModel.prototype), {
 		}
 	},
 
-	predict: function (input) {
+	predict: function (input, callback) {
 
 		this.inputValue = input;
 
@@ -227,7 +227,7 @@ Sequential.prototype = Object.assign(Object.create(AbstractModel.prototype), {
 
 			let inputShape = this.layers[0].shape;
 
-			this.predictResult = this.loader.predict(input, inputShape);
+			this.predictResult = this.predictor.predict(input, inputShape, callback);
 		}
 
 		this.updateLayerVis();

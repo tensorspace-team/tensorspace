@@ -1,4 +1,5 @@
 import { Loader } from './Loader';
+import {TfjsPredictor} from "../predictor/TfjsPredictor";
 
 function TfjsLoader( model, config ) {
 
@@ -35,23 +36,17 @@ TfjsLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 		this.model.resource = loadedModel;
 		this.model.isFit = true;
 
+		this.model.modelType = "tfjs";
+		this.setPredictor();
+
 		if (this.onCompleteCallback !== undefined) {
 			this.onCompleteCallback();
 		}
 
 	},
 
-	predict: function(data, inputShape) {
-
-		let batchSize = [1];
-		let predictTensorShape = batchSize.concat(inputShape);
-
-		let predictTensor = tf.tensor(data, predictTensorShape);
-
-		let predictResult = this.model.resource.predict(predictTensor);
-
-		return predictResult;
-
+	setPredictor: function() {
+		this.model.predictor = new TfjsPredictor(this.model);
 	}
 
 });

@@ -16,6 +16,12 @@ function AbstractModel(container ) {
 	// store the predict result from resource
 	this.predictResult = undefined;
 
+	// predictor is used to trigger model prediction and get predict result
+	this.predictor = undefined;
+
+	// three types now: "tfjs", "keras", "tensorflow"
+	this.modelType = undefined;
+
 	SceneInitializer.call(this, container);
 
 }

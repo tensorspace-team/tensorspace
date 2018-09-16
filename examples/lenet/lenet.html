@@ -100,7 +100,9 @@
 
 		}
 
-		model.predict(signatureData);
+		model.predict(signatureData, function(predictResult) {
+			//console.log(predictResult);
+        });
 
 	}
 
