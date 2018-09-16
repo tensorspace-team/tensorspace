@@ -15,11 +15,18 @@ function SceneInitializer(container) {
 	this.raycaster = undefined;
 	this.mouse = undefined;
 
-	this.createScene();
+	// control whether to show Stats panel, configured by Model Configuration
+	this.hasStats = undefined;
 
 }
 
 SceneInitializer.prototype = {
+
+	loadSceneConfig: function(config) {
+
+		this.hasStats = config.stats;
+
+	},
 
 	dispose: function() {
 		window.cancelAnimationFrame(this.animateFrame);
@@ -58,9 +65,12 @@ SceneInitializer.prototype = {
 
 		this.scene = new THREE.Scene();
 
-		this.stats = new Stats();
-		this.stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-		container.appendChild( this.stats.dom );
+		if (this.hasStats) {
+
+			this.stats = new Stats();
+			this.stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+			container.appendChild( this.stats.dom );
+		}
 
 		this.cameraControls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
 		this.cameraControls.target.set(0, 0, 0);
@@ -88,7 +98,11 @@ SceneInitializer.prototype = {
 		let delta = this.clock.getDelta();
 
 		this.cameraControls.update(delta);
-		this.stats.update();
+
+		if (this.hasStats) {
+			this.stats.update();
+		}
+
 		TWEEN.update();
 
 		this.renderer.render(this.scene, this.camera);

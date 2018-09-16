@@ -10,10 +10,14 @@ function Sequential(container, config) {
 	this.layers = [];
 
 	this.configuration = new MapModelConfiguration(config);
+	this.loadSceneConfig(this.configuration);
 
 	this.hoveredLayer = undefined;
 
 	this.inputValue = undefined;
+
+	// create three.js actual scene
+	this.createScene();
 
 }
 
