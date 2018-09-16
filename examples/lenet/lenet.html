@@ -190,7 +190,10 @@
 
 	model.load({
 		type: "tfjs",
-        url: './lenetModel/mnist.json'
+        url: './lenetModel/mnist.json',
+        onComplete: function() {
+			console.log("Complete load model.");
+        }
 	});
 
 	model.init();

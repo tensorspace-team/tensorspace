@@ -4,51 +4,41 @@ function TfLoader(model, config) {
 
 	Loader.call(this, model);
 
-	this.modelUrl = config.modelUrl;
-	this.weightUrl = config.weightUrl;
-	this.output = config.output;
+	this.modelUrl = undefined;
+	this.weightUrl = undefined;
 
 	this.outputsName = undefined;
+	this.onCompleteCallback = undefined;
 
-	if (config.outputsName !== undefined) {
-		this.outputsName = config.outputsName;
-	}
+	this.type = "TfLoader";
 
-	this.type = "tensorflowLoader";
+	this.loadLoaderConfig(config);
 
 }
 
 TfLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
-	preLoad: function() {
+	loadLoaderConfig: function(loaderConfig) {
 
-		// undefined 还是null？
-		if (this.output !== undefined && this.output !== null) {
-
-			// 根据name来设置output的序列
-			let outputConfig = this.output;
-
-			this.model.initLayerOutputIndexFromName(outputConfig);
-
+		if (loaderConfig.modelUrl !== undefined) {
+			this.modelUrl = loaderConfig.modelUrl;
 		} else {
-
-			// 逐次设置output序列
-
-			this.model.initLayerOutputIndex();
-
+			console.error("\"modelUrl\" property is required to load tensorflow model.");
 		}
 
-		if (this.model.isInitialized) {
-
-			// 执行异步加载模型
-			this.load().then(function() {
-				console.log("Have stored the resource into visualization model.");
-			});
-
+		if (loaderConfig.weightUrl !== undefined) {
+			this.weightUrl = loaderConfig.weightUrl;
+		} else {
+			console.error("\"weightUrl\" property is required to load tensorflow model.");
 		}
 
-		this.model.loader = this;
-		this.model.hasLoader = true;
+		if (loaderConfig.onComplete !== undefined) {
+			this.onCompleteCallback = loaderConfig.onComplete;
+		}
+
+		if (loaderConfig.outputsName !== undefined) {
+			this.outputsName = loaderConfig.outputsName;
+		}
 
 	},
 
@@ -57,6 +47,10 @@ TfLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 		const loadedModel = await tf.loadFrozenModel(this.modelUrl, this.weightUrl);
 		this.model.resource = loadedModel;
 		this.model.isFit = true;
+
+		if (this.onCompleteCallback !== undefined) {
+			this.onCompleteCallback();
+		}
 
 	},
 

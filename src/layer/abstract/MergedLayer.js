@@ -10,7 +10,6 @@ function MergedLayer(config) {
 	this.scene = undefined;
 	this.layerIndex = undefined;
 	this.center = undefined;
-	this.nextLayer = undefined;
 	this.lastLayer = undefined;
 
 	// store all neural value as an array
