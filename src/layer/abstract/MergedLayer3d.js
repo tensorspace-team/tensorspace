@@ -360,7 +360,10 @@ MergedLayer3d.prototype = Object.assign(Object.create(MergedLayer.prototype), {
 			}
 		}
 
-		return relativeElements;
+		return {
+			isOpen: this.isOpen,
+			elementList: relativeElements
+		};
 
 	},
 

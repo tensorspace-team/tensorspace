@@ -85,8 +85,8 @@ Pooling2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 			if (this.padding === "valid") {
 
-				this.width = (this.inputShape[0] - this.poolSize[0]) / this.strides[0] + 1;
-				this.height = (this.inputShape[1] - this.poolSize[1]) / this.strides[1] + 1;
+				this.width = Math.floor((this.inputShape[0] - this.poolSize[0]) / this.strides[0]) + 1;
+				this.height = Math.floor((this.inputShape[1] - this.poolSize[1]) / this.strides[1]) + 1;
 
 			} else if (this.padding === "same") {
 

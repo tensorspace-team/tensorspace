@@ -77,11 +77,11 @@ Pooling1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 		if (this.padding === "valid") {
 
-			this.width = (this.inputShape[0] - this.poolSize) / this.strides + 1;
+			this.width = Math.floor((this.inputShape[0] - this.poolSize) / this.strides) + 1;
 
 		} else if (this.padding === "same") {
 
-			this.width = this.inputShape[0] / this.strides;
+			this.width = Math.ceil(this.inputShape[0] / this.strides);
 
 		} else {
 			console.error("Why padding property will be set to such value?");

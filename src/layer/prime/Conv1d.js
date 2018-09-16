@@ -99,7 +99,7 @@ Conv1d.prototype = Object.assign(Object.create(Layer2d.prototype), {
 
 			if (this.padding === "valid") {
 
-				this.width = (this.inputShape[0] - this.kernelSize) / this.strides + 1;
+				this.width = Math.floor((this.inputShape[0] - this.kernelSize) / this.strides) + 1;
 
 			} else if (this.padding === "same") {
 
