@@ -245,10 +245,8 @@
 
     model.init(function() {
 
-        setTimeout(function() {
-            model.predict(data);
-            $("#loadingPad").hide();
-        }, 4000);
+        model.predict(data);
+        $("#loadingPad").hide();
 
     });
 
