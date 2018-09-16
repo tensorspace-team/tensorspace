@@ -1,34 +1,30 @@
-import { centerLocator } from "./CenterLocator";
+import { CenterLocator } from "./CenterLocator";
 
-function FmCenterGenerator() {
+let FmCenterGenerator = (function() {
 
-	this.defaultYPos = 0;
+	let defaultYPos = 0;
 
-}
-
-FmCenterGenerator.prototype = {
-
-	getFmCenters: function(shape, filters, width, height) {
+	function getFmCenters(shape, filters, width, height) {
 		if (shape === "line") {
 
-			let centerList = centerLocator.createLineCenters(filters, width);
-			let fmCenters = this.create3DCenters(centerList);
+			let centerList = CenterLocator.createLineCenters(filters, width);
+			let fmCenters = create3DCenters(centerList);
 
 			return fmCenters;
 
 		} else if (shape === "square") {
 
-			let centerList = centerLocator.createSquareCenters(filters, width, height);
-			let fmCenters = this.create3DCenters(centerList);
+			let centerList = CenterLocator.createSquareCenters(filters, width, height);
+			let fmCenters = create3DCenters(centerList);
 
 			return fmCenters;
 
 		} else {
 			console.error("do not support shape " + shape);
 		}
-	},
+	}
 
-	create3DCenters: function(centerList) {
+	function create3DCenters(centerList) {
 
 		let fmCenters = [];
 
@@ -37,7 +33,7 @@ FmCenterGenerator.prototype = {
 			let center2d = centerList[i];
 			let center3d = {};
 			center3d.x = center2d[0];
-			center3d.y = this.defaultYPos;
+			center3d.y = defaultYPos;
 			center3d.z = center2d[1];
 			fmCenters.push(center3d);
 
@@ -47,8 +43,12 @@ FmCenterGenerator.prototype = {
 
 	}
 
-};
+	return {
 
-let fmCenterGenerator = new FmCenterGenerator();
+		getFmCenters: getFmCenters
 
-export { fmCenterGenerator };
+	}
+
+})();
+
+export { FmCenterGenerator };

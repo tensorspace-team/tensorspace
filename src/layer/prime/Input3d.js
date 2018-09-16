@@ -1,8 +1,8 @@
 import { Layer } from "../abstract/Layer";
-import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
+import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
 import { InputMap3d } from "../../elements/InputMap3d";
 import { ChannelMap } from "../../elements/ChannelMap";
-import { colorUtils } from "../../utils/ColorUtils";
+import { ColorUtils } from "../../utils/ColorUtils";
 import { RGBTweenFactory } from "../../animation/RGBChannelTween";
 import { ModelInitWidth } from "../../utils/Constant";
 import { CloseButtonRatio } from "../../utils/Constant";
@@ -26,7 +26,7 @@ function Input3d(config) {
 
 	this.fmCenters = [];
 	this.closeFmCenters = [];
-	this.openFmCenters = fmCenterGenerator.getFmCenters("line", 3, this.actualWidth, this.actualHeight);
+	this.openFmCenters = FmCenterGenerator.getFmCenters("line", 3, this.actualWidth, this.actualHeight);
 	this.leftMostCenter = this.openFmCenters[0];
 
 	this.openHeight = 1 * this.actualHeight;
@@ -236,13 +236,13 @@ Input3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
+		let colors = ColorUtils.getAdjustValues(this.neuralValue);
 		this.aggregationHandler.updateVis(colors);
 	},
 
 	updateSegregationVis: function() {
 
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
+		let colors = ColorUtils.getAdjustValues(this.neuralValue);
 
 		let rVal = [];
 		let gVal = [];

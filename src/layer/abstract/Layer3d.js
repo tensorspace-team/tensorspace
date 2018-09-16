@@ -1,6 +1,6 @@
 import {Layer} from "./Layer";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
-import { colorUtils } from "../../utils/ColorUtils";
+import { ColorUtils } from "../../utils/ColorUtils";
 import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { CloseButtonRatio } from "../../utils/Constant";
 import {FeatureMap} from "../../elements/FeatureMap";
@@ -24,6 +24,9 @@ function Layer3d(config) {
 
 	this.openFmCenters = [];
 	this.closeFmCenters = [];
+
+	// center position is the left-most for layer, type: {x: value , y: value, z: value}
+	this.leftMostCenter = undefined;
 
 	this.aggregationStrategy = undefined;
 
@@ -161,7 +164,7 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
 
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
+		let colors = ColorUtils.getAdjustValues(aggregationUpdateValue);
 
 		this.aggregationHandler.updateVis(colors);
 
@@ -171,7 +174,7 @@ Layer3d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
-		let colors = colorUtils.getAdjustValues(layerOutputValues);
+		let colors = ColorUtils.getAdjustValues(layerOutputValues);
 
 		let featureMapSize = this.width * this.height;
 

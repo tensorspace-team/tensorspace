@@ -62,6 +62,7 @@ RGBChannelTween.prototype = {
 			console.log("start separate layer");
 			layer.disposeAggregationElement();
 			layer.initSegregationElements();
+			layer.isOpen = true;
 		}).onComplete(function() {
 			console.log("end separate layer");
 		});
@@ -118,7 +119,6 @@ RGBChannelTween.prototype = {
 		}).onComplete(function() {
 			console.log("end journey layer");
 			layer.initCloseButton();
-			layer.isOpen = true;
 		});
 
 		separateTween.chain(journeyTween);

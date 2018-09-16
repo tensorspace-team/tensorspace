@@ -1,5 +1,5 @@
 import {Layer3d} from "../abstract/Layer3d";
-import { fmCenterGenerator } from "../../utils/FmCenterGenerator";
+import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
 
 function Activation3d(config) {
 

@@ -1,8 +1,8 @@
-import { AbstractComposite } from './AbstractComposite';
+import { AbstractModel } from './AbstractModel';
 
 function PixelSequential(container, config) {
 
-	AbstractComposite.call(this, container);
+	AbstractModel.call(this, container);
 
 	this.layers = [];
 	this.heightLightNeural = [];
@@ -14,7 +14,7 @@ function PixelSequential(container, config) {
 
 }
 
-PixelSequential.prototype = Object.assign(Object.create(AbstractComposite.prototype), {
+PixelSequential.prototype = Object.assign(Object.create(AbstractModel.prototype), {
 
 	add: function (layer) {
 

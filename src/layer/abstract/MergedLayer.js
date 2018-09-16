@@ -1,6 +1,4 @@
 import { CloseButton } from "../../elements/CloseButton";
-import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
-import { BasicMaterialOpacity } from "../../utils/Constant";
 import { MergeLineGroupController } from "./MergedLineGroupController";
 
 function MergedLayer(config) {
@@ -10,21 +8,15 @@ function MergedLayer(config) {
 	this.scene = undefined;
 	this.layerIndex = undefined;
 	this.center = undefined;
-	this.nextLayer = undefined;
 	this.lastLayer = undefined;
 
 	// store all neural value as an array
-
 	this.neuralValue = undefined;
 
 	this.activation = undefined;
-	this.neuralNum = undefined;
 	this.inputShape = [];
 	this.outputShape = [];
 	this.neuralGroup = undefined;
-
-	// output index to fit the layer
-	this.resourceOutputIndex = undefined;
 
 	// color for layer neural visualization
 	this.color = undefined;

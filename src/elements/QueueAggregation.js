@@ -1,4 +1,5 @@
 import { MinAlpha } from "../utils/Constant";
+import { FrameColor } from "../utils/Constant";
 
 function QueueAggregation(actualWidth, actualHeight, actualDepth, color) {
 
@@ -34,7 +35,7 @@ QueueAggregation.prototype = {
 
 		let edgesGeometry = new THREE.EdgesGeometry(geometry);
 		let edgesLine = new THREE.LineSegments(edgesGeometry, new THREE.LineBasicMaterial({
-			color: 0xA5A5A5
+			color: FrameColor
 		}));
 
 		let aggregationGroup = new THREE.Object3D();

@@ -1,15 +1,9 @@
 import { MathUtils } from "./MathUtils";
 import { FeatureMapIntervalRatio } from "./Constant";
 
-function CenterLocator() {
+let CenterLocator = (function() {
 
-	this.fmInterval = 10;
-
-}
-
-CenterLocator.prototype = {
-
-	createLineCenters: function(filters, width) {
+	function createLineCenters(filters, width) {
 
 		let centerList = [];
 
@@ -32,9 +26,9 @@ CenterLocator.prototype = {
 
 		return centerList;
 
-	},
+	}
 
-	createSquareCenters: function(filters, width, height) {
+	function createSquareCenters(filters, width, height) {
 
 		let centerList = [];
 
@@ -75,8 +69,14 @@ CenterLocator.prototype = {
 
 	}
 
-};
+	return {
 
-let centerLocator = new CenterLocator();
+		createLineCenters: createLineCenters,
 
-export { centerLocator };
+		createSquareCenters: createSquareCenters
+
+	}
+
+})();
+
+export { CenterLocator };

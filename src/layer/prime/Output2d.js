@@ -1,5 +1,5 @@
 import {Layer} from "../abstract/Layer";
-import {colorUtils} from "../../utils/ColorUtils";
+import {ColorUtils} from "../../utils/ColorUtils";
 import {FeatureMap} from "../../elements/FeatureMap";
 
 function Output2d(config) {
@@ -107,7 +107,7 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
+		let colors = ColorUtils.getAdjustValues(this.neuralValue);
 
 		this.aggregationHandler.updateVis(colors);
 

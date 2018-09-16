@@ -1,6 +1,6 @@
 import {MinAlpha} from "../../utils/Constant";
 import {NeuralBoxLength} from "../../utils/Constant";
-import { colorUtils } from '../../utils/ColorUtils';
+import { ColorUtils } from '../../utils/ColorUtils';
 import { PixelLayer } from './PixelLayer';
 
 function PixelPadding(config) {
@@ -198,7 +198,7 @@ PixelPadding.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 		this.neuralValue = this.lastLayer.neuralValue;
 
-		let colorList = colorUtils.getColors(this.neuralValue);
+		let colorList = ColorUtils.getColors(this.neuralValue);
 
 		console.log(this.nonePaddingNeuralList.length);
 

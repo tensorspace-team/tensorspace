@@ -3,52 +3,40 @@ import { Loader } from './Loader';
 function KerasLoader( model, config ) {
 
 	Loader.call(this, model);
-	this.url = config.url;
-	this.output = config.output;
-	this.type = "KerasLoader"
+	this.url = undefined;
+	this.onCompleteCallback = undefined;
+
+	this.type = "KerasLoader";
+
+	this.loadLoaderConfig(config);
 
 }
 
 KerasLoader.prototype = Object.assign(Object.create(Loader.prototype), {
 
-	preLoad: function() {
+	loadLoaderConfig: function(loaderConfig) {
 
-		// undefined 还是null？
-		if (this.output !== undefined && this.output !== null) {
-
-			// 根据name来设置output的序列
-			let outputConfig = this.output;
-
-			this.model.initLayerOutputIndexFromName(outputConfig);
-
+		if (loaderConfig.url !== undefined) {
+			this.url = loaderConfig.url;
 		} else {
-
-			// 逐次设置output序列
-
-			this.model.initLayerOutputIndex();
-
+			console.error("\"url\" property is required to load Keras model.");
 		}
 
-		if (this.model.isInitialized) {
-
-			// 执行异步加载模型
-			this.load().then(function() {
-				console.log("Have stored the resource into visualization model.");
-			});
-
+		if (loaderConfig.onComplete !== undefined) {
+			this.onCompleteCallback = loaderConfig.onComplete;
 		}
-
-		this.model.loader = this;
-		this.model.hasLoader = true;
 	},
 
-
-	// 异步加载模型
+	// load model asynchronously
 	load: async function() {
 
 		const loadedModel = await tf.loadModel(this.url);
 		this.model.resource = loadedModel;
 		this.model.isFit = true;
+
+		if (this.onCompleteCallback !== undefined) {
+			this.onCompleteCallback();
+		}
 
 	},
 

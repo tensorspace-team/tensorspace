@@ -1,5 +1,5 @@
 import { Layer } from '../abstract/Layer';
-import { colorUtils } from '../../utils/ColorUtils';
+import { ColorUtils } from '../../utils/ColorUtils';
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { OutputUnit } from "../../elements/OutputUnit";
 import { OutputNeuralPosGenerator } from "../../utils/OutputNeuralPosGenerator";
@@ -213,7 +213,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	updateSegregationVis: function() {
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
+		let colors = ColorUtils.getAdjustValues(this.neuralValue);
 
 		for (let i = 0; i < this.segregationHandlers.length; i++) {
 

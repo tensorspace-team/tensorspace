@@ -1,7 +1,7 @@
 import {Layer} from "./Layer";
 import { QueueGroupTweenFactory } from "../../animation/QueueGroupTransitionTween";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
-import { colorUtils } from "../../utils/ColorUtils";
+import { ColorUtils } from "../../utils/ColorUtils";
 import {GridAggregation} from "../../elements/GridAggregation";
 import {GridLine} from "../../elements/GridLine";
 
@@ -231,7 +231,7 @@ Layer2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(this.neuralValue, this.depth, this.aggregationStrategy);
 
-		let colors = colorUtils.getAdjustValues(aggregationUpdateValue);
+		let colors = ColorUtils.getAdjustValues(aggregationUpdateValue);
 
 		this.aggregationHandler.updateVis(colors);
 
@@ -241,7 +241,7 @@ Layer2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData(this.neuralValue, this.depth);
 
-		let colors = colorUtils.getAdjustValues(layerOutputValues);
+		let colors = ColorUtils.getAdjustValues(layerOutputValues);
 
 		let featureMapSize = this.width;
 

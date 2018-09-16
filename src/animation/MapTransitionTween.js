@@ -35,10 +35,9 @@ MapTransitionTween.prototype = {
 		}).onStart(function () {
 			layer.disposeAggregationElement();
 			layer.initSegregationElements(layer.closeFmCenters);
+			layer.isOpen = true;
 		}).onComplete(function() {
 			layer.initCloseButton();
-			layer.isOpen = true;
-
 		});
 
 		fmTween.start();

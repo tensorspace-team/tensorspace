@@ -1,6 +1,6 @@
 import {Layer} from "../abstract/Layer";
 import { ModelInitWidth } from "../../utils/Constant";
-import {colorUtils} from "../../utils/ColorUtils";
+import {ColorUtils} from "../../utils/ColorUtils";
 import {NeuralQueue} from "../../elements/NeuralQueue";
 
 function Input1d(config) {
@@ -111,7 +111,7 @@ Input1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.neuralValue = value;
 
-		let colors = colorUtils.getAdjustValues(value);
+		let colors = ColorUtils.getAdjustValues(value);
 
 		this.aggregationHandler.updateVis(colors);
 

@@ -1,6 +1,4 @@
 import { CloseButton } from "../../elements/CloseButton";
-import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
-import { BasicMaterialOpacity } from "../../utils/Constant";
 import { BasicLineGroupController } from "./BasicLineGroupController";
 
 function Layer(config) {
@@ -10,21 +8,15 @@ function Layer(config) {
 	this.scene = undefined;
 	this.layerIndex = undefined;
 	this.center = undefined;
-	this.nextLayer = undefined;
 	this.lastLayer = undefined;
 
 	// store all neural value as an array
-
 	this.neuralValue = undefined;
 
 	this.activation = undefined;
-	this.neuralNum = undefined;
 	this.inputShape = [];
 	this.outputShape = [];
 	this.neuralGroup = undefined;
-
-	// output index to fit the layer
-	this.resourceOutputIndex = undefined;
 
 	// color for layer neural visualization
 	this.color = undefined;
@@ -36,9 +28,6 @@ function Layer(config) {
 	this.closeButtonHandler = undefined;
 	this.hasCloseButton = true;
 	this.closeButtonSizeRatio = 1;
-
-	// center position is the left-most for layer, type: {x: value , y: value, z: value}
-	this.leftMostCenter = undefined;
 
 	// actual width and height in three.js scene
 	this.actualWidth = undefined;

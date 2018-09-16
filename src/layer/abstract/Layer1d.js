@@ -1,6 +1,6 @@
 import {Layer} from "./Layer";
 import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
-import { colorUtils } from "../../utils/ColorUtils";
+import { ColorUtils } from "../../utils/ColorUtils";
 import {QueueAggregation} from "../../elements/QueueAggregation";
 import {NeuralQueue} from "../../elements/NeuralQueue";
 
@@ -17,6 +17,8 @@ function Layer1d(config) {
 	this.lastActualHeight = undefined;
 
 	this.queueHandler = undefined;
+
+	this.isTransition = false;
 
 }
 
@@ -167,7 +169,7 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	updateQueueVis: function() {
-		let colors = colorUtils.getAdjustValues(this.neuralValue);
+		let colors = ColorUtils.getAdjustValues(this.neuralValue);
 
 		this.queueHandler.updateVis(colors);
 	},
@@ -199,10 +201,12 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		let relativeElements = [];
 
-		if (this.isOpen) {
-			relativeElements.push(this.queueHandler.getElement());
-		} else {
-			relativeElements.push(this.aggregationHandler.getElement());
+		if (!this.isTransition) {
+			if (this.isOpen) {
+				relativeElements.push(this.queueHandler.getElement());
+			} else {
+				relativeElements.push(this.aggregationHandler.getElement());
+			}
 		}
 
 		return {

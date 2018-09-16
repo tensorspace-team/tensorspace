@@ -3,7 +3,7 @@ import { TfjsLoader } from '../loader/TfjsLoader';
 import {KerasLoader} from "../loader/KerasLoader";
 import {TfLoader} from "../loader/TfLoader";
 
-function AbstractComposite( container ) {
+function AbstractModel(container ) {
 
 	this.loader = undefined;
 	this.hasLoader = false;
@@ -20,7 +20,7 @@ function AbstractComposite( container ) {
 
 }
 
-AbstractComposite.prototype = Object.assign(Object.create( SceneInitializer.prototype ), {
+AbstractModel.prototype = Object.assign(Object.create( SceneInitializer.prototype ), {
 
 	load: function(config) {
 
@@ -63,4 +63,4 @@ AbstractComposite.prototype = Object.assign(Object.create( SceneInitializer.prot
 
 });
 
-export { AbstractComposite };
+export { AbstractModel };
