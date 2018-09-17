@@ -35,7 +35,6 @@ import { PixelInput } from "./layer/pixel/PixelInput";
 import { PixelPooling2d } from "./layer/pixel/PixelPooling2d";
 import { PixelFlatten } from "./layer/pixel/PixelFlatten";
 import { PixelDense } from "./layer/pixel/PixelDense";
-import { PixelReshape } from "./layer/pixel/PixelReshape";
 import { PixelOutput } from "./layer/pixel/PixelOutput";
 
 import { Add } from "./merge/Add";
@@ -81,7 +80,6 @@ let layers = {
 	PixelPooling2d: PixelPooling2d,
 	PixelFlatten: PixelFlatten,
 	PixelDense: PixelDense,
-	PixelReshape: PixelReshape,
 	PixelOutput: PixelOutput
 };
 

@@ -63,8 +63,8 @@
 		}
 	});
 
-    let addLayer = TSP.Average([layer1, layer2], {
-    	color: 0x0000ff,
+    let addLayer = TSP.Maximum([layer1, layer2], {
+    	color: 0xffffff,
         name: "addLayer",
 		closeButton: {
 			ratio: 1,
@@ -91,6 +91,17 @@
 		strides: 1,
 		padding: "same"
 	}));
+
+    model.add(new TSP.layers.Dense({
+        units: 20
+    }));
+
+    model.add(new TSP.layers.Conv1d({
+		kernelSize: 2,
+		filters: 4,
+		strides: 1,
+		padding: "same"
+    }));
 
     model.init(function(){
 
