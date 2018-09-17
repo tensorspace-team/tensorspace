@@ -36,7 +36,7 @@ CloseButton.prototype = {
 		materials.push(materialTop);
 		materials.push(materialTop);
 
-		let cylinderRadius = this.size < 10 ? 2 * this.unitLength : this.size;
+		let cylinderRadius = this.size;
 
 		let geometry = new THREE.CylinderBufferGeometry( cylinderRadius, cylinderRadius, this.thickness, 32 );
 		let cylinderButton = new THREE.Mesh( geometry, materials );

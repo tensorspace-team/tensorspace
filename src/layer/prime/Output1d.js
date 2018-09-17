@@ -289,7 +289,7 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	calcCloseButtonSize: function() {
-		return 2 * this.unitLength;
+		return 1.1 * this.unitLength;
 	},
 
 	calcCloseButtonPos: function() {

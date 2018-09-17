@@ -175,7 +175,13 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 	},
 
 	calcCloseButtonSize: function() {
-		return 2 * this.unitLength;
+
+		if (this.width > 50) {
+			return 2 * this.unitLength;
+		} else {
+			return 1.1 * this.unitLength;
+		}
+
 	},
 
 	calcCloseButtonPos: function() {
