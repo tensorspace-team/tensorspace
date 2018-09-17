@@ -19,6 +19,13 @@ let FmCenterGenerator = (function() {
 
 			return fmCenters;
 
+		} else if (shape === "rectangle") {
+
+			let centerList = CenterLocator.createRectangleCenters(filters, width, height);
+            let fmCenters = create3DCenters(centerList);
+
+            return fmCenters;
+
 		} else {
 			console.error("do not support shape " + shape);
 		}

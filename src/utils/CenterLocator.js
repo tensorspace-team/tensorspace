@@ -69,11 +69,42 @@ let CenterLocator = (function() {
 
 	}
 
+    function createRectangleCenters(filters, width, height) {
+
+        let centerList = [];
+
+        // Get the best rectangle shape ([0]: width; [1]: height)
+        let rectShape = MathUtils.getClosestTwoFactors(filters);
+
+        let initXTranslate = - (rectShape[0] - 1) / 2 * (1 + FeatureMapIntervalRatio) * width;
+        let initZTranslate = - (rectShape[1] - 1) / 2 * (1 + FeatureMapIntervalRatio) * height;
+
+        for (let i = 0; i < rectShape[0]; i++) {
+            for (let j = 0; j < rectShape[1]; j++) {
+
+                let centerPos = [];
+
+                let xTranslate = initXTranslate + (1 + FeatureMapIntervalRatio) * width * i;    // width ==> i
+                let zTranslate = initZTranslate + (1 + FeatureMapIntervalRatio) * height * j;   // height==> j
+
+                centerPos.push(xTranslate);
+                centerPos.push(zTranslate);
+
+                centerList.push(centerPos);
+            }
+        }
+
+        return centerList;
+
+    }
+
 	return {
 
 		createLineCenters: createLineCenters,
 
-		createSquareCenters: createSquareCenters
+		createSquareCenters: createSquareCenters,
+
+        createRectangleCenters: createRectangleCenters
 
 	}
 
