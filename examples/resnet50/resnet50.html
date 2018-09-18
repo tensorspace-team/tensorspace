@@ -158,7 +158,7 @@
     // let activation_4 = new TSP.layers.Layer3d({
     //     shape: [55, 55, 256]
     // });
-    let activation_4 = TSP.Add([bn2a_branch2c, bn2a_branch1]);
+    let activation_4 = TSP.layers.Add([bn2a_branch2c, bn2a_branch1]);
     model.add(activation_4);
 
     // 7
@@ -202,7 +202,6 @@
 //    model.add(new TSP.layers.Layer3d({
 //        shape: [55, 55, 256]
 //    }));
-
     let activation_7 = TSP.layers.Add([activation_4, bn2b_branch2c]);
     model.add(activation_7);
 //
