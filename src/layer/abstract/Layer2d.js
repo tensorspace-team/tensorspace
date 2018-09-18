@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import {Layer} from "./Layer";
 import { QueueGroupTweenFactory } from "../../animation/QueueGroupTransitionTween";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";

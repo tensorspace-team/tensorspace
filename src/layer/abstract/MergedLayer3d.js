@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
 import {MergedLayer} from "./MergedLayer";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";

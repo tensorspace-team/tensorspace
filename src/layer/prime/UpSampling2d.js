@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import {FmCenterGenerator} from "../../utils/FmCenterGenerator";
 import { Layer3d } from "../abstract/Layer3d";
 

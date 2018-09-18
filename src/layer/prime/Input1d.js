@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import {Layer} from "../abstract/Layer";
 import { ModelInitWidth } from "../../utils/Constant";
 import {ColorUtils} from "../../utils/ColorUtils";

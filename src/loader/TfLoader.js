@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { Loader } from './Loader';
 import {TfPredictor} from "../predictor/TfPredictor";
 

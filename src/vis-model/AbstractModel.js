@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { SceneInitializer } from '../scene/SceneInitializer';
 import { TfjsLoader } from '../loader/TfjsLoader';
 import {KerasLoader} from "../loader/KerasLoader";

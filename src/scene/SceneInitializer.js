@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { DefaultCameraPos } from "../utils/Constant";
 import { DefaultLayerDepth } from "../utils/Constant";
 

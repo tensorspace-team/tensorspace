@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { Layer2d } from "../abstract/Layer2d";
 
 function Pooling1d(config) {

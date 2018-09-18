@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { MinAlpha } from "../utils/Constant";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 import { ColorUtils } from "../utils/ColorUtils";

@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { MergedLayer3d } from "../layer/abstract/MergedLayer3d";
 
 function Concatenate(layerList, config) {

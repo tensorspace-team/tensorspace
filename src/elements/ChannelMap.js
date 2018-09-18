@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { BasicMaterialOpacity } from "../utils/Constant";
 import { MinAlpha } from "../utils/Constant";
 import { TextHelper } from "../utils/TextHelper";

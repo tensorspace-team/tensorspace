@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { AbstractModel } from './AbstractModel';
 import { MapModelConfiguration } from "../configure/MapModelConfiguration";
 import { ModelLayerInterval } from "../utils/Constant";

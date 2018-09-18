@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { CloseData } from "../assets/image/CloseData";
 import { PlusData } from "../assets/image/Plus";
 import { ConcatenateData } from "../assets/image/Concatenate";

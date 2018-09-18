@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 let MapTransitionFactory = (function() {
 
 	let animationTime = 2000;

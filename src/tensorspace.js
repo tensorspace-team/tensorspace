@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { Sequential } from "./vis-model/Sequential";
 import { PixelSequential } from "./vis-model/PixelSequential";
 

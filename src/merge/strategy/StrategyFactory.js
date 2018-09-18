@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import {Add3d} from "./Add3d";
 import {Concatenate3d} from "./Concatenate3d";
 import {Subtract3d} from "./Subtract3d";

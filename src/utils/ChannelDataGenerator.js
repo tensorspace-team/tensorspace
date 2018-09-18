@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 let ChannelDataGenerator = (function() {
 
 	function generateChannelData(rawValue, depth) {

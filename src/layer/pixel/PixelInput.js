@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { PixelLayer } from './PixelLayer';
 import { NeuralBoxLength } from "../../utils/Constant";
 import { MinAlpha } from "../../utils/Constant";

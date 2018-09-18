@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 let OutputTransitionFactory = (function() {
 
 	let animationTime = 2000;

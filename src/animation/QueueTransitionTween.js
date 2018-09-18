@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { VariableLengthObject } from "../elements/VariableLengthObject";
 
 let QueueTransitionFactory = (function() {

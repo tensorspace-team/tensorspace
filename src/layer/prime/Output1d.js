@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { Layer } from '../abstract/Layer';
 import { ColorUtils } from '../../utils/ColorUtils';
 import { QueueAggregation } from "../../elements/QueueAggregation";

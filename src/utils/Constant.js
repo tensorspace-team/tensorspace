@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 export let MinAlpha = 0.3;
 export let NeuralBoxLength = 1.3;
 export let BasicMaterialOpacity = 0.2;

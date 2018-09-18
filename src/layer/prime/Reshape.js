@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import {Reshape1d} from "./Reshape1d";
 import {Reshape2d} from "./Reshape2d";
 

@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { Layer2d } from "../abstract/Layer2d";
 import {MapAggregation} from "../../elements/MapAggregation";
 import {GlobalPoolingElement} from "../../elements/GlobalPoolingElement";

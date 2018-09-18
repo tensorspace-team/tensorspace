@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { Layer3d } from "../abstract/Layer3d";
 
 function Cropping2d(config) {

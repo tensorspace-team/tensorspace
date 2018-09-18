@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { Layer1d } from "../abstract/Layer1d";
 
 function Flatten(config) {
