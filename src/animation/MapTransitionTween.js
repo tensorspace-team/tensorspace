@@ -4,8 +4,6 @@
 
 let MapTransitionFactory = (function() {
 
-	let animationTime = 2000;
-
 	function openLayer(layer) {
 
 		layer.disposeAggregationElement();
@@ -19,7 +17,7 @@ let MapTransitionFactory = (function() {
 		};
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, animationTime);
+			.to(end, layer.openTime);
 
 		fmTween.onUpdate(function () {
 
@@ -55,7 +53,7 @@ let MapTransitionFactory = (function() {
 		};
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, animationTime);
+			.to(end, layer.openTime);
 
 		fmTween.onUpdate(function () {
 

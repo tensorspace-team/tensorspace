@@ -10,6 +10,7 @@ function MapModelConfiguration(config) {
 	this.relationSystem = true;
 	this.textSystem = true;
 	this.stats = false;
+	this.animationTimeRatio = 1;
 	this.color = {
 		background: 0x000000,
 		input1d: 0xffffff,
@@ -93,6 +94,14 @@ function MapModelConfiguration(config) {
 				this.layerInitStatus = true;
 			} else {
 				console.error("LayerInitStatus " + config.layerInitStatus +" is not support.");
+			}
+
+		}
+
+		if (config.animationTimeRatio !== undefined) {
+
+			if (config.animationTimeRatio > 0) {
+				this.animationTimeRatio = config.animationTimeRatio;
 			}
 
 		}

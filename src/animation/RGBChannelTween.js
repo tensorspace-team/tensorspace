@@ -4,12 +4,6 @@
 
 let RGBTweenFactory = (function() {
 
-	let separateTime = 1000;
-	let journeyTime = 2000;
-
-	let aggregateTime = 1000;
-	let homingTime = 2000;
-
 	function separate(layer) {
 
 		let separateInit = {
@@ -20,7 +14,7 @@ let RGBTweenFactory = (function() {
 		};
 
 		let separateTween = new TWEEN.Tween(separateInit)
-			.to(separateEnd, separateTime);
+			.to(separateEnd, layer.separateTime);
 
 		separateTween.onUpdate(function () {
 
@@ -76,7 +70,7 @@ let RGBTweenFactory = (function() {
 		};
 
 		let journeyTween = new TWEEN.Tween(journeyInit)
-			.to(journeyEnd, journeyTime);
+			.to(journeyEnd, layer.openTime);
 
 		journeyTween.onUpdate(function () {
 
@@ -137,7 +131,7 @@ let RGBTweenFactory = (function() {
 		};
 
 		let homingTween = new TWEEN.Tween(homingInit)
-			.to(homingEnd, homingTime);
+			.to(homingEnd, layer.openTime);
 
 		homingTween.onUpdate(function () {
 
@@ -190,7 +184,7 @@ let RGBTweenFactory = (function() {
 		};
 
 		let aggregateTween = new TWEEN.Tween(aggregateInit)
-			.to(aggregateEnd, aggregateTime);
+			.to(aggregateEnd, layer.separateTime);
 
 		aggregateTween.onUpdate(function () {
 

@@ -4,8 +4,6 @@
 
 let OutputTransitionFactory = (function() {
 
-	let animationTime = 2000;
-
 	function openLayer(layer) {
 
 		let init = {
@@ -17,7 +15,7 @@ let OutputTransitionFactory = (function() {
 		};
 
 		let openTween = new TWEEN.Tween(init)
-			.to(end, animationTime);
+			.to(end, layer.openTime);
 
 		openTween.onUpdate(function() {
 
@@ -59,7 +57,7 @@ let OutputTransitionFactory = (function() {
 		};
 
 		let closeTween = new TWEEN.Tween(init)
-			.to(end, animationTime);
+			.to(end, layer.openTime);
 
 		closeTween.onUpdate(function() {
 

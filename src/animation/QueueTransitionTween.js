@@ -6,8 +6,6 @@ import { VariableLengthObject } from "../elements/VariableLengthObject";
 
 let QueueTransitionFactory = (function() {
 
-	let animationTime = 2000;
-
 	function openLayer(layer) {
 
 		let init = {
@@ -21,7 +19,7 @@ let QueueTransitionFactory = (function() {
 		let variableLengthObject = (new VariableLengthObject(layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.color)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, animationTime);
+			.to(end, layer.openTime);
 
 		fmTween.onUpdate(function () {
 
@@ -58,7 +56,7 @@ let QueueTransitionFactory = (function() {
 		let variableLengthObject = (new VariableLengthObject(layer.actualWidth, layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.color)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, animationTime);
+			.to(end, layer.openTime);
 
 		fmTween.onUpdate(function () {
 

@@ -4,6 +4,7 @@
 
 import { CloseButton } from "../../elements/CloseButton";
 import { BasicLineGroupController } from "./BasicLineGroupController";
+import {OpenTime, SeparateTime} from "../../utils/Constant";
 
 function Layer(config) {
 
@@ -58,6 +59,10 @@ function Layer(config) {
 	// identify whether is merged layer
 	this.isMerged = false;
 
+	this.animationTimeRatio = 1;
+	this.openTime = OpenTime;
+	this.separateTime = SeparateTime;
+
 	this.loadBasicLayerConfig(config);
 
 }
@@ -100,6 +105,14 @@ Layer.prototype = Object.assign(Object.create(BasicLineGroupController.prototype
 
 			}
 
+			if (config.animationTimeRatio !== undefined) {
+				if (config.animationTimeRatio > 0) {
+					this.animationTimeRatio = config.animationTimeRatio;
+				}
+				this.openTime *= this.animationTimeRatio;
+				this.separateTime *= this.animationTimeRatio;
+			}
+
 		}
 
 	},
@@ -117,6 +130,9 @@ Layer.prototype = Object.assign(Object.create(BasicLineGroupController.prototype
 		if (this.textSystem === undefined) {
 			this.textSystem = modelConfig.textSystem;
 		}
+
+		this.openTime *= modelConfig.animationTimeRatio;
+		this.separateTime *= modelConfig.animationTimeRatio;
 
 	},
 

@@ -4,8 +4,6 @@
 
 let QueueGroupTweenFactory = (function() {
 
-	let animationTime = 2000;
-
 	function openLayer(layer) {
 
 		let init = {
@@ -16,7 +14,7 @@ let QueueGroupTweenFactory = (function() {
 		};
 
 		let openTween = new TWEEN.Tween(init)
-			.to(end, animationTime);
+			.to(end, layer.openTime);
 
 		openTween.onUpdate(function () {
 
@@ -56,7 +54,7 @@ let QueueGroupTweenFactory = (function() {
 		};
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, animationTime);
+			.to(end, layer.openTime);
 
 		fmTween.onUpdate(function () {
 
