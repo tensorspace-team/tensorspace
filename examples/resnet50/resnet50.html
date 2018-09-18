@@ -110,21 +110,12 @@
     // res2a_branch2a ~ res2a_branch2a_relu (activation_2)
     // output: 55 *55 *64 ==> 193600
     // Padding ==0
-//    model.add(new TSP.layers.Conv2d({
-//        kernelSize: 1,
-//        filters: 64,
-//        strides: 1,
-//        padding: "valid"
-//    }));
-
-    let conv1 = new TSP.layers.Conv2d({
+    model.add(new TSP.layers.Conv2d({
 		kernelSize: 1,
 		filters: 64,
 		strides: 1,
 		padding: "valid"
-	});
-    model.add(conv1);
-    console.log(conv1.outputShape);
+	}));
 
     // 3
     // res2a_branch2b ~ res2a_branch2b_relu (activation_3)
@@ -141,47 +132,34 @@
     // res2a_branch2c ~ scale2a_branch2c (bn2a_branch2c)
     // output: 55 *55 *256 ==> 774400
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn2a_branch2c =new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 256,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn2a_branch2c);
 
     // 5
     // res2a_branch1 ~ scale2a_branch1 (bn2a_branch1)
     // output: 55 *55 *256 ==> 774400
     // Padding ==0
-//    model.add(new TSP.layers.Conv2d({
-//        kernelSize: 1,
-//        filters: 256,
-//        strides: 1,
-//        padding: "valid"
-//    }));
-
-    let conv2 = new TSP.layers.Conv2d({
+    let bn2a_branch1 = new TSP.layers.Conv2d({
 		kernelSize: 1,
 		filters: 256,
 		strides: 1,
 		padding: "valid"
 	});
-    model.add(conv2);
-    console.log(conv2.outputShape);
+    model.add(bn2a_branch1);
 
     // 6
     // res2a(add_1) ~ res2a_relu (activation_4)
     // output: 55 *55 *256 ==> 774400
-//    model.add(new TSP.layers.Layer3d({
-//        shape: [55, 55, 256]
-//    }));
-
-    let lastLayer = new TSP.layers.Layer3d({
-		shape: [55, 55, 256]
-	});
-    model.add(lastLayer);
-
-//    let addLayer = TSP.Add([conv1, conv2]);
-//    model.add(addLayer);
+    // let activation_4 = new TSP.layers.Layer3d({
+    //     shape: [55, 55, 256]
+    // });
+    let activation_4 = TSP.Add([bn2a_branch2c, bn2a_branch1]);
+    model.add(activation_4);
 
     // 7
     // res2b_branch2a ~ res2b_branch2a_relu (activation_5)
@@ -209,20 +187,14 @@
     // res2b_branch2c ~ scale2b_branch2c (bn2b_branch2c)
     // output: 55 *55 *256 ==> 774400
     // Padding ==0
-//    model.add(new TSP.layers.Conv2d({
-//        kernelSize: 1,
-//        filters: 256,
-//        strides: 1,
-//        padding: "valid"
-//    }));
+    let bn2b_branch2c = new TSP.layers.Conv2d({
+        kernelSize: 1,
+        filters: 256,
+        strides: 1,
+        padding: "valid"
+    });
+    model.add(bn2b_branch2c);
 
-    let conv3 = new TSP.layers.Conv2d({
-		kernelSize: 1,
-		filters: 256,
-		strides: 1,
-		padding: "valid"
-	});
-    model.add(conv3);
 
     // 10
     // res2b(add_2) ~ res2b_relu (activation_7)
@@ -231,11 +203,8 @@
 //        shape: [55, 55, 256]
 //    }));
 
-//    console.log(lastLayer.outputShape);
-//    console.log(conv3.outputShape);
-    let addLayer2 = TSP.layers.Add([lastLayer, conv3]);
-
-    model.add(addLayer2);
+    let activation_7 = TSP.layers.Add([activation_4, bn2b_branch2c]);
+    model.add(activation_7);
 //
 //	console.log(addLayer2.outputShape);
 
