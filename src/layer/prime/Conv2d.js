@@ -5,9 +5,9 @@
 import { FmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { Layer3d } from "../abstract/Layer3d";
 
-function Conv2d(config) {
+function Conv2d( config ) {
 
-	Layer3d.call(this, config);
+	Layer3d.call( this, config );
 
 	this.kernelSize = undefined;
 	this.filters = undefined;
@@ -20,49 +20,60 @@ function Conv2d(config) {
 
 	this.padding = "valid";
 
-	this.loadLayerConfig(config);
+	this.loadLayerConfig( config );
 
-	for (let i = 0; i < this.depth; i++) {
+	for ( let i = 0; i < this.depth; i++ ) {
+
 		let center = {
+
 			x: 0,
 			y: 0,
 			z: 0
+
 		};
-		this.closeFmCenters.push(center);
+
+		this.closeFmCenters.push( center );
+
 	}
 
 	this.layerType = "prime conv2d";
 
 }
 
-Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
+Conv2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
 
-	loadLayerConfig: function(layerConfig) {
+	loadLayerConfig: function( layerConfig ) {
 
-		if (layerConfig !== undefined) {
+		if ( layerConfig !== undefined ) {
 
 			this.kernelSize = layerConfig.kernelSize;
 			this.filters = layerConfig.filters;
 			this.strides = layerConfig.strides;
 			this.depth = layerConfig.filters;
 
-			if (layerConfig.shape !== undefined) {
+			if ( layerConfig.shape !== undefined ) {
 
 				this.isShapePredefined = true;
 				this.fmShape = layerConfig.shape;
-				this.width = this.fmShape[0];
-				this.height = this.fmShape[1];
+				this.width = this.fmShape[ 0 ];
+				this.height = this.fmShape[ 1 ];
 
 			}
 
-			if (layerConfig.padding !== undefined) {
+			if ( layerConfig.padding !== undefined ) {
 
-				if (layerConfig.padding.toLowerCase() === "valid") {
+				if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
 					this.padding = "valid";
-				} else if (layerConfig.padding.toLowerCase() === "same") {
+
+				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
 					this.padding = "same";
+
 				} else {
-					console.error("\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead.");
+
+					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
 				}
 
 			}
@@ -71,73 +82,86 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	},
 
-	loadModelConfig: function(modelConfig) {
+	loadModelConfig: function( modelConfig ) {
 
-		this.loadBasicModelConfig(modelConfig);
+		this.loadBasicModelConfig( modelConfig );
 
-		if (this.color === undefined) {
+		if ( this.color === undefined ) {
+
 			this.color = modelConfig.color.conv2d;
+
 		}
 
-		if (this.layerShape === undefined) {
+		if ( this.layerShape === undefined ) {
+
 			this.layerShape = modelConfig.layerShape;
+
 		}
 
-		if (this.aggregationStrategy === undefined) {
+		if ( this.aggregationStrategy === undefined ) {
+
 			this.aggregationStrategy = modelConfig.aggregationStrategy;
+
 		}
+
 	},
 
-	assemble: function (layerIndex) {
+	assemble: function ( layerIndex ) {
 
-		console.log("Assemble conv2d, layer index: " + layerIndex);
+		console.log( "Assemble conv2d, layer index: " + layerIndex );
 
 		this.layerIndex = layerIndex;
 
-		if (!this.isShapePredefined) {
+		if ( !this.isShapePredefined ) {
+
 			this.inputShape = this.lastLayer.outputShape;
 
-			if (this.padding === "valid") {
+			if ( this.padding === "valid" ) {
 
-				this.width = Math.floor((this.inputShape[0] - this.kernelSize) / this.strides) + 1;
-				this.height = Math.floor((this.inputShape[1] - this.kernelSize) / this.strides) + 1;
+				this.width = Math.floor( ( this.inputShape[ 0 ] - this.kernelSize ) / this.strides ) + 1;
+				this.height = Math.floor( ( this.inputShape[ 1 ] - this.kernelSize) / this.strides ) + 1;
 
-			} else if (this.padding === "same") {
+			} else if ( this.padding === "same" ) {
 
-				this.width = Math.ceil(this.inputShape[0] / this.strides);
-				this.height = Math.ceil(this.inputShape[1] / this.strides);
+				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides );
+				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides );
 
 			} else {
-				console.error("Why padding property will be set to such value?");
+
+				console.error( "Why padding property will be set to such value?" );
+
 			}
 
-			this.fmShape = [this.width, this.height];
+			this.fmShape = [ this.width, this.height ];
+
 		}
 
-		this.outputShape = [this.width, this.height, this.filters];
+		this.outputShape = [ this.width, this.height, this.filters ];
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.width * this.unitLength;
 		this.actualHeight = this.height * this.unitLength;
 
-		this.openFmCenters = FmCenterGenerator.getFmCenters(this.layerShape, this.depth, this.actualWidth, this.actualHeight);
+		this.openFmCenters = FmCenterGenerator.getFmCenters( this.layerShape, this.depth, this.actualWidth, this.actualHeight );
 
-		this.leftMostCenter = this.openFmCenters[0];
-		this.openHeight = this.actualHeight + this.openFmCenters[this.openFmCenters.length - 1].z - this.openFmCenters[0].z;
+		this.leftMostCenter = this.openFmCenters[ 0 ];
+		this.openHeight = this.actualHeight + this.openFmCenters[ this.openFmCenters.length - 1 ].z - this.openFmCenters[ 0 ].z;
 
 	},
 
-	getRelativeElements: function(selectedElement) {
+	getRelativeElements: function( selectedElement ) {
 
 		let relativeElements = [];
 
-		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureMap") {
+		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureMap" ) {
 
 			let request = {
+
 				all: true
+
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
+			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
 		}
 
@@ -145,6 +169,6 @@ Conv2d.prototype = Object.assign(Object.create(Layer3d.prototype), {
 
 	}
 
-});
+} );
 
 export { Conv2d };

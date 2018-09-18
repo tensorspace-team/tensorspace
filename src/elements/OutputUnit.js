@@ -7,7 +7,7 @@ import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 
-function OutputUnit(cubeSize, textSize, output, initPositions, color) {
+function OutputUnit( cubeSize, textSize, output, initPositions, color ) {
 
 	this.cubeSize = cubeSize;
 	this.textSize = textSize;
@@ -18,14 +18,18 @@ function OutputUnit(cubeSize, textSize, output, initPositions, color) {
 	this.color = color;
 
 	this.initPosition = {
+
 		x: initPositions.x,
 		y: initPositions.y,
 		z: initPositions.z
+
 	};
 	this.position = {
+
 		x: initPositions.x,
 		y: initPositions.y,
 		z: initPositions.z
+
 	};
 
 	this.isTextShown = false;
@@ -45,38 +49,44 @@ OutputUnit.prototype = {
 	init: function() {
 
 		let outputGroup = new THREE.Object3D();
-		outputGroup.position.set(0, 0, 0);
 
-		let boxGeometry = new THREE.BoxBufferGeometry(this.cubeSize, this.cubeSize, this.cubeSize);
+		let boxGeometry = new THREE.BoxBufferGeometry( this.cubeSize, this.cubeSize, this.cubeSize );
 
-		let material = new THREE.MeshBasicMaterial({
+		let material = new THREE.MeshBasicMaterial( {
+
 			color: this.color,
 			opacity: MinAlpha,
-			transparent: true,
-		});
+			transparent: true
 
-		let cube = new THREE.Mesh(boxGeometry, material);
+		} );
+
+		let cube = new THREE.Mesh( boxGeometry, material );
 		cube.elementType = "outputNeural";
 		cube.hoverable = true;
 		cube.clickable = true;
 
 		this.outputNeural = cube;
 
-		outputGroup.add(cube);
+		outputGroup.add( cube );
 		this.outputGroup = outputGroup;
+
 		this.outputGroup.position.set(
+
 			this.initPosition.x,
 			this.initPosition.y,
 			this.initPosition.z
+
 		);
 
 	},
 
 	getElement: function() {
+
 		return this.outputGroup;
+
 	},
 
-	updateVis: function(color) {
+	updateVis: function( color ) {
 
 		this.outputNeural.material.opacity = color;
 		this.outputNeural.material.needsUpdate = true;
@@ -86,45 +96,51 @@ OutputUnit.prototype = {
 	showText: function() {
 
 		let geometry = new THREE.TextGeometry( this.output, {
+
 			font: this.font,
 			size: this.textSize,
-			height: Math.min(this.unitLength, 1),
-			curveSegments: 8,
+			height: Math.min( this.unitLength, 1 ),
+			curveSegments: 8
+
 		} );
 
 		let material = new THREE.MeshBasicMaterial( { color: this.color } );
 
-		let text = new THREE.Mesh(geometry, material);
+		let text = new THREE.Mesh( geometry, material );
 
 		let textPos = TextHelper.calcOutputTextPos(
+
 			this.output.length,
 			this.textSize,
 			this.cubeSize,
 			{
+
 				x: this.outputNeural.position.x,
 				y: this.outputNeural.position.y,
 				z: this.outputNeural.position.z
+
 			}
+
 		);
 
 		text.position.set(
+
 			textPos.x,
 			textPos.y,
 			textPos.z
+
 		);
 
 		this.outputText = text;
 
-		this.outputGroup.add(text);
+		this.outputGroup.add( text );
 		this.isTextShown = true;
 
 	},
 
 	hideText: function() {
 
-		console.log("hide text for index " + this.outputNeural.outputIndex);
-
-		this.outputGroup.remove(this.outputText);
+		this.outputGroup.remove( this.outputText );
 		this.outputText = undefined;
 		this.isTextShown = false;
 
@@ -132,34 +148,42 @@ OutputUnit.prototype = {
 
 	clear: function() {
 
-		let colors = ColorUtils.getAdjustValues([0]);
+		let colors = ColorUtils.getAdjustValues( [ 0 ] );
 
-		this.updateVis(colors);
+		this.updateVis( colors );
 
-		if (this.outputText !== undefined) {
+		if ( this.outputText !== undefined ) {
+
 			this.hideText();
+
 		}
 
 	},
 
-	setLayerIndex: function(layerIndex) {
+	setLayerIndex: function( layerIndex ) {
+
 		this.outputNeural.layerIndex = layerIndex;
+
 	},
 
-	setOutputIndex: function(outputIndex) {
+	setOutputIndex: function( outputIndex ) {
+
 		this.outputNeural.outputIndex = outputIndex;
+
 	},
 
 	isSelected: function() {
+
 		return this.isTextShown;
+
 	},
 
-	updatePos: function(pos) {
+	updatePos: function( pos ) {
 
 		this.position.x = pos.x;
 		this.position.y = pos.y;
 		this.position.z = pos.z;
-		this.outputGroup.position.set(pos.x, pos.y, pos.z);
+		this.outputGroup.position.set( pos.x, pos.y, pos.z );
 
 	}
 

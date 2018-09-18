@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-function Dot3d(mergedElements) {
+function Dot3d( mergedElements ) {
 
 	this.mergedElements = mergedElements;
 	this.layerIndex = undefined;
@@ -11,8 +11,10 @@ function Dot3d(mergedElements) {
 
 Dot3d.prototype = {
 
-	setLayerIndex: function(layerIndex) {
+	setLayerIndex: function( layerIndex ) {
+
 		this.layerIndex = layerIndex;
+
 	},
 
 	validate: function() {

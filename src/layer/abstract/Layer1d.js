@@ -2,15 +2,15 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import {Layer} from "./Layer";
+import { Layer } from "./Layer";
 import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
 import { ColorUtils } from "../../utils/ColorUtils";
-import {QueueAggregation} from "../../elements/QueueAggregation";
-import {NeuralQueue} from "../../elements/NeuralQueue";
+import { QueueAggregation } from "../../elements/QueueAggregation";
+import { NeuralQueue } from "../../elements/NeuralQueue";
 
-function Layer1d(config) {
+function Layer1d( config ) {
 
-	Layer.call(this, config);
+	Layer.call( this, config );
 
 	this.layerDimension = 1;
 
@@ -26,16 +26,16 @@ function Layer1d(config) {
 
 }
 
-Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
+Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
-	init: function(center, actualDepth) {
+	init: function( center, actualDepth ) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
 		this.neuralGroup = new THREE.Group();
-		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
+		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
 
-		if (this.isOpen) {
+		if ( this.isOpen ) {
 
 			this.initQueueElement();
 			this.initCloseButton();
@@ -46,15 +46,15 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		}
 
-		this.scene.add(this.neuralGroup);
+		this.scene.add( this.neuralGroup );
 
 	},
 
 	openLayer: function() {
 
-		if (!this.isOpen) {
+		if ( !this.isOpen ) {
 
-			QueueTransitionFactory.openLayer(this);
+			QueueTransitionFactory.openLayer( this );
 
 			this.isOpen = true;
 
@@ -65,18 +65,22 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 	initQueueElement: function() {
 
 		let queueHandler = new NeuralQueue(
+
 			this.width,
 			this.actualWidth,
 			this.unitLength,
 			this.color
+
 		);
 
-		queueHandler.setLayerIndex(this.layerIndex);
+		queueHandler.setLayerIndex( this.layerIndex );
 		this.queueHandler = queueHandler;
-		this.neuralGroup.add(queueHandler.getElement());
+		this.neuralGroup.add( queueHandler.getElement() );
 
-		if (this.neuralValue !== undefined) {
+		if ( this.neuralValue !== undefined ) {
+
 			this.updateQueueVis();
+
 		}
 
 	},
@@ -85,167 +89,207 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		console.log("dispose queue element");
 
-		this.neuralGroup.remove(this.queueHandler.getElement());
+		this.neuralGroup.remove( this.queueHandler.getElement() );
 		this.queueHandler = undefined;
 
 	},
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new QueueAggregation(this.lastActualWidth, this.lastActualHeight, this.unitLength, this.color);
-		aggregationHandler.setLayerIndex(this.layerIndex);
+		let aggregationHandler = new QueueAggregation( this.lastActualWidth, this.lastActualHeight, this.unitLength, this.color );
+		aggregationHandler.setLayerIndex( this.layerIndex );
 
 		this.aggregationHandler = aggregationHandler;
-		this.neuralGroup.add(this.aggregationHandler.getElement());
+		this.neuralGroup.add( this.aggregationHandler.getElement() );
 
 	},
 
 	disposeAggregationElement: function() {
 
-		this.neuralGroup.remove(this.aggregationHandler.getElement());
+		this.neuralGroup.remove( this.aggregationHandler.getElement() );
 		this.aggregationHandler = undefined;
 
 	},
 
 	closeLayer: function() {
 
-		if (this.isOpen) {
+		if ( this.isOpen ) {
 
-			QueueTransitionFactory.closeLayer(this);
+			QueueTransitionFactory.closeLayer( this );
 
 			this.isOpen = false;
 		}
 
 	},
 
-	showText: function(element) {
+	showText: function( element ) {
 
-		if (element.elementType === "featureLine") {
+		if ( element.elementType === "featureLine" ) {
+
 			this.queueHandler.showText();
 			this.textElementHandler = this.queueHandler;
+
 		}
 
 	},
 
 	hideText: function() {
 
-		if (this.textElementHandler !== undefined) {
+		if ( this.textElementHandler !== undefined ) {
 
 			this.textElementHandler.hideText();
 			this.textElementHandler = undefined;
+
 		}
 
 	},
 
-	handleHoverIn: function(hoveredElement) {
+	handleHoverIn: function( hoveredElement ) {
 
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.initLineGroup( hoveredElement );
+
 		}
 
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
+			this.showText( hoveredElement );
+
 		}
 
 	},
 
 	handleHoverOut: function() {
 
-		if (this.relationSystem !== undefined && this.relationSystem) {
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
 			this.disposeLineGroup();
+
 		}
 
-		if (this.textSystem !== undefined && this.textSystem) {
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
 			this.hideText();
+
 		}
 
 	},
 
-	updateValue: function(value) {
+	updateValue: function( value ) {
 
 		this.neuralValue = value;
 
-		if (this.isOpen) {
+		if ( this.isOpen ) {
+
 			this.updateQueueVis();
+
 		}
 
 	},
 
 	updateQueueVis: function() {
-		let colors = ColorUtils.getAdjustValues(this.neuralValue);
 
-		this.queueHandler.updateVis(colors);
+		let colors = ColorUtils.getAdjustValues( this.neuralValue );
+
+		this.queueHandler.updateVis( colors );
+
 	},
 
 	calcCloseButtonSize: function() {
 
-		if (this.width > 50) {
+		if ( this.width > 50 ) {
+
 			return 2 * this.unitLength;
+
 		} else {
+
 			return 1.1 * this.unitLength;
+
 		}
 
 	},
 
 	calcCloseButtonPos: function() {
+
 		return {
+
 			x: - this.actualWidth / 2 - 30,
 			y: 0,
 			z: 0
+
 		};
+
 	},
 
 	clear: function() {
 
-		if (this.neuralValue !== undefined) {
-			if (this.isOpen) {
+		if ( this.neuralValue !== undefined ) {
+
+			if ( this.isOpen ) {
+
 				this.queueHandler.clear();
+
 			}
+
 			this.neuralValue = undefined;
+
 		}
 
 	},
 
-	provideRelativeElements: function(request) {
+	provideRelativeElements: function( request ) {
 
 		let relativeElements = [];
 
-		if (!this.isTransition) {
-			if (this.isOpen) {
-				relativeElements.push(this.queueHandler.getElement());
+		if ( !this.isTransition ) {
+
+			if ( this.isOpen ) {
+
+				relativeElements.push( this.queueHandler.getElement() );
+
 			} else {
-				relativeElements.push(this.aggregationHandler.getElement());
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
 			}
 		}
 
 		return {
+
 			isOpen: this.isOpen,
 			elementList: relativeElements
+
 		};
 
 	},
 
-	handleClick: function(clickedElement) {
+	handleClick: function( clickedElement ) {
 
-		if (clickedElement.elementType === "aggregationElement") {
+		if ( clickedElement.elementType === "aggregationElement" ) {
+
 			this.openLayer();
-		} else if (clickedElement.elementType === "closeButton") {
+
+		} else if ( clickedElement.elementType === "closeButton" ) {
+
 			this.closeLayer();
+
 		}
+
 	},
 
 	// override this function to load user's layer config for layer2d object
-	loadLayerConfig: function(layerConfig) {
+	loadLayerConfig: function( layerConfig ) {
 
 	},
 
 	// override this function to load user's model config to layer2d object
-	loadModelConfig: function(modelConfig) {
+	loadModelConfig: function( modelConfig ) {
 
 	},
 
 	// override this function to get information from previous layer
-	assemble: function(layerIndex) {
+	assemble: function( layerIndex ) {
 
 	}
 

@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-function Predictor(model) {
+function Predictor( model ) {
 
 	this.model = model;
 
@@ -11,7 +11,7 @@ function Predictor(model) {
 Predictor.prototype = {
 
 	// predictor need to override this function to implement actual prediction work
-	predict: function(data, inputShape) {
+	predict: function( data, inputShape ) {
 
 	}
 

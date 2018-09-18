@@ -2,21 +2,21 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-let ChannelDataGenerator = (function() {
+let ChannelDataGenerator = ( function() {
 
-	function generateChannelData(rawValue, depth) {
+	function generateChannelData( rawValue, depth ) {
 
 		let layerOutputValues = [];
 
-		for (let i = 0; i < depth; i++) {
+		for ( let i = 0; i < depth; i++ ) {
 
 			let referredIndex = i;
 
-			while (referredIndex < rawValue.length) {
+			while ( referredIndex < rawValue.length)  {
 
-				layerOutputValues.push(rawValue[referredIndex]);
-
+				layerOutputValues.push( rawValue[ referredIndex ] );
 				referredIndex += depth;
+
 			}
 
 		}
@@ -26,21 +26,21 @@ let ChannelDataGenerator = (function() {
 	}
 
 	// generate channel average data for aggregation
-	function generateMaxAggregationData(rawValue, depth) {
+	function generateMaxAggregationData( rawValue, depth ) {
 
 		let aggregationValue = [];
 
-		for (let i = 0; i < rawValue.length; i += depth) {
+		for ( let i = 0; i < rawValue.length; i += depth ) {
 
 			let channelSum = 0;
 
-			for (let j = 0; j < depth; j++) {
+			for ( let j = 0; j < depth; j++ ) {
 
-				channelSum += rawValue[i + j];
+				channelSum += rawValue[ i + j ];
 
 			}
 
-			aggregationValue.push(channelSum / depth);
+			aggregationValue.push( channelSum / depth );
 
 		}
 
@@ -49,21 +49,21 @@ let ChannelDataGenerator = (function() {
 	}
 
 	// generate channel max data for aggregation
-	function generateAverageAggregationData(rawValue, depth) {
+	function generateAverageAggregationData( rawValue, depth ) {
 
 		let aggregationValue = [];
 
-		for (let i = 0; i < rawValue.length; i += depth) {
+		for ( let i = 0; i < rawValue.length; i += depth ) {
 
-			let max = rawValue[i];
+			let max = rawValue[ i ];
 
-			for (let j = 0; j < depth; j++) {
+			for ( let j = 0; j < depth; j++ ) {
 
-				max = max > rawValue[i + j] ? max : rawValue[i + j];
+				max = max > rawValue[ i + j ] ? max : rawValue[ i + j ];
 
 			}
 
-			aggregationValue.push(max);
+			aggregationValue.push( max );
 
 		}
 
@@ -71,14 +71,20 @@ let ChannelDataGenerator = (function() {
 
 	}
 
-	function generateAggregationData(rawValue, depth, strategy) {
+	function generateAggregationData( rawValue, depth, strategy ) {
 
-		if (strategy === "average") {
-			return generateAverageAggregationData(rawValue, depth);
-		} else if (strategy === "max") {
-			return generateMaxAggregationData(rawValue, depth);
+		if ( strategy === "average" ) {
+
+			return generateAverageAggregationData( rawValue, depth );
+
+		} else if ( strategy === "max" ) {
+
+			return generateMaxAggregationData( rawValue, depth );
+
 		} else {
-			console.error("Do not support \"aggregationStrategy\": " + strategy + ", use \"average\" or \"max\" max instead.");
+
+			console.error( "Do not support \"aggregationStrategy\": " + strategy + ", use \"average\" or \"max\" max instead." );
+
 		}
 
 	}
@@ -91,6 +97,6 @@ let ChannelDataGenerator = (function() {
 
 	}
 
-})();
+} )();
 
 export { ChannelDataGenerator }

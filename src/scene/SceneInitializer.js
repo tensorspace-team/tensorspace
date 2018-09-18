@@ -5,7 +5,7 @@
 import { DefaultCameraPos } from "../utils/Constant";
 import { DefaultLayerDepth } from "../utils/Constant";
 
-function SceneInitializer(container) {
+function SceneInitializer( container ) {
 
 	this.container = container;
 	this.animateFrame = undefined;
@@ -28,7 +28,7 @@ function SceneInitializer(container) {
 
 SceneInitializer.prototype = {
 
-	loadSceneConfig: function(config) {
+	loadSceneConfig: function( config ) {
 
 		this.hasStats = config.stats;
 		this.backgroundColor = config.color.background;
@@ -36,11 +36,14 @@ SceneInitializer.prototype = {
 	},
 
 	dispose: function() {
-		window.cancelAnimationFrame(this.animateFrame);
+
+		window.cancelAnimationFrame( this.animateFrame );
+
 	},
 
 	createScene: function() {
-		console.log("creating scene...");
+
+		console.log( "creating scene..." );
 
 		let sceneArea = document.createElement( "canvas" );
 
@@ -54,15 +57,19 @@ SceneInitializer.prototype = {
 
 		sceneArea.width = this.container.clientWidth - paddingX - borderX;
 		sceneArea.height = this.container.clientHeight - paddingY - borderY;
-
-		console.log(this.backgroundColor);
-
 		sceneArea.style.backgroundColor = this.backgroundColor;
 
 		this.clock = new THREE.Clock();
-		this.renderer = new THREE.WebGLRenderer({canvas: sceneArea, antialias: true});
-		this.renderer.setSize(sceneArea.width, sceneArea.height);
-		container.appendChild(this.renderer.domElement);
+
+		this.renderer = new THREE.WebGLRenderer( {
+
+			canvas: sceneArea,
+			antialias: true
+
+		} );
+
+		this.renderer.setSize( sceneArea.width, sceneArea.height );
+		container.appendChild( this.renderer.domElement );
 
 		this.camera = new THREE.PerspectiveCamera();
 		this.camera.fov = 45;
@@ -76,41 +83,49 @@ SceneInitializer.prototype = {
 		this.scene = new THREE.Scene();
 		this.scene.background = new THREE.Color( this.backgroundColor );
 
-		if (this.hasStats) {
+		if ( this.hasStats ) {
 
 			this.stats = new Stats();
 			this.stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 			container.appendChild( this.stats.dom );
+
 		}
 
-		this.cameraControls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-		this.cameraControls.target.set(0, 0, 0);
+		this.cameraControls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
+		this.cameraControls.target.set( 0, 0, 0 );
 
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
 
-		let fogColor = new THREE.Color(0xffffff);
+		let fogColor = new THREE.Color( 0xffffff );
 
-		this.scene.fog = new THREE.Fog(fogColor, 0.0025, 5000);
+		this.scene.fog = new THREE.Fog( fogColor, 0.0025, 5000 );
 
 	},
 
 	updateCamera: function() {
-		console.log("update camera.");
+
+		console.log( "update camera." );
 
 		let modelDepth = this.layers.length;
-		let controlRatio = getControlRatio(modelDepth);
-		this.camera.position.set(0, 0, controlRatio * DefaultCameraPos * modelDepth / DefaultLayerDepth);
+		let controlRatio = getControlRatio( modelDepth );
+		this.camera.position.set( 0, 0, controlRatio * DefaultCameraPos * modelDepth / DefaultLayerDepth );
 
 		// as strategy can not directly be applied to model when layer depth is too small, add a control ratio to move camera farther
-		function getControlRatio(depth) {
+		function getControlRatio( depth ) {
 
-			if (depth > 5) {
+			if ( depth > 5 ) {
+
 				return 1;
-			} else if (depth >= 3 && depth < 5) {
+
+			} else if ( depth >= 3 && depth < 5 ) {
+
 				return 1.5;
+
 			} else {
+
 				return 2;
+
 			}
 
 		}
@@ -122,35 +137,48 @@ SceneInitializer.prototype = {
 
 		let delta = this.clock.getDelta();
 
-		this.cameraControls.update(delta);
+		this.cameraControls.update( delta );
 
-		if (this.hasStats) {
+		if ( this.hasStats ) {
+
 			this.stats.update();
+
 		}
 
 		TWEEN.update();
 
-		this.renderer.render(this.scene, this.camera);
+		this.renderer.render( this.scene, this.camera );
 
 		this.animateFrame = requestAnimationFrame( function() {
+
 			this.animate();
-		}.bind(this) );
+
+		}.bind( this ) );
+
 	},
 
 	registerModelEvent: function() {
+
 		window.addEventListener( 'resize', function() {
+
 			this.onResize();
-		}.bind(this), false );
+
+		}.bind( this ), false );
+
 	},
 
 	onResize: function() {
+
 		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
+
 	},
 
 	resetCamera: function() {
-		console.log("Reset camera position.");
+
+		console.log( "Reset camera position." );
+
 	}
 
 };

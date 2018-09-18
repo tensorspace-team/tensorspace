@@ -2,23 +2,26 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-let OutputExtractor = (function() {
+let OutputExtractor = ( function() {
 
-	function getMaxConfidenceIndex(values) {
+	function getMaxConfidenceIndex( values ) {
 
 		let index = 0;
 		let maxValue = 0;
 
-		for (let i = 0; i < values.length; i++) {
+		for ( let i = 0; i < values.length; i++ ) {
 
-			if (values[i] >= maxValue) {
+			if ( values[ i ] >= maxValue ) {
+
 				index = i;
-				maxValue = values[i];
+				maxValue = values[ i ];
+
 			}
 
 		}
 
 		return index;
+
 	}
 
 	return {
@@ -27,6 +30,6 @@ let OutputExtractor = (function() {
 
 	}
 
-})();
+} )();
 
 export { OutputExtractor };

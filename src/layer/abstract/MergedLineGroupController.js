@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import {LineGroupGeometry} from "../../elements/LineGroupGeometry";
+import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
 import { BasicMaterialOpacity } from "../../utils/Constant";
 
 function MergeLineGroupController() {
@@ -19,23 +19,25 @@ MergeLineGroupController.prototype = {
 	createBasicLineElement: function() {
 
 		let lineMat = new THREE.LineBasicMaterial( {
+
 			color: 0xffffff,
 			opacity: BasicMaterialOpacity,
 			transparent:true,
 			vertexColors: THREE.VertexColors
+
 		} );
 
 		let straightLineGeo = new THREE.Geometry();
 		straightLineGeo.dynamic = true;
-		this.straightLineGroup = new THREE.Line(straightLineGeo, lineMat);
+		this.straightLineGroup = new THREE.Line( straightLineGeo, lineMat );
 
 		let curveLineGeo = new THREE.Geometry();
 		curveLineGeo.dynamic = true;
-		this.curveLineGroup = new THREE.Line(curveLineGeo, lineMat);
+		this.curveLineGroup = new THREE.Line( curveLineGeo, lineMat );
 
 	},
 
-	getLineGroupParameters: function(selectedElement) {
+	getLineGroupParameters: function( selectedElement ) {
 
 		this.scene.updateMatrixWorld();
 
@@ -45,124 +47,139 @@ MergeLineGroupController.prototype = {
 		let curveLineColors = [];
 		let curveLineVertices = [];
 
-		let relatedElements = this.getRelativeElements(selectedElement);
+		let relatedElements = this.getRelativeElements( selectedElement );
 
 		let straightElements = relatedElements.straight;
 		let curveElements = relatedElements.curve;
 
-		let startPosition = selectedElement.getWorldPosition().sub(this.neuralGroup.getWorldPosition());
+		let startPosition = selectedElement.getWorldPosition().sub( this.neuralGroup.getWorldPosition() );
 
-		for (let i = 0; i < straightElements.length; i++) {
+		for ( let i = 0; i < straightElements.length; i++ ) {
 
-			straightLineColors.push(new THREE.Color(this.color));
-			straightLineColors.push(new THREE.Color(this.color));
+			straightLineColors.push( new THREE.Color( this.color ) );
+			straightLineColors.push( new THREE.Color( this.color ) );
 
-			straightLineVertices.push(straightElements[i].getWorldPosition().sub(this.neuralGroup.getWorldPosition()));
-			straightLineVertices.push(startPosition);
+			straightLineVertices.push( straightElements[ i ].getWorldPosition().sub( this.neuralGroup.getWorldPosition() ) );
+			straightLineVertices.push( startPosition );
 
 		}
 
 		let forward = true;
 
-		for (let i = 0; i < curveElements.length; i++) {
+		for ( let i = 0; i < curveElements.length; i++ ) {
 
 			let startPos = startPosition;
 
 			let controlTranslateXVector;
-			if (startPos.x >= 0) {
-				controlTranslateXVector = new THREE.Vector3(1.5 * this.actualWidth, 0, 0)
+			if ( startPos.x >= 0 ) {
+
+				controlTranslateXVector = new THREE.Vector3( 1.5 * this.actualWidth, 0, 0 );
+
 			} else {
-				controlTranslateXVector = new THREE.Vector3(-1.5 * this.actualWidth, 0, 0)
+
+				controlTranslateXVector = new THREE.Vector3( - 1.5 * this.actualWidth, 0, 0 );
+
 			}
 
-			let firstControlPointPos = startPos.clone().add(controlTranslateXVector);
+			let firstControlPointPos = startPos.clone().add( controlTranslateXVector );
 
-			let endPos = curveElements[i].getWorldPosition().sub(this.neuralGroup.getWorldPosition());
-			let secondControlPointPos = endPos.clone().add(controlTranslateXVector);
+			let endPos = curveElements[ i ].getWorldPosition().sub( this.neuralGroup.getWorldPosition() );
+			let secondControlPointPos = endPos.clone().add( controlTranslateXVector );
 
 			let curve = new THREE.CubicBezierCurve3(
+
 				startPos,
 				firstControlPointPos,
 				secondControlPointPos,
 				endPos
-			);
 
+			);
 
 			let points = curve.getPoints( 50 );
 
-			if (forward) {
+			if ( forward ) {
 
-				for (let i = 0; i < points.length; i++) {
+				for ( let i = 0; i < points.length; i++ ) {
 
-					curveLineVertices.push(points[i]);
-					curveLineColors.push(new THREE.Color(this.color));
+					curveLineVertices.push( points[ i ] );
+					curveLineColors.push( new THREE.Color( this.color ) );
 
 				}
 
 			} else {
 
-				for (let i = points.length - 1; i >= 0; i--) {
+				for ( let i = points.length - 1; i >= 0; i-- ) {
 
-					curveLineVertices.push(points[i]);
-					curveLineColors.push(new THREE.Color(this.color));
+					curveLineVertices.push( points[ i ] );
+					curveLineColors.push( new THREE.Color( this.color ) );
 
 				}
 
 			}
 
 			forward = !forward;
+
 		}
 
 		return {
 
 			straight: {
+
 				lineColors: straightLineColors,
 				lineVertices: straightLineVertices
+
 			},
 
 			curve: {
+
 				lineColors: curveLineColors,
 				lineVertices: curveLineVertices
+
 			}
 
 		}
 
 	},
 
-	initLineGroup: function(selectedElement) {
+	initLineGroup: function( selectedElement ) {
 
-		let lineGroupParameters = this.getLineGroupParameters(selectedElement);
+		let lineGroupParameters = this.getLineGroupParameters( selectedElement );
 		let straightParameters = lineGroupParameters.straight;
 		let curveParameters = lineGroupParameters.curve;
 
 		let straightGroupGeometryHandler = new LineGroupGeometry(
+
 			straightParameters.lineVertices,
 			straightParameters.lineColors
+
 		);
 
 		this.straightLineGroup.geometry = straightGroupGeometryHandler.getElement();
 		this.straightLineGroup.material.needsUpdate = true;
 
-		this.neuralGroup.add(this.straightLineGroup);
+		this.neuralGroup.add( this.straightLineGroup );
 
 		let curveGroupGeometryHandler = new LineGroupGeometry(
+
 			curveParameters.lineVertices,
 			curveParameters.lineColors
+
 		);
+
 		this.curveLineGroup.geometry = curveGroupGeometryHandler.getElement();
 		this.curveLineGroup.material.needsUpdate = true;
 
-		this.neuralGroup.add(this.curveLineGroup);
+		this.neuralGroup.add( this.curveLineGroup );
 
 	},
 
 	disposeLineGroup: function() {
 
 		this.straightLineGroup.geometry.dispose();
-		this.neuralGroup.remove(this.straightLineGroup);
+		this.neuralGroup.remove( this.straightLineGroup );
 
 		this.curveLineGroup.geometry.dispose();
-		this.neuralGroup.remove(this.curveLineGroup);
+		this.neuralGroup.remove( this.curveLineGroup );
 
 	}
 

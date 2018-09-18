@@ -5,9 +5,9 @@
 import { CloseButton } from "../../elements/CloseButton";
 import { MergeLineGroupController } from "./MergedLineGroupController";
 
-function MergedLayer(config) {
+function MergedLayer( config ) {
 
-	MergeLineGroupController.call(this);
+	MergeLineGroupController.call( this );
 
 	this.scene = undefined;
 	this.layerIndex = undefined;
@@ -68,45 +68,59 @@ function MergedLayer(config) {
 	this.operator = undefined;
 
 
-	this.loadBasicLayerConfig(config);
+	this.loadBasicLayerConfig( config );
 
 
 }
 
-MergedLayer.prototype = Object.assign(Object.create(MergeLineGroupController.prototype), {
+MergedLayer.prototype = Object.assign( Object.create( MergeLineGroupController.prototype ), {
 
-	loadBasicLayerConfig: function(config) {
+	loadBasicLayerConfig: function( config ) {
 
-		if (config !== undefined) {
+		if ( config !== undefined ) {
 
-			if (config.initStatus !== undefined) {
+			if ( config.initStatus !== undefined ) {
 
-				if (config.initStatus === "open") {
+				if ( config.initStatus === "open" ) {
+
 					this.isOpen = true;
-				} else if (config.initStatus === "close") {
+
+				} else if ( config.initStatus === "close" ) {
+
 					this.isOpen = false;
+
 				} else {
-					console.error("\"initStatus\" property do not support for " + config.initStatus + ", use \"open\" or \"close\" instead.");
+
+					console.error( "\"initStatus\" property do not support for " + config.initStatus + ", use \"open\" or \"close\" instead." );
+
 				}
 
 			}
 
-			if (config.color !== undefined) {
+			if ( config.color !== undefined ) {
+
 				this.color = config.color;
+
 			}
 
-			if (config.name !== undefined) {
+			if ( config.name !== undefined ) {
+
 				this.name = config.name;
+
 			}
 
-			if (config.closeButton !== undefined) {
+			if ( config.closeButton !== undefined ) {
 
-				if (config.closeButton.display !== undefined) {
+				if ( config.closeButton.display !== undefined ) {
+
 					this.hasCloseButton = config.closeButton.display;
+
 				}
 
-				if (config.closeButton.ratio !== undefined) {
+				if ( config.closeButton.ratio !== undefined ) {
+
 					this.closeButtonSizeRatio = config.closeButton.ratio;
+
 				}
 
 			}
@@ -115,47 +129,57 @@ MergedLayer.prototype = Object.assign(Object.create(MergeLineGroupController.pro
 
 	},
 
-	loadBasicModelConfig: function(modelConfig) {
+	loadBasicModelConfig: function( modelConfig ) {
 
-		if (this.isOpen === undefined) {
+		if ( this.isOpen === undefined ) {
+
 			this.isOpen = modelConfig.layerInitStatus;
+
 		}
 
-		if (this.relationSystem === undefined) {
+		if ( this.relationSystem === undefined ) {
+
 			this.relationSystem = modelConfig.relationSystem;
+
 		}
 
-		if (this.textSystem === undefined) {
+		if ( this.textSystem === undefined ) {
+
 			this.textSystem = modelConfig.textSystem;
+
 		}
 
 	},
 
-	setEnvironment: function(scene) {
+	setEnvironment: function( scene ) {
+
 		this.scene = scene;
+
 	},
 
 	initCloseButton: function() {
 
-		if (this.hasCloseButton) {
+		if ( this.hasCloseButton ) {
+
 			let closeButtonPos = this.calcCloseButtonPos();
 			let closeButtonSize = this.closeButtonSizeRatio * this.calcCloseButtonSize();
-			let closeButtonHandler = new CloseButton(closeButtonSize, this.unitLength, closeButtonPos, this.color);
-			closeButtonHandler.setLayerIndex(this.layerIndex);
+			let closeButtonHandler = new CloseButton( closeButtonSize, this.unitLength, closeButtonPos, this.color );
+			closeButtonHandler.setLayerIndex( this.layerIndex );
 
 			this.closeButtonHandler = closeButtonHandler;
-			this.neuralGroup.add(this.closeButtonHandler.getElement());
+			this.neuralGroup.add( this.closeButtonHandler.getElement() );
+
 		}
 
 	},
 
 	disposeCloseButton: function() {
 
-		this.neuralGroup.remove(this.closeButtonHandler.getElement());
+		this.neuralGroup.remove( this.closeButtonHandler.getElement() );
 		this.closeButtonHandler = undefined;
 
 	}
 
-});
+} );
 
 export { MergedLayer };

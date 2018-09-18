@@ -2,13 +2,13 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import {Layer} from "../abstract/Layer";
-import {ColorUtils} from "../../utils/ColorUtils";
-import {FeatureMap} from "../../elements/FeatureMap";
+import { Layer } from "../abstract/Layer";
+import { ColorUtils } from "../../utils/ColorUtils";
+import { FeatureMap } from "../../elements/FeatureMap";
 
-function Output2d(config) {
+function Output2d( config ) {
 
-	Layer.call(this, config);
+	Layer.call( this, config );
 
 	this.shape = undefined;
 	this.width = undefined;
@@ -18,45 +18,46 @@ function Output2d(config) {
 
 	this.isShapePredefined = false;
 
-	this.loadLayerConfig(config);
+	this.loadLayerConfig( config );
 
 	this.fmCenter = {
+
 		x: 0,
 		y: 0,
 		z: 0
+
 	};
 
 	this.layerType = "output2d";
 
 }
 
-Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
+Output2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
-	init: function(center, actualDepth, nextHookHandler) {
+	init: function( center, actualDepth) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
-		this.nextHookHandler = nextHookHandler;
 
 		this.neuralGroup = new THREE.Group();
-		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
+		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
 
 		this.initAggregationElement();
 
-		this.scene.add(this.neuralGroup);
+		this.scene.add( this.neuralGroup );
 
 	},
 
-	loadLayerConfig: function(layerConfig) {
+	loadLayerConfig: function( layerConfig ) {
 
-		if (layerConfig !== undefined) {
+		if ( layerConfig !== undefined ) {
 
-			if (layerConfig.shape !== undefined) {
+			if ( layerConfig.shape !== undefined ) {
 
 				this.isShapePredefined = true;
 				this.shape = layerConfig.shape;
-				this.width = layerConfig.shape[0];
-				this.height = layerConfig.shape[1];
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
 				this.outputShape = layerConfig.shape;
 
 			}
@@ -65,17 +66,19 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	},
 
-	loadModelConfig: function(modelConfig) {
+	loadModelConfig: function( modelConfig ) {
 
-		this.loadBasicModelConfig(modelConfig);
+		this.loadBasicModelConfig( modelConfig );
 
-		if (this.color === undefined) {
+		if ( this.color === undefined ) {
+
 			this.color = modelConfig.color.output2d;
+
 		}
 
 	},
 
-	assemble: function(layerIndex) {
+	assemble: function( layerIndex ) {
 
 		this.layerIndex = layerIndex;
 
@@ -87,21 +90,24 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 	initAggregationElement: function() {
 
 		let aggregationHandler = new FeatureMap(
+
 			this.width,
 			this.height,
 			this.actualWidth,
 			this.actualHeight,
 			this.fmCenter,
 			this.color
+
 		);
-		aggregationHandler.setLayerIndex(this.layerIndex);
+
+		aggregationHandler.setLayerIndex( this.layerIndex );
 
 		this.aggregationHandler = aggregationHandler;
-		this.neuralGroup.add(aggregationHandler.getElement());
+		this.neuralGroup.add( aggregationHandler.getElement() );
 
 	},
 
-	updateValue: function(value) {
+	updateValue: function( value ) {
 
 		this.neuralValue = value;
 
@@ -111,39 +117,47 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	updateAggregationVis: function() {
 
-		let colors = ColorUtils.getAdjustValues(this.neuralValue);
+		let colors = ColorUtils.getAdjustValues( this.neuralValue );
 
-		this.aggregationHandler.updateVis(colors);
+		this.aggregationHandler.updateVis( colors );
 
 	},
 
-	handleHoverIn: function(hoveredElement) {
+	handleHoverIn: function( hoveredElement ) {
 
-		if (this.relationSystem !== undefined && this.relationSystem) {
-			this.initLineGroup(hoveredElement);
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.initLineGroup( hoveredElement );
+
 		}
 
-		if (this.textSystem !== undefined && this.textSystem) {
-			this.showText(hoveredElement);
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
+			this.showText( hoveredElement );
+
 		}
 
 	},
 
 	handleHoverOut: function() {
 
-		if (this.relationSystem !== undefined && this.relationSystem) {
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
 			this.disposeLineGroup();
+
 		}
 
-		if (this.textSystem !== undefined && this.textSystem) {
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
 			this.hideText();
+
 		}
 
 	},
 
-	showText: function(element) {
+	showText: function( element ) {
 
-		if (element.elementType === "featureMap") {
+		if ( element.elementType === "featureMap" ) {
 
 			this.aggregationHandler.showText();
 			this.textElementHandler = this.aggregationHandler;
@@ -154,14 +168,15 @@ Output2d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	hideText: function() {
 
-		if (this.textElementHandler !== undefined) {
+		if ( this.textElementHandler !== undefined ) {
 
 			this.textElementHandler.hideText();
 			this.textElementHandler = undefined;
+
 		}
 
 	}
 
-});
+} );
 
 export { Output2d };

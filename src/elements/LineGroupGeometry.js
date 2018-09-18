@@ -4,7 +4,7 @@
 
 import { BasicMaterialOpacity } from "../utils/Constant";
 
-function LineGroupGeometry(lineVertices, lineColors) {
+function LineGroupGeometry( lineVertices, lineColors ) {
 
 	this.lineVertices = lineVertices;
 	this.lineColors = lineColors;
@@ -12,15 +12,20 @@ function LineGroupGeometry(lineVertices, lineColors) {
 	this.geometry = undefined;
 
 	this.init();
+
 }
 
 LineGroupGeometry.prototype = {
 
 	init: function() {
 
-		let geometry = new THREE.Geometry({
-			transparent:true, opacity: BasicMaterialOpacity
-		});
+		let geometry = new THREE.Geometry( {
+
+			transparent:true,
+			opacity: BasicMaterialOpacity
+
+		} );
+
 		geometry.colors = this.lineColors;
 		geometry.vertices = this.lineVertices;
 		geometry.colorsNeedUpdate = true;
@@ -31,7 +36,9 @@ LineGroupGeometry.prototype = {
 	},
 
 	getElement: function() {
+
 		return this.geometry;
+
 	}
 
 };

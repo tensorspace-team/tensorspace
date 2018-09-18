@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-function Maximum3d(mergedElements) {
+function Maximum3d( mergedElements ) {
 
 	this.mergedElements = mergedElements;
 	this.layerIndex = undefined;
@@ -11,22 +11,26 @@ function Maximum3d(mergedElements) {
 
 Maximum3d.prototype = {
 
-	setLayerIndex: function(layerIndex) {
+	setLayerIndex: function( layerIndex ) {
+
 		this.layerIndex = layerIndex;
+
 	},
 
 	validate: function() {
 
-		let inputShape = this.mergedElements[0].outputShape;
+		let inputShape = this.mergedElements[ 0 ].outputShape;
 
-		for (let i = 0; i < this.mergedElements.length; i++) {
+		for ( let i = 0; i < this.mergedElements.length; i++ ) {
 
-			let outputShape = this.mergedElements[i].outputShape;
+			let outputShape = this.mergedElements[ i ].outputShape;
 
-			for (let j = 0; j < inputShape.length; j++) {
+			for ( let j = 0; j < inputShape.length; j++ ) {
 
-				if (outputShape[j] !== inputShape[j]) {
+				if ( outputShape[ j ] !== inputShape[ j ] ) {
+
 					return false;
+
 				}
 
 			}
@@ -39,72 +43,101 @@ Maximum3d.prototype = {
 
 	getShape: function() {
 
-		return this.mergedElements[0].outputShape;
+		return this.mergedElements[ 0 ].outputShape;
 
 	},
 
-	getRelativeElements: function(selectedElement) {
+	getRelativeElements: function( selectedElement ) {
 
 		let curveElements = [];
 		let straightElements = [];
 
-		if (selectedElement.elementType === "aggregationElement") {
+		if ( selectedElement.elementType === "aggregationElement" ) {
 
 			let request = {
+
 				all: true
+
 			};
 
-			for (let i = 0; i < this.mergedElements.length; i++) {
-				let relativeResult = this.mergedElements[i].provideRelativeElements(request);
-				let relativeElements = relativeResult.elementList;
-				if (this.mergedElements[i].layerIndex === this.layerIndex - 1) {
+			for ( let i = 0; i < this.mergedElements.length; i++ ) {
 
-					for (let j = 0; j < relativeElements.length; j++) {
-						straightElements.push(relativeElements[j]);
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
 					}
 
 				} else {
 
-					if (relativeResult.isOpen) {
-						for (let j = 0; j < relativeElements.length; j++) {
-							straightElements.push(relativeElements[j]);
+					if ( relativeResult.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+
 						}
+
 					} else {
-						for (let j = 0; j < relativeElements.length; j++) {
-							curveElements.push(relativeElements[j]);
+
+						for ( let j = 0; j < relativeElements.length; j++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
 						}
+
 					}
 
 				}
+
 			}
 
-		} else if (selectedElement.elementType === "featureMap") {
+		} else if ( selectedElement.elementType === "featureMap" ) {
 
 			let fmIndex = selectedElement.fmIndex;
+
 			let request = {
+
 				index: fmIndex
+
 			};
 
-			for (let i = 0; i < this.mergedElements.length; i++) {
-				let relativeResult = this.mergedElements[i].provideRelativeElements(request);
+			for ( let i = 0; i < this.mergedElements.length; i++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
 				let relativeElements = relativeResult.elementList;
 
-				if (this.mergedElements[i].layerIndex === this.layerIndex - 1) {
+				if ( this.mergedElements[i].layerIndex === this.layerIndex - 1 ) {
 
-					for (let j = 0; j < relativeElements.length; j++) {
-						straightElements.push(relativeElements[j]);
+					for ( let j = 0; j < relativeElements.length; j++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
 					}
 
 				} else {
 
-					if (relativeResult.isOpen) {
-						for (let j = 0; j < relativeElements.length; j++) {
-							straightElements.push(relativeElements[j]);
+					if ( relativeResult.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+
 						}
+
 					} else {
-						for (let j = 0; j < relativeElements.length; j++) {
-							curveElements.push(relativeElements[j]);
+
+						for ( let j = 0; j < relativeElements.length; j++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
 						}
+
 					}
 
 				}
@@ -114,10 +147,11 @@ Maximum3d.prototype = {
 		}
 
 		return {
+
 			straight: straightElements,
 			curve: curveElements
-		};
 
+		};
 
 	}
 

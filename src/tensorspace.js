@@ -51,6 +51,7 @@ import { Dot } from "./merge/Dot";
 import { Multiply } from "./merge/Multiply";
 
 let layers = {
+
 	Input1d: Input1d,
 	Input2d: Input2d,
 	Input3d: Input3d,
@@ -95,11 +96,14 @@ let layers = {
 	Multiply: Multiply,
 	Average: Average,
 	Maximum: Maximum
+
 };
 
 let model = {
+
 	Sequential: Sequential,
 	PixelSequential: PixelSequential
+
 };
 
 export {model, layers};

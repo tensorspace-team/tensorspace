@@ -4,25 +4,27 @@
 
 import { GridIntervalRatio } from "./Constant";
 
-let QueueCenterGenerator = (function() {
+let QueueCenterGenerator = ( function() {
 
-	function getCenterList(actualLength, number) {
+	function getCenterList( actualLength, number ) {
 
 		let centerList = [];
 
 		let interval = GridIntervalRatio * actualLength;
 
-		let initZTranslation = - interval * (number - 1) / 2;
+		let initZTranslation = - interval * ( number - 1 ) / 2;
 
-		for (let i = 0; i < number; i++) {
+		for ( let i = 0; i < number; i++ ) {
 
 			let center = {
+
 				x: 0,
 				y: 0,
 				z: initZTranslation + interval * i
+
 			};
 
-			centerList.push(center);
+			centerList.push( center );
 
 		}
 
@@ -36,6 +38,6 @@ let QueueCenterGenerator = (function() {
 
 	}
 
-})();
+} )();
 
 export { QueueCenterGenerator }

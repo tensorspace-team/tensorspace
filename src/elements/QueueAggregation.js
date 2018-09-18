@@ -5,7 +5,7 @@
 import { MinAlpha } from "../utils/Constant";
 import { FrameColor } from "../utils/Constant";
 
-function QueueAggregation(actualWidth, actualHeight, actualDepth, color) {
+function QueueAggregation( actualWidth, actualHeight, actualDepth, color ) {
 
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
@@ -23,37 +23,51 @@ function QueueAggregation(actualWidth, actualHeight, actualDepth, color) {
 QueueAggregation.prototype = {
 
 	init: function() {
-		let geometry = new THREE.BoxBufferGeometry(this.actualWidth, this.actualDepth, this.actualHeight);
-		let material = new THREE.MeshBasicMaterial({
-			color: this.color, opacity: MinAlpha, transparent: true
-		});
 
-		let cube = new THREE.Mesh(geometry, material);
+		let geometry = new THREE.BoxBufferGeometry( this.actualWidth, this.actualDepth, this.actualHeight );
 
-		cube.position.set(0, 0, 0);
+		let material = new THREE.MeshBasicMaterial( {
+
+			color: this.color,
+			opacity: MinAlpha,
+			transparent: true
+
+		} );
+
+		let cube = new THREE.Mesh( geometry, material );
+
+		cube.position.set( 0, 0, 0 );
 		cube.clickable = true;
 		cube.elementType = "aggregationElement";
 
 		this.cube = cube;
 
-		let edgesGeometry = new THREE.EdgesGeometry(geometry);
-		let edgesLine = new THREE.LineSegments(edgesGeometry, new THREE.LineBasicMaterial({
-			color: FrameColor
-		}));
+		let edgesGeometry = new THREE.EdgesGeometry( geometry );
+
+		let edgesLine = new THREE.LineSegments(
+
+			edgesGeometry,
+			new THREE.LineBasicMaterial( { color: FrameColor } )
+
+		);
 
 		let aggregationGroup = new THREE.Object3D();
-		aggregationGroup.add(cube);
-		aggregationGroup.add(edgesLine);
+		aggregationGroup.add( cube );
+		aggregationGroup.add( edgesLine );
 
 		this.aggregationElement = aggregationGroup;
 	},
 
 	getElement: function() {
+
 		return this.aggregationElement;
+
 	},
 
-	setLayerIndex: function(layerIndex) {
+	setLayerIndex: function( layerIndex ) {
+
 		this.cube.layerIndex = layerIndex;
+
 	}
 
 };

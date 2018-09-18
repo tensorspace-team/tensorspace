@@ -2,11 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import {Layer1d} from "../abstract/Layer1d";
+import { Layer1d } from "../abstract/Layer1d";
 
-function Activation1d(config) {
+function Activation1d( config ) {
 
-	Layer1d.call(this, config);
+	Layer1d.call( this, config );
 
 	this.activation = undefined;
 
@@ -14,68 +14,81 @@ function Activation1d(config) {
 
 }
 
-Activation1d.prototype = Object.assign(Object.create(Layer1d.prototype), {
+Activation1d.prototype = Object.assign( Object.create( Layer1d.prototype ), {
 
-	loadLayerConfig: function(layerConfig) {
+	loadLayerConfig: function( layerConfig ) {
 
-		if (layerConfig !== undefined) {
+		if ( layerConfig !== undefined ) {
 
-			if (layerConfig.activation !== undefined) {
+			if ( layerConfig.activation !== undefined ) {
+
 				this.activation = layerConfig.activation;
+
 			} else {
-				console.error("\"activation\" property is required for activation1d layer.");
+
+				console.error( "\"activation\" property is required for activation1d layer." );
+
 			}
 
 		} else {
-			console.error("Lack config for layer activation1d.");
+
+			console.error( "Lack config for layer activation1d." );
+
 		}
 
 	},
 
-	loadModelConfig: function(modelConfig) {
+	loadModelConfig: function( modelConfig ) {
 
-		this.loadBasicModelConfig(modelConfig);
+		this.loadBasicModelConfig( modelConfig );
 
-		if (this.color === undefined) {
+		if ( this.color === undefined ) {
+
 			this.color = modelConfig.color.activation1d;
+
 		}
 
 	},
 
-	assemble: function(layerIndex) {
+	assemble: function( layerIndex ) {
 
 		this.layerIndex = layerIndex;
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		this.width = this.inputShape[0];
-		this.outputShape = [this.width];
+		this.width = this.inputShape[ 0 ];
+		this.outputShape = [ this.width ];
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.width * this.unitLength;
 
-		if (this.lastLayer.layerDimension === 1) {
+		if ( this.lastLayer.layerDimension === 1 ) {
 
 			this.lastActualWidth = this.lastLayer.lastActualWidth;
 			this.lastActualHeight = this.lastLayer.lastActualHeight;
+
 		} else {
+
 			this.lastActualWidth = this.lastLayer.actualWidth;
 			this.lastActualHeight = this.lastLayer.actualHeight;
+
 		}
 
 	},
 
-	getRelativeElements: function(selectedElement) {
+	getRelativeElements: function( selectedElement ) {
 
 		let relativeElements = [];
 
-		if (selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureLine") {
+		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureLine" ) {
 
 			let request = {
+
 				all: true
+
 			};
 
-			relativeElements = this.lastLayer.provideRelativeElements(request).elementList;
+			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
 		}
 
@@ -83,6 +96,6 @@ Activation1d.prototype = Object.assign(Object.create(Layer1d.prototype), {
 
 	}
 
-});
+} );
 
 export { Activation1d };

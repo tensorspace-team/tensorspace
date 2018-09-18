@@ -2,80 +2,100 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-let MapTransitionFactory = (function() {
+let MapTransitionFactory = ( function() {
 
-	function openLayer(layer) {
+	function openLayer( layer ) {
 
 		layer.disposeAggregationElement();
-		layer.initSegregationElements(layer.closeFmCenters);
+		layer.initSegregationElements( layer.closeFmCenters );
 
 		let init = {
+
 			ratio: 0
+
 		};
 		let end = {
+
 			ratio: 1
+
 		};
 
-		let fmTween = new TWEEN.Tween(init)
-			.to(end, layer.openTime);
+		let fmTween = new TWEEN.Tween( init )
+			.to( end, layer.openTime );
 
-		fmTween.onUpdate(function () {
+		fmTween.onUpdate( function() {
 
-			for (let i = 0; i < layer.segregationHandlers.length; i++) {
+			for ( let i = 0; i < layer.segregationHandlers.length; i++ ) {
 
 				let tempPos = {
-					x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
-					y: init.ratio * (layer.openFmCenters[i].y - layer.closeFmCenters[i].y),
-					z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
+
+					x: init.ratio * ( layer.openFmCenters[ i ].x - layer.closeFmCenters[ i ].x ),
+					y: init.ratio * ( layer.openFmCenters[ i ].y - layer.closeFmCenters[ i ].y ),
+					z: init.ratio * ( layer.openFmCenters[ i ].z - layer.closeFmCenters[ i ].z )
+
 				};
 
-				layer.segregationHandlers[i].updatePos(tempPos);
+				layer.segregationHandlers[ i ].updatePos( tempPos );
 
 			}
 
-		}).onStart(function () {
+		} ).onStart( function() {
+
 			layer.isOpen = true;
-		}).onComplete(function() {
+
+		} ).onComplete( function() {
+
 			layer.initCloseButton();
-		});
+
+		} );
 
 		fmTween.start();
 
 	}
 
-	function closeLayer(layer) {
+	function closeLayer( layer ) {
 
 		let init = {
+
 			ratio: 1
+
 		};
 		let end = {
+
 			ratio: 0
+
 		};
 
-		let fmTween = new TWEEN.Tween(init)
-			.to(end, layer.openTime);
+		let fmTween = new TWEEN.Tween( init )
+			.to( end, layer.openTime );
 
-		fmTween.onUpdate(function () {
+		fmTween.onUpdate( function() {
 
-			for (let i = 0; i < layer.segregationHandlers.length; i++) {
+			for ( let i = 0; i < layer.segregationHandlers.length; i++ ) {
 
 				let tempPos = {
-					x: init.ratio * (layer.openFmCenters[i].x - layer.closeFmCenters[i].x),
-					y: init.ratio * (layer.openFmCenters[i].y - layer.closeFmCenters[i].y),
-					z: init.ratio * (layer.openFmCenters[i].z - layer.closeFmCenters[i].z)
+
+					x: init.ratio * ( layer.openFmCenters[ i ].x - layer.closeFmCenters[ i ].x ),
+					y: init.ratio * ( layer.openFmCenters[ i ].y - layer.closeFmCenters[ i ].y ),
+					z: init.ratio * ( layer.openFmCenters[ i ].z - layer.closeFmCenters[ i ].z )
+
 				};
 
-				layer.segregationHandlers[i].updatePos(tempPos);
+				layer.segregationHandlers[ i ].updatePos( tempPos );
 
 			}
 
-		}).onStart(function () {
+		} ).onStart(function() {
+
 			layer.disposeCloseButton();
-		}).onComplete(function() {
+
+		} ).onComplete( function() {
+
 			layer.disposeSegregationElements();
 			layer.initAggregationElement();
 			layer.isOpen = false;
-		});
+
+		} );
 
 		fmTween.start();
 
@@ -89,6 +109,6 @@ let MapTransitionFactory = (function() {
 
 	}
 
-})();
+} )();
 
 export { MapTransitionFactory };

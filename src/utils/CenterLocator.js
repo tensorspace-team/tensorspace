@@ -5,56 +5,58 @@
 import { MathUtils } from "./MathUtils";
 import { FeatureMapIntervalRatio } from "./Constant";
 
-let CenterLocator = (function() {
+let CenterLocator = ( function() {
 
-	function createLineCenters(filters, width) {
+	function createLineCenters( filters, width ) {
 
 		let centerList = [];
 
 		let fmLength = width;
 		let initXTranslate;
 
-		initXTranslate = - (1 + FeatureMapIntervalRatio) * (filters - 1) / 2 * fmLength;
-		//initXTranslate = - (filters - 1) / 2 * (fmLength + this.fmInterval);
+		initXTranslate = - ( 1 + FeatureMapIntervalRatio ) * ( filters - 1 ) / 2 * fmLength;
 
-		for (let i = 0; i < filters; i++) {
+		for ( let i = 0; i < filters; i++ ) {
 
-			//let xTranslate = initXTranslate + (fmLength + this.fmInterval) * i;
-			let xTranslate = initXTranslate + (1 + FeatureMapIntervalRatio) * fmLength * i;
+			let xTranslate = initXTranslate + ( 1 + FeatureMapIntervalRatio ) * fmLength * i;
 			let centerPos = [];
-			centerPos.push(xTranslate);
-			centerPos.push(0);
+			centerPos.push( xTranslate );
+			centerPos.push( 0 );
 
-			centerList.push(centerPos);
+			centerList.push( centerPos );
+
 		}
 
 		return centerList;
 
 	}
 
-    function createRectangleCenters(filters, width, height) {
+    function createRectangleCenters( filters, width, height ) {
 
         let centerList = [];
 
         // Get the best rectangle shape ([0]: width; [1]: height)
-        let rectShape = MathUtils.getClosestTwoFactors(filters);
+        let rectShape = MathUtils.getClosestTwoFactors( filters );
 
-        let initXTranslate = - (rectShape[0] - 1) / 2 * (1 + FeatureMapIntervalRatio) * width;
-        let initZTranslate = - (rectShape[1] - 1) / 2 * (1 + FeatureMapIntervalRatio) * height;
+        let initXTranslate = - ( rectShape[0] - 1 ) / 2 * ( 1 + FeatureMapIntervalRatio ) * width;
+        let initZTranslate = - ( rectShape[1] - 1 ) / 2 * ( 1 + FeatureMapIntervalRatio ) * height;
 
-        for (let i = 0; i < rectShape[0]; i++) {
-            for (let j = 0; j < rectShape[1]; j++) {
+        for ( let i = 0; i < rectShape[ 0 ]; i++ ) {
+
+            for ( let j = 0; j < rectShape[ 1 ]; j++ ) {
 
                 let centerPos = [];
 
-                let xTranslate = initXTranslate + (1 + FeatureMapIntervalRatio) * width * i;    // width ==> i
-                let zTranslate = initZTranslate + (1 + FeatureMapIntervalRatio) * height * j;   // height==> j
+                let xTranslate = initXTranslate + ( 1 + FeatureMapIntervalRatio ) * width * i;    // width ==> i
+                let zTranslate = initZTranslate + ( 1 + FeatureMapIntervalRatio ) * height * j;   // height==> j
 
-                centerPos.push(xTranslate);
-                centerPos.push(zTranslate);
+                centerPos.push( xTranslate );
+                centerPos.push( zTranslate );
 
-                centerList.push(centerPos);
+                centerList.push( centerPos );
+
             }
+
         }
 
         return centerList;
@@ -69,6 +71,6 @@ let CenterLocator = (function() {
 
 	}
 
-})();
+} )();
 
 export { CenterLocator };

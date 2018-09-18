@@ -5,13 +5,15 @@
 import { FeatureMapTextRatio } from "./Constant";
 import { FeatureQueueTextRatio } from "./Constant";
 
-let TextHelper = (function() {
+let TextHelper = ( function() {
 
-	function calcOutputTextSize(cubeSize) {
+	function calcOutputTextSize( cubeSize ) {
+
 		return cubeSize;
+
 	}
 
-	function calcOutputTextPos(textLength, textSize, cubeSize, cubePos) {
+	function calcOutputTextPos( textLength, textSize, cubeSize, cubePos ) {
 
 		return {
 
@@ -23,48 +25,56 @@ let TextHelper = (function() {
 
 	}
 
-	function calcFmTextSize(actualFmWidth) {
+	function calcFmTextSize( actualFmWidth ) {
+
 		return FeatureMapTextRatio * actualFmWidth;
+
 	}
 
-	function calcFmHeightTextPos(textLength, textSize, actualFmWidth, fmPos) {
+	function calcFmHeightTextPos( textLength, textSize, actualFmWidth, fmPos ) {
 
 		return {
+
 			x: fmPos.x - actualFmWidth / 2 - textLength * textSize,
 			y: fmPos.y,
 			z: fmPos.z
+
 		};
 
 	}
 
-	function calcFmWidthTextPos(textLength, textSize, actualFmHeight, fmPos) {
+	function calcFmWidthTextPos( textLength, textSize, actualFmHeight, fmPos ) {
 
 		return {
+
 			x: fmPos.x - textLength * textSize / 2,
 			y: fmPos.y,
 			z: fmPos.z - actualFmHeight / 2 - textSize
+
 		};
 
 	}
 
-	function calcQueueTextSize(unitLength) {
+	function calcQueueTextSize( unitLength ) {
 
 		return FeatureQueueTextRatio * unitLength;
 
 	}
 
-	function calcGlobalPoolingSize(unitLength) {
+	function calcGlobalPoolingSize( unitLength ) {
 
 		return unitLength;
 
 	}
 
-	function calcQueueTextPos(textLength, textSize, unitLength, queueCenter) {
+	function calcQueueTextPos( textLength, textSize, unitLength, queueCenter ) {
 
 		return {
+
 			x: queueCenter.x - textLength * textSize / 2,
 			y: queueCenter.y + 2 * unitLength,
 			z: queueCenter.z
+
 		}
 
 	}
@@ -89,6 +99,6 @@ let TextHelper = (function() {
 
 	}
 
-})();
+} )();
 
 export { TextHelper }
