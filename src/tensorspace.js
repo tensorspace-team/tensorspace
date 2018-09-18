@@ -82,7 +82,15 @@ let layers = {
 	PixelPooling2d: PixelPooling2d,
 	PixelFlatten: PixelFlatten,
 	PixelDense: PixelDense,
-	PixelOutput: PixelOutput
+	PixelOutput: PixelOutput,
+
+	Add: Add,
+	Concatenate: Concatenate,
+	Subtract: Subtract,
+	Dot: Dot,
+	Multiply: Multiply,
+	Average: Average,
+	Maximum: Maximum
 };
 
 let model = {
@@ -90,4 +98,4 @@ let model = {
 	PixelSequential: PixelSequential
 };
 
-export {model, layers, Add, Concatenate, Subtract, Dot, Multiply, Average, Maximum};
+export {model, layers};
