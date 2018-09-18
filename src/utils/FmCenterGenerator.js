@@ -12,14 +12,7 @@ let FmCenterGenerator = (function() {
 
 			return fmCenters;
 
-		} else if (shape === "square") {
-
-			let centerList = CenterLocator.createSquareCenters(filters, width, height);
-			let fmCenters = create3DCenters(centerList);
-
-			return fmCenters;
-
-		} else if (shape === "rectangle") {
+		} else if (shape === "rect") {
 
 			let centerList = CenterLocator.createRectangleCenters(filters, width, height);
             let fmCenters = create3DCenters(centerList);

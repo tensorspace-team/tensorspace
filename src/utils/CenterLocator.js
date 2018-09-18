@@ -28,47 +28,6 @@ let CenterLocator = (function() {
 
 	}
 
-	function createSquareCenters(filters, width, height) {
-
-		let centerList = [];
-
-		let squareWidth = MathUtils.getMaxSquareRoot(filters);
-		let squareHeight = Math.floor(filters / squareWidth) === filters / squareWidth ?
-			filters / squareWidth : Math.floor(filters / squareWidth) + 1;
-
-		// let initXTranslate = - (squareWidth - 1) / 2 * (width + this.fmInterval);
-		// let initZTranslate = - (squareHeight - 1) / 2 * (height + this.fmInterval);
-
-		let initXTranslate = - (squareWidth - 1) / 2 * (1 + FeatureMapIntervalRatio) * width;
-		let initZTranslate = - (squareHeight - 1) / 2 * (1 + FeatureMapIntervalRatio) * height;
-
-		for (let i = 0; i < squareHeight; i++) {
-			for (let j = 0; j < squareWidth; j++) {
-
-				if ((i * squareWidth + j + 1) > filters) {
-
-					return centerList;
-				}
-
-				let centerPos = [];
-
-				// let xTranslate = initXTranslate + (width + this.fmInterval) * j;
-				// let zTranslate = initZTranslate + (height + this.fmInterval) * i;
-
-				let xTranslate = initXTranslate + (1 + FeatureMapIntervalRatio) * width * j;
-				let zTranslate = initZTranslate + (1 + FeatureMapIntervalRatio) * height * i;
-
-				centerPos.push(xTranslate);
-				centerPos.push(zTranslate);
-
-				centerList.push(centerPos);
-			}
-		}
-
-		return centerList;
-
-	}
-
     function createRectangleCenters(filters, width, height) {
 
         let centerList = [];
@@ -101,8 +60,6 @@ let CenterLocator = (function() {
 	return {
 
 		createLineCenters: createLineCenters,
-
-		createSquareCenters: createSquareCenters,
 
         createRectangleCenters: createRectangleCenters
 
