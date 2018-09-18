@@ -176,6 +176,12 @@
 		strides: 1
     }));
 
+    model.add(new TSP.layers.YoloOutput({
+		onClick: function(outputData) {
+
+        }
+    }));
+
 	model.load({
 		type: "tensorflow",
 		modelUrl: "./yoloModel/tensorflowjs_model.pb",

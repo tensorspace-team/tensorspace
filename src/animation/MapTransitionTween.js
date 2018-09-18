@@ -1,12 +1,11 @@
-function MapTransitionTween() {
+let MapTransitionFactory = (function() {
 
-	this.animationTime = 2000;
+	let animationTime = 2000;
 
-}
+	function openLayer(layer) {
 
-MapTransitionTween.prototype = {
-
-	openLayer: function(layer) {
+		layer.disposeAggregationElement();
+		layer.initSegregationElements(layer.closeFmCenters);
 
 		let init = {
 			ratio: 0
@@ -16,7 +15,7 @@ MapTransitionTween.prototype = {
 		};
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, this.animationTime);
+			.to(end, animationTime);
 
 		fmTween.onUpdate(function () {
 
@@ -33,8 +32,6 @@ MapTransitionTween.prototype = {
 			}
 
 		}).onStart(function () {
-			layer.disposeAggregationElement();
-			layer.initSegregationElements(layer.closeFmCenters);
 			layer.isOpen = true;
 		}).onComplete(function() {
 			layer.initCloseButton();
@@ -42,9 +39,9 @@ MapTransitionTween.prototype = {
 
 		fmTween.start();
 
-	},
+	}
 
-	closeLayer: function(layer) {
+	function closeLayer(layer) {
 
 		let init = {
 			ratio: 1
@@ -54,7 +51,7 @@ MapTransitionTween.prototype = {
 		};
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, this.animationTime);
+			.to(end, animationTime);
 
 		fmTween.onUpdate(function () {
 
@@ -82,8 +79,14 @@ MapTransitionTween.prototype = {
 
 	}
 
-};
+	return {
 
-let MapTransitionFactory = new MapTransitionTween();
+		openLayer: openLayer,
+
+		closeLayer: closeLayer
+
+	}
+
+})();
 
 export { MapTransitionFactory };

@@ -1,14 +1,10 @@
 import { VariableLengthObject } from "../elements/VariableLengthObject";
 
-function QueueTransitionTween() {
+let QueueTransitionFactory = (function() {
 
-	this.animationTime = 2000;
+	let animationTime = 2000;
 
-}
-
-QueueTransitionTween.prototype = {
-
-	openLayer: function(layer) {
+	function openLayer(layer) {
 
 		let init = {
 			scale: 1
@@ -21,7 +17,7 @@ QueueTransitionTween.prototype = {
 		let variableLengthObject = (new VariableLengthObject(layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.color)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, this.animationTime);
+			.to(end, animationTime);
 
 		fmTween.onUpdate(function () {
 
@@ -43,9 +39,9 @@ QueueTransitionTween.prototype = {
 
 		fmTween.start();
 
-	},
+	}
 
-	closeLayer: function(layer) {
+	function closeLayer(layer) {
 
 		let init = {
 			scale: 1
@@ -58,7 +54,7 @@ QueueTransitionTween.prototype = {
 		let variableLengthObject = (new VariableLengthObject(layer.actualWidth, layer.actualWidth / layer.width, layer.actualWidth / layer.width, layer.color)).getElement();
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, this.animationTime);
+			.to(end, animationTime);
 
 		fmTween.onUpdate(function () {
 
@@ -80,8 +76,14 @@ QueueTransitionTween.prototype = {
 
 	}
 
-};
+	return {
 
-let QueueTransitionFactory = new QueueTransitionTween();
+		openLayer: openLayer,
+
+		closeLayer: closeLayer
+
+	}
+
+})();
 
 export { QueueTransitionFactory };

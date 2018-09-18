@@ -56,16 +56,15 @@ OutputUnit.prototype = {
 		cube.hoverable = true;
 		cube.clickable = true;
 
-		cube.position.set(
-			this.initPosition.x,
-			this.initPosition.y,
-			this.initPosition.z
-		);
-
 		this.outputNeural = cube;
 
 		outputGroup.add(cube);
 		this.outputGroup = outputGroup;
+		this.outputGroup.position.set(
+			this.initPosition.x,
+			this.initPosition.y,
+			this.initPosition.z
+		);
 
 	},
 

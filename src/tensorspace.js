@@ -11,6 +11,7 @@ import { Input2d } from "./layer/prime/Input2d";
 import { Input3d } from "./layer/prime/Input3d";
 import { Output } from "./layer/prime/Output1d";
 import { Output2d } from "./layer/prime/Output2d";
+import { YoloOutput } from "./layer/prime/YoloOutput";
 import { Flatten } from "./layer/prime/Flatten";
 import { Pooling1d } from "./layer/prime/Pooling1d";
 import { Pooling2d } from "./layer/prime/Pooling2d";
@@ -51,6 +52,7 @@ let layers = {
 	Input3d: Input3d,
 	Output: Output,
 	Output2d: Output2d,
+	YoloOutput: YoloOutput,
 	Conv1d: Conv1d,
 	Conv2d: Conv2d,
 	Conv2dTranspose: Conv2dTranspose,

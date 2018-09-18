@@ -69,6 +69,8 @@ Output.prototype = Object.assign(Object.create(Layer.prototype), {
 
 	loadLayerConfig: function(layerConfig) {
 
+		this.loadBasicLayerConfig(layerConfig);
+
 		if (layerConfig !== undefined) {
 			this.units = layerConfig.units;
 			this.width = layerConfig.units;

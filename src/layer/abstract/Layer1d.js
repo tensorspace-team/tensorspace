@@ -28,7 +28,6 @@ Layer1d.prototype = Object.assign(Object.create(Layer.prototype), {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
-
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
 

@@ -28,7 +28,6 @@ QueueAggregation.prototype = {
 
 		cube.position.set(0, 0, 0);
 		cube.clickable = true;
-		cube.hoverable = true;
 		cube.elementType = "aggregationElement";
 
 		this.cube = cube;

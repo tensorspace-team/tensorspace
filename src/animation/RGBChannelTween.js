@@ -1,16 +1,12 @@
-function RGBChannelTween() {
+let RGBTweenFactory = (function() {
 
-	this.separateTime = 1000;
-	this.journeyTime = 2000;
+	let separateTime = 1000;
+	let journeyTime = 2000;
 
-	this.aggregateTime = 1000;
-	this.homingTime = 2000;
+	let aggregateTime = 1000;
+	let homingTime = 2000;
 
-}
-
-RGBChannelTween.prototype = {
-
-	separate: function(layer) {
+	function separate(layer) {
 
 		let separateInit = {
 			ratio: 0
@@ -20,7 +16,7 @@ RGBChannelTween.prototype = {
 		};
 
 		let separateTween = new TWEEN.Tween(separateInit)
-			.to(separateEnd, this.separateTime);
+			.to(separateEnd, separateTime);
 
 		separateTween.onUpdate(function () {
 
@@ -76,7 +72,7 @@ RGBChannelTween.prototype = {
 		};
 
 		let journeyTween = new TWEEN.Tween(journeyInit)
-			.to(journeyEnd, this.journeyTime);
+			.to(journeyEnd, journeyTime);
 
 		journeyTween.onUpdate(function () {
 
@@ -124,9 +120,9 @@ RGBChannelTween.prototype = {
 		separateTween.chain(journeyTween);
 		separateTween.start();
 
-	},
+	}
 
-	aggregate: function(layer) {
+	function aggregate(layer) {
 
 		let homingInit = {
 			ratio: 1
@@ -137,7 +133,7 @@ RGBChannelTween.prototype = {
 		};
 
 		let homingTween = new TWEEN.Tween(homingInit)
-			.to(homingEnd, this.homingTime);
+			.to(homingEnd, homingTime);
 
 		homingTween.onUpdate(function () {
 
@@ -190,7 +186,7 @@ RGBChannelTween.prototype = {
 		};
 
 		let aggregateTween = new TWEEN.Tween(aggregateInit)
-			.to(aggregateEnd, this.aggregateTime);
+			.to(aggregateEnd, aggregateTime);
 
 		aggregateTween.onUpdate(function () {
 
@@ -242,8 +238,14 @@ RGBChannelTween.prototype = {
 
 	}
 
-};
+	return {
 
-let RGBTweenFactory = new RGBChannelTween();
+		separate: separate,
+
+		aggregate: aggregate
+
+	}
+
+})();
 
 export { RGBTweenFactory };

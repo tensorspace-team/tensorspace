@@ -1,12 +1,8 @@
-function QueueGroupTransitionTween() {
+let QueueGroupTweenFactory = (function() {
 
-	this.animationTime = 2000;
+	let animationTime = 2000;
 
-}
-
-QueueGroupTransitionTween.prototype = {
-
-	openLayer: function(layer) {
+	function openLayer(layer) {
 
 		let init = {
 			ratio: 0
@@ -16,7 +12,7 @@ QueueGroupTransitionTween.prototype = {
 		};
 
 		let openTween = new TWEEN.Tween(init)
-			.to(end, this.animationTime);
+			.to(end, animationTime);
 
 		openTween.onUpdate(function () {
 
@@ -44,9 +40,9 @@ QueueGroupTransitionTween.prototype = {
 
 		openTween.start();
 
-	},
+	}
 
-	closeLayer: function(layer) {
+	function closeLayer(layer) {
 
 		let init = {
 			ratio: 1
@@ -56,7 +52,7 @@ QueueGroupTransitionTween.prototype = {
 		};
 
 		let fmTween = new TWEEN.Tween(init)
-			.to(end, 2000);
+			.to(end, animationTime);
 
 		fmTween.onUpdate(function () {
 
@@ -86,8 +82,14 @@ QueueGroupTransitionTween.prototype = {
 
 	}
 
-};
+	return {
 
-let QueueGroupTweenFactory = new QueueGroupTransitionTween();
+		openLayer: openLayer,
+
+		closeLayer: closeLayer
+
+	}
+
+})();
 
 export { QueueGroupTweenFactory };

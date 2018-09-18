@@ -249,9 +249,13 @@ Sequential.prototype = Object.assign(Object.create(AbstractModel.prototype), {
 
 		for (let i = 1; i < this.layers.length; i++) {
 
-			let predictValue = this.predictResult[i - 1].dataSync();
+			if (this.layers[i].layerType !== "yoloOutput") {
+				let predictValue = this.predictResult[i - 1].dataSync();
 
-			this.layers[i].updateValue(predictValue);
+				this.layers[i].updateValue(predictValue);
+			} else {
+				this.layers[i].updateValue();
+			}
 
 		}
 
