@@ -90,18 +90,10 @@
     // 1
     // pool1 (max_pooling2d_1)
     // output: 55 *55 *64 ==> 193600
-//    model.add(new TSP.layers.Pooling2d({
-//        poolSize: [3, 3],
-//        strides: [2, 2]
-//    }));
-//
-    let maxPoool1 = new TSP.layers.Pooling2d({
-		poolSize: [3, 3],
-		strides: [2, 2]
-	});
-
-    model.add(maxPoool1);
-    console.log(maxPoool1.outputShape);
+    model.add(new TSP.layers.Pooling2d({
+        poolSize: [3, 3],
+        strides: [2, 2]
+    }));
 
 
     /* >>>>>>>>>____2____<<<<<<<<<< */
@@ -199,13 +191,9 @@
     // 10
     // res2b(add_2) ~ res2b_relu (activation_7)
     // output: 55 *55 *256 ==> 774400
-//    model.add(new TSP.layers.Layer3d({
-//        shape: [55, 55, 256]
-//    }));
     let activation_7 = TSP.layers.Add([activation_4, bn2b_branch2c]);
     model.add(activation_7);
-//
-//	console.log(addLayer2.outputShape);
+
 
     // 11
     // res2c_branch2a ~ res2c_branch2a_relu (activation_8)
@@ -233,19 +221,22 @@
     // res2c_branch2c ~ scale2c_branch2c (bn2c_branch2c)
     // output: 55 *55 *256 ==> 774400
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn2c_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 256,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn2c_branch2c);
 
     // 14
     // res2c(add_3) ~ res2c_relu (activation_10)
     // output: 55 *55 *256 ==> 774400
-    model.add(new TSP.layers.Layer3d({
-        shape: [55, 55, 256]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [55, 55, 256]
+    // }));
+    let activation_10 = TSP.layers.Add([activation_7, bn2c_branch2c]);
+    model.add(activation_10);
 
 
     /* >>>>>>>>>____3____<<<<<<<<<< */
@@ -276,30 +267,34 @@
     // res3a_branch2c ~ scale3a_branch2c (bn3a_branch2c)
     // output: 28 *28 *512 ==> 401408
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn3a_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 512,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn3a_branch2c);
 
     // 18
     // res3a_branch1 ~ scale3a_branch1 (bn3a_branch1)
     // output: 28 *28 *512==> 401408
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn3a_branch1 = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 512,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn3a_branch1);
 
     //19
     // res3a(add_4) ~ res3a_relu (activation_13)
     // output: 28 *28 *512 ==> 401408
-    model.add(new TSP.layers.Layer3d({
-        shape: [28, 28, 512]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [28, 28, 512]
+    // }));
+    let activation_13 = TSP.layers.Add([bn3a_branch1, bn3a_branch2c]);
+    model.add(activation_13);
 
     // 20
     // res3b_branch2a ~ res3b_branch2a_relu (activation_14)
@@ -327,19 +322,19 @@
     // res3b_branch2c ~ scale3b_branch2c (bn3b_branch2c)
     // output: 28 *28 *512 ==>401408
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn3b_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 512,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn3b_branch2c);
 
     // 23
     // res3b(add_5) ~ res3b_relu (activation_16)
     // output: 28 *28 *512 ==>401408
-    model.add(new TSP.layers.Layer3d({
-        shape: [28, 28, 512]
-    }));
+    let activation_16 = TSP.layers.Add([activation_13, bn3b_branch2c]);
+    model.add(activation_16);
 
     // 24
     // res3c_branch2a ~ res3c_branch2a_relu (activation_17)
@@ -367,19 +362,22 @@
     // res3c_branch2c ~ scale3c_branch2c (bn3c_branch2c)
     // output: 28 *28 *512 ==>401408
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn3c_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 512,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn3c_branch2c);
 
     // 27
     // res3c(add_6) ~ res3c_relu (activation_19)
     // output: 28 *28 *512 ==>401408
-    model.add(new TSP.layers.Layer3d({
-        shape: [28, 28, 512]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [28, 28, 512]
+    // }));
+    let activation_19 = TSP.layers.Add([activation_16, bn3c_branch2c]);
+    model.add(activation_19);
 
     // 28
     // res3d_branch2a ~ res3d_branch2a_relu (activation_20)
@@ -407,19 +405,22 @@
     // res3d_branch2c ~ scale3d_branch2c (bn3d_branch2c)
     // output: 28 *28 *512 ==>401408
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn3d_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 512,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn3d_branch2c);
 
     // 31
     // res3d(add_7) ~ res3d_relu (activation_22)
     // output: 28 *28 *512 ==>401408
-    model.add(new TSP.layers.Layer3d({
-        shape: [28, 28, 512]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [28, 28, 512]
+    // }));
+    let activation_22 = TSP.layers.Add([activation_19, bn3d_branch2c]);
+    model.add(activation_22);
 
     /* >>>>>>>>>____4____<<<<<<<<<< */
 
@@ -449,30 +450,34 @@
     // res4a_branch2c ~ scale4a_branch2c (bn4a_branch2c)
     // output: 14 *14 *1024 ==>200704
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn4a_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 1024,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn4a_branch2c);
 
     // 35
     // res4a_branch1 ~ scale4a_branch1 (bn4a_branch1)
     // output: 14 *14 *1024 ==>200704
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn4a_branch1 = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 1024,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn4a_branch1);
 
     // 36
     // res4a(add_8) ~ res4a_relu (activation_25)
     // output: 14 *14 *1024 ==>200704
-    model.add(new TSP.layers.Layer3d({
-        shape: [14, 14, 1024]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [14, 14, 1024]
+    // }));
+    let activation_25 = TSP.layers.Add([bn4a_branch1, bn4a_branch2c]);
+    model.add(activation_25);
 
     // 37
     // res4b_branch2a ~ res4b_branch2a_relu (activation_26)
@@ -500,19 +505,22 @@
     // res4b_branch2c ~ scale4b_branch2c (bn4b_branch2c)
     // output: 14 *14 *1024 ==>200704
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn4b_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 1024,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn4b_branch2c);
 
     // 40
     // res4b(add_9) ~ res4b_relu (activation_28)
     // output: 14 *14 *1024 ==>200704
-    model.add(new TSP.layers.Layer3d({
-        shape: [14, 14, 1024]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [14, 14, 1024]
+    // }));
+    let activation_28 = TSP.layers.Add([activation_25, bn4b_branch2c]);
+    model.add(activation_28);
 
     // 41
     // res4c_branch2a ~ res4c_branch2a_relu (activation_29)
@@ -540,19 +548,22 @@
     // res4c_branch2c ~ scale4c_branch2c (bn4c_branch2c)
     // output: 14 *14 *1024 ==>200704
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn4c_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 1024,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn4c_branch2c);
 
     // 44
     // res4c(add_10) ~ res4c_relu (activation_31)
     // output: 14 *14 *1024 ==>200704
-    model.add(new TSP.layers.Layer3d({
-        shape: [14, 14, 1024]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [14, 14, 1024]
+    // }));
+    let activation_31 = TSP.layers.Add([activation_28, bn4c_branch2c]);
+    model.add(activation_31);
 
     // 45
     // res4d_branch2a ~ res4d_branch2a_relu (activation_32)
@@ -580,19 +591,22 @@
     // res4d_branch2c ~ scale4d_branch2c (bn4d_branch2c)
     // output: 14 *14 *1024 ==>200704
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn4d_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 1024,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn4d_branch2c);
 
     // 48
     // res4d(add_11) ~ res4d_relu (activation_34)
     // output: 14 *14 *1024 ==>200704
-    model.add(new TSP.layers.Layer3d({
-        shape: [14, 14, 1024]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [14, 14, 1024]
+    // }));
+    let activation_34 = TSP.layers.Add([activation_31, bn4d_branch2c]);
+    model.add(activation_34);
 
     // 49
     // res4e_branch2a ~ res4e_branch2a_relu (activation_35)
@@ -620,19 +634,22 @@
     // res4e_branch2c ~ scale4e_branch2c (bn4e_branch2c)
     // output: 14 *14 *1024 ==>200704
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn4e_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 1024,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn4e_branch2c);
 
     // 52
     // res4e(add_12) ~ res4e_relu (activation_37)
     // output: 14 *14 *1024 ==>200704
-    model.add(new TSP.layers.Layer3d({
-        shape: [14, 14, 1024]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [14, 14, 1024]
+    // }));
+    let activation_37 = TSP.layers.Add([activation_34, bn4e_branch2c]);
+    model.add(activation_37);
 
     // 53
     // res4f_branch2a ~ res4f_branch2a_relu (activation_38)
@@ -660,19 +677,22 @@
     // res4f_branch2c ~ scale4f_branch2c (bn4f_branch2c)
     // output: 14 *14 *1024 ==>200704
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn4f_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 1024,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn4f_branch2c);
 
     // 56
     // res4f(add_13) ~ res4f_relu (activation_40)
     // output: 14 *14 *1024 ==>200704
-    model.add(new TSP.layers.Layer3d({
-        shape: [14, 14, 1024]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [14, 14, 1024]
+    // }));
+    let activation_40 = TSP.layers.Add([activation_37, bn4f_branch2c]);
+    model.add(activation_40);
 
 
     /* >>>>>>>>>____5____<<<<<<<<<< */
@@ -703,30 +723,34 @@
     // res5a_branch2c ~ scale5a_branch2c (bn5a_branch2c)
     // output: 7 *7 *2048 ==>100352
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn5a_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 2048,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn5a_branch2c);
 
     // 60
     // res5a_branch1 ~ scale5a_branch1 (bn5a_branch1)
     // output: 7 *7 *2048 ==>100352
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn5a_branch1 = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 2048,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn5a_branch1);
 
     // 61
     // res5a(add_14) ~ res5a_relu (activation_43)
     // output: 7 *7 *2048 ==>100352
-    model.add(new TSP.layers.Layer3d({
-        shape: [7, 7, 2048]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [7, 7, 2048]
+    // }));
+    let activation_43 = TSP.layers.Add([bn5a_branch1, bn5a_branch2c]);
+    model.add(activation_43);
 
     // 62
     // res5b_branch2a ~ res5b_branch2a_relu (activation_44)
@@ -754,19 +778,22 @@
     // res5b_branch2c ~ scale5b_branch2c (bn5b_branch2c)
     // output: 7 *7 *2048 ==>100352
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn5b_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 2048,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn5b_branch2c);
 
     // 65
     // res5b(add_15) ~ res5b_relu (activation_46)
     // output: 7 *7 *2048 ==>100352
-    model.add(new TSP.layers.Layer3d({
-        shape: [7, 7, 2048]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [7, 7, 2048]
+    // }));
+    let activation_46 = TSP.layers.Add([activation_43, bn5b_branch2c]);
+    model.add(activation_46);
 
     // 66
     // res5c_branch2a ~ res5c_branch2a_relu (activation_47)
@@ -794,19 +821,22 @@
     // res5c_branch2c ~ scale5c_branch2c (bn5c_branch2c)
     // output: 7 *7 *2048 ==>100352
     // Padding ==0
-    model.add(new TSP.layers.Conv2d({
+    let bn5c_branch2c = new TSP.layers.Conv2d({
         kernelSize: 1,
         filters: 2048,
         strides: 1,
         padding: "valid"
-    }));
+    });
+    model.add(bn5c_branch2c);
 
     // 69
     // res5c(add_10) ~ res5c_relu (activation_49)
     // output: 7 *7 *2048 ==>100352
-    model.add(new TSP.layers.Layer3d({
-        shape: [7, 7, 2048]
-    }));
+    // model.add(new TSP.layers.Layer3d({
+    //     shape: [7, 7, 2048]
+    // }));
+    let activation_49 = TSP.layers.Add([activation_46, bn5c_branch2c]);
+    model.add(activation_49);
 
     // 70
     // pool5 (avg_pool)
