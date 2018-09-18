@@ -12,10 +12,6 @@ let MathUtils = (function() {
 
 	}
 
-	function getTest() {
-	    return 777;
-    }
-
     function getClosestTwoFactors(n) {
 
 	    let sqrt = Math.sqrt(n);
@@ -40,8 +36,6 @@ let MathUtils = (function() {
 	return {
 
 		getMaxSquareRoot: getMaxSquareRoot,
-
-        getTest: getTest,
 
         getClosestTwoFactors: getClosestTwoFactors
 
