@@ -63,24 +63,6 @@
 		}
 	});
 
-    let addLayer = TSP.Maximum([layer1, layer2], {
-    	color: 0xffffff,
-        name: "addLayer",
-		closeButton: {
-			ratio: 1,
-			display: true
-		}
-    });
-
-    console.log(addLayer);
-
-//    console.log(addLayer);
-//
-    model.add(layer1);
-    model.add(layer2);
-
-    model.add(addLayer);
-
 //	model.add(new TSP.layers.Activation3d({
 //		activation: "test"
 //	}));
@@ -93,7 +75,10 @@
 	}));
 
     model.add(new TSP.layers.Dense({
-        units: 20
+        units: 16,
+        section: true,
+        segmentLength: 5,
+//        initStatus: "open"
     }));
 
     model.add(new TSP.layers.Conv1d({

@@ -106,4 +106,4 @@ let model = {
 
 };
 
-export {model, layers};
+export { model, layers };

@@ -79,6 +79,30 @@ let TextHelper = ( function() {
 
 	}
 
+	function calcSegmentStartIndexPos( segmentActualWidth,  textLength, textSize, queueCenter ) {
+
+		return {
+
+			x: queueCenter.x - segmentActualWidth / 2 - textLength * textSize - textLength * textSize / 2,
+			y: queueCenter.y - textSize / 2,
+			z: queueCenter.z
+
+		};
+
+	}
+
+	function calcSegmentEndIndexPos( segmentActualWidth,  textLength, textSize, queueCenter ) {
+
+		return {
+
+			x: queueCenter.x + segmentActualWidth / 2 + textLength * textSize - textLength * textSize / 2,
+			y: queueCenter.y - textSize / 2,
+			z: queueCenter.z
+
+		};
+
+	}
+
 	return {
 
 		calcOutputTextPos: calcOutputTextPos,
@@ -95,7 +119,11 @@ let TextHelper = ( function() {
 
 		calcQueueTextPos: calcQueueTextPos,
 
-		calcGlobalPoolingSize: calcGlobalPoolingSize
+		calcGlobalPoolingSize: calcGlobalPoolingSize,
+
+		calcSegmentStartIndexPos: calcSegmentStartIndexPos,
+
+		calcSegmentEndIndexPos: calcSegmentEndIndexPos
 
 	}
 

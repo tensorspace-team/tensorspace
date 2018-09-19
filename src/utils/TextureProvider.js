@@ -10,6 +10,8 @@ import { MultiplyData } from "../assets/image/Multiply";
 import { MaximumData } from "../assets/image/Maximum";
 import { AverageData } from "../assets/image/Average";
 import { DotData } from "../assets/image/Dot";
+import { NextData } from "../assets/image/Next";
+import { LastData } from "../assets/image/Last";
 
 let TextureProvider = ( function() {
 
@@ -46,6 +48,14 @@ let TextureProvider = ( function() {
 		} else if ( name === "dot" ) {
 
 			return DotData;
+
+		} else if ( name === "next" ) {
+
+			return NextData;
+
+		} else if ( name === "last" ) {
+
+			return LastData;
 
 		}
 

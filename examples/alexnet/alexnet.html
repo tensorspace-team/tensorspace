@@ -122,13 +122,19 @@
 		strides: [2, 2]
     }));
     model.add(new TSP.layers.Dense({
-        units: 4096
+        units: 4096,
+		section: true,
+		segmentLength: 400
     }));
 	model.add(new TSP.layers.Dense({
-		units: 4096
+		units: 4096,
+		section: true,
+		segmentLength: 400
 	}));
 	model.add(new TSP.layers.Dense({
-		units: 1000
+		units: 1000,
+		section: true,
+		segmentLength: 400
 	}));
 
 	model.load({

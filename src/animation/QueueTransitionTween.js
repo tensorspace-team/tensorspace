@@ -14,17 +14,29 @@ let QueueTransitionFactory = ( function() {
 
 		};
 
+		let scale;
+
+		if ( layer.section ) {
+
+			scale = layer.segmentLength;
+
+		} else {
+
+			scale = layer.width;
+
+		}
+
 		let end = {
 
-			scale: layer.width
+			scale: scale
 
 		};
 
 		let variableLengthObject = ( new VariableLengthObject(
 
-			layer.actualWidth / layer.width,
-			layer.actualWidth / layer.width,
-			layer.actualWidth / layer.width,
+			layer.unitLength,
+			layer.unitLength,
+			layer.unitLength,
 			layer.color
 
 		) ).getElement();
@@ -49,6 +61,13 @@ let QueueTransitionFactory = ( function() {
 			layer.neuralGroup.remove( variableLengthObject );
 			layer.initQueueElement();
 			layer.initCloseButton();
+
+			if ( layer.section ) {
+
+				layer.showPagination();
+
+			}
+
 			layer.isTransition = false;
 			layer.isOpen = true;
 
@@ -66,17 +85,41 @@ let QueueTransitionFactory = ( function() {
 
 		};
 
+		let scale;
+
+		if ( layer.section ) {
+
+			scale = layer.segmentLength;
+
+		} else {
+
+			scale = layer.width;
+
+		}
+
 		let end = {
 
-			scale: 1 / layer.width
+			scale: 1 / scale
 
 		};
 
+		let variableLength;
+
+		if ( layer.section ) {
+
+			variableLength = layer.segmentLength;
+
+		} else {
+
+			variableLength = layer.width;
+
+		}
+
 		let variableLengthObject = ( new VariableLengthObject(
 
-			layer.actualWidth,
-			layer.actualWidth / layer.width,
-			layer.actualWidth / layer.width,
+			variableLength * layer.unitLength,
+			layer.unitLength,
+			layer.unitLength,
 			layer.color
 
 		) ).getElement();
@@ -93,6 +136,13 @@ let QueueTransitionFactory = ( function() {
 			layer.disposeQueueElement();
 			layer.neuralGroup.add( variableLengthObject );
 			layer.disposeCloseButton();
+
+			if ( layer.section ) {
+
+				layer.hidePagination();
+
+			}
+
 			layer.isTransition = true;
 
 		} ).onComplete( function() {

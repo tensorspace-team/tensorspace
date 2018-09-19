@@ -8,9 +8,6 @@ function Dense( config ) {
 
 	Layer1d.call( this, config );
 
-	// the default segment is 1
-	this.segments = 1;
-
 	this.loadLayerConfig( config );
 
 	this.layerType = "dense";
@@ -21,6 +18,9 @@ Dense.prototype = Object.assign( Object.create( Layer1d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 
+		this.loadBasicLayerConfig( layerConfig );
+		this.loadLayer1dConfig( layerConfig );
+
 		if ( layerConfig !== undefined ) {
 
 			if ( layerConfig.units !== undefined ) {
@@ -29,15 +29,11 @@ Dense.prototype = Object.assign( Object.create( Layer1d.prototype ), {
 				this.width = layerConfig.units;
 				this.outputShape = [ layerConfig.units ];
 
+				this.totalSegments = Math.ceil( this.units / this.segmentLength );
+
 			} else {
 
 				console.error( "The \"unit\" property is required for dense layer." );
-
-			}
-
-			if ( layerConfig.segments !== undefined ) {
-
-				this.segments = layerConfig.segments;
 
 			}
 

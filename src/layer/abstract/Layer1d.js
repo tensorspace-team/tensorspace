@@ -7,6 +7,8 @@ import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { NeuralQueue } from "../../elements/NeuralQueue";
+import { PaginationButton } from "../../elements/PagniationButton";
+import { QueueSegment } from "../../elements/QueueSegment";
 
 function Layer1d( config ) {
 
@@ -21,6 +23,13 @@ function Layer1d( config ) {
 	this.lastActualHeight = undefined;
 
 	this.queueHandler = undefined;
+	this.lastButtonHandler = undefined;
+	this.nextButtonHandler = undefined;
+
+	this.section = false;
+	this.segmentLength = 200;
+	this.segmentIndex = 0;
+	this.totalSegments = undefined;
 
 	this.isTransition = false;
 
@@ -32,6 +41,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
+
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
 
@@ -40,6 +50,12 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.initQueueElement();
 			this.initCloseButton();
 
+			if ( this.section ) {
+
+				this.showPagination();
+
+			}
+
 		} else {
 
 			this.initAggregationElement();
@@ -47,6 +63,204 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		}
 
 		this.scene.add( this.neuralGroup );
+
+	},
+
+	loadLayer1dConfig: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			if ( layerConfig.section !== undefined ) {
+
+				this.section = layerConfig.section;
+
+				if ( this.section ) {
+
+					if ( layerConfig.segmentLength !== undefined ) {
+
+						this.segmentLength = layerConfig.segmentLength;
+
+					}
+
+					if ( layerConfig.initSegmentIndex !== undefined ) {
+
+						this.segmentIndex = layerConfig.initSegmentIndex;
+
+					}
+
+				}
+
+			}
+
+		}
+
+	},
+
+	showPagination: function() {
+
+		if ( this.segmentIndex === 0 && this.segmentIndex !== this.totalSegments - 1 ) {
+
+			this.showNextButton();
+
+		} else if ( this.segmentIndex !== 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			this.showLastButton();
+
+		} else if ( this.segmentIndex === 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			// no button
+
+		} else {
+
+			this.showNextButton();
+			this.showLastButton();
+
+		}
+
+	},
+
+	showLastButton: function() {
+
+		let lastButtonHandler = new PaginationButton(
+
+			"last",
+			this.unitLength,
+			this.calculatePaginationPos( "last" ),
+			this.color
+
+		);
+
+		lastButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.lastButtonHandler = lastButtonHandler;
+		this.neuralGroup.add( this.lastButtonHandler.getElement() );
+
+	},
+
+	showNextButton: function() {
+
+		let nextButtonHandler = new PaginationButton(
+
+			"next",
+			this.unitLength,
+			this.calculatePaginationPos( "next" ),
+			this.color
+
+		);
+
+		nextButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.nextButtonHandler = nextButtonHandler;
+		this.neuralGroup.add( this.nextButtonHandler.getElement() );
+
+	},
+
+	calculatePaginationPos: function( paginationType ) {
+
+		if ( paginationType === "last" ) {
+
+			return {
+
+				x: - this.segmentLength * this.unitLength / 2 - 5 * this.unitLength,
+				y: 0,
+				z: 0
+
+			};
+
+		} else {
+
+			return {
+
+				x: this.segmentLength * this.unitLength / 2 + 5 * this.unitLength,
+				y: 0,
+				z: 0
+
+			};
+
+		}
+
+	},
+
+	hidePagination: function() {
+
+		this.hideNextButton();
+		this.hideLastButton();
+
+	},
+
+	hideNextButton: function() {
+
+		if ( this.nextButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.nextButtonHandler.getElement() );
+			this.nextButtonHandler = undefined;
+
+		}
+
+	},
+
+	hideLastButton: function() {
+
+		if ( this.lastButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.lastButtonHandler.getElement() );
+			this.lastButtonHandler = undefined;
+
+		}
+
+	},
+
+	updatePage: function( paginationType ) {
+
+		if ( paginationType === "next" ) {
+
+			if ( this.segmentIndex < this.totalSegments - 1 ) {
+
+				if ( this.segmentIndex === 0 ) {
+
+					this.showLastButton();
+
+				}
+
+				if ( this.segmentIndex === this.totalSegments - 2 ) {
+
+					this.hideNextButton();
+
+				}
+
+				this.segmentIndex += 1;
+
+			}
+
+		} else {
+
+			if ( this.segmentIndex > 0 ) {
+
+				if ( this.segmentIndex === this.totalSegments - 1 ) {
+
+					this.showNextButton();
+
+				}
+
+				if ( this.segmentIndex === 1 ) {
+
+					this.hideLastButton();
+
+				}
+
+				this.segmentIndex -= 1;
+
+			}
+
+		}
+
+		this.queueHandler.updateSegmentIndex( this.segmentIndex );
+
+		if ( this.neuralValue !== undefined ) {
+
+			this.updateQueueVis();
+
+		}
 
 	},
 
@@ -64,14 +278,32 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	initQueueElement: function() {
 
-		let queueHandler = new NeuralQueue(
+		let queueHandler;
 
-			this.width,
-			this.actualWidth,
-			this.unitLength,
-			this.color
+		if ( this.section ) {
 
-		);
+			queueHandler = new QueueSegment(
+
+				this.segmentLength,
+				this.segmentIndex,
+				this.width,
+				this.unitLength,
+				this.color
+
+			);
+
+		} else {
+
+			queueHandler = new NeuralQueue(
+
+				this.width,
+				this.actualWidth,
+				this.unitLength,
+				this.color
+
+			);
+
+		}
 
 		queueHandler.setLayerIndex( this.layerIndex );
 		this.queueHandler = queueHandler;
@@ -96,7 +328,15 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new QueueAggregation( this.lastActualWidth, this.lastActualHeight, this.unitLength, this.color );
+		let aggregationHandler = new QueueAggregation(
+
+			this.lastActualWidth,
+			this.lastActualHeight,
+			this.unitLength,
+			this.color
+
+		);
+
 		aggregationHandler.setLayerIndex( this.layerIndex );
 
 		this.aggregationHandler = aggregationHandler;
@@ -192,7 +432,22 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let colors = ColorUtils.getAdjustValues( this.neuralValue );
 
-		this.queueHandler.updateVis( colors );
+		if ( this.section ) {
+
+			let segmentColors = colors.slice(
+
+				this.segmentLength * this.segmentIndex,
+				Math.min( this.segmentLength * ( this.segmentIndex + 1 ), this.width - 1 )
+
+			);
+
+			this.queueHandler.updateVis( segmentColors );
+
+		} else {
+
+			this.queueHandler.updateVis( colors );
+
+		}
 
 	},
 
@@ -212,9 +467,21 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	calcCloseButtonPos: function() {
 
+		let xTranslate;
+
+		if ( this.section ) {
+
+			xTranslate = - this.segmentLength * this.unitLength / 2 - 10 * this.unitLength;
+
+		} else {
+
+			xTranslate = - this.actualWidth / 2 - 10 * this.unitLength;
+
+		}
+
 		return {
 
-			x: - this.actualWidth / 2 - 30,
+			x: xTranslate,
 			y: 0,
 			z: 0
 
@@ -253,6 +520,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 				relativeElements.push( this.aggregationHandler.getElement() );
 
 			}
+
 		}
 
 		return {
@@ -274,6 +542,10 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.closeLayer();
 
+		} else if ( clickedElement.elementType === "paginationButton" ) {
+
+			this.updatePage( clickedElement.paginationType );
+
 		}
 
 	},
@@ -293,6 +565,6 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	}
 
-});
+} );
 
 export { Layer1d };

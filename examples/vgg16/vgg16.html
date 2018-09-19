@@ -227,16 +227,22 @@
     // 18
     model.add(new TSP.layers.Dense({
         units: 4096,
+		section: true,
+		segmentLength: 400
     }));
 
     // 19
     model.add(new TSP.layers.Dense({
         units: 4096,
+		section: true,
+		segmentLength: 400
     }));
 
     // 20
     model.add(new TSP.layers.Dense({
         units: 1000,
+		section: true,
+		segmentLength: 400
     }));
 
     model.load({
