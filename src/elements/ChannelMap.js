@@ -24,6 +24,7 @@ function ChannelMap( width, height, actualWidth, actualHeight, actualDepth, cent
 		z: center.z
 
 	};
+
 	this.color = color;
 	this.type = type;
 
@@ -105,6 +106,7 @@ ChannelMap.prototype = {
 			map: dataTex
 
 		} );
+
 		let basicMaterial = new THREE.MeshBasicMaterial( {
 
 			color: this.color,

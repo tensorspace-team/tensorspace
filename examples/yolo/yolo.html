@@ -35,6 +35,10 @@
             left: 500px;
         }
 
+        .mdl-dialog {
+            width: fit-content!important;
+        }
+
     </style>
 
 </head>
@@ -45,12 +49,27 @@
     <img id="loading" src="./assets/loading.gif">
 </div>
 
+<dialog class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Yolo Output</h4>
+    <div class="mdl-dialog__content">
+        <canvas id="drawerPad" width=416 height="416"></canvas>
+    </div>
+    <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button close">Goodbye 33</button>
+    </div>
+</dialog>
+
 <script src="../lib/jquery.min.js"></script>
 <script src="../lib/three.min.js"></script>
 <script src="../lib/stats.min.js"></script>
 <script src="../lib/tween.min.js"></script>
 <script src="../lib/TrackballControls.js"></script>
 <script src="../lib/tf.min.js"></script>
+<link rel="stylesheet" href="../lib/material.min.css">
+<script src="../lib/material.min.js"></script>
+<link rel="stylesheet" href="../lib/material.fonts.css">
+<script src="../lib/dialog-polyfill.js"></script>
+<link rel="stylesheet" href="../lib/dialog-polyfill.css">
 <script src="../../build/tensorspace.js"></script>
 
 <script src="./data/33.js"></script>
@@ -179,6 +198,37 @@
     model.add(new TSP.layers.YoloOutput({
 		onClick: function(outputData) {
 
+			// generate this rectList from outputData
+			let rectList = [{
+				x: 0,
+				y: 0,
+				width: 100,
+				height: 150
+			}, {
+				x: 250,
+				y: 50,
+				width: 100,
+				height: 50
+			}, {
+				x: 100,
+				y: 10,
+				width: 50,
+				height: 100
+			}, {
+				x: 200,
+				y: 200,
+				width: 100,
+				height: 200
+			}, {
+				x: 250,
+				y: 300,
+				width: 100,
+				height: 80
+			}];
+
+			dialog.showModal();
+			drawImage();
+			drawRects( rectList );
         }
     }));
 
@@ -195,6 +245,71 @@
         $("#loadingPad").hide();
 
     });
+
+	let dialog = document.querySelector('dialog');
+	if (! dialog.showModal) {
+		dialogPolyfill.registerDialog(dialog);
+	}
+
+	dialog.querySelector('.close').addEventListener('click', function() {
+		dialog.close();
+	});
+
+	function drawImage() {
+
+		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+		let imageDataValue = imageData.data;
+
+		let count = 0;
+
+		for (let i = 0; i < imageDataValue.length; i++) {
+
+			if (i % 4 !== 3 ) {
+
+				imageDataValue[ i ] = data[count];
+
+				count++;
+
+			} else {
+
+				imageDataValue[ i ]  = 255;
+
+			}
+
+		}
+
+		ctx.putImageData(imageData, 0, 0);
+
+	}
+
+	let canvas = document.getElementById('drawerPad');
+	let ctx = canvas.getContext('2d');
+
+	function drawRects(rectList) {
+
+		for (let i = 0; i < rectList.length; i++) {
+
+			let rectParameter = rectList[i];
+			drawRect(
+				rectParameter.x,
+				rectParameter.y,
+				rectParameter.width,
+				rectParameter.height
+			);
+
+		}
+
+	}
+
+	function drawRect(x, y, width, height) {
+
+		let c = document.getElementById("drawerPad");
+		let ctx = c.getContext("2d");
+		ctx.rect(x, y, width, height);
+		ctx.stroke();
+
+	}
 
 </script>
 
