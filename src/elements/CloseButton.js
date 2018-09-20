@@ -80,6 +80,15 @@ CloseButton.prototype = {
 
 		this.button.layerIndex = layerIndex;
 
+	},
+
+	updatePos: function( pos ) {
+
+		this.position.x = pos.x;
+		this.position.y = pos.y;
+		this.position.z = pos.z;
+		this.button.position.set( this.position.x, this.position.y, this.position.z );
+
 	}
 
 };

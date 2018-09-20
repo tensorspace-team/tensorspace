@@ -18,7 +18,7 @@ let QueueTransitionFactory = ( function() {
 
 		if ( layer.section ) {
 
-			scale = layer.segmentLength;
+			scale = layer.queueLength;
 
 		} else {
 
@@ -89,7 +89,7 @@ let QueueTransitionFactory = ( function() {
 
 		if ( layer.section ) {
 
-			scale = layer.segmentLength;
+			scale = layer.queueLength;
 
 		} else {
 
@@ -107,7 +107,7 @@ let QueueTransitionFactory = ( function() {
 
 		if ( layer.section ) {
 
-			variableLength = layer.segmentLength;
+			variableLength = layer.queueLength;
 
 		} else {
 

@@ -31,6 +31,8 @@ function Layer1d( config ) {
 	this.segmentIndex = 0;
 	this.totalSegments = undefined;
 
+	this.queueLength = this.segmentLength;
+
 	this.isTransition = false;
 
 }
@@ -79,6 +81,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 					if ( layerConfig.segmentLength !== undefined ) {
 
 						this.segmentLength = layerConfig.segmentLength;
+						this.queueLength = this.segmentLength;
 
 					}
 
@@ -161,7 +164,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			return {
 
-				x: - this.segmentLength * this.unitLength / 2 - 5 * this.unitLength,
+				x: - this.queueLength * this.unitLength / 2 - 5 * this.unitLength,
 				y: 0,
 				z: 0
 
@@ -171,7 +174,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			return {
 
-				x: this.segmentLength * this.unitLength / 2 + 5 * this.unitLength,
+				x: this.queueLength * this.unitLength / 2 + 5 * this.unitLength,
 				y: 0,
 				z: 0
 
@@ -256,6 +259,29 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		this.queueHandler.updateSegmentIndex( this.segmentIndex );
 
+		if ( this.queueHandler.isLengthChanged ) {
+
+			this.queueLength = this.queueHandler.queueLength;
+
+			if ( this.nextButtonHandler !== undefined ) {
+
+				let nextButtonPos = this.calculatePaginationPos( "next" );
+				this.nextButtonHandler.updatePos( nextButtonPos );
+
+			}
+
+			if ( this.lastButtonHandler !== undefined ) {
+
+				let lastButtonPos = this.calculatePaginationPos( "last" );
+				this.lastButtonHandler.updatePos( lastButtonPos );
+
+			}
+
+			let closeButtonPos = this.calcCloseButtonPos();
+			this.closeButtonHandler.updatePos( closeButtonPos );
+
+		}
+
 		if ( this.neuralValue !== undefined ) {
 
 			this.updateQueueVis();
@@ -291,6 +317,8 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 				this.color
 
 			);
+
+			this.queueLength = queueHandler.queueLength;
 
 		} else {
 
@@ -471,7 +499,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.section ) {
 
-			xTranslate = - this.segmentLength * this.unitLength / 2 - 10 * this.unitLength;
+			xTranslate = - this.queueLength * this.unitLength / 2 - 10 * this.unitLength;
 
 		} else {
 

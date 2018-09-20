@@ -46,6 +46,7 @@ function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, col
 	this.layerIndex = undefined;
 
 	this.queueLengthNeedsUpdate = false;
+	this.isLengthChanged = false;
 
 	this.init();
 
@@ -341,6 +342,11 @@ QueueSegment.prototype = {
 		) {
 
 			this.queueLengthNeedsUpdate = true;
+			this.isLengthChanged = true;
+
+		} else {
+
+			this.isLengthChanged = false;
 
 		}
 
