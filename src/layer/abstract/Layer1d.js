@@ -300,8 +300,6 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			QueueTransitionFactory.openLayer( this );
 
-			this.isOpen = true;
-
 		}
 
 	},
@@ -392,7 +390,6 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			QueueTransitionFactory.closeLayer( this );
 
-			this.isOpen = false;
 		}
 
 	},
