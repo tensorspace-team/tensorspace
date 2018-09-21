@@ -2,16 +2,14 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-function Concatenate3d( mergedElements ) {
+function StableMerge3d( mergedElements ) {
 
 	this.mergedElements = mergedElements;
 	this.layerIndex = undefined;
 
-	this.strategyType = "concatenate3d";
-
 }
 
-Concatenate3d.prototype = {
+StableMerge3d.prototype = {
 
 	setLayerIndex: function( layerIndex ) {
 
@@ -25,11 +23,15 @@ Concatenate3d.prototype = {
 
 		for ( let i = 0; i < this.mergedElements.length; i++ ) {
 
-			let layerShape = this.mergedElements[ i ].outputShape;
+			let outputShape = this.mergedElements[ i ].outputShape;
 
-			if ( layerShape[ 0 ] !== inputShape[ 0 ] || layerShape[ 1 ] !== inputShape[ 1 ] ) {
+			for ( let j = 0; j < inputShape.length; j++ ) {
 
-				return false;
+				if ( outputShape[ j ] !== inputShape[ j ] ) {
+
+					return false;
+
+				}
 
 			}
 
@@ -41,17 +43,7 @@ Concatenate3d.prototype = {
 
 	getShape: function() {
 
-		let width = this.mergedElements[ 0 ].outputShape[ 0 ];
-		let height = this.mergedElements[ 0 ].outputShape[ 1 ];
-		let depth = 0;
-
-		for (let i = 0; i < this.mergedElements.length; i++) {
-
-			depth += this.mergedElements[ i ].outputShape[ 2 ];
-
-		}
-
-		return [ width, height, depth ];
+		return this.mergedElements[ 0 ].outputShape;
 
 	},
 
@@ -65,6 +57,52 @@ Concatenate3d.prototype = {
 			let request = {
 
 				all: true
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					if ( relativeResult.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+						}
+
+					} else {
+
+						for ( let j = 0; j < relativeElements.length; j++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
+						}
+
+					}
+
+				}
+
+			}
+
+		} else if ( selectedElement.elementType === "featureMap" ) {
+
+			let fmIndex = selectedElement.fmIndex;
+
+			let request = {
+
+				index: fmIndex
 
 			};
 
@@ -105,68 +143,6 @@ Concatenate3d.prototype = {
 
 			}
 
-		} else if ( selectedElement.elementType === "featureMap" ) {
-
-			let fmIndex = selectedElement.fmIndex;
-
-			let relativeLayer;
-
-			for ( let i = 0; i < this.mergedElements.length; i++ ) {
-
-				let layerDepth = this.mergedElements[ i ].outputShape[ 2 ];
-
-				if ( layerDepth >= fmIndex ) {
-
-					relativeLayer = this.mergedElements[ i ];
-					break;
-
-				} else {
-
-					fmIndex -= layerDepth;
-
-				}
-
-			}
-
-			let request = {
-
-				index: fmIndex
-
-			};
-
-			let relativeResult = relativeLayer.provideRelativeElements( request );
-			let relativeElements = relativeResult.elementList;
-
-			if ( relativeLayer.layerIndex === this.layerIndex - 1 ) {
-
-				for ( let i = 0; i < relativeElements.length; i++ ) {
-
-					straightElements.push( relativeElements[ i ] );
-
-				}
-
-			} else {
-
-				if ( relativeResult.isOpen ) {
-
-					for ( let i = 0; i < relativeElements.length; i++ ) {
-
-						straightElements.push( relativeElements[ i ] );
-
-					}
-
-				} else {
-
-					for ( let i = 0; i < relativeElements.length; i++ ) {
-
-						curveElements.push( relativeElements[ i ] );
-
-					}
-
-				}
-
-			}
-
 		}
 
 		return {
@@ -178,6 +154,7 @@ Concatenate3d.prototype = {
 
 	}
 
+
 };
 
-export { Concatenate3d };
+export { StableMerge3d };

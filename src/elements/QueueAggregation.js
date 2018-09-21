@@ -56,6 +56,7 @@ QueueAggregation.prototype = {
 		aggregationGroup.add( edgesLine );
 
 		this.aggregationElement = aggregationGroup;
+
 	},
 
 	getElement: function() {
