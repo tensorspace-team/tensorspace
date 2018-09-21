@@ -8,18 +8,18 @@ import { TextHelper } from "../utils/TextHelper";
 import { TextFont } from "../assets/fonts/TextFont";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function FeatureMap( width, height, actualWidth, actualHeight, initCenter, color, minOpacity ) {
+function FeatureMap( width, height, unitLength, initCenter, color, minOpacity ) {
 
 	this.fmWidth = width;
 	this.fmHeight = height;
 
-	this.actualWidth = actualWidth;
-	this.actualHeight = actualHeight;
+	this.unitLength = unitLength;
+	this.actualWidth = this.unitLength * this.fmWidth;
+	this.actualHeight = this.unitLength * this.fmHeight;
+
 	this.color = color;
 
 	this.neuralLength = width * height;
-
-	this.unitLength = this.actualWidth / this.fmWidth;
 
 	this.minOpacity = minOpacity;
 	this.sideOpacity = SideFaceRatio * this.minOpacity;

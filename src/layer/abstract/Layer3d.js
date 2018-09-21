@@ -100,8 +100,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 				this.width,
 				this.height,
-				this.actualWidth,
-				this.actualHeight,
+				this.unitLength,
 				centers[ i ],
 				this.color,
 				this.minOpacity
@@ -144,8 +143,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.width,
 			this.height,
-			this.actualWidth,
-			this.actualHeight,
+			this.unitLength,
 			this.actualDepth,
 			this.color,
 			this.minOpacity

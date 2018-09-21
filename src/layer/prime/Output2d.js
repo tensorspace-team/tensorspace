@@ -94,8 +94,7 @@ Output2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.width,
 			this.height,
-			this.actualWidth,
-			this.actualHeight,
+			this.unitLength,
 			this.fmCenter,
 			this.color
 

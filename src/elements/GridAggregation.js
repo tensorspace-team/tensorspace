@@ -5,11 +5,11 @@
 import { FrameColor } from "../utils/Constant";
 import { ColorUtils } from "../utils/ColorUtils";
 
-function GridAggregation( width, actualWidth, unitLength, color, minOpacity ) {
+function GridAggregation( width, unitLength, color, minOpacity ) {
 
 	this.width = width;
-	this.actualWidth = actualWidth;
 	this.unitLength = unitLength;
+	this.actualWidth = this.unitLength * this.width;
 	this.color = color;
 	this.minOpacity = minOpacity;
 

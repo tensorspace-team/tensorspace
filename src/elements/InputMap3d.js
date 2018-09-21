@@ -7,16 +7,15 @@ import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function InputMap3d( width, height, actualWidth, actualHeight, actualDepth, initCenter, color, minOpacity ) {
+function InputMap3d( width, height, unitLength, actualDepth, initCenter, color, minOpacity ) {
 
 	this.width = width;
 	this.height = height;
 	this.depth = 3;
-	this.actualWidth = actualWidth;
-	this.actualHeight = actualHeight;
+	this.unitLength = unitLength;
+	this.actualWidth = this.unitLength * this.width;
+	this.actualHeight = this.unitLength * this.height;
 	this.actualDepth = actualDepth;
-
-	this.unitLength = this.actualWidth / this.width;
 
 	this.minOpacity = minOpacity;
 	this.sideOpacity = SideFaceRatio * this.minOpacity;

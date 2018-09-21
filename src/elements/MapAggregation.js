@@ -6,12 +6,13 @@ import { FrameColor } from "../utils/Constant";
 import { ColorUtils } from "../utils/ColorUtils";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function MapAggregation( width, height, actualWidth, actualHeight, depth, color, minOpacity ) {
+function MapAggregation( width, height, unitLength, depth, color, minOpacity ) {
 
 	this.width = width;
 	this.height = height;
-	this.actualWidth = actualWidth;
-	this.actualHeight = actualHeight;
+	this.unitLength = unitLength;
+	this.actualWidth = this.unitLength * this.width;
+	this.actualHeight = this.unitLength * this.height;
 	this.depth = depth;
 	this.color = color;
 	this.minOpacity = minOpacity;

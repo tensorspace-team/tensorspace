@@ -7,11 +7,11 @@ import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 
-function GridLine( width, actualWidth, unitLength, initCenter, color, minOpacity ) {
+function GridLine( width, unitLength, initCenter, color, minOpacity ) {
 
 	this.width = width;
-	this.actualWidth = actualWidth;
 	this.unitLength = unitLength;
+	this.actualWidth = this.unitLength * this.width;
 
 	this.center = {
 

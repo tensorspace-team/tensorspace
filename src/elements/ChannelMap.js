@@ -7,16 +7,17 @@ import { TextHelper } from "../utils/TextHelper";
 import { TextFont } from "../assets/fonts/TextFont";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function ChannelMap( width, height, actualWidth, actualHeight, actualDepth, center, color, type, minOpacity ) {
+function ChannelMap( width, height, unitLength, actualDepth, center, color, type, minOpacity ) {
 
 	this.width = width;
 	this.height = height;
-	this.actualWidth = actualWidth;
-	this.actualHeight = actualHeight;
+	this.unitLength = unitLength;
 	this.actualDepth = actualDepth;
-	this.unitLength = this.actualWidth / this.width;
 	this.minOpacity = minOpacity;
 	this.sideOpacity = SideFaceRatio * minOpacity;
+
+	this.actualWidth = this.unitLength * this.width;
+	this.actualHeight = this.unitLength * this.height;
 
 	this.center = {
 
@@ -35,7 +36,7 @@ function ChannelMap( width, height, actualWidth, actualHeight, actualDepth, cent
 	this.channelGroup = undefined;
 
 	this.font = TextFont;
-	this.textSize = TextHelper.calcFmTextSize( actualWidth );
+	this.textSize = TextHelper.calcFmTextSize( this.actualWidth );
 
 	this.widthText = undefined;
 	this.heightText = undefined;

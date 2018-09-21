@@ -328,7 +328,6 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			queueHandler = new NeuralQueue(
 
 				this.width,
-				this.actualWidth,
 				this.unitLength,
 				this.color,
 				this.minOpacity

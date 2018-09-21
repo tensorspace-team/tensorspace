@@ -149,8 +149,7 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.width,
 			this.height,
-			this.actualWidth,
-			this.actualHeight,
+			this.unitLength,
 			this.actualDepth,
 			{
 
@@ -190,8 +189,7 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.width,
 			this.height,
-			this.actualWidth,
-			this.actualHeight,
+			this.unitLength,
 			this.actualDepth,
 			this.closeFmCenters[ 0 ],
 			this.color,
@@ -204,8 +202,7 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.width,
 			this.height,
-			this.actualWidth,
-			this.actualHeight,
+			this.unitLength,
 			this.actualDepth,
 			this.closeFmCenters[ 1 ],
 			this.color,
@@ -218,8 +215,7 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			this.width,
 			this.height,
-			this.actualWidth,
-			this.actualHeight,
+			this.unitLength,
 			this.actualDepth,
 			this.closeFmCenters[ 2 ],
 			this.color,

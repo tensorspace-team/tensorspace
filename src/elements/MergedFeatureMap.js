@@ -9,13 +9,14 @@ import { TextFont } from "../assets/fonts/TextFont";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 import { TextureProvider } from "../utils/TextureProvider";
 
-function MergedFeatureMap( operator, width, height, actualWidth, actualHeight, initCenter, color, minOpacity ) {
+function MergedFeatureMap( operator, width, height, unitLength, initCenter, color, minOpacity ) {
 
 	this.operator = operator;
 	this.fmWidth = width;
 	this.fmHeight = height;
-	this.actualWidth = actualWidth;
-	this.actualHeight = actualHeight;
+	this.unitLength = unitLength;
+	this.actualWidth = this.unitLength * this.fmWidth;
+	this.actualHeight = this.unitLength * this.fmHeight;
 	this.color = color;
 	this.minOpacity = minOpacity;
 	this.sideOpacity = SideFaceRatio * this.minOpacity;

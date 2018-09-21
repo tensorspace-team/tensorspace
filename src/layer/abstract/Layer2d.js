@@ -205,7 +205,6 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			let queueHandler = new GridLine(
 
 				this.width,
-				this.actualWidth,
 				this.unitLength,
 				centers[ i ],
 				this.color,
@@ -246,7 +245,6 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		let aggregationHandler = new GridAggregation(
 
 			this.width,
-			this.actualWidth,
 			this.unitLength,
 			this.color,
 			this.minOpacity

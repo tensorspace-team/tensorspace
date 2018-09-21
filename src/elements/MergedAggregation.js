@@ -7,13 +7,14 @@ import { ColorUtils } from "../utils/ColorUtils";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 import { TextureProvider } from "../utils/TextureProvider";
 
-function MergedAggregation( operator, width, height, actualWidth, actualHeight, depth, color, minOpacity ) {
+function MergedAggregation( operator, width, height, unitLength, depth, color, minOpacity ) {
 
 	this.operator = operator;
 	this.width = width;
 	this.height = height;
-	this.actualWidth = actualWidth;
-	this.actualHeight = actualHeight;
+	this.unitLength = unitLength;
+	this.actualWidth = this.unitLength * this.width;
+	this.actualHeight = this.unitLength * this.height;
 	this.depth = depth;
 	this.color = color;
 	this.minOpacity = minOpacity;

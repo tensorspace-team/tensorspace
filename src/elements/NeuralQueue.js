@@ -8,12 +8,12 @@ import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function NeuralQueue( length, actualWidth, unitLength, color, minOpacity ) {
+function NeuralQueue( length, unitLength, color, minOpacity ) {
 
 	this.queueLength = length;
-	this.actualWidth = actualWidth;
-	this.color = color;
 	this.unitLength = unitLength;
+	this.actualWidth = this.unitLength * this.queueLength;
+	this.color = color;
 	this.minOpacity = minOpacity;
 	this.sideOpacity = SideFaceRatio * this.minOpacity;
 
