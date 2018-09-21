@@ -57,43 +57,23 @@
 		filters: 4,
 		strides: 1,
 		padding: "same",
-		closeButton: {
-			ratio: 1,
-			display: true
-		}
+//		closeButton: {
+//			ratio: 1,
+//			display: true
+//		}
 	});
 
-//	model.add(new TSP.layers.Activation3d({
-//		activation: "test"
-//	}));
+    model.add(layer1);
+    model.add(layer2);
 
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 2,
-		filters: 4,
-		strides: 1,
-		padding: "same"
-	}));
+    let addLayer = TSP.layers.Add([layer1, layer2]);
 
-    model.add(new TSP.layers.Dense({
-        units: 16,
-        section: true,
-        segmentLength: 5,
-//        initStatus: "open"
-    }));
-
-    model.add(new TSP.layers.Conv1d({
-		kernelSize: 2,
-		filters: 4,
-		strides: 1,
-		padding: "same"
-    }));
+    model.add(addLayer);
 
     model.init(function(){
 
 
     });
-
-//    console.log(TSP.Add(1, 2));
 
 </script>
 
