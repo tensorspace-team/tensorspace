@@ -2,13 +2,12 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { BasicMaterialOpacity } from "../utils/Constant";
-import { MinAlpha } from "../utils/Constant";
+import { SideFaceRatio } from "../utils/Constant";
 import { TextHelper } from "../utils/TextHelper";
 import { TextFont } from "../assets/fonts/TextFont";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function ChannelMap( width, height, actualWidth, actualHeight, actualDepth, center, color, type ) {
+function ChannelMap( width, height, actualWidth, actualHeight, actualDepth, center, color, type, minOpacity ) {
 
 	this.width = width;
 	this.height = height;
@@ -16,6 +15,8 @@ function ChannelMap( width, height, actualWidth, actualHeight, actualDepth, cent
 	this.actualHeight = actualHeight;
 	this.actualDepth = actualDepth;
 	this.unitLength = this.actualWidth / this.width;
+	this.minOpacity = minOpacity;
+	this.sideOpacity = SideFaceRatio * minOpacity;
 
 	this.center = {
 
@@ -59,7 +60,7 @@ ChannelMap.prototype = {
 
 					if ( i % 3 === 0 ) {
 
-						data[ i ] = 255 * MinAlpha;
+						data[ i ] = 255 * this.minOpacity;
 
 					}
 
@@ -69,7 +70,7 @@ ChannelMap.prototype = {
 
 					if ( i % 3 === 1 ) {
 
-						data[ i ] = 255 * MinAlpha;
+						data[ i ] = 255 * this.minOpacity;
 
 					}
 
@@ -79,7 +80,7 @@ ChannelMap.prototype = {
 
 					if ( i % 3 === 2 ) {
 
-						data[ i ] = 255 * MinAlpha;
+						data[ i ] = 255 * this.minOpacity;
 
 					}
 
@@ -111,7 +112,7 @@ ChannelMap.prototype = {
 
 			color: this.color,
 			transparent: true,
-			opacity: BasicMaterialOpacity
+			opacity: this.sideOpacity
 
 		} );
 
@@ -192,7 +193,8 @@ ChannelMap.prototype = {
 
 					if ( i % 3 === 0 ) {
 
-						this.dataArray[ i ] = 255 * MinAlpha;
+						this.dataArray[ i ] = 255 * this.minOpacity;
+
 					}
 
 					break;
@@ -201,7 +203,7 @@ ChannelMap.prototype = {
 
 					if ( i % 3 === 1 ) {
 
-						this.dataArray[ i ] = 255 * MinAlpha;
+						this.dataArray[ i ] = 255 *  this.minOpacity;
 
 					}
 
@@ -211,7 +213,7 @@ ChannelMap.prototype = {
 
 					if ( i % 3 === 2 ) {
 
-						this.dataArray[ i ] = 255 * MinAlpha;
+						this.dataArray[ i ] = 255 *  this.minOpacity;
 
 					}
 

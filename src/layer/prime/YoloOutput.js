@@ -177,7 +177,8 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 				this.unitLength,
 				centers[ i ],
-				this.color
+				this.color,
+				this.minOpacity
 
 			);
 

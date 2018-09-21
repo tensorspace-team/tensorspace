@@ -2,18 +2,21 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { BasicMaterialOpacity } from "../utils/Constant";
+import { SideFaceRatio } from "../utils/Constant";
 
-function VariableLengthObject( width, height, depth, color ) {
+function VariableLengthObject( width, height, depth, color, minOpacity ) {
 
 	this.width = width;
 	this.height = height;
 	this.depth = depth;
 	this.color = color;
 
+	this.sideOpacity = SideFaceRatio * minOpacity;
+
 	this.element = undefined;
 
 	this.init();
+
 }
 
 VariableLengthObject.prototype = {
@@ -25,7 +28,7 @@ VariableLengthObject.prototype = {
 		let material = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: BasicMaterialOpacity,
+			opacity: this.sideOpacity,
 			transparent: true
 
 		} );

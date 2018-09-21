@@ -2,20 +2,22 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
-import { BasicMaterialOpacity } from "../utils/Constant";
+import { SideFaceRatio } from "../utils/Constant";
 import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, color ) {
+function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity ) {
 
 	this.segmentLength = segmentLength;
 	this.segmentIndex = segmentIndex;
 	this.totalLength = totalLength;
 	this.unitLength = unitLength;
 	this.color = color;
+	this.minOpacity = minOpacity;
+
+	this.sideOpacity = SideFaceRatio * minOpacity;
 
 	this.totalSegments = Math.ceil( this.totalLength / this.segmentLength );
 
@@ -73,7 +75,7 @@ QueueSegment.prototype = {
 
 		for ( let i = 0; i < this.queueLength; i++ ) {
 
-			data[ i ] = 255 * MinAlpha;
+			data[ i ] = 255 * this.minOpacity;
 
 		}
 
@@ -111,7 +113,7 @@ QueueSegment.prototype = {
 
 			color: this.color,
 			transparent: true,
-			opacity: BasicMaterialOpacity
+			opacity: this.sideOpacity
 
 		} );
 
@@ -161,7 +163,7 @@ QueueSegment.prototype = {
 	clear: function() {
 
 		let zeroData = new Uint8Array( this.queueLength );
-		let colors = ColorUtils.getAdjustValues( zeroData );
+		let colors = ColorUtils.getAdjustValues( zeroData, this.minOpacity );
 
 		this.updateVis( colors );
 

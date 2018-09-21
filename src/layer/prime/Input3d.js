@@ -159,7 +159,8 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 				z: 0
 
 			},
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 
@@ -194,7 +195,8 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.actualDepth,
 			this.closeFmCenters[ 0 ],
 			this.color,
-			"R"
+			"R",
+			this.minOpacity
 
 		);
 
@@ -207,7 +209,8 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.actualDepth,
 			this.closeFmCenters[ 1 ],
 			this.color,
-			"G"
+			"G",
+			this.minOpacity
 
 		);
 
@@ -220,7 +223,8 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.actualDepth,
 			this.closeFmCenters[ 2 ],
 			this.color,
-			"B"
+			"B",
+			this.minOpacity
 
 		);
 
@@ -277,14 +281,14 @@ Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	updateAggregationVis: function() {
 
-		let colors = ColorUtils.getAdjustValues( this.neuralValue );
+		let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
 		this.aggregationHandler.updateVis( colors );
 
 	},
 
 	updateSegregationVis: function() {
 
-		let colors = ColorUtils.getAdjustValues( this.neuralValue );
+		let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
 
 		let rVal = [];
 		let gVal = [];

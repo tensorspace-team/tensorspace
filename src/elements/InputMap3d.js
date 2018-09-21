@@ -2,13 +2,12 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { BasicMaterialOpacity } from "../utils/Constant";
-import { MinAlpha } from "../utils/Constant";
+import { SideFaceRatio } from "../utils/Constant";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function InputMap3d( width, height, actualWidth, actualHeight, actualDepth, initCenter, color ) {
+function InputMap3d( width, height, actualWidth, actualHeight, actualDepth, initCenter, color, minOpacity ) {
 
 	this.width = width;
 	this.height = height;
@@ -18,6 +17,9 @@ function InputMap3d( width, height, actualWidth, actualHeight, actualDepth, init
 	this.actualDepth = actualDepth;
 
 	this.unitLength = this.actualWidth / this.width;
+
+	this.minOpacity = minOpacity;
+	this.sideOpacity = SideFaceRatio * this.minOpacity;
 
 	this.fmCenter = {
 
@@ -50,14 +52,12 @@ InputMap3d.prototype = {
 
 		let amount = 3 * this.width * this.height;
 
-		console.log( amount );
-
 		let data = new Uint8Array( amount );
 		this.dataArray = data;
 
 		for ( let i = 0; i < amount; i++ ) {
 
-			data[ i ] = 255 * MinAlpha;
+			data[ i ] = 255 * this.minOpacity;
 
 		}
 
@@ -75,7 +75,7 @@ InputMap3d.prototype = {
 
 			color: this.color,
 			transparent: true,
-			opacity: BasicMaterialOpacity
+			opacity: this.sideOpacity
 
 		} );
 
@@ -129,7 +129,7 @@ InputMap3d.prototype = {
 
 		for ( let i = 0; i < this.dataArray.length; i++ ) {
 
-			this.dataArray[ i ] = 255 * MinAlpha;
+			this.dataArray[ i ] = 255 * this.minOpacity;
 
 		}
 

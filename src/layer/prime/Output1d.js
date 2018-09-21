@@ -72,6 +72,8 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
+		this.createBasicLineElement();
+
 		this.scene.add( this.neuralGroup );
 
 	},
@@ -122,7 +124,8 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 				textSize,
 				this.outputs[ i ],
 				positions[ i ],
-				this.color
+				this.color,
+				this.minOpacity
 
 			);
 
@@ -158,7 +161,16 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	initAggregationElement: function() {
 
-		let aggregationHandler = new QueueAggregation( this.lastActualWidth, this.lastActualHeight, this.actualDepth, this.color );
+		let aggregationHandler = new QueueAggregation(
+
+			this.lastActualWidth,
+			this.lastActualHeight,
+			this.actualDepth,
+			this.color,
+			this.minOpacity
+
+		);
+
 		aggregationHandler.setLayerIndex( this.layerIndex );
 
 		this.aggregationHandler = aggregationHandler;
@@ -231,21 +243,13 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			}
 
-		} else {
-
-			this.updateAggregationVis();
-
 		}
-
-	},
-
-	updateAggregationVis: function() {
 
 	},
 
 	updateSegregationVis: function() {
 
-		let colors = ColorUtils.getAdjustValues( this.neuralValue );
+		let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
 
 		for ( let i = 0; i < this.segregationHandlers.length; i++ ) {
 

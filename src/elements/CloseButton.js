@@ -2,14 +2,14 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
 import { TextureProvider } from "../utils/TextureProvider";
 
-function CloseButton( size, unitLength, position, color ) {
+function CloseButton( size, unitLength, position, color, minOpacity ) {
 
 	this.size = size;
 	this.thickness = 2 * unitLength;
 	this.unitLength = unitLength;
+	this.minOpacity = minOpacity;
 
 	this.position = {
 
@@ -36,7 +36,7 @@ CloseButton.prototype = {
 		let materialSide = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: MinAlpha,
+			opacity: this.minOpacity,
 			transparent: true
 
 		} );

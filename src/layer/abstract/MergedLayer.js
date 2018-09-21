@@ -67,9 +67,9 @@ function MergedLayer( config ) {
 
 	this.operator = undefined;
 
+	this.minOpacity = undefined;
 
 	this.loadBasicLayerConfig( config );
-
 
 }
 
@@ -125,6 +125,12 @@ MergedLayer.prototype = Object.assign( Object.create( MergeLineGroupController.p
 
 			}
 
+			if ( config.minOpacity !== undefined ) {
+
+				this.minOpacity = config.minOpacity;
+
+			}
+
 		}
 
 	},
@@ -149,6 +155,12 @@ MergedLayer.prototype = Object.assign( Object.create( MergeLineGroupController.p
 
 		}
 
+		if ( this.minOpacity === undefined ) {
+
+			this.minOpacity = modelConfig.minOpacity;
+
+		}
+
 	},
 
 	setEnvironment: function( scene ) {
@@ -163,7 +175,17 @@ MergedLayer.prototype = Object.assign( Object.create( MergeLineGroupController.p
 
 			let closeButtonPos = this.calcCloseButtonPos();
 			let closeButtonSize = this.closeButtonSizeRatio * this.calcCloseButtonSize();
-			let closeButtonHandler = new CloseButton( closeButtonSize, this.unitLength, closeButtonPos, this.color );
+
+			let closeButtonHandler = new CloseButton(
+
+				closeButtonSize,
+				this.unitLength,
+				closeButtonPos,
+				this.color,
+				this.minOpacity
+
+			);
+
 			closeButtonHandler.setLayerIndex( this.layerIndex );
 
 			this.closeButtonHandler = closeButtonHandler;

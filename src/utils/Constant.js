@@ -2,9 +2,18 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-export let MinAlpha = 0.3;
+// min value area alpha
+
+export let DefaultMinAlpha = 0.3;
+
+// side material, smaller than min alpha
+
+export let DefaultBasicMaterialOpacity = 0.2;
+
+export let SideFaceRatio = 0.6;
+
 export let NeuralBoxLength = 1.3;
-export let BasicMaterialOpacity = 0.2;
+
 export let ModelInitWidth = 100;
 export let ModelLayerInterval = 50;
 export let FeatureMapIntervalRatio = 0.5;

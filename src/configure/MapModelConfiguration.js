@@ -11,6 +11,7 @@ function MapModelConfiguration( config ) {
 	this.textSystem = true;
 	this.stats = false;
 	this.animationTimeRatio = 1;
+	this.minOpacity = 0.3;
 	this.color = {
 
 		background: 0x000000,
@@ -130,6 +131,16 @@ function MapModelConfiguration( config ) {
 			if ( config.animationTimeRatio > 0 ) {
 
 				this.animationTimeRatio = config.animationTimeRatio;
+
+			}
+
+		}
+
+		if ( config.minOpacity !== undefined ) {
+
+			if ( config.minOpacity > 0 ) {
+
+				this.minOpacity = config.minOpacity;
 
 			}
 

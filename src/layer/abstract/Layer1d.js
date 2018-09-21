@@ -64,6 +64,8 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
+		this.createBasicLineElement();
+
 		this.scene.add( this.neuralGroup );
 
 	},
@@ -129,7 +131,8 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			"last",
 			this.unitLength,
 			this.calculatePaginationPos( "last" ),
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 
@@ -147,7 +150,8 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			"next",
 			this.unitLength,
 			this.calculatePaginationPos( "next" ),
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 
@@ -314,7 +318,8 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 				this.segmentIndex,
 				this.width,
 				this.unitLength,
-				this.color
+				this.color,
+				this.minOpacity
 
 			);
 
@@ -327,7 +332,8 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 				this.width,
 				this.actualWidth,
 				this.unitLength,
-				this.color
+				this.color,
+				this.minOpacity
 
 			);
 
@@ -361,7 +367,8 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.lastActualWidth,
 			this.lastActualHeight,
 			this.unitLength,
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 
@@ -458,7 +465,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	updateQueueVis: function() {
 
-		let colors = ColorUtils.getAdjustValues( this.neuralValue );
+		let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
 
 		if ( this.section ) {
 

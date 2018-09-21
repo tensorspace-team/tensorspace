@@ -140,11 +140,13 @@
 		shape: [28, 28, 1],
 		padding: 1,
 		name: "initInput",
-        color: 0x0000ff
+        color: 0x0000ff,
+        opacityRatio: 2
 	}));
 
 	model.add(new TSP.layers.Padding2d({
-        padding: [2, 2]
+        padding: [2, 2],
+		opacityRatio: 2
     }));
 
 	let convLayer = new TSP.layers.Conv2d({
@@ -153,6 +155,7 @@
 		strides: 1,
         animationTimeRatio: 10,
 		name: "conv2d1",
+		opacityRatio: 2
 //        initStatus: "open"
 	});
 	model.add(convLayer);
@@ -181,7 +184,9 @@
 
 	let denseLayer = new TSP.layers.Dense({
 		units: 120,
-		name: "dense1"
+		name: "dense1",
+		opacityRatio: 3,
+		animationTimeRatio: 10,
 	});
 	model.add(denseLayer);
 	model.add(new TSP.layers.Dense({

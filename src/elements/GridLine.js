@@ -2,17 +2,17 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 
-function GridLine( width, actualWidth, unitLength, initCenter, color ) {
+function GridLine( width, actualWidth, unitLength, initCenter, color, minOpacity ) {
 
 	this.width = width;
 	this.actualWidth = actualWidth;
 	this.unitLength = unitLength;
+
 	this.center = {
 
 		x: initCenter.x,
@@ -20,7 +20,9 @@ function GridLine( width, actualWidth, unitLength, initCenter, color ) {
 		z: initCenter.z
 
 	};
+
 	this.color = color;
+	this.minOpacity = minOpacity;
 
 	this.font = TextFont;
 	this.textSize = TextHelper.calcQueueTextSize( this.unitLength );
@@ -82,7 +84,7 @@ GridLine.prototype = {
 		let basicMaterial = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: MinAlpha,
+			opacity: this.minOpacity,
 			transparent: true
 
 		} );
@@ -164,7 +166,7 @@ GridLine.prototype = {
 	clear: function() {
 
 		let zeroData = new Uint8Array( this.width );
-		let colors = ColorUtils.getAdjustValues( zeroData );
+		let colors = ColorUtils.getAdjustValues( zeroData, this.minOpacity );
 		this.updateVis( colors );
 
 	},

@@ -2,14 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { BasicMaterialOpacity } from "../../utils/Constant";
 import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
 
 function BasicLineGroupController() {
 
 	this.lineGroup = undefined;
-
-	this.createBasicLineElement();
 
 }
 
@@ -17,11 +14,10 @@ BasicLineGroupController.prototype = {
 
 	createBasicLineElement: function() {
 
-		// store the line group system element
 		let lineMat = new THREE.LineBasicMaterial( {
 
 			color: 0xffffff,
-			opacity: BasicMaterialOpacity,
+			opacity: this.minOpacity,
 			transparent:true,
 			vertexColors: THREE.VertexColors
 
@@ -70,7 +66,8 @@ BasicLineGroupController.prototype = {
 		let lineGroupGeometryHandler = new LineGroupGeometry(
 
 			lineGroupParameters.lineVertices,
-			lineGroupParameters.lineColors
+			lineGroupParameters.lineColors,
+			this.minOpacity
 
 		);
 

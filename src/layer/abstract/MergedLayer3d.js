@@ -171,6 +171,8 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		}
 
+		this.createBasicLineElement();
+
 		this.scene.add( this.neuralGroup );
 
 	},
@@ -207,7 +209,8 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 				this.actualWidth,
 				this.actualHeight,
 				centers[ i ],
-				this.color
+				this.color,
+				this.minOpacity
 
 			);
 
@@ -251,7 +254,8 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 			this.actualWidth,
 			this.actualHeight,
 			this.actualDepth,
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 
@@ -301,7 +305,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		);
 
-		let colors = ColorUtils.getAdjustValues( aggregationUpdateValue );
+		let colors = ColorUtils.getAdjustValues( aggregationUpdateValue, this.minOpacity );
 
 		this.aggregationHandler.updateVis( colors );
 
@@ -311,7 +315,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData( this.neuralValue, this.depth );
 
-		let colors = ColorUtils.getAdjustValues( layerOutputValues );
+		let colors = ColorUtils.getAdjustValues( layerOutputValues, this.minOpacity );
 
 		let featureMapSize = this.width * this.height;
 

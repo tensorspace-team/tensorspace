@@ -55,6 +55,8 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
+		this.createBasicLineElement();
+
 		this.scene.add( this.neuralGroup );
 
 	},
@@ -206,7 +208,8 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 				this.actualWidth,
 				this.unitLength,
 				centers[ i ],
-				this.color
+				this.color,
+				this.minOpacity
 
 			);
 
@@ -245,7 +248,8 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.width,
 			this.actualWidth,
 			this.unitLength,
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 		aggregationHandler.setLayerIndex( this.layerIndex );
@@ -294,7 +298,7 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		);
 
-		let colors = ColorUtils.getAdjustValues( aggregationUpdateValue );
+		let colors = ColorUtils.getAdjustValues( aggregationUpdateValue, this.minOpacity );
 
 		this.aggregationHandler.updateVis( colors );
 
@@ -304,7 +308,7 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData( this.neuralValue, this.depth );
 
-		let colors = ColorUtils.getAdjustValues( layerOutputValues );
+		let colors = ColorUtils.getAdjustValues( layerOutputValues, this.minOpacity );
 
 		let featureMapSize = this.width;
 

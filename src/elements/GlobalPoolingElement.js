@@ -4,13 +4,13 @@
 
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
-import { MinAlpha } from "../utils/Constant";
 import { FrameColor } from "../utils/Constant";
 
-function GlobalPoolingElement( actualLength, initCenter, color ) {
+function GlobalPoolingElement( actualLength, initCenter, color, minOpacity ) {
 
 	this.theoryLength = 1;
 	this.actualLength = actualLength;
+	this.minOpacity = minOpacity;
 
 	this.unitLength = this.actualLength / this.theoryLength;
 
@@ -49,7 +49,7 @@ GlobalPoolingElement.prototype = {
 		let material = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: MinAlpha,
+			opacity: this.minOpacity,
 			transparent: true
 
 		} );
@@ -107,7 +107,7 @@ GlobalPoolingElement.prototype = {
 
 	clear: function() {
 
-		this.updateVis( MinAlpha );
+		this.updateVis( this.minOpacity );
 
 	},
 

@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../../utils/Constant";
+import { DefaultMinAlpha } from "../../utils/Constant";
 
 function PixelLayer(config) {
 
@@ -86,7 +86,7 @@ PixelLayer.prototype = {
 
 	clear: function() {
 		for (let i = 0; i < this.neuralList.length; i++) {
-			this.neuralList[i].material.color.setRGB(MinAlpha, MinAlpha, MinAlpha);
+			this.neuralList[i].material.color.setRGB(DefaultMinAlpha, DefaultMinAlpha, DefaultMinAlpha);
 		}
 	}
 

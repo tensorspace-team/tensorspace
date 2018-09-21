@@ -2,20 +2,19 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
 import { FrameColor } from "../utils/Constant";
 import { ColorUtils } from "../utils/ColorUtils";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function MapAggregation( width, height, actualWidth, actualHeight, depth, color ) {
+function MapAggregation( width, height, actualWidth, actualHeight, depth, color, minOpacity ) {
 
 	this.width = width;
 	this.height = height;
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
 	this.depth = depth;
-
 	this.color = color;
+	this.minOpacity = minOpacity;
 
 	this.cube = undefined;
 	this.aggregationElement = undefined;
@@ -53,7 +52,7 @@ MapAggregation.prototype = {
 		let basicMaterial = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: MinAlpha,
+			opacity: this.minOpacity,
 			transparent: true
 
 		} );
@@ -111,7 +110,8 @@ MapAggregation.prototype = {
 	clear: function() {
 
 		let zeroValue = new Int8Array( this.width * this.height );
-		let colors = ColorUtils.getAdjustValues( zeroValue );
+		let colors = ColorUtils.getAdjustValues( zeroValue, this.minOpacity );
+
 		this.updateVis( colors );
 
 	},

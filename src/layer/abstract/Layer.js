@@ -34,6 +34,8 @@ function Layer( config ) {
 	this.hasCloseButton = true;
 	this.closeButtonSizeRatio = 1;
 
+	this.minAlpha = undefined;
+
 	// actual width and height in three.js scene
 	this.actualWidth = undefined;
 	this.actualHeight = undefined;
@@ -132,6 +134,12 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 
 			}
 
+			if ( config.minOpacity !== undefined ) {
+
+				this.minOpacity = config.minOpacity;
+
+			}
+
 		}
 
 	},
@@ -153,6 +161,12 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 		if ( this.textSystem === undefined ) {
 
 			this.textSystem = modelConfig.textSystem;
+
+		}
+
+		if ( this.minOpacity === undefined ) {
+
+			this.minOpacity = modelConfig.minOpacity;
 
 		}
 
@@ -179,8 +193,18 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 
 			let closeButtonPos = this.calcCloseButtonPos();
 			let closeButtonSize = this.closeButtonSizeRatio * this.calcCloseButtonSize();
-			let closeButtonHandler = new CloseButton( closeButtonSize, this.unitLength, closeButtonPos, this.color );
-			closeButtonHandler.setLayerIndex(this.layerIndex);
+
+			let closeButtonHandler = new CloseButton(
+
+				closeButtonSize,
+				this.unitLength,
+				closeButtonPos,
+				this.color,
+				this.minOpacity
+
+			);
+
+			closeButtonHandler.setLayerIndex( this.layerIndex );
 
 			this.closeButtonHandler = closeButtonHandler;
 			this.neuralGroup.add( this.closeButtonHandler.getElement() );

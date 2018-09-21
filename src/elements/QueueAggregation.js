@@ -2,16 +2,15 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
 import { FrameColor } from "../utils/Constant";
 
-function QueueAggregation( actualWidth, actualHeight, actualDepth, color ) {
+function QueueAggregation( actualWidth, actualHeight, actualDepth, color, minOpacity ) {
 
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
 	this.actualDepth = actualDepth;
-
 	this.color = color;
+	this.minOpacity = minOpacity;
 
 	this.cube = undefined;
 	this.aggregationElement = undefined;
@@ -29,7 +28,7 @@ QueueAggregation.prototype = {
 		let material = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: MinAlpha,
+			opacity: this.minOpacity,
 			transparent: true
 
 		} );

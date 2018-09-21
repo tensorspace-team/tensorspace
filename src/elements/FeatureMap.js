@@ -2,14 +2,13 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
-import { BasicMaterialOpacity } from "../utils/Constant";
+import { SideFaceRatio } from "../utils/Constant";
 import { ColorUtils } from "../utils/ColorUtils";
 import { TextHelper } from "../utils/TextHelper";
 import { TextFont } from "../assets/fonts/TextFont";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function FeatureMap( width, height, actualWidth, actualHeight, initCenter, color ) {
+function FeatureMap( width, height, actualWidth, actualHeight, initCenter, color, minOpacity ) {
 
 	this.fmWidth = width;
 	this.fmHeight = height;
@@ -21,6 +20,9 @@ function FeatureMap( width, height, actualWidth, actualHeight, initCenter, color
 	this.neuralLength = width * height;
 
 	this.unitLength = this.actualWidth / this.fmWidth;
+
+	this.minOpacity = minOpacity;
+	this.sideOpacity = SideFaceRatio * this.minOpacity;
 
 	this.fmCenter = {
 
@@ -56,7 +58,7 @@ FeatureMap.prototype = {
 
 		for ( let i = 0; i < amount; i++ ) {
 
-			data[ i ] = 255 * MinAlpha;
+			data[ i ] = 255 * this.minOpacity;
 
 		}
 
@@ -80,7 +82,7 @@ FeatureMap.prototype = {
 
 			color: this.color,
 			transparent: true,
-			opacity: BasicMaterialOpacity
+			opacity: this.sideOpacity
 
 		} );
 
@@ -141,7 +143,7 @@ FeatureMap.prototype = {
 
 		let zeroValue = new Int8Array( this.neuralLength );
 
-		let colors = ColorUtils.getAdjustValues( zeroValue );
+		let colors = ColorUtils.getAdjustValues( zeroValue, this.minOpacity );
 
 		this.updateVis( colors );
 

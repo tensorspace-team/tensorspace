@@ -3,14 +3,11 @@
  */
 
 import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
-import { BasicMaterialOpacity } from "../../utils/Constant";
 
 function MergeLineGroupController() {
 
 	this.straightLineGroup = undefined;
 	this.curveLineGroup = undefined;
-
-	this.createBasicLineElement();
 
 }
 
@@ -21,7 +18,7 @@ MergeLineGroupController.prototype = {
 		let lineMat = new THREE.LineBasicMaterial( {
 
 			color: 0xffffff,
-			opacity: BasicMaterialOpacity,
+			opacity: this.minOpacity,
 			transparent:true,
 			vertexColors: THREE.VertexColors
 
@@ -150,7 +147,8 @@ MergeLineGroupController.prototype = {
 		let straightGroupGeometryHandler = new LineGroupGeometry(
 
 			straightParameters.lineVertices,
-			straightParameters.lineColors
+			straightParameters.lineColors,
+			this.minOpacity
 
 		);
 
@@ -162,7 +160,8 @@ MergeLineGroupController.prototype = {
 		let curveGroupGeometryHandler = new LineGroupGeometry(
 
 			curveParameters.lineVertices,
-			curveParameters.lineColors
+			curveParameters.lineColors,
+			this.minOpacity
 
 		);
 

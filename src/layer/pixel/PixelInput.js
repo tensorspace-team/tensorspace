@@ -4,7 +4,7 @@
 
 import { PixelLayer } from './PixelLayer';
 import { NeuralBoxLength } from "../../utils/Constant";
-import { MinAlpha } from "../../utils/Constant";
+import { DefaultMinAlpha } from "../../utils/Constant";
 import { ColorUtils } from '../../utils/ColorUtils';
 
 function PixelInput(config) {
@@ -38,7 +38,7 @@ PixelInput.prototype = Object.assign( Object.create( PixelLayer.prototype ), {
 
 				let geometry = new THREE.BoxGeometry(1, 1, 1);
 				let material = new THREE.MeshBasicMaterial({
-					color: new THREE.Color( MinAlpha, MinAlpha, MinAlpha ),
+					color: new THREE.Color( DefaultMinAlpha, DefaultMinAlpha, DefaultMinAlpha ),
 					vertexColors: THREE.VertexColors,
 					flatShading: true,
 					transparent: true

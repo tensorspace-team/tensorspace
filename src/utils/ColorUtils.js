@@ -2,13 +2,12 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "./Constant";
-
 let ColorUtils = ( function() {
 
-	function getAdjustValues( values ) {
+	function getAdjustValues( values, minAlpha ) {
 
 		let max = values[ 0 ], min = values[ 0 ];
+
 		for ( let i = 1; i < values.length; i++ ) {
 
 			if ( values[ i ] > max ) {
@@ -32,7 +31,7 @@ let ColorUtils = ( function() {
 
 			if ( distance === 0 ) {
 
-				adjustValues.push( 0 );
+				adjustValues.push( min );
 
 			} else {
 
@@ -44,9 +43,11 @@ let ColorUtils = ( function() {
 
 		for ( let i = 0; i < adjustValues.length; i++ ) {
 
-			adjustValues[ i ] = MinAlpha + adjustValues[ i ] * ( 1 - MinAlpha );
+			adjustValues[ i ] = minAlpha + adjustValues[ i ] * ( 1 - minAlpha );
 
 		}
+
+		// console.log(adjustValues);
 
 		return adjustValues;
 

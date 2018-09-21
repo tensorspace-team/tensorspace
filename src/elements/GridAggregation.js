@@ -2,16 +2,16 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
 import { FrameColor } from "../utils/Constant";
 import { ColorUtils } from "../utils/ColorUtils";
 
-function GridAggregation( width, actualWidth, unitLength, color ) {
+function GridAggregation( width, actualWidth, unitLength, color, minOpacity ) {
 
 	this.width = width;
 	this.actualWidth = actualWidth;
 	this.unitLength = unitLength;
 	this.color = color;
+	this.minOpacity = minOpacity;
 
 	this.aggregationEntity = undefined;
 	this.gridGroup = undefined;
@@ -46,7 +46,7 @@ GridAggregation.prototype = {
 		let basicMaterial = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: MinAlpha,
+			opacity: this.minOpacity,
 			transparent: true
 
 		} );
@@ -116,7 +116,7 @@ GridAggregation.prototype = {
 	clear: function() {
 
 		let zeroValue = new Int8Array( this.width );
-		let colors = ColorUtils.getAdjustValues( zeroValue );
+		let colors = ColorUtils.getAdjustValues( zeroValue, this.minOpacity );
 		this.updateVis( colors );
 
 	}

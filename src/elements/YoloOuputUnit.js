@@ -2,12 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
-
-function YoloOutputUnit( unitLength, initPosition, color ) {
+function YoloOutputUnit( unitLength, initPosition, color, minOpacity ) {
 
 	this.unitLength = unitLength;
 	this.width = 2 * this.unitLength;
+
 	this.position = {
 
 		x: initPosition.x,
@@ -15,7 +14,9 @@ function YoloOutputUnit( unitLength, initPosition, color ) {
 		z: initPosition.z
 
 	};
+
 	this.color = color;
+	this.minOpacity = minOpacity;
 
 	this.outputNeural = undefined;
 	this.outputGroup = undefined;
@@ -35,7 +36,7 @@ YoloOutputUnit.prototype = {
 		let material = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: MinAlpha,
+			opacity: this.minOpacity,
 			transparent: true
 
 		} );

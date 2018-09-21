@@ -37,7 +37,8 @@ let QueueTransitionFactory = ( function() {
 			layer.unitLength,
 			layer.unitLength,
 			layer.unitLength,
-			layer.color
+			layer.color,
+			layer.minOpacity
 
 		) ).getElement();
 
@@ -120,7 +121,8 @@ let QueueTransitionFactory = ( function() {
 			variableLength * layer.unitLength,
 			layer.unitLength,
 			layer.unitLength,
-			layer.color
+			layer.color,
+			layer.minOpacity
 
 		) ).getElement();
 

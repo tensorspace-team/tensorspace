@@ -2,20 +2,18 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../utils/Constant";
 import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 
-function OutputUnit( cubeSize, textSize, output, initPositions, color ) {
+function OutputUnit( cubeSize, textSize, output, initPositions, color, minOpacity ) {
 
 	this.cubeSize = cubeSize;
 	this.textSize = textSize;
 	this.output = output;
-
 	this.unitLength = cubeSize;
-
 	this.color = color;
+	this.minOpacity = minOpacity;
 
 	this.initPosition = {
 
@@ -24,6 +22,7 @@ function OutputUnit( cubeSize, textSize, output, initPositions, color ) {
 		z: initPositions.z
 
 	};
+
 	this.position = {
 
 		x: initPositions.x,
@@ -55,7 +54,7 @@ OutputUnit.prototype = {
 		let material = new THREE.MeshBasicMaterial( {
 
 			color: this.color,
-			opacity: MinAlpha,
+			opacity: this.minOpacity,
 			transparent: true
 
 		} );
@@ -148,7 +147,7 @@ OutputUnit.prototype = {
 
 	clear: function() {
 
-		let colors = ColorUtils.getAdjustValues( [ 0 ] );
+		let colors = ColorUtils.getAdjustValues( [ 0 ], this.minOpacity );
 
 		this.updateVis( colors );
 

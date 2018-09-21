@@ -2,26 +2,25 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { BasicMaterialOpacity } from "../utils/Constant";
+import { SideFaceRatio } from "../utils/Constant";
 import { ColorUtils } from "../utils/ColorUtils";
 import { TextHelper } from "../utils/TextHelper";
 import { TextFont } from "../assets/fonts/TextFont";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 import { TextureProvider } from "../utils/TextureProvider";
 
-function MergedFeatureMap( operator, width, height, actualWidth, actualHeight, initCenter, color ) {
+function MergedFeatureMap( operator, width, height, actualWidth, actualHeight, initCenter, color, minOpacity ) {
 
 	this.operator = operator;
-
 	this.fmWidth = width;
 	this.fmHeight = height;
-
 	this.actualWidth = actualWidth;
 	this.actualHeight = actualHeight;
 	this.color = color;
+	this.minOpacity = minOpacity;
+	this.sideOpacity = SideFaceRatio * this.minOpacity;
 
 	this.neuralLength = width * height;
-
 	this.unitLength = this.actualWidth / this.fmWidth;
 
 	this.fmCenter = {
@@ -79,7 +78,7 @@ MergedFeatureMap.prototype = {
 
 			color: this.color,
 			transparent: true,
-			opacity: BasicMaterialOpacity
+			opacity: this.sideOpacity
 
 		} );
 
@@ -167,7 +166,7 @@ MergedFeatureMap.prototype = {
 	clear: function() {
 
 		let zeroValue = new Int8Array( this.neuralLength );
-		let colors = ColorUtils.getAdjustValues( zeroValue );
+		let colors = ColorUtils.getAdjustValues( zeroValue, this.minOpacity );
 
 		this.updateVis( colors );
 		this.featureMap.material = this.clearMaterial;

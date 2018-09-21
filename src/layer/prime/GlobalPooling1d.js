@@ -83,7 +83,8 @@ GlobalPooling1d.prototype = Object.assign( Object.create( Layer2d.prototype ), {
 			this.unitLength,
 			this.unitLength,
 			this.actualDepth,
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 
@@ -108,7 +109,8 @@ GlobalPooling1d.prototype = Object.assign( Object.create( Layer2d.prototype ), {
 
 				this.actualWidth,
 				centers[ i ],
-				this.color
+				this.color,
+				this.minOpacity
 
 			);
 

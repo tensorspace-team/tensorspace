@@ -90,7 +90,8 @@ Input2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.actualWidth,
 			this.actualHeight,
 			this.fmCenter,
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 
@@ -125,7 +126,7 @@ Input2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		this.neuralValue = value;
 
-		let colors = ColorUtils.getAdjustValues( value );
+		let colors = ColorUtils.getAdjustValues( value, this.minOpacity );
 
 		this.aggregationHandler.updateVis( colors );
 

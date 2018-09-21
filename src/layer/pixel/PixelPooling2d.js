@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MinAlpha } from "../../utils/Constant";
+import { DefaultMinAlpha } from "../../utils/Constant";
 import { NeuralBoxLength } from "../../utils/Constant";
 import { ColorUtils } from '../../utils/ColorUtils';
 import { PixelLayer } from './PixelLayer';
@@ -57,7 +57,7 @@ PixelPooling2d.prototype = Object.assign(Object.create(PixelLayer.prototype), {
 
 					let geometry = new THREE.BoxGeometry(1, 1, 1);
 					let material = new THREE.MeshBasicMaterial({
-						color: new THREE.Color( MinAlpha, MinAlpha, MinAlpha ),
+						color: new THREE.Color( DefaultMinAlpha, DefaultMinAlpha, DefaultMinAlpha ),
 						vertexColors: THREE.VertexColors,
 						flatShading: true,
 						transparent: true

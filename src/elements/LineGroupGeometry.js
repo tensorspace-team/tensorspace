@@ -2,12 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { BasicMaterialOpacity } from "../utils/Constant";
-
-function LineGroupGeometry( lineVertices, lineColors ) {
+function LineGroupGeometry( lineVertices, lineColors, minOpacity ) {
 
 	this.lineVertices = lineVertices;
 	this.lineColors = lineColors;
+	this.minOpacity = minOpacity;
 
 	this.geometry = undefined;
 
@@ -22,7 +21,7 @@ LineGroupGeometry.prototype = {
 		let geometry = new THREE.Geometry( {
 
 			transparent:true,
-			opacity: BasicMaterialOpacity
+			opacity: this.minOpacity
 
 		} );
 
