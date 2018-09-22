@@ -113,7 +113,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		}
 
-		for ( let i = 0; i < intersects.length; i++ ) {
+		for ( let i = 0; i < intersects.length; i ++ ) {
 
 			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
 
@@ -144,7 +144,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 		model.raycaster.setFromCamera( model.mouse, model.camera );
 		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
 
-		for ( let i = 0; i < intersects.length; i++ ) {
+		for ( let i = 0; i < intersects.length; i ++ ) {
 
 			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
 
@@ -185,12 +185,11 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 		let layersPos = calculateLayersPos( this.layers.length );
 		let layerActualDepth = calculateDepths( this );
 
-		for ( let i = 0; i < this.layers.length; i++ ) {
+		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].init( layersPos[ i ], layerActualDepth[ i ] );
 
 		}
-
 
 		function calculateLayersPos( depth ) {
 
@@ -232,7 +231,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 			let maxDepthValue = 0;
 			let actualDepthList = [];
 
-			for ( let i = 0; i < model.layers.length; i++ ) {
+			for ( let i = 0; i < model.layers.length; i ++ ) {
 
 				let layerDepth = model.layers[ i ].depth;
 
@@ -249,7 +248,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 			}
 
-			for ( let i = 0; i < model.layers.length; i++ ) {
+			for ( let i = 0; i < model.layers.length; i ++ ) {
 
 				if ( depthList[ i ] / maxDepthValue * MaxDepthInLayer > 1 ) {
 
@@ -300,7 +299,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	updateLayerPredictVis: function() {
 
-		for ( let i = 1; i < this.layers.length; i++ ) {
+		for ( let i = 1; i < this.layers.length; i ++ ) {
 
 			if ( this.layers[i].layerType !== "yoloOutput" ) {
 
@@ -320,7 +319,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	clear: function() {
 
-		for ( let i = 0; i < this.layers.length; i++ ) {
+		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].clear();
 

@@ -196,7 +196,11 @@
     }));
 
     model.add(new TSP.layers.YoloOutput({
-		onClick: function(outputData) {
+
+		onClick: function(widthIndex, heightIndex, outputData) {
+
+			console.log(widthIndex);
+			console.log(heightIndex);
 
 			// generate this rectList from outputData
 			let rectList = [{

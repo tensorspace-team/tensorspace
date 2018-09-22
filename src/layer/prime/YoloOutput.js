@@ -15,6 +15,8 @@ function YoloOutput( config ) {
 	this.segregationHandlers = [];
 	this.onNeuralClicked = undefined;
 
+	this.channelDepth = undefined;
+
 	this.loadLayerConfig( config );
 
 	this.leftMostCenter = {
@@ -92,6 +94,7 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.inputShape = this.lastLayer.outputShape;
 		this.widthNum = this.inputShape[ 0 ];
 		this.heightNum = this.inputShape[ 1 ];
+		this.channelDepth = this.inputShape[ 2 ];
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.lastLayer.actualWidth;
@@ -240,7 +243,10 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 				let outputIndex = clickedElement.outputIndex;
 
-				this.onNeuralClicked( this.getNeuralOutputValue( outputIndex ) );
+				let widthIndex = outputIndex % this.widthNum;
+				let heightIndex = Math.floor( outputIndex / this.widthNum );
+
+				this.onNeuralClicked( widthIndex, heightIndex, this.getNeuralOutputValue( outputIndex ) );
 
 			}
 
@@ -254,11 +260,7 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.neuralValue !== undefined ) {
 
-			for ( let i = outputIndex; i < this.neuralValue.length; i += this.totalOutputs ) {
-
-				singleOutput.push( this.neuralValue[ i ] );
-
-			}
+			singleOutput = this.neuralValue.slice( this.channelDepth * outputIndex, this.channelDepth * ( outputIndex + 1 ) );
 
 		}
 
