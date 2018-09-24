@@ -65,6 +65,8 @@ function Layer( config ) {
 	this.openTime = OpenTime;
 	this.separateTime = SeparateTime;
 
+	this.isGroup = false;
+
 	this.loadBasicLayerConfig( config );
 
 }
@@ -181,9 +183,10 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 
 	},
 
-	setEnvironment: function( scene ) {
+	setEnvironment: function( scene, model ) {
 
 		this.scene = scene;
+		this.model = model;
 
 	},
 
@@ -205,6 +208,7 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 			);
 
 			closeButtonHandler.setLayerIndex( this.layerIndex );
+			closeButtonHandler.setPositionedLayer( this.layerType );
 
 			this.closeButtonHandler = closeButtonHandler;
 			this.neuralGroup.add( this.closeButtonHandler.getElement() );

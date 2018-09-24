@@ -9,7 +9,7 @@ function BasicLayer3d( config ) {
 
 	Layer3d.call( this, config );
 
-	console.log( "construct basic 3D layer." );
+	console.log( "construct intemediate 3D layer." );
 
 	this.color = 0xffffff;
 

@@ -8,12 +8,14 @@ import { YoloTweenFactory } from "../../animation/YoloTransitionTween";
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { CloseButtonRatio } from "../../utils/Constant";
 
-function YoloOutput( config ) {
+function YoloChannel(config ) {
 
 	Layer.call( this, config );
 
 	this.segregationHandlers = [];
 	this.onNeuralClicked = undefined;
+
+	this.channelDepth = undefined;
 
 	this.loadLayerConfig( config );
 
@@ -28,11 +30,11 @@ function YoloOutput( config ) {
 	this.closeResultPos = [];
 	this.openResultPos = [];
 
-	this.layerType = "yoloOutput";
+	this.layerType = "yoloChannel";
 
 }
 
-YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
+YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	init: function( center, actualDepth ) {
 
@@ -53,6 +55,7 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
+		this.createBasicLineElement();
 		this.scene.add( this.neuralGroup );
 
 	},
@@ -92,6 +95,7 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.inputShape = this.lastLayer.outputShape;
 		this.widthNum = this.inputShape[ 0 ];
 		this.heightNum = this.inputShape[ 1 ];
+		this.channelDepth = this.inputShape[ 2 ];
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.lastLayer.actualWidth;
@@ -156,6 +160,7 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 		);
 
 		aggregationHandler.setLayerIndex( this.layerIndex );
+		aggregationHandler.setPositionedLayer( this.layerType );
 
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add( this.aggregationHandler.getElement() );
@@ -184,6 +189,7 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			segregationHandler.setLayerIndex( this.layerIndex );
 			segregationHandler.setOutputIndex( i );
+			segregationHandler.setPositionedLayer( this.layerType );
 
 			this.segregationHandlers.push( segregationHandler );
 			this.neuralGroup.add( segregationHandler.getElement() );
@@ -204,26 +210,6 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	getRelativeElements: function ( selectedElement ) {
-
-		let relativeElements = [];
-
-		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputNeural" ) {
-
-			let request = {
-
-				all: true
-
-			};
-
-			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
-
-		}
-
-		return relativeElements;
-
-	},
-
 	handleClick: function ( clickedElement ) {
 
 		if ( clickedElement.elementType === "aggregationElement" ) {
@@ -236,11 +222,23 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		} else if ( clickedElement.elementType === "outputNeural" ) {
 
-			if ( this.onNeuralClicked !== undefined ) {
+			// if ( this.onNeuralClicked !== undefined ) {
+			//
+			// 	let outputIndex = clickedElement.outputIndex;
+			//
+			// 	let widthIndex = outputIndex % this.widthNum;
+			// 	let heightIndex = Math.floor( outputIndex / this.widthNum );
+			//
+			// 	this.onNeuralClicked( widthIndex, heightIndex, this.getNeuralOutputValue( outputIndex ) );
+			//
+			// }
 
-				let outputIndex = clickedElement.outputIndex;
+			let outputIndex = clickedElement.outputIndex;
+			this.nextLayer.addRectangleList( outputIndex, this.getNeuralOutputValue( outputIndex ) );
 
-				this.onNeuralClicked( this.getNeuralOutputValue( outputIndex ) );
+			if ( !this.nextLayer.isOpen ) {
+
+				this.nextLayer.openLayer();
 
 			}
 
@@ -254,11 +252,7 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.neuralValue !== undefined ) {
 
-			for ( let i = outputIndex; i < this.neuralValue.length; i += this.totalOutputs ) {
-
-				singleOutput.push( this.neuralValue[ i ] );
-
-			}
+			singleOutput = this.neuralValue.slice( this.channelDepth * outputIndex, this.channelDepth * ( outputIndex + 1 ) );
 
 		}
 
@@ -316,14 +310,93 @@ YoloOutput.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	handleHoverIn: function() {
+	handleHoverIn: function( hoveredElement ) {
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.initLineGroup( hoveredElement );
+
+		}
 
 	},
 
 	handleHoverOut: function() {
 
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.disposeLineGroup();
+
+		}
+
+	},
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		if ( request.all !== undefined && request.all ) {
+
+			if ( this.isOpen ) {
+
+				for ( let i = 0; i < this.segregationHandlers.length; i++ ) {
+
+					relativeElements.push( this.segregationHandlers[ i ].getElement() );
+
+				}
+
+			} else {
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		} else {
+
+			if ( request.index !== undefined ) {
+
+				if ( this.isOpen ) {
+
+					relativeElements.push( this.segregationHandlers[ request.index ].getElement() );
+
+				} else {
+
+					relativeElements.push( this.aggregationHandler.getElement() );
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	getRelativeElements: function ( selectedElement ) {
+
+		let relativeElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputNeural" ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
+
+		}
+
+		return relativeElements;
+
 	}
 
 } );
 
-export { YoloOutput };
+export { YoloChannel };

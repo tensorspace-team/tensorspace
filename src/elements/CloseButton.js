@@ -82,6 +82,12 @@ CloseButton.prototype = {
 
 	},
 
+	setPositionedLayer: function( layerType ) {
+
+		this.button.positionedLayer = layerType;
+
+	},
+
 	updatePos: function( pos ) {
 
 		this.position.x = pos.x;

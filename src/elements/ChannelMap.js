@@ -300,7 +300,7 @@ ChannelMap.prototype = {
 
 			font: this.font,
 			size: this.textSize,
-			height: Math.min(this.unitLength, 1),
+			height: Math.min( this.unitLength, 1 ),
 			curveSegments: 8
 
 		} );

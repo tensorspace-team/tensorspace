@@ -40,10 +40,12 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		}
 
-		layer.setEnvironment( this.scene );
+		layer.setEnvironment( this.scene, this );
 		layer.loadModelConfig( this.configuration );
 		this.layers.push( layer) ;
-		layer.assemble( this.layers.length );
+
+		// may be layer want model information
+		layer.assemble( this.layers.length, this );
 
 	},
 
@@ -113,7 +115,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		}
 
-		for ( let i = 0; i < intersects.length; i++ ) {
+		for ( let i = 0; i < intersects.length; i ++ ) {
 
 			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
 
@@ -144,7 +146,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 		model.raycaster.setFromCamera( model.mouse, model.camera );
 		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
 
-		for ( let i = 0; i < intersects.length; i++ ) {
+		for ( let i = 0; i < intersects.length; i ++ ) {
 
 			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
 
@@ -182,18 +184,18 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		console.log( "creating prime sequential model..." );
 
-		let layersPos = calculateLayersPos( this.layers.length );
+		let layersPos = calculateLayersPos( this.layers );
 		let layerActualDepth = calculateDepths( this );
 
-		for ( let i = 0; i < this.layers.length; i++ ) {
+		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].init( layersPos[ i ], layerActualDepth[ i ] );
 
 		}
 
+		function calculateLayersPos( layers ) {
 
-		function calculateLayersPos( depth ) {
-
+			let depth = layers.length;
 			let layersPos = [];
 
 			let initPos;
@@ -210,15 +212,39 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 			for ( let i = 0; i < depth; i++ ) {
 
-				layersPos.push( {
+				if ( !layers[ i ].isGroup  ) {
 
-					x: 0,
-					y: initPos,
-					z: 0
+					layersPos.push( {
 
-				} );
+						x: 0,
+						y: initPos,
+						z: 0
 
-				initPos += ModelLayerInterval;
+					} );
+
+					initPos += ModelLayerInterval;
+
+				} else {
+
+					let posArray = [];
+
+					for ( let j = 0; j < layers[ i ].thickness; j ++ ) {
+
+						posArray.push( {
+
+							x: 0,
+							y: initPos,
+							z: 0
+
+						} );
+
+						initPos += ModelLayerInterval;
+
+					}
+
+					layersPos.push( posArray );
+
+				}
 
 			}
 
@@ -232,7 +258,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 			let maxDepthValue = 0;
 			let actualDepthList = [];
 
-			for ( let i = 0; i < model.layers.length; i++ ) {
+			for ( let i = 0; i < model.layers.length; i ++ ) {
 
 				let layerDepth = model.layers[ i ].depth;
 
@@ -249,7 +275,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 			}
 
-			for ( let i = 0; i < model.layers.length; i++ ) {
+			for ( let i = 0; i < model.layers.length; i ++ ) {
 
 				if ( depthList[ i ] / maxDepthValue * MaxDepthInLayer > 1 ) {
 
@@ -300,9 +326,9 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	updateLayerPredictVis: function() {
 
-		for ( let i = 1; i < this.layers.length; i++ ) {
+		for ( let i = 1; i < this.layers.length; i ++ ) {
 
-			if ( this.layers[i].layerType !== "yoloOutput" ) {
+			if ( this.layers[i].layerType !== "YoloOutput" ) {
 
 				let predictValue = this.predictResult[ i - 1 ].dataSync();
 
@@ -320,7 +346,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	clear: function() {
 
-		for ( let i = 0; i < this.layers.length; i++ ) {
+		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].clear();
 

@@ -44,6 +44,7 @@ YoloOutputUnit.prototype = {
 		let cube = new THREE.Mesh( boxGeometry, material );
 		cube.elementType = "outputNeural";
 		cube.clickable = true;
+		cube.hoverable = true;
 
 		cube.position.set(
 
@@ -75,6 +76,12 @@ YoloOutputUnit.prototype = {
 	setOutputIndex: function( outputIndex ) {
 
 		this.outputNeural.outputIndex = outputIndex;
+
+	},
+
+	setPositionedLayer: function( layerType ) {
+
+		this.outputNeural.positionedLayer = layerType;
 
 	},
 
