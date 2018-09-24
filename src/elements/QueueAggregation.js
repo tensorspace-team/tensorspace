@@ -69,6 +69,12 @@ QueueAggregation.prototype = {
 
 		this.cube.layerIndex = layerIndex;
 
+	},
+
+	setPositionedLayer: function( layerType ) {
+
+		this.cube.positionedLayer = layerType;
+
 	}
 
 };

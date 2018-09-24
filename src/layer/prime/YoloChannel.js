@@ -30,11 +30,7 @@ function YoloChannel(config ) {
 	this.closeResultPos = [];
 	this.openResultPos = [];
 
-	this.layerType = "yoloOutput";
-
-	this.isCompositeLayer = true;
-	this.composites = 2;
-
+	this.layerType = "yoloChannel";
 
 }
 
@@ -59,6 +55,7 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
+		this.createBasicLineElement();
 		this.scene.add( this.neuralGroup );
 
 	},
@@ -163,6 +160,7 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 		);
 
 		aggregationHandler.setLayerIndex( this.layerIndex );
+		aggregationHandler.setPositionedLayer( this.layerType );
 
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add( this.aggregationHandler.getElement() );
@@ -191,6 +189,7 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			segregationHandler.setLayerIndex( this.layerIndex );
 			segregationHandler.setOutputIndex( i );
+			segregationHandler.setPositionedLayer( this.layerType );
 
 			this.segregationHandlers.push( segregationHandler );
 			this.neuralGroup.add( segregationHandler.getElement() );
@@ -211,26 +210,6 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	getRelativeElements: function ( selectedElement ) {
-
-		let relativeElements = [];
-
-		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputNeural" ) {
-
-			let request = {
-
-				all: true
-
-			};
-
-			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
-
-		}
-
-		return relativeElements;
-
-	},
-
 	handleClick: function ( clickedElement ) {
 
 		if ( clickedElement.elementType === "aggregationElement" ) {
@@ -243,14 +222,23 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		} else if ( clickedElement.elementType === "outputNeural" ) {
 
-			if ( this.onNeuralClicked !== undefined ) {
+			// if ( this.onNeuralClicked !== undefined ) {
+			//
+			// 	let outputIndex = clickedElement.outputIndex;
+			//
+			// 	let widthIndex = outputIndex % this.widthNum;
+			// 	let heightIndex = Math.floor( outputIndex / this.widthNum );
+			//
+			// 	this.onNeuralClicked( widthIndex, heightIndex, this.getNeuralOutputValue( outputIndex ) );
+			//
+			// }
 
-				let outputIndex = clickedElement.outputIndex;
+			let outputIndex = clickedElement.outputIndex;
+			this.nextLayer.addRectangleList( outputIndex, this.getNeuralOutputValue( outputIndex ) );
 
-				let widthIndex = outputIndex % this.widthNum;
-				let heightIndex = Math.floor( outputIndex / this.widthNum );
+			if ( !this.nextLayer.isOpen ) {
 
-				this.onNeuralClicked( widthIndex, heightIndex, this.getNeuralOutputValue( outputIndex ) );
+				this.nextLayer.openLayer();
 
 			}
 
@@ -322,11 +310,90 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	handleHoverIn: function() {
+	handleHoverIn: function( hoveredElement ) {
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.initLineGroup( hoveredElement );
+
+		}
 
 	},
 
 	handleHoverOut: function() {
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.disposeLineGroup();
+
+		}
+
+	},
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		if ( request.all !== undefined && request.all ) {
+
+			if ( this.isOpen ) {
+
+				for ( let i = 0; i < this.segregationHandlers.length; i++ ) {
+
+					relativeElements.push( this.segregationHandlers[ i ].getElement() );
+
+				}
+
+			} else {
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		} else {
+
+			if ( request.index !== undefined ) {
+
+				if ( this.isOpen ) {
+
+					relativeElements.push( this.segregationHandlers[ request.index ].getElement() );
+
+				} else {
+
+					relativeElements.push( this.aggregationHandler.getElement() );
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	getRelativeElements: function ( selectedElement ) {
+
+		let relativeElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputNeural" ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
+
+		}
+
+		return relativeElements;
 
 	}
 

@@ -1,8 +1,9 @@
 import { Layer } from "../abstract/Layer";
 import { OutputMap3d } from "../../elements/OutputMap3d";
 import { ColorUtils } from "../../utils/ColorUtils";
-import {QueueAggregation} from "../../elements/QueueAggregation";
-import {CloseButtonRatio} from "../../utils/Constant";
+import { QueueAggregation } from "../../elements/QueueAggregation";
+import { CloseButtonRatio } from "../../utils/Constant";
+import { YoloResultGenerator } from "../../utils/YoloResultGenerator";
 
 function YoloBox(config) {
 
@@ -15,6 +16,8 @@ function YoloBox(config) {
 	this.outputHandler = undefined;
 
 	this.rectangleList = [];
+	this.channelIndex = undefined;
+	this.allChannel = true;
 
 	this.loadLayerConfig( config );
 
@@ -50,10 +53,10 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		this.layerIndex = layerIndex;
 
-		let modelInputShape = this.model.layers[0].outputShape;
+		let modelInputShape = this.model.layers[ 0 ].outputShape;
 
-		this.width = modelInputShape[0];
-		this.height = modelInputShape[1];
+		this.width = modelInputShape[ 0 ];
+		this.height = modelInputShape[ 1 ];
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.lastLayer.actualWidth;
@@ -73,6 +76,7 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 		);
 
 		aggregationHandler.setLayerIndex( this.layerIndex );
+		aggregationHandler.setPositionedLayer( this.layerType );
 
 		this.aggregationHandler = aggregationHandler;
 		this.neuralGroup.add( this.aggregationHandler.getElement() );
@@ -107,6 +111,7 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 		);
 
 		outputHandler.setLayerIndex( this.layerIndex );
+		outputHandler.setPositionedLayer( this.layerType );
 
 		this.outputHandler = outputHandler;
 		this.neuralGroup.add( this.outputHandler.getElement() );
@@ -142,43 +147,26 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	updateOutputVis: function() {
 
-		this.addRectangleList();
+		if ( this.isOpen ) {
 
-		if (this.isOpen) {
 			let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
 			this.outputHandler.updateVis( colors, this.rectangleList );
+
 		}
 
 	},
 
-	addRectangleList: function() {
+	addRectangleList: function( channelIndex, channelData ) {
 
-		this.rectangleList = [{
-			x: 0,
-			y: 0,
-			width: 100,
-			height: 150
-		}, {
-			x: 250,
-			y: 50,
-			width: 100,
-			height: 50
-		}, {
-			x: 100,
-			y: 10,
-			width: 50,
-			height: 100
-		}, {
-			x: 200,
-			y: 200,
-			width: 100,
-			height: 200
-		}, {
-			x: 250,
-			y: 300,
-			width: 100,
-			height: 80
-		}];
+		this.allChannel = false;
+		this.channelIndex = channelIndex;
+		this.rectangleList = YoloResultGenerator.getChannelBox( channelData );
+
+		if ( this.isOpen ) {
+
+			this.updateOutputVis();
+
+		}
 
 	},
 
@@ -196,11 +184,87 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	handleHoverIn: function() {
+	handleHoverIn: function( hoveredElement ) {
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.initLineGroup( hoveredElement );
+
+		}
+
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
+			this.showText( hoveredElement );
+
+		}
 
 	},
 
 	handleHoverOut: function() {
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.disposeLineGroup();
+
+		}
+
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
+			this.hideText();
+
+		}
+
+	},
+
+	showText: function(element) {
+
+		if ( element.elementType === "outputMap3d" ) {
+
+			this.outputHandler.showText();
+			this.textElementHandler = this.outputHandler;
+
+		}
+
+	},
+
+	hideText: function() {
+
+		if ( this.textElementHandler !== undefined ) {
+
+			this.textElementHandler.hideText();
+			this.textElementHandler = undefined;
+
+		}
+
+	},
+
+	getRelativeElements: function( selectedElement ) {
+
+		let relativeElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" || ( this.allChannel && selectedElement.elementType === "outputMap3d" ) ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
+
+		} else if ( selectedElement.elementType === "outputMap3d" ) {
+
+			let request = {
+
+				index: this.channelIndex
+
+			};
+
+			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
+
+		}
+
+		return relativeElements;
 
 	},
 
@@ -234,7 +298,7 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	openLayer: function() {
 
-		if (!this.isOpen) {
+		if ( !this.isOpen ) {
 
 			this.isOpen = true;
 
@@ -242,19 +306,21 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.initOutput();
 			this.updateOutputVis();
 			this.initCloseButton();
+
 		}
 
 	},
 
 	closeLayer: function() {
 
-		if (this.isOpen) {
+		if ( this.isOpen ) {
 
 			this.isOpen = false;
 
 			this.disposeOutput();
 			this.disposeCloseButton();
 			this.initAggregationElement();
+
 		}
 
 	}

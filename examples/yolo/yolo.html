@@ -195,49 +195,7 @@
 		strides: 1
     }));
 
-    model.add(new TSP.layers.YoloChannel({
-
-		onClick: function(widthIndex, heightIndex, outputData) {
-
-			console.log(widthIndex);
-			console.log(heightIndex);
-			console.log(outputData);
-
-			// generate this rectList from outputData
-			let rectList = [{
-				x: 0,
-				y: 0,
-				width: 100,
-				height: 150
-			}, {
-				x: 250,
-				y: 50,
-				width: 100,
-				height: 50
-			}, {
-				x: 100,
-				y: 10,
-				width: 50,
-				height: 100
-			}, {
-				x: 200,
-				y: 200,
-				width: 100,
-				height: 200
-			}, {
-				x: 250,
-				y: 300,
-				width: 100,
-				height: 80
-			}];
-
-			dialog.showModal();
-			drawImage();
-			drawRects( rectList );
-        }
-    }));
-
-    model.add(new TSP.layers.YoloBox({}));
+    model.add( new TSP.layers.YoloOutput({}) );
 
 	model.load({
 		type: "tensorflow",
@@ -252,71 +210,6 @@
         $("#loadingPad").hide();
 
     });
-
-	let dialog = document.querySelector('dialog');
-	if (! dialog.showModal) {
-		dialogPolyfill.registerDialog(dialog);
-	}
-
-	dialog.querySelector('.close').addEventListener('click', function() {
-		dialog.close();
-	});
-
-	function drawImage() {
-
-		let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-		let imageDataValue = imageData.data;
-
-		let count = 0;
-
-		for (let i = 0; i < imageDataValue.length; i++) {
-
-			if (i % 4 !== 3 ) {
-
-				imageDataValue[ i ] = data[count];
-
-				count++;
-
-			} else {
-
-				imageDataValue[ i ]  = 255;
-
-			}
-
-		}
-
-		ctx.putImageData(imageData, 0, 0);
-
-	}
-
-	let canvas = document.getElementById('drawerPad');
-	let ctx = canvas.getContext('2d');
-
-	function drawRects(rectList) {
-
-		for (let i = 0; i < rectList.length; i++) {
-
-			let rectParameter = rectList[i];
-			drawRect(
-				rectParameter.x,
-				rectParameter.y,
-				rectParameter.width,
-				rectParameter.height
-			);
-
-		}
-
-	}
-
-	function drawRect(x, y, width, height) {
-
-		let c = document.getElementById("drawerPad");
-		let ctx = c.getContext("2d");
-		ctx.rect(x, y, width, height);
-		ctx.stroke();
-
-	}
 
 </script>
 

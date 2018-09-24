@@ -208,6 +208,7 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 			);
 
 			closeButtonHandler.setLayerIndex( this.layerIndex );
+			closeButtonHandler.setPositionedLayer( this.layerType );
 
 			this.closeButtonHandler = closeButtonHandler;
 			this.neuralGroup.add( this.closeButtonHandler.getElement() );

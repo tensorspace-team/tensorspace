@@ -1,8 +1,7 @@
 import { SideFaceRatio } from "../utils/Constant";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
-import { RenderPreprocessor } from "../utils/RenderPreprocessor";
-import {ColorUtils} from "../utils/ColorUtils";
+import { ColorUtils } from "../utils/ColorUtils";
 
 function OutputMap3d( width, height, unitLength, actualDepth, initCenter, color, minOpacity ) {
 
@@ -49,17 +48,17 @@ OutputMap3d.prototype = {
 
 	init: function() {
 
-		let canvas = document.createElement("canvas");
+		let canvas = document.createElement( "canvas" );
 		canvas.width = this.width;
 		canvas.height = this.height;
 
-		this.ctx = canvas.getContext('2d');
+		this.ctx = canvas.getContext( "2d" );
 
-		let canvasTexture = new THREE.Texture(canvas);
+		let canvasTexture = new THREE.Texture( canvas );
 
 		this.canvasTexture = canvasTexture;
 
-		let material = new THREE.MeshBasicMaterial({ map: canvasTexture });
+		let material = new THREE.MeshBasicMaterial( { map: canvasTexture } );
 
 		let boxGeometry = new THREE.BoxBufferGeometry( this.actualWidth, this.actualDepth, this.actualHeight );
 
@@ -79,6 +78,7 @@ OutputMap3d.prototype = {
 			material,
 			basicMaterial,
 			basicMaterial
+
 		];
 
 		let cube = new THREE.Mesh( boxGeometry, materials );
@@ -110,7 +110,7 @@ OutputMap3d.prototype = {
 		let zeroData = new Int8Array( 3 * this.width * this.height );
 		let zeroColors = ColorUtils.getAdjustValues( zeroData, this.minOpacity );
 
-		this.updateVis(zeroColors, []);
+		this.updateVis( zeroColors, [] );
 
 		this.canvasTexture.needsUpdate = true;
 
@@ -221,51 +221,54 @@ OutputMap3d.prototype = {
 
 	},
 
-	updateVis: function(imageData, rectList) {
+	updateVis: function( imageData, rectList ) {
 
-		this.drawImage(imageData);
-		this.drawRectangles(rectList);
+		this.drawImage( imageData );
+		this.drawRectangles( rectList );
 
 		this.canvasTexture.needsUpdate = true;
+
 	},
 
-	drawRectangles: function(rectList) {
+	drawRectangles: function( rectList ) {
 
-		for (let i = 0; i < rectList.length; i++) {
+		for ( let i = 0; i < rectList.length; i ++ ) {
 
-			let rectParameter = rectList[i];
+			let rectParameter = rectList[ i ];
+
 			this.drawRect(
+
 				rectParameter.x,
 				rectParameter.y,
 				rectParameter.width,
 				rectParameter.height
+
 			);
 
 		}
 
 	},
 
-	drawRect: function(x, y, width, height) {
+	drawRect: function( x, y, width, height ) {
 
-		this.ctx.rect(x, y, width, height);
+		this.ctx.rect( x, y, width, height );
 		this.ctx.stroke();
 
 	},
 
-	drawImage: function(data) {
+	drawImage: function( data ) {
 
-		let imageData = this.ctx.getImageData(0, 0, this.width, this.height);
+		let imageData = this.ctx.getImageData( 0, 0, this.width, this.height );
 
 		let imageDataValue = imageData.data;
 
 		let count = 0;
 
-		for (let i = 0; i < imageDataValue.length; i++) {
+		for ( let i = 0; i < imageDataValue.length; i ++ ) {
 
-			if (i % 4 !== 3 ) {
+			if ( i % 4 !== 3 ) {
 
-				imageDataValue[ i ] = 255 * data[count];
-
+				imageDataValue[ i ] = 255 * data[ count ];
 				count++;
 
 			} else {
@@ -276,8 +279,12 @@ OutputMap3d.prototype = {
 
 		}
 
-		this.ctx.putImageData(imageData, 0, 0);
+		this.ctx.putImageData( imageData, 0, 0 );
 
+	},
+
+	setPositionedLayer: function( layerType ) {
+		this.outputMap.positionedLayer = layerType;
 	}
 
 };

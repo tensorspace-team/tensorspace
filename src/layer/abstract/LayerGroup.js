@@ -37,12 +37,11 @@ LayerGroup.prototype = {
 
 	},
 
-	setEnvironment: function(scene) {
-		this.scene = scene;
+	setEnvironment: function(scene, model) {
 
 	},
 
-	setLastLayer: function() {
+	setLastLayer: function( layer ) {
 
 	}
 

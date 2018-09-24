@@ -228,7 +228,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 					let posArray = [];
 
-					for ( let i = 0; i < layers[ i ].thickness; i ++ ) {
+					for ( let j = 0; j < layers[ i ].thickness; j ++ ) {
 
 						posArray.push( {
 
@@ -328,7 +328,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		for ( let i = 1; i < this.layers.length; i ++ ) {
 
-			if ( this.layers[i].layerType !== "yoloOutput" && this.layers[i].layerType !== "yoloBox" ) {
+			if ( this.layers[i].layerType !== "YoloOutput" ) {
 
 				let predictValue = this.predictResult[ i - 1 ].dataSync();
 
