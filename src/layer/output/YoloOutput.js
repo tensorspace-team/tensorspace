@@ -1,6 +1,6 @@
 import { LayerGroup } from "../abstract/LayerGroup";
-import { YoloChannel } from "../prime/YoloChannel";
-import { YoloBox } from "../prime/YoloBox";
+import { YoloChannel } from "./YoloChannel";
+import { YoloBox } from "./YoloBox";
 
 function YoloOutput( config ) {
 
