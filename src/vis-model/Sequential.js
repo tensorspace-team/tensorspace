@@ -40,10 +40,12 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		}
 
-		layer.setEnvironment( this.scene );
+		layer.setEnvironment( this.scene, this );
 		layer.loadModelConfig( this.configuration );
 		this.layers.push( layer) ;
-		layer.assemble( this.layers.length );
+
+		// may be layer want model information
+		layer.assemble( this.layers.length, this );
 
 	},
 
@@ -182,7 +184,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		console.log( "creating prime sequential model..." );
 
-		let layersPos = calculateLayersPos( this.layers.length );
+		let layersPos = calculateLayersPos( this.layers );
 		let layerActualDepth = calculateDepths( this );
 
 		for ( let i = 0; i < this.layers.length; i ++ ) {
@@ -191,8 +193,9 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		}
 
-		function calculateLayersPos( depth ) {
+		function calculateLayersPos( layers ) {
 
+			let depth = layers.length;
 			let layersPos = [];
 
 			let initPos;
@@ -209,15 +212,39 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 			for ( let i = 0; i < depth; i++ ) {
 
-				layersPos.push( {
+				if ( !layers[ i ].isGroup  ) {
 
-					x: 0,
-					y: initPos,
-					z: 0
+					layersPos.push( {
 
-				} );
+						x: 0,
+						y: initPos,
+						z: 0
 
-				initPos += ModelLayerInterval;
+					} );
+
+					initPos += ModelLayerInterval;
+
+				} else {
+
+					let posArray = [];
+
+					for ( let i = 0; i < layers[ i ].thickness; i ++ ) {
+
+						posArray.push( {
+
+							x: 0,
+							y: initPos,
+							z: 0
+
+						} );
+
+						initPos += ModelLayerInterval;
+
+					}
+
+					layersPos.push( posArray );
+
+				}
 
 			}
 
@@ -301,7 +328,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		for ( let i = 1; i < this.layers.length; i ++ ) {
 
-			if ( this.layers[i].layerType !== "yoloOutput" ) {
+			if ( this.layers[i].layerType !== "yoloOutput" && this.layers[i].layerType !== "yoloBox" ) {
 
 				let predictValue = this.predictResult[ i - 1 ].dataSync();
 

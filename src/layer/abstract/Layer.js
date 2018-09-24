@@ -65,6 +65,8 @@ function Layer( config ) {
 	this.openTime = OpenTime;
 	this.separateTime = SeparateTime;
 
+	this.isGroup = false;
+
 	this.loadBasicLayerConfig( config );
 
 }
@@ -181,9 +183,10 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 
 	},
 
-	setEnvironment: function( scene ) {
+	setEnvironment: function( scene, model ) {
 
 		this.scene = scene;
+		this.model = model;
 
 	},
 

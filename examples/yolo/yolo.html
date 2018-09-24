@@ -195,12 +195,13 @@
 		strides: 1
     }));
 
-    model.add(new TSP.layers.YoloOutput({
+    model.add(new TSP.layers.YoloChannel({
 
 		onClick: function(widthIndex, heightIndex, outputData) {
 
 			console.log(widthIndex);
 			console.log(heightIndex);
+			console.log(outputData);
 
 			// generate this rectList from outputData
 			let rectList = [{
@@ -235,6 +236,8 @@
 			drawRects( rectList );
         }
     }));
+
+    model.add(new TSP.layers.YoloBox({}));
 
 	model.load({
 		type: "tensorflow",
