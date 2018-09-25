@@ -252,6 +252,14 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		}
 
+	},
+
+	reset: function() {
+
+		this.clear();
+		this.cameraControls.reset();
+		this.updateCamera();
+
 	}
 
 } );

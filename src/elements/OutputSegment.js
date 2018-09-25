@@ -278,10 +278,6 @@ OutputSegment.prototype = {
 
 		}
 
-	},
-
-	reset: function() {
-
 	}
 
 };
