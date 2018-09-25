@@ -4,8 +4,8 @@
 
 import { AbstractModel } from './AbstractModel';
 import { MapModelConfiguration } from "../configure/MapModelConfiguration";
-import { ModelLayerInterval } from "../utils/Constant";
-import { MaxDepthInLayer } from "../utils/Constant";
+import { LayerLocator } from "../utils/LayerLocator";
+import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
 
 function Sequential( container, config ) {
 
@@ -184,112 +184,12 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		console.log( "creating prime sequential model..." );
 
-		let layersPos = calculateLayersPos( this.layers );
-		let layerActualDepth = calculateDepths( this );
+		let layersPos = LayerLocator.calculateLayersPos( this.layers );
+		let layerActualDepth = ActualDepthCalculator.calculateDepths( this );
 
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].init( layersPos[ i ], layerActualDepth[ i ] );
-
-		}
-
-		function calculateLayersPos( layers ) {
-
-			let depth = layers.length;
-			let layersPos = [];
-
-			let initPos;
-
-			if ( depth % 2 === 1 ) {
-
-				initPos = - ModelLayerInterval * ( ( depth - 1 ) / 2 );
-
-			} else {
-
-				initPos = - ModelLayerInterval * ( depth / 2 ) + ModelLayerInterval / 2;
-
-			}
-
-			for ( let i = 0; i < depth; i++ ) {
-
-				if ( !layers[ i ].isGroup  ) {
-
-					layersPos.push( {
-
-						x: 0,
-						y: initPos,
-						z: 0
-
-					} );
-
-					initPos += ModelLayerInterval;
-
-				} else {
-
-					let posArray = [];
-
-					for ( let j = 0; j < layers[ i ].thickness; j ++ ) {
-
-						posArray.push( {
-
-							x: 0,
-							y: initPos,
-							z: 0
-
-						} );
-
-						initPos += ModelLayerInterval;
-
-					}
-
-					layersPos.push( posArray );
-
-				}
-
-			}
-
-			return layersPos;
-
-		}
-
-		function calculateDepths( model ) {
-
-			let depthList = [];
-			let maxDepthValue = 0;
-			let actualDepthList = [];
-
-			for ( let i = 0; i < model.layers.length; i ++ ) {
-
-				let layerDepth = model.layers[ i ].depth;
-
-				if ( layerDepth !== undefined ) {
-
-					maxDepthValue = maxDepthValue > layerDepth ? maxDepthValue : layerDepth;
-					depthList.push( layerDepth );
-
-				} else {
-
-					depthList.push( 1 );
-
-				}
-
-			}
-
-			for ( let i = 0; i < model.layers.length; i ++ ) {
-
-				if ( depthList[ i ] / maxDepthValue * MaxDepthInLayer > 1 ) {
-
-					actualDepthList.push( depthList[ i ] / maxDepthValue * MaxDepthInLayer );
-
-				} else {
-
-					actualDepthList.push( 1 );
-
-				}
-
-			}
-
-			return actualDepthList;
 
 		}
 
