@@ -5,11 +5,11 @@
 import { Layer } from '../abstract/Layer';
 import { ColorUtils } from '../../utils/ColorUtils';
 import { QueueAggregation } from "../../elements/QueueAggregation";
-import { OutputUnit } from "../../elements/OutputUnit";
-import { OutputNeuralPosGenerator } from "../../utils/OutputNeuralPosGenerator";
-import { TextHelper } from "../../utils/TextHelper";
 import { OutputTransitionFactory } from "../../animation/OutputTransitionTween";
 import { OutputExtractor } from "../../utils/OutputExtractor";
+import { OutputQueue } from "../../elements/OutputQueue";
+import { OutputSegment } from "../../elements/OutputSegment";
+import { PaginationButton } from "../../elements/PagniationButton";
 
 function Output( config ) {
 
@@ -18,36 +18,23 @@ function Output( config ) {
 	this.units = undefined;
 	this.width = undefined;
 	this.outputs = undefined;
-	this.height = 1;
-	this.depth = 1;
 
-	this.segregationHandlers = [];
+	this.outputHandler = undefined;
+
+	this.lastButtonHandler = undefined;
+	this.nextButtonHandler = undefined;
+
+	this.section = false;
+	this.segmentLength = 200;
+	this.segmentIndex = 0;
+	this.totalSegments = undefined;
+
+	this.leftBoundary = undefined;
+	this.rightBoundary = undefined;
 
 	this.loadLayerConfig( config );
 
-	this.leftMostCenter = {
-
-		x: 0,
-		y: 0,
-		z: 0
-
-	};
-
-	this.closeResultPos = [];
-	this.openResultPos = [];
-
-	for ( let i = 0; i < this.units; i++ ) {
-
-		this.closeResultPos.push( {
-
-			x: 0,
-			y: 0,
-			z: 0
-
-		} );
-	}
-
-	this.layerType = "output";
+	this.layerType = "output1d";
 
 }
 
@@ -63,8 +50,14 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.isOpen ) {
 
-			this.initSegregationElements( this.openResultPos );
+			this.initOutputElement( "open" );
 			this.initCloseButton();
+
+			if ( this.section ) {
+
+				this.showPagination();
+
+			}
 
 		} else {
 
@@ -87,6 +80,200 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.units = layerConfig.units;
 			this.width = layerConfig.units;
 			this.outputs = layerConfig.outputs;
+
+			if ( layerConfig.section !== undefined ) {
+
+				this.section = layerConfig.section;
+
+				if ( this.section ) {
+
+					if ( layerConfig.segmentLength !== undefined ) {
+
+						this.segmentLength = layerConfig.segmentLength;
+						this.queueLength = this.segmentLength;
+						this.totalSegments = Math.ceil( this.units / this.segmentLength );
+
+					}
+
+					if ( layerConfig.initSegmentIndex !== undefined ) {
+
+						this.segmentIndex = layerConfig.initSegmentIndex;
+
+					}
+
+				}
+
+			}
+
+		}
+
+	},
+
+	showPagination: function() {
+
+		if ( this.segmentIndex === 0 && this.segmentIndex !== this.totalSegments - 1 ) {
+
+			this.showNextButton();
+
+		} else if ( this.segmentIndex !== 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			this.showLastButton();
+
+		} else if ( this.segmentIndex === 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			// no button
+
+		} else {
+
+			this.showNextButton();
+			this.showLastButton();
+
+		}
+
+	},
+
+	showLastButton: function() {
+
+		let lastButtonHandler = new PaginationButton(
+
+			"last",
+			this.calcPaginationButtonSize(),
+			this.unitLength,
+			this.calculatePaginationPos( "last" ),
+			this.color,
+			this.minOpacity
+
+		);
+
+		lastButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.lastButtonHandler = lastButtonHandler;
+		this.neuralGroup.add( this.lastButtonHandler.getElement() );
+
+	},
+
+	showNextButton: function() {
+
+		let nextButtonHandler = new PaginationButton(
+
+			"next",
+			this.calcPaginationButtonSize(),
+			this.unitLength,
+			this.calculatePaginationPos( "next" ),
+			this.color,
+			this.minOpacity
+
+		);
+
+		nextButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.nextButtonHandler = nextButtonHandler;
+		this.neuralGroup.add( this.nextButtonHandler.getElement() );
+
+	},
+
+	hidePagination: function() {
+
+		this.hideNextButton();
+		this.hideLastButton();
+
+	},
+
+	hideNextButton: function() {
+
+		if ( this.nextButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.nextButtonHandler.getElement() );
+			this.nextButtonHandler = undefined;
+
+		}
+
+	},
+
+	hideLastButton: function() {
+
+		if ( this.lastButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.lastButtonHandler.getElement() );
+			this.lastButtonHandler = undefined;
+
+		}
+
+	},
+
+	updatePage: function( paginationType ) {
+
+		if ( paginationType === "next" ) {
+
+			if ( this.segmentIndex < this.totalSegments - 1 ) {
+
+				if ( this.segmentIndex === 0 ) {
+
+					this.showLastButton();
+
+				}
+
+				if ( this.segmentIndex === this.totalSegments - 2 ) {
+
+					this.hideNextButton();
+
+				}
+
+				this.segmentIndex += 1;
+
+			}
+
+		} else {
+
+			if ( this.segmentIndex > 0 ) {
+
+				if ( this.segmentIndex === this.totalSegments - 1 ) {
+
+					this.showNextButton();
+
+				}
+
+				if ( this.segmentIndex === 1 ) {
+
+					this.hideLastButton();
+
+				}
+
+				this.segmentIndex -= 1;
+
+			}
+
+		}
+
+		this.outputHandler.updateSegmentIndex( this.segmentIndex );
+
+		if ( this.outputHandler.isLengthChanged ) {
+
+			this.leftBoundary = this.outputHandler.leftBoundary;
+			this.rightBoundary = this.outputHandler.rightBoundary;
+
+			if ( this.nextButtonHandler !== undefined ) {
+
+				let nextButtonPos = this.calculatePaginationPos( "next" );
+				this.nextButtonHandler.updatePos( nextButtonPos );
+
+			}
+
+			if ( this.lastButtonHandler !== undefined ) {
+
+				let lastButtonPos = this.calculatePaginationPos( "last" );
+				this.lastButtonHandler.updatePos( lastButtonPos );
+
+			}
+
+			let closeButtonPos = this.calcCloseButtonPos();
+			this.closeButtonHandler.updatePos( closeButtonPos );
+
+		}
+
+		if ( this.neuralValue !== undefined ) {
+
+			this.updateOutputVis();
 
 		}
 
@@ -112,50 +299,64 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	initSegregationElements: function( positions ) {
+	initOutputElement: function( initStatus ) {
 
-		let textSize = TextHelper.calcOutputTextSize( this.unitLength );
+		let outputHandler;
 
-		for ( let i = 0; i < this.units; i++ ) {
+		if ( this.section ) {
 
-			let segregationHandler = new OutputUnit(
+			outputHandler = new OutputSegment(
 
+				this.outputs,
+				this.segmentLength,
+				this.segmentIndex,
+				this.units,
 				this.unitLength,
-				textSize,
-				this.outputs[ i ],
-				positions[ i ],
 				this.color,
-				this.minOpacity
+				this.minOpacity,
+				initStatus
 
 			);
 
-			segregationHandler.setLayerIndex( this.layerIndex );
-			segregationHandler.setOutputIndex( i );
+		} else {
 
-			this.segregationHandlers.push( segregationHandler );
-			this.neuralGroup.add( segregationHandler.getElement() );
+			outputHandler = new OutputQueue(
+
+				this.units,
+				this.outputs,
+				this.unitLength,
+				this.color,
+				this.minOpacity,
+				initStatus
+
+			);
 
 		}
 
+		outputHandler.setLayerIndex( this.layerIndex );
+
+		this.leftBoundary = outputHandler.leftBoundary;
+		this.rightBoundary = outputHandler.rightBoundary;
+
+		this.outputHandler = outputHandler;
+
+		this.neuralGroup.add( outputHandler.getElement() );
+
 		if ( this.neuralValue !== undefined ) {
 
-			this.updateSegregationVis();
+			this.updateOutputVis();
 
 		}
 
 	},
 
-	disposeSegregationElements: function() {
+	disposeOutputElement: function() {
 
 		console.log( "dispose output element" );
 
-		for ( let i = 0; i < this.segregationHandlers.length; i++ ) {
+		this.neuralGroup.remove( this.outputHandler.getElement() );
 
-			this.neuralGroup.remove( this.segregationHandlers[ i ].getElement() );
-
-		}
-
-		this.segregationHandlers = [];
+		this.outputHandler = undefined;
 
 	},
 
@@ -205,7 +406,6 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.width * this.unitLength;
-		this.actualHeight = this.height * this.unitLength;
 
 		if ( this.lastLayer.layerDimension === 1 ) {
 
@@ -219,10 +419,6 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
-		this.openHeight = 100;
-
-		this.openResultPos = OutputNeuralPosGenerator.getLinePos( this.units, this.actualWidth / this.width );
-
 	},
 
 	updateValue: function( value ) {
@@ -231,15 +427,14 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.isOpen ) {
 
-			this.updateSegregationVis();
+			this.updateOutputVis();
 
 			let maxConfidenceIndex = OutputExtractor.getMaxConfidenceIndex( value );
 
 			if ( this.textSystem !== undefined && this.textSystem ) {
 
-				this.hideText();
-				this.segregationHandlers[ maxConfidenceIndex ].showText();
-				this.textElementHandler = this.segregationHandlers[ maxConfidenceIndex ];
+				this.outputHandler.showTextWithIndex( maxConfidenceIndex );
+				this.textElementHandler = this.outputHandler;
 
 			}
 
@@ -247,13 +442,24 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	updateSegregationVis: function() {
+	updateOutputVis: function() {
 
 		let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
 
-		for ( let i = 0; i < this.segregationHandlers.length; i++ ) {
+		if ( this.section ) {
 
-			this.segregationHandlers[ i ].updateVis( [ colors[ i ] ] );
+			let segmentColors = colors.slice(
+
+				this.segmentLength * this.segmentIndex,
+				Math.min( this.segmentLength * ( this.segmentIndex + 1 ), this.width - 1 )
+
+			);
+
+			this.outputHandler.updateVis( segmentColors );
+
+		} else {
+
+			this.outputHandler.updateVis( colors );
 
 		}
 
@@ -281,10 +487,8 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	showText: function( selectedNeural ) {
 
-		let selectedIndex = selectedNeural.outputIndex;
-
-		this.segregationHandlers[ selectedIndex ].showText();
-		this.textElementHandler = this.segregationHandlers[ selectedIndex ];
+		this.outputHandler.showText( selectedNeural );
+		this.textElementHandler = this.outputHandler;
 
 	},
 
@@ -318,6 +522,10 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			}
 
+		} else if ( clickedElement.elementType === "paginationButton" ) {
+
+			this.updatePage( clickedElement.paginationType );
+
 		}
 
 	},
@@ -348,15 +556,47 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
+	calcPaginationButtonSize: function() {
+
+		return 1.1 * this.unitLength;
+
+	},
+
 	calcCloseButtonPos: function() {
 
 		return {
 
-			x: - this.actualWidth / 2 - 30,
+			x: this.leftBoundary.x - 10 * this.unitLength,
 			y: 0,
 			z: 0
 
 		};
+
+	},
+
+	calculatePaginationPos: function( paginationType ) {
+
+		if ( paginationType === "last" ) {
+
+			return {
+
+				x: this.leftBoundary.x - 5 * this.unitLength,
+				y: 0,
+				z: 0
+
+			};
+
+		} else {
+
+			return {
+
+				x: this.rightBoundary.x + 5 * this.unitLength,
+				y: 0,
+				z: 0
+
+			};
+
+		}
 
 	},
 
@@ -366,11 +606,7 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 			if ( this.isOpen ) {
 
-				for ( let i = 0; i < this.segregationHandlers.length; i++ ) {
-
-					this.segregationHandlers[ i ].clear();
-
-				}
+				this.outputHandler.clear();
 
 			}
 
@@ -378,8 +614,7 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
-	},
-
+	}
 
 } );
 

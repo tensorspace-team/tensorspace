@@ -6,14 +6,15 @@ import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 
-function OutputUnit( cubeSize, textSize, output, initPositions, color, minOpacity ) {
+function OutputUnit( unitLength, output, initPositions, color, minOpacity ) {
 
-	this.cubeSize = cubeSize;
-	this.textSize = textSize;
 	this.output = output;
-	this.unitLength = cubeSize;
+	this.unitLength = unitLength;
 	this.color = color;
 	this.minOpacity = minOpacity;
+
+	this.cubeSize = this.unitLength;
+	this.textSize = TextHelper.calcOutputTextSize( this.unitLength );
 
 	this.initPosition = {
 

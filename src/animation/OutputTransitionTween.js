@@ -21,36 +21,46 @@ let OutputTransitionFactory = ( function() {
 		let openTween = new TWEEN.Tween( init )
 			.to( end, layer.openTime );
 
+		layer.disposeAggregationElement();
+		layer.initOutputElement("close");
+		layer.isOpen = true;
+
 		openTween.onUpdate( function() {
 
-			for ( let i = 0; i < layer.segregationHandlers.length; i++ ) {
+			let poses = [];
+
+			for ( let i = 0; i < layer.outputHandler.outputLength; i ++ ) {
 
 				let pos = {
 
-					x: init.ratio * ( layer.openResultPos[ i ].x - layer.closeResultPos[ i ].x ),
-					y: init.ratio * ( layer.openResultPos[ i ].y - layer.closeResultPos[ i ].y ),
-					z: init.ratio * ( layer.openResultPos[ i ].z - layer.closeResultPos[ i ].z )
+					x: init.ratio * ( layer.outputHandler.openResultPos[ i ].x - layer.outputHandler.closeResultPos[ i ].x ),
+					y: init.ratio * ( layer.outputHandler.openResultPos[ i ].y - layer.outputHandler.closeResultPos[ i ].y ),
+					z: init.ratio * ( layer.outputHandler.openResultPos[ i ].z - layer.outputHandler.closeResultPos[ i ].z )
 
 				};
 
-				layer.segregationHandlers[ i ].updatePos( pos );
-
+				poses.push( pos );
 
 			}
+
+			layer.outputHandler.updatePoses( poses );
 
 		} ).onStart( function() {
 
 			console.log( "start open output layer" );
-			layer.disposeAggregationElement();
-			layer.initSegregationElements(layer.closeResultPos);
-			layer.isOpen = true;
 
 		} ).onComplete( function() {
 
 			console.log( "finish open output layer" );
 			layer.initCloseButton();
 
-		});
+			if ( layer.section ) {
+
+				layer.showPagination();
+
+			}
+
+		} );
 
 		openTween.start();
 
@@ -73,31 +83,42 @@ let OutputTransitionFactory = ( function() {
 		let closeTween = new TWEEN.Tween( init )
 			.to( end, layer.openTime );
 
+		layer.disposeCloseButton();
+
 		closeTween.onUpdate( function() {
 
-			for ( let i = 0; i < layer.segregationHandlers.length; i++ ) {
+			let poses = [];
+
+			for ( let i = 0; i < layer.outputHandler.outputLength; i ++ ) {
 
 				let pos = {
 
-					x: init.ratio * ( layer.openResultPos[ i ].x - layer.closeResultPos[ i ].x ),
-					y: init.ratio * ( layer.openResultPos[ i ].y - layer.closeResultPos[ i ].y ),
-					z: init.ratio * ( layer.openResultPos[ i ].z - layer.closeResultPos[ i ].z )
+					x: init.ratio * ( layer.outputHandler.openResultPos[ i ].x - layer.outputHandler.closeResultPos[ i ].x ),
+					y: init.ratio * ( layer.outputHandler.openResultPos[ i ].y - layer.outputHandler.closeResultPos[ i ].y ),
+					z: init.ratio * ( layer.outputHandler.openResultPos[ i ].z - layer.outputHandler.closeResultPos[ i ].z )
 
 				};
 
-				layer.segregationHandlers[ i ].updatePos( pos );
+				poses.push( pos );
 
 			}
+
+			layer.outputHandler.updatePoses( poses );
 
 		} ).onStart( function() {
 
 			console.log( "start close output layer" );
-			layer.disposeCloseButton();
+
+			if ( layer.section ) {
+
+				layer.hidePagination();
+
+			}
 
 		} ).onComplete( function() {
 
 			console.log( "end close output layer" );
-			layer.disposeSegregationElements();
+			layer.disposeOutputElement();
 			layer.initAggregationElement();
 			layer.isOpen = false;
 

@@ -129,6 +129,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		let lastButtonHandler = new PaginationButton(
 
 			"last",
+			this.calcPaginationButtonSize(),
 			this.unitLength,
 			this.calculatePaginationPos( "last" ),
 			this.color,
@@ -148,6 +149,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		let nextButtonHandler = new PaginationButton(
 
 			"next",
+			this.calcPaginationButtonSize(),
 			this.unitLength,
 			this.calculatePaginationPos( "next" ),
 			this.color,
@@ -483,6 +485,20 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	calcCloseButtonSize: function() {
+
+		if ( this.width > 50 ) {
+
+			return 2 * this.unitLength;
+
+		} else {
+
+			return 1.1 * this.unitLength;
+
+		}
+
+	},
+
+	calcPaginationButtonSize: function() {
 
 		if ( this.width > 50 ) {
 

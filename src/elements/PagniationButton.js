@@ -4,11 +4,11 @@
 
 import { TextureProvider } from "../utils/TextureProvider";
 
-function PaginationButton( paginationType, unitLength, position, color, minOpacity ) {
+function PaginationButton( paginationType, size, unitLength, position, color, minOpacity ) {
 
 	this.paginationType = paginationType;
 	this.thickness = 2 * unitLength;
-	this.size = 2 * unitLength;
+	this.size = size;
 	this.unitLength = unitLength;
 	this.minOpacity = minOpacity;
 
