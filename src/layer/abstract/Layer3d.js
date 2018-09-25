@@ -32,6 +32,8 @@ function Layer3d( config ) {
 	// center position is the left-most for layer, type: {x: value , y: value, z: value}
 	this.leftMostCenter = undefined;
 
+	this.layerShape = undefined;
+
 	this.aggregationStrategy = undefined;
 
 }
@@ -252,7 +254,9 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	calcCloseButtonSize: function() {
 
-		return this.openHeight * CloseButtonRatio;
+		let openHeight = this.actualHeight + this.openFmCenters[ this.openFmCenters.length - 1 ].z - this.openFmCenters[ 0 ].z;
+
+		return openHeight * CloseButtonRatio;
 
 	},
 

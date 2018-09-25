@@ -157,9 +157,6 @@ Pooling2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
 
 		}
 
-		this.leftMostCenter = this.openFmCenters[ 0 ];
-		this.openHeight = this.actualHeight + this.openFmCenters[ this.openFmCenters.length - 1 ].z - this.openFmCenters[ 0 ].z;
-
 	},
 
 	getRelativeElements: function( selectedElement ) {
