@@ -31,14 +31,15 @@ $ pip install tensorflowjs
 ```
 
 In general the preprocess of a TensorFlow model is:
-```Python
-INSERT IMAGE: General TF process
-``` 
+<p align="center">
+<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process.png" alt="general TF process" width="830" >
+</p>
+
 * [1. Train/Load model](#loadModel)
 * [2 Find Out Tensor Names](#findNames)
 * [3 Convert to TensorFlow.js Model](#convertModel)
 
-It is different from the preprocessing of a Keras or tf.Keras model: we do not encapsulate an intermediate TensorFlow model. All we want is to catch the correct corresponding tensor names and convert original model to TensorFlow.js compatible model directly by tfjs-converter.
+It is different from the preprocessing of a Keras or tf.Keras model: we don't need to encapsulate an intermediate TensorFlow model. All we want is to catch the correct corresponding tensor names and convert original model to TensorFlow.js compatible model directly by tfjs-converter.
 
 ### <div id="loadModel">1 Train/Load Model</div>
 #### 1.1 Train a Model
@@ -61,12 +62,12 @@ x_train = np.pad(x_train, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 ```
 
-Next, based on the structure of an LeNet:
-```Python
-INSERT IMAGE: LeNet structure
-```
+Next, based on the structure of an LeNet_v5:
+<p align="center">
+<img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+</p>
 
-we should have: ( Conv2D+MaxPooling )x2 and ( Dense )x3, so the model is implemented like:
+we should have 2 Conv2D+MaxPooling together with 3 dense layers. The model is implemented like:
 ```Python
 def LeNet_5(x):
     # Convolutional Layer. Input = 32x32x1, Output = 28x28x1.
