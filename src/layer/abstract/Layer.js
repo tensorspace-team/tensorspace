@@ -3,12 +3,10 @@
  */
 
 import { CloseButton } from "../../elements/CloseButton";
-import { BasicLineGroupController } from "./BasicLineGroupController";
 import { OpenTime, SeparateTime } from "../../utils/Constant";
+import { BasicLineGroup } from "../../elements/BasicLineGroup";
 
 function Layer( config ) {
-
-	BasicLineGroupController.call( this );
 
 	this.scene = undefined;
 	this.layerIndex = undefined;
@@ -67,11 +65,27 @@ function Layer( config ) {
 
 	this.isGroup = false;
 
+	this.lineGroupHandler = undefined;
+
 	this.loadBasicLayerConfig( config );
 
 }
 
-Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototype ), {
+Layer.prototype = {
+
+	addLineGroup: function() {
+
+		this.lineGroupHandler = new BasicLineGroup(
+
+			this,
+			this.scene,
+			this.neuralGroup,
+			this.color,
+			this.minOpacity
+
+		);
+
+	},
 
 	loadBasicLayerConfig: function( config ) {
 
@@ -222,8 +236,27 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 		this.neuralGroup.remove( this.closeButtonHandler.getElement() );
 		this.closeButtonHandler = undefined;
 
+	},
+
+	/**
+	 * getRelativeElements() get relative element in last layer for relative lines based on given hovered element.
+	 *
+	 * Override this function to define relative element from previous layer
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { THREE.Object[] } relativeElements
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return [];
+
 	}
 
-} );
+};
 
 export { Layer };

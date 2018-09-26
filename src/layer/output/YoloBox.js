@@ -43,9 +43,11 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		this.initAggregationElement();
 
-		this.createBasicLineElement();
-
 		this.scene.add( this.neuralGroup );
+
+		// Create relative line element.
+
+		this.addLineGroup();
 
 	},
 
@@ -188,7 +190,7 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.relationSystem !== undefined && this.relationSystem ) {
 
-			this.initLineGroup( hoveredElement );
+			this.lineGroupHandler.initLineGroup( hoveredElement );
 
 		}
 
@@ -204,7 +206,7 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.relationSystem !== undefined && this.relationSystem ) {
 
-			this.disposeLineGroup();
+			this.lineGroupHandler.disposeLineGroup();
 
 		}
 
