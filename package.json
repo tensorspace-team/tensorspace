@@ -4,7 +4,7 @@
   "description": "Neural network 3D visualization framework",
   "main": "build/tensorspace.module.js",
   "scripts": {
-    "test": "mocha",
+    "test": "echo test; mocha; echo end;",
     "build": "rollup -c",
     "build-uglify": "rollup -c && uglifyjs build/tensorspace.js -cm --preamble \"// https://github.com/syt123450/tensorspace/blob/master/LICENSE\" --output build/tensorspace.min.js",
     "contributors:add": "all-contributors add",

@@ -2,22 +2,27 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
+function MergedLineGroup(layer, scene, neuralGroup, color, minOpacity ) {
 
-function MergeLineGroupController() {
+	this.layer = layer;
+	this.scene = scene;
+	this.neuralGroup = neuralGroup;
+	this.color = color;
+	this.minOpacity = minOpacity;
 
 	this.straightLineGroup = undefined;
 	this.curveLineGroup = undefined;
 
+	this.init();
+
 }
 
-MergeLineGroupController.prototype = {
+MergedLineGroup.prototype = {
 
-	createBasicLineElement: function() {
+	init: function() {
 
 		let lineMat = new THREE.LineBasicMaterial( {
 
-			color: 0xffffff,
 			opacity: this.minOpacity,
 			transparent:true,
 			vertexColors: THREE.VertexColors
@@ -44,14 +49,14 @@ MergeLineGroupController.prototype = {
 		let curveLineColors = [];
 		let curveLineVertices = [];
 
-		let relatedElements = this.getRelativeElements( selectedElement );
+		let relatedElements = this.layer.getRelativeElements( selectedElement );
 
 		let straightElements = relatedElements.straight;
 		let curveElements = relatedElements.curve;
 
 		let startPosition = selectedElement.getWorldPosition().sub( this.neuralGroup.getWorldPosition() );
 
-		for ( let i = 0; i < straightElements.length; i++ ) {
+		for ( let i = 0; i < straightElements.length; i ++ ) {
 
 			straightLineColors.push( new THREE.Color( this.color ) );
 			straightLineColors.push( new THREE.Color( this.color ) );
@@ -63,7 +68,7 @@ MergeLineGroupController.prototype = {
 
 		let forward = true;
 
-		for ( let i = 0; i < curveElements.length; i++ ) {
+		for ( let i = 0; i < curveElements.length; i ++ ) {
 
 			let startPos = startPosition;
 			let endPos = curveElements[ i ].getWorldPosition().sub( this.neuralGroup.getWorldPosition() );
@@ -97,7 +102,7 @@ MergeLineGroupController.prototype = {
 
 			if ( forward ) {
 
-				for ( let i = 0; i < points.length; i++ ) {
+				for ( let i = 0; i < points.length; i ++ ) {
 
 					curveLineVertices.push( points[ i ] );
 					curveLineColors.push( new THREE.Color( this.color ) );
@@ -106,7 +111,7 @@ MergeLineGroupController.prototype = {
 
 			} else {
 
-				for ( let i = points.length - 1; i >= 0; i-- ) {
+				for ( let i = points.length - 1; i >= 0; i -- ) {
 
 					curveLineVertices.push( points[ i ] );
 					curveLineColors.push( new THREE.Color( this.color ) );
@@ -145,28 +150,24 @@ MergeLineGroupController.prototype = {
 		let straightParameters = lineGroupParameters.straight;
 		let curveParameters = lineGroupParameters.curve;
 
-		let straightGroupGeometryHandler = new LineGroupGeometry(
+		this.straightLineGroup.geometry = this.createGroupGeometry(
 
 			straightParameters.lineVertices,
-			straightParameters.lineColors,
-			this.minOpacity
+			straightParameters.lineColors
 
 		);
 
-		this.straightLineGroup.geometry = straightGroupGeometryHandler.getElement();
 		this.straightLineGroup.material.needsUpdate = true;
 
 		this.neuralGroup.add( this.straightLineGroup );
 
-		let curveGroupGeometryHandler = new LineGroupGeometry(
+		this.curveLineGroup.geometry = this.createGroupGeometry(
 
 			curveParameters.lineVertices,
-			curveParameters.lineColors,
-			this.minOpacity
+			curveParameters.lineColors
 
 		);
 
-		this.curveLineGroup.geometry = curveGroupGeometryHandler.getElement();
 		this.curveLineGroup.material.needsUpdate = true;
 
 		this.neuralGroup.add( this.curveLineGroup );
@@ -181,8 +182,26 @@ MergeLineGroupController.prototype = {
 		this.curveLineGroup.geometry.dispose();
 		this.neuralGroup.remove( this.curveLineGroup );
 
+	},
+
+	createGroupGeometry: function(lineVertices, lineColors) {
+
+		let geometry = new THREE.Geometry( {
+
+			transparent:true,
+			opacity: this.minOpacity
+
+		} );
+
+		geometry.colors = lineColors;
+		geometry.vertices = lineVertices;
+		geometry.colorsNeedUpdate = true;
+		geometry.verticesNeedUpdate = true;
+
+		return geometry;
+
 	}
 
 };
 
-export { MergeLineGroupController };
+export { MergedLineGroup };

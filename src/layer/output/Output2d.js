@@ -43,9 +43,12 @@ Output2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
 
 		this.initAggregationElement();
-		this.createBasicLineElement();
 
 		this.scene.add( this.neuralGroup );
+
+		// Create relative line element.
+
+		this.addLineGroup();
 
 	},
 

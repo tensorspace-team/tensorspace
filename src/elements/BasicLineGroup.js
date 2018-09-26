@@ -2,23 +2,37 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { LineGroupGeometry } from "../../elements/LineGroupGeometry";
+/**
+ * BasicLineGroupController, abstract layer, can not be initialized by TensorSpace user.
+ * Line group component for abstract layer "Layer"
+ *
+ * @returns BasicLineGroup object
+ */
 
-function BasicLineGroupController() {
+function BasicLineGroup( layer, scene, neuralGroup, color, minOpacity ) {
+
+	this.layer = layer;
+	this.scene = scene;
+	this.neuralGroup = neuralGroup;
+	this.color = color;
+	this.minOpacity = minOpacity;
+
+	// actual relative lines element for layer
 
 	this.lineGroup = undefined;
 
+	this.init();
+
 }
 
-BasicLineGroupController.prototype = {
+BasicLineGroup.prototype = {
 
-	createBasicLineElement: function() {
+	init: function() {
 
 		let lineMat = new THREE.LineBasicMaterial( {
 
-			color: 0xffffff,
 			opacity: this.minOpacity,
-			transparent:true,
+			transparent: true,
 			vertexColors: THREE.VertexColors
 
 		} );
@@ -36,11 +50,11 @@ BasicLineGroupController.prototype = {
 		let lineColors = [];
 		let lineVertices = [];
 
-		let relatedElements = this.getRelativeElements( selectedElement );
+		let relatedElements = this.layer.getRelativeElements( selectedElement );
 
 		let startPosition = selectedElement.getWorldPosition().sub( this.neuralGroup.getWorldPosition() );
 
-		for ( let i = 0; i < relatedElements.length; i++ ) {
+		for ( let i = 0; i < relatedElements.length; i ++ ) {
 
 			lineColors.push( new THREE.Color( this.color ) );
 			lineColors.push( new THREE.Color( this.color ) );
@@ -63,15 +77,19 @@ BasicLineGroupController.prototype = {
 
 		let lineGroupParameters = this.getLineGroupParameters( selectedElement );
 
-		let lineGroupGeometryHandler = new LineGroupGeometry(
+		let geometry = new THREE.Geometry( {
 
-			lineGroupParameters.lineVertices,
-			lineGroupParameters.lineColors,
-			this.minOpacity
+			transparent:true,
+			opacity: this.minOpacity
 
-		);
+		} );
 
-		this.lineGroup.geometry = lineGroupGeometryHandler.getElement();
+		geometry.colors = lineGroupParameters.lineColors;
+		geometry.vertices = lineGroupParameters.lineVertices;
+		geometry.colorsNeedUpdate = true;
+		geometry.verticesNeedUpdate = true;
+
+		this.lineGroup.geometry = geometry;
 		this.lineGroup.material.needsUpdate = true;
 
 		this.neuralGroup.add( this.lineGroup );
@@ -83,29 +101,8 @@ BasicLineGroupController.prototype = {
 		this.lineGroup.geometry.dispose();
 		this.neuralGroup.remove( this.lineGroup );
 
-	},
-
-	/**
-	 * getRelativeElements() get relative element in last layer for relative lines based on given hovered element.
-	 *
-	 * Override this function to define relative element from previous layer
-	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
-	 *
-	 * @param { THREE.Object } selectedElement
-	 * @return { THREE.Object[] } relativeElements
-	 */
-
-	getRelativeElements: function( selectedElement ) {
-
-		let relativeElements = [];
-
-		return [];
-
 	}
 
 };
 
-export { BasicLineGroupController };
+export { BasicLineGroup };

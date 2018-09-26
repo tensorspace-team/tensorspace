@@ -171,9 +171,9 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		}
 
-		this.createBasicLineElement();
-
 		this.scene.add( this.neuralGroup );
+
+		this.addLineGroup();
 
 	},
 
@@ -329,7 +329,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		if ( this.relationSystem !== undefined && this.relationSystem ) {
 
-			this.initLineGroup( hoveredElement );
+			this.lineGroupHandler.initLineGroup( hoveredElement );
 
 		}
 
@@ -345,7 +345,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		if ( this.relationSystem !== undefined && this.relationSystem ) {
 
-			this.disposeLineGroup();
+			this.lineGroupHandler.disposeLineGroup();
 
 		}
 

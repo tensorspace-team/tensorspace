@@ -3,11 +3,9 @@
  */
 
 import { CloseButton } from "../../elements/CloseButton";
-import { MergeLineGroupController } from "./MergedLineGroupController";
+import { MergedLineGroup } from "../../elements/MergedLineGroup";
 
 function MergedLayer( config ) {
-
-	MergeLineGroupController.call( this );
 
 	this.scene = undefined;
 	this.layerIndex = undefined;
@@ -73,7 +71,21 @@ function MergedLayer( config ) {
 
 }
 
-MergedLayer.prototype = Object.assign( Object.create( MergeLineGroupController.prototype ), {
+MergedLayer.prototype = {
+
+	addLineGroup: function() {
+
+		this.lineGroupHandler = new MergedLineGroup(
+
+			this,
+			this.scene,
+			this.neuralGroup,
+			this.color,
+			this.minOpacity
+
+		);
+
+	},
 
 	loadBasicLayerConfig: function( config ) {
 
@@ -202,6 +214,6 @@ MergedLayer.prototype = Object.assign( Object.create( MergeLineGroupController.p
 
 	}
 
-} );
+};
 
 export { MergedLayer };

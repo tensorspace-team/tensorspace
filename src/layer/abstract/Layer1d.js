@@ -64,9 +64,11 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
-		this.createBasicLineElement();
-
 		this.scene.add( this.neuralGroup );
+
+		// Create relative line element.
+
+		this.addLineGroup();
 
 	},
 
@@ -421,7 +423,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.relationSystem !== undefined && this.relationSystem ) {
 
-			this.initLineGroup( hoveredElement );
+			this.lineGroupHandler.initLineGroup( hoveredElement );
 
 		}
 
@@ -437,7 +439,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.relationSystem !== undefined && this.relationSystem ) {
 
-			this.disposeLineGroup();
+			this.lineGroupHandler.disposeLineGroup();
 
 		}
 

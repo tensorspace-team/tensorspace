@@ -107,13 +107,13 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
-		// Create relative line element.
-
-		this.createBasicLineElement();
-
 		// Add the wrapper to the actual THREE.js scene.
 
 		this.scene.add( this.neuralGroup );
+
+		// Create relative line element.
+
+		this.addLineGroup();
 
 	},
 
@@ -371,7 +371,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.relationSystem !== undefined && this.relationSystem ) {
 
-			this.initLineGroup( hoveredElement );
+			this.lineGroupHandler.initLineGroup( hoveredElement );
 
 		}
 
@@ -395,7 +395,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.relationSystem !== undefined && this.relationSystem ) {
 
-			this.disposeLineGroup();
+			this.lineGroupHandler.disposeLineGroup();
 
 		}
 
@@ -600,7 +600,8 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * loadLayerConfig() abstract method, check user's configuration and load it into layer object.
+	 * loadLayerConfig() abstract method
+	 * Check user's configuration and load it into layer object.
 	 *
 	 * Override this function if there are some specific user configurations for layer.
 	 *
@@ -612,7 +613,8 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * loadModelConfig() abstract method, load model's configuration into layer object.
+	 * loadModelConfig() abstract method
+	 * Load model's configuration into layer object.
 	 *
 	 * Override this function if there are some specific model configurations for layer.
 	 *
@@ -624,7 +626,8 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * assemble() abstract method, configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * assemble() abstract method
+	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
 	 *
 	 * Override this function to get information from previous layer
 	 *
@@ -632,6 +635,26 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 */
 
 	assemble: function( layerIndex ) {
+
+	},
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 *
+	 * Override this function to define relative element from previous layer
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { THREE.Object[] } relativeElements
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return [];
 
 	}
 
