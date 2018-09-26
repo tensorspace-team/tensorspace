@@ -1,24 +1,67 @@
 {
   "name": "tensorspace",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Neural network 3D visualization framework",
+  "main": "build/tensorspace.module.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c"
+    "test": "mocha",
+    "build-beautify": "rollup -c",
+    "build-uglify": "rollup -c && uglifyjs build/tensorspace.js -cm --preamble \"// https://github.com/syt123450/tensorspace/blob/master/LICENSE\" --output build/tensorspace.min.js",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate"
+  },
+  "directories": {
+    "assets": "static resource for github repo",
+    "docs": "document for users and contributors",
+    "examples": "examples showing how to use tensorspace.js",
+    "test": "test scripts",
+    "build": "release files, build code for different environment",
+    "src": "source code"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^0.12.7",
     "install": "^0.12.1",
     "npm": "^6.4.1",
-    "three": "^0.90.0"
+    "three": "^0.90.0",
+    "@tweenjs/tween.js": "^17.2.0"
   },
   "devDependencies": {
+    "all-contributors-cli": "^5.3.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
-    "rollup": "^0.53.4"
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "rollup": "^0.53.4",
+    "uglify-js": "^2.4.11"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syt123450/tensorspace.git"
+  },
+  "homepage": "https://github.com/syt123450/tensorspace#readme",
   "author": "tensorspace",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "contributors": [
+    {
+      "name": "syt123450",
+      "email": "syt123450@gmail.com",
+      "url": "https://github.com/syt123450"
+    },
+    {
+      "name": "zchholmes",
+      "email": "zhu.chenhua@sjsu.edu",
+      "url": "https://github.com/zchholmes"
+    },
+    {
+      "name": "CharlesLiuyx",
+      "email": "charlesliuyx@gmail.com",
+      "url": "https://github.com/CharlesLiuyx"
+    },
+    {
+      "name": "lq3297401",
+      "email": "qi.liu01@sjsu.edu",
+      "url": "https://github.com/lq3297401"
+    }
+  ]
 }
