@@ -8,7 +8,7 @@ import { Layer3d } from "../abstract/Layer3d";
 /**
  * 2D Convolution
  *
- * @param config user's configuration for Conv2d layer
+ * @param config, user's configuration for Conv2d layer
  * @returns Conv2d layer object
  */
 
@@ -73,7 +73,7 @@ Conv2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
 	 *
 	 * Based on the passed in layerConfig parameter.
 	 *
-	 * @param { JSON } layerConfig
+	 * @param { JSON } layerConfig, user's configuration for Conv2d layer
 	 */
 
 	loadLayerConfig: function( layerConfig ) {
@@ -145,7 +145,7 @@ Conv2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
 	 *
 	 * Based on the passed in modelConfig parameter
 	 *
-	 * @param { JSON } modelConfig
+	 * @param { JSON } modelConfig, default and user's configuration for model
 	 */
 
 	loadModelConfig: function( modelConfig ) {
@@ -177,7 +177,7 @@ Conv2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
 	/**
 	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
 	 *
-	 * @param { int } layerIndex
+	 * @param { int } layerIndex, this layer's order in model
 	 */
 
 	assemble: function ( layerIndex ) {
@@ -242,7 +242,7 @@ Conv2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
 	 * 1. "getRelativeElements" send request to previous layer for relative elements;
 	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
 	 *
-	 * @param { THREE.Object } selectedElement
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
 	 * @return { THREE.Object[] } relativeElements
 	 */
 

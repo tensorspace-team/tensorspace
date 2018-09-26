@@ -34,7 +34,7 @@ function Layer( config ) {
 	this.hasCloseButton = true;
 	this.closeButtonSizeRatio = 1;
 
-	this.minAlpha = undefined;
+	this.minOpacity = undefined;
 
 	// actual width and height in three.js scene
 	this.actualWidth = undefined;
@@ -225,6 +225,5 @@ Layer.prototype = Object.assign( Object.create( BasicLineGroupController.prototy
 	}
 
 } );
-
 
 export { Layer };

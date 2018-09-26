@@ -3,7 +3,7 @@
  */
 
 import { AbstractModel } from './AbstractModel';
-import { MapModelConfiguration } from "../configure/MapModelConfiguration";
+import { ModelConfiguration } from "../configure/ModelConfiguration";
 import { LayerLocator } from "../utils/LayerLocator";
 import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
 
@@ -13,7 +13,7 @@ function Sequential( container, config ) {
 
 	this.layers = [];
 
-	this.configuration = new MapModelConfiguration( config );
+	this.configuration = new ModelConfiguration( config );
 	this.loadSceneConfig( this.configuration );
 
 	this.hoveredLayer = undefined;

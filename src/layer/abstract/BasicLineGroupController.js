@@ -85,14 +85,22 @@ BasicLineGroupController.prototype = {
 
 	},
 
-	// override this function to define relative element from previous layer
+	/**
+	 * getRelativeElements() get relative element in last layer for relative lines based on given hovered element.
+	 *
+	 * Override this function to define relative element from previous layer
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement
+	 * @return { THREE.Object[] } relativeElements
+	 */
+
 	getRelativeElements: function( selectedElement ) {
 
 		let relativeElements = [];
-
-		if ( selectedElement.elementType === "" ) {
-
-		}
 
 		return [];
 
