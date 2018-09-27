@@ -16,103 +16,214 @@ import { BasicLineGroup } from "../../elements/BasicLineGroup";
 
 function Layer( config ) {
 
-	// Actual THREE.js scene.
+	/**
+	 * Actual THREE.js scene.
+	 *
+	 * @type { THREE.Scene }
+	 */
 
 	this.scene = undefined;
 
-	// Layer's order in model.
+	/**
+	 * Layer's order in model.
+	 *
+	 * @type { number }
+	 */
 
 	this.layerIndex = undefined;
 
-	// Layer's center (x, y, z) relative to model.
+	/**
+	 * Layer's center (x, y, z) relative to model.
+	 *
+	 * @type { Object } {x: double, y: double, z: double}
+	 */
 
 	this.center = undefined;
 
-	// last layer in model relative to this layer.
+	/**
+	 * last layer in model relative to this layer.
+	 *
+	 * @type { Layer }
+	 */
 
 	this.lastLayer = undefined;
 
-	// Store all neural value as an array, "undefined" means no value.
+	/**
+	 * Store all neural value as an array.
+	 * "undefined" means no value.
+	 *
+	 * @type { double[] }
+	 */
 
 	this.neuralValue = undefined;
 
-	// Important Shape for layer.
+	/**
+	 * Important Shape for layer.
+	 * Shape length depends on layer's dimension.
+	 *
+	 * @type { Array }
+	 */
 
 	this.inputShape = [];
 	this.outputShape = [];
 
-	// Elements wrapper for layer.
+	/**
+	 * Elements wrapper for layer.
+	 * All actual element in layer will be add to this group.
+	 *
+	 * @type { THREE.Object }
+	 */
 
 	this.neuralGroup = undefined;
 
-	// Color for layer visualization.
+	/**
+	 * Color for layer visualization.
+	 *
+	 * @type { HEX }
+	 */
 
 	this.color = undefined;
 
-	// Store handler for layer aggregation.
+	/**
+	 * Store handler for layer aggregation.
+	 *
+	 * @type { Object }
+	 */
 
 	this.aggregationHandler = undefined;
 
-	// Store handler for close button.
+	/**
+	 * Store handler for close button.
+	 *
+	 * @type { Object }
+	 */
 
 	this.closeButtonHandler = undefined;
 
-	// Config to control whether to show close button, true -- show when layer is open, false -- never show close button.
+	/**
+	 * Config to control whether to show close button.
+	 * true -- show close button when layer is open.
+	 * false -- never show close button.
+	 *
+	 * @type { boolean }
+	 */
 
 	this.hasCloseButton = true;
 
-	// User's external control for close button, close button will multiply this size to get the final size.
+	/**
+	 * User's external control for close button.
+	 * Close button will multiply this size to get the final size.
+	 *
+	 * @type { number }
+	 */
 
 	this.closeButtonSizeRatio = 1;
 
-	// Minimum opacity to control layer's visualization effect.
+	/**
+	 * Minimum opacity to control layer's visualization effect.
+	 *
+	 * @type { double } [0, 1]
+	 */
 
 	this.minOpacity = undefined;
 
-	// Actual width and height in three.js scene.
+	/**
+	 * Actual width and height in three.js scene.
+	 * 1d layer and 2d layer do not have actualHeight.
+	 *
+	 * @type { double }
+	 */
 
 	this.actualWidth = undefined;
 	this.actualHeight = undefined;
 
-	// Actual depth for layer aggregation.
+	/**
+	 * Actual depth for layer aggregation.
+	 *
+	 * @type { double }
+	 */
 
 	this.actualDepth = undefined;
 
-	// Unit length, get from last layer, actualWidth = unitLength * width.
+	/**
+	 * Unit length, quantitatively, actualWidth = unitLength * width.
+	 *
+	 * If layer is not the first layer in model, value is get from last layer.
+	 * this.unitLength = this.lastLayer.unitLength;
+	 *
+	 * If layer is the first layer in model, checkout input layer for more information.
+	 * this.unitLength = this.actualWidth / this.width;
+	 *
+	 * @type { double }
+	 */
 
 	this.unitLength = undefined;
 
-	// Handler for element which is showing text.
+	/**
+	 * Handler for element which is showing text.
+	 *
+	 * @type { Object }
+	 */
 
 	this.textElementHandler = undefined;
 
-	// Store handler for line group.
+	/**
+	 * Store handler for line group.
+	 *
+	 * @type { Object }
+	 */
 
 	this.lineGroupHandler = undefined;
 
-	// Config to control showing text in layer.
+	/**
+	 * Config to control showing text in layer.
+	 *
+	 * @type { boolean }
+	 */
 
 	this.textSystem = undefined;
 
-	// Config to control showing relation line in layer.
+	/**
+	 * Config to control showing relation line in layer.
+	 *
+	 * @type { boolean }
+	 */
 
 	this.relationSystem = undefined;
 
-	// Layer status, true -- open, false -- close.
+	/**
+	 * Layer status.
+	 * true -- open;
+	 * false -- close.
+	 *
+	 * @type { boolean }
+	 */
 
 	this.isOpen = undefined;
 
-	// Parameters for animation time.
+	/**
+	 * Parameters for animation time.
+	 *
+	 * @type {number}
+	 */
 
 	this.animationTimeRatio = 1;
 	this.openTime = OpenTime;
 	this.separateTime = SeparateTime;
 
-	// Identity whether the layer is merged layer.
+	/**
+	 * Identity whether the layer is merged layer.
+	 *
+	 * @type {boolean}
+	 */
 
 	this.isMerged = false;
 
-	// Identity whether the layer is a group for layers.
+	/**
+	 * Identity whether the layer is a group for layers.
+	 *
+	 * @type {boolean}
+	 */
 
 	this.isGroup = false;
 
@@ -143,7 +254,8 @@ Layer.prototype = {
 	},
 
 	/**
-	 * loadBasicLayerConfig() Load user's common config into layer's attribute. Called by loadLayerConfig() in inherit layer.
+	 * loadBasicLayerConfig() Load user's common config into layer's attribute.
+	 * Called when "Layer" is initializing.
 	 *
 	 * @param { JSON } config, user's layer configuration.
 	 */
@@ -335,6 +447,105 @@ Layer.prototype = {
 	},
 
 	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for Layer.
+	 * SubClasses ( specific layers ) override these abstract method to get Layer's characters.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * init() abstract method
+	 * Create actual THREE.Object in Layer, warp them into a group, and add it to THREE.js's scene.
+	 *
+	 * Model passes two parameters, center and actualDepth, to Layer when call init() to initialize Layer.
+	 *
+	 * @param { JSON } center, layer's center (x, y, z) relative to model
+	 * @param { double } actualDepth, layer aggregation's depth
+	 */
+
+	init: function(center, actualDepth ) {
+
+	},
+
+	/**
+	 * assemble() abstract method
+	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 *
+	 * Override this function to get information from previous layer
+	 *
+	 * @param { int } layerIndex, this layer's order in model
+	 */
+
+	assemble: function( layerIndex ) {
+
+	},
+
+	/**
+	 * updateValue() abstract method
+	 * Accept layer output value from model, update layer visualization if required.
+	 *
+	 * Model passes layer's output value to layer through updateValue method.
+	 *
+	 * Override this function to implement layer's own value update strategy.
+	 *
+	 * @param { double[] } value, neural output value.
+	 */
+
+	updateValue: function( value ) {
+
+	},
+
+	/**
+	 * clear() abstract method
+	 * Clear data and visualization in layer.
+	 *
+	 * Override this function to implement layer's own clear function.
+	 */
+
+	clear: function() {
+
+	},
+
+	/**
+	 * handleClick() abstract method
+	 * Event callback, if clickable element in this layer is clicked, execute this handle function.
+	 *
+	 * Override this function if layer has any clicked event.
+	 *
+	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
+	 */
+
+	handleClick: function( clickedElement ) {
+
+	},
+
+	/**
+	 * handleHoverIn() abstract method
+	 * Event callback, if hoverable element in this layer picked by Raycaster, execute this handle function.
+	 *
+	 * Override this function if layer has any hover event.
+	 *
+	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
+	 */
+
+	handleHoverIn: function( hoveredElement ) {
+
+	},
+
+	/**
+	 * handleHoverOut() abstract method
+	 * Event callback, called by model if mouse hover out of this layer.
+	 *
+	 * Override this function if layer has some hover event.
+	 */
+
+	handleHoverOut: function() {
+
+	},
+
+	/**
 	 * getRelativeElements() abstract method
 	 * Get relative element in last layer for relative lines based on given hovered element.
 	 *
@@ -393,67 +604,6 @@ Layer.prototype = {
 	},
 
 	/**
-	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * Override this function to get information from previous layer
-	 *
-	 * @param { int } layerIndex, this layer's order in model
-	 */
-
-	assemble: function( layerIndex ) {
-
-	},
-
-	/**
-	 * handleClick() abstract method
-	 * If clickable element in this layer is clicked, execute this handle function.
-	 *
-	 * Override this function if layer has any clicked event.
-	 *
-	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
-	 */
-
-	handleClick: function( clickedElement ) {
-
-	},
-
-	/**
-	 * handleHoverIn() abstract method
-	 * If hoverable element in this layer picked by Raycaster, execute this handle function.
-	 *
-	 * Override this function if layer has any hover event.
-	 *
-	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
-	 */
-
-	handleHoverIn: function( hoveredElement ) {
-
-	},
-
-	/**
-	 * handleHoverOut() abstract method
-	 * Called by model if mouse hover out of this layer.
-	 *
-	 * Override this function if layer has some hover event.
-	 */
-
-	handleHoverOut: function() {
-
-	},
-
-	/**
-	 * clear() abstract method
-	 * Clear data and visualization in layer.
-	 *
-	 * Override this function to implement layer's own clear function.
-	 */
-
-	clear: function() {
-
-	},
-
-	/**
 	 * calcCloseButtonSize() abstract method
 	 * Called by initCloseButton function in abstract class "Layer", get close button size.
 	 *
@@ -484,21 +634,6 @@ Layer.prototype = {
 			y: 0,
 			z: 0
 		};
-
-	},
-
-	/**
-	 * updateValue() abstract method
-	 * Accept layer output value from model, update layer visualization if required.
-	 *
-	 * Model passes layer's output value to layer through updateValue method.
-	 *
-	 * Override this function to implement layer's own value update strategy.
-	 *
-	 * @param { double[] } value, neural output value.
-	 */
-
-	updateValue: function( value ) {
 
 	}
 

@@ -57,13 +57,13 @@ BasicLayer1d.prototype = Object.assign( Object.create( Layer1d.prototype ), {
 
 		if ( this.lastLayer.layerDimension === 1 ) {
 
-			this.lastActualWidth = this.lastLayer.lastActualWidth;
-			this.lastActualHeight = this.lastLayer.lastActualHeight;
+			this.aggregationWidth = this.lastLayer.aggregationWidth;
+			this.aggregationHeight = this.lastLayer.aggregationHeight;
 
 		} else {
 
-			this.lastActualWidth = this.lastLayer.actualWidth;
-			this.lastActualHeight = this.lastLayer.actualHeight;
+			this.aggregationWidth = this.lastLayer.actualWidth;
+			this.aggregationHeight = this.lastLayer.actualHeight;
 
 		}
 

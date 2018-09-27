@@ -24,7 +24,7 @@ function Output( config ) {
 	this.lastButtonHandler = undefined;
 	this.nextButtonHandler = undefined;
 
-	this.section = false;
+	this.paging = false;
 	this.segmentLength = 200;
 	this.segmentIndex = 0;
 	this.totalSegments = undefined;
@@ -53,9 +53,9 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.initOutputElement( "open" );
 			this.initCloseButton();
 
-			if ( this.section ) {
+			if ( this.paging ) {
 
-				this.showPagination();
+				this.showPaginationButton();
 
 			}
 
@@ -83,11 +83,11 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 			this.width = layerConfig.units;
 			this.outputs = layerConfig.outputs;
 
-			if ( layerConfig.section !== undefined ) {
+			if ( layerConfig.paging !== undefined ) {
 
-				this.section = layerConfig.section;
+				this.paging = layerConfig.paging;
 
-				if ( this.section ) {
+				if ( this.paging ) {
 
 					if ( layerConfig.segmentLength !== undefined ) {
 
@@ -111,7 +111,7 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	showPagination: function() {
+	showPaginationButton: function() {
 
 		if ( this.segmentIndex === 0 && this.segmentIndex !== this.totalSegments - 1 ) {
 
@@ -174,7 +174,7 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	hidePagination: function() {
+	hidePaginationButton: function() {
 
 		this.hideNextButton();
 		this.hideLastButton();
@@ -305,7 +305,7 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let outputHandler;
 
-		if ( this.section ) {
+		if ( this.paging ) {
 
 			outputHandler = new OutputSegment(
 
@@ -366,8 +366,8 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let aggregationHandler = new QueueAggregation(
 
-			this.lastActualWidth,
-			this.lastActualHeight,
+			this.aggregationWidth,
+			this.aggregationHeight,
 			this.actualDepth,
 			this.color,
 			this.minOpacity
@@ -411,13 +411,13 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		if ( this.lastLayer.layerDimension === 1 ) {
 
-			this.lastActualWidth = this.lastLayer.lastActualWidth;
-			this.lastActualHeight = this.lastLayer.lastActualHeight;
+			this.aggregationWidth = this.lastLayer.aggregationWidth;
+			this.aggregationHeight = this.lastLayer.aggregationHeight;
 
 		} else {
 
-			this.lastActualWidth = this.lastLayer.actualWidth;
-			this.lastActualHeight = this.lastLayer.actualHeight;
+			this.aggregationWidth = this.lastLayer.actualWidth;
+			this.aggregationHeight = this.lastLayer.actualHeight;
 
 		}
 
@@ -448,7 +448,7 @@ Output.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
 
-		if ( this.section ) {
+		if ( this.paging ) {
 
 			let segmentColors = colors.slice(
 

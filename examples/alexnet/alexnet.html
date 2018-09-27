@@ -124,17 +124,17 @@
     }));
     model.add(new TSP.layers.Dense({
         units: 4096,
-		section: true,
+		paging: true,
 		segmentLength: 400
     }));
 	model.add(new TSP.layers.Dense({
 		units: 4096,
-		section: true,
+		paging: true,
 		segmentLength: 400
 	}));
 	model.add(new TSP.layers.Output({
 		units: 1000,
-		section: true,
+		paging: true,
 		segmentLength: 400,
 		outputs: result
 	}));

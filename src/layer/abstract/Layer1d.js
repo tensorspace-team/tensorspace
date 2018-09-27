@@ -10,61 +10,199 @@ import { NeuralQueue } from "../../elements/NeuralQueue";
 import { PaginationButton } from "../../elements/PagniationButton";
 import { QueueSegment } from "../../elements/QueueSegment";
 
+/**
+ * Layer1d, abstract layer, can not be initialized by TensorSpace user.
+ * Base class for Dense, Flatten, Activation1d, BasicLayer1d.
+ * The characteristic for classes which inherit from Layer1d is that their output shape has one dimension, for example, [units].
+ *
+ * @param config, user's configuration for Layer1d.
+ * @returns Layer1d layer object
+ */
+
 function Layer1d( config ) {
+
+	// Layer1d inherit from abstract layer "Layer".
 
 	Layer.call( this, config );
 
-	this.layerDimension = 1;
+	/**
+	 * Layer1d has one output dimensions: [ width ].
+	 *
+	 * @type { int }
+	 */
 
-	this.units = undefined;
 	this.width = undefined;
 
-	this.lastActualWidth = undefined;
-	this.lastActualHeight = undefined;
+	/**
+	 * queue element's handler.
+	 * queue is an element which is displayed on the screen when layer1d is open.
+	 *
+	 * @type { Object }
+	 */
 
 	this.queueHandler = undefined;
-	this.lastButtonHandler = undefined;
-	this.nextButtonHandler = undefined;
 
-	this.section = false;
-	this.segmentLength = 200;
-	this.segmentIndex = 0;
-	this.totalSegments = undefined;
-
-	this.queueLength = this.segmentLength;
+	/**
+	 * Decide how to display hint text.
+	 *
+	 * @type { boolean }
+	 */
 
 	this.overview = false;
 
+	/**
+	 * mode for how to display queue element
+	 * If queue element is too long, use "paging" mode may have better visualization effect.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.paging = false;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Segment length for "one page".
+	 * Default to 200.
+	 *
+	 * @type { number }
+	 */
+
+	this.segmentLength = 200;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Which page Layer1d displays now.
+	 * Can be update when "last" or "next" buttons are clicked, initial value can be defined by user.
+	 * Default to 0.
+	 *
+	 * @type { number }
+	 */
+
+	this.segmentIndex = 0;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * How many pages in Layer1d.
+	 *
+	 * @type { number }
+	 */
+
+	this.totalSegments = undefined;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Store handler for last button.
+	 *
+	 * @type { Object }
+	 */
+
+	this.lastButtonHandler = undefined;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Store handler for next button.
+	 *
+	 * @type { Object }
+	 */
+
+	this.nextButtonHandler = undefined;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Attribute used by tween in QueueTransitionFactory.
+	 *
+	 * @type { number }
+	 */
+
+	this.queueLength = this.segmentLength;
+
+	/**
+	 * aggregation's width and height.
+	 * aggregation is an element which is displayed on the screen when layer1d is close.
+	 *
+	 * @type { number }
+	 */
+
+	this.aggregationWidth = undefined;
+	this.aggregationHeight = undefined;
+
+	/**
+	 * An indicator whether layer1d is in an transition status.
+	 * Layer1d has a transition period between "close" and "open" when openLayer is called.
+	 *
+	 * @type { boolean }
+	 */
+
 	this.isTransition = false;
+
+	// Load user's layer1d config into some layer1d's attribute.
+
+	this.loadLayer1dConfig( config );
+
+	this.layerDimension = 1;
 
 }
 
 Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
-	init: function( center, actualDepth ) {
+	/**
+	 * ============
+	 *
+	 * Functions below override base class Layer's abstract method
+	 *
+	 * Layer1d overrides Layer's function:
+	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
+	 * calcCloseButtonSize, calcCloseButtonPos
+	 *
+	 * ============
+	 */
+
+	/**
+	 * init() create actual THREE.Object in Layer1d, warp them into a group, and add it to THREE.js's scene.
+	 *
+	 * Model passes two parameters, center and actualDepth, to Layer1d when call init() to initialize Layer1d.
+	 *
+	 * @param { JSON } center, layer's center (x, y, z) relative to model
+	 * @param { double } actualDepth, layer aggregation's depth
+	 */
+
+	init: function(center, actualDepth ) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
+
+		// Init a neuralGroup as the wrapper for all THREE.Object in Layer1d.
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
 
 		if ( this.isOpen ) {
 
+			// Init queue element, when layer is open.
+
 			this.initQueueElement();
+
+			// Init close button.
+
 			this.initCloseButton();
 
-			if ( this.section ) {
+			if ( this.paging ) {
 
-				this.showPagination();
+				// Init pagination button when layer is in "paging mode".
+
+				this.showPaginationButton();
 
 			}
 
 		} else {
 
+			// Init aggregation when layer is closed.
+
 			this.initAggregationElement();
 
 		}
+
+		// Add the wrapper object to the actual THREE.js scene.
 
 		this.scene.add( this.neuralGroup );
 
@@ -74,15 +212,296 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	loadLayer1dConfig: function( layerConfig ) {
+	/**
+	 * updateValue() accept layer output value from model, update layer visualization if required.
+	 *
+	 * Model passes layer's output value to layer through updateValue method.
+	 *
+	 * @param { double[] } value, neural output value.
+	 */
+
+	updateValue: function( value ) {
+
+		// Store layer output value in "neuralValue" attribute, this attribute can be get by TensorSpace user.
+
+		this.neuralValue = value;
+
+		if ( this.isOpen ) {
+
+			// In layer1d, only queue element's visualization is relative to neural value.
+
+			this.updateQueueVis();
+
+		}
+
+	},
+
+	/**
+	 * clear() clear data and visualization in layer.
+	 */
+
+	clear: function() {
+
+		if ( this.neuralValue !== undefined ) {
+
+			if ( this.isOpen ) {
+
+				// Use queue's handler to clear queue element's visualization.
+
+				this.queueHandler.clear();
+
+			}
+
+			// Clear layer data.
+
+			this.neuralValue = undefined;
+
+		}
+
+	},
+
+	/**
+	 * handleClick() If clickable element in this layer is clicked, execute this handle function.
+	 *
+	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
+	 */
+
+	handleClick: function( clickedElement ) {
+
+		if ( clickedElement.elementType === "aggregationElement" ) {
+
+			// If aggregation element is clicked, open layer.
+
+			this.openLayer();
+
+		} else if ( clickedElement.elementType === "closeButton" ) {
+
+			// If close button is clicked, close layer.
+
+			this.closeLayer();
+
+		} else if ( clickedElement.elementType === "paginationButton" ) {
+
+			// If pagination button ("last" or "next") is clicked, update page visualization.
+
+			this.updatePage( clickedElement.paginationType );
+
+		}
+
+	},
+
+	/**
+	 * handleHoverIn() If hoverable element in this layer picked by Raycaster, execute this handle function.
+	 *
+	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
+	 */
+
+	handleHoverIn: function( hoveredElement ) {
+
+		// If relationSystem is enabled, show relation lines.
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.lineGroupHandler.initLineGroup( hoveredElement );
+
+		}
+
+		// If textSystem is enabled, show hint text, for example, show total neural number.
+
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
+			this.showText( hoveredElement );
+
+		}
+
+	},
+
+	/**
+	 * handleHoverOut() called by model if mouse hover out of this layer.
+	 */
+
+	handleHoverOut: function() {
+
+		// If relationSystem is enabled, hide relation lines.
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.lineGroupHandler.disposeLineGroup();
+
+		}
+
+		// If textSystem is enabled, hide hint text, for example, hide total neural number.
+
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
+			this.hideText();
+
+		}
+
+	},
+
+	/**
+	 * provideRelativeElements() return relative elements.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { JSON } request, parameter configured by request layer
+	 * @return { Object } { isOpen: boolean, elementList: elements }
+	 */
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		// When layer1d is in transition, will not return any relative element.
+
+		if ( !this.isTransition ) {
+
+			if ( this.isOpen ) {
+
+				// If layer is open, queue element is the relative element.
+
+				relativeElements.push( this.queueHandler.getElement() );
+
+			} else {
+
+				// If layer is close, aggregation element is the relative element.
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	/**
+	 * calcCloseButtonSize() get close button size.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { number } size, close button size
+	 */
+
+	calcCloseButtonSize: function() {
+
+		// To make close button's size responsive, width = 50 is the boundary.
+
+		if ( this.width > 50 ) {
+
+			return 2 * this.unitLength;
+
+		} else {
+
+			return 1.1 * this.unitLength;
+
+		}
+
+	},
+
+	/**                                                                                                                                                 y        y                        /**
+	 * calcCloseButtonPos() get close button position.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { JSON } position, close button position, relative to layer.
+	 */
+
+	calcCloseButtonPos: function() {
+
+		let xTranslate;
+
+		// Close button is positioned in the left of layer, different strategy if layer1d is in "paging mode"
+
+		if ( this.paging ) {
+
+			xTranslate = - this.queueLength * this.unitLength / 2 - 10 * this.unitLength;
+
+		} else {
+
+			xTranslate = - this.actualWidth / 2 - 10 * this.unitLength;
+
+		}
+
+		return {
+
+			x: xTranslate,
+			y: 0,
+			z: 0
+
+		};
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class Layer's abstract method
+	 *
+	 * ============
+	 */
+
+	/**
+	 * openLayer() open Layer1d, switch layer status from "close" to "open".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
+	openLayer: function() {
+
+		if ( !this.isOpen ) {
+
+			// QueueTransitionFactory handles actual open animation, checkout "QueueTransitionTween.js" for more information.
+
+			QueueTransitionFactory.openLayer( this );
+
+		}
+
+	},
+
+	/**
+	 * closeLayer() close Layer1d, switch layer status from "open" to "close".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
+	closeLayer: function() {
+
+		if ( this.isOpen ) {
+
+			// QueueTransitionFactory handles actual close animation, checkout "QueueTransitionTween.js" for more information.
+
+			QueueTransitionFactory.closeLayer( this );
+
+		}
+
+	},
+
+	/**
+	 * loadLayer1dConfig() Load user's common config into layer1d's attribute.
+	 * Called when "Layer1d" is initializing.
+	 *
+	 * @param { JSON } layerConfig, user's layer configuration.
+	 */
+
+	loadLayer1dConfig: function(layerConfig ) {
 
 		if ( layerConfig !== undefined ) {
 
-			if ( layerConfig.section !== undefined ) {
+			if ( layerConfig.paging !== undefined ) {
 
-				this.section = layerConfig.section;
+				this.paging = layerConfig.paging;
 
-				if ( this.section ) {
+				// If paging mode is set, load paging parameters.
+
+				if ( this.paging ) {
 
 					if ( layerConfig.segmentLength !== undefined ) {
 
@@ -111,216 +530,60 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	showPagination: function() {
+	/**
+	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in Layer1d.
+	 */
 
-		if ( this.segmentIndex === 0 && this.segmentIndex !== this.totalSegments - 1 ) {
+	initAggregationElement: function() {
 
-			this.showNextButton();
+		// QueueAggregation Object is a wrapper for aggregation element, checkout "QueueAggregation.js" for more information.
 
-		} else if ( this.segmentIndex !== 0 && this.segmentIndex === this.totalSegments - 1 ) {
+		let aggregationHandler = new QueueAggregation(
 
-			this.showLastButton();
-
-		} else if ( this.segmentIndex === 0 && this.segmentIndex === this.totalSegments - 1 ) {
-
-			// no button
-
-		} else {
-
-			this.showNextButton();
-			this.showLastButton();
-
-		}
-
-	},
-
-	showLastButton: function() {
-
-		let lastButtonHandler = new PaginationButton(
-
-			"last",
-			this.calcPaginationButtonSize(),
+			this.aggregationWidth,
+			this.aggregationHeight,
 			this.unitLength,
-			this.calculatePaginationPos( "last" ),
 			this.color,
 			this.minOpacity
 
 		);
 
-		lastButtonHandler.setLayerIndex( this.layerIndex );
+		// Set layer index to aggregation, aggregation object can know which layer it has been positioned.
 
-		this.lastButtonHandler = lastButtonHandler;
-		this.neuralGroup.add( this.lastButtonHandler.getElement() );
+		aggregationHandler.setLayerIndex( this.layerIndex );
 
-	},
+		// Store handler for aggregation for latter use.
 
-	showNextButton: function() {
+		this.aggregationHandler = aggregationHandler;
 
-		let nextButtonHandler = new PaginationButton(
+		// Get actual THREE.js element and add it to layer wrapper Object.
 
-			"next",
-			this.calcPaginationButtonSize(),
-			this.unitLength,
-			this.calculatePaginationPos( "next" ),
-			this.color,
-			this.minOpacity
-
-		);
-
-		nextButtonHandler.setLayerIndex( this.layerIndex );
-
-		this.nextButtonHandler = nextButtonHandler;
-		this.neuralGroup.add( this.nextButtonHandler.getElement() );
+		this.neuralGroup.add( this.aggregationHandler.getElement() );
 
 	},
 
-	calculatePaginationPos: function( paginationType ) {
+	/**
+	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in Layer1d.
+	 */
 
-		if ( paginationType === "last" ) {
+	disposeAggregationElement: function() {
 
-			return {
-
-				x: - this.queueLength * this.unitLength / 2 - 5 * this.unitLength,
-				y: 0,
-				z: 0
-
-			};
-
-		} else {
-
-			return {
-
-				x: this.queueLength * this.unitLength / 2 + 5 * this.unitLength,
-				y: 0,
-				z: 0
-
-			};
-
-		}
+		this.neuralGroup.remove( this.aggregationHandler.getElement() );
+		this.aggregationHandler = undefined;
 
 	},
 
-	hidePagination: function() {
-
-		this.hideNextButton();
-		this.hideLastButton();
-
-	},
-
-	hideNextButton: function() {
-
-		if ( this.nextButtonHandler !== undefined ) {
-
-			this.neuralGroup.remove( this.nextButtonHandler.getElement() );
-			this.nextButtonHandler = undefined;
-
-		}
-
-	},
-
-	hideLastButton: function() {
-
-		if ( this.lastButtonHandler !== undefined ) {
-
-			this.neuralGroup.remove( this.lastButtonHandler.getElement() );
-			this.lastButtonHandler = undefined;
-
-		}
-
-	},
-
-	updatePage: function( paginationType ) {
-
-		if ( paginationType === "next" ) {
-
-			if ( this.segmentIndex < this.totalSegments - 1 ) {
-
-				if ( this.segmentIndex === 0 ) {
-
-					this.showLastButton();
-
-				}
-
-				if ( this.segmentIndex === this.totalSegments - 2 ) {
-
-					this.hideNextButton();
-
-				}
-
-				this.segmentIndex += 1;
-
-			}
-
-		} else {
-
-			if ( this.segmentIndex > 0 ) {
-
-				if ( this.segmentIndex === this.totalSegments - 1 ) {
-
-					this.showNextButton();
-
-				}
-
-				if ( this.segmentIndex === 1 ) {
-
-					this.hideLastButton();
-
-				}
-
-				this.segmentIndex -= 1;
-
-			}
-
-		}
-
-		this.queueHandler.updateSegmentIndex( this.segmentIndex );
-
-		if ( this.queueHandler.isLengthChanged ) {
-
-			this.queueLength = this.queueHandler.queueLength;
-
-			if ( this.nextButtonHandler !== undefined ) {
-
-				let nextButtonPos = this.calculatePaginationPos( "next" );
-				this.nextButtonHandler.updatePos( nextButtonPos );
-
-			}
-
-			if ( this.lastButtonHandler !== undefined ) {
-
-				let lastButtonPos = this.calculatePaginationPos( "last" );
-				this.lastButtonHandler.updatePos( lastButtonPos );
-
-			}
-
-			let closeButtonPos = this.calcCloseButtonPos();
-			this.closeButtonHandler.updatePos( closeButtonPos );
-
-		}
-
-		if ( this.neuralValue !== undefined ) {
-
-			this.updateQueueVis();
-
-		}
-
-	},
-
-	openLayer: function() {
-
-		if ( !this.isOpen ) {
-
-			QueueTransitionFactory.openLayer( this );
-
-		}
-
-	},
+	/**
+	 * initQueueElement() create queue element's THREE.js Object, configure it, and add it to neuralGroup in Layer1d.
+	 */
 
 	initQueueElement: function() {
 
 		let queueHandler;
 
-		if ( this.section ) {
+		// Create different elements in different mode.
+
+		if ( this.paging ) {
 
 			queueHandler = new QueueSegment(
 
@@ -348,9 +611,19 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
+		// Set layer index to queue element, queue element object can know which layer it has been positioned.
+
 		queueHandler.setLayerIndex( this.layerIndex );
+
+		// Store handler for queue element for latter use.
+
 		this.queueHandler = queueHandler;
+
+		// Get actual THREE.js element and add it to layer wrapper Object.
+
 		this.neuralGroup.add( queueHandler.getElement() );
+
+		// Update queue element' visualization if layer's value has already been set.
 
 		if ( this.neuralValue !== undefined ) {
 
@@ -360,122 +633,30 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	disposeQueueElement: function() {
+	/**
+	 * disposeQueueElement() remove queue element from neuralGroup, clear their handlers, and dispose their THREE.js Object in Layer1d.
+	 */
 
-		console.log("dispose queue element");
+	disposeQueueElement: function() {
 
 		this.neuralGroup.remove( this.queueHandler.getElement() );
 		this.queueHandler = undefined;
 
 	},
 
-	initAggregationElement: function() {
-
-		let aggregationHandler = new QueueAggregation(
-
-			this.lastActualWidth,
-			this.lastActualHeight,
-			this.unitLength,
-			this.color,
-			this.minOpacity
-
-		);
-
-		aggregationHandler.setLayerIndex( this.layerIndex );
-
-		this.aggregationHandler = aggregationHandler;
-		this.neuralGroup.add( this.aggregationHandler.getElement() );
-
-	},
-
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove( this.aggregationHandler.getElement() );
-		this.aggregationHandler = undefined;
-
-	},
-
-	closeLayer: function() {
-
-		if ( this.isOpen ) {
-
-			QueueTransitionFactory.closeLayer( this );
-
-		}
-
-	},
-
-	showText: function( element ) {
-
-		if ( element.elementType === "featureLine" ) {
-
-			this.queueHandler.showText();
-			this.textElementHandler = this.queueHandler;
-
-		}
-
-	},
-
-	hideText: function() {
-
-		if ( this.textElementHandler !== undefined ) {
-
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
-
-		}
-
-	},
-
-	handleHoverIn: function( hoveredElement ) {
-
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
-
-			this.lineGroupHandler.initLineGroup( hoveredElement );
-
-		}
-
-		if ( this.textSystem !== undefined && this.textSystem ) {
-
-			this.showText( hoveredElement );
-
-		}
-
-	},
-
-	handleHoverOut: function() {
-
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
-
-			this.lineGroupHandler.disposeLineGroup();
-
-		}
-
-		if ( this.textSystem !== undefined && this.textSystem ) {
-
-			this.hideText();
-
-		}
-
-	},
-
-	updateValue: function( value ) {
-
-		this.neuralValue = value;
-
-		if ( this.isOpen ) {
-
-			this.updateQueueVis();
-
-		}
-
-	},
+	/**
+	 * updateQueueVis() update queue element's visualization.
+	 */
 
 	updateQueueVis: function() {
 
+		// Get colors to render the surface of queue element.
+
 		let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
 
-		if ( this.section ) {
+		if ( this.paging ) {
+
+			// Get part of colors to render segment.
 
 			let segmentColors = colors.slice(
 
@@ -494,131 +675,376 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	calcCloseButtonSize: function() {
+	/**
+	 * showText() show hint text relative to given element.
+	 *
+	 * @param { THREE.Object } element
+	 */
 
-		if ( this.width > 50 ) {
+	showText: function( element ) {
 
-			return 2 * this.unitLength;
+		if ( element.elementType === "featureLine" ) {
 
-		} else {
-
-			return 1.1 * this.unitLength;
-
-		}
-
-	},
-
-	calcPaginationButtonSize: function() {
-
-		if ( this.width > 50 ) {
-
-			return 2 * this.unitLength;
-
-		} else {
-
-			return 1.1 * this.unitLength;
+			this.queueHandler.showText();
+			this.textElementHandler = this.queueHandler;
 
 		}
 
 	},
 
-	calcCloseButtonPos: function() {
+	/**
+	 * hideText() hide hint text.
+	 */
 
-		let xTranslate;
+	hideText: function() {
 
-		if ( this.section ) {
+		if ( this.textElementHandler !== undefined ) {
 
-			xTranslate = - this.queueLength * this.unitLength / 2 - 10 * this.unitLength;
-
-		} else {
-
-			xTranslate = - this.actualWidth / 2 - 10 * this.unitLength;
+			this.textElementHandler.hideText();
+			this.textElementHandler = undefined;
 
 		}
 
-		return {
+	},
 
-			x: xTranslate,
-			y: 0,
-			z: 0
+	/**
+	 * showPaginationButton() conditional add "next" button and "last" button into layer1d.
+	 */
 
-		};
+	showPaginationButton: function() {
+
+		if ( this.segmentIndex === 0 && this.segmentIndex !== this.totalSegments - 1 ) {
+
+			// First page only show "next" button.
+
+			this.showNextButton();
+
+		} else if ( this.segmentIndex !== 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			// last page only show "last" button.
+
+			this.showLastButton();
+
+		} else if ( this.segmentIndex === 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			// If only has one page, no button.
+
+		} else {
+
+			// In other situational, show two button.
+
+			this.showNextButton();
+			this.showLastButton();
+
+		}
 
 	},
 
-	clear: function() {
+	/**
+	 * showLastButton() initialize "last" button, and add it to neuralGroup.
+	 */
+
+	showLastButton: function() {
+
+		let lastButtonHandler = new PaginationButton(
+
+			"last",
+			this.calcPaginationButtonSize(),
+			this.unitLength,
+			this.calcPaginationButtonPos( "last" ),
+			this.color,
+			this.minOpacity
+
+		);
+
+		// Set layer index to "last" button, button object can know which layer it has been positioned.
+
+		lastButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.lastButtonHandler = lastButtonHandler;
+		this.neuralGroup.add( this.lastButtonHandler.getElement() );
+
+	},
+
+	/**
+	 * showNextButton() initialize "next" button, and add it to neuralGroup.
+	 */
+
+	showNextButton: function() {
+
+		let nextButtonHandler = new PaginationButton(
+
+			"next",
+			this.calcPaginationButtonSize(),
+			this.unitLength,
+			this.calcPaginationButtonPos( "next" ),
+			this.color,
+			this.minOpacity
+
+		);
+
+		// Set layer index to "next" button, button object can know which layer it has been positioned.
+
+		nextButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.nextButtonHandler = nextButtonHandler;
+		this.neuralGroup.add( this.nextButtonHandler.getElement() );
+
+	},
+
+	/**
+	 * hidePaginationButton(), hide "last" button and "next" button.
+	 */
+
+	hidePaginationButton: function() {
+
+		this.hideNextButton();
+		this.hideLastButton();
+
+	},
+
+	/**
+	 * hideNextButton(), hide "next" button.
+	 */
+
+	hideNextButton: function() {
+
+		if ( this.nextButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.nextButtonHandler.getElement() );
+			this.nextButtonHandler = undefined;
+
+		}
+
+	},
+
+	/**
+	 * hideLastButton(), hide "last" button.
+	 */
+
+	hideLastButton: function() {
+
+		if ( this.lastButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.lastButtonHandler.getElement() );
+			this.lastButtonHandler = undefined;
+
+		}
+
+	},
+
+	/**                                                                                                                                                 y        y                        /**
+	 * updatePage() execute actual page update work.
+	 *
+	 * @param { string } paginationType, "last" or "next".
+	 */
+
+	updatePage: function( paginationType ) {
+
+		if ( paginationType === "next" ) {
+
+			// "next" button is clicked.
+
+			if ( this.segmentIndex === 0 ) {
+
+				// First page now, click "next" button will show "last" button.
+
+				this.showLastButton();
+
+			}
+
+			if ( this.segmentIndex === this.totalSegments - 2 ) {
+
+				// Is going to the last page, the last page do not have "next" button.
+
+				this.hideNextButton();
+
+			}
+
+			// Update segmentIndex.
+
+			this.segmentIndex += 1;
+
+		} else {
+
+			// "last" button is clicked.
+
+			if ( this.segmentIndex === this.totalSegments - 1 ) {
+
+				// Last page now, click "last" button will show "next" button.
+
+				this.showNextButton();
+
+			}
+
+			if ( this.segmentIndex === 1 ) {
+
+				// Is going to the first page, the first page do not have "last" button.
+
+				this.hideLastButton();
+
+			}
+
+			// Update segmentIndex.
+
+			this.segmentIndex -= 1;
+
+		}
+
+		// Modify segment element based on new segment index.
+
+		this.queueHandler.updateSegmentIndex( this.segmentIndex );
+
+		// Check whether queue length change, situation: the page's length may different with previous page.
+
+		if ( this.queueHandler.isLengthChanged ) {
+
+			this.queueLength = this.queueHandler.queueLength;
+
+			if ( this.nextButtonHandler !== undefined ) {
+
+				let nextButtonPos = this.calcPaginationButtonPos( "next" );
+				this.nextButtonHandler.updatePos( nextButtonPos );
+
+			}
+
+			if ( this.lastButtonHandler !== undefined ) {
+
+				let lastButtonPos = this.calcPaginationButtonPos( "last" );
+				this.lastButtonHandler.updatePos( lastButtonPos );
+
+			}
+
+			let closeButtonPos = this.calcCloseButtonPos();
+			this.closeButtonHandler.updatePos( closeButtonPos );
+
+		}
 
 		if ( this.neuralValue !== undefined ) {
 
-			if ( this.isOpen ) {
-
-				this.queueHandler.clear();
-
-			}
-
-			this.neuralValue = undefined;
+			this.updateQueueVis();
 
 		}
 
 	},
 
-	provideRelativeElements: function( request ) {
+	/**
+	 * calcPaginationButtonSize() calculate button size.
+	 *
+	 * @return { number } size, pagination button size
+	 */
 
-		let relativeElements = [];
+	calcPaginationButtonSize: function() {
 
-		if ( !this.isTransition ) {
+		// The size of pagination button is the same as close button in Layer1d.
 
-			if ( this.isOpen ) {
-
-				relativeElements.push( this.queueHandler.getElement() );
-
-			} else {
-
-				relativeElements.push( this.aggregationHandler.getElement() );
-
-			}
-
-		}
-
-		return {
-
-			isOpen: this.isOpen,
-			elementList: relativeElements
-
-		};
+		this.calcCloseButtonSize();
 
 	},
 
-	handleClick: function( clickedElement ) {
+	/**                                                                                                                                                 y        y                        /**
+	 * calcCloseButtonPos() calculate the position of pagination button based on button type.
+	 *
+	 * @param { string } paginationType, "last" or "next".
+	 * @return { Object } pagination button position, { x: double, y: double, z: double }, relative to layer.
+	 */
 
-		if ( clickedElement.elementType === "aggregationElement" ) {
+	calcPaginationButtonPos: function( paginationType ) {
 
-			this.openLayer();
+		if ( paginationType === "last" ) {
 
-		} else if ( clickedElement.elementType === "closeButton" ) {
+			// "last" button is positioned in the left of the layer.
 
-			this.closeLayer();
+			return {
 
-		} else if ( clickedElement.elementType === "paginationButton" ) {
+				x: - this.queueLength * this.unitLength / 2 - 5 * this.unitLength,
+				y: 0,
+				z: 0
 
-			this.updatePage( clickedElement.paginationType );
+			};
+
+		} else {
+
+			// "next" button is positioned in the right of the layer.
+
+			return {
+
+				x: this.queueLength * this.unitLength / 2 + 5 * this.unitLength,
+				y: 0,
+				z: 0
+
+			};
 
 		}
 
 	},
 
-	// override this function to load user's layer config for layer2d object
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for Layer1d.
+	 * SubClasses ( specific layers ) override these abstract method to get Layer1d's characters.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * loadLayerConfig() abstract method
+	 * Load layer's configuration into layer which extends Layer1d.
+	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig and loadLayer1dConfig.
+	 *
+	 * Override this function if there are some specific configuration for layer which extends Layer1d.
+	 *
+	 * @param { JSON } layerConfig, user's configuration for layer.
+	 */
+
 	loadLayerConfig: function( layerConfig ) {
 
 	},
 
-	// override this function to load user's model config to layer2d object
+	/**
+	 * loadModelConfig() abstract method
+	 * Load model's configuration into layer object.
+	 *
+	 * Override this function if there are some specific model configurations for layer.
+	 *
+	 * @param { JSON } modelConfig, default and user's configuration for model.
+	 */
+
 	loadModelConfig: function( modelConfig ) {
 
 	},
 
-	// override this function to get information from previous layer
+	/**
+	 * assemble() abstract method
+	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 *
+	 * Override this function to get information from previous layer.
+	 *
+	 * @param { int } layerIndex, this layer's order in model.
+	 */
+
 	assemble: function( layerIndex ) {
+
+	},
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 *
+	 * Override this function to define relative element from previous layer.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster.
+	 * @return { THREE.Object[] } relativeElements
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return [];
 
 	}
 

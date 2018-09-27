@@ -18,27 +18,56 @@ function Conv2d( config ) {
 
 	Layer3d.call( this, config );
 
-	// The dimension of the convolution window. The 2d convolutional window is square.
+	/**
+	 * The dimension of the convolution window.
+	 * The 2d convolutional window is square.
+	 *
+	 * @type { int }
+	 */
 
 	this.kernelSize = undefined;
 
-	// The depth of the layer output.
+	/**
+	 * The depth of the layer output.
+	 *
+	 * @type { int }
+	 */
 
 	this.filters = undefined;
 
-	// The strides of the convolution, strides in both dimensions are equal.
+	/**
+	 * The strides of the convolution.
+	 * Strides in both dimensions are equal.
+	 *
+	 * @type { int }
+	 */
 
 	this.strides = undefined;
 
-	// 2d feature map shape, stored as array, for example, [20, 20]
+	/**
+	 * 2d feature map shape, stored as array.
+	 * For example, [20, 20]
+	 *
+	 * @type { array }, length = 2
+	 */
 
 	this.fmShape = undefined;
 
-	// Padding mode, "valid" or "same", default to "valid".
+	/**
+	 * Padding mode.
+	 * "valid" or "same", default to "valid".
+	 *
+	 * @type { string }
+	 */
 
 	this.padding = "valid";
 
-	// Set "true" if Conv2d's shape is predefined by user.
+	/**
+	 * Whether user directly define the layer shape.
+	 * Set "true" if Conv2d's shape is predefined by user.
+	 *
+	 * @type { boolean }
+	 */
 
 	this.isShapePredefined = false;
 

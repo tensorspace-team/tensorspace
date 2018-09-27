@@ -25,29 +25,57 @@ function Layer3d( config ) {
 
 	Layer.call( this, config );
 
-	// Layer3d has three output dimensions: width, height, depth
+	/**
+	 * Layer3d has three output dimensions: [ width, height, depth ]
+	 *
+	 * @type { int }
+	 */
 
 	this.width = undefined;
 	this.height = undefined;
 	this.depth = undefined;
 
-	// Feature map's handlers list.
+	/**
+	 * Feature map's handlers list.
+	 *
+	 * @type { Array }
+	 */
 
 	this.segregationHandlers = [];
 
-	// Feature maps's centers when layer is totally open.
+	/**
+	 * Feature maps's centers when layer is totally open.
+	 *
+	 * @type { Array }
+	 */
 
 	this.openFmCenters = [];
 
-	// Feature maps' centers when layer is closed.
+	/**
+	 * Feature maps' centers when layer is closed.
+	 *
+	 * @type { Array }
+	 */
 
 	this.closeFmCenters = [];
 
-	// Feature maps arrange mode, "line" or "rect", default to "rect", defined in "ModelConfiguration.js".
+	/**
+	 * Feature maps arrange mode.
+	 * "line" or "rect", default to "rect".
+	 * Defined in "ModelConfiguration.js".
+	 *
+	 * @type { string }
+	 */
 
 	this.layerShape = undefined;
 
-	// Aggregation mode, "max" or "average", default to "average", defined in "ModelConfiguration.js".
+	/**
+	 * Aggregation mode.
+	 * "max" or "average", default to "average".
+	 * Defined in "ModelConfiguration.js".
+	 *
+	 * @type { string }
+	 */
 
 	this.aggregationStrategy = undefined;
 
@@ -58,6 +86,18 @@ function Layer3d( config ) {
 Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
+	 * ============
+	 *
+	 * Functions below override base class Layer's abstract method
+	 *
+	 * Layer3d overrides Layer's function:
+	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
+	 * calcCloseButtonSize, calcCloseButtonPos
+	 *
+	 * ============
+	 */
+
+	/**
 	 * init() create actual THREE.Object in Layer3d, warp them into a group, and add it to THREE.js's scene.
 	 *
 	 * Model passes two parameters, center and actualDepth, to Layer3d when call init() to initialize Layer3d.
@@ -66,7 +106,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 * @param { double } actualDepth, layer aggregation's depth
 	 */
 
-	init: function( center, actualDepth ) {
+	init: function(center, actualDepth ) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
@@ -107,7 +147,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		}
 
-		// Add the wrapper to the actual THREE.js scene.
+		// Add the wrapper object to the actual THREE.js scene.
 
 		this.scene.add( this.neuralGroup );
 
@@ -116,6 +156,253 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.addLineGroup();
 
 	},
+
+	/**
+	 * updateValue() accept layer output value from model, update layer visualization if required.
+	 *
+	 * Model passes layer's output value to layer through updateValue method.
+	 *
+	 * @param { double[] } value, neural output value.
+	 */
+
+	updateValue: function( value ) {
+
+		// Store layer output value in "neuralValue" attribute, this attribute can be get by TensorSpace user.
+
+		this.neuralValue = value;
+
+		if ( this.isOpen ) {
+
+			// If layer is open, update feature maps' visualization.
+
+			this.updateSegregationVis();
+
+		} else {
+
+			// If layer is closed, update feature maps' aggregation's visualization.
+
+			this.updateAggregationVis();
+
+		}
+
+	},
+
+	/**
+	 * clear() clear data and visualization in layer.
+	 */
+
+	clear: function() {
+
+		if ( this.neuralValue !== undefined ) {
+
+			// Use handlers to clear visualization.
+
+			if ( this.isOpen ) {
+
+				for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+
+					this.segregationHandlers[ i ].clear();
+
+				}
+
+			} else {
+
+				this.aggregationHandler.clear();
+
+			}
+
+			// Clear layer data.
+
+			this.neuralValue = undefined;
+
+		}
+
+	},
+
+	/**
+	 * handleClick() If clickable element in this layer is clicked, execute this handle function.
+	 *
+	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
+	 */
+
+	handleClick: function( clickedElement ) {
+
+		if ( clickedElement.elementType === "aggregationElement" ) {
+
+			// If aggregation element is clicked, open layer.
+
+			this.openLayer();
+
+		} else if ( clickedElement.elementType === "closeButton" ) {
+
+			// If close button is clicked, close layer.
+
+			this.closeLayer();
+
+		}
+
+	},
+
+	/**
+	 * handleHoverIn() If hoverable element in this layer picked by Raycaster, execute this handle function.
+	 *
+	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
+	 */
+
+	handleHoverIn: function( hoveredElement ) {
+
+		// If relationSystem is enabled, show relation lines.
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.lineGroupHandler.initLineGroup( hoveredElement );
+
+		}
+
+		// If textSystem is enabled, show hint text, for example, show feature map size.
+
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
+			this.showText( hoveredElement );
+
+		}
+
+	},
+
+	/**
+	 * handleHoverOut() called by model if mouse hover out of this layer.
+	 */
+
+	handleHoverOut: function() {
+
+		// If relationSystem is enabled, hide relation lines.
+
+		if ( this.relationSystem !== undefined && this.relationSystem ) {
+
+			this.lineGroupHandler.disposeLineGroup();
+
+		}
+
+		// If textSystem is enabled, hide hint text, for example, hide feature map size.
+
+		if ( this.textSystem !== undefined && this.textSystem ) {
+
+			this.hideText();
+
+		}
+
+	},
+
+	/**
+	 * provideRelativeElements() return relative elements.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { JSON } request, parameter configured by request layer
+	 * @return { Object } { isOpen: boolean, elementList: elements }
+	 */
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		if ( request.all !== undefined && request.all ) {
+
+			// When "all" attribute in request is true, return all elements displayed in this layer.
+
+			if ( this.isOpen ) {
+
+				for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+
+					relativeElements.push( this.segregationHandlers[ i ].getElement() );
+
+				}
+
+			} else {
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		} else {
+
+			if ( request.index !== undefined ) {
+
+				if ( this.isOpen ) {
+
+					// If index attribute is set in request, and layer is open, return feature map element which has the same index.
+
+					relativeElements.push( this.segregationHandlers[ request.index ].getElement() );
+
+				} else {
+
+					// If layer is closed, return aggregation element.
+
+					relativeElements.push( this.aggregationHandler.getElement() );
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	/**
+	 * calcCloseButtonSize() get close button size.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { number } size, close button size
+	 */
+
+	calcCloseButtonSize: function() {
+
+		// Total height when layer is open.
+
+		let openHeight = this.actualHeight + this.openFmCenters[ this.openFmCenters.length - 1 ].z - this.openFmCenters[ 0 ].z;
+
+		return  openHeight * CloseButtonRatio;
+
+	},
+
+	/**                                                                                                                                                 y        y                        /**
+	 * calcCloseButtonPos() get close button position.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { JSON } position, close button position, relative to layer.
+	 */
+
+	calcCloseButtonPos: function() {
+
+		let leftMostCenter = this.openFmCenters[ 0 ];
+		let buttonSize = this.calcCloseButtonSize();
+
+		return {
+
+			x: leftMostCenter.x - this.actualWidth / 2 - 2 * buttonSize,
+			y: 0,
+			z: 0
+
+		};
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class Layer's abstract method
+	 *
+	 * ============
+	 */
 
 	/**
 	 * openLayer() open Layer3d, switch layer status from "close" to "open".
@@ -278,36 +565,6 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * updateValue() accept layer output value from model, update layer visualization if required.
-	 *
-	 * Model passes layer's output value to layer through updateValue method.
-	 *
-	 * @param { double[] } value, neural output value.
-	 */
-
-	updateValue: function( value ) {
-
-		// Store layer output value in "neuralValue" attribute, this attribute can be get by TensorSpace user.
-
-		this.neuralValue = value;
-
-		if ( this.isOpen ) {
-
-			// If layer is open, update feature maps' visualization.
-
-			this.updateSegregationVis();
-
-		} else {
-
-			// If layer is closed, update feature maps' aggregation's visualization.
-
-			this.updateAggregationVis();
-
-		}
-
-	},
-
-	/**
 	 * updateAggregationVis() update feature maps' aggregation's visualization.
 	 */
 
@@ -360,213 +617,6 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * handleHoverIn() If hoverable element in this layer picked by Raycaster, execute this handle function.
-	 *
-	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
-	 */
-
-	handleHoverIn: function( hoveredElement ) {
-
-		// If relationSystem is enabled, show relation lines.
-
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
-
-			this.lineGroupHandler.initLineGroup( hoveredElement );
-
-		}
-
-		// If textSystem is enabled, show hint text, for example, show feature map size.
-
-		if ( this.textSystem !== undefined && this.textSystem ) {
-
-			this.showText( hoveredElement );
-
-		}
-
-	},
-
-	/**
-	 * handleHoverOut() called by model if mouse hover out of this layer.
-	 */
-
-	handleHoverOut: function() {
-
-		// If relationSystem is enabled, hide relation lines.
-
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
-
-			this.lineGroupHandler.disposeLineGroup();
-
-		}
-
-		// If textSystem is enabled, hide hint text, for example, hide feature map size.
-
-		if ( this.textSystem !== undefined && this.textSystem ) {
-
-			this.hideText();
-
-		}
-
-	},
-
-	/**
-	 * calcCloseButtonSize() called by initCloseButton function in abstract class "Layer", get close button size.
-	 *
-	 * @return { number } size, close button size
-	 */
-
-	calcCloseButtonSize: function() {
-
-		// Total height when layer is open.
-
-		let openHeight = this.actualHeight + this.openFmCenters[ this.openFmCenters.length - 1 ].z - this.openFmCenters[ 0 ].z;
-
-		return  openHeight * CloseButtonRatio;
-
-	},
-
-	 /**                                                                                                                                                 y        y                        /**
-	  * calcCloseButtonPos() called by initCloseButton function in abstract class "Layer", get close button position.
-	  *
-	  * @return { JSON } position, close button position, relative to layer.
-	  */
-
-	calcCloseButtonPos: function() {
-
-		let leftMostCenter = this.openFmCenters[ 0 ];
-		let buttonSize = this.calcCloseButtonSize();
-
-		return {
-
-			x: leftMostCenter.x - this.actualWidth / 2 - 2 * buttonSize,
-			y: 0,
-			z: 0
-
-		};
-
-	},
-
-	/**
-	 * clear() clear data and visualization in layer.
-	 */
-
-	clear: function() {
-
-		if ( this.neuralValue !== undefined ) {
-
-			// Use handlers to clear visualization.
-
-			if ( this.isOpen ) {
-
-				for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
-
-					this.segregationHandlers[ i ].clear();
-
-				}
-
-			} else {
-
-				this.aggregationHandler.clear();
-
-			}
-
-			// Clear layer data.
-
-			this.neuralValue = undefined;
-
-		}
-
-	},
-
-	/**
-	 * provideRelativeElements() return relative elements.
-	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
-	 *
-	 * @param { JSON } request, parameter configured by request layer
-	 * @return { Object } { isOpen: boolean, elementList: elements }
-	 */
-
-	provideRelativeElements: function( request ) {
-
-		let relativeElements = [];
-
-		if ( request.all !== undefined && request.all ) {
-
-			// When "all" attribute in request is true, return all elements displayed in this layer.
-
-			if ( this.isOpen ) {
-
-				for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
-
-					relativeElements.push( this.segregationHandlers[ i ].getElement() );
-
-				}
-
-			} else {
-
-				relativeElements.push( this.aggregationHandler.getElement() );
-
-			}
-
-		} else {
-
-			if ( request.index !== undefined ) {
-
-				if ( this.isOpen ) {
-
-					// If index attribute is set in request, and layer is open, return feature map element which has the same index.
-
-					relativeElements.push( this.segregationHandlers[ request.index ].getElement() );
-
-				} else {
-
-					// If layer is closed, return aggregation element.
-
-					relativeElements.push( this.aggregationHandler.getElement() );
-
-				}
-
-			}
-
-		}
-
-		return {
-
-			isOpen: this.isOpen,
-			elementList: relativeElements
-
-		};
-
-	},
-
-	/**
-	 * handleClick() If clickable element in this layer is clicked, execute this handle function.
-	 *
-	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
-	 */
-
-	handleClick: function( clickedElement ) {
-
-		if ( clickedElement.elementType === "aggregationElement" ) {
-
-			// If aggregation element is clicked, open layer.
-
-			this.openLayer();
-
-		} else if ( clickedElement.elementType === "closeButton" ) {
-
-			// If close button is clicked, close layer.
-
-			this.closeLayer();
-
-		}
-
-	},
-
-	/**
 	 * showText() show hint text relative to given element.
 	 *
 	 * @param { THREE.Object } element
@@ -598,6 +648,15 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		}
 
 	},
+
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for Layer1d.
+	 * SubClasses ( specific layers ) override these abstract method to get Layer3d's characters.
+	 *
+	 * ============
+	 */
 
 	/**
 	 * loadLayerConfig() abstract method

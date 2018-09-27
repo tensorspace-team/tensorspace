@@ -54,9 +54,9 @@ let OutputTransitionFactory = ( function() {
 			console.log( "finish open output layer" );
 			layer.initCloseButton();
 
-			if ( layer.section ) {
+			if ( layer.paging ) {
 
-				layer.showPagination();
+				layer.showPaginationButton();
 
 			}
 
@@ -109,9 +109,9 @@ let OutputTransitionFactory = ( function() {
 
 			console.log( "start close output layer" );
 
-			if ( layer.section ) {
+			if ( layer.paging ) {
 
-				layer.hidePagination();
+				layer.hidePaginationButton();
 
 			}
 

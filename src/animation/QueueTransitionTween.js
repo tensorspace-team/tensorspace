@@ -16,7 +16,7 @@ let QueueTransitionFactory = ( function() {
 
 		let scale;
 
-		if ( layer.section ) {
+		if ( layer.paging ) {
 
 			scale = layer.queueLength;
 
@@ -63,9 +63,9 @@ let QueueTransitionFactory = ( function() {
 			layer.initQueueElement();
 			layer.initCloseButton();
 
-			if ( layer.section ) {
+			if ( layer.paging ) {
 
-				layer.showPagination();
+				layer.showPaginationButton();
 
 			}
 
@@ -88,7 +88,7 @@ let QueueTransitionFactory = ( function() {
 
 		let scale;
 
-		if ( layer.section ) {
+		if ( layer.paging ) {
 
 			scale = layer.queueLength;
 
@@ -106,7 +106,7 @@ let QueueTransitionFactory = ( function() {
 
 		let variableLength;
 
-		if ( layer.section ) {
+		if ( layer.paging ) {
 
 			variableLength = layer.queueLength;
 
@@ -139,9 +139,9 @@ let QueueTransitionFactory = ( function() {
 			layer.neuralGroup.add( variableLengthObject );
 			layer.disposeCloseButton();
 
-			if ( layer.section ) {
+			if ( layer.paging ) {
 
-				layer.hidePagination();
+				layer.hidePaginationButton();
 
 			}
 

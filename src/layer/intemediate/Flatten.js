@@ -8,8 +8,6 @@ function Flatten( config ) {
 
 	Layer1d.call( this, config );
 
-	this.segments = 1;
-
 	this.loadLayerConfig( config );
 
 	this.layerType = "flatten";
@@ -42,23 +40,22 @@ Flatten.prototype = Object.assign( Object.create( Layer1d.prototype ), {
 
 		}
 
-		this.units = units;
-		this.width = this.units;
+		this.width = units;
 
-		this.outputShape = [ this.units ];
+		this.outputShape = [ this.width ];
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.width * this.unitLength;
 
 		if ( this.lastLayer.layerDimension === 1 ) {
 
-			this.lastActualWidth = this.lastLayer.lastActualWidth;
-			this.lastActualHeight = this.lastLayer.lastActualHeight;
+			this.aggregationWidth = this.lastLayer.aggregationWidth;
+			this.aggregationHeight = this.lastLayer.aggregationHeight;
 
 		} else {
 
-			this.lastActualWidth = this.lastLayer.actualWidth;
-			this.lastActualHeight = this.lastLayer.actualHeight;
+			this.aggregationWidth = this.lastLayer.actualWidth;
+			this.aggregationHeight = this.lastLayer.actualHeight;
 
 		}
 

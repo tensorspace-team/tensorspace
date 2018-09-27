@@ -9,28 +9,78 @@ import { ColorUtils } from "../../utils/ColorUtils";
 import { GridAggregation } from "../../elements/GridAggregation";
 import { GridLine } from "../../elements/GridLine";
 
+/**
+ * Layer2d, abstract layer, can not be initialized by TensorSpace user.
+ * Base class for Activation2d, BasicLayer2d, Conv1d, Cropping1d, GlobalPooling1d, padding1d, Pooling1d, Reshape1d, UpSampling1d.
+ * The characteristic for classes which inherit from Layer2d is that their output shape has one dimension, for example, [ width, depth ].
+ *
+ * @param config, user's configuration for Layer2d.
+ * @returns Layer2d layer object
+ */
+
 function Layer2d( config ) {
+
+	// Layer2d inherit from abstract layer "Layer".
 
 	Layer.call( this, config );
 
-	this.layerDimension = 2;
+	/**
+	 * Layer1d has one output dimensions: [ width, depth ].
+	 *
+	 * @type { int }
+	 */
 
 	this.width = undefined;
 	this.depth = undefined;
 
+	/**
+	 *
+	 *
+	 * @type { Array }
+	 */
+
 	this.queueHandlers = [];
 
+	/**
+	 *
+	 *
+	 * @type { Array }
+	 */
+
 	this.closeCenterList = [];
+
+	/**
+	 *
+	 *
+	 * @type { Array }
+	 */
+
 	this.openCenterList = [];
+
+	this.layerDimension = 2;
 
 }
 
 Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
+	/**
+	 * ============
+	 *
+	 * Functions below override base class Layer's abstract method
+	 *
+	 * Layer2d overrides Layer's function:
+	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
+	 * calcCloseButtonSize, calcCloseButtonPos
+	 *
+	 * ============
+	 */
+
 	init: function( center, actualDepth ) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
+
+		// Init a neuralGroup as the wrapper for all THREE.Object in Layer2d.
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -63,45 +113,19 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	openLayer: function() {
+	updateValue: function( value ) {
 
-		if ( !this.isOpen ) {
-
-			QueueGroupTweenFactory.openLayer( this );
-
-			this.isOpen = true;
-
-		}
-
-	},
-
-	closeLayer: function() {
+		this.neuralValue = value;
 
 		if ( this.isOpen ) {
 
-			QueueGroupTweenFactory.closeLayer( this );
+			this.updateSegregationVis();
 
-			this.isOpen = false;
+		} else {
+
+			this.updateAggregationVis();
 
 		}
-
-	},
-
-	calcCloseButtonSize: function() {
-
-		return 1.1 * this.unitLength;
-
-	},
-
-	calcCloseButtonPos: function() {
-
-		return {
-
-			x: - this.actualWidth / 2 - 30,
-			y: 0,
-			z: 0
-
-		};
 
 	},
 
@@ -124,30 +148,6 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 			}
 
 			this.neuralValue = undefined;
-
-		}
-
-	},
-
-	showText: function( element ) {
-
-		if ( element.elementType === "gridLine" ) {
-
-			let gridIndex = element.gridIndex;
-
-			this.queueHandlers[ gridIndex ].showText();
-			this.textElementHandler = this.queueHandlers[ gridIndex ];
-
-		}
-
-	},
-
-	hideText: function() {
-
-		if ( this.textElementHandler !== undefined ) {
-
-			this.textElementHandler.hideText();
-			this.textElementHandler = undefined;
 
 		}
 
@@ -193,6 +193,103 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		if ( this.textSystem !== undefined && this.textSystem ) {
 
 			this.hideText();
+
+		}
+
+	},
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		if ( request.all !== undefined && request.all ) {
+
+			if ( this.isOpen ) {
+
+				for ( let i = 0; i < this.queueHandlers.length; i++ ) {
+
+					relativeElements.push( this.queueHandlers[ i ].getElement() );
+
+				}
+
+			} else {
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		} else {
+
+			if ( request.index !== undefined ) {
+
+				if ( this.isOpen ) {
+
+					relativeElements.push( this.queueHandlers[ request.index ].getElement() );
+
+				} else {
+
+					relativeElements.push( this.aggregationHandler.getElement() );
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	calcCloseButtonSize: function() {
+
+		return 1.1 * this.unitLength;
+
+	},
+
+	calcCloseButtonPos: function() {
+
+		return {
+
+			x: - this.actualWidth / 2 - 30,
+			y: 0,
+			z: 0
+
+		};
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class Layer's abstract method
+	 *
+	 * ============
+	 */
+
+	openLayer: function() {
+
+		if ( !this.isOpen ) {
+
+			QueueGroupTweenFactory.openLayer( this );
+
+			this.isOpen = true;
+
+		}
+
+	},
+
+	closeLayer: function() {
+
+		if ( this.isOpen ) {
+
+			QueueGroupTweenFactory.closeLayer( this );
+
+			this.isOpen = false;
 
 		}
 
@@ -272,22 +369,6 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	updateValue: function( value ) {
-
-		this.neuralValue = value;
-
-		if ( this.isOpen ) {
-
-			this.updateSegregationVis();
-
-		} else {
-
-			this.updateAggregationVis();
-
-		}
-
-	},
-
 	updateAggregationVis: function() {
 
 		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(
@@ -320,65 +401,96 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	provideRelativeElements: function( request ) {
+	showText: function( element ) {
 
-		let relativeElements = [];
+		if ( element.elementType === "gridLine" ) {
 
-		if ( request.all !== undefined && request.all ) {
+			let gridIndex = element.gridIndex;
 
-			if ( this.isOpen ) {
-
-				for ( let i = 0; i < this.queueHandlers.length; i++ ) {
-
-					relativeElements.push( this.queueHandlers[ i ].getElement() );
-
-				}
-
-			} else {
-
-				relativeElements.push( this.aggregationHandler.getElement() );
-
-			}
-
-		} else {
-
-			if ( request.index !== undefined ) {
-
-				if ( this.isOpen ) {
-
-					relativeElements.push( this.queueHandlers[ request.index ].getElement() );
-
-				} else {
-
-					relativeElements.push( this.aggregationHandler.getElement() );
-
-				}
-
-			}
+			this.queueHandlers[ gridIndex ].showText();
+			this.textElementHandler = this.queueHandlers[ gridIndex ];
 
 		}
 
-		return {
+	},
 
-			isOpen: this.isOpen,
-			elementList: relativeElements
+	hideText: function() {
 
-		};
+		if ( this.textElementHandler !== undefined ) {
+
+			this.textElementHandler.hideText();
+			this.textElementHandler = undefined;
+
+		}
 
 	},
 
-	// override this function to load user's layer config for layer2d object
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for Layer2d.
+	 * SubClasses ( specific layers ) override these abstract method to get Layer2d's characters.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * loadLayerConfig() abstract method
+	 * Load layer's configuration into layer which extends Layer2d.
+	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
+	 *
+	 * Override this function if there are some specific configuration for layer which extends Layer2d.
+	 *
+	 * @param { JSON } layerConfig, user's configuration for layer.
+	 */
+
 	loadLayerConfig: function( layerConfig ) {
 
 	},
 
-	// override this function to load user's model config to layer2d object
+	/**
+	 * loadModelConfig() abstract method
+	 * Load model's configuration into layer object.
+	 *
+	 * Override this function if there are some specific model configurations for layer.
+	 *
+	 * @param { JSON } modelConfig, default and user's configuration for model.
+	 */
+
 	loadModelConfig: function( modelConfig ) {
 
 	},
 
-	// override this function to get information from previous layer
+	/**
+	 * assemble() abstract method
+	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 *
+	 * Override this function to get information from previous layer.
+	 *
+	 * @param { int } layerIndex, this layer's order in model.
+	 */
+
 	assemble: function( layerIndex ) {
+
+	},
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 *
+	 * Override this function to define relative element from previous layer.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster.
+	 * @return { THREE.Object[] } relativeElements
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return [];
 
 	}
 
