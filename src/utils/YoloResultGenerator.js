@@ -53,9 +53,14 @@ let YoloResultGenerator = (function() {
 
 			let index = box * len;
 			let bx = ( sigmoid( channelData[ index ] ) + cx );
-			let by = ( sigmoid( channelData[ index + 1 ] + cy) );
+			let by = ( sigmoid( channelData[ index + 1 ] ) + cy );
 			let bw = anchors[ box * 2 ] * Math.exp( channelData[ index + 2 ] );
 			let bh = anchors[ box * 2 + 1 ] * Math.exp( channelData[ index + 3 ] );
+
+			let width = bw / widthRange * outputShape[ 0 ];
+			let height = bh  / heightRange * outputShape[ 1 ];
+			let x = bx / widthRange * outputShape[ 0 ] - width / 2;
+			let y = by / heightRange * outputShape[ 1 ] - height / 2;
 
 			if ( checkRange( bx, widthRange ) &&
 				checkRange( by, heightRange ) &&
@@ -64,10 +69,10 @@ let YoloResultGenerator = (function() {
 
 				output.push( {
 
-					x: bx / widthRange * outputShape[ 0 ],
-					y: by / heightRange * outputShape[ 1 ],
-					width: bw / widthRange * outputShape[ 0 ],
-					height: bh  / heightRange * outputShape[ 1 ],
+					x: x,
+					y: y,
+					width: width,
+					height: height,
 
 				} );
 
