@@ -1,5 +1,6 @@
 /**
  * @author syt123450 / https://github.com/syt123450
+ * @author zchholmes / https://github.com/zchholmes
  */
 
 import { Predictor } from "./Predictor";

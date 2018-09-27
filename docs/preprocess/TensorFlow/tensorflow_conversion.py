@@ -12,13 +12,14 @@ with tf.Session(graph=tf.Graph()) as sess:
 
     graph = tf.get_default_graph()
 
-    # Pick some input as input
+    # Pick the input for SavedModel
     x = graph.get_tensor_by_name("input/Placeholder:0")
-    # Pick some output as output
+    # Pick the output for SavedModel, please take the very last output based on the model structure
     add_8 = graph.get_tensor_by_name("add_8:0")
 
+    output_dir = './saved_models/0925-yolov2-tiny-saved-model/'
     tf.saved_model.simple_save(
-        sess, './saved_models/0925-yolov2-tiny-saved-model/',
+        sess, output_dir,
         {"input":x},
         {"output":add_8}
     )
