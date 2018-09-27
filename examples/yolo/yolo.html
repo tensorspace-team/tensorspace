@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <meta name="author" content="syt123450 / https://github.com/syt123450">
+    <meta name="author" content="Charlesliuyx / https://github.com/Charlesliuyx">
     <style>
 
         html, body {
@@ -72,7 +73,7 @@
 <link rel="stylesheet" href="../lib/dialog-polyfill.css">
 <script src="../../build/tensorspace.js"></script>
 
-<script src="./data/33.js"></script>
+<script src="./data/dog.js"></script>
 
 <script>
 
@@ -191,24 +192,31 @@
     // shape: [13, 13]
     model.add(new TSP.layers.Conv2d({
 		kernelSize: 1,
-		filters: 425,
+		filters: 125,
 		strides: 1
     }));
 
     model.add( new TSP.layers.YoloOutput({
-        anchors: [ 0.57273, 0.677385,
-			1.87446, 2.06253,
-			3.33843, 5.47434,
-			7.88282, 3.52778,
-			9.77052, 9.16828 ]
-    }) );
+        // coco dataSet
+        // anchors: [ 0.57273, 0.677385, 1.87446, 2.06253, 3.33843, 5.47434, 7.88282, 3.52778, 9.77052, 9.16828 ],
+
+        // voc dataSet
+        anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ],
+
+    }));
 
 	model.load({
 		type: "tensorflow",
-		modelUrl: "./yoloModel/tensorflowjs_model.pb",
-		weightUrl: "./yoloModel/weights_manifest.json",
-		outputsName: ["1-leaky","2-maxpool","4-leaky","5-maxpool","7-leaky","8-maxpool","10-leaky","11-maxpool","13-leaky","14-maxpool","16-leaky","17-maxpool","19-leaky","21-leaky","BiasAdd_8"]
-	});
+		// modelUrl: "./yoloModel/tensorflowjs_model.pb",
+		// weightUrl: "./yoloModel/weights_manifest.json",
+		// outputsName: ["1-leaky","2-maxpool","4-leaky","5-maxpool","7-leaky","8-maxpool","10-leaky","11-maxpool","13-leaky","14-maxpool","16-leaky","17-maxpool","19-leaky","21-leaky","BiasAdd_8"]
+
+        modelUrl: "./yolov2-tiny-voc/tensorflowjs_model.pb",
+        weightUrl: "./yolov2-tiny-voc/weights_manifest.json",
+        outputsName: ["Maximum", "Const_1", "Maximum_1", "Const_2", "Maximum_2",
+                      "Const_3", "Maximum_3", "Const_4", "Maximum_4", "Const_5",
+                      "Maximum_5", "Const_6", "Const_7", "Const_8", "add_8"],
+    });
 
 	model.init(function() {
 
