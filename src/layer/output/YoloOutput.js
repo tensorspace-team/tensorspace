@@ -16,6 +16,8 @@ function YoloOutput( config ) {
 
 	this.layerType = "YoloOutput";
 
+	this.loadLayerConfig( config );
+
 }
 
 YoloOutput.prototype = Object.assign( Object.create( LayerGroup.prototype ), {
@@ -113,6 +115,21 @@ YoloOutput.prototype = Object.assign( Object.create( LayerGroup.prototype ), {
 
 		this.yoloChannel.loadModelConfig( config );
 		this.yoloBox.loadModelConfig( config );
+
+	},
+
+	loadLayerConfig: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			this.yoloChannel.loadLayerConfig( layerConfig );
+			this.yoloBox.loadLayerConfig( layerConfig );
+
+		} else {
+
+			console.error( "Lack config for yoloOutput layer." );
+
+		}
 
 	}
 

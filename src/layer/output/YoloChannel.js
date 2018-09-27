@@ -17,8 +17,6 @@ function YoloChannel(config ) {
 
 	this.channelDepth = undefined;
 
-	this.loadLayerConfig( config );
-
 	this.leftMostCenter = {
 
 		x: 0,
@@ -100,13 +98,15 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.heightNum = this.inputShape[ 1 ];
 		this.channelDepth = this.inputShape[ 2 ];
 
+		this.outputShape = [ this.widthNum, this.heightNum ];
+
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.lastLayer.actualWidth;
 		this.actualHeight = this.lastLayer.actualHeight;
 
 		this.totalOutputs = this.widthNum * this.heightNum;
 
-		for ( let i = 0; i < this.totalOutputs; i++ ) {
+		for ( let i = 0; i < this.totalOutputs; i ++ ) {
 
 			this.closeResultPos.push( {
 
@@ -131,9 +131,9 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		let distance = 4 * this.unitLength;
 
-		for ( let i = 0; i < this.widthNum; i++ ) {
+		for ( let i = 0; i < this.widthNum; i ++ ) {
 
-			for ( let j = 0; j < this.heightNum; j++ ) {
+			for ( let j = 0; j < this.heightNum; j ++ ) {
 
 				openResultList.push( {
 
@@ -237,7 +237,16 @@ YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
 			// }
 
 			let outputIndex = clickedElement.outputIndex;
-			this.nextLayer.addRectangleList( outputIndex, this.getNeuralOutputValue( outputIndex ) );
+			let widthIndex = outputIndex % this.widthNum;
+			let heightIndex = Math.floor( outputIndex / this.widthNum );
+
+			this.nextLayer.addRectangleList(
+
+				this.getNeuralOutputValue( outputIndex ),
+				widthIndex,
+				heightIndex
+
+			);
 
 			if ( !this.nextLayer.isOpen ) {
 

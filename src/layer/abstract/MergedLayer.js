@@ -31,9 +31,6 @@ function MergedLayer( config ) {
 	this.hasCloseButton = true;
 	this.closeButtonSizeRatio = 1;
 
-	// center position is the left-most for layer, type: {x: value , y: value, z: value}
-	this.leftMostCenter = undefined;
-
 	// actual width and height in three.js scene
 	this.actualWidth = undefined;
 	this.actualHeight = undefined;
@@ -43,10 +40,6 @@ function MergedLayer( config ) {
 
 	// actualWidth / width
 	this.unitLength = undefined;
-
-	// store hook between layers
-	this.nextHookHandler = undefined;
-	this.lastHookHandler = undefined;
 
 	// handler for element showing text
 	this.textElementHandler = undefined;

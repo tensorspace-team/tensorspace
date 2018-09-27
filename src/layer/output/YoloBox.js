@@ -19,8 +19,7 @@ function YoloBox(config) {
 	this.channelIndex = undefined;
 	this.allChannel = true;
 
-	this.loadLayerConfig( config );
-
+	this.anchors = undefined;
 	this.isOpen = false;
 
 	this.layerType = "yoloBox";
@@ -30,6 +29,18 @@ function YoloBox(config) {
 YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
+
+		console.log( layerConfig );
+
+		if ( layerConfig.anchors !== undefined ) {
+
+			this.anchors = layerConfig.anchors;
+
+		} else {
+
+			console.error( "\"anchors\" property is required." );
+
+		}
 
 	},
 
@@ -59,6 +70,11 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 		this.width = modelInputShape[ 0 ];
 		this.height = modelInputShape[ 1 ];
+
+		this.inputShape = this.lastLayer.outputShape;
+
+		this.channelShape = this.inputShape;
+		this.outputShape = [ this.width, this.height ];
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.lastLayer.actualWidth;
@@ -158,11 +174,20 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	},
 
-	addRectangleList: function( channelIndex, channelData ) {
+	addRectangleList: function( channelData, widthIndex, heightIndex ) {
 
 		this.allChannel = false;
-		this.channelIndex = channelIndex;
-		this.rectangleList = YoloResultGenerator.getChannelBox( channelData );
+
+		this.rectangleList = YoloResultGenerator.getChannelBox(
+
+			channelData,
+			this.channelShape,
+			this.outputShape,
+			this.anchors,
+			widthIndex,
+			heightIndex
+
+		);
 
 		if ( this.isOpen ) {
 
@@ -275,7 +300,9 @@ YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.neuralValue = undefined;
 
 		if (this.outputHandler !== undefined) {
+
 			this.outputHandler.clear();
+
 		}
 
 	},

@@ -13,8 +13,6 @@ LayerGroup.prototype = {
 
 	createMembers: function() {
 
-
-
 	},
 
 	init: function() {

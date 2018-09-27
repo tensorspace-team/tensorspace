@@ -33,6 +33,8 @@ function Layer1d( config ) {
 
 	this.queueLength = this.segmentLength;
 
+	this.overview = false;
+
 	this.isTransition = false;
 
 }
@@ -96,6 +98,12 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 					}
 
 				}
+
+			}
+
+			if ( layerConfig.overview !== undefined ) {
+
+				this.overview = layerConfig.overview;
 
 			}
 
