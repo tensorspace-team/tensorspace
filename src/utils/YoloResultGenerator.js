@@ -40,53 +40,6 @@ let YoloResultGenerator = (function() {
 
     }
 
-    function decodeEach( outputArr, featureMapSize, imagePixelSize, cx, cy ) {
-
-        // outputArr : array [425] for coco; [125] for VOC
-        // return the format rect coordinate, weight and height
-        // cx is col of feature map [13, 13]
-        // cy is row of feature map [13, 13]
-
-        let anchors_config = [ 0.57273, 0.677385,
-            1.87446, 2.06253,
-            3.33843, 5.47434,
-            7.88282, 3.52778,
-            9.77052, 9.16828 ];
-
-        const mapWidth = featureMapSize[ 0 ];
-        const mapHeight = featureMapSize[ 1 ];
-
-        const len = outputArr.length / 5;
-
-        const output = [];
-
-        for ( let box = 0; box < anchors_config.length; box ++ ) {
-
-            const index = box * len;
-            const bx = ( sigmoid( outputArr[ index ] ) + cx );
-            const by = ( sigmoid( outputArr[ index + 1 ] + cy) );
-            const bw = anchors_config[ box * 2 ] * Math.exp( outputArr[ index + 2 ] );
-            const bh = anchors_config[ box * 2 + 1 ] * Math.exp( outputArr[ index + 3 ] );
-
-            if ( checkRange( bx, 13 ) && checkRange( by, 13 ) && checkRange( bw, 13 ) && checkRange( bh, 13 )) {
-
-                output.push( {
-
-                    x: bx / mapWidth * imagePixelSize,
-                    y: by / mapHeight * imagePixelSize,
-                    width: bw / mapWidth * imagePixelSize,
-                    height: bh  / mapHeight * imagePixelSize,
-
-                } );
-
-            }
-
-        }
-
-        return output;
-
-    }
-
 	function getChannelBox( channelData, channelShape, outputShape, anchors, cx, cy ) {
 
 		let widthRange = channelShape[ 0 ];
