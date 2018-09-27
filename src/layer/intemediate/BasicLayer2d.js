@@ -2,12 +2,12 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer2d } from "../abstract/Layer2d";
+import { NativeLayer2d } from "../abstract/NativeLayer2d";
 import { QueueCenterGenerator } from "../../utils/QueueCenterGenerator";
 
 function BasicLayer2d( config ) {
 
-	Layer2d.call( this, config );
+	NativeLayer2d.call( this, config );
 
 	this.color = 0xffffff;
 
@@ -17,7 +17,7 @@ function BasicLayer2d( config ) {
 
 }
 
-BasicLayer2d.prototype = Object.assign( Object.create( Layer2d.prototype ), {
+BasicLayer2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 
@@ -45,13 +45,13 @@ BasicLayer2d.prototype = Object.assign( Object.create( Layer2d.prototype ), {
 
 			} else {
 
-				console.error( "\"shape\" property is required for Layer2d." );
+				console.error( "\"shape\" property is required for NativeLayer2d." );
 
 			}
 
 		} else {
 
-			console.error( "Lack config for Layer2d." );
+			console.error( "Lack config for NativeLayer2d." );
 
 		}
 

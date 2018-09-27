@@ -2,11 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer3d } from "../abstract/Layer3d";
+import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 function Cropping2d( config ) {
 
-	Layer3d.call( this, config );
+	NativeLayer3d.call( this, config );
 
 	this.cropping = undefined;
 	this.croppingWidth = undefined;
@@ -18,7 +18,7 @@ function Cropping2d( config ) {
 
 }
 
-Cropping2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
+Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

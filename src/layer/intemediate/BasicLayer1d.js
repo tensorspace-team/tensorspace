@@ -2,11 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer1d } from "../abstract/Layer1d";
+import { NativeLayer1d } from "../abstract/NativeLayer1d";
 
 function BasicLayer1d( config ) {
 
-	Layer1d.call( this, config );
+	NativeLayer1d.call( this, config );
 
 	this.color = 0xffffff;
 
@@ -16,7 +16,7 @@ function BasicLayer1d( config ) {
 
 }
 
-BasicLayer1d.prototype = Object.assign( Object.create( Layer1d.prototype ), {
+BasicLayer1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 
@@ -30,13 +30,13 @@ BasicLayer1d.prototype = Object.assign( Object.create( Layer1d.prototype ), {
 
 			} else {
 
-				console.error( "\"shape\" property is required for Layer1d." );
+				console.error( "\"shape\" property is required for NativeLayer1d." );
 
 			}
 
 		} else {
 
-			console.error( "Lack config for Layer1d." );
+			console.error( "Lack config for NativeLayer1d." );
 
 		}
 

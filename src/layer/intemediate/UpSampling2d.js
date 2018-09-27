@@ -3,11 +3,11 @@
  */
 
 import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
-import { Layer3d } from "../abstract/Layer3d";
+import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 function UpSampling2d( config ) {
 
-	Layer3d.call( this, config );
+	NativeLayer3d.call( this, config );
 
 	this.size = undefined;
 	this.widthSize = undefined;
@@ -21,7 +21,7 @@ function UpSampling2d( config ) {
 
 }
 
-UpSampling2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
+UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

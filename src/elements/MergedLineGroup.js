@@ -76,13 +76,14 @@ MergedLineGroup.prototype = {
 			let startEndDistance = startPos.y - endPos.y;
 
 			let controlTranslateXVector;
+
 			if ( startPos.x >= 0 ) {
 
-				controlTranslateXVector = new THREE.Vector3( this.actualWidth + startEndDistance, 0, 0 );
+				controlTranslateXVector = new THREE.Vector3( this.layer.actualWidth + startEndDistance, 0, 0 );
 
 			} else {
 
-				controlTranslateXVector = new THREE.Vector3( - this.actualWidth - startEndDistance, 0, 0 );
+				controlTranslateXVector = new THREE.Vector3( - this.layer.actualWidth - startEndDistance, 0, 0 );
 
 			}
 
@@ -147,6 +148,9 @@ MergedLineGroup.prototype = {
 	initLineGroup: function( selectedElement ) {
 
 		let lineGroupParameters = this.getLineGroupParameters( selectedElement );
+
+		console.log(lineGroupParameters);
+
 		let straightParameters = lineGroupParameters.straight;
 		let curveParameters = lineGroupParameters.curve;
 

@@ -2,13 +2,13 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer2d } from "../abstract/Layer2d";
+import { NativeLayer2d } from "../abstract/NativeLayer2d";
 import { MapAggregation } from "../../elements/MapAggregation";
 import { GlobalPoolingElement } from "../../elements/GlobalPoolingElement";
 
 function GlobalPooling1d( config ) {
 
-	Layer2d.call( this, config );
+	NativeLayer2d.call( this, config );
 
 	this.width = 1;
 
@@ -16,7 +16,7 @@ function GlobalPooling1d( config ) {
 
 }
 
-GlobalPooling1d.prototype = Object.assign( Object.create( Layer2d.prototype ), {
+GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 	loadModelConfig: function( modelConfig ) {
 

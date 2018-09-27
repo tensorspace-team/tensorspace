@@ -3,7 +3,7 @@
  */
 
 import { FmCenterGenerator } from '../../utils/FmCenterGenerator';
-import { Layer3d } from "../abstract/Layer3d";
+import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 /**
  * 2D Convolution
@@ -14,9 +14,9 @@ import { Layer3d } from "../abstract/Layer3d";
 
 function Conv2d( config ) {
 
-	// "Conv2d" inherit from abstract layer "Layer3d"
+	// "Conv2d" inherit from abstract layer "NativeLayer3d"
 
-	Layer3d.call( this, config );
+	NativeLayer3d.call( this, config );
 
 	/**
 	 * The dimension of the convolution window.
@@ -95,7 +95,7 @@ function Conv2d( config ) {
 
 }
 
-Conv2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
+Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 	/**
 	 * loadLayerConfig() check user's configuration and load it into Conv2d object.
@@ -241,7 +241,7 @@ Conv2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
 
 		}
 
-		// Conv2d layer's outputShape has three dimension, that's why Conv2d layer inherits from abstract layer "Layer3d".
+		// Conv2d layer's outputShape has three dimension, that's why Conv2d layer inherits from abstract layer "NativeLayer3d".
 
 		this.outputShape = [ this.width, this.height, this.filters ];
 

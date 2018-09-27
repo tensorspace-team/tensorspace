@@ -2,11 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer2d } from "../abstract/Layer2d";
+import { NativeLayer2d } from "../abstract/NativeLayer2d";
 
 function Activation2d( config ) {
 
-	Layer2d.call( this, config );
+	NativeLayer2d.call( this, config );
 
 	this.activation = undefined;
 
@@ -14,7 +14,7 @@ function Activation2d( config ) {
 
 }
 
-Activation2d.prototype = Object.assign( Object.create( Layer2d.prototype ), {
+Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

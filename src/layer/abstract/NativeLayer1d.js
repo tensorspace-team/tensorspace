@@ -2,31 +2,31 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer } from "./Layer";
 import { QueueTransitionFactory } from "../../animation/QueueTransitionTween";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { NeuralQueue } from "../../elements/NeuralQueue";
 import { PaginationButton } from "../../elements/PagniationButton";
 import { QueueSegment } from "../../elements/QueueSegment";
+import { NativeLayer } from "./NativeLayer";
 
 /**
- * Layer1d, abstract layer, can not be initialized by TensorSpace user.
+ * NativeLayer1d, abstract layer, can not be initialized by TensorSpace user.
  * Base class for Dense, Flatten, Activation1d, BasicLayer1d.
- * The characteristic for classes which inherit from Layer1d is that their output shape has one dimension, for example, [units].
+ * The characteristic for classes which inherit from NativeLayer1d is that their output shape has one dimension, for example, [units].
  *
- * @param config, user's configuration for Layer1d.
- * @returns Layer1d layer object
+ * @param config, user's configuration for NativeLayer1d.
+ * @returns NativeLayer1d layer object
  */
 
-function Layer1d( config ) {
+function NativeLayer1d(config ) {
 
-	// Layer1d inherit from abstract layer "Layer".
+	// NativeLayer1d inherit from abstract layer "Layer".
 
-	Layer.call( this, config );
+	NativeLayer.call( this, config );
 
 	/**
-	 * Layer1d has one output dimensions: [ width ].
+	 * NativeLayer1d has one output dimensions: [ width ].
 	 *
 	 * @type { int }
 	 */
@@ -71,7 +71,7 @@ function Layer1d( config ) {
 
 	/**
 	 * Only take effect when this.paging = true.
-	 * Which page Layer1d displays now.
+	 * Which page NativeLayer1d displays now.
 	 * Can be update when "last" or "next" buttons are clicked, initial value can be defined by user.
 	 * Default to 0.
 	 *
@@ -82,7 +82,7 @@ function Layer1d( config ) {
 
 	/**
 	 * Only take effect when this.paging = true.
-	 * How many pages in Layer1d.
+	 * How many pages in NativeLayer1d.
 	 *
 	 * @type { number }
 	 */
@@ -128,7 +128,7 @@ function Layer1d( config ) {
 
 	/**
 	 * An indicator whether layer1d is in an transition status.
-	 * Layer1d has a transition period between "close" and "open" when openLayer is called.
+	 * NativeLayer1d has a transition period between "close" and "open" when openLayer is called.
 	 *
 	 * @type { boolean }
 	 */
@@ -143,14 +143,14 @@ function Layer1d( config ) {
 
 }
 
-Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
+NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	/**
 	 * ============
 	 *
 	 * Functions below override base class Layer's abstract method
 	 *
-	 * Layer1d overrides Layer's function:
+	 * NativeLayer1d overrides Layer's function:
 	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
 	 * calcCloseButtonSize, calcCloseButtonPos
 	 *
@@ -158,9 +158,9 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 */
 
 	/**
-	 * init() create actual THREE.Object in Layer1d, warp them into a group, and add it to THREE.js's scene.
+	 * init() create actual THREE.Object in NativeLayer1d, warp them into a group, and add it to THREE.js's scene.
 	 *
-	 * Model passes two parameters, center and actualDepth, to Layer1d when call init() to initialize Layer1d.
+	 * Model passes two parameters, center and actualDepth, to NativeLayer1d when call init() to initialize NativeLayer1d.
 	 *
 	 * @param { JSON } center, layer's center (x, y, z) relative to model
 	 * @param { double } actualDepth, layer aggregation's depth
@@ -171,7 +171,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.center = center;
 		this.actualDepth = actualDepth;
 
-		// Init a neuralGroup as the wrapper for all THREE.Object in Layer1d.
+		// Init a neuralGroup as the wrapper for all THREE.Object in NativeLayer1d.
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
@@ -449,7 +449,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 */
 
 	/**
-	 * openLayer() open Layer1d, switch layer status from "close" to "open".
+	 * openLayer() open NativeLayer1d, switch layer status from "close" to "open".
 	 *
 	 * This API is exposed to TensorSpace user.
 	 */
@@ -467,7 +467,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * closeLayer() close Layer1d, switch layer status from "open" to "close".
+	 * closeLayer() close NativeLayer1d, switch layer status from "open" to "close".
 	 *
 	 * This API is exposed to TensorSpace user.
 	 */
@@ -486,7 +486,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
 	 * loadLayer1dConfig() Load user's common config into layer1d's attribute.
-	 * Called when "Layer1d" is initializing.
+	 * Called when "NativeLayer1d" is initializing.
 	 *
 	 * @param { JSON } layerConfig, user's layer configuration.
 	 */
@@ -531,7 +531,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in Layer1d.
+	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in NativeLayer1d.
 	 */
 
 	initAggregationElement: function() {
@@ -563,7 +563,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in Layer1d.
+	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in NativeLayer1d.
 	 */
 
 	disposeAggregationElement: function() {
@@ -574,7 +574,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * initQueueElement() create queue element's THREE.js Object, configure it, and add it to neuralGroup in Layer1d.
+	 * initQueueElement() create queue element's THREE.js Object, configure it, and add it to neuralGroup in NativeLayer1d.
 	 */
 
 	initQueueElement: function() {
@@ -634,7 +634,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * disposeQueueElement() remove queue element from neuralGroup, clear their handlers, and dispose their THREE.js Object in Layer1d.
+	 * disposeQueueElement() remove queue element from neuralGroup, clear their handlers, and dispose their THREE.js Object in NativeLayer1d.
 	 */
 
 	disposeQueueElement: function() {
@@ -936,7 +936,7 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	calcPaginationButtonSize: function() {
 
-		// The size of pagination button is the same as close button in Layer1d.
+		// The size of pagination button is the same as close button in NativeLayer1d.
 
 		this.calcCloseButtonSize();
 
@@ -982,18 +982,18 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	/**
 	 * ============
 	 *
-	 * Functions below are abstract method for Layer1d.
-	 * SubClasses ( specific layers ) override these abstract method to get Layer1d's characters.
+	 * Functions below are abstract method for NativeLayer1d.
+	 * SubClasses ( specific layers ) override these abstract method to get NativeLayer1d's characters.
 	 *
 	 * ============
 	 */
 
 	/**
 	 * loadLayerConfig() abstract method
-	 * Load layer's configuration into layer which extends Layer1d.
+	 * Load layer's configuration into layer which extends NativeLayer1d.
 	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig and loadLayer1dConfig.
 	 *
-	 * Override this function if there are some specific configuration for layer which extends Layer1d.
+	 * Override this function if there are some specific configuration for layer which extends NativeLayer1d.
 	 *
 	 * @param { JSON } layerConfig, user's configuration for layer.
 	 */
@@ -1050,4 +1050,4 @@ Layer1d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 } );
 
-export { Layer1d };
+export { NativeLayer1d };

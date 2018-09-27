@@ -1,4 +1,4 @@
-import { Layer } from "../abstract/Layer";
+import { NativeLayer } from "../abstract/NativeLayer";
 import { OutputMap3d } from "../../elements/OutputMap3d";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { QueueAggregation } from "../../elements/QueueAggregation";
@@ -7,7 +7,7 @@ import { YoloResultGenerator } from "../../utils/YoloResultGenerator";
 
 function YoloBox(config) {
 
-	Layer.call(this, config);
+	NativeLayer.call(this, config);
 
 	this.width = undefined;
 	this.height = undefined;
@@ -26,7 +26,7 @@ function YoloBox(config) {
 
 }
 
-YoloBox.prototype = Object.assign( Object.create( Layer.prototype ), {
+YoloBox.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

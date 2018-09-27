@@ -2,11 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer2d } from "../abstract/Layer2d";
+import { NativeLayer2d } from "../abstract/NativeLayer2d";
 
 function Padding1d( config ) {
 
-	Layer2d.call( this, config );
+	NativeLayer2d.call( this, config );
 
 	this.paddingLeft = undefined;
 	this.paddingRight = undefined;
@@ -22,7 +22,7 @@ function Padding1d( config ) {
 
 }
 
-Padding1d.prototype = Object.assign( Object.create( Layer2d.prototype ), {
+Padding1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

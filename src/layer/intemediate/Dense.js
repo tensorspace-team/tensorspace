@@ -2,11 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer1d } from "../abstract/Layer1d";
+import { NativeLayer1d } from "../abstract/NativeLayer1d";
 
 function Dense( config ) {
 
-	Layer1d.call( this, config );
+	NativeLayer1d.call( this, config );
 
 	this.loadLayerConfig( config );
 
@@ -14,7 +14,7 @@ function Dense( config ) {
 
 }
 
-Dense.prototype = Object.assign( Object.create( Layer1d.prototype ), {
+Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

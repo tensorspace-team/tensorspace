@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer } from '../abstract/Layer';
+import { NativeLayer } from '../abstract/NativeLayer';
 import { ColorUtils } from '../../utils/ColorUtils';
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { OutputTransitionFactory } from "../../animation/OutputTransitionTween";
@@ -13,7 +13,7 @@ import { PaginationButton } from "../../elements/PagniationButton";
 
 function Output( config ) {
 
-	Layer.call( this, config );
+	NativeLayer.call( this, config );
 
 	this.units = undefined;
 	this.width = undefined;
@@ -38,7 +38,7 @@ function Output( config ) {
 
 }
 
-Output.prototype = Object.assign( Object.create( Layer.prototype ), {
+Output.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	init: function( center, actualDepth ) {
 

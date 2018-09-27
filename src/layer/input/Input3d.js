@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer } from "../abstract/Layer";
+import { NativeLayer } from "../abstract/NativeLayer";
 import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
 import { InputMap3d } from "../../elements/InputMap3d";
 import { ChannelMap } from "../../elements/ChannelMap";
@@ -13,7 +13,7 @@ import { CloseButtonRatio } from "../../utils/Constant";
 
 function Input3d( config ) {
 
-	Layer.call( this, config );
+	NativeLayer.call( this, config );
 
 	this.shape = undefined;
 	this.width = undefined;
@@ -70,7 +70,7 @@ function Input3d( config ) {
 
 }
 
-Input3d.prototype = Object.assign( Object.create( Layer.prototype ), {
+Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	init: function( center, actualDepth ) {
 

@@ -119,6 +119,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 		this.outputShape = [ this.width, this.height, this.depth ];
 
 		this.unitLength = this.mergedElements[ 0 ].unitLength;
+
 		this.actualWidth = this.unitLength * this.width;
 		this.actualHeight = this.unitLength * this.height;
 

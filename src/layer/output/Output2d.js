@@ -2,13 +2,13 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer } from "../abstract/Layer";
+import { NativeLayer } from "../abstract/NativeLayer";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { FeatureMap } from "../../elements/FeatureMap";
 
 function Output2d( config ) {
 
-	Layer.call( this, config );
+	NativeLayer.call( this, config );
 
 	this.shape = undefined;
 	this.width = undefined;
@@ -32,7 +32,7 @@ function Output2d( config ) {
 
 }
 
-Output2d.prototype = Object.assign( Object.create( Layer.prototype ), {
+Output2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	init: function( center, actualDepth) {
 

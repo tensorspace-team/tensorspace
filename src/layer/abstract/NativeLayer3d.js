@@ -2,31 +2,31 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer } from "./Layer";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { MapTransitionFactory } from "../../animation/MapTransitionTween";
 import { CloseButtonRatio } from "../../utils/Constant";
 import { FeatureMap } from "../../elements/FeatureMap";
 import { MapAggregation } from "../../elements/MapAggregation";
+import { NativeLayer } from "./NativeLayer";
 
 /**
- * Layer3d, abstract layer, can not be initialized by TensorSpace user.
+ * NativeLayer3d, abstract layer, can not be initialized by TensorSpace user.
  * Base class for Conv2d, Activation3d, GlobalPooling2d, BasicLayer3d, Pooling2d, Reshape2d, UpSampling2d, Cropping2d
- * The characteristic for classes which inherit from Layer3d is that their output shape has three dimension, for example, [width, height, depth]
+ * The characteristic for classes which inherit from NativeLayer3d is that their output shape has three dimension, for example, [width, height, depth]
  *
- * @param config, user's configuration for Layer3d
- * @returns Layer3d layer object
+ * @param config, user's configuration for NativeLayer3d
+ * @returns NativeLayer3d layer object
  */
 
-function Layer3d( config ) {
+function NativeLayer3d( config ) {
 
-	// Layer3d inherit from abstract layer "Layer"
+	// NativeLayer3d inherit from abstract layer "Layer"
 
-	Layer.call( this, config );
+	NativeLayer.call( this, config );
 
 	/**
-	 * Layer3d has three output dimensions: [ width, height, depth ]
+	 * NativeLayer3d has three output dimensions: [ width, height, depth ]
 	 *
 	 * @type { int }
 	 */
@@ -83,14 +83,14 @@ function Layer3d( config ) {
 
 }
 
-Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
+NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	/**
 	 * ============
 	 *
 	 * Functions below override base class Layer's abstract method
 	 *
-	 * Layer3d overrides Layer's function:
+	 * NativeLayer3d overrides Layer's function:
 	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
 	 * calcCloseButtonSize, calcCloseButtonPos
 	 *
@@ -98,9 +98,9 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 */
 
 	/**
-	 * init() create actual THREE.Object in Layer3d, warp them into a group, and add it to THREE.js's scene.
+	 * init() create actual THREE.Object in NativeLayer3d, warp them into a group, and add it to THREE.js's scene.
 	 *
-	 * Model passes two parameters, center and actualDepth, to Layer3d when call init() to initialize Layer3d.
+	 * Model passes two parameters, center and actualDepth, to NativeLayer3d when call init() to initialize NativeLayer3d.
 	 *
 	 * @param { JSON } center, layer's center (x, y, z) relative to model
 	 * @param { double } actualDepth, layer aggregation's depth
@@ -111,12 +111,12 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.center = center;
 		this.actualDepth = actualDepth;
 
-		// Init a neuralGroup as the wrapper for all THREE.Object in Layer3d.
+		// Init a neuralGroup as the wrapper for all THREE.Object in NativeLayer3d.
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
 
-		// depth === 1 means that there is only one feature map in Layer3d, no need for aggregation, open layer, or close layer.
+		// depth === 1 means that there is only one feature map in NativeLayer3d, no need for aggregation, open layer, or close layer.
 
 		if ( this.depth === 1 ) {
 
@@ -405,7 +405,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 */
 
 	/**
-	 * openLayer() open Layer3d, switch layer status from "close" to "open".
+	 * openLayer() open NativeLayer3d, switch layer status from "close" to "open".
 	 *
 	 * This API is exposed to TensorSpace user.
 	 */
@@ -423,7 +423,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * closeLayer() close Layer3d, switch layer status from "open" to "close".
+	 * closeLayer() close NativeLayer3d, switch layer status from "open" to "close".
 	 *
 	 * This API is exposed to TensorSpace user.
 	 */
@@ -441,7 +441,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * initSegregationElements() create feature maps's THREE.js Object, configure them, and add them to neuralGroup in Layer3d.
+	 * initSegregationElements() create feature maps's THREE.js Object, configure them, and add them to neuralGroup in NativeLayer3d.
 	 *
 	 * @param { JSON[] } centers, list of feature map's center (x, y, z), relative to layer
 	 */
@@ -492,7 +492,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * disposeSegregationElements() remove feature maps from neuralGroup, clear their handlers, and dispose their THREE.js Object in Layer3d.
+	 * disposeSegregationElements() remove feature maps from neuralGroup, clear their handlers, and dispose their THREE.js Object in NativeLayer3d.
 	 */
 
 	disposeSegregationElements: function () {
@@ -513,7 +513,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in Layer3d.
+	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in NativeLayer3d.
 	 */
 
 	initAggregationElement: function() {
@@ -554,7 +554,7 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in Layer3d.
+	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in NativeLayer3d.
 	 */
 
 	disposeAggregationElement: function() {
@@ -652,8 +652,8 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	/**
 	 * ============
 	 *
-	 * Functions below are abstract method for Layer1d.
-	 * SubClasses ( specific layers ) override these abstract method to get Layer3d's characters.
+	 * Functions below are abstract method for NativeLayer1d.
+	 * SubClasses ( specific layers ) override these abstract method to get NativeLayer3d's characters.
 	 *
 	 * ============
 	 */
@@ -719,4 +719,4 @@ Layer3d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 } );
 
-export { Layer3d };
+export { NativeLayer3d };

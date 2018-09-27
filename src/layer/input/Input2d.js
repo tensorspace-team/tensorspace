@@ -2,14 +2,14 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer } from '../abstract/Layer';
+import { NativeLayer } from '../abstract/NativeLayer';
 import { FeatureMap } from "../../elements/FeatureMap";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { ModelInitWidth } from "../../utils/Constant";
 
 function Input2d( config ) {
 
-	Layer.call( this, config );
+	NativeLayer.call( this, config );
 
 	this.shape = undefined;
 	this.width = undefined;
@@ -43,7 +43,7 @@ function Input2d( config ) {
 
 }
 
-Input2d.prototype = Object.assign( Object.create( Layer.prototype ), {
+Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	init: function( center, actualDepth) {
 

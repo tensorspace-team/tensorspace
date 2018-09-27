@@ -149,7 +149,7 @@
     // 6
     // res2a(add_1) ~ res2a_relu (activation_4)
     // output: 55 *55 *256 ==> 774400
-    // let activation_4 = new TSP.layers.Layer3d({
+    // let activation_4 = new TSP.layers.NativeLayer3d({
     //     shape: [55, 55, 256]
     // });
     let activation_4 = TSP.layers.Add([bn2a_branch2c, bn2a_branch1]);
@@ -234,7 +234,7 @@
     // 14
     // res2c(add_3) ~ res2c_relu (activation_10)
     // output: 55 *55 *256 ==> 774400
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [55, 55, 256]
     // }));
     let activation_10 = TSP.layers.Add([activation_7, bn2c_branch2c]);
@@ -292,7 +292,7 @@
     //19
     // res3a(add_4) ~ res3a_relu (activation_13)
     // output: 28 *28 *512 ==> 401408
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [28, 28, 512]
     // }));
     let activation_13 = TSP.layers.Add([bn3a_branch1, bn3a_branch2c]);
@@ -375,7 +375,7 @@
     // 27
     // res3c(add_6) ~ res3c_relu (activation_19)
     // output: 28 *28 *512 ==>401408
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [28, 28, 512]
     // }));
     let activation_19 = TSP.layers.Add([activation_16, bn3c_branch2c]);
@@ -418,7 +418,7 @@
     // 31
     // res3d(add_7) ~ res3d_relu (activation_22)
     // output: 28 *28 *512 ==>401408
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [28, 28, 512]
     // }));
     let activation_22 = TSP.layers.Add([activation_19, bn3d_branch2c]);
@@ -475,7 +475,7 @@
     // 36
     // res4a(add_8) ~ res4a_relu (activation_25)
     // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [14, 14, 1024]
     // }));
     let activation_25 = TSP.layers.Add([bn4a_branch1, bn4a_branch2c]);
@@ -518,7 +518,7 @@
     // 40
     // res4b(add_9) ~ res4b_relu (activation_28)
     // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [14, 14, 1024]
     // }));
     let activation_28 = TSP.layers.Add([activation_25, bn4b_branch2c]);
@@ -561,7 +561,7 @@
     // 44
     // res4c(add_10) ~ res4c_relu (activation_31)
     // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [14, 14, 1024]
     // }));
     let activation_31 = TSP.layers.Add([activation_28, bn4c_branch2c]);
@@ -604,7 +604,7 @@
     // 48
     // res4d(add_11) ~ res4d_relu (activation_34)
     // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [14, 14, 1024]
     // }));
     let activation_34 = TSP.layers.Add([activation_31, bn4d_branch2c]);
@@ -647,7 +647,7 @@
     // 52
     // res4e(add_12) ~ res4e_relu (activation_37)
     // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [14, 14, 1024]
     // }));
     let activation_37 = TSP.layers.Add([activation_34, bn4e_branch2c]);
@@ -690,7 +690,7 @@
     // 56
     // res4f(add_13) ~ res4f_relu (activation_40)
     // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [14, 14, 1024]
     // }));
     let activation_40 = TSP.layers.Add([activation_37, bn4f_branch2c]);
@@ -748,7 +748,7 @@
     // 61
     // res5a(add_14) ~ res5a_relu (activation_43)
     // output: 7 *7 *2048 ==>100352
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [7, 7, 2048]
     // }));
     let activation_43 = TSP.layers.Add([bn5a_branch1, bn5a_branch2c]);
@@ -791,7 +791,7 @@
     // 65
     // res5b(add_15) ~ res5b_relu (activation_46)
     // output: 7 *7 *2048 ==>100352
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [7, 7, 2048]
     // }));
     let activation_46 = TSP.layers.Add([activation_43, bn5b_branch2c]);
@@ -834,7 +834,7 @@
     // 69
     // res5c(add_10) ~ res5c_relu (activation_49)
     // output: 7 *7 *2048 ==>100352
-    // model.add(new TSP.layers.Layer3d({
+    // model.add(new TSP.layers.NativeLayer3d({
     //     shape: [7, 7, 2048]
     // }));
     let activation_49 = TSP.layers.Add([activation_46, bn5c_branch2c]);

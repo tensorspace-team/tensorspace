@@ -3,11 +3,11 @@
  */
 
 import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
-import { Layer3d } from "../abstract/Layer3d";
+import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 function Reshape2d( config ) {
 
-	Layer3d.call( this, config );
+	NativeLayer3d.call( this, config );
 
 	this.targetShape = undefined;
 
@@ -20,7 +20,7 @@ function Reshape2d( config ) {
 
 }
 
-Reshape2d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
+Reshape2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

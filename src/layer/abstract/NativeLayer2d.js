@@ -2,30 +2,30 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer } from "./Layer";
 import { QueueGroupTweenFactory } from "../../animation/QueueGroupTransitionTween";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { GridAggregation } from "../../elements/GridAggregation";
 import { GridLine } from "../../elements/GridLine";
+import { NativeLayer } from "./NativeLayer";
 
 /**
- * Layer2d, abstract layer, can not be initialized by TensorSpace user.
+ * NativeLayer2d, abstract layer, can not be initialized by TensorSpace user.
  * Base class for Activation2d, BasicLayer2d, Conv1d, Cropping1d, GlobalPooling1d, padding1d, Pooling1d, Reshape1d, UpSampling1d.
- * The characteristic for classes which inherit from Layer2d is that their output shape has one dimension, for example, [ width, depth ].
+ * The characteristic for classes which inherit from NativeLayer2d is that their output shape has one dimension, for example, [ width, depth ].
  *
- * @param config, user's configuration for Layer2d.
- * @returns Layer2d layer object
+ * @param config, user's configuration for NativeLayer2d.
+ * @returns NativeLayer2d layer object
  */
 
-function Layer2d( config ) {
+function NativeLayer2d(config ) {
 
-	// Layer2d inherit from abstract layer "Layer".
+	// NativeLayer2d inherit from abstract layer "Layer".
 
-	Layer.call( this, config );
+	NativeLayer.call( this, config );
 
 	/**
-	 * Layer1d has one output dimensions: [ width, depth ].
+	 * NativeLayer1d has one output dimensions: [ width, depth ].
 	 *
 	 * @type { int }
 	 */
@@ -61,14 +61,14 @@ function Layer2d( config ) {
 
 }
 
-Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
+NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	/**
 	 * ============
 	 *
 	 * Functions below override base class Layer's abstract method
 	 *
-	 * Layer2d overrides Layer's function:
+	 * NativeLayer2d overrides Layer's function:
 	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
 	 * calcCloseButtonSize, calcCloseButtonPos
 	 *
@@ -80,7 +80,7 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.center = center;
 		this.actualDepth = actualDepth;
 
-		// Init a neuralGroup as the wrapper for all THREE.Object in Layer2d.
+		// Init a neuralGroup as the wrapper for all THREE.Object in NativeLayer2d.
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set(this.center.x, this.center.y, this.center.z);
@@ -428,18 +428,18 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 	/**
 	 * ============
 	 *
-	 * Functions below are abstract method for Layer2d.
-	 * SubClasses ( specific layers ) override these abstract method to get Layer2d's characters.
+	 * Functions below are abstract method for NativeLayer2d.
+	 * SubClasses ( specific layers ) override these abstract method to get NativeLayer2d's characters.
 	 *
 	 * ============
 	 */
 
 	/**
 	 * loadLayerConfig() abstract method
-	 * Load layer's configuration into layer which extends Layer2d.
+	 * Load layer's configuration into layer which extends NativeLayer2d.
 	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
 	 *
-	 * Override this function if there are some specific configuration for layer which extends Layer2d.
+	 * Override this function if there are some specific configuration for layer which extends NativeLayer2d.
 	 *
 	 * @param { JSON } layerConfig, user's configuration for layer.
 	 */
@@ -496,4 +496,4 @@ Layer2d.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 } );
 
-export { Layer2d };
+export { NativeLayer2d };

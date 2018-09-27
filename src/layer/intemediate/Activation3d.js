@@ -2,11 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer3d } from "../abstract/Layer3d";
+import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 function Activation3d( config ) {
 
-	Layer3d.call( this, config );
+	NativeLayer3d.call( this, config );
 
 	this.activation = undefined;
 
@@ -14,7 +14,7 @@ function Activation3d( config ) {
 
 }
 
-Activation3d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
+Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

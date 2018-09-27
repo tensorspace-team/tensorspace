@@ -2,12 +2,12 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer3d } from "../abstract/Layer3d";
+import { NativeLayer3d } from "../abstract/NativeLayer3d";
 import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
 
 function BasicLayer3d( config ) {
 
-	Layer3d.call( this, config );
+	NativeLayer3d.call( this, config );
 
 	console.log( "construct intemediate 3D layer." );
 
@@ -19,7 +19,7 @@ function BasicLayer3d( config ) {
 
 }
 
-BasicLayer3d.prototype = Object.assign( Object.create( Layer3d.prototype ), {
+BasicLayer3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 	loadLayerConfig: function( layerConfig ) {
 

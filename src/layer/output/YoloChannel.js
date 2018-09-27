@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Layer } from "../abstract/Layer";
+import { NativeLayer } from "../abstract/NativeLayer";
 import { YoloOutputUnit } from "../../elements/YoloOuputUnit";
 import { YoloTweenFactory } from "../../animation/YoloTransitionTween";
 import { QueueAggregation } from "../../elements/QueueAggregation";
@@ -10,7 +10,7 @@ import { CloseButtonRatio } from "../../utils/Constant";
 
 function YoloChannel(config ) {
 
-	Layer.call( this, config );
+	NativeLayer.call( this, config );
 
 	this.segregationHandlers = [];
 	this.onNeuralClicked = undefined;
@@ -32,7 +32,7 @@ function YoloChannel(config ) {
 
 }
 
-YoloChannel.prototype = Object.assign( Object.create( Layer.prototype ), {
+YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	init: function( center, actualDepth ) {
 
