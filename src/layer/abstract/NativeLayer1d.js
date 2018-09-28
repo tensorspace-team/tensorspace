@@ -21,7 +21,7 @@ import { NativeLayer } from "./NativeLayer";
 
 function NativeLayer1d(config ) {
 
-	// NativeLayer1d inherit from abstract layer "Layer".
+	// NativeLayer1d inherits from abstract layer "NativeLayer".
 
 	NativeLayer.call( this, config );
 

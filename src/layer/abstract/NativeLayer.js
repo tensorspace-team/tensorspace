@@ -1,9 +1,24 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { Layer } from "./Layer";
 import { BasicLineGroup } from "../../elements/BasicLineGroup";
 
-function NativeLayer(config) {
+/**
+ * NativeLayer, abstract layer, can not be initialized by TensorSpace user.
+ * Base class for NativeLayer1d, NativeLayer2d, NativeLayer3d, Input1d, Input2d, Input3d, Output1d, Output2d, YoloBox, YoloChannel.
+ * NativeLayer add basic line group character into "Layer".
+ *
+ * @param config, user's configuration for NativeLayer.
+ * @returns NativeLayer layer object
+ */
 
-	Layer.call(this, config);
+function NativeLayer( config ) {
+
+	// NativeLayer inherits from abstract layer "Layer"
+
+	Layer.call( this, config );
 
 	/**
 	 * Store handler for line group.
@@ -15,6 +30,7 @@ function NativeLayer(config) {
 
 	/**
 	 * Identity whether the layer is merged layer.
+	 * The different between native layer and merge layer is that the the native layer's "isMerged" attribute is false.
 	 *
 	 * @type {boolean}
 	 */
@@ -26,7 +42,7 @@ function NativeLayer(config) {
 NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
-	 * addLineGroup() add line group element to layer, store its handler.
+	 * addLineGroup() add basic line group element to layer, store its handler.
 	 */
 
 	addLineGroup: function() {
@@ -143,51 +159,6 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * getRelativeElements() abstract method
-	 * Get relative element in last layer for relative lines based on given hovered element.
-	 *
-	 * Override this function to define relative element from previous layer.
-	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
-	 *
-	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
-	 * @return { THREE.Object[] } relativeElements
-	 */
-
-	getRelativeElements: function( selectedElement ) {
-
-		return [];
-
-	},
-
-	/**
-	 * provideRelativeElements() abstract method
-	 * Return relative elements.
-	 *
-	 * Override this function to return relative elements based on request information.
-	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
-	 *
-	 * @param { JSON } request, parameter configured by request layer
-	 * @return { Object } { isOpen: boolean, elementList: THREE.Object[] }
-	 */
-
-	provideRelativeElements: function( request ) {
-
-		return {
-
-			isOpen: this.isOpen,
-			elementList: []
-
-		};
-
-	},
-
-	/**
 	 * loadModelConfig() abstract method
 	 * Load model's configuration into layer object.
 	 *
@@ -232,8 +203,62 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 			z: 0
 		};
 
-	}
+	},
 
+	/**
+	 * ============
+	 *
+	 * As native layer add basic line group element to layer,
+	 * the inherited layer need to implement two more abstract class than directly implement "Layer",
+	 * "getRelativeElements" and "provideRelativeElements" to enable line system.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 *
+	 * Override this function to define relative element from previous layer.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { THREE.Object[] } relativeElements
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return [];
+
+	},
+
+	/**
+	 * provideRelativeElements() abstract method
+	 * Return relative elements.
+	 *
+	 * Override this function to return relative elements based on request information.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { JSON } request, parameter configured by request layer
+	 * @return { Object } { isOpen: boolean, elementList: THREE.Object[] }
+	 */
+
+	provideRelativeElements: function( request ) {
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: []
+
+		};
+
+	}
 
 } );
 

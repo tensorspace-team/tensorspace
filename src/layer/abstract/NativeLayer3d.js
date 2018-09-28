@@ -21,7 +21,7 @@ import { NativeLayer } from "./NativeLayer";
 
 function NativeLayer3d( config ) {
 
-	// NativeLayer3d inherit from abstract layer "Layer"
+	// NativeLayer3d inherits from abstract layer "NativeLayer"
 
 	NativeLayer.call( this, config );
 
@@ -120,7 +120,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		if ( this.depth === 1 ) {
 
-			// Open layer and init one feature (depth === 1) without initializing close button.
+			// Open layer and init one feature map (depth === 1) without initializing close button.
 
 			this.isOpen = true;
 			this.initSegregationElements( this.openFmCenters );

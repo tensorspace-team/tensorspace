@@ -7,7 +7,7 @@ import { OpenTime, SeparateTime } from "../../utils/Constant";
 
 /**
  * Layer, abstract layer, can not be initialized by TensorSpace user.
- * Base class for NativeLayer1d, NativeLayer2d, NativeLayer3d, input1d, input2d, input3d, output1d, YoloBox, YoloChannel
+ * Base class for NativeLayer, MergedLayer
  *
  * @param config, user's configuration for Layer
  * @returns abstract Layer object

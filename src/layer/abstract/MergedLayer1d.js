@@ -2,14 +2,20 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-function MergedLayer1d() {
+import { MergedLayer } from "./MergedLayer";
 
-	this.isMerged = true;
+function MergedLayer1d( config ) {
+
+	MergedLayer.call( this, config );
+
+	// TODO
 
 }
 
-MergedLayer1d.prototype = {
+MergedLayer1d.prototype = Object.assign( Object.create( MergedLayer.prototype ), {
 
-};
+	// TODO
+
+} );
 
 export { MergedLayer1d };
