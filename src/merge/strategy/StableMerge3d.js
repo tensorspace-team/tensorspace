@@ -2,30 +2,25 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import { Strategy3d } from "../abstract/Strategy3d";
+
 function StableMerge3d( mergedElements ) {
 
-	this.mergedElements = mergedElements;
-	this.layerIndex = undefined;
+	Strategy3d.call( this, mergedElements );
 
 }
 
-StableMerge3d.prototype = {
-
-	setLayerIndex: function( layerIndex ) {
-
-		this.layerIndex = layerIndex;
-
-	},
+StableMerge3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), {
 
 	validate: function() {
 
 		let inputShape = this.mergedElements[ 0 ].outputShape;
 
-		for ( let i = 0; i < this.mergedElements.length; i++ ) {
+		for ( let i = 0; i < this.mergedElements.length; i ++ ) {
 
 			let outputShape = this.mergedElements[ i ].outputShape;
 
-			for ( let j = 0; j < inputShape.length; j++ ) {
+			for ( let j = 0; j < inputShape.length; j ++ ) {
 
 				if ( outputShape[ j ] !== inputShape[ j ] ) {
 
@@ -41,7 +36,7 @@ StableMerge3d.prototype = {
 
 	},
 
-	getShape: function() {
+	getOutputShape: function() {
 
 		return this.mergedElements[ 0 ].outputShape;
 
@@ -60,14 +55,14 @@ StableMerge3d.prototype = {
 
 			};
 
-			for ( let i = 0; i < this.mergedElements.length; i++ ) {
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
 
 				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
 				let relativeElements = relativeResult.elementList;
 
 				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
 
-					for ( let j = 0; j < relativeElements.length; j++ ) {
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 						straightElements.push( relativeElements[ j ] );
 
@@ -77,14 +72,14 @@ StableMerge3d.prototype = {
 
 					if ( relativeResult.isOpen ) {
 
-						for ( let j = 0; j < relativeElements.length; j++ ) {
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 							straightElements.push( relativeElements[ j ] );
 						}
 
 					} else {
 
-						for ( let j = 0; j < relativeElements.length; j++ ) {
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 							curveElements.push( relativeElements[ j ] );
 
@@ -106,14 +101,14 @@ StableMerge3d.prototype = {
 
 			};
 
-			for ( let i = 0; i < this.mergedElements.length; i++ ) {
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
 
 				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
 				let relativeElements = relativeResult.elementList;
 
 				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
 
-					for ( let j = 0; j < relativeElements.length; j++ ) {
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 						straightElements.push( relativeElements[ j ] );
 
@@ -123,7 +118,7 @@ StableMerge3d.prototype = {
 
 					if ( relativeResult.isOpen ) {
 
-						for ( let j = 0; j < relativeElements.length; j++ ) {
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 							straightElements.push( relativeElements[ j ] );
 
@@ -131,7 +126,7 @@ StableMerge3d.prototype = {
 
 					} else {
 
-						for ( let j = 0; j < relativeElements.length; j++ ) {
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 							curveElements.push( relativeElements[ j ] );
 
@@ -155,6 +150,6 @@ StableMerge3d.prototype = {
 	}
 
 
-};
+} );
 
 export { StableMerge3d };

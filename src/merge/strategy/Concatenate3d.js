@@ -2,28 +2,23 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import { Strategy3d } from "../abstract/Strategy3d";
+
 function Concatenate3d( mergedElements ) {
 
-	this.mergedElements = mergedElements;
-	this.layerIndex = undefined;
+	Strategy3d.call( this, mergedElements );
 
 	this.strategyType = "concatenate3d";
 
 }
 
-Concatenate3d.prototype = {
-
-	setLayerIndex: function( layerIndex ) {
-
-		this.layerIndex = layerIndex;
-
-	},
+Concatenate3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), {
 
 	validate: function() {
 
 		let inputShape = this.mergedElements[ 0 ].outputShape;
 
-		for ( let i = 0; i < this.mergedElements.length; i++ ) {
+		for ( let i = 0; i < this.mergedElements.length; i ++ ) {
 
 			let layerShape = this.mergedElements[ i ].outputShape;
 
@@ -39,13 +34,13 @@ Concatenate3d.prototype = {
 
 	},
 
-	getShape: function() {
+	getOutputShape: function() {
 
 		let width = this.mergedElements[ 0 ].outputShape[ 0 ];
 		let height = this.mergedElements[ 0 ].outputShape[ 1 ];
 		let depth = 0;
 
-		for (let i = 0; i < this.mergedElements.length; i++) {
+		for (let i = 0; i < this.mergedElements.length; i ++) {
 
 			depth += this.mergedElements[ i ].outputShape[ 2 ];
 
@@ -75,7 +70,7 @@ Concatenate3d.prototype = {
 
 				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
 
-					for ( let j = 0; j < relativeElements.length; j++ ) {
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 						straightElements.push( relativeElements[ j ] );
 
@@ -85,7 +80,7 @@ Concatenate3d.prototype = {
 
 					if ( relativeResult.isOpen ) {
 
-						for ( let j = 0; j < relativeElements.length; j++ ) {
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 							straightElements.push( relativeElements[ j ] );
 
@@ -93,7 +88,7 @@ Concatenate3d.prototype = {
 
 					} else {
 
-						for ( let j = 0; j < relativeElements.length; j++ ) {
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
 
 							curveElements.push( relativeElements[ j ] );
 
@@ -111,7 +106,7 @@ Concatenate3d.prototype = {
 
 			let relativeLayer;
 
-			for ( let i = 0; i < this.mergedElements.length; i++ ) {
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
 
 				let layerDepth = this.mergedElements[ i ].outputShape[ 2 ];
 
@@ -139,7 +134,7 @@ Concatenate3d.prototype = {
 
 			if ( relativeLayer.layerIndex === this.layerIndex - 1 ) {
 
-				for ( let i = 0; i < relativeElements.length; i++ ) {
+				for ( let i = 0; i < relativeElements.length; i ++ ) {
 
 					straightElements.push( relativeElements[ i ] );
 
@@ -149,7 +144,7 @@ Concatenate3d.prototype = {
 
 				if ( relativeResult.isOpen ) {
 
-					for ( let i = 0; i < relativeElements.length; i++ ) {
+					for ( let i = 0; i < relativeElements.length; i ++ ) {
 
 						straightElements.push( relativeElements[ i ] );
 
@@ -157,7 +152,7 @@ Concatenate3d.prototype = {
 
 				} else {
 
-					for ( let i = 0; i < relativeElements.length; i++ ) {
+					for ( let i = 0; i < relativeElements.length; i ++ ) {
 
 						curveElements.push( relativeElements[ i ] );
 
@@ -178,6 +173,6 @@ Concatenate3d.prototype = {
 
 	}
 
-};
+} );
 
 export { Concatenate3d };

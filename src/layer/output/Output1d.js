@@ -517,7 +517,7 @@ Output.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		} else if ( clickedElement.elementType === "outputNeural" ) {
 
-			if ( this.textSystem !== undefined && this.textSystem ) {
+			if ( this.textSystem ) {
 
 				this.hideText();
 				this.showText( clickedElement );
@@ -534,7 +534,7 @@ Output.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleHoverIn: function( hoveredElement ) {
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.initLineGroup( hoveredElement );
 
@@ -544,7 +544,7 @@ Output.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleHoverOut: function() {
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.disposeLineGroup();
 

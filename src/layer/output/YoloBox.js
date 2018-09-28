@@ -213,13 +213,13 @@ YoloBox.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleHoverIn: function( hoveredElement ) {
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.initLineGroup( hoveredElement );
 
 		}
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.showText( hoveredElement );
 
@@ -229,13 +229,13 @@ YoloBox.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleHoverOut: function() {
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.disposeLineGroup();
 
 		}
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.hideText();
 

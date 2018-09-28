@@ -16,7 +16,7 @@ import { NativeLayer } from "./NativeLayer";
  * The characteristic for classes which inherit from NativeLayer1d is that their output shape has one dimension, for example, [units].
  *
  * @param config, user's configuration for NativeLayer1d.
- * @returns NativeLayer1d layer object
+ * @constructor
  */
 
 function NativeLayer1d(config ) {
@@ -148,9 +148,9 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	/**
 	 * ============
 	 *
-	 * Functions below override base class Layer's abstract method
+	 * Functions below override base class NativeLayer's abstract method
 	 *
-	 * NativeLayer1d overrides Layer's function:
+	 * NativeLayer1d overrides NativeLayer's function:
 	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
 	 * calcCloseButtonSize, calcCloseButtonPos
 	 *
@@ -300,7 +300,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If relationSystem is enabled, show relation lines.
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.initLineGroup( hoveredElement );
 
@@ -308,7 +308,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If textSystem is enabled, show hint text, for example, show total neural number.
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.showText( hoveredElement );
 
@@ -324,7 +324,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If relationSystem is enabled, hide relation lines.
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.disposeLineGroup();
 
@@ -332,55 +332,11 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If textSystem is enabled, hide hint text, for example, hide total neural number.
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.hideText();
 
 		}
-
-	},
-
-	/**
-	 * provideRelativeElements() return relative elements.
-	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
-	 *
-	 * @param { JSON } request, parameter configured by request layer
-	 * @return { Object } { isOpen: boolean, elementList: elements }
-	 */
-
-	provideRelativeElements: function( request ) {
-
-		let relativeElements = [];
-
-		// When layer1d is in transition, will not return any relative element.
-
-		if ( !this.isTransition ) {
-
-			if ( this.isOpen ) {
-
-				// If layer is open, queue element is the relative element.
-
-				relativeElements.push( this.queueHandler.getElement() );
-
-			} else {
-
-				// If layer is close, aggregation element is the relative element.
-
-				relativeElements.push( this.aggregationHandler.getElement() );
-
-			}
-
-		}
-
-		return {
-
-			isOpen: this.isOpen,
-			elementList: relativeElements
-
-		};
 
 	},
 
@@ -441,9 +397,53 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
+	 * provideRelativeElements() return relative elements.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { JSON } request, parameter configured by request layer
+	 * @return { Object } { isOpen: boolean, elementList: elements }
+	 */
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		// When layer1d is in transition, will not return any relative element.
+
+		if ( !this.isTransition ) {
+
+			if ( this.isOpen ) {
+
+				// If layer is open, queue element is the relative element.
+
+				relativeElements.push( this.queueHandler.getElement() );
+
+			} else {
+
+				// If layer is close, aggregation element is the relative element.
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	/**
 	 * ============
 	 *
-	 * Functions above override base class Layer's abstract method
+	 * Functions above override base class NativeLayer's abstract method.
 	 *
 	 * ============
 	 */

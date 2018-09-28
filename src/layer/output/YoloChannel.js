@@ -324,7 +324,7 @@ YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleHoverIn: function( hoveredElement ) {
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.initLineGroup( hoveredElement );
 
@@ -334,7 +334,7 @@ YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleHoverOut: function() {
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.disposeLineGroup();
 

@@ -16,7 +16,7 @@ import { NativeLayer } from "./NativeLayer";
  * The characteristic for classes which inherit from NativeLayer3d is that their output shape has three dimension, for example, [width, height, depth]
  *
  * @param config, user's configuration for NativeLayer3d
- * @returns NativeLayer3d layer object
+ * @constructor
  */
 
 function NativeLayer3d( config ) {
@@ -88,9 +88,9 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	/**
 	 * ============
 	 *
-	 * Functions below override base class Layer's abstract method
+	 * Functions below override base class NativeLayer's abstract method
 	 *
-	 * NativeLayer3d overrides Layer's function:
+	 * NativeLayer3d overrides NativeLayer's function:
 	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
 	 * calcCloseButtonSize, calcCloseButtonPos
 	 *
@@ -253,7 +253,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If relationSystem is enabled, show relation lines.
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.initLineGroup( hoveredElement );
 
@@ -261,7 +261,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If textSystem is enabled, show hint text, for example, show feature map size.
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.showText( hoveredElement );
 
@@ -277,7 +277,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If relationSystem is enabled, hide relation lines.
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.disposeLineGroup();
 
@@ -285,11 +285,50 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If textSystem is enabled, hide hint text, for example, hide feature map size.
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.hideText();
 
 		}
+
+	},
+
+	/**
+	 * calcCloseButtonSize() get close button size.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { number } size, close button size
+	 */
+
+	calcCloseButtonSize: function() {
+
+		// Total height when layer is open.
+
+		let openHeight = this.actualHeight + this.openFmCenters[ this.openFmCenters.length - 1 ].z - this.openFmCenters[ 0 ].z;
+
+		return  openHeight * CloseButtonRatio;
+
+	},
+
+	/**                                                                                                                                                 y        y                        /**
+	 * calcCloseButtonPos() get close button position.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { JSON } position, close button position, relative to layer.
+	 */
+
+	calcCloseButtonPos: function() {
+
+		let leftMostCenter = this.openFmCenters[ 0 ];
+		let buttonSize = this.calcCloseButtonSize();
+
+		return {
+
+			x: leftMostCenter.x - this.actualWidth / 2 - 2 * buttonSize,
+			y: 0,
+			z: 0
+
+		};
 
 	},
 
@@ -358,48 +397,9 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
-	 * calcCloseButtonSize() get close button size.
-	 * Called by initCloseButton function in abstract class "Layer",
-	 *
-	 * @return { number } size, close button size
-	 */
-
-	calcCloseButtonSize: function() {
-
-		// Total height when layer is open.
-
-		let openHeight = this.actualHeight + this.openFmCenters[ this.openFmCenters.length - 1 ].z - this.openFmCenters[ 0 ].z;
-
-		return  openHeight * CloseButtonRatio;
-
-	},
-
-	/**                                                                                                                                                 y        y                        /**
-	 * calcCloseButtonPos() get close button position.
-	 * Called by initCloseButton function in abstract class "Layer",
-	 *
-	 * @return { JSON } position, close button position, relative to layer.
-	 */
-
-	calcCloseButtonPos: function() {
-
-		let leftMostCenter = this.openFmCenters[ 0 ];
-		let buttonSize = this.calcCloseButtonSize();
-
-		return {
-
-			x: leftMostCenter.x - this.actualWidth / 2 - 2 * buttonSize,
-			y: 0,
-			z: 0
-
-		};
-
-	},
-
-	/**
 	 * ============
 	 *
-	 * Functions above override base class Layer's abstract method
+	 * Functions above override base class NativeLayer's abstract method.
 	 *
 	 * ============
 	 */
@@ -450,7 +450,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		for ( let i = 0; i < this.depth; i ++ ) {
 
-			// FeatureMap Object is a wrapper for one feature, checkout "FeatureMap.js" for more information.
+			// FeatureMap Object is a wrapper for one feature map, checkout "FeatureMap.js" for more information.
 
 			let segregationHandler = new FeatureMap(
 
@@ -543,7 +543,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		this.neuralGroup.add( aggregationHandler.getElement() );
 
-		// Update all aggregation's visualization if layer's value has already been set.
+		// Update aggregation's visualization if layer's value has already been set.
 
 		if ( this.neuralValue !== undefined ) {
 
@@ -657,19 +657,6 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 *
 	 * ============
 	 */
-
-	/**
-	 * loadLayerConfig() abstract method
-	 * Check user's configuration and load it into layer object.
-	 *
-	 * Override this function if there are some specific user configurations for layer.
-	 *
-	 * @param { JSON } layerConfig, user's configuration for layer
-	 */
-
-	loadLayerConfig: function( layerConfig ) {
-
-	},
 
 	/**
 	 * loadModelConfig() abstract method

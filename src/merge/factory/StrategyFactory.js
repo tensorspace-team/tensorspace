@@ -2,13 +2,13 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Add3d } from "./Add3d";
-import { Concatenate3d } from "./Concatenate3d";
-import { Subtract3d } from "./Subtract3d";
-import { Multiply3d } from "./Multiply3d";
-import { Dot3d } from "./Dot3d";
-import { Maximum3d } from "./Maximum3d";
-import { Average3d}  from "./Average3d";
+import { Add3d } from "../strategy/Add3d";
+import { Concatenate3d } from "../strategy/Concatenate3d";
+import { Subtract3d } from "../strategy/Subtract3d";
+import { Multiply3d } from "../strategy/Multiply3d";
+import { Dot3d } from "../strategy/Dot3d";
+import { Maximum3d } from "../strategy/Maximum3d";
+import { Average3d}  from "../strategy/Average3d";
 
 let StrategyFactory = ( function() {
 

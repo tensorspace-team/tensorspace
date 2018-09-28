@@ -11,14 +11,14 @@ import { Layer } from "./Layer";
  * MergedLayer add merged line group character into "Layer".
  *
  * @param config, user's configuration for MergedLayer.
- * @returns MergedLayer layer object
+ * @constructor
  */
 
 function MergedLayer( config ) {
 
 	// NativeLayer inherits from abstract layer "Layer"
 
-	Layer.call( this, config );
+	Layer.call( this, config.userConfig );
 
 	/**
 	 * Store handler for line group.

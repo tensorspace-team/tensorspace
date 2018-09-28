@@ -15,7 +15,7 @@ import { NativeLayer } from "./NativeLayer";
  * The characteristic for classes which inherit from NativeLayer2d is that their output shape has one dimension, for example, [ width, depth ].
  *
  * @param config, user's configuration for NativeLayer2d.
- * @returns NativeLayer2d layer object
+ * @constructor
  */
 
 function NativeLayer2d(config ) {
@@ -25,7 +25,7 @@ function NativeLayer2d(config ) {
 	NativeLayer.call( this, config );
 
 	/**
-	 * NativeLayer1d has one output dimensions: [ width, depth ].
+	 * NativeLayer2d has one output dimensions: [ width, depth ].
 	 *
 	 * @type { int }
 	 */
@@ -34,7 +34,7 @@ function NativeLayer2d(config ) {
 	this.depth = undefined;
 
 	/**
-	 * queue's handlers list
+	 * grid lines' handlers list
 	 *
 	 * @type { Array }
 	 */
@@ -42,7 +42,7 @@ function NativeLayer2d(config ) {
 	this.queueHandlers = [];
 
 	/**
-	 * queue's centers when layer is closed.
+	 * grid lines' centers when layer is closed.
 	 *
 	 * @type { Array }
 	 */
@@ -50,7 +50,7 @@ function NativeLayer2d(config ) {
 	this.closeCenterList = [];
 
 	/**
-	 * queue's centers when layer is totally open.
+	 * grid lines' centers when layer is totally open.
 	 *
 	 * @type { Array }
 	 */
@@ -66,13 +66,22 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	/**
 	 * ============
 	 *
-	 * Functions below override base class Layer's abstract method
+	 * Functions below override base class NativeLayer's abstract method
 	 *
-	 * NativeLayer2d overrides Layer's function:
+	 * NativeLayer2d overrides NativeLayer's function:
 	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
 	 * calcCloseButtonSize, calcCloseButtonPos
 	 *
 	 * ============
+	 */
+
+	/**
+	 * init() create actual THREE.Object in NativeLayer2d, warp them into a group, and add it to THREE.js's scene.
+	 *
+	 * Model passes two parameters, center and actualDepth, to NativeLayer2d when call init() to initialize NativeLayer2d.
+	 *
+	 * @param { JSON } center, layer's center (x, y, z) relative to model
+	 * @param { double } actualDepth, layer aggregation's depth
 	 */
 
 	init: function( center, actualDepth ) {
@@ -85,11 +94,11 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
 
-		// depth === 1 means that there is only one queue in NativeLayer2d, no need for aggregation, open layer, or close layer.
+		// depth === 1 means that there is only one grid line in NativeLayer2d, no need for aggregation, open layer, or close layer.
 
 		if ( this.depth === 1 ) {
 
-			// Open layer and init one queue (depth === 1) without initializing close button.
+			// Open layer and init one grid line (depth === 1) without initializing close button.
 
 			this.isOpen = true;
 			this.initSegregationElements( this.openCenterList );
@@ -98,7 +107,7 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 			if ( this.isOpen ) {
 
-				// Init all queues and display them to totally opened positions.
+				// Init all grid lines and display them to totally opened positions.
 
 				this.initSegregationElements( this.openCenterList );
 
@@ -222,15 +231,15 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If relationSystem is enabled, show relation lines.
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.initLineGroup( hoveredElement );
 
 		}
 
-		// If textSystem is enabled, show hint text, for example, show queue length.
+		// If textSystem is enabled, show hint text, for example, show grid line length.
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.showText( hoveredElement );
 
@@ -245,83 +254,19 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// If relationSystem is enabled, hide relation lines.
 
-		if ( this.relationSystem !== undefined && this.relationSystem ) {
+		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.disposeLineGroup();
 
 		}
 
-		// If textSystem is enabled, hide hint text, for example, hide queue length.
+		// If textSystem is enabled, hide hint text, for example, hide grid line length.
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.hideText();
 
 		}
-
-	},
-
-	/**
-	 * provideRelativeElements() return relative elements.
-	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
-	 *
-	 * @param { JSON } request, parameter configured by request layer
-	 * @return { Object } { isOpen: boolean, elementList: elements }
-	 */
-
-	provideRelativeElements: function( request ) {
-
-		let relativeElements = [];
-
-		if ( request.all !== undefined && request.all ) {
-
-			// When "all" attribute in request is true, return all elements displayed in this layer.
-
-			if ( this.isOpen ) {
-
-				for ( let i = 0; i < this.queueHandlers.length; i++ ) {
-
-					relativeElements.push( this.queueHandlers[ i ].getElement() );
-
-				}
-
-			} else {
-
-				relativeElements.push( this.aggregationHandler.getElement() );
-
-			}
-
-		} else {
-
-			if ( request.index !== undefined ) {
-
-				if ( this.isOpen ) {
-
-					// If index attribute is set in request, and layer is open, return queue element which has the same index.
-
-					relativeElements.push( this.queueHandlers[ request.index ].getElement() );
-
-				} else {
-
-					// If layer is closed, return aggregation element.
-
-					relativeElements.push( this.aggregationHandler.getElement() );
-
-				}
-
-			}
-
-		}
-
-		return {
-
-			isOpen: this.isOpen,
-			elementList: relativeElements
-
-		};
 
 	},
 
@@ -358,16 +303,88 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
+	 * provideRelativeElements() return relative elements.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { JSON } request, parameter configured by request layer
+	 * @return { Object } { isOpen: boolean, elementList: elements }
+	 */
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		if ( request.all !== undefined && request.all ) {
+
+			// When "all" attribute in request is true, return all elements displayed in this layer.
+
+			if ( this.isOpen ) {
+
+				for ( let i = 0; i < this.queueHandlers.length; i ++ ) {
+
+					relativeElements.push( this.queueHandlers[ i ].getElement() );
+
+				}
+
+			} else {
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		} else {
+
+			if ( request.index !== undefined ) {
+
+				if ( this.isOpen ) {
+
+					// If index attribute is set in request, and layer is open, return grid line element which has the same index.
+
+					relativeElements.push( this.queueHandlers[ request.index ].getElement() );
+
+				} else {
+
+					// If layer is closed, return aggregation element.
+
+					relativeElements.push( this.aggregationHandler.getElement() );
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	/**
 	 * ============
 	 *
-	 * Functions above override base class Layer's abstract method
+	 * Functions above override base class NativeLayer's abstract method.
 	 *
 	 * ============
+	 */
+
+	/**
+	 * openLayer() open NativeLayer2d, switch layer status from "close" to "open".
+	 *
+	 * This API is exposed to TensorSpace user.
 	 */
 
 	openLayer: function() {
 
 		if ( !this.isOpen ) {
+
+			// QueueGroupTweenFactory handles actual open animation, checkout "QueueGroupTransitionTween.js" for more information.
 
 			QueueGroupTweenFactory.openLayer( this );
 
@@ -377,9 +394,17 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	},
 
+	/**
+	 * closeLayer() close NativeLayer2d, switch layer status from "open" to "close".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
 	closeLayer: function() {
 
 		if ( this.isOpen ) {
+
+			// QueueGroupTweenFactory handles actual close animation, checkout "QueueGroupTransitionTween.js" for more information.
 
 			QueueGroupTweenFactory.closeLayer( this );
 
@@ -389,11 +414,19 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	},
 
+	/**
+	 * initSegregationElements() create grid lines's THREE.js Object, configure them, and add them to neuralGroup in NativeLayer2d.
+	 *
+	 * @param { JSON[] } centers, list of grid lines' center (x, y, z), relative to layer
+	 */
+
 	initSegregationElements: function( centers ) {
 
 		this.queueHandlers = [];
 
-		for ( let i = 0; i < this.depth; i++ ) {
+		for ( let i = 0; i < this.depth; i ++ ) {
+
+			// GridLine Object is a wrapper for grid line elements, checkout "GridLine.js" for more information.
 
 			let queueHandler = new GridLine(
 
@@ -405,13 +438,25 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 			);
 
+			// Set layer index to feature map, feature map object can know which layer it has been positioned.
+
 			queueHandler.setLayerIndex( this.layerIndex );
+
+			// Set queue index.
+
 			queueHandler.setGridIndex( i );
 
+			// Store handler for queue for latter use.
+
 			this.queueHandlers.push( queueHandler );
+
+			// Get actual THREE.js element and add it to layer wrapper Object.
+
 			this.neuralGroup.add( queueHandler.getElement() );
 
 		}
+
+		// Update all queues' visualization if layer's value has already been set.
 
 		if ( this.neuralValue !== undefined ) {
 
@@ -421,19 +466,33 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	},
 
+	/**
+	 * disposeSegregationElements() remove grid lines from neuralGroup, clear their handlers, and dispose their THREE.js Object in NativeLayer2d.
+	 */
+
 	disposeSegregationElements: function() {
 
-		for ( let i = 0; i < this.depth; i++ ) {
+		for ( let i = 0; i < this.depth; i ++ ) {
+
+			// Remove queues' THREE.js object from neuralGroup.
 
 			this.neuralGroup.remove( this.queueHandlers[ i ].getElement() );
 
 		}
 
+		// Clear handlers, actual objects will automatically be GC.
+
 		this.queueHandlers = [];
 
 	},
 
+	/**
+	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in NativeLayer2d.
+	 */
+
 	initAggregationElement: function() {
+
+		// GridAggregation Object is a wrapper for queues' aggregation, checkout "GridAggregation.js" for more information.
 
 		let aggregationHandler = new GridAggregation(
 
@@ -443,10 +502,20 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 			this.minOpacity
 
 		);
+
+		// Set layer index to aggregation, aggregation object can know which layer it has been positioned.
+
 		aggregationHandler.setLayerIndex( this.layerIndex );
 
+		// Store handler for aggregation for latter use.
+
 		this.aggregationHandler = aggregationHandler;
+
+		// Get actual THREE.js element and add it to layer wrapper Object.
+
 		this.neuralGroup.add( this.aggregationHandler.getElement() );
+
+		// Update aggregation's visualization if layer's value has already been set.
 
 		if ( this.neuralValue !== undefined ) {
 
@@ -456,6 +525,10 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	},
 
+	/**
+	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in NativeLayer2d.
+	 */
+
 	disposeAggregationElement: function() {
 
 		this.neuralGroup.remove( this.aggregationHandler.getElement() );
@@ -463,7 +536,13 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	},
 
+	/**
+	 * updateAggregationVis() update feature maps' aggregation's visualization.
+	 */
+
 	updateAggregationVis: function() {
+
+		// Generate aggregation data from layer's raw output data. Checkout "ChannelDataGenerator.js" for more information.
 
 		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(
 
@@ -473,27 +552,47 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		);
 
+		// Get colors to render the surface of aggregation.
+
 		let colors = ColorUtils.getAdjustValues( aggregationUpdateValue, this.minOpacity );
+
+		// aggregationHandler execute update visualization process.
 
 		this.aggregationHandler.updateVis( colors );
 
 	},
 
+	/**
+	 * updateSegregationVis() grid lines' visualization.
+	 */
+
 	updateSegregationVis: function() {
+
+		// Generate grid line data from layer's raw output data. Checkout "ChannelDataGenerator.js" for more information.
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData( this.neuralValue, this.depth );
 
+		// Get colors to render the surface of grid lines.
+
 		let colors = ColorUtils.getAdjustValues( layerOutputValues, this.minOpacity );
 
-		let featureMapSize = this.width;
+		let gridLineLength = this.width;
 
-		for ( let i = 0; i < this.depth; i++ ) {
+		// Each grid line handler execute its own update function.
 
-			this.queueHandlers[ i ].updateVis( colors.slice( i * featureMapSize, ( i + 1 ) * featureMapSize ) );
+		for ( let i = 0; i < this.depth; i ++ ) {
+
+			this.queueHandlers[ i ].updateVis( colors.slice( i * gridLineLength, ( i + 1 ) * gridLineLength ) );
 
 		}
 
 	},
+
+	/**
+	 * showText() show hint text relative to given element.
+	 *
+	 * @param { THREE.Object } element
+	 */
 
 	showText: function( element ) {
 
@@ -507,6 +606,10 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 		}
 
 	},
+
+	/**
+	 * hideText() hide hint text.
+	 */
 
 	hideText: function() {
 
@@ -527,20 +630,6 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 *
 	 * ============
 	 */
-
-	/**
-	 * loadLayerConfig() abstract method
-	 * Load layer's configuration into layer which extends NativeLayer2d.
-	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
-	 *
-	 * Override this function if there are some specific configuration for layer which extends NativeLayer2d.
-	 *
-	 * @param { JSON } layerConfig, user's configuration for layer.
-	 */
-
-	loadLayerConfig: function( layerConfig ) {
-
-	},
 
 	/**
 	 * loadModelConfig() abstract method

@@ -10,7 +10,7 @@ import { OpenTime, SeparateTime } from "../../utils/Constant";
  * Base class for NativeLayer, MergedLayer
  *
  * @param config, user's configuration for Layer
- * @returns abstract Layer object
+ * @constructor
  */
 
 function Layer( config ) {

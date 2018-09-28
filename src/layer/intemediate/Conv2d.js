@@ -9,7 +9,7 @@ import { NativeLayer3d } from "../abstract/NativeLayer3d";
  * 2D Convolution
  *
  * @param config, user's configuration for Conv2d layer
- * @returns Conv2d layer object
+ * @constructor
  */
 
 function Conv2d( config ) {
@@ -71,11 +71,11 @@ function Conv2d( config ) {
 
 	this.isShapePredefined = false;
 
-	// Load user's Conv2d configuration
+	// Load user's Conv2d configuration.
 
 	this.loadLayerConfig( config );
 
-	// Init close feature map centers
+	// Init close feature map centers.
 
 	for ( let i = 0; i < this.depth; i ++ ) {
 
@@ -98,11 +98,158 @@ function Conv2d( config ) {
 Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 	/**
-	 * loadLayerConfig() check user's configuration and load it into Conv2d object.
+	 * ============
 	 *
-	 * Based on the passed in layerConfig parameter.
+	 * Functions below override base class NativeLayer3d's abstract method
 	 *
-	 * @param { JSON } layerConfig, user's configuration for Conv2d layer
+	 * Conv2d overrides NativeLayer3d's function:
+	 * loadModelConfig, assemble, getRelativeElements
+	 *
+	 * ============
+	 */
+
+	/**
+	 * loadModelConfig() load model's configuration into Conv2d object,
+	 * If one specific attribute has been set before, model's configuration will not be loaded into it.
+	 *
+	 * Based on the passed in modelConfig parameter
+	 *
+	 * @param { JSON } modelConfig, default and user's configuration for model
+	 */
+
+	loadModelConfig: function( modelConfig ) {
+
+		// Call super class "Layer"'s method to load common model configuration, check out "Layer.js" file for more information.
+
+		this.loadBasicModelConfig( modelConfig );
+
+		if ( this.color === undefined ) {
+
+			this.color = modelConfig.color.conv2d;
+
+		}
+
+		if ( this.layerShape === undefined ) {
+
+			this.layerShape = modelConfig.layerShape;
+
+		}
+
+		if ( this.aggregationStrategy === undefined ) {
+
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
+
+		}
+
+	},
+
+	/**
+	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 *
+	 * @param { int } layerIndex, this layer's order in model
+	 */
+
+	assemble: function ( layerIndex ) {
+
+		this.layerIndex = layerIndex;
+
+		// If user's do not define a specific 2d shape for feature map,
+
+		if ( !this.isShapePredefined ) {
+
+			this.inputShape = this.lastLayer.outputShape;
+
+			// Two padding mode is the same as TensorFlow
+
+			if ( this.padding === "valid" ) {
+
+				// floor[ ( W - F + 1 ) / S ] + 1
+
+				this.width = Math.floor( ( this.inputShape[ 0 ] - this.kernelSize ) / this.strides ) + 1;
+				this.height = Math.floor( ( this.inputShape[ 1 ] - this.kernelSize) / this.strides ) + 1;
+
+			} else if ( this.padding === "same" ) {
+
+				// ceil( W / S )
+
+				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides );
+				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides );
+
+			}
+
+			this.fmShape = [ this.width, this.height ];
+
+		}
+
+		// Conv2d layer's outputShape has three dimension, that's why Conv2d layer inherits from abstract layer "NativeLayer3d".
+
+		this.outputShape = [ this.width, this.height, this.filters ];
+
+		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
+
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
+		this.actualHeight = this.height * this.unitLength;
+
+		// Calculate the feature map centers for open status.
+
+		this.openFmCenters = FmCenterGenerator.getFmCenters(
+
+			this.layerShape,
+			this.depth,
+			this.actualWidth,
+			this.actualHeight
+
+		);
+
+	},
+
+	/**
+	 * getRelativeElements() get relative element in last layer for relative lines based on given hovered element.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster.
+	 * @return { THREE.Object[] } relativeElements
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		let relativeElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureMap" ) {
+
+			// "all" means get all "displayed" elements from last layer.
+
+			let request = {
+
+				all: true
+
+			};
+
+			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
+
+		}
+
+		return relativeElements;
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class NativeLayer3d's abstract method.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * loadLayerConfig() Load user's configuration into Conv2d.
+	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
+	 *
+	 * @param { JSON } layerConfig, user's configuration for Conv2d.
 	 */
 
 	loadLayerConfig: function( layerConfig ) {
@@ -165,135 +312,6 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 			console.error( "Lack config for Conv2d layer." );
 
 		}
-
-	},
-
-	/**
-	 * loadModelConfig() load model's configuration into Conv2d object,
-	 * If one specific attribute has been set before, model's configuration will not be loaded into it.
-	 *
-	 * Based on the passed in modelConfig parameter
-	 *
-	 * @param { JSON } modelConfig, default and user's configuration for model
-	 */
-
-	loadModelConfig: function( modelConfig ) {
-
-		// Call super class "Layer"'s method to load common model configuration, check out "Layer.js" file for more information.
-
-		this.loadBasicModelConfig( modelConfig );
-
-		if ( this.color === undefined ) {
-
-			this.color = modelConfig.color.conv2d;
-
-		}
-
-		if ( this.layerShape === undefined ) {
-
-			this.layerShape = modelConfig.layerShape;
-
-		}
-
-		if ( this.aggregationStrategy === undefined ) {
-
-			this.aggregationStrategy = modelConfig.aggregationStrategy;
-
-		}
-
-	},
-
-	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
-	 */
-
-	assemble: function ( layerIndex ) {
-
-		this.layerIndex = layerIndex;
-
-		// If user's do not define a specific 2d shape for feature map,
-
-		if ( !this.isShapePredefined ) {
-
-			this.inputShape = this.lastLayer.outputShape;
-
-			// Two padding mode is the same as TensorFlow
-
-			if ( this.padding === "valid" ) {
-
-				// ceil[ ( W - F + 1 ) / S ]
-
-				this.width = Math.floor( ( this.inputShape[ 0 ] - this.kernelSize ) / this.strides ) + 1;
-				this.height = Math.floor( ( this.inputShape[ 1 ] - this.kernelSize) / this.strides ) + 1;
-
-			} else if ( this.padding === "same" ) {
-
-				// ceil( W / S )
-
-				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides );
-				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides );
-
-			}
-
-			this.fmShape = [ this.width, this.height ];
-
-		}
-
-		// Conv2d layer's outputShape has three dimension, that's why Conv2d layer inherits from abstract layer "NativeLayer3d".
-
-		this.outputShape = [ this.width, this.height, this.filters ];
-
-		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object
-
-		this.unitLength = this.lastLayer.unitLength;
-		this.actualWidth = this.width * this.unitLength;
-		this.actualHeight = this.height * this.unitLength;
-
-		// Calculate the feature map centers for open status
-
-		this.openFmCenters = FmCenterGenerator.getFmCenters(
-
-			this.layerShape,
-			this.depth,
-			this.actualWidth,
-			this.actualHeight
-
-		);
-
-	},
-
-	/**
-	 * getRelativeElements() get relative element in last layer for relative lines based on given hovered element.
-	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
-	 *
-	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
-	 * @return { THREE.Object[] } relativeElements
-	 */
-
-	getRelativeElements: function( selectedElement ) {
-
-		let relativeElements = [];
-
-		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureMap" ) {
-
-			// "all" means get all "displayed" elements from last layer.
-
-			let request = {
-
-				all: true
-
-			};
-
-			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
-
-		}
-
-		return relativeElements;
 
 	}
 

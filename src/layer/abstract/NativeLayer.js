@@ -11,7 +11,7 @@ import { BasicLineGroup } from "../../elements/BasicLineGroup";
  * NativeLayer add basic line group character into "Layer".
  *
  * @param config, user's configuration for NativeLayer.
- * @returns NativeLayer layer object
+ * @constructor
  */
 
 function NativeLayer( config ) {

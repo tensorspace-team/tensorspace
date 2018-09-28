@@ -133,7 +133,7 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleHoverIn: function( hoveredElement ) {
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.showText( hoveredElement );
 
@@ -143,7 +143,7 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleHoverOut: function() {
 
-		if ( this.textSystem !== undefined && this.textSystem ) {
+		if ( this.textSystem ) {
 
 			this.hideText();
 

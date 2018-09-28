@@ -26,7 +26,7 @@ function Subtract( layerList, config ) {
 
 		}
 
-		for ( let i = 0; i < layerList.length; i++ ) {
+		for ( let i = 0; i < layerList.length; i ++ ) {
 
 			if ( layerList[ i ].layerDimension !== depth ) {
 
