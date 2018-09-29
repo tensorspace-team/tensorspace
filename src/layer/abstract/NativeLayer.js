@@ -7,7 +7,7 @@ import { BasicLineGroup } from "../../elements/BasicLineGroup";
 
 /**
  * NativeLayer, abstract layer, can not be initialized by TensorSpace user.
- * Base class for NativeLayer1d, NativeLayer2d, NativeLayer3d, Input1d, Input2d, Input3d, Output1d, Output2d, YoloBox, YoloChannel.
+ * Base class for NativeLayer1d, NativeLayer2d, NativeLayer3d, Input1d, Input2d, Input3d, Output1d, Output2d, OutputDetection, YoloChannel.
  * NativeLayer add basic line group character into "Layer".
  *
  * @param config, user's configuration for NativeLayer.

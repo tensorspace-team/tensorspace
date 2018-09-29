@@ -6,7 +6,7 @@ import { OutputUnit } from "./OutputUnit";
 import { OutputNeuralPosGenerator } from "../utils/OutputNeuralPosGenerator";
 import { ColorUtils } from "../utils/ColorUtils";
 
-function OutputSegment(outputs, segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity, initStatus ) {
+function OutputSegment( outputs, segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity, initStatus ) {
 
 	this.outputs = outputs;
 	this.segmentLength = segmentLength;
@@ -73,6 +73,8 @@ OutputSegment.prototype = {
 		}
 
 		this.outputGroup = outputGroup;
+
+		this.initStatus = "open";
 
 	},
 

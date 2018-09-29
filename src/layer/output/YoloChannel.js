@@ -8,7 +8,7 @@ import { YoloTweenFactory } from "../../animation/YoloTransitionTween";
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { CloseButtonRatio } from "../../utils/Constant";
 
-function YoloChannel(config ) {
+function YoloChannel( config ) {
 
 	NativeLayer.call( this, config );
 
@@ -34,6 +34,18 @@ function YoloChannel(config ) {
 
 YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
+	/**
+	 * ============
+	 *
+	 * Functions below override base class NativeLayer's abstract method
+	 *
+	 * YoloChannel overrides NativeLayer's function:
+	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, loadModelConfig,
+	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, provideRelativeElements,
+	 *
+	 * ============
+	 */
+
 	init: function( center, actualDepth ) {
 
 		this.center = center;
@@ -58,34 +70,6 @@ YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		// Create relative line element.
 
 		this.addLineGroup();
-
-	},
-
-	loadLayerConfig: function ( layerConfig ) {
-
-		this.loadBasicLayerConfig( layerConfig );
-
-		if ( layerConfig !== undefined ) {
-
-			if ( layerConfig.onClick !== undefined ) {
-
-				this.onNeuralClicked = layerConfig.onClick;
-
-			}
-
-		}
-
-	},
-
-	loadModelConfig: function ( modelConfig ) {
-
-		this.loadBasicModelConfig( modelConfig );
-
-		if ( this.color === undefined ) {
-
-			this.color = modelConfig.color.yoloOutput;
-
-		}
 
 	},
 
@@ -122,94 +106,15 @@ YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	},
 
-	calcOpenResultPos: function() {
+	updateValue: function() {
 
-		let openResultList = [];
-
-		let initXTranslate = - 2 * ( this.widthNum - 1 ) * this.unitLength;
-		let initZTranslate = - 2 * ( this.heightNum - 1 ) * this.unitLength;
-
-		let distance = 4 * this.unitLength;
-
-		for ( let i = 0; i < this.widthNum; i ++ ) {
-
-			for ( let j = 0; j < this.heightNum; j ++ ) {
-
-				openResultList.push( {
-
-					x: initXTranslate + distance * j,
-					y: 0,
-					z: initZTranslate + distance * i
-
-				} );
-
-			}
-
-		}
-
-		return openResultList;
+		this.neuralValue = this.lastLayer.neuralValue;
 
 	},
 
-	initAggregationElement: function() {
+	clear: function() {
 
-		let aggregationHandler = new QueueAggregation(
-
-			this.actualWidth,
-			this.actualHeight,
-			this.actualDepth,
-			this.color
-
-		);
-
-		aggregationHandler.setLayerIndex( this.layerIndex );
-		aggregationHandler.setPositionedLayer( this.layerType );
-
-		this.aggregationHandler = aggregationHandler;
-		this.neuralGroup.add( this.aggregationHandler.getElement() );
-
-	},
-
-	disposeAggregationElement: function() {
-
-		this.neuralGroup.remove( this.aggregationHandler.getElement() );
-		this.aggregationHandler = undefined;
-
-	},
-
-	initSegregationElements: function( centers ) {
-
-		for ( let i = 0; i < this.totalOutputs; i++ ) {
-
-			let segregationHandler = new YoloOutputUnit(
-
-				this.unitLength,
-				centers[ i ],
-				this.color,
-				this.minOpacity
-
-			);
-
-			segregationHandler.setLayerIndex( this.layerIndex );
-			segregationHandler.setOutputIndex( i );
-			segregationHandler.setPositionedLayer( this.layerType );
-
-			this.segregationHandlers.push( segregationHandler );
-			this.neuralGroup.add( segregationHandler.getElement() );
-
-		}
-
-	},
-
-	disposeSegregationElements: function() {
-
-		for ( let i = 0; i < this.segregationHandlers.length; i++ ) {
-
-			this.neuralGroup.remove( this.segregationHandlers[ i ].getElement() );
-
-		}
-
-		this.segregationHandlers = [];
+		this.neuralValue = undefined;
 
 	},
 
@@ -258,17 +163,35 @@ YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	},
 
-	getNeuralOutputValue: function( outputIndex ) {
+	handleHoverIn: function( hoveredElement ) {
 
-		let singleOutput = [];
+		if ( this.relationSystem ) {
 
-		if ( this.neuralValue !== undefined ) {
-
-			singleOutput = this.neuralValue.slice( this.channelDepth * outputIndex, this.channelDepth * ( outputIndex + 1 ) );
+			this.lineGroupHandler.showLines( hoveredElement );
 
 		}
 
-		return singleOutput;
+	},
+
+	handleHoverOut: function() {
+
+		if ( this.relationSystem ) {
+
+			this.lineGroupHandler.hideLines();
+
+		}
+
+	},
+
+	loadModelConfig: function ( modelConfig ) {
+
+		this.loadBasicModelConfig( modelConfig );
+
+		if ( this.color === undefined ) {
+
+			this.color = modelConfig.color.yoloOutput;
+
+		}
 
 	},
 
@@ -290,55 +213,23 @@ YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	},
 
-	clear: function() {
+	getRelativeElements: function ( selectedElement ) {
 
-		this.neuralValue = undefined;
+		let relativeElements = [];
 
-	},
+		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputNeural" ) {
 
-	openLayer: function() {
+			let request = {
 
-		if ( !this.isOpen ) {
+				all: true
 
-			YoloTweenFactory.openLayer( this );
+			};
 
-		}
-
-	},
-
-	closeLayer: function() {
-
-		if ( this.isOpen ) {
-
-			YoloTweenFactory.closeLayer( this );
+			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
 		}
 
-	},
-
-	updateValue: function() {
-
-		this.neuralValue = this.lastLayer.neuralValue;
-
-	},
-
-	handleHoverIn: function( hoveredElement ) {
-
-		if ( this.relationSystem ) {
-
-			this.lineGroupHandler.initLineGroup( hoveredElement );
-
-		}
-
-	},
-
-	handleHoverOut: function() {
-
-		if ( this.relationSystem ) {
-
-			this.lineGroupHandler.disposeLineGroup();
-
-		}
+		return relativeElements;
 
 	},
 
@@ -389,23 +280,152 @@ YoloChannel.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	},
 
-	getRelativeElements: function ( selectedElement ) {
+	/**
+	 * ============
+	 *
+	 * Functions above override base class NativeLayer's abstract method.
+	 *
+	 * ============
+	 */
 
-		let relativeElements = [];
+	openLayer: function() {
 
-		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputNeural" ) {
+		if ( !this.isOpen ) {
 
-			let request = {
-
-				all: true
-
-			};
-
-			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
+			YoloTweenFactory.openLayer( this );
 
 		}
 
-		return relativeElements;
+	},
+
+	closeLayer: function() {
+
+		if ( this.isOpen ) {
+
+			YoloTweenFactory.closeLayer( this );
+
+		}
+
+	},
+
+	loadLayerConfig: function ( layerConfig ) {
+
+		this.loadBasicLayerConfig( layerConfig );
+
+		if ( layerConfig !== undefined ) {
+
+			if ( layerConfig.onClick !== undefined ) {
+
+				this.onNeuralClicked = layerConfig.onClick;
+
+			}
+
+		}
+
+	},
+
+	initSegregationElements: function( centers ) {
+
+		for ( let i = 0; i < this.totalOutputs; i ++ ) {
+
+			let segregationHandler = new YoloOutputUnit(
+
+				this.unitLength,
+				centers[ i ],
+				this.color,
+				this.minOpacity
+
+			);
+
+			segregationHandler.setLayerIndex( this.layerIndex );
+			segregationHandler.setOutputIndex( i );
+			segregationHandler.setPositionedLayer( this.layerType );
+
+			this.segregationHandlers.push( segregationHandler );
+			this.neuralGroup.add( segregationHandler.getElement() );
+
+		}
+
+	},
+
+	disposeSegregationElements: function() {
+
+		for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+
+			this.neuralGroup.remove( this.segregationHandlers[ i ].getElement() );
+
+		}
+
+		this.segregationHandlers = [];
+
+	},
+
+	initAggregationElement: function() {
+
+		let aggregationHandler = new QueueAggregation(
+
+			this.actualWidth,
+			this.actualHeight,
+			this.actualDepth,
+			this.color
+
+		);
+
+		aggregationHandler.setLayerIndex( this.layerIndex );
+		aggregationHandler.setPositionedLayer( this.layerType );
+
+		this.aggregationHandler = aggregationHandler;
+		this.neuralGroup.add( this.aggregationHandler.getElement() );
+
+	},
+
+	disposeAggregationElement: function() {
+
+		this.neuralGroup.remove( this.aggregationHandler.getElement() );
+		this.aggregationHandler = undefined;
+
+	},
+
+	getNeuralOutputValue: function( outputIndex ) {
+
+		let singleOutput = [];
+
+		if ( this.neuralValue !== undefined ) {
+
+			singleOutput = this.neuralValue.slice( this.channelDepth * outputIndex, this.channelDepth * ( outputIndex + 1 ) );
+
+		}
+
+		return singleOutput;
+
+	},
+
+	calcOpenResultPos: function() {
+
+		let openResultList = [];
+
+		let initXTranslate = - 2 * ( this.widthNum - 1 ) * this.unitLength;
+		let initZTranslate = - 2 * ( this.heightNum - 1 ) * this.unitLength;
+
+		let distance = 4 * this.unitLength;
+
+		for ( let i = 0; i < this.widthNum; i ++ ) {
+
+			for ( let j = 0; j < this.heightNum; j ++ ) {
+
+				openResultList.push( {
+
+					x: initXTranslate + distance * j,
+					y: 0,
+					z: initZTranslate + distance * i
+
+				} );
+
+			}
+
+		}
+
+		return openResultList;
 
 	}
 

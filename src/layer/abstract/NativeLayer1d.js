@@ -118,7 +118,7 @@ function NativeLayer1d(config ) {
 
 	/**
 	 * aggregation's width and height.
-	 * aggregation is an element which is displayed on the screen when layer1d is close.
+	 * aggregation is an element which is displayed on the screen when layer1d is closed.
 	 *
 	 * @type { number }
 	 */
@@ -151,8 +151,8 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 * Functions below override base class NativeLayer's abstract method
 	 *
 	 * NativeLayer1d overrides NativeLayer's function:
-	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
-	 * calcCloseButtonSize, calcCloseButtonPos
+	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut,
+	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements
 	 *
 	 * ============
 	 */
@@ -302,7 +302,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		if ( this.relationSystem ) {
 
-			this.lineGroupHandler.initLineGroup( hoveredElement );
+			this.lineGroupHandler.showLines( hoveredElement );
 
 		}
 
@@ -326,7 +326,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		if ( this.relationSystem ) {
 
-			this.lineGroupHandler.disposeLineGroup();
+			this.lineGroupHandler.hideLines();
 
 		}
 
@@ -871,7 +871,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 			if ( this.segmentIndex === this.totalSegments - 1 ) {
 
-				// Last page now, click "last" button will show "next" button.
+				// The Last page now, click "last" button will show "next" button.
 
 				this.showNextButton();
 
@@ -938,7 +938,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		// The size of pagination button is the same as close button in NativeLayer1d.
 
-		this.calcCloseButtonSize();
+		return this.calcCloseButtonSize();
 
 	},
 

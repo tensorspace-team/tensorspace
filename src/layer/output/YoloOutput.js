@@ -1,6 +1,10 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { LayerGroup } from "../abstract/LayerGroup";
 import { YoloChannel } from "./YoloChannel";
-import { YoloBox } from "./YoloBox";
+import { OutputDetection } from "./OutputDetection";
 
 function YoloOutput( config ) {
 
@@ -25,7 +29,7 @@ YoloOutput.prototype = Object.assign( Object.create( LayerGroup.prototype ), {
 	createMembers: function() {
 
 		let yoloChannel = new YoloChannel( this.config );
-		let yoloBox = new YoloBox( this.config );
+		let yoloBox = new OutputDetection( this.config );
 
 		this.yoloChannel = yoloChannel;
 		this.yoloBox = yoloBox;
@@ -34,8 +38,8 @@ YoloOutput.prototype = Object.assign( Object.create( LayerGroup.prototype ), {
 
 	init: function( centerList, actualDepth ) {
 
-		this.yoloChannel.init( centerList[0], actualDepth );
-		this.yoloBox.init( centerList[1], actualDepth );
+		this.yoloChannel.init( centerList[ 0 ], actualDepth );
+		this.yoloBox.init( centerList[ 1 ], actualDepth );
 
 	},
 

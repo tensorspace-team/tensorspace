@@ -13,7 +13,7 @@ import { Cropping2d } from "./layer/intemediate/Cropping2d";
 import { Input1d } from "./layer/input/Input1d";
 import { Input2d } from "./layer/input/Input2d";
 import { Input3d } from "./layer/input/Input3d";
-import { Output } from "./layer/output/Output1d";
+import { Output1d } from "./layer/output/Output1d";
 import { Output2d } from "./layer/output/Output2d";
 import { YoloOutput } from "./layer/output/YoloOutput";
 import { Flatten } from "./layer/intemediate/Flatten";
@@ -55,7 +55,7 @@ let layers = {
 	Input1d: Input1d,
 	Input2d: Input2d,
 	Input3d: Input3d,
-	Output: Output,
+	Output1d: Output1d,
 	Output2d: Output2d,
 	YoloOutput: YoloOutput,
 	Conv1d: Conv1d,

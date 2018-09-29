@@ -145,7 +145,7 @@ MergedLineGroup.prototype = {
 
 	},
 
-	initLineGroup: function( selectedElement ) {
+	showLines: function(selectedElement ) {
 
 		let lineGroupParameters = this.getLineGroupParameters( selectedElement );
 
@@ -178,7 +178,7 @@ MergedLineGroup.prototype = {
 
 	},
 
-	disposeLineGroup: function() {
+	hideLines: function() {
 
 		this.straightLineGroup.geometry.dispose();
 		this.neuralGroup.remove( this.straightLineGroup );

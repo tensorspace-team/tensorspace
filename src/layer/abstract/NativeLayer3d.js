@@ -91,8 +91,8 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 * Functions below override base class NativeLayer's abstract method
 	 *
 	 * NativeLayer3d overrides NativeLayer's function:
-	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, provideRelativeElements,
-	 * calcCloseButtonSize, calcCloseButtonPos
+	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut
+	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements
 	 *
 	 * ============
 	 */
@@ -255,7 +255,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		if ( this.relationSystem ) {
 
-			this.lineGroupHandler.initLineGroup( hoveredElement );
+			this.lineGroupHandler.showLines( hoveredElement );
 
 		}
 
@@ -279,7 +279,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		if ( this.relationSystem ) {
 
-			this.lineGroupHandler.disposeLineGroup();
+			this.lineGroupHandler.hideLines();
 
 		}
 

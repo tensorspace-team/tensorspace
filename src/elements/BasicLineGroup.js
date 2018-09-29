@@ -73,7 +73,7 @@ BasicLineGroup.prototype = {
 
 	},
 
-	initLineGroup: function( selectedElement ) {
+	showLines: function(selectedElement ) {
 
 		let lineGroupParameters = this.getLineGroupParameters( selectedElement );
 
@@ -96,7 +96,7 @@ BasicLineGroup.prototype = {
 
 	},
 
-	disposeLineGroup: function() {
+	hideLines: function() {
 
 		this.lineGroup.geometry.dispose();
 		this.neuralGroup.remove( this.lineGroup );

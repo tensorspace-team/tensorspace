@@ -130,7 +130,7 @@ Output2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		if ( this.relationSystem ) {
 
-			this.initLineGroup( hoveredElement );
+			this.showLines( hoveredElement );
 
 		}
 
@@ -146,7 +146,7 @@ Output2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		if ( this.relationSystem ) {
 
-			this.disposeLineGroup();
+			this.hideLines();
 
 		}
 

@@ -99,8 +99,8 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	 * Functions below override base class MergedLayer's abstract method
 	 *
 	 * MergedLayer3d overrides MergedLayer's function:
-	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, loadModelConfig, getRelativeElements,
-	 * provideRelativeElements, calcCloseButtonSize, calcCloseButtonPos
+	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, loadModelConfig,
+	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, provideRelativeElements
 	 *
 	 * ============
 	 */
@@ -331,7 +331,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		if ( this.relationSystem ) {
 
-			this.lineGroupHandler.initLineGroup( hoveredElement );
+			this.lineGroupHandler.showLines( hoveredElement );
 
 		}
 
@@ -355,7 +355,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		if ( this.relationSystem ) {
 
-			this.lineGroupHandler.disposeLineGroup();
+			this.lineGroupHandler.hideLines();
 
 		}
 
@@ -535,6 +535,42 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	 */
 
 	/**
+	 * openLayer() open MergedLayer3d, switch layer status from "close" to "open".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
+	openLayer: function() {
+
+		if ( !this.isOpen ) {
+
+			// MapTransitionFactory handles actual open animation, checkout "MapTransitionTween.js" for more information.
+
+			MapTransitionFactory.openLayer( this );
+
+		}
+
+	},
+
+	/**
+	 * closeLayer() close MergedLayer3d, switch layer status from "open" to "close".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
+	closeLayer: function() {
+
+		if ( this.isOpen ) {
+
+			// MapTransitionFactory handles actual close animation, checkout "MapTransitionTween.js" for more information.
+
+			MapTransitionFactory.closeLayer( this );
+
+		}
+
+	},
+
+	/**
 	 * loadLayerConfig() init concrete strategy for MergedLayer3d.
 	 * Create Strategy object and set it to MergedLayer3d based on layerConfig.
 	 *
@@ -568,42 +604,6 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 			// Get concrete strategy from factory.
 
 			this.operationStrategy = StrategyFactory.getOperationStrategy( this.operator, 3, this.mergedElements );
-
-		}
-
-	},
-
-	/**
-	 * openLayer() open MergedLayer3d, switch layer status from "close" to "open".
-	 *
-	 * This API is exposed to TensorSpace user.
-	 */
-
-	openLayer: function() {
-
-		if ( !this.isOpen ) {
-
-			// MapTransitionFactory handles actual open animation, checkout "MapTransitionTween.js" for more information.
-
-			MapTransitionFactory.openLayer( this );
-
-		}
-
-	},
-
-	/**
-	 * closeLayer() close MergedLayer3d, switch layer status from "open" to "close".
-	 *
-	 * This API is exposed to TensorSpace user.
-	 */
-
-	closeLayer: function() {
-
-		if ( this.isOpen ) {
-
-			// MapTransitionFactory handles actual close animation, checkout "MapTransitionTween.js" for more information.
-
-			MapTransitionFactory.closeLayer( this );
 
 		}
 
