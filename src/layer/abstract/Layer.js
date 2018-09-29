@@ -203,7 +203,7 @@ function Layer( config ) {
 	/**
 	 * Parameters for animation time.
 	 *
-	 * @type {number}
+	 * @type { number }
 	 */
 
 	this.animationTimeRatio = 1;
@@ -213,10 +213,20 @@ function Layer( config ) {
 	/**
 	 * Identity whether the layer is a group for layers.
 	 *
-	 * @type {boolean}
+	 * @type { boolean }
 	 */
 
 	this.isGroup = false;
+
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * For example, YoloGrid can automatically detect the output from last layer,
+	 * user do not need to add value for YoloGrid value when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = undefined;
 
 	// Load user's common config into layer's attribute.
 
@@ -397,7 +407,6 @@ Layer.prototype = {
 			// Set layer information to close button.
 
 			closeButtonHandler.setLayerIndex( this.layerIndex );
-			closeButtonHandler.setPositionedLayer( this.layerType );
 
 			// Store close button handler and add actual Close button element to neuralGroup.
 

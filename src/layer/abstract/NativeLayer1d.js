@@ -135,6 +135,15 @@ function NativeLayer1d(config ) {
 
 	this.isTransition = false;
 
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for NativeLayer1d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
 	// Load user's layer1d config into some layer1d's attribute.
 
 	this.loadLayer1dConfig( config );

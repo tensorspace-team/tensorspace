@@ -39,6 +39,15 @@ function Input2d( config ) {
 
 	} ];
 
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for Input2d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
 	this.layerType = "input";
 
 }

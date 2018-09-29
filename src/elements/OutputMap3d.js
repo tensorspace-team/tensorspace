@@ -58,7 +58,13 @@ OutputMap3d.prototype = {
 
 		this.canvasTexture = canvasTexture;
 
-		let material = new THREE.MeshBasicMaterial( { map: canvasTexture } );
+		let material;
+
+		// suppress three.js image is not power of two warning
+
+		console.warn = function(){};
+
+		material = new THREE.MeshBasicMaterial( { map: canvasTexture } );
 
 		let boxGeometry = new THREE.BoxBufferGeometry( this.actualWidth, this.actualDepth, this.actualHeight );
 

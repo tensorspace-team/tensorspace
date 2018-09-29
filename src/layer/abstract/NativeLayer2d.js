@@ -57,6 +57,15 @@ function NativeLayer2d(config ) {
 
 	this.openCenterList = [];
 
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for NativeLayer2d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
 	this.layerDimension = 2;
 
 }

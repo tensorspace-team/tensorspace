@@ -79,6 +79,15 @@ function NativeLayer3d( config ) {
 
 	this.aggregationStrategy = undefined;
 
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for NativeLayer3d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
 	this.layerDimension = 3;
 
 }
@@ -518,7 +527,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	initAggregationElement: function() {
 
-		// MapAggregation Object is a wrapper for feature maps's aggregation, checkout "MapAggregation.js" for more information.
+		// MapAggregation Object is a wrapper for feature maps' aggregation, checkout "MapAggregation.js" for more information.
 
 		let aggregationHandler = new MapAggregation(
 

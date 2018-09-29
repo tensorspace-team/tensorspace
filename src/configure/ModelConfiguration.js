@@ -30,7 +30,8 @@ function ModelConfiguration(config ) {
 		padding2d: 0xffffff,
 		output1d: 0xffffff,
 		output2d: 0xffffff,
-		yoloOutput: 0xffffff,
+		outputDetection: 0xffffff,
+		yoloGrid: 0xffffff,
 		flatten: 0xffffff,
 		globalPooling1d: 0xffffff,
 		globalPooling2d: 0xffffff,
@@ -250,9 +251,15 @@ function ModelConfiguration(config ) {
 
 			}
 
-			if ( config.color.yoloOutput !== undefined ) {
+			if ( config.color.outputDetection !== undefined ) {
 
-				this.color.yoloOutput = config.color.yoloOutput;
+				this.color.outputDetection = config.color.outputDetection;
+
+			}
+
+			if ( config.color.yoloGrid !== undefined ) {
+
+				this.color.yoloGrid = config.color.yoloGrid;
 
 			}
 

@@ -1,3 +1,9 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+// TODO: group to wrap multiple layers
+
 function LayerGroup() {
 
 	this.isGroup = true;

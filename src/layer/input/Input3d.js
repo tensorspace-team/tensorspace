@@ -66,6 +66,15 @@ function Input3d( config ) {
 	this.aggregationHandler = undefined;
 	this.segregationHandlers = [];
 
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for Input3d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
 	this.layerType = "input3d";
 
 }

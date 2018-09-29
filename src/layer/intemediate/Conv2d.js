@@ -91,7 +91,7 @@ function Conv2d( config ) {
 
 	}
 
-	this.layerType = "conv2d";
+	this.layerType = "Conv2d";
 
 }
 

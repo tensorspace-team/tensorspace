@@ -7,26 +7,69 @@ import { OutputMap3d } from "../../elements/OutputMap3d";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { QueueAggregation } from "../../elements/QueueAggregation";
 import { CloseButtonRatio } from "../../utils/Constant";
-import { YoloResultGenerator } from "../../utils/YoloResultGenerator";
+
+/**
+ * OutputDetection, output layer, can be initialized by TensorSpace user.
+ *
+ * 2D output, shape is the same as input, can draw rectangles on it, can be used to show object detection result.
+ *
+ * @param config, user's configuration for OutputDetection.
+ * @constructor
+ */
 
 function OutputDetection( config ) {
 
+	// OutputDetection inherits from abstract layer "NativeLayer".
+
 	NativeLayer.call( this, config );
+
+	/**
+	 * OutputDetection has three output dimensions: [ width, height, depth ]
+	 *
+	 * @type { int }
+	 */
 
 	this.width = undefined;
 	this.height = undefined;
 	this.depth = 3;
 
+	/**
+	 * Store outputMap handler.
+	 *
+	 * @type { Object }
+	 */
+
 	this.outputHandler = undefined;
 
+	/**
+	 * Store rectangle parameters drawn on it.
+	 * Each rectangle has a JSON parameter, the parameter is like:
+	 * {
+	 * 		x: x,
+	 * 		y: y,
+	 * 		width: width,
+	 * 		height: height,
+	 * }
+	 *
+	 * @type { Array }
+	 */
+
 	this.rectangleList = [];
-	this.channelIndex = undefined;
-	this.allChannel = true;
 
-	this.anchors = undefined;
-	this.isOpen = false;
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * True means that user do not need to add value for OutputDetection value when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
 
-	this.layerType = "yoloBox";
+	this.autoOutputDetect = true;
+
+	// Load user's OutputDetection configuration.
+
+	this.loadLayerConfig( config );
+
+	this.layerType = "OutputDetection";
 
 }
 
@@ -44,15 +87,44 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 	 * ============
 	 */
 
+	/**
+	 * init() create actual THREE.Object in OutputDetection, warp them into a group, and add it to THREE.js's scene.
+	 *
+	 * Model passes two parameters, center and actualDepth, to OutputDetection when call init() to initialize OutputDetection.
+	 *
+	 * @param { JSON } center, layer's center (x, y, z) relative to model
+	 * @param { double } actualDepth, layer aggregation's depth
+	 */
+
 	init: function( center, actualDepth ) {
 
 		this.center = center;
 		this.actualDepth = actualDepth;
 
+		// Init a neuralGroup as the wrapper for all THREE.Object in OutputDetection.
+
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
 
-		this.initAggregationElement();
+		if ( this.isOpen ) {
+
+			// Init output element.
+
+			this.initOutput();
+
+			// Init close button.
+
+			this.initCloseButton();
+
+		} else {
+
+			// Init aggregation when layer is closed.
+
+			this.initAggregationElement();
+
+		}
+
+		// Add the wrapper object to the actual THREE.js scene.
 
 		this.scene.add( this.neuralGroup );
 
@@ -62,9 +134,17 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
-	assemble: function(layerIndex) {
+	/**
+	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 *
+	 * @param { int } layerIndex, this layer's order in model
+	 */
+
+	assemble: function( layerIndex ) {
 
 		this.layerIndex = layerIndex;
+
+		// Automatically detect model's input shape as outputShape.
 
 		let modelInputShape = this.model.layers[ 0 ].outputShape;
 
@@ -73,14 +153,19 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		this.channelShape = this.inputShape;
-		this.outputShape = [ this.width, this.height ];
+		this.outputShape = [ this.width, this.height, this.depth ];
+
+		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.lastLayer.actualWidth;
 		this.actualHeight = this.lastLayer.actualHeight;
 
 	},
+
+	/**
+	 * updateValue(), get layer value from model's input value.
+	 */
 
 	updateValue: function() {
 
@@ -90,11 +175,15 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
+	/**
+	 * clear(), clear layer value and visualization.
+	 */
+
 	clear: function() {
 
 		this.neuralValue = undefined;
 
-		if (this.outputHandler !== undefined) {
+		if ( this.outputHandler !== undefined ) {
 
 			this.outputHandler.clear();
 
@@ -102,13 +191,23 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
-	handleClick: function(clickedElement) {
+	/**
+	 * handleClick() If clickable element in this layer is clicked, execute this handle function.
+	 *
+	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
+	 */
+
+	handleClick: function( clickedElement ) {
 
 		if ( clickedElement.elementType === "aggregationElement" ) {
+
+			// If aggregation element is clicked, open layer.
 
 			this.openLayer();
 
 		} else if ( clickedElement.elementType === "closeButton" ) {
+
+			// If close button is clicked, close layer.
 
 			this.closeLayer();
 
@@ -116,13 +215,23 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
+	/**
+	 * handleHoverIn() If hoverable element in this layer picked by Raycaster, execute this handle function.
+	 *
+	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
+	 */
+
 	handleHoverIn: function( hoveredElement ) {
+
+		// If relationSystem is enabled, show relation lines.
 
 		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.showLines( hoveredElement );
 
 		}
+
+		// If textSystem is enabled, show hint text, for example, show output map size.
 
 		if ( this.textSystem ) {
 
@@ -132,13 +241,21 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
+	/**
+	 * handleHoverOut() called by model if mouse hover out of this layer.
+	 */
+
 	handleHoverOut: function() {
+
+		// If relationSystem is enabled, hide relation lines.
 
 		if ( this.relationSystem ) {
 
 			this.lineGroupHandler.hideLines();
 
 		}
+
+		// If textSystem is enabled, hide hint text, for example, hide output map size.
 
 		if ( this.textSystem ) {
 
@@ -148,17 +265,48 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
+	/**
+	 * loadModelConfig() load model's configuration into OutputDetection object,
+	 * If one specific attribute has been set before, model's configuration will not be loaded into it.
+	 *
+	 * Based on the passed in modelConfig parameter
+	 *
+	 * @param { JSON } modelConfig, default and user's configuration for model
+	 */
+
 	loadModelConfig: function( modelConfig ) {
+
+		// Call super class "Layer"'s method to load common model configuration, check out "Layer.js" file for more information.
 
 		this.loadBasicModelConfig( modelConfig );
 
+		if ( this.color === undefined ) {
+
+			this.color = modelConfig.color.outputDetection;
+
+		}
+
 	},
+
+	/**
+	 * calcCloseButtonSize() get close button size.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { number } size, close button size
+	 */
 
 	calcCloseButtonSize: function() {
 
 		return this.unitLength * this.width * CloseButtonRatio;
 
 	},
+
+	/**                                                                                                                                                 y        y                        /**
+	 * calcCloseButtonPos() get close button position.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { JSON } position, close button position, relative to layer.
+	 */
 
 	calcCloseButtonPos: function() {
 
@@ -172,25 +320,28 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
+	/**
+	 * getRelativeElements() get relative element in last layer for relative lines based on given hovered element.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster.
+	 * @return { THREE.Object[] } relativeElements
+	 */
+
 	getRelativeElements: function( selectedElement ) {
 
 		let relativeElements = [];
 
-		if ( selectedElement.elementType === "aggregationElement" || ( this.allChannel && selectedElement.elementType === "outputMap3d" ) ) {
+		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "outputMap3d" ) {
+
+			// "all" means get all "displayed" elements from last layer.
 
 			let request = {
 
 				all: true
-
-			};
-
-			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
-
-		} else if ( selectedElement.elementType === "outputMap3d" ) {
-
-			let request = {
-
-				index: this.channelIndex
 
 			};
 
@@ -210,20 +361,28 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 	 * ============
 	 */
 
-	addRectangleList: function( channelData, widthIndex, heightIndex ) {
+	/**
+	 * addRectangleList() add rectangles to output map.
+	 * Each rectangle has a JSON parameter, the parameter is like:
+	 * {
+	 * 		x: x,
+	 * 		y: y,
+	 * 		width: width,
+	 * 		height: height,
+	 * }
+	 *
+	 * This API is exposed to TensorSpace user.
+	 *
+	 * @param { Array } rectList, rectangle parameters list.
+	 */
 
-		this.allChannel = false;
+	addRectangleList: function( rectList ) {
 
-		this.rectangleList = YoloResultGenerator.getChannelBox(
+		// Store rectangle parameters data.
 
-			channelData,
-			this.channelShape,
-			this.outputShape,
-			this.anchors,
-			widthIndex,
-			heightIndex
+		this.rectangleList = rectList;
 
-		);
+		// If layer is open, update output map's visualization.
 
 		if ( this.isOpen ) {
 
@@ -232,6 +391,12 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 		}
 
 	},
+
+	/**
+	 * openLayer() open OutputDetection, switch layer status from "close" to "open".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
 
 	openLayer: function() {
 
@@ -247,6 +412,12 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 		}
 
 	},
+
+	/**
+	 * closeLayer() close OutputDetection, switch layer status from "open" to "close".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
 
 	closeLayer: function() {
 
@@ -264,36 +435,45 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	loadLayerConfig: function( layerConfig ) {
 
-		if ( layerConfig.anchors !== undefined ) {
 
-			this.anchors = layerConfig.anchors;
-
-		} else {
-
-			console.error( "\"anchors\" property is required." );
-
-		}
 
 	},
 
+	/**
+	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in OutputDetection.
+	 */
+
 	initAggregationElement: function() {
+
+		// QueueAggregation Object is a wrapper for aggregation, checkout "QueueAggregation.js" for more information.
 
 		let aggregationHandler = new QueueAggregation(
 
 			this.actualWidth,
 			this.actualHeight,
 			this.actualDepth,
-			this.color
+			this.color,
+			this.minOpacity
 
 		);
 
+		// Set layer index to aggregation, aggregation object can know which layer it has been positioned.
+
 		aggregationHandler.setLayerIndex( this.layerIndex );
-		aggregationHandler.setPositionedLayer( this.layerType );
+
+		// Store handler for aggregation for latter use.
 
 		this.aggregationHandler = aggregationHandler;
+
+		// Get actual THREE.js element and add it to layer wrapper Object.
+
 		this.neuralGroup.add( this.aggregationHandler.getElement() );
 
 	},
+
+	/**
+	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in OutputDetection.
+	 */
 
 	disposeAggregationElement: function() {
 
@@ -302,7 +482,13 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
+	/**
+	 * initOutput() create layer output map's THREE.js Object, configure it, and add it to neuralGroup in OutputDetection.
+	 */
+
 	initOutput: function() {
+
+		// OutputMap3d Object is a wrapper for output map, checkout "MapAggregation.js" for more information.
 
 		let outputHandler = new OutputMap3d(
 
@@ -322,11 +508,19 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 		);
 
+		// Set layer index to output map, output map object can know which layer it has been positioned.
+
 		outputHandler.setLayerIndex( this.layerIndex );
-		outputHandler.setPositionedLayer( this.layerType );
+
+		// Store handler for output map for latter use.
 
 		this.outputHandler = outputHandler;
+
+		// Get actual THREE.js element and add it to layer wrapper Object.
+
 		this.neuralGroup.add( this.outputHandler.getElement() );
+
+		// Update output map's visualization if layer's value has already been set.
 
 		if ( this.neuralValue !== undefined ) {
 
@@ -336,6 +530,10 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
+	/**
+	 * disposeOutput() remove output map from neuralGroup, clear its handler, and dispose its THREE.js Object in OutputDetection.
+	 */
+
 	disposeOutput: function() {
 
 		this.neuralGroup.remove( this.outputHandler.getElement() );
@@ -343,16 +541,31 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 
 	},
 
+	/**
+	 * updateSegregationVis() update output map's visualization.
+	 */
+
 	updateOutputVis: function() {
 
 		if ( this.isOpen ) {
 
+			// Get colors to render the surface of output map.
+
 			let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
+
+			// handler execute update.
+
 			this.outputHandler.updateVis( colors, this.rectangleList );
 
 		}
 
 	},
+
+	/**
+	 * showText() show hint text relative to given element.
+	 *
+	 * @param { THREE.Object } element
+	 */
 
 	showText: function(element) {
 
@@ -364,6 +577,10 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 		}
 
 	},
+
+	/**
+	 * hideText() hide hint text.
+	 */
 
 	hideText: function() {
 

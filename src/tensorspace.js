@@ -14,8 +14,8 @@ import { Input1d } from "./layer/input/Input1d";
 import { Input2d } from "./layer/input/Input2d";
 import { Input3d } from "./layer/input/Input3d";
 import { Output1d } from "./layer/output/Output1d";
-import { Output2d } from "./layer/output/Output2d";
-import { YoloOutput } from "./layer/output/YoloOutput";
+import { OutputDetection } from "./layer/output/OutputDetection";
+import { YoloGrid } from "./layer/output/YoloGrid";
 import { Flatten } from "./layer/intemediate/Flatten";
 import { Pooling1d } from "./layer/intemediate/Pooling1d";
 import { Pooling2d } from "./layer/intemediate/Pooling2d";
@@ -56,8 +56,8 @@ let layers = {
 	Input2d: Input2d,
 	Input3d: Input3d,
 	Output1d: Output1d,
-	Output2d: Output2d,
-	YoloOutput: YoloOutput,
+	OutputDetection: OutputDetection,
+	YoloGrid: YoloGrid,
 	Conv1d: Conv1d,
 	Conv2d: Conv2d,
 	Conv2dTranspose: Conv2dTranspose,

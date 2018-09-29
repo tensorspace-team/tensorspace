@@ -115,11 +115,20 @@ function Output1d( config ) {
 
 	this.nextButtonHandler = undefined;
 
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for Output1d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
 	// Load user's Output1d configuration.
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "output1d";
+	this.layerType = "Output1d";
 
 }
 

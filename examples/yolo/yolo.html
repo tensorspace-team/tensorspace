@@ -197,10 +197,18 @@
 		strides: 1
     }));
 
-    model.add( new TSP.layers.YoloOutput({
-        // voc dataSet
-        anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ],
-    }));
+    let yoloGrid = new TSP.layers.YoloGrid({
+
+		anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ],
+        onCeilClicked: onYoloCeilClicked
+
+    });
+
+    model.add( yoloGrid );
+
+    let outputDetectionLayer = new TSP.layers.OutputDetection();
+
+    model.add( outputDetectionLayer );
 
 	model.load({
 		type: "tensorflow",
@@ -217,6 +225,18 @@
         $("#loadingPad").hide();
 
     });
+
+	function onYoloCeilClicked( ceilData, rectList ) {
+
+		outputDetectionLayer.addRectangleList( rectList );
+
+		if ( !outputDetectionLayer.isOpen ) {
+
+			outputDetectionLayer.openLayer();
+
+        }
+
+    }
 
 </script>
 

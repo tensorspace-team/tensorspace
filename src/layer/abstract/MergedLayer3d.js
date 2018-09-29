@@ -81,6 +81,15 @@ function MergedLayer3d( config ) {
 
 	this.operationStrategy = undefined;
 
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for MergedLayer3d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
 	// Init concrete strategy based on config.
 
 	this.initStrategy( config );
