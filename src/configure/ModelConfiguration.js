@@ -11,43 +11,43 @@ function ModelConfiguration(config ) {
 	this.textSystem = true;
 	this.stats = false;
 	this.animationTimeRatio = 1;
-	this.minOpacity = 0.3;
+	this.minOpacity = 0.4;
 	this.color = {
 
 		background: 0x000000,
 		input1d: 0xffffff,
 		input2d: 0xffffff,
 		input3d: 0xffffff,
-		conv1d: 0xffffff,
-		conv2d: 0xffffff,
-		conv2dTranspose: 0xffffff,
+		conv1d: 0xffff2E,
+		conv2d: 0xF7FE2E,
+		conv2dTranspose: 0xF7FE2E,
 		cropping1d: 0xffffff,
 		cropping2d: 0xffffff,
-		pooling1d: 0xffffff,
-		pooling2d: 0xffffff,
-		dense: 0xffffff,
-		padding1d: 0xffffff,
-		padding2d: 0xffffff,
+		pooling1d: 0x00ffff,
+		pooling2d: 0x00ffff,
+		dense: 0x00ff00,
+		padding1d: 0x6eb6ff,
+		padding2d: 0x6eb6ff,
 		output1d: 0xffffff,
 		output2d: 0xffffff,
 		outputDetection: 0xffffff,
 		yoloGrid: 0xffffff,
 		flatten: 0xffffff,
-		globalPooling1d: 0xffffff,
-		globalPooling2d: 0xffffff,
-		upSampling1d: 0xffffff,
-		upSampling2d: 0xffffff,
+		globalPooling1d: 0x6eb6ff,
+		globalPooling2d: 0x6eb6ff,
+		upSampling1d: 0x00e0ff,
+		upSampling2d: 0x00e0ff,
 		reshape: 0xffffff,
-		activation1d: 0xffffff,
-		activation2d: 0xffffff,
-		activation3d: 0xffffff,
-		add: 0xffffff,
-		subtract: 0xffffff,
-		multiply: 0xffffff,
-		maximum: 0xffffff,
-		average: 0xffffff,
-		dot: 0xffffff,
-		concatenate: 0xffffff
+		activation1d: 0x7a08fa,
+		activation2d: 0x7a08fa,
+		activation3d: 0x7a08fa,
+		add: 0xe23e57,
+		subtract: 0xe23e57,
+		multiply: 0xe23e57,
+		maximum: 0xe23e57,
+		average: 0xe23e57,
+		dot: 0xe23e57,
+		concatenate: 0xe23e57
 
 	};
 
