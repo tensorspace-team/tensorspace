@@ -129,11 +129,11 @@
         animationTimeRatio: 0.1,
         stats: true,
         color: {
-//			background: 0xcccccc,
-			conv2d: 0xff0000,
+			background: 0x000000,
+			conv2d: 0xffff2E,
 			pooling2d: 0x00ffff,
 			dense: 0x00ff00,
-			padding2d: 0xffff00
+			padding2d: 0x6eb6ff,
         }
 	});
 
@@ -141,23 +141,19 @@
 		shape: [28, 28, 1],
 		padding: 1,
 		name: "initInput",
-        color: 0x0000ff,
-        opacityRatio: 2
+        color: 0xFFFFFF,
 	}));
 
 	model.add(new TSP.layers.Padding2d({
         padding: [2, 2],
-		opacityRatio: 2
     }));
 
 	let convLayer = new TSP.layers.Conv2d({
 		kernelSize: 5,
 		filters: 6,
 		strides: 1,
-        animationTimeRatio: 10,
 		name: "conv2d1",
-		opacityRatio: 2
-//        initStatus: "open"
+//      initStatus: "open"
 	});
 	model.add(convLayer);
 //	model.add(new TSP.layers.Conv2d({
@@ -186,14 +182,15 @@
 	let denseLayer = new TSP.layers.Dense({
 		units: 120,
 		name: "dense1",
-		opacityRatio: 3,
-		animationTimeRatio: 10,
+		animationTimeRatio: 1,
 	});
+
 	model.add(denseLayer);
 	model.add(new TSP.layers.Dense({
 		units: 84,
-		name: "dense2"
+		name: "dense2",
 	}));
+
 	model.add(new TSP.layers.Output1d({
 		units: 10,
 		outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
@@ -209,6 +206,7 @@
 	});
 
 	model.init();
+	TSP.layers.Conv2d.openLayer()
 
 //	setTimeout(function() {
 //		model.reset();
