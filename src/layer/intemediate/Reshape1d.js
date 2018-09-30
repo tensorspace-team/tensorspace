@@ -16,7 +16,7 @@ function Reshape1d( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "reshape1d";
+	this.layerType = "Reshape1d";
 
 }
 

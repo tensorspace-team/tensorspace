@@ -6,7 +6,7 @@ import { FmCenterGenerator } from '../../utils/FmCenterGenerator';
 import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 /**
- * 2D Convolution
+ * 2D Convolution.
  *
  * @param config, user's configuration for Conv2d layer
  * @constructor
@@ -14,7 +14,7 @@ import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 function Conv2d( config ) {
 
-	// "Conv2d" inherit from abstract layer "NativeLayer3d"
+	// "Conv2d" inherits from abstract layer "NativeLayer3d".
 
 	NativeLayer3d.call( this, config );
 
@@ -43,15 +43,6 @@ function Conv2d( config ) {
 	 */
 
 	this.strides = undefined;
-
-	/**
-	 * 2d feature map shape, stored as array.
-	 * For example, [20, 20]
-	 *
-	 * @type { array }, length = 2
-	 */
-
-	this.fmShape = undefined;
 
 	/**
 	 * Padding mode.
@@ -103,10 +94,69 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 * Functions below override base class NativeLayer3d's abstract method
 	 *
 	 * Conv2d overrides NativeLayer3d's function:
-	 * loadModelConfig, assemble, getRelativeElements
+	 * assemble, loadModelConfig, getRelativeElements
 	 *
 	 * ============
 	 */
+
+	/**
+	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 *
+	 * @param { int } layerIndex, this layer's order in model
+	 */
+
+	assemble: function ( layerIndex ) {
+
+		this.layerIndex = layerIndex;
+
+		this.inputShape = this.lastLayer.outputShape;
+
+		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
+
+		if ( !this.isShapePredefined ) {
+
+			// Two padding mode is the same as TensorFlow
+
+			if ( this.padding === "valid" ) {
+
+				// ceil[ ( W - F + 1 ) / S ]
+
+				this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize + 1 ) / this.strides );
+				this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize + 1 ) / this.strides );
+
+			} else if ( this.padding === "same" ) {
+
+				// ceil( W / S )
+
+				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides );
+				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides );
+
+			}
+
+		}
+
+		// Conv2d layer's outputShape has three dimension, that's why Conv2d layer inherits from abstract layer "NativeLayer3d".
+
+		this.outputShape = [ this.width, this.height, this.filters ];
+
+		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
+
+		this.unitLength = this.lastLayer.unitLength;
+		this.actualWidth = this.width * this.unitLength;
+		this.actualHeight = this.height * this.unitLength;
+
+		// Calculate the feature map centers for open status.
+
+		this.openFmCenters = FmCenterGenerator.getFmCenters(
+
+			this.layerShape,
+			this.depth,
+			this.actualWidth,
+			this.actualHeight
+
+		);
+
+	},
 
 	/**
 	 * loadModelConfig() load model's configuration into Conv2d object,
@@ -140,67 +190,6 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 			this.aggregationStrategy = modelConfig.aggregationStrategy;
 
 		}
-
-	},
-
-	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
-	 */
-
-	assemble: function ( layerIndex ) {
-
-		this.layerIndex = layerIndex;
-
-		// If user's do not define a specific 2d shape for feature map,
-
-		if ( !this.isShapePredefined ) {
-
-			this.inputShape = this.lastLayer.outputShape;
-
-			// Two padding mode is the same as TensorFlow
-
-			if ( this.padding === "valid" ) {
-
-				// floor[ ( W - F + 1 ) / S ] + 1
-
-				this.width = Math.floor( ( this.inputShape[ 0 ] - this.kernelSize ) / this.strides ) + 1;
-				this.height = Math.floor( ( this.inputShape[ 1 ] - this.kernelSize) / this.strides ) + 1;
-
-			} else if ( this.padding === "same" ) {
-
-				// ceil( W / S )
-
-				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides );
-				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides );
-
-			}
-
-			this.fmShape = [ this.width, this.height ];
-
-		}
-
-		// Conv2d layer's outputShape has three dimension, that's why Conv2d layer inherits from abstract layer "NativeLayer3d".
-
-		this.outputShape = [ this.width, this.height, this.filters ];
-
-		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
-
-		this.unitLength = this.lastLayer.unitLength;
-		this.actualWidth = this.width * this.unitLength;
-		this.actualHeight = this.height * this.unitLength;
-
-		// Calculate the feature map centers for open status.
-
-		this.openFmCenters = FmCenterGenerator.getFmCenters(
-
-			this.layerShape,
-			this.depth,
-			this.actualWidth,
-			this.actualHeight
-
-		);
 
 	},
 

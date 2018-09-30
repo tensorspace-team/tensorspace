@@ -12,7 +12,7 @@ function GlobalPooling1d( config ) {
 
 	this.width = 1;
 
-	this.layerType = "globalPooling1d";
+	this.layerType = "GlobalPooling1d";
 
 }
 

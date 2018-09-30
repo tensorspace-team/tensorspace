@@ -17,7 +17,7 @@ function Pooling1d( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "pooling1d";
+	this.layerType = "Pooling1d";
 
 }
 
@@ -106,7 +106,7 @@ Pooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		if ( this.padding === "valid" ) {
 
-			this.width = Math.floor( ( this.inputShape[ 0 ] - this.poolSize ) / this.strides ) + 1;
+			this.width = Math.ceil( ( this.inputShape[ 0 ] - this.poolSize + 1 ) / this.strides );
 
 		} else if ( this.padding === "same" ) {
 

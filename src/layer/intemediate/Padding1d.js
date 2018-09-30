@@ -18,7 +18,7 @@ function Padding1d( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "padding1d";
+	this.layerType = "Padding1d";
 
 }
 

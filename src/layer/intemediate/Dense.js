@@ -10,7 +10,7 @@ function Dense( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "dense";
+	this.layerType = "	Dense";
 
 }
 

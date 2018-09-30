@@ -13,7 +13,7 @@ function GlobalPooling2d( config ) {
 	this.height = 1;
 	this.depth = undefined;
 
-	this.layerType = "globalPooling2d";
+	this.layerType = "GlobalPooling2d";
 
 }
 

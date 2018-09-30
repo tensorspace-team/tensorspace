@@ -33,7 +33,7 @@ function Conv1d( config ) {
 
 	}
 
-	this.layerType = "conv1d";
+	this.layerType = "Conv1d";
 
 }
 
@@ -127,7 +127,7 @@ Conv1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 			if ( this.padding === "valid" ) {
 
-				this.width = Math.floor( ( this.inputShape[ 0 ] - this.kernelSize ) / this.strides ) + 1;
+				this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize + 1 ) / this.strides );
 
 			} else if ( this.padding === "same" ) {
 

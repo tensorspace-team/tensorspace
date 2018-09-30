@@ -323,7 +323,13 @@ Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 			this.width,
 			this.height,
 			this.unitLength,
-			this.fmCenter,
+			{
+
+				x: 0,
+				y: 0,
+				z: 0
+
+			},
 			this.color,
 			this.minOpacity
 

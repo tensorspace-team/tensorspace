@@ -15,7 +15,7 @@ function BasicLayer3d( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "basicLayer3d";
+	this.layerType = "BasicLayer3d";
 
 }
 

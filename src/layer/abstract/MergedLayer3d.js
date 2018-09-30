@@ -96,7 +96,7 @@ function MergedLayer3d( config ) {
 
 	this.layerDimension = 3;
 
-	this.layerType = "mergedLayer3d";
+	this.layerType = "MergedLayer3d";
 
 }
 

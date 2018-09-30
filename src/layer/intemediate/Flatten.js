@@ -10,7 +10,7 @@ function Flatten( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "flatten";
+	this.layerType = "Flatten";
 
 }
 

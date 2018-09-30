@@ -113,7 +113,7 @@ function YoloGrid( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "YoloChannel";
+	this.layerType = "YoloGrid";
 
 }
 

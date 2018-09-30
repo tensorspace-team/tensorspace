@@ -13,7 +13,7 @@ function BasicLayer2d( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "basicLayer2d";
+	this.layerType = "BasicLayer2d";
 
 }
 
