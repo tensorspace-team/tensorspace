@@ -87,12 +87,42 @@ function YoloGrid( config ) {
 	 * Stored as an array, for example,
 	 * in VOC data set, anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ]
 	 *
-	 * @type { Array }
+	 * @type { Array } float
 	 */
 
 	this.anchors = undefined;
 
-	/**
+    /**
+     * The label list configuration.
+     * For example, in VOC data set, label: [ "aeroplane", "bicycle", "bird", "boat", "bottle",
+     * "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person",
+     * "pottedplant", "sheep", "sofa", "train", "tvmonitor" ]
+     *
+     * @type { Array } string
+     */
+
+    this.classLabelList = undefined;
+
+    /**
+     * The threshold to constrain the output baseline.
+     * The larger the value, the higher the confidence value of the detected object need.
+     * [Default] 0.5
+	 *
+     * @type { float }
+     */
+
+    this.scoreThreshold = 0.5;
+
+    /**
+     * The toggle to control whether to draw all 5 boxes in each grid.
+     * Usually be used to how how yolo network generate the final detective boxes.
+     * [Default] false, means to draw the final result.
+     * @type { bool }
+     */
+
+    this.isDrawFiveBoxes = false;
+
+    /**
 	 * Model's input shape, the shape is the same as model's input layer.
 	 *
 	 * @type { Array }
@@ -534,6 +564,9 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 				this.outputShape,
 				this.modelInputShape,
 				this.anchors,
+				this.classLabelList,
+				this.scoreThreshold,
+				this.isDrawFiveBoxes,
 				widthIndex,
 				heightIndex
 
@@ -579,6 +612,22 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 				console.error( "\"anchors\" property is required for YoloGrid layer." );
 
 			}
+
+			// Load required label name list
+
+            if ( layerConfig.classLabelList !== undefined ) {
+
+                this.classLabelList = layerConfig.classLabelList;
+
+            } else {
+
+                console.error( "\"anchors\" property is required for YoloGrid layer." );
+
+            }
+
+            this.scoreThreshold = layerConfig.scoreThreshold;
+
+            this.isDrawFiveBoxes = layerConfig.isDrawFiveBoxes;
 
 		}
 
