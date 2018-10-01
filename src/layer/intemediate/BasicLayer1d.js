@@ -4,11 +4,20 @@
 
 import { NativeLayer1d } from "../abstract/NativeLayer1d";
 
+/**
+ * layer has 1d shape.
+ *
+ * @param config, user's configuration for BasicLayer1d layer
+ * @constructor
+ */
+
 function BasicLayer1d( config ) {
+
+	// "BasicLayer1d" inherits from abstract layer "NativeLayer1d".
 
 	NativeLayer1d.call( this, config );
 
-	this.color = 0xffffff;
+	// Load user's BasicLayer1d configuration.
 
 	this.loadLayerConfig( config );
 
@@ -18,42 +27,33 @@ function BasicLayer1d( config ) {
 
 BasicLayer1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
-	loadLayerConfig: function( layerConfig ) {
+	/**
+	 * ============
+	 *
+	 * Functions below override base class NativeLayer1d's abstract method
+	 *
+	 * BasicLayer1d overrides NativeLayer1d's function:
+	 * assemble, loadModelConfig
+	 *
+	 * ============
+	 */
 
-		if ( layerConfig !== undefined ) {
-
-			if ( layerConfig.shape !== undefined ) {
-
-				this.width = layerConfig.shape[ 0 ];
-				this.units = layerConfig.shape[ 0 ];
-				this.outputShape = [ this.width ];
-
-			} else {
-
-				console.error( "\"shape\" property is required for NativeLayer1d." );
-
-			}
-
-		} else {
-
-			console.error( "Lack config for NativeLayer1d." );
-
-		}
-
-	},
-
-	loadModelConfig: function( modelConfig ) {
-
-		this.loadBasicModelConfig( modelConfig );
-
-	},
+	/**
+	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 *
+	 * @param { int } layerIndex, this layer's order in model
+	 */
 
 	assemble: function( layerIndex ) {
 
 		this.layerIndex = layerIndex;
 
+		// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
+
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.unitLength * this.width;
+
+		// Calculate aggregation actual size.
 
 		if ( this.lastLayer.layerDimension === 1 ) {
 
@@ -64,6 +64,74 @@ BasicLayer1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 
 			this.aggregationWidth = this.lastLayer.actualWidth;
 			this.aggregationHeight = this.lastLayer.actualHeight;
+
+		}
+
+	},
+
+	/**
+	 * loadModelConfig() load model's configuration into BasicLayer1d object,
+	 * If one specific attribute has been set before, model's configuration will not be loaded into it.
+	 *
+	 * Based on the passed in modelConfig parameter
+	 *
+	 * @param { JSON } modelConfig, default and user's configuration for model
+	 */
+
+	loadModelConfig: function( modelConfig ) {
+
+		// Call super class "Layer"'s method to load common model configuration, check out "Layer.js" file for more information.
+
+		this.loadBasicModelConfig( modelConfig );
+
+		if( this.color === undefined ) {
+
+			this.color = modelConfig.color.basicLayer1d;
+
+		}
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class NativeLayer1d's abstract method.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * loadLayerConfig() Load user's configuration into BasicLayer1d.
+	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
+	 *
+	 * @param { JSON } layerConfig, user's configuration for BasicLayer1d.
+	 */
+
+	loadLayerConfig: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			// "shape" configuration is required.
+
+			if ( layerConfig.shape !== undefined ) {
+
+				this.width = layerConfig.shape[ 0 ];
+
+				// BasicLayer1d layer's outputShape has one dimension, that's why BasicLayer1d layer inherits from abstract layer "NativeLayer1d".
+
+				this.outputShape = [ this.width ];
+
+			} else {
+
+				console.error( "\"shape\" property is required for NativeLayer1d." );
+
+			}
+
+			// TODO: add segment to BasicLayer1d.
+
+		} else {
+
+			console.error( "Lack config for NativeLayer1d." );
 
 		}
 

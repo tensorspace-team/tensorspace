@@ -42,7 +42,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		layer.setEnvironment( this.scene, this );
 		layer.loadModelConfig( this.configuration );
-		this.layers.push( layer) ;
+		this.layers.push( layer ) ;
 
 		// may be layer want model information
 		layer.assemble( this.layers.length, this );
