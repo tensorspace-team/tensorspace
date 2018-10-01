@@ -10,6 +10,8 @@ function Activation1d( config ) {
 
 	this.activation = undefined;
 
+	this.loadLayerConfig( config );
+
 	this.layerType = "Activation1d";
 
 }

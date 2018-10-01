@@ -249,13 +249,13 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			this.kernelSize = layerConfig.kernelSize;
 			this.strides = layerConfig.strides;
-			this.depth = layerConfig.filters;
 
 			// "filters" configuration is required.
 
 			if ( layerConfig.filters !== undefined ) {
 
 				this.filters = layerConfig.filters;
+				this.depth = layerConfig.filters;
 
 			} else {
 

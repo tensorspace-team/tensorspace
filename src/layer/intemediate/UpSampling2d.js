@@ -6,10 +6,10 @@ import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
 import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 /**
- * Upsampling layer for layer inputs.
+ * 2D Upsampling layer for layer inputs.
  * Repeats the rows and columns of the data.
  *
- * @param config, user's configuration for Cropping2d layer
+ * @param config, user's configuration for UpSampling2d layer
  * @constructor
  */
 
@@ -39,7 +39,7 @@ function UpSampling2d( config ) {
 
 	/**
 	 * Whether user directly define the layer shape.
-	 * Set "true" if Pooling2d's shape is predefined by user.
+	 * Set "true" if UpSampling2d's shape is predefined by user.
 	 *
 	 * @type { boolean }
 	 */

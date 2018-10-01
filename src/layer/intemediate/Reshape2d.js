@@ -20,7 +20,7 @@ function Reshape2d( config ) {
 
 	/**
 	 * Certain 2d shape the input will be reshape into.
-	 * For example: [3, 3]
+	 * For example: [ 3, 3 ]
 	 *
 	 * @type { Array }
 	 */
@@ -28,7 +28,7 @@ function Reshape2d( config ) {
 	this.targetShape = undefined;
 
 	/**
-	 * Neural size, calculated in assemble period based on input shape.
+	 * Total Neural number in layer, calculated in assemble period based on input shape.
 	 * Set init size to be 1.
 	 *
 	 * @type { int }

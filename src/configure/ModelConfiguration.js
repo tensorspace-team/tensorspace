@@ -41,6 +41,10 @@ function ModelConfiguration(config ) {
 		activation1d: 0x7a08fa,
 		activation2d: 0x7a08fa,
 		activation3d: 0x7a08fa,
+		basicLayer1d: 0xfffff,
+		basicLayer2d: 0xfffff,
+		basicLayer3d: 0xfffff,
+
 		add: 0xe23e57,
 		subtract: 0xe23e57,
 		multiply: 0xe23e57,
@@ -314,6 +318,24 @@ function ModelConfiguration(config ) {
 			if ( config.color.activation3d !== undefined ) {
 
 				this.color.activation3d = config.color.activation3d;
+
+			}
+
+			if ( config.color.basicLayer1d !== undefined ) {
+
+				this.color.basicLayer1d = config.color.basicLayer1d;
+
+			}
+
+			if ( config.color.basicLayer2d !== undefined ) {
+
+				this.color.basicLayer2d = config.color.basicLayer2d;
+
+			}
+
+			if ( config.color.basicLayer3d !== undefined ) {
+
+				this.color.basicLayer3d = config.color.basicLayer3d;
 
 			}
 

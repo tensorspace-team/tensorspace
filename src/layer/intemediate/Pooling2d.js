@@ -134,7 +134,7 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			this.closeFmCenters.push( center );
 
-			// Pooling2d's feature map align to last layer.
+			// Pooling2d's feature maps align to last layer.
 
 			let fmCenter = {
 

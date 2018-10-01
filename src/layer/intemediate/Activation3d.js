@@ -5,7 +5,7 @@
 import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 /**
- * Applies an activation function to an output.
+ * Applies an activation function to an 3D output.
  *
  * @param config, user's configuration for Activation3d layer
  * @constructor
