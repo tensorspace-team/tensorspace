@@ -7,20 +7,20 @@ import { TfjsPredictor } from "../predictor/TfjsPredictor";
 
 function TfjsLoader( model, config ) {
 
-	Loader.call( this, model );
+	Loader.call( this, model, config );
 
 	this.url = undefined;
 	this.onCompleteCallback = undefined;
 
 	this.type = "TfjsLoader";
 
-	this.loadLoaderConfig( config );
+	this.loadTfjsConfig( config );
 
 }
 
 TfjsLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
-	loadLoaderConfig: function( loaderConfig ) {
+	loadTfjsConfig: function( loaderConfig ) {
 
 		if ( loaderConfig.url !== undefined ) {
 
@@ -59,7 +59,10 @@ TfjsLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	setPredictor: function() {
 
-		this.model.predictor = new TfjsPredictor( this.model );
+		let tfjsPredictor = new TfjsPredictor( this.model );
+		this.configInputShape( tfjsPredictor );
+
+		this.model.predictor = tfjsPredictor;
 
 	}
 

@@ -84,6 +84,8 @@ function Input2d( config ) {
 
 	this.autoOutputDetect = false;
 
+	this.layerDimension = 2;
+
 	this.layerType = "Input2d";
 
 }

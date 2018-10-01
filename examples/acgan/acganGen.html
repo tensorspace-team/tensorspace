@@ -124,12 +124,16 @@
 
     model.load({
         type: "tfjs",
-        url: './acganGenModel/model.json'
+        url: './acganGenModel/model.json',
+        multiInput: true,
+        inputShapes: [[100], [1]]
     });
+
+    let randomData = tf.randomNormal([1,100]).dataSync();
 
     model.init(function() {
 
-
+        model.predict( [randomData, [3]] );
 		$("#loadingPad").hide();
 
     });

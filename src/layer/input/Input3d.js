@@ -123,6 +123,8 @@ function Input3d( config ) {
 
 	this.autoOutputDetect = false;
 
+	this.layerDimension = 3;
+
 	this.layerType = "Input3d";
 
 }

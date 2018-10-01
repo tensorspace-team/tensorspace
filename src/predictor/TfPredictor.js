@@ -15,18 +15,15 @@ function TfPredictor( model ) {
 
 TfPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
-	predict: function( data, inputShape, callback ) {
+	predict: function( data, callback ) {
 
-		let batchSize = [ 1 ];
-		let predictTensorShape = batchSize.concat( inputShape );
-
-		let predictTensor = tf.tensor( data, predictTensorShape );
+		let inputTensor = this.createInputTensor( data );
 
 		let predictResult;
 
 		if ( this.outputsName !== undefined ) {
 
-			predictResult = this.model.resource.execute( predictTensor, this.outputsName );
+			predictResult = this.model.resource.execute( inputTensor, this.outputsName );
 
 		} else {
 

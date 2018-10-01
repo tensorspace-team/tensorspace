@@ -57,8 +57,17 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		if ( this.lastLayer.layerDimension === 1 ) {
 
-			this.aggregationWidth = this.lastLayer.aggregationWidth;
-			this.aggregationHeight = this.lastLayer.aggregationHeight;
+			if ( this.lastLayer.layerType === "Input1d" ) {
+
+				this.aggregationWidth = 3 * this.unitLength;
+				this.aggregationHeight = 3 * this.unitLength;
+
+			} else {
+
+				this.aggregationWidth = this.lastLayer.aggregationWidth;
+				this.aggregationHeight = this.lastLayer.aggregationHeight;
+
+			}
 
 		} else {
 
@@ -152,7 +161,7 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 				// Dense layer's outputShape has one dimension, that's why Dense layer inherits from abstract layer "NativeLayer1d".
 
-				this.outputShape = [ layerConfig.width ];
+				this.outputShape = [ layerConfig.units ];
 
 				this.totalSegments = Math.ceil( this.width / this.segmentLength );
 

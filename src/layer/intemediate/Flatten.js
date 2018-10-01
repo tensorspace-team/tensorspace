@@ -139,7 +139,7 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		return relativeElements;
 
-	}
+	},
 
 	/**
 	 * ============

@@ -83,6 +83,8 @@ function Input1d( config ) {
 
 	this.autoOutputDetect = false;
 
+	this.layerDimension = 1;
+
 	this.layerType = "Input1d";
 
 }

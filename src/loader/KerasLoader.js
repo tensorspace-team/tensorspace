@@ -7,20 +7,20 @@ import { KerasPredictor } from "../predictor/KerasPredictor";
 
 function KerasLoader( model, config ) {
 
-	Loader.call( this, model );
+	Loader.call( this, model, config );
 
 	this.url = undefined;
 	this.onCompleteCallback = undefined;
 
 	this.type = "KerasLoader";
 
-	this.loadLoaderConfig( config );
+	this.loadKerasConfig( config );
 
 }
 
 KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
-	loadLoaderConfig: function( loaderConfig ) {
+	loadKerasConfig: function( loaderConfig ) {
 
 		if ( loaderConfig.url !== undefined ) {
 
@@ -60,7 +60,9 @@ KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	setPredictor: function() {
 
-		this.model.predictor = new KerasPredictor( this.model );
+		let kerasPredictor = new KerasPredictor( this.model );
+		this.configInputShape( kerasPredictor );
+		this.model.predictor = kerasPredictor;
 
 	}
 

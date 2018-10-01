@@ -12,14 +12,11 @@ function KerasPredictor( model ) {
 
 KerasPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
-	predict: function( data, inputShape, callback ) {
+	predict: function( data, callback ) {
 
-		let batchSize = [ 1 ];
-		let predictTensorShape = batchSize.concat( inputShape );
+		let inputTensor = this.createInputTensor( data );
 
-		let predictTensor = tf.tensor( data, predictTensorShape );
-
-		let predictResult = this.model.resource.predict( predictTensor );
+		let predictResult = this.model.resource.predict( inputTensor );
 
 		if ( callback !== undefined ) {
 
@@ -34,4 +31,3 @@ KerasPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), 
 } );
 
 export { KerasPredictor };
-

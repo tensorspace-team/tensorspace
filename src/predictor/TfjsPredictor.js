@@ -4,22 +4,39 @@
 
 import { Predictor } from "./Predictor";
 
+/**
+ * Handle prediction for tfjs model.
+ *
+ * @param model, model context
+ * @constructor
+ */
+
 function TfjsPredictor( model ) {
+
+	// "TfjsPredictor" inherits from abstract predictor "Predictor".
 
 	Predictor.call( this, model );
 
 }
 
-TfjsPredictor.prototype = Object.assign( Object.create( TfjsPredictor.prototype ), {
+TfjsPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
-	predict: function( data, inputShape, callback ) {
+	/**
+	 * ============
+	 *
+	 * Functions below override base class Predictor's abstract method
+	 *
+	 * TfjsPredictor overrides Predictor's function:
+	 * predict
+	 *
+	 * ============
+	 */
 
-		let batchSize = [ 1 ];
-		let predictTensorShape = batchSize.concat( inputShape );
+	predict: function( data, callback ) {
 
-		let predictTensor = tf.tensor( data, predictTensorShape );
+		let inputTensor = this.createInputTensor( data );
 
-		let predictResult = this.model.resource.predict( predictTensor );
+		let predictResult = this.model.resource.predict( inputTensor );
 
 		if ( callback !== undefined ) {
 
@@ -30,6 +47,14 @@ TfjsPredictor.prototype = Object.assign( Object.create( TfjsPredictor.prototype 
 		return predictResult;
 
 	}
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class Predictor's abstract method.
+	 *
+	 * ============
+	 */
 
 } );
 

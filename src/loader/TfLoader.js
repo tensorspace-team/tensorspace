@@ -7,7 +7,7 @@ import { TfPredictor } from "../predictor/TfPredictor";
 
 function TfLoader( model, config ) {
 
-	Loader.call( this, model );
+	Loader.call( this, model, config );
 
 	this.modelUrl = undefined;
 	this.weightUrl = undefined;
@@ -17,13 +17,13 @@ function TfLoader( model, config ) {
 
 	this.type = "TfLoader";
 
-	this.loadLoaderConfig( config );
+	this.loadTfConfig( config );
 
 }
 
 TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
-	loadLoaderConfig: function( loaderConfig ) {
+	loadTfConfig: function( loaderConfig ) {
 
 		if ( loaderConfig.modelUrl !== undefined ) {
 
@@ -78,8 +78,12 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	setPredictor: function() {
 
-		this.model.predictor = new TfPredictor( this.model );
-		this.model.predictor.setOutputsName( this.outputsName );
+		let tfPredictor = new TfPredictor( this.model );
+		tfPredictor.setOutputsName( this.outputsName );
+
+		this.configInputShape( tfPredictor );
+
+		this.model.predictor = tfPredictor;
 
 	}
 

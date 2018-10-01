@@ -201,9 +201,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		if ( this.resource !== undefined ) {
 
-			let inputShape = this.layers[ 0 ].outputShape;
-
-			this.predictResult = this.predictor.predict( input, inputShape, callback );
+			this.predictResult = this.predictor.predict( input, callback );
 
 		}
 
