@@ -2,8 +2,8 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Sequential } from "./vis-model/Sequential";
-import { PixelSequential } from "./vis-model/PixelSequential";
+import { Sequential } from "./tsp-model/Sequential";
+import { PixelSequential } from "./tsp-model/PixelSequential";
 
 import { Conv1d } from "./layer/intemediate/Conv1d";
 import { Conv2d } from "./layer/intemediate/Conv2d";

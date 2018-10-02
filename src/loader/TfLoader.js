@@ -83,7 +83,6 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		const loadedModel = await tf.loadFrozenModel( this.modelUrl, this.weightUrl );
 
 		this.model.resource = loadedModel;
-		this.model.isFit = true;
 		this.model.modelType = "tensorflow";
 
 		this.setPredictor();

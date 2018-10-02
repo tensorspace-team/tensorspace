@@ -65,7 +65,6 @@ TfjsLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		const loadedModel = await tf.loadModel( this.url );
 
 		this.model.resource = loadedModel;
-		this.model.isFit = true;
 		this.model.modelType = "tfjs";
 
 		this.setPredictor();
