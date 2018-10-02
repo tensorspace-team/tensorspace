@@ -74,7 +74,9 @@
     // 0
     // output: (128*7*7=) 6272
     model.add(new TSP.layers.Dense({
-        units: 6272
+        units: 6272,
+		paging: true,
+		segmentLength: 400
     }));
 
     // 1
