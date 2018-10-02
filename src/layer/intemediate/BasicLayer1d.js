@@ -57,8 +57,17 @@ BasicLayer1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 
 		if ( this.lastLayer.layerDimension === 1 ) {
 
-			this.aggregationWidth = this.lastLayer.aggregationWidth;
-			this.aggregationHeight = this.lastLayer.aggregationHeight;
+			if ( this.lastLayer.layerType === "Input1d" ) {
+
+				this.aggregationWidth = 3 * this.unitLength;
+				this.aggregationHeight = 3 * this.unitLength;
+
+			} else {
+
+				this.aggregationWidth = this.lastLayer.aggregationWidth;
+				this.aggregationHeight = this.lastLayer.aggregationHeight;
+
+			}
 
 		} else {
 
