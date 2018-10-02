@@ -37,7 +37,7 @@ let FmCenterGenerator = ( function() {
 
 		let fmCenters = [];
 
-		for ( let i = 0; i < centerList.length; i++ ) {
+		for ( let i = 0; i < centerList.length; i ++ ) {
 
 			let center2d = centerList[ i ];
 			let center3d = {};

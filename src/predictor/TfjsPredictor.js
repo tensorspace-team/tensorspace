@@ -17,6 +17,8 @@ function TfjsPredictor( model ) {
 
 	Predictor.call( this, model );
 
+	this.predictorType = "TfjsPredictor";
+
 }
 
 TfjsPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
@@ -32,11 +34,24 @@ TfjsPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 	 * ============
 	 */
 
+	/**
+	 * predict(), Called by model to get prediction result.
+	 *
+	 * @param data, input data
+	 * @param callback, callback function fired when finishing prediction.
+	 */
+
 	predict: function( data, callback ) {
+
+		// Create input tensor for prediction.
 
 		let inputTensor = this.createInputTensor( data );
 
+		// Get prediction result from loaded model.
+
 		let predictResult = this.model.resource.predict( inputTensor );
+
+		// Execute callback function if defined.
 
 		if ( callback !== undefined ) {
 

@@ -8,7 +8,7 @@ let RenderPreprocessor = ( function() {
 
 		let renderData = [];
 
-		for ( let i = 0; i < height; i++ ) {
+		for ( let i = 0; i < height; i ++ ) {
 
 			let dataLine = colors.slice( width * i, width * ( i + 1 ) );
 			renderData = dataLine.concat( renderData );
@@ -23,7 +23,7 @@ let RenderPreprocessor = ( function() {
 
 		let renderData = [];
 
-		for ( let i = 0; i < height; i++ ) {
+		for ( let i = 0; i < height; i ++ ) {
 
 			let dataLine = colors.slice( 3 * i * width, 3 * ( i + 1 ) * width );
 			renderData = dataLine.concat( renderData );
@@ -38,7 +38,7 @@ let RenderPreprocessor = ( function() {
 
 		let renderData = [];
 
-		for ( let i = colors.length - 1; i >= 0; i-- ) {
+		for ( let i = colors.length - 1; i >= 0; i -- ) {
 
 			renderData.push( colors[ i ] );
 

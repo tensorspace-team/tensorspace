@@ -173,12 +173,6 @@ SceneInitializer.prototype = {
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
 
-	},
-
-	resetCamera: function() {
-
-		console.log( "Reset camera position." );
-
 	}
 
 };

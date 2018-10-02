@@ -30,14 +30,32 @@ function Predictor( model ) {
 
 	this.multiInputs = false;
 
+	/**
+	 * Input shapes if model has multiple inputs.
+	 *
+	 * @type { Array }
+	 */
 
-	this.inputShapes = [];
+	this.inputShapes = undefined;
+
+	/**
+	 * Input shape if model has only one input.
+	 *
+	 * @type { Array }
+	 */
 
 	this.inputShape = undefined;
 
 }
 
 Predictor.prototype = {
+
+	/**
+	 * createInputTensor(), create tfjs Tensor which can be used for prediction.
+	 *
+	 * @param data, user's raw prediction data
+	 * @returns { tf.Tensor }
+	 */
 
 	createInputTensor: function( data ) {
 
@@ -53,7 +71,17 @@ Predictor.prototype = {
 
 	},
 
+	/**
+	 * createOneInputTensor(), transfer an data array into a Tensor based on tensor shape.
+	 *
+	 * @param data, a list of input data, for example, [ 0.1, 0.15 ......, 0.2 ]
+	 * @param inputShape
+	 * @returns { tf.Tensor }
+	 */
+
 	createOneInputTensor: function( data, inputShape ) {
+
+		// Support predict one input data at a time, set batch size to be 1.
 
 		let batchSize = [ 1 ];
 		let predictTensorShape = batchSize.concat( inputShape );
@@ -61,6 +89,14 @@ Predictor.prototype = {
 		return tf.tensor( data, predictTensorShape );
 
 	},
+
+	/**
+	 * createInputTensorList(), transfer data arrays into a Tensors based on tensor shapes.
+	 *
+	 * @param data, input data list, for example, [[...], [...], ..., [...]]
+	 * @param inputShapes
+	 * @returns { tf.Tensor }
+	 */
 
 	createInputTensorList: function( data, inputShapes ) {
 
@@ -86,15 +122,17 @@ Predictor.prototype = {
 	 */
 
 	/**
-	 * Called by model to get prediction result.
+	 * predict(), Called by model to get prediction result.
 	 *
 	 * Override this function to implement actual prediction work
 	 *
-	 * @param data
-	 * @param inputShape
+	 * @param data, input data
+	 * @param callback, callback function fired when finishing prediction.
 	 */
 
-	predict: function( data, inputShape ) {
+	predict: function( data, callback ) {
+
+		return [];
 
 	}
 

@@ -8,7 +8,7 @@ let ColorUtils = ( function() {
 
 		let max = values[ 0 ], min = values[ 0 ];
 
-		for ( let i = 1; i < values.length; i++ ) {
+		for ( let i = 1; i < values.length; i ++ ) {
 
 			if ( values[ i ] > max ) {
 
@@ -27,7 +27,7 @@ let ColorUtils = ( function() {
 		let adjustValues = [];
 		let distance = max - min;
 
-		for ( let i = 0; i < values.length; i++ ) {
+		for ( let i = 0; i < values.length; i ++ ) {
 
 			if ( distance === 0 ) {
 
@@ -41,7 +41,7 @@ let ColorUtils = ( function() {
 
 		}
 
-		for ( let i = 0; i < adjustValues.length; i++ ) {
+		for ( let i = 0; i < adjustValues.length; i ++ ) {
 
 			adjustValues[ i ] = minAlpha + adjustValues[ i ] * ( 1 - minAlpha );
 
@@ -59,11 +59,11 @@ let ColorUtils = ( function() {
 
 		let colorList = [];
 
-		for ( let i = 0; i < adjustValues.length; i++ ) {
+		for ( let i = 0; i < adjustValues.length; i ++ ) {
 
 			let rgbTriple = [];
 
-			for ( let j = 0; j < 3; j++ ) {
+			for ( let j = 0; j < 3; j ++ ) {
 
 				rgbTriple.push( adjustValues[ i ] );
 

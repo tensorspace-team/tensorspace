@@ -226,7 +226,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		for ( let i = 1; i < this.layers.length; i ++ ) {
 
-			if ( !this.layers[i].autoOutputDetect ) {
+			if ( !this.layers[ i ].autoOutputDetect ) {
 
 				let predictValue = this.predictResult[ i - 1 ].dataSync();
 

@@ -42,9 +42,9 @@ let CenterLocator = ( function() {
         let initXTranslate = - ( rectShape[0] - 1 ) / 2 * ( 1 + FeatureMapIntervalRatio ) * width;
         let initZTranslate = - ( rectShape[1] - 1 ) / 2 * ( 1 + FeatureMapIntervalRatio ) * height;
 
-        for ( let i = 0; i < rectShape[ 0 ]; i++ ) {
+        for ( let i = 0; i < rectShape[ 0 ]; i ++ ) {
 
-            for ( let j = 0; j < rectShape[ 1 ]; j++ ) {
+            for ( let j = 0; j < rectShape[ 1 ]; j ++ ) {
 
                 let centerPos = [];
 
