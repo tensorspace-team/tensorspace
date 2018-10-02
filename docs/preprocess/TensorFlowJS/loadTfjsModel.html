@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Convert tfjs model</title>
+    <meta name="author" content="zchholmes / https://github.com/zchholmes">
+
+    <script src="libs/tf.min.js"></script>
+</head>
+
+<body>
+<script>
+    async function saveModel() {
+        await encModel.save("downloads://encModel");
+    }
+
+    async function loadAndPredict() {
+
+        const loadedModel = await tf.loadModel('./model/tfjs_lenet_seq/mnist.json');
+
+        let layers = loadedModel.layers;
+
+        const input = layers[0].input;
+        let outputList = [];
+        let tempInput = input;
+        let tempOutput = null;
+        for (i =0; i<layers.length; i++) {
+            console.log("name: " + layers[i].name);
+            tempOutput = layers[i].apply(tempInput);
+            outputList.push(tempOutput);
+            tempInput = tempOutput;
+        }
+
+        console.log(outputList);
+
+        const encModel = tf.model({
+            inputs: input,
+            outputs: outputList
+        });
+
+        // singleOutput = loadedModel.predict(tf.randomNormal([1,28,28,1]));
+        // console.log(singleOutput);
+
+        singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
+        console.log(singleOutput);
+
+        // saveModel();
+
+    }
+
+    loadAndPredict();
+
+</script>
+</body>
+</html>

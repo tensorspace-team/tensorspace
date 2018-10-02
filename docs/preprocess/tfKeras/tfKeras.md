@@ -1,10 +1,34 @@
 ## Preprocessing a tf.keras Model
 
-In this chapter, we will introduce how to preprocess a tf.keras model to adapt the multiple intermediate layer outputs for applying TensorSpace.
+<p align="center">
+<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
+</p>
+
+In this chapter, we will introduce how to preprocess a tf.keras model to adapt the multiple intermediate layer outputs for applying TensorSpace. If you have read the [Keras preprocessing tutorial](https://github.com/syt123450/tensorspace/wiki/%5BTutorial%5D--Keras-preprocessing-tutorial), since the close relations between the two APIs, the workflows are very similar.
+
+The sample files that are used for the tutorial are listed below:
+* [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/tf_keras_model.py)
+* [convert_tf_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/convert_tf_keras.sh)
+* [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/tfKeras/models)
+
+For the tutorial, we use Python 3.6.5 and the following libraries:
+```Python
+import tensorflow as tf
+import numpy as np
+```
+
+It is also required to install [tfjs-converter](https://github.com/tensorflow/tfjs-converter) (it is a tool from TensorFlow.js):
+```bash
+$ pip install tensorflowjs
+```
 
 If you are new and have no idea about how to train a ML model with tf.keras, we highly recommand you to go through this [guide](https://www.tensorflow.org/guide/keras) from TensorFlow first.
 
 To preprocess a tf.keras model, make sure you satisfy the followings:
+<p align="center">
+<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_general_process.png" alt="general TF process" width="830" >
+</p>
+
 * [1. Train/Load model](#loadModel)
 * [2. Insert multiple intermediate outputs](#addOutputs)
 * [3. Save encapsulated model](#saveModel)
@@ -16,17 +40,21 @@ The following instruction preprocesses a LeNet with MNIST dataset as an example.
 #### 1.1 Train a new model
 Let's train a simple LeNet model to recognize MNIST handwritten digit, if you don't have your model trained yet.
 
-It is almost the same as the [tutorial](https://www.tensorflow.org/guide/keras) from TensorFlow.
+By following the structure of the LeNet,
+<p align="center">
+<img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+</p>
 
-**Note:** 
-* We add a **"name"** property for each layers that we want to apply for TensorSapce API later.
+we can build our model like:
+
 ```python
 def create_sequential_model():
     single_output_model = tf.keras.models.Sequential([
             tf.keras.layers.InputLayer(input_shape=(28, 28)),
             tf.keras.layers.Reshape((28, 28, 1), input_shape=(28, 28,)),
             tf.keras.layers.Convolution2D(
-                filters=6, kernel_size=5, strides=1, input_shape=(28, 28, 1), name="conv_1"
+                filters=6, kernel_size=5, strides=1, 
+                input_shape=(28, 28, 1), name="conv_1"
             ),
             tf.keras.layers.MaxPool2D(
                 pool_size=(2, 2), strides=(2, 2), name="maxpool_1"
@@ -44,6 +72,8 @@ def create_sequential_model():
         ])
     return single_output_model
 ```
+**Note:** 
+* We add a **"name"** property for each layers that we want to apply for TensorSapce API later.
 
 After construction, we can compile and train the model with MNIST data:
 ```python
@@ -89,22 +119,22 @@ Then we have a single array with 10 probabilities.
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
 
 **Note:** 
-* The output is random in the example above.
+* Since the we used a random input, the output would be random as well.
 
 ### <div id="addOutputs">2 Insert multiple intermediate outputs</div>
 If the output from the previous step is correct, we can find the output is actually a single array(softmax result) predicted by the model. The array represents the probability of each digits that the input image could be.
 
 One important purpose of TensorSpace is to show the internal relations among different layers, so we need to find the way to catch the outputs from intermediate layers during the prediction.
 
-First, we can use summary() command to check the general structure. We can also loop all the layers to find out all layer names.
+First, we can use summary() command to check the general structure. We can also loop all layers to find out all layer names.
 ```
 model.summary()
-for l in model.layers:
-     print(l.name)
+for layer in model.layers:
+     print(layer.name)
 ```
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_summary.png" alt="summary" width="705" >
 	
-If the layers are given proper names (add "name" property), we can find them from the summary.
+If the layers are given proper names (i.e. if add a **"name"** property while building the model), we can find them from the summary.
 
 **Note:** 
 * If the model is loaded from an existed model, the name of each layer should be relevant to the layer class in most cases.
@@ -196,8 +226,3 @@ tensorflowjs_converter \
 * For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
 
 If everything looks good, you shall be ready for the next step - "2. Apply TensorSpace API from the model structure".
-
-For your reference, you can find the source files of the examples from [here](https://github.com/syt123450/tensorspace/tree/master/documentation/preprocess/tfKeras), which includes:
-* [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/documentation/preprocess/tfKeras/tf_keras_model.py)
-* [convert_tf_keras.sh](https://github.com/syt123450/tensorspace/blob/master/documentation/preprocess/tfKeras/convert_tf_keras.sh)
-* [All model files](https://github.com/syt123450/tensorspace/tree/master/documentation/preprocess/tfKeras/models)
