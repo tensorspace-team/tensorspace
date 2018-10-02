@@ -4,13 +4,15 @@
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
 </p>
 
-In the following chapter, we will introduce how to prepare a TensorFlow model (saved model, fronzen model and checkpoint(TBA)) before applying TensorSpace.
+In the following chapter, we will introduce how to prepare a TensorFlow model (saved model, frozen model and checkpoint) before applying TensorSpace.
 
-Here are the list of sample files we are using for the following tutorial:
+Here is the list of sample files we are using for the following tutorial:
 * [tensorflow_create_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/tensorflow_create_model.py)
 * [tensorflow_load_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/tensorflow_load_model.py)
+* [tensorflow_conversion.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/tensorflow_conversion.py)
 * [convert_tensorflow_saved_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/convert_tensorflow_saved_model.sh)
-* [convert_tensorflow_frozen_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/convert_tensorflow_frozen_model.sh) (TBA)
+* [convert_tensorflow_frozen_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/convert_tensorflow_frozen_model.sh)
+* [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlow/models)
 
 For the tutorial, we use Python 3.6.5 and the following libraries:
 ```Python
@@ -22,7 +24,7 @@ mnist = tf.keras.datasets.mnist
 ```
 **Note:**
 * The core libraries are `tensorflow` and `numpy`.
-* `tf.keras` is used to provide dataset only in the tutorial.
+* `tf.keras` is used to provide dataset only.
 * `sklearn.utils` is used for `shuffle` only.
 
 It is also required to install [tfjs-converter](https://github.com/tensorflow/tfjs-converter) (it is a tool from TensorFlow.js):
@@ -30,16 +32,19 @@ It is also required to install [tfjs-converter](https://github.com/tensorflow/tf
 $ pip install tensorflowjs
 ```
 
-In general the preprocess of a TensorFlow model is:
+In general, the preprocess of a TensorFlow model is:
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process.png" alt="general TF process" width="830" >
 </p>
 
-* [1. Train/Load model](#loadModel)
+* [1 Train/Load model](#loadModel)
 * [2 Find Out Tensor Names](#findNames)
 * [3 Convert to TensorFlow.js Model](#convertModel)
 
-It is different from the preprocessing of a Keras or tf.Keras model: we don't need to encapsulate an intermediate TensorFlow model. All we want is to catch the correct corresponding tensor names and convert original model to TensorFlow.js compatible model directly by tfjs-converter.
+It is different from the preprocessing of a Keras or tf.Keras model: we don't need to encapsulate an intermediate TensorFlow model. All we want is to catch the correct corresponding **tensor names** and convert original model to TensorFlow.js compatible model directly by tfjs-converter.
+
+**Note:**
+* The collected tensor names are stored as a list which is used as **"outputNames"** in the TensorSpace.
 
 ### <div id="loadModel">1 Train/Load Model</div>
 #### 1.1 Train a Model
@@ -131,7 +136,7 @@ def LeNet_5(x):
     return logits
 ``` 
 **Note:**
-* We put a **"name"** property for the tensor that we want to apply TensorSpace later. A specified name can speed up the process much faster!
+* We put a **"name"** property for the tensor that we want to apply TensorSpace later. A specified name can speed up the process of creating **"outputNames"** list.
 * You may notice that we do not mark the tensor exactly in the tensor for the core action. For example, we don't put a name in the `tf.nn.conv2d`, but mark `tf.nn.relu` as the **"MyConv2D_*"**. The reason is that our desired output of a "Convolution Layer" is the result of the activation function, which provides a better visualization.
 * We only have 2 dense (or fully connection) tensors in the function. The last Softmax dense will be used for trianing, so we treat it a little different.
 
@@ -156,6 +161,7 @@ training_operation = optimizer.minimize(loss_operation)
 correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(one_hot_y, 1))
 accuracy_operation = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
+# Declare an actual output without training label dependence
 predict_outputs = tf.nn.softmax(logits, name="MySoftMax")
 
 EPOCHS = 5
@@ -197,7 +203,7 @@ with tf.Session() as sess:
 ``` 
 
 **Note:**
-* Don't forget to have claim an extra Softmax tensor for the prediction output and give a proper **"name"**.
+* Don't forget to declare an extra Softmax tensor for the prediction output and give a proper **"name"**.
 
 We can see some evaluation outputs like:
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_training_evaluations.png" alt="evaluations" width="705" >
@@ -216,10 +222,43 @@ with tf.Session(graph=tf.Graph()) as sess:
     )
 ``` 
 ```Python
-INSERT IMAGE: load frozen model
+with tf.Session(graph=tf.Graph()) as sess:
+        dir_path = '/PATH/TO/DIR/tensorflow_model_ckpt/'
+        ckpt_name = 'lenet.ckpt'
+        saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
+        saver.restore(sess, tf.train.latest_checkpoint(dir_path))
 ``` 
 ```Python
-INSERT IMAGE: load checkpoint
+with tf.Session(graph=tf.Graph()) as sess:
+    dir_path = '../DIR/SAVE/CKPT/'
+    ckpt_name = 'lenet.ckpt'
+    saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
+    saver.restore(sess, tf.train.latest_checkpoint(dir_path))
+``` 
+
+**Note:**
+* If you are loading a model from Checkpoint, you have to dump the file to either SavedModel or FrozenModel. Since the tfjs-converter currently does not support the conversion from Checkpoint to TensorFlow.js compatible.
+* You can try the conversion similar to:
+```Python
+with tf.Session(graph=tf.Graph()) as sess:
+    dir_path = '../DIR/SAVE/CKPT/'
+    ckpt_name = 'lenet.ckpt'
+    saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
+    saver.restore(sess, tf.train.latest_checkpoint(dir_path))
+
+    graph = tf.get_default_graph()
+
+    # Pick input for SavedModel
+    x = graph.get_tensor_by_name("input/Placeholder:0")
+    # Pick output for SavedModel
+    add_8 = graph.get_tensor_by_name("add_8:0")
+
+    output_dir = '/OUTPUT/TO/DIR/'
+    tf.saved_model.simple_save(
+        sess, output_dir,
+        {"input":x},
+        {"output":add_8}
+    )
 ``` 
 
 ### <div id="findNames">2 Find Out Tensor Names</div>
@@ -233,10 +272,10 @@ for n in tf.get_default_graph().as_graph_def().node:
 You may get a lot, even the model is not that large. From the model we just built, we have 400+ tensors:
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_tensor_names_all.png" alt="all tensor names" width="705" >
 **Note:**
-* Don't worry every tensor names, most of them are used for training. You only need to focus on the ones which are used for prediction.
-* If you trained a model by given "name" properties, you can find them all quickly in the list, which indicates it follows expectations. 
+* Don't worry about every tensors, most of them are used as parameter or for training only. You only need to focus on the ones which are used for prediction.
+* If you trained a model by providing **"name"** properties, you can find them all quickly in the list, which indicates everything follows expectations. 
 * If you try to use an existed model, it may require some knowledge of the model structure.
-* In most cases, if a tensor "name" is not specified while construction, it is related to the constructor of TensorFlow.
+* In most cases, if a tensor **"name"** is not specified while construction, it is related to the constructor of TensorFlow.
 
 After we figured out the tensors we want, we have to put them in a name list:
 ```Python
@@ -256,11 +295,11 @@ print(sess.run(outputs, feed_dict={x:x_test}))
 
 **Note:**
 * You have to add **":0"** for the output from the tensor object. If not, it returns the tensor object (i.e. rise exceptions).
-* Please save the name list which will be used later.
+* Please save the **name list** which will be used as **outputNames** in TensorSpace.
 
 ### <div id="convertModel">3 Convert to TensorFlow.js Model</div>
 If everything so far looks good, we can use the following script to dump out a TensorFlow.js compatable model:
-```shell
+```Bash
 onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
 tensorflowjs_converter \
     --input_format=tf_saved_model \
@@ -272,11 +311,11 @@ tensorflowjs_converter \
 
 **Note:**
 * Please make sure you have installed tfjs-converter correctly.
-* If the model is a CheckPoint, you have to save it as a FrozenModel or SavedModel first, since the tfjs-converter does not support Checkpoint for now.
+* If the model is a CheckPoint, you have to save it as a SavedModel or FrozenModel first, since the tfjs-converter does not support Checkpoint for now.
 * Select the `input_format` based on your model type.
 * Put name list as a parameter of the script (no extra space or quotes).
 
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_models.png" alt="models" width="705" >
+<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_models.png" alt="models" width="530" >
 
 **Note:**
 * There are three types of file generated:

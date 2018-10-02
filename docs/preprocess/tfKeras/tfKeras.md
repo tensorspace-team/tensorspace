@@ -18,7 +18,7 @@ import numpy as np
 ```
 
 It is also required to install [tfjs-converter](https://github.com/tensorflow/tfjs-converter) (it is a tool from TensorFlow.js):
-```bash
+```shell
 $ pip install tensorflowjs
 ```
 
@@ -88,6 +88,17 @@ model.compile(optimizer='adam',
 model.fit(x_train, y_train, epochs=5)
 ```
 
+After training, we can give it a try by:
+```python
+input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
+input_sample = np.expand_dims(input_sample, axis=0)
+print(model.predict(input_sample))
+```
+Then we have a single array with 10 probabilities:
+
+<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
+
+
 #### 1.2 Load from an existed model
 For an existed model, we can load the model as:
 ```python
@@ -108,13 +119,13 @@ model = tf.keras.models.model_from_json(
 model.load_weights(weight_path)
 ```
 
-After training/loading properly, we can give it a try by:
+Similar to training, we can try to use the model for prediction:
 ```python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))
 ```
-Then we have a single array with 10 probabilities.
+The same length 10 array output:
 
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
 
@@ -126,7 +137,7 @@ If the output from the previous step is correct, we can find the output is actua
 
 One important purpose of TensorSpace is to show the internal relations among different layers, so we need to find the way to catch the outputs from intermediate layers during the prediction.
 
-First, we can use summary() command to check the general structure. We can also loop all layers to find out all layer names.
+First, we can use `summary()` command to check the general structure. We can also loop all layers to find out all layer names.
 ```
 model.summary()
 for layer in model.layers:
@@ -164,7 +175,7 @@ def generate_encapsulate_model(model):
     return display_model
 ```
 **Note:** 
-* Do not include the input or input_layer, the model constructed from Model() could use an input tensor instead of an inputLayer, which causes errors.
+* Do not include the `input` or `input_layer`, the model constructed from `Model()` could use an input tensor instead of an inputLayer, which causes errors.
 * Double check the layers you included.
 
 Then we have our model with multiple intermediate outputs:
@@ -215,7 +226,7 @@ tensorflowjs_converter \
     ../models/enc_tf_keras_model.h5 \
     ../models/json_models/tf_keras
 ```
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_models.png" alt="models" width="705" >
+<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_models.png" alt="models" width="530" >
 
 **Note:**
 * There are two types of file generated:
