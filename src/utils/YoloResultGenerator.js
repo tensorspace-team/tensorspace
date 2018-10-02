@@ -40,7 +40,15 @@ let YoloResultGenerator = (function() {
 
     }
 
-	function getChannelBox( channelData, channelShape, outputShape, anchors, cx, cy ) {
+	function getChannelBox( channelData, channelShape, outputShape,
+                            anchors, classLabelList, scoreThreshold, isDrawFiveBoxes,
+							cx, cy ) {
+
+        // channelData : array [425] for coco; [125] for VOC
+        // channelShape ： array [2] [13, 13]
+        // outputShape : array [2] [416, 416] output image pixel
+        // cx is col of feature map [13, 13]
+        // cy is row of feature map [13, 13]
 
 		let widthRange = channelShape[ 0 ];
 		let heightRange = channelShape[ 1 ];
@@ -49,7 +57,7 @@ let YoloResultGenerator = (function() {
 
 		let output = [];
 
-		for ( let box = 0; box < anchors.length; box ++ ) {
+		for ( let box = 0; box < anchors.length / 2; box ++ ) {
 
 			let index = box * len;
 			let bx = ( sigmoid( channelData[ index ] ) + cx );
@@ -57,15 +65,41 @@ let YoloResultGenerator = (function() {
 			let bw = anchors[ box * 2 ] * Math.exp( channelData[ index + 2 ] );
 			let bh = anchors[ box * 2 + 1 ] * Math.exp( channelData[ index + 3 ] );
 
+            console.log("------------------Index: " + index + " ----------------------");
+            console.log( "bx: " + bx + " | by: " + by );
+            console.log( "bw: " + bw + " | bh: " + bh );
+
+			let finalConfidence = sigmoid( channelData[ index + 4 ] );
+
+			let classPrediction = softmax( channelData.slice( index + 5, index + 5 + len ) );
+
+			let bestClassIndex = classPrediction.indexOf( Math.max( ...classPrediction ) );
+
+			let bestClassLabel = classLabelList[ bestClassIndex ];
+
+			let bestClassScore = classPrediction[ bestClassIndex ];
+
+			let finalScore = bestClassScore * finalConfidence;
+
+            console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
+            console.log("Final Score: " + finalScore);
+
 			let width = bw / widthRange * outputShape[ 0 ];
 			let height = bh  / heightRange * outputShape[ 1 ];
 			let x = bx / widthRange * outputShape[ 0 ] - width / 2;
 			let y = by / heightRange * outputShape[ 1 ] - height / 2;
 
-			if ( checkRange( bx, widthRange ) &&
-				checkRange( by, heightRange ) &&
-				checkRange( bw, widthRange ) &&
-				checkRange( bh, heightRange ) ) {
+            if ( isDrawFiveBoxes ||
+                ( checkRange( bx, widthRange ) &&
+                    checkRange( by, heightRange ) &&
+                    checkRange( bw, widthRange ) &&
+                    checkRange( bh, heightRange ) &&
+                    finalScore > scoreThreshold
+                )
+            )
+            {
+
+            	console.log("Class name: " + bestClassLabel + " | Confidence Score: " + finalScore);
 
 				output.push( {
 
