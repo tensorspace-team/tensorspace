@@ -64,14 +64,6 @@ function MergedLayer3d( config ) {
 	this.closeFmCenters = [];
 
 	/**
-	 * Elements participle in merge function.
-	 *
-	 * @type { Array }
-	 */
-
-	this.mergedElements = [];
-
-	/**
 	 * Concrete strategy in runtime.
 	 * Initialized in MergedLayer3d's initStrategy period.
 	 * Applicable strategy: Add3d, Average3d, Concatenate3d, Dot3d, Maximum3d, Multiply3d, Subtract3d.
@@ -199,6 +191,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 		// Get output shape after merge operation.
 
 		this.outputShape = this.operationStrategy.getOutputShape();
+
 		this.inputShape = this.outputShape;
 
 		// The layer's shape is based on output shape.

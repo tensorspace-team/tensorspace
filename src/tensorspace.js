@@ -3,6 +3,7 @@
  */
 
 import { Sequential } from "./tsp-model/Sequential";
+import { Model } from "./tsp-model/Model";
 
 import { Conv1d } from "./layer/intemediate/Conv1d";
 import { Conv2d } from "./layer/intemediate/Conv2d";
@@ -85,6 +86,7 @@ let layers = {
 let model = {
 
 	Sequential: Sequential,
+	Model: Model
 
 };
 

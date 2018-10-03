@@ -46,6 +46,14 @@ function MergedLayer( config ) {
 
 	this.isMerged = true;
 
+	/**
+	 * Elements participle in merge function.
+	 *
+	 * @type { Array }
+	 */
+
+	this.mergedElements = [];
+
 }
 
 MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
@@ -87,7 +95,7 @@ MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 * @param { double } actualDepth, layer aggregation's depth
 	 */
 
-	init: function(center, actualDepth ) {
+	init: function( center, actualDepth ) {
 
 	},
 
@@ -207,9 +215,11 @@ MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	calcCloseButtonPos: function() {
 
 		return {
+
 			x: 0,
 			y: 0,
 			z: 0
+
 		};
 
 	},
