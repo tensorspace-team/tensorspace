@@ -19,7 +19,7 @@ let LayerLocator = (function() {
 
 		}
 
-		for ( let i = 0; i < depth; i++ ) {
+		for ( let i = 0; i < depth; i ++ ) {
 
 			if ( !layers[ i ].isGroup  ) {
 

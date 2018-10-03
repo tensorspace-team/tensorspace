@@ -37,7 +37,7 @@ let MathUtils = (function() {
 
 	        while ( n % base !== 0 && base > limit ) {
 
-	            base--;
+	            base --;
 
             }
 

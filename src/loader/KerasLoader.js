@@ -5,49 +5,68 @@
 import { Loader } from './Loader';
 import { KerasPredictor } from "../predictor/KerasPredictor";
 
+/**
+ * Load keras model for TensorSpace.
+ *
+ * @param model, model context
+ * @param config, user's configuration for Loader
+ * @constructor
+ */
+
 function KerasLoader( model, config ) {
+
+	// "KerasLoader" inherits from abstract Loader "Loader".
 
 	Loader.call( this, model, config );
 
-	this.url = undefined;
-	this.onCompleteCallback = undefined;
+	/**
+	 * Keras model's url (.json file's url).
+	 * KerasLoader will get Keras model from this url.
+	 *
+	 * @type { url }
+	 */
 
-	this.type = "KerasLoader";
+	this.url = undefined;
+
+	// Load KerasLoader's configuration.
 
 	this.loadKerasConfig( config );
+
+	this.loaderType = "KerasLoader";
 
 }
 
 KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
-	loadKerasConfig: function( loaderConfig ) {
+	/**
+	 * ============
+	 *
+	 * Functions below override base class Loader's abstract method
+	 *
+	 * KerasLoader overrides Loader's function:
+	 * load, setPredictor
+	 *
+	 * ============
+	 */
 
-		if ( loaderConfig.url !== undefined ) {
+	/**
+	 * load(), load Keras model asynchronously.
+	 *
+	 * Three steps:
+	 * 1. Load Keras model into TSP
+	 * 2. Set Keras predictor to TSP
+	 * 3. Fire callback function if defined.
+	 *
+	 * @returns { Promise.<void> }
+	 */
 
-			this.url = loaderConfig.url;
-
-		} else {
-
-			console.error( "\"url\" property is required to load Keras model." );
-
-		}
-
-		if ( loaderConfig.onComplete !== undefined ) {
-
-			this.onCompleteCallback = loaderConfig.onComplete;
-
-		}
-
-	},
-
-	// load model asynchronously
 	load: async function() {
 
 		const loadedModel = await tf.loadModel( this.url );
-		this.model.resource = loadedModel;
-		this.model.isFit = true;
 
+		this.model.resource = loadedModel;
 		this.model.modelType = "keras";
+
 		this.setPredictor();
 
 		if ( this.onCompleteCallback !== undefined ) {
@@ -58,11 +77,46 @@ KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	},
 
+	/**
+	 * setPredictor(), create a keras predictor, config it and set the predictor for TSP model.
+	 */
+
 	setPredictor: function() {
 
 		let kerasPredictor = new KerasPredictor( this.model );
 		this.configInputShape( kerasPredictor );
 		this.model.predictor = kerasPredictor;
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class Predictor's abstract method.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * loadKerasConfig(), Load user's configuration into KerasLoader.
+	 * The configuration load in this function sometimes has not been loaded in "Loader"'s "loadLoaderConfig".
+	 *
+	 * @param loaderConfig
+	 */
+
+	loadKerasConfig: function( loaderConfig ) {
+
+		// "url" configuration is required.
+
+		if ( loaderConfig.url !== undefined ) {
+
+			this.url = loaderConfig.url;
+
+		} else {
+
+			console.error( "\"url\" property is required to load Keras model." );
+
+		}
 
 	}
 

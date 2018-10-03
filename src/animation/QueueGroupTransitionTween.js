@@ -22,7 +22,7 @@ let QueueGroupTweenFactory = ( function() {
 
 		openTween.onUpdate( function() {
 
-			for ( let i = 0; i < layer.queueHandlers.length; i++ ) {
+			for ( let i = 0; i < layer.queueHandlers.length; i ++ ) {
 
 				let tempPos = {
 
@@ -72,7 +72,7 @@ let QueueGroupTweenFactory = ( function() {
 
 		fmTween.onUpdate( function() {
 
-			for ( let i = 0; i < layer.queueHandlers.length; i++ ) {
+			for ( let i = 0; i < layer.queueHandlers.length; i ++ ) {
 
 				let tempPos = {
 

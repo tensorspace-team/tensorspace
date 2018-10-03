@@ -14,7 +14,7 @@ let QueueCenterGenerator = ( function() {
 
 		let initZTranslation = - interval * ( number - 1 ) / 2;
 
-		for ( let i = 0; i < number; i++ ) {
+		for ( let i = 0; i < number; i ++ ) {
 
 			let center = {
 

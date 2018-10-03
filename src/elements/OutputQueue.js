@@ -2,7 +2,7 @@ import { OutputUnit } from "./OutputUnit";
 import { OutputNeuralPosGenerator } from "../utils/OutputNeuralPosGenerator";
 import {ColorUtils} from "../utils/ColorUtils";
 
-function OutputQueue( units, outputs, unitLength, color, minOpacity, initStatus ) {
+function OutputQueue( units, outputs, unitLength, color, minOpacity, initStatus, overview ) {
 
 	this.units = units;
 	this.outputs = outputs;
@@ -10,6 +10,7 @@ function OutputQueue( units, outputs, unitLength, color, minOpacity, initStatus 
 	this.color = color;
 	this.minOpacity = minOpacity;
 	this.initStatus = initStatus;
+	this.overview = overview;
 
 	this.outputLength = units;
 
@@ -67,7 +68,8 @@ OutputQueue.prototype = {
 				this.outputs[ i ],
 				unitsInitPos[ i ],
 				this.color,
-				this.minOpacity
+				this.minOpacity,
+				this.overview
 
 			);
 

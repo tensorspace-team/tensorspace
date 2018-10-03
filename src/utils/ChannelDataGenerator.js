@@ -8,7 +8,7 @@ let ChannelDataGenerator = ( function() {
 
 		let layerOutputValues = [];
 
-		for ( let i = 0; i < depth; i++ ) {
+		for ( let i = 0; i < depth; i ++ ) {
 
 			let referredIndex = i;
 
@@ -34,7 +34,7 @@ let ChannelDataGenerator = ( function() {
 
 			let channelSum = 0;
 
-			for ( let j = 0; j < depth; j++ ) {
+			for ( let j = 0; j < depth; j ++ ) {
 
 				channelSum += rawValue[ i + j ];
 

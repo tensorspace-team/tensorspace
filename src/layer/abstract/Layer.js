@@ -431,6 +431,12 @@ Layer.prototype = {
 
 	},
 
+	apply: function( lastLayer ) {
+
+		this.lastLayer = lastLayer;
+
+	},
+
 	/**
 	 * ============
 	 *

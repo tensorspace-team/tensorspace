@@ -25,7 +25,7 @@ let YoloTweenFactory = ( function() {
 
 		yoloOutputTween.onUpdate( function() {
 
-			for ( let i = 0; i < layer.segregationHandlers.length; i++ ) {
+			for ( let i = 0; i < layer.segregationHandlers.length; i ++ ) {
 
 				let tempPos = {
 
@@ -71,7 +71,7 @@ let YoloTweenFactory = ( function() {
 
 		fmTween.onUpdate( function() {
 
-			for ( let i = 0; i < layer.segregationHandlers.length; i++ ) {
+			for ( let i = 0; i < layer.segregationHandlers.length; i ++ ) {
 
 				let tempPos = {
 

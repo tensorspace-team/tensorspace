@@ -2,13 +2,11 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { DefaultCameraPos } from "../utils/Constant";
-import { DefaultLayerDepth } from "../utils/Constant";
+import { DefaultCameraPos, DefaultLayerDepth } from "../utils/Constant";
 
 function SceneInitializer( container ) {
 
 	this.container = container;
-	this.animateFrame = undefined;
 
 	this.scene = undefined;
 	this.camera = undefined;
@@ -32,12 +30,6 @@ SceneInitializer.prototype = {
 
 		this.hasStats = config.stats;
 		this.backgroundColor = config.color.background;
-
-	},
-
-	dispose: function() {
-
-		window.cancelAnimationFrame( this.animateFrame );
 
 	},
 
@@ -149,7 +141,7 @@ SceneInitializer.prototype = {
 
 		this.renderer.render( this.scene, this.camera );
 
-		this.animateFrame = requestAnimationFrame( function() {
+		requestAnimationFrame( function() {
 
 			this.animate();
 
@@ -165,6 +157,18 @@ SceneInitializer.prototype = {
 
 		}.bind( this ), false );
 
+		document.addEventListener( 'mousemove', function( event ) {
+
+			this.onMouseMove( event );
+
+		}.bind( this ), true );
+
+		document.addEventListener( 'click', function( event ) {
+
+			this.onClick( event );
+
+		}.bind( this ), true );
+
 	},
 
 	onResize: function() {
@@ -172,12 +176,6 @@ SceneInitializer.prototype = {
 		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
-
-	},
-
-	resetCamera: function() {
-
-		console.log( "Reset camera position." );
 
 	}
 

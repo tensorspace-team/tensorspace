@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
     <head>
         <meta charset="UTF-8">
         <title>TensorSpace - LeNet Demo</title>
@@ -254,3 +255,221 @@
         </script>
     </body>
 </html>
+=======
+<head>
+    <meta charset="UTF-8">
+    <title>LeNet_v5</title>
+    <meta name="author" content="syt123450 / https://github.com/syt123450">
+    <meta name="author" content="zchholmes / https://github.com/zchholmes">
+    <script src="../lib/jquery.min.js"></script>
+    <script src="../lib/three.min.js"></script>
+    <script src="../lib/stats.min.js"></script>
+    <script src="../lib/tween.min.js"></script>
+    <script src="../lib/TrackballControls.js"></script>
+    <script src="../lib/tf.min.js"></script>
+    <script src="../lib/signature_pad.min.js"></script>
+
+    <script src="../../build/tensorspace.js"></script>
+
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        #controlPanel {
+            position: fixed;
+            left: 0;
+            top: 200px;
+            width: 224px;
+        }
+
+        #clear {
+            width: 224px;
+            height: 100px;
+            background-color: red;
+        }
+
+        .wrapper {
+            width: 224px;
+            height: 224px;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            z-index: 100;
+            background-color: white;
+        }
+
+        .signature-pad {
+            position: absolute;
+            left: 0;
+            top: 0;
+            border: 1px solid #000;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div id="controlPanel">
+    <div class="wrapper">
+        <canvas id="signature-pad" class="signature-pad" width=224 height=224></canvas>
+    </div>
+    <div id="clear">clear</div>
+</div>
+
+
+<div id="container"></div>
+
+<script>
+
+	let signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+		minWidth: 10,
+		backgroundColor: 'rgba(255, 255, 255, 0)',
+		penColor: 'rgb(0, 0, 0)',
+		onEnd: getImage
+	});
+
+	function getImage() {
+		let canvas = document.getElementById("signature-pad");
+		let context = canvas.getContext('2d');
+		let imgData = context.getImageData(0,0,canvas.width,canvas.height);
+
+		let signatureData = [];
+
+		for (let i = 0; i < 224; i += 8) {
+
+			for (let j = 3; j < 896; j += 32) {
+
+				signatureData.push(imgData.data[896 * i + j] / 255);
+
+			}
+
+		}
+
+		model.predict(signatureData, function(predictResult) {
+			//console.log(predictResult);
+        });
+
+	}
+
+	$(function() {
+		$("#clear").click(function() {
+			signaturePad.clear();
+			model.clear();
+		});
+	});
+
+</script>
+
+<script>
+
+	let container = document.getElementById("container");
+
+	let model = new TSP.model.Sequential(container, {
+		layerInitStatus: "close",
+		aggregationStrategy: "max",
+        layerShape: "rect",
+        textSystem: "enable",
+        relationSystem: "enable",
+        animationTimeRatio: 0.1,
+        stats: true,
+        color: {
+			background: 0x000000,
+			conv2d: 0xffff2E,
+			pooling2d: 0x00ffff,
+			dense: 0x00ff00,
+			padding2d: 0x6eb6ff,
+        }
+	});
+
+	model.add(new TSP.layers.Input2d({
+		shape: [28, 28, 1],
+		name: "initInput",
+        color: 0xFFFFFF,
+	}));
+
+	model.add(new TSP.layers.Padding2d({
+        padding: [2, 2],
+    }));
+
+	let convLayer = new TSP.layers.Conv2d({
+		kernelSize: 5,
+		filters: 6,
+		strides: 1,
+		name: "conv2d1",
+//      initStatus: "open"
+	});
+	model.add(convLayer);
+//	model.add(new TSP.layers.Conv2d({
+//		kernelSize: 5,
+//		filters: 6,
+//		strides: 1,
+//		name: "conv2d1"
+//	}));
+	model.add(new TSP.layers.Pooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2],
+		name: "maxPool2d1"
+	}));
+	model.add(new TSP.layers.Conv2d({
+		kernelSize: 5,
+		filters: 16,
+		strides: 1,
+		name: "conv2d2"
+	}));
+	model.add(new TSP.layers.Pooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2],
+		name: "maxPool2d2"
+	}));
+
+	let denseLayer = new TSP.layers.Dense({
+		units: 120,
+		name: "dense1",
+		animationTimeRatio: 1,
+        overview: true
+	});
+
+	model.add(denseLayer);
+	model.add(new TSP.layers.Dense({
+		units: 84,
+		name: "dense2",
+	}));
+
+	model.add(new TSP.layers.Output1d({
+		units: 10,
+		outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+		name: "output",
+        overview: true
+	}));
+
+	model.load({
+		type: "tfjs",
+        url: './lenetModel/mnist.json',
+        onComplete: function() {
+			console.log("Complete load model.");
+        }
+	});
+
+	model.init();
+
+//	setTimeout(function() {
+//		model.reset();
+//    }, 4000);
+
+</script>
+
+</body>
+</html>
+>>>>>>> 4e98f1ec9d7026c14153211b283bda58260dcc0f

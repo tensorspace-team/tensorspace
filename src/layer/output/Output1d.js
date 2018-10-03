@@ -59,6 +59,14 @@ function Output1d( config ) {
 	this.aggregationHeight = undefined;
 
 	/**
+	 * Decide how to display hint text.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.overview = false;
+
+	/**
 	 * mode for how to display queue element
 	 * If there is too many output units, use "paging" mode may have better visualization effect.
 	 *
@@ -222,8 +230,17 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		if ( this.lastLayer.layerDimension === 1 ) {
 
-			this.aggregationWidth = this.lastLayer.aggregationWidth;
-			this.aggregationHeight = this.lastLayer.aggregationHeight;
+			if ( this.lastLayer.layerType === "Input1d" ) {
+
+				this.aggregationWidth = 3 * this.unitLength;
+				this.aggregationHeight = 3 * this.unitLength;
+
+			} else {
+
+				this.aggregationWidth = this.lastLayer.aggregationWidth;
+				this.aggregationHeight = this.lastLayer.aggregationHeight;
+
+			}
 
 		} else {
 
@@ -560,6 +577,12 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 			}
 
+			if ( layerConfig.overview !== undefined ) {
+
+				this.overview = layerConfig.overview;
+
+			}
+
 		}
 
 	},
@@ -588,7 +611,8 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 				this.unitLength,
 				this.color,
 				this.minOpacity,
-				initStatus
+				initStatus,
+				this.overview
 
 			);
 
@@ -601,7 +625,8 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 				this.unitLength,
 				this.color,
 				this.minOpacity,
-				initStatus
+				initStatus,
+				this.overview
 
 			);
 

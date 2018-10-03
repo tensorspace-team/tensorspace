@@ -9,7 +9,7 @@ let OutputExtractor = ( function() {
 		let index = 0;
 		let maxValue = 0;
 
-		for ( let i = 0; i < values.length; i++ ) {
+		for ( let i = 0; i < values.length; i ++ ) {
 
 			if ( values[ i ] >= maxValue ) {
 

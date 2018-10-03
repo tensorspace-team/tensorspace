@@ -2,8 +2,8 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Sequential } from "./vis-model/Sequential";
-import { PixelSequential } from "./vis-model/PixelSequential";
+import { Sequential } from "./tsp-model/Sequential";
+import { Model } from "./tsp-model/Model";
 
 import { Conv1d } from "./layer/intemediate/Conv1d";
 import { Conv2d } from "./layer/intemediate/Conv2d";
@@ -33,14 +33,6 @@ import { BasicLayer3d } from "./layer/intemediate/BasicLayer3d";
 import { Activation1d } from "./layer/intemediate/Activation1d";
 import { Activation2d } from "./layer/intemediate/Activation2d";
 import { Activation3d } from "./layer/intemediate/Activation3d";
-
-import { PixelConv2d } from "./layer/pixel/PixelConv2d";
-import { PixelPadding } from "./layer/pixel/PixelPadding2d";
-import { PixelInput } from "./layer/pixel/PixelInput";
-import { PixelPooling2d } from "./layer/pixel/PixelPooling2d";
-import { PixelFlatten } from "./layer/pixel/PixelFlatten";
-import { PixelDense } from "./layer/pixel/PixelDense";
-import { PixelOutput } from "./layer/pixel/PixelOutput";
 
 import { Add } from "./merge/Add";
 import { Concatenate } from "./merge/Concatenate";
@@ -81,14 +73,6 @@ let layers = {
 	Activation2d: Activation2d,
 	Activation3d: Activation3d,
 
-	PixelConv2d: PixelConv2d,
-	PixelPadding: PixelPadding,
-	PixelInput: PixelInput,
-	PixelPooling2d: PixelPooling2d,
-	PixelFlatten: PixelFlatten,
-	PixelDense: PixelDense,
-	PixelOutput: PixelOutput,
-
 	Add: Add,
 	Concatenate: Concatenate,
 	Subtract: Subtract,
@@ -102,7 +86,7 @@ let layers = {
 let model = {
 
 	Sequential: Sequential,
-	PixelSequential: PixelSequential
+	Model: Model
 
 };
 

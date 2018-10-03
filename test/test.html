@@ -36,14 +36,14 @@
 
 	let container = document.getElementById("container");
 
-    let model = new TSP.model.Sequential(container, {
-        layerShape: "rect",
-		layerInitStatus: "close"
-    });
+//    let model = new TSP.model.Sequential(container, {
+//        layerShape: "rect",
+//		layerInitStatus: "close"
+//    });
 
-    model.add(new TSP.layers.Input2d({
+    let input = new TSP.layers.Input2d({
         shape: [28, 28, 1]
-    }));
+    });
 
     let layer1 = new TSP.layers.Conv2d({
 		kernelSize: 2,
@@ -52,23 +52,46 @@
 		padding: "same"
 	});
 
-    let layer2 = new TSP.layers.Conv2d({
+    layer1.apply( input );
+
+	let layer2 = new TSP.layers.Conv2d({
 		kernelSize: 2,
 		filters: 4,
 		strides: 1,
-		padding: "same",
-//		closeButton: {
-//			ratio: 1,
-//			display: true
-//		}
+		padding: "same"
 	});
 
-    model.add(layer1);
-    model.add(layer2);
+	layer2.apply( input );
 
-    let addLayer = TSP.layers.Add([layer1, layer2]);
+	let addLayer = new TSP.layers.Add([layer1, layer2]);
 
-    model.add(addLayer);
+	let model = new TSP.model.Model(container, {
+        inputs: [input],
+        outputs: [addLayer],
+        layerShape: "rect",
+		layerInitStatus: "close"
+
+	});
+
+
+//
+//    let layer2 = new TSP.layers.Conv2d({
+//		kernelSize: 2,
+//		filters: 4,
+//		strides: 1,
+//		padding: "same",
+////		closeButton: {
+////			ratio: 1,
+////			display: true
+////		}
+//	});
+//
+//    model.add(layer1);
+//    model.add(layer2);
+//
+//    let addLayer = TSP.layers.Add([layer1, layer2]);
+//
+//    model.add(addLayer);
 
     model.init(function(){
 
