@@ -601,7 +601,8 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 				this.width,
 				this.unitLength,
 				this.color,
-				this.minOpacity
+				this.minOpacity,
+				this.overview
 
 			);
 
@@ -614,7 +615,8 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 				this.width,
 				this.unitLength,
 				this.color,
-				this.minOpacity
+				this.minOpacity,
+				this.overview
 
 			);
 

@@ -6,7 +6,7 @@ import { OutputUnit } from "./OutputUnit";
 import { OutputNeuralPosGenerator } from "../utils/OutputNeuralPosGenerator";
 import { ColorUtils } from "../utils/ColorUtils";
 
-function OutputSegment( outputs, segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity, initStatus ) {
+function OutputSegment( outputs, segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity, initStatus, overview ) {
 
 	this.outputs = outputs;
 	this.segmentLength = segmentLength;
@@ -16,6 +16,7 @@ function OutputSegment( outputs, segmentLength, segmentIndex, totalLength, unitL
 	this.color = color;
 	this.minOpacity = minOpacity;
 	this.initStatus = initStatus;
+	this.overview = overview;
 
 	this.totalSegments = Math.ceil( this.totalLength / this.segmentLength );
 	this.groupLength = this.calcGroupLength();
@@ -103,7 +104,8 @@ OutputSegment.prototype = {
 				this.outputs[ this.segmentLength * this.segmentIndex + i ],
 				unitsInitPos[ i ],
 				this.color,
-				this.minOpacity
+				this.minOpacity,
+				this.overview
 
 			);
 

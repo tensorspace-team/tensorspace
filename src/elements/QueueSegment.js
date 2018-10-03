@@ -8,7 +8,7 @@ import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity ) {
+function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity, overview ) {
 
 	this.segmentLength = segmentLength;
 	this.segmentIndex = segmentIndex;
@@ -16,6 +16,7 @@ function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, col
 	this.unitLength = unitLength;
 	this.color = color;
 	this.minOpacity = minOpacity;
+	this.overview = overview;
 
 	this.sideOpacity = SideFaceRatio * minOpacity;
 
@@ -40,6 +41,8 @@ function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, col
 	this.font = TextFont;
 	this.textSize = TextHelper.calcQueueTextSize( this.unitLength );
 	this.indexSize = 0.5 * this.textSize;
+
+	this.textRotation = this.overview ? - Math.PI / 2 : 0;
 
 	this.lengthText = undefined;
 	this.startText = undefined;
@@ -195,6 +198,8 @@ QueueSegment.prototype = {
 
 		let text = new THREE.Mesh( geometry, material );
 
+		text.rotateX( this.textRotation );
+
 		let textPos = TextHelper.calcQueueTextPos(
 
 			lengthTextContent.length,
@@ -239,6 +244,8 @@ QueueSegment.prototype = {
 
 		let startText = new THREE.Mesh( startGeometry, startMaterial );
 
+		startText.rotateX( this.textRotation );
+
 		let startTextPos = TextHelper.calcSegmentStartIndexPos(
 
 			this.actualWidth,
@@ -282,6 +289,8 @@ QueueSegment.prototype = {
 		let endMaterial = new THREE.MeshBasicMaterial( { color: this.color } );
 
 		let endText = new THREE.Mesh( endGeometry, endMaterial );
+
+		endText.rotateX( this.textRotation );
 
 		let endTextPos = TextHelper.calcSegmentEndIndexPos(
 

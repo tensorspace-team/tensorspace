@@ -6,15 +6,17 @@ import { ColorUtils } from "../utils/ColorUtils";
 import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 
-function OutputUnit( unitLength, output, initPositions, color, minOpacity ) {
+function OutputUnit( unitLength, output, initPositions, color, minOpacity, overview ) {
 
 	this.output = output;
 	this.unitLength = unitLength;
 	this.color = color;
 	this.minOpacity = minOpacity;
+	this.overview = overview;
 
 	this.cubeSize = this.unitLength;
 	this.textSize = TextHelper.calcOutputTextSize( this.unitLength );
+	this.textRotation = this.overview ? - Math.PI / 2 : 0;
 
 	this.initPosition = {
 
@@ -99,7 +101,7 @@ OutputUnit.prototype = {
 
 			font: this.font,
 			size: this.textSize,
-			height: Math.min( this.unitLength, 1 ),
+			height: Math.min( this.unitLength / 3, 1 ),
 			curveSegments: 8
 
 		} );
@@ -107,6 +109,8 @@ OutputUnit.prototype = {
 		let material = new THREE.MeshBasicMaterial( { color: this.color } );
 
 		let text = new THREE.Mesh( geometry, material );
+
+		text.rotateX( this.textRotation );
 
 		let textPos = TextHelper.calcOutputTextPos(
 

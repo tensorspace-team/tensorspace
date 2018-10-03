@@ -8,13 +8,15 @@ import { TextFont } from "../assets/fonts/TextFont";
 import { TextHelper } from "../utils/TextHelper";
 import { RenderPreprocessor } from "../utils/RenderPreprocessor";
 
-function NeuralQueue( length, unitLength, color, minOpacity ) {
+function NeuralQueue( length, unitLength, color, minOpacity, overview ) {
 
 	this.queueLength = length;
 	this.unitLength = unitLength;
 	this.actualWidth = this.unitLength * this.queueLength;
 	this.color = color;
 	this.minOpacity = minOpacity;
+	this.overview = overview;
+
 	this.sideOpacity = SideFaceRatio * this.minOpacity;
 
 	this.dataArray = undefined;
@@ -27,6 +29,7 @@ function NeuralQueue( length, unitLength, color, minOpacity ) {
 
 	this.font = TextFont;
 	this.textSize = TextHelper.calcQueueTextSize( this.unitLength );
+	this.textRotation = this.overview ? - Math.PI / 2 : 0;
 
 	this.lengthText = undefined;
 
@@ -165,6 +168,8 @@ NeuralQueue.prototype = {
 		let material = new THREE.MeshBasicMaterial( { color: this.color } );
 
 		let text = new THREE.Mesh( geometry, material );
+
+		text.rotateX( this.textRotation );
 
 		let textPos = TextHelper.calcQueueTextPos(
 

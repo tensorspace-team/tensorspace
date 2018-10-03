@@ -131,13 +131,15 @@
 	model.add(new TSP.layers.Dense({
 		units: 4096,
 		paging: true,
-		segmentLength: 400
+		segmentLength: 400,
+        overview: true
 	}));
 	model.add(new TSP.layers.Output1d({
 		units: 1000,
 		paging: true,
 		segmentLength: 400,
-		outputs: result
+		outputs: result,
+        overview: true
 	}));
 
 	model.load({
