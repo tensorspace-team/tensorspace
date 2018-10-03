@@ -1,257 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Yolo_v2_tiny</title>
-    <meta name="author" content="zchholmes / https://github.com/zchholmes">
-    <meta name="author" content="syt123450 / https://github.com/syt123450">
-    <meta name="author" content="Charlesliuyx / https://github.com/Charlesliuyx">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <title>TensorSpace - Yolo_v2_tiny Demo</title>
+        <meta name="author" content="zchholmes / https://github.com/zchholmes">
+        <meta name="author" content="syt123450 / https://github.com/syt123450">
+        <meta name="author" content="Charlesliuyx / https://github.com/Charlesliuyx">
+        <style>
 
-        html, body {
-             margin: 0;
-             padding: 0;
-             width: 100%;
-             height: 100%;
-         }
+            html, body {
+                 margin: 0;
+                 padding: 0;
+                 width: 100%;
+                 height: 100%;
+             }
 
-        #container {
-            width: 100%;
-            height: 100%;
-        }
+            #container {
+                width: 100%;
+                height: 100%;
+            }
 
-        #loadingPad {
-            position: fixed;
-            height: 100%;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background-color: #031D32;
-        }
+            #loadingPad {
+                position: fixed;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                background-color: #031D32;
+            }
 
-        #loading {
-            position: fixed;
-            width: 400px;
-            height: 300px;
-            top: 200px;
-            left: 500px;
-        }
+            #loading {
+                position: fixed;
+                width: 400px;
+                height: 300px;
+                top: 200px;
+                left: 500px;
+            }
 
-        .mdl-dialog {
-            width: fit-content!important;
-        }
+            .mdl-dialog {
+                width: fit-content!important;
+            }
+        </style>
+        <link rel="stylesheet" href="../lib/material.min.css">
+        <link rel="stylesheet" href="../lib/material.fonts.css">
+        <link rel="stylesheet" href="../lib/dialog-polyfill.css">
+    </head>
+    <body>
 
-    </style>
+        <div id="container"></div>
+        <div id="loadingPad">
+            <img id="loading" src="./assets/loading.gif">
+        </div>
 
-</head>
-<body>
+        <dialog class="mdl-dialog">
+            <h4 class="mdl-dialog__title">Yolo Output</h4>
+            <div class="mdl-dialog__content">
+                <canvas id="drawerPad" width=416 height="416"></canvas>
+            </div>
+            <div class="mdl-dialog__actions">
+                <button type="button" class="mdl-button close">Goodbye 33</button>
+            </div>
+        </dialog>
 
-<div id="container"></div>
-<div id="loadingPad">
-    <img id="loading" src="./assets/loading.gif">
-</div>
+        <script src="../../build/tensorspace.js"></script>
+        <script src="../lib/jquery.min.js"></script>
+        <script src="../lib/three.min.js"></script>
+        <script src="../lib/stats.min.js"></script>
+        <script src="../lib/tween.min.js"></script>
+        <script src="../lib/TrackballControls.js"></script>
+        <script src="../lib/tf.min.js"></script>
+        <script src="../lib/material.min.js"></script>
+        <script src="../lib/dialog-polyfill.js"></script>
 
-<dialog class="mdl-dialog">
-    <h4 class="mdl-dialog__title">Yolo Output</h4>
-    <div class="mdl-dialog__content">
-        <canvas id="drawerPad" width=416 height="416"></canvas>
-    </div>
-    <div class="mdl-dialog__actions">
-        <button type="button" class="mdl-button close">Goodbye 33</button>
-    </div>
-</dialog>
+        <script src="./data/33.js"></script>
 
-<script src="../lib/jquery.min.js"></script>
-<script src="../lib/three.min.js"></script>
-<script src="../lib/stats.min.js"></script>
-<script src="../lib/tween.min.js"></script>
-<script src="../lib/TrackballControls.js"></script>
-<script src="../lib/tf.min.js"></script>
-<link rel="stylesheet" href="../lib/material.min.css">
-<script src="../lib/material.min.js"></script>
-<link rel="stylesheet" href="../lib/material.fonts.css">
-<script src="../lib/dialog-polyfill.js"></script>
-<link rel="stylesheet" href="../lib/dialog-polyfill.css">
-<script src="../../build/tensorspace.js"></script>
+        <script>
 
-<script src="./data/33.js"></script>
+            let container = document.getElementById( "container" );
 
-<script>
+            let model = new TSP.model.Sequential( container, {
 
-	let container = document.getElementById("container");
+                aggregationStrategy: "average",
+                layerShape: "rect",
+                layerInitStatus: "close",
+                color: {
 
-	let model = new TSP.model.Sequential(container, {
-		aggregationStrategy: "average",
-		layerShape: "rect",
-		layerInitStatus: "close",
-		color: {
-			conv2d: 0xff00ff,
-			pooling2d: 0x00ffff
-		}
-	});
+                    conv2d: 0xff00ff,
+                    pooling2d: 0x00ffff
 
-    model.add(new TSP.layers.Input3d({
-        shape: [416, 416, 3]
-    }));
-    // 0
-    //  shape: [416, 416]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 3,
-		filters: 16,
-		strides: 1,
-        padding: "same"
-    }));
-    // 1
-    model.add(new TSP.layers.Pooling2d({
-        poolSize: [2, 2],
-		strides: [2, 2]
-    }));
-    // 2
-    // shape: [208, 208]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 3,
-		filters: 32,
-		strides: 1,
-        padding: "same"
-    }));
-    // 3
-    model.add(new TSP.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2]
-    }));
-    // 4
-    // shape: [104, 104]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 3,
-		filters: 64,
-		strides: 1,
-		padding: "same"
-    }));
-    // 5
-    model.add(new TSP.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2]
-    }));
-    // 6
-    // shape: [52, 52]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 3,
-		filters: 128,
-		strides: 1,
-		padding: "same"
-    }));
-    // 7
-    model.add(new TSP.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2]
-    }));
-    // 8
-    // shape: [26, 26]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 3,
-		filters: 256,
-		strides: 1,
-		padding: "same"
-    }));
-    // 9
-    model.add(new TSP.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [2, 2]
-    }));
-    // 10
-    // shape: [13, 13]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 3,
-		filters: 512,
-		strides: 1,
-		padding: "same"
-    }));
-    // 11
-    // shape: [13, 13]
-    model.add(new TSP.layers.Pooling2d({
-		poolSize: [2, 2],
-		strides: [1, 1],
-		padding: "same"
-    }));
-    // 12
-    // shape: [13, 13]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 3,
-		filters: 1024,
-		strides: 1,
-		padding: "same"
-    }));
-    // 13
-    // shape: [13, 13]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 3,
-		filters: 512,
-		strides: 1,
-		padding: "same"
-    }));
-    // 14
-    // shape: [13, 13]
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 1,
-		filters: 125,
-		strides: 1
-    }));
+                }
 
-    let yoloGrid = new TSP.layers.YoloGrid({
+            } );
 
-		anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ],
+            model.add( new TSP.layers.Input3d( {
 
-        //voc class label name list
-        classLabelList: [ "aeroplane", "bicycle", "bird", "boat", "bottle",
-            "bus", "car", "cat", "chair", "cow",
-            "diningtable", "dog", "horse", "motorbike", "person",
-            "pottedplant", "sheep", "sofa", "train", "tvmonitor" ],
+                shape: [ 416, 416, 3 ]
 
-        // defualt is 0.5
-        scoreThreshold: 0.1,
+            } ) );
 
-        // default is true
-        isDrawFiveBoxes: true,
+            model.add( new TSP.layers.Conv2d( {
 
-        onCeilClicked: onYoloCeilClicked
+                kernelSize: 3,
+                filters: 16,
+                strides: 1,
+                padding: "same"
 
-    });
+            } ) );
 
-    model.add( yoloGrid );
+            model.add( new TSP.layers.Pooling2d( {
 
-    let outputDetectionLayer = new TSP.layers.OutputDetection();
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
 
-    model.add( outputDetectionLayer );
+            } ) );
 
-	model.load({
-		type: "tensorflow",
-        modelUrl: "./yolov2-tiny-voc/tensorflowjs_model.pb",
-        weightUrl: "./yolov2-tiny-voc/weights_manifest.json",
-        outputsName: ["Maximum", "Const_1", "Maximum_1", "Const_2", "Maximum_2",
-                      "Const_3", "Maximum_3", "Const_4", "Maximum_4", "Const_5",
-                      "Maximum_5", "Const_6", "Const_7", "Const_8", "add_8"],
-    });
+            model.add( new TSP.layers.Conv2d( {
 
-	model.init(function() {
+                kernelSize: 3,
+                filters: 32,
+                strides: 1,
+                padding: "same"
 
-        model.predict(data);
-        $("#loadingPad").hide();
+            } ) );
 
-    });
+            model.add( new TSP.layers.Pooling2d( {
 
-	function onYoloCeilClicked( ceilData, rectList ) {
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
 
-		outputDetectionLayer.addRectangleList( rectList );
+            } ) );
 
-		if ( !outputDetectionLayer.isOpen ) {
+            model.add( new TSP.layers.Conv2d( {
 
-			outputDetectionLayer.openLayer();
+                kernelSize: 3,
+                filters: 64,
+                strides: 1,
+                padding: "same"
 
-        }
+            } ) );
 
-    }
+            model.add( new TSP.layers.Pooling2d( {
 
-</script>
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
 
-</body>
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 128,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 1, 1 ],
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 1024,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 1,
+                filters: 125,
+                strides: 1
+
+            } ) );
+
+            let yoloGrid = new TSP.layers.YoloGrid( {
+
+                anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ],
+
+                //voc class label name list
+                classLabelList: [ "aeroplane", "bicycle", "bird", "boat", "bottle",
+                    "bus", "car", "cat", "chair", "cow",
+                    "diningtable", "dog", "horse", "motorbike", "person",
+                    "pottedplant", "sheep", "sofa", "train", "tvmonitor" ],
+
+                // defualt is 0.5
+                scoreThreshold: 0.1,
+
+                // default is true
+                isDrawFiveBoxes: true,
+
+                onCeilClicked: onYoloCeilClicked
+
+            } );
+
+            model.add( yoloGrid );
+
+            let outputDetectionLayer = new TSP.layers.OutputDetection();
+
+            model.add( outputDetectionLayer );
+
+            model.load( {
+
+                type: "tensorflow",
+                modelUrl: "./yolov2-tiny-voc/tensorflowjs_model.pb",
+                weightUrl: "./yolov2-tiny-voc/weights_manifest.json",
+                outputsName: [ "Maximum", "Const_1", "Maximum_1", "Const_2", "Maximum_2",
+                              "Const_3", "Maximum_3", "Const_4", "Maximum_4", "Const_5",
+                              "Maximum_5", "Const_6", "Const_7", "Const_8", "add_8" ],
+            } );
+
+            model.init( function() {
+
+                model.predict( data );
+                $( "#loadingPad" ).hide();
+
+            } );
+
+            function onYoloCeilClicked( ceilData, rectList ) {
+
+                outputDetectionLayer.addRectangleList( rectList );
+
+                if ( !outputDetectionLayer.isOpen ) {
+
+                    outputDetectionLayer.openLayer();
+
+                }
+
+            }
+
+        </script>
+    </body>
 </html>

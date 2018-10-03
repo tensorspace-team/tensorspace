@@ -1,878 +1,879 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ResNet-50</title>
-    <meta name="author" content="zchholmes / https://github.com/zchholmes">
-    <meta name="author" content="syt123450 / https://github.com/syt123450">
-    <style>
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        #container {
-            width: 100%;
-            height: 100%;
-        }
-
-        #loadingPad {
-            position: fixed;
-            height: 100%;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background-color: #031D32;
-        }
-
-        #loading {
-            position: fixed;
-            width: 400px;
-            height: 300px;
-            top: 200px;
-            left: 500px;
-        }
-
-    </style>
-</head>
-<body>
-<div id="container"></div>
-<div id="loadingPad">
-    <img id="loading" src="./assets/loading.gif">
-</div>
-
-<script src="../lib/jquery.min.js"></script>
-<script src="../lib/three.min.js"></script>
-<script src="../lib/stats.min.js"></script>
-<script src="../lib/tween.min.js"></script>
-<script src="../lib/TrackballControls.js"></script>
-<script src="../lib/tf.min.js"></script>
-<script src="../../build/tensorspace.js"></script>
-
-<script src="data/dilingdiling.js"></script>
-<script src="data/imagenet_result.js"></script>
-
-<script>
-
-    let container = document.getElementById("container");
-
-    let model = new TSP.model.Sequential(container, {
-        aggregationStrategy: "max",
-        layerShape: "rect",
-        layerInitStatus: "close",
-        stats: true,
-        color: {
-            conv2d: 0xff00ff,
-            pooling2d: 0x00ffff,
-            add: 0xff0000
-        }
-    });
-
-    // input ==> [224, 224, 3]
-    model.add(new TSP.layers.Input3d({
-        shape: [224, 224, 3]
-    }));
-
-
-    /* >>>>>>>>>____1____<<<<<<<<<< */
-
-    // 0
-    // conv1 ~ conv1_relu (activation_1)
-    // output: 112*112*64 ==> 802,816
-    // Padding ==3
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 7,
-        filters: 64,
-        strides: 2,
-        padding: "same"
-    }));
-
-    // 1
-    // pool1 (max_pooling2d_1)
-    // output: 55 *55 *64 ==> 193600
-    model.add(new TSP.layers.Pooling2d({
-        poolSize: [3, 3],
-        strides: [2, 2]
-    }));
-
-
-    /* >>>>>>>>>____2____<<<<<<<<<< */
-
-    // 2
-    // res2a_branch2a ~ res2a_branch2a_relu (activation_2)
-    // output: 55 *55 *64 ==> 193600
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-		kernelSize: 1,
-		filters: 64,
-		strides: 1,
-		padding: "valid"
-	}));
-
-    // 3
-    // res2a_branch2b ~ res2a_branch2b_relu (activation_3)
-    // output: 55 *55 *64 ==> 193600
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 64,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 4
-    // res2a_branch2c ~ scale2a_branch2c (bn2a_branch2c)
-    // output: 55 *55 *256 ==> 774400
-    // Padding ==0
-    let bn2a_branch2c =new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn2a_branch2c);
-
-    // 5
-    // res2a_branch1 ~ scale2a_branch1 (bn2a_branch1)
-    // output: 55 *55 *256 ==> 774400
-    // Padding ==0
-    let bn2a_branch1 = new TSP.layers.Conv2d({
-		kernelSize: 1,
-		filters: 256,
-		strides: 1,
-		padding: "valid"
-	});
-    model.add(bn2a_branch1);
-
-    // 6
-    // res2a(add_1) ~ res2a_relu (activation_4)
-    // output: 55 *55 *256 ==> 774400
-    // let activation_4 = new TSP.layers.NativeLayer3d({
-    //     shape: [55, 55, 256]
-    // });
-    let activation_4 = TSP.layers.Add([bn2a_branch2c, bn2a_branch1]);
-    model.add(activation_4);
-
-    // 7
-    // res2b_branch2a ~ res2b_branch2a_relu (activation_5)
-    // output: 55 *55 *64 ==> 193600
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 64,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 8
-    // res2b_branch2b ~ res2b_branch2b_relu (activation_6)
-    // output: 55 *55 *64 ==> 193600
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 64,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 9
-    // res2b_branch2c ~ scale2b_branch2c (bn2b_branch2c)
-    // output: 55 *55 *256 ==> 774400
-    // Padding ==0
-    let bn2b_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn2b_branch2c);
-
-
-    // 10
-    // res2b(add_2) ~ res2b_relu (activation_7)
-    // output: 55 *55 *256 ==> 774400
-    let activation_7 = TSP.layers.Add([activation_4, bn2b_branch2c]);
-    model.add(activation_7);
-
-
-    // 11
-    // res2c_branch2a ~ res2c_branch2a_relu (activation_8)
-    // output: 55 *55 *64 ==> 193600
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 64,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 12
-    // res2c_branch2b ~ res2c_branch2b_relu (activation_9)
-    // output: 55 *55 *64 ==> 193600
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 64,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 13
-    // res2c_branch2c ~ scale2c_branch2c (bn2c_branch2c)
-    // output: 55 *55 *256 ==> 774400
-    // Padding ==0
-    let bn2c_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn2c_branch2c);
-
-    // 14
-    // res2c(add_3) ~ res2c_relu (activation_10)
-    // output: 55 *55 *256 ==> 774400
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [55, 55, 256]
-    // }));
-    let activation_10 = TSP.layers.Add([activation_7, bn2c_branch2c]);
-    model.add(activation_10);
-
-
-    /* >>>>>>>>>____3____<<<<<<<<<< */
-
-    // 15
-    // res3a_branch2a ~ res3a_branch2a_relu (activation_11)
-    // output: 28 *28 *128 ==> 100352
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 128,
-        strides: 2,
-        padding: "valid"
-    }));
-
-    // 16
-    // res3a_branch2b ~ res3a_branch2b_relu (activation_12)
-    // output: 28 *28 *128 ==> 100352
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 128,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 17
-    // res3a_branch2c ~ scale3a_branch2c (bn3a_branch2c)
-    // output: 28 *28 *512 ==> 401408
-    // Padding ==0
-    let bn3a_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 512,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn3a_branch2c);
-
-    // 18
-    // res3a_branch1 ~ scale3a_branch1 (bn3a_branch1)
-    // output: 28 *28 *512==> 401408
-    // Padding ==0
-    let bn3a_branch1 = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 512,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn3a_branch1);
-
-    //19
-    // res3a(add_4) ~ res3a_relu (activation_13)
-    // output: 28 *28 *512 ==> 401408
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [28, 28, 512]
-    // }));
-    let activation_13 = TSP.layers.Add([bn3a_branch1, bn3a_branch2c]);
-    model.add(activation_13);
-
-    // 20
-    // res3b_branch2a ~ res3b_branch2a_relu (activation_14)
-    // output: 28 *28 *128 ==> 100352
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 128,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 21
-    // res3b_branch2b ~ res3b_branch2b_relu (activation_15)
-    // output: 28 *28 *128 ==> 100352
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 128,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 22
-    // res3b_branch2c ~ scale3b_branch2c (bn3b_branch2c)
-    // output: 28 *28 *512 ==>401408
-    // Padding ==0
-    let bn3b_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 512,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn3b_branch2c);
-
-    // 23
-    // res3b(add_5) ~ res3b_relu (activation_16)
-    // output: 28 *28 *512 ==>401408
-    let activation_16 = TSP.layers.Add([activation_13, bn3b_branch2c]);
-    model.add(activation_16);
-
-    // 24
-    // res3c_branch2a ~ res3c_branch2a_relu (activation_17)
-    // output: 28 *28 *128 ==>100352
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 128,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 25
-    // res3c_branch2b ~ res3c_branch2b_relu (activation_18)
-    // output: 28 *28 *128 ==>100352
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 128,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 26
-    // res3c_branch2c ~ scale3c_branch2c (bn3c_branch2c)
-    // output: 28 *28 *512 ==>401408
-    // Padding ==0
-    let bn3c_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 512,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn3c_branch2c);
-
-    // 27
-    // res3c(add_6) ~ res3c_relu (activation_19)
-    // output: 28 *28 *512 ==>401408
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [28, 28, 512]
-    // }));
-    let activation_19 = TSP.layers.Add([activation_16, bn3c_branch2c]);
-    model.add(activation_19);
-
-    // 28
-    // res3d_branch2a ~ res3d_branch2a_relu (activation_20)
-    // output: 28 *28 *128 ==>100352
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 128,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 29
-    // res3d_branch2b ~ res3d_branch2b_relu (activation_21)
-    // output: 28 *28 *128 ==>100352
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 128,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 30
-    // res3d_branch2c ~ scale3d_branch2c (bn3d_branch2c)
-    // output: 28 *28 *512 ==>401408
-    // Padding ==0
-    let bn3d_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 512,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn3d_branch2c);
-
-    // 31
-    // res3d(add_7) ~ res3d_relu (activation_22)
-    // output: 28 *28 *512 ==>401408
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [28, 28, 512]
-    // }));
-    let activation_22 = TSP.layers.Add([activation_19, bn3d_branch2c]);
-    model.add(activation_22);
-
-    /* >>>>>>>>>____4____<<<<<<<<<< */
-
-    // 32
-    // res4a_branch2a ~ res4a_branch2a_relu (activation_23)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 2,
-        padding: "valid"
-    }));
-
-    // 33
-    // res4a_branch2b ~ res4a_branch2b_relu (activation_24)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 34
-    // res4a_branch2c ~ scale4a_branch2c (bn4a_branch2c)
-    // output: 14 *14 *1024 ==>200704
-    // Padding ==0
-    let bn4a_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 1024,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn4a_branch2c);
-
-    // 35
-    // res4a_branch1 ~ scale4a_branch1 (bn4a_branch1)
-    // output: 14 *14 *1024 ==>200704
-    // Padding ==0
-    let bn4a_branch1 = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 1024,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn4a_branch1);
-
-    // 36
-    // res4a(add_8) ~ res4a_relu (activation_25)
-    // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [14, 14, 1024]
-    // }));
-    let activation_25 = TSP.layers.Add([bn4a_branch1, bn4a_branch2c]);
-    model.add(activation_25);
-
-    // 37
-    // res4b_branch2a ~ res4b_branch2a_relu (activation_26)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 38
-    // res4b_branch2b ~ res4b_branch2b_relu (activation_27)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 39
-    // res4b_branch2c ~ scale4b_branch2c (bn4b_branch2c)
-    // output: 14 *14 *1024 ==>200704
-    // Padding ==0
-    let bn4b_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 1024,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn4b_branch2c);
-
-    // 40
-    // res4b(add_9) ~ res4b_relu (activation_28)
-    // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [14, 14, 1024]
-    // }));
-    let activation_28 = TSP.layers.Add([activation_25, bn4b_branch2c]);
-    model.add(activation_28);
-
-    // 41
-    // res4c_branch2a ~ res4c_branch2a_relu (activation_29)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 42
-    // res4c_branch2b ~ res4c_branch2b_relu (activation_30)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 43
-    // res4c_branch2c ~ scale4c_branch2c (bn4c_branch2c)
-    // output: 14 *14 *1024 ==>200704
-    // Padding ==0
-    let bn4c_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 1024,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn4c_branch2c);
-
-    // 44
-    // res4c(add_10) ~ res4c_relu (activation_31)
-    // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [14, 14, 1024]
-    // }));
-    let activation_31 = TSP.layers.Add([activation_28, bn4c_branch2c]);
-    model.add(activation_31);
-
-    // 45
-    // res4d_branch2a ~ res4d_branch2a_relu (activation_32)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 46
-    // res4d_branch2b ~ res4d_branch2b_relu (activation_33)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 47
-    // res4d_branch2c ~ scale4d_branch2c (bn4d_branch2c)
-    // output: 14 *14 *1024 ==>200704
-    // Padding ==0
-    let bn4d_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 1024,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn4d_branch2c);
-
-    // 48
-    // res4d(add_11) ~ res4d_relu (activation_34)
-    // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [14, 14, 1024]
-    // }));
-    let activation_34 = TSP.layers.Add([activation_31, bn4d_branch2c]);
-    model.add(activation_34);
-
-    // 49
-    // res4e_branch2a ~ res4e_branch2a_relu (activation_35)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 50
-    // res4e_branch2b ~ res4e_branch2b_relu (activation_36)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 51
-    // res4e_branch2c ~ scale4e_branch2c (bn4e_branch2c)
-    // output: 14 *14 *1024 ==>200704
-    // Padding ==0
-    let bn4e_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 1024,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn4e_branch2c);
-
-    // 52
-    // res4e(add_12) ~ res4e_relu (activation_37)
-    // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [14, 14, 1024]
-    // }));
-    let activation_37 = TSP.layers.Add([activation_34, bn4e_branch2c]);
-    model.add(activation_37);
-
-    // 53
-    // res4f_branch2a ~ res4f_branch2a_relu (activation_38)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 256,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 54
-    // res4f_branch2b ~ res4f_branch2b_relu (activation_39)
-    // output: 14 *14 *256 ==>50176
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 55
-    // res4f_branch2c ~ scale4f_branch2c (bn4f_branch2c)
-    // output: 14 *14 *1024 ==>200704
-    // Padding ==0
-    let bn4f_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 1024,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn4f_branch2c);
-
-    // 56
-    // res4f(add_13) ~ res4f_relu (activation_40)
-    // output: 14 *14 *1024 ==>200704
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [14, 14, 1024]
-    // }));
-    let activation_40 = TSP.layers.Add([activation_37, bn4f_branch2c]);
-    model.add(activation_40);
-
-
-    /* >>>>>>>>>____5____<<<<<<<<<< */
-
-    // 57
-    // res5a_branch2a ~ res5a_branch2a_relu (activation_41)
-    // output: 7 *7 *512 ==>25088
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 512,
-        strides: 2,
-        padding: "valid"
-    }));
-
-    // 58
-    // res5a_branch2b ~ res5a_branch2b_relu (activation_42)
-    // output: 7 *7 *512 ==>25088
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 59
-    // res5a_branch2c ~ scale5a_branch2c (bn5a_branch2c)
-    // output: 7 *7 *2048 ==>100352
-    // Padding ==0
-    let bn5a_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 2048,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn5a_branch2c);
-
-    // 60
-    // res5a_branch1 ~ scale5a_branch1 (bn5a_branch1)
-    // output: 7 *7 *2048 ==>100352
-    // Padding ==0
-    let bn5a_branch1 = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 2048,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn5a_branch1);
-
-    // 61
-    // res5a(add_14) ~ res5a_relu (activation_43)
-    // output: 7 *7 *2048 ==>100352
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [7, 7, 2048]
-    // }));
-    let activation_43 = TSP.layers.Add([bn5a_branch1, bn5a_branch2c]);
-    model.add(activation_43);
-
-    // 62
-    // res5b_branch2a ~ res5b_branch2a_relu (activation_44)
-    // output: 7 *7 *512 ==>25088
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 512,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 63
-    // res5b_branch2b ~ res5b_branch2b_relu (activation_45)
-    // output: 7 *7 *512 ==>25088
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 64
-    // res5b_branch2c ~ scale5b_branch2c (bn5b_branch2c)
-    // output: 7 *7 *2048 ==>100352
-    // Padding ==0
-    let bn5b_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 2048,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn5b_branch2c);
-
-    // 65
-    // res5b(add_15) ~ res5b_relu (activation_46)
-    // output: 7 *7 *2048 ==>100352
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [7, 7, 2048]
-    // }));
-    let activation_46 = TSP.layers.Add([activation_43, bn5b_branch2c]);
-    model.add(activation_46);
-
-    // 66
-    // res5c_branch2a ~ res5c_branch2a_relu (activation_47)
-    // output: 7 *7 *512 ==>25088
-    // Padding ==0
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 512,
-        strides: 1,
-        padding: "valid"
-    }));
-
-    // 67
-    // res5c_branch2b ~ res5c_branch2b_relu (activation_48)
-    // output: 7 *7 *512 ==>25088
-    // Padding ==1
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
-
-    // 68
-    // res5c_branch2c ~ scale5c_branch2c (bn5c_branch2c)
-    // output: 7 *7 *2048 ==>100352
-    // Padding ==0
-    let bn5c_branch2c = new TSP.layers.Conv2d({
-        kernelSize: 1,
-        filters: 2048,
-        strides: 1,
-        padding: "valid"
-    });
-    model.add(bn5c_branch2c);
-
-    // 69
-    // res5c(add_10) ~ res5c_relu (activation_49)
-    // output: 7 *7 *2048 ==>100352
-    // model.add(new TSP.layers.NativeLayer3d({
-    //     shape: [7, 7, 2048]
-    // }));
-    let activation_49 = TSP.layers.Add([activation_46, bn5c_branch2c]);
-    model.add(activation_49);
-
-    // 70
-    // pool5 (avg_pool)
-    // output: 1 *1 *2048 ==>2048
-    model.add(new TSP.layers.Pooling2d({
-        poolSize: [7, 7],
-        strides: [1, 1]
-    }));
-
-    // 71
-    // fc1000 (fc1000)
-    // output: 1000
-	model.add(new TSP.layers.Output1d({
-		units: 1000,
-		paging: true,
-		segmentLength: 400,
-		outputs: result
-	}));
-
-
-    model.load({
-        type: "tfjs",
-        url: './resnet50Model/model.json'
-    });
-
-    model.init(function() {
-
-        model.predict(data);
-        $("#loadingPad").hide();
-
-    });
-
-</script>
-
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>TensorSpace - ResNet-50 Demo</title>
+        <meta name="author" content="zchholmes / https://github.com/zchholmes">
+        <meta name="author" content="syt123450 / https://github.com/syt123450">
+        <style>
+
+            html, body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            #container {
+                width: 100%;
+                height: 100%;
+            }
+
+            #loadingPad {
+                position: fixed;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                background-color: #031D32;
+            }
+
+            #loading {
+                position: fixed;
+                width: 400px;
+                height: 300px;
+                top: 200px;
+                left: 500px;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div id="container"></div>
+        <div id="loadingPad">
+            <img id="loading" src="./assets/loading.gif">
+        </div>
+
+        <script src="../../build/tensorspace.js"></script>
+        <script src="../lib/jquery.min.js"></script>
+        <script src="../lib/three.min.js"></script>
+        <script src="../lib/stats.min.js"></script>
+        <script src="../lib/tween.min.js"></script>
+        <script src="../lib/TrackballControls.js"></script>
+        <script src="../lib/tf.min.js"></script>
+
+        <script src="data/dilingdiling.js"></script>
+        <script src="data/imagenet_result.js"></script>
+
+        <script>
+
+            let container = document.getElementById("container");
+
+            let model = new TSP.model.Sequential(container, {
+                aggregationStrategy: "max",
+                layerShape: "rect",
+                layerInitStatus: "close",
+                stats: true,
+                color: {
+                    conv2d: 0xff00ff,
+                    pooling2d: 0x00ffff,
+                    add: 0xff0000
+                }
+            });
+
+            // input ==> [224, 224, 3]
+            model.add(new TSP.layers.Input3d({
+                shape: [224, 224, 3]
+            }));
+
+
+            /* >>>>>>>>>____1____<<<<<<<<<< */
+
+            // 0
+            // conv1 ~ conv1_relu (activation_1)
+            // output: 112*112*64 ==> 802,816
+            // Padding ==3
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 7,
+                filters: 64,
+                strides: 2,
+                padding: "same"
+            }));
+
+            // 1
+            // pool1 (max_pooling2d_1)
+            // output: 55 *55 *64 ==> 193600
+            model.add(new TSP.layers.Pooling2d({
+                poolSize: [3, 3],
+                strides: [2, 2]
+            }));
+
+
+            /* >>>>>>>>>____2____<<<<<<<<<< */
+
+            // 2
+            // res2a_branch2a ~ res2a_branch2a_relu (activation_2)
+            // output: 55 *55 *64 ==> 193600
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 64,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 3
+            // res2a_branch2b ~ res2a_branch2b_relu (activation_3)
+            // output: 55 *55 *64 ==> 193600
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 64,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 4
+            // res2a_branch2c ~ scale2a_branch2c (bn2a_branch2c)
+            // output: 55 *55 *256 ==> 774400
+            // Padding ==0
+            let bn2a_branch2c =new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn2a_branch2c);
+
+            // 5
+            // res2a_branch1 ~ scale2a_branch1 (bn2a_branch1)
+            // output: 55 *55 *256 ==> 774400
+            // Padding ==0
+            let bn2a_branch1 = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn2a_branch1);
+
+            // 6
+            // res2a(add_1) ~ res2a_relu (activation_4)
+            // output: 55 *55 *256 ==> 774400
+            // let activation_4 = new TSP.layers.NativeLayer3d({
+            //     shape: [55, 55, 256]
+            // });
+            let activation_4 = TSP.layers.Add([bn2a_branch2c, bn2a_branch1]);
+            model.add(activation_4);
+
+            // 7
+            // res2b_branch2a ~ res2b_branch2a_relu (activation_5)
+            // output: 55 *55 *64 ==> 193600
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 64,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 8
+            // res2b_branch2b ~ res2b_branch2b_relu (activation_6)
+            // output: 55 *55 *64 ==> 193600
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 64,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 9
+            // res2b_branch2c ~ scale2b_branch2c (bn2b_branch2c)
+            // output: 55 *55 *256 ==> 774400
+            // Padding ==0
+            let bn2b_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn2b_branch2c);
+
+
+            // 10
+            // res2b(add_2) ~ res2b_relu (activation_7)
+            // output: 55 *55 *256 ==> 774400
+            let activation_7 = TSP.layers.Add([activation_4, bn2b_branch2c]);
+            model.add(activation_7);
+
+
+            // 11
+            // res2c_branch2a ~ res2c_branch2a_relu (activation_8)
+            // output: 55 *55 *64 ==> 193600
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 64,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 12
+            // res2c_branch2b ~ res2c_branch2b_relu (activation_9)
+            // output: 55 *55 *64 ==> 193600
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 64,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 13
+            // res2c_branch2c ~ scale2c_branch2c (bn2c_branch2c)
+            // output: 55 *55 *256 ==> 774400
+            // Padding ==0
+            let bn2c_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn2c_branch2c);
+
+            // 14
+            // res2c(add_3) ~ res2c_relu (activation_10)
+            // output: 55 *55 *256 ==> 774400
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [55, 55, 256]
+            // }));
+            let activation_10 = TSP.layers.Add([activation_7, bn2c_branch2c]);
+            model.add(activation_10);
+
+
+            /* >>>>>>>>>____3____<<<<<<<<<< */
+
+            // 15
+            // res3a_branch2a ~ res3a_branch2a_relu (activation_11)
+            // output: 28 *28 *128 ==> 100352
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 128,
+                strides: 2,
+                padding: "valid"
+            }));
+
+            // 16
+            // res3a_branch2b ~ res3a_branch2b_relu (activation_12)
+            // output: 28 *28 *128 ==> 100352
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 128,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 17
+            // res3a_branch2c ~ scale3a_branch2c (bn3a_branch2c)
+            // output: 28 *28 *512 ==> 401408
+            // Padding ==0
+            let bn3a_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 512,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn3a_branch2c);
+
+            // 18
+            // res3a_branch1 ~ scale3a_branch1 (bn3a_branch1)
+            // output: 28 *28 *512==> 401408
+            // Padding ==0
+            let bn3a_branch1 = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 512,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn3a_branch1);
+
+            //19
+            // res3a(add_4) ~ res3a_relu (activation_13)
+            // output: 28 *28 *512 ==> 401408
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [28, 28, 512]
+            // }));
+            let activation_13 = TSP.layers.Add([bn3a_branch1, bn3a_branch2c]);
+            model.add(activation_13);
+
+            // 20
+            // res3b_branch2a ~ res3b_branch2a_relu (activation_14)
+            // output: 28 *28 *128 ==> 100352
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 128,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 21
+            // res3b_branch2b ~ res3b_branch2b_relu (activation_15)
+            // output: 28 *28 *128 ==> 100352
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 128,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 22
+            // res3b_branch2c ~ scale3b_branch2c (bn3b_branch2c)
+            // output: 28 *28 *512 ==>401408
+            // Padding ==0
+            let bn3b_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 512,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn3b_branch2c);
+
+            // 23
+            // res3b(add_5) ~ res3b_relu (activation_16)
+            // output: 28 *28 *512 ==>401408
+            let activation_16 = TSP.layers.Add([activation_13, bn3b_branch2c]);
+            model.add(activation_16);
+
+            // 24
+            // res3c_branch2a ~ res3c_branch2a_relu (activation_17)
+            // output: 28 *28 *128 ==>100352
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 128,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 25
+            // res3c_branch2b ~ res3c_branch2b_relu (activation_18)
+            // output: 28 *28 *128 ==>100352
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 128,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 26
+            // res3c_branch2c ~ scale3c_branch2c (bn3c_branch2c)
+            // output: 28 *28 *512 ==>401408
+            // Padding ==0
+            let bn3c_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 512,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn3c_branch2c);
+
+            // 27
+            // res3c(add_6) ~ res3c_relu (activation_19)
+            // output: 28 *28 *512 ==>401408
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [28, 28, 512]
+            // }));
+            let activation_19 = TSP.layers.Add([activation_16, bn3c_branch2c]);
+            model.add(activation_19);
+
+            // 28
+            // res3d_branch2a ~ res3d_branch2a_relu (activation_20)
+            // output: 28 *28 *128 ==>100352
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 128,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 29
+            // res3d_branch2b ~ res3d_branch2b_relu (activation_21)
+            // output: 28 *28 *128 ==>100352
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 128,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 30
+            // res3d_branch2c ~ scale3d_branch2c (bn3d_branch2c)
+            // output: 28 *28 *512 ==>401408
+            // Padding ==0
+            let bn3d_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 512,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn3d_branch2c);
+
+            // 31
+            // res3d(add_7) ~ res3d_relu (activation_22)
+            // output: 28 *28 *512 ==>401408
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [28, 28, 512]
+            // }));
+            let activation_22 = TSP.layers.Add([activation_19, bn3d_branch2c]);
+            model.add(activation_22);
+
+            /* >>>>>>>>>____4____<<<<<<<<<< */
+
+            // 32
+            // res4a_branch2a ~ res4a_branch2a_relu (activation_23)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 2,
+                padding: "valid"
+            }));
+
+            // 33
+            // res4a_branch2b ~ res4a_branch2b_relu (activation_24)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 34
+            // res4a_branch2c ~ scale4a_branch2c (bn4a_branch2c)
+            // output: 14 *14 *1024 ==>200704
+            // Padding ==0
+            let bn4a_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 1024,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn4a_branch2c);
+
+            // 35
+            // res4a_branch1 ~ scale4a_branch1 (bn4a_branch1)
+            // output: 14 *14 *1024 ==>200704
+            // Padding ==0
+            let bn4a_branch1 = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 1024,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn4a_branch1);
+
+            // 36
+            // res4a(add_8) ~ res4a_relu (activation_25)
+            // output: 14 *14 *1024 ==>200704
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [14, 14, 1024]
+            // }));
+            let activation_25 = TSP.layers.Add([bn4a_branch1, bn4a_branch2c]);
+            model.add(activation_25);
+
+            // 37
+            // res4b_branch2a ~ res4b_branch2a_relu (activation_26)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 38
+            // res4b_branch2b ~ res4b_branch2b_relu (activation_27)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 39
+            // res4b_branch2c ~ scale4b_branch2c (bn4b_branch2c)
+            // output: 14 *14 *1024 ==>200704
+            // Padding ==0
+            let bn4b_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 1024,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn4b_branch2c);
+
+            // 40
+            // res4b(add_9) ~ res4b_relu (activation_28)
+            // output: 14 *14 *1024 ==>200704
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [14, 14, 1024]
+            // }));
+            let activation_28 = TSP.layers.Add([activation_25, bn4b_branch2c]);
+            model.add(activation_28);
+
+            // 41
+            // res4c_branch2a ~ res4c_branch2a_relu (activation_29)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 42
+            // res4c_branch2b ~ res4c_branch2b_relu (activation_30)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 43
+            // res4c_branch2c ~ scale4c_branch2c (bn4c_branch2c)
+            // output: 14 *14 *1024 ==>200704
+            // Padding ==0
+            let bn4c_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 1024,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn4c_branch2c);
+
+            // 44
+            // res4c(add_10) ~ res4c_relu (activation_31)
+            // output: 14 *14 *1024 ==>200704
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [14, 14, 1024]
+            // }));
+            let activation_31 = TSP.layers.Add([activation_28, bn4c_branch2c]);
+            model.add(activation_31);
+
+            // 45
+            // res4d_branch2a ~ res4d_branch2a_relu (activation_32)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 46
+            // res4d_branch2b ~ res4d_branch2b_relu (activation_33)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 47
+            // res4d_branch2c ~ scale4d_branch2c (bn4d_branch2c)
+            // output: 14 *14 *1024 ==>200704
+            // Padding ==0
+            let bn4d_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 1024,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn4d_branch2c);
+
+            // 48
+            // res4d(add_11) ~ res4d_relu (activation_34)
+            // output: 14 *14 *1024 ==>200704
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [14, 14, 1024]
+            // }));
+            let activation_34 = TSP.layers.Add([activation_31, bn4d_branch2c]);
+            model.add(activation_34);
+
+            // 49
+            // res4e_branch2a ~ res4e_branch2a_relu (activation_35)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 50
+            // res4e_branch2b ~ res4e_branch2b_relu (activation_36)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 51
+            // res4e_branch2c ~ scale4e_branch2c (bn4e_branch2c)
+            // output: 14 *14 *1024 ==>200704
+            // Padding ==0
+            let bn4e_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 1024,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn4e_branch2c);
+
+            // 52
+            // res4e(add_12) ~ res4e_relu (activation_37)
+            // output: 14 *14 *1024 ==>200704
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [14, 14, 1024]
+            // }));
+            let activation_37 = TSP.layers.Add([activation_34, bn4e_branch2c]);
+            model.add(activation_37);
+
+            // 53
+            // res4f_branch2a ~ res4f_branch2a_relu (activation_38)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 256,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 54
+            // res4f_branch2b ~ res4f_branch2b_relu (activation_39)
+            // output: 14 *14 *256 ==>50176
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 55
+            // res4f_branch2c ~ scale4f_branch2c (bn4f_branch2c)
+            // output: 14 *14 *1024 ==>200704
+            // Padding ==0
+            let bn4f_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 1024,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn4f_branch2c);
+
+            // 56
+            // res4f(add_13) ~ res4f_relu (activation_40)
+            // output: 14 *14 *1024 ==>200704
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [14, 14, 1024]
+            // }));
+            let activation_40 = TSP.layers.Add([activation_37, bn4f_branch2c]);
+            model.add(activation_40);
+
+
+            /* >>>>>>>>>____5____<<<<<<<<<< */
+
+            // 57
+            // res5a_branch2a ~ res5a_branch2a_relu (activation_41)
+            // output: 7 *7 *512 ==>25088
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 512,
+                strides: 2,
+                padding: "valid"
+            }));
+
+            // 58
+            // res5a_branch2b ~ res5a_branch2b_relu (activation_42)
+            // output: 7 *7 *512 ==>25088
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 59
+            // res5a_branch2c ~ scale5a_branch2c (bn5a_branch2c)
+            // output: 7 *7 *2048 ==>100352
+            // Padding ==0
+            let bn5a_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 2048,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn5a_branch2c);
+
+            // 60
+            // res5a_branch1 ~ scale5a_branch1 (bn5a_branch1)
+            // output: 7 *7 *2048 ==>100352
+            // Padding ==0
+            let bn5a_branch1 = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 2048,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn5a_branch1);
+
+            // 61
+            // res5a(add_14) ~ res5a_relu (activation_43)
+            // output: 7 *7 *2048 ==>100352
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [7, 7, 2048]
+            // }));
+            let activation_43 = TSP.layers.Add([bn5a_branch1, bn5a_branch2c]);
+            model.add(activation_43);
+
+            // 62
+            // res5b_branch2a ~ res5b_branch2a_relu (activation_44)
+            // output: 7 *7 *512 ==>25088
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 512,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 63
+            // res5b_branch2b ~ res5b_branch2b_relu (activation_45)
+            // output: 7 *7 *512 ==>25088
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 64
+            // res5b_branch2c ~ scale5b_branch2c (bn5b_branch2c)
+            // output: 7 *7 *2048 ==>100352
+            // Padding ==0
+            let bn5b_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 2048,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn5b_branch2c);
+
+            // 65
+            // res5b(add_15) ~ res5b_relu (activation_46)
+            // output: 7 *7 *2048 ==>100352
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [7, 7, 2048]
+            // }));
+            let activation_46 = TSP.layers.Add([activation_43, bn5b_branch2c]);
+            model.add(activation_46);
+
+            // 66
+            // res5c_branch2a ~ res5c_branch2a_relu (activation_47)
+            // output: 7 *7 *512 ==>25088
+            // Padding ==0
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 512,
+                strides: 1,
+                padding: "valid"
+            }));
+
+            // 67
+            // res5c_branch2b ~ res5c_branch2b_relu (activation_48)
+            // output: 7 *7 *512 ==>25088
+            // Padding ==1
+            model.add(new TSP.layers.Conv2d({
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+            }));
+
+            // 68
+            // res5c_branch2c ~ scale5c_branch2c (bn5c_branch2c)
+            // output: 7 *7 *2048 ==>100352
+            // Padding ==0
+            let bn5c_branch2c = new TSP.layers.Conv2d({
+                kernelSize: 1,
+                filters: 2048,
+                strides: 1,
+                padding: "valid"
+            });
+            model.add(bn5c_branch2c);
+
+            // 69
+            // res5c(add_10) ~ res5c_relu (activation_49)
+            // output: 7 *7 *2048 ==>100352
+            // model.add(new TSP.layers.NativeLayer3d({
+            //     shape: [7, 7, 2048]
+            // }));
+            let activation_49 = TSP.layers.Add([activation_46, bn5c_branch2c]);
+            model.add(activation_49);
+
+            // 70
+            // pool5 (avg_pool)
+            // output: 1 *1 *2048 ==>2048
+            model.add(new TSP.layers.Pooling2d({
+                poolSize: [7, 7],
+                strides: [1, 1]
+            }));
+
+            // 71
+            // fc1000 (fc1000)
+            // output: 1000
+            model.add(new TSP.layers.Output1d({
+                units: 1000,
+                paging: true,
+                segmentLength: 400,
+                outputs: result
+            }));
+
+
+            model.load({
+                type: "tfjs",
+                url: './resnet50Model/model.json'
+            });
+
+            model.init(function() {
+
+                model.predict(data);
+                $("#loadingPad").hide();
+
+            });
+
+        </script>
+
+    </body>
 </html>

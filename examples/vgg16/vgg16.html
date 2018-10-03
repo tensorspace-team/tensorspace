@@ -1,266 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>VGG-16</title>
-    <meta name="author" content="zchholmes / https://github.com/zchholmes">
-    <meta name="author" content="syt123450 / https://github.com/syt123450">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <title>TensorSpace - VGG-16 Demo</title>
+        <meta name="author" content="zchholmes / https://github.com/zchholmes">
+        <meta name="author" content="syt123450 / https://github.com/syt123450">
+        <style>
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
+            html, body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
 
-        #container {
-            width: 100%;
-            height: 100%;
-        }
+            #container {
+                width: 100%;
+                height: 100%;
+            }
 
-        #loadingPad {
-            position: fixed;
-            height: 100%;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background-color: #031D32;
-        }
+            #loadingPad {
+                position: fixed;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                background-color: #031D32;
+            }
 
-        #loading {
-            position: fixed;
-            width: 400px;
-            height: 300px;
-            top: 200px;
-            left: 500px;
-        }
+            #loading {
+                position: fixed;
+                width: 400px;
+                height: 300px;
+                top: 200px;
+                left: 500px;
+            }
 
-    </style>
-</head>
-<body>
-<div id="container"></div>
-<div id="loadingPad">
-    <img id="loading" src="./assets/loading.gif">
-</div>
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <div id="loadingPad">
+            <img id="loading" src="./assets/loading.gif">
+        </div>
 
-<script src="../lib/jquery.min.js"></script>
-<script src="../lib/three.min.js"></script>
-<script src="../lib/stats.min.js"></script>
-<script src="../lib/tween.min.js"></script>
-<script src="../lib/TrackballControls.js"></script>
-<script src="../lib/tf.min.js"></script>
-<script src="../../build/tensorspace.js"></script>
+        <script src="../../build/tensorspace.js"></script>
+        <script src="../lib/jquery.min.js"></script>
+        <script src="../lib/three.min.js"></script>
+        <script src="../lib/stats.min.js"></script>
+        <script src="../lib/tween.min.js"></script>
+        <script src="../lib/TrackballControls.js"></script>
+        <script src="../lib/tf.min.js"></script>
 
-<script src="data/dilingdiling.js"></script>
-<script src="data/imagenet_result.js"></script>
+        <script src="data/dilingdiling.js"></script>
+        <script src="data/imagenet_result.js"></script>
 
-<script>
+        <script>
 
-    let container = document.getElementById("container");
+            let container = document.getElementById( "container" );
 
-    let model = new TSP.model.Sequential(container, {
-        aggregationStrategy: "average",
-        layerShape: "rect",
-        layerInitStatus: "close",
-        color: {
-            conv2d: 0xff00ff,
-            pooling2d: 0x00ffff
-        }
-    });
+            let model = new TSP.model.Sequential( container, {
 
-    // input ==> [224, 224, 3]
-    model.add(new TSP.layers.Input3d({
-        shape: [224, 224, 3]
-    }));
+                aggregationStrategy: "average",
+                layerShape: "rect",
+                layerInitStatus: "close",
+                color: {
 
-    // 0
-    // output: 224*224*64 ==> 3,211,264
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 64,
-        strides: 1,
-        padding: "same"
-    }));
+                    conv2d: 0xff00ff,
+                    pooling2d: 0x00ffff
 
-    // 1
-    // output: 224*224*64 ==> 3,211,264
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 64,
-        strides: 1,
-        padding: "same"
-    }));
+                }
 
-    // 2
-    // output: 112*112*64 ==> 802,816
-    model.add(new TSP.layers.Pooling2d({
-        poolSize: [2, 2],
-        strides: [2, 2]
-    }));
+            } );
 
-    // 3
-    // output: 112*112*128 ==> 1,605,632
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 128,
-        strides: 1,
-        padding: "same"
-    }));
+            model.add( new TSP.layers.Input3d( {
 
-    // 4
-    // output: 112*112*128 ==> 1,605,632
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 128,
-        strides: 1,
-        padding: "same"
-    }));
+                shape: [ 224, 224, 3 ]
 
-    // 5
-    // output: 56*56*128 ==> 401,408
-    model.add(new TSP.layers.Pooling2d({
-        poolSize: [2, 2],
-        strides: [2, 2]
-    }));
+            } ) );
 
-    // 6
-    // output: 56*56*256 ==> 802,816
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
+            model.add( new TSP.layers.Conv2d( {
 
-    // 7
-    // output: 56*56*256 ==> 802,816
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
+                kernelSize: 3,
+                filters: 64,
+                strides: 1,
+                padding: "same"
 
-    // 8
-    // output: 56*56*256 ==> 802,816
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 256,
-        strides: 1,
-        padding: "same"
-    }));
+            } ) );
 
-    // 9
-    // output: 28*28*256 ==> 200,704
-    model.add(new TSP.layers.Pooling2d({
-        poolSize: [2, 2],
-        strides: [2, 2]
-    }));
+            model.add( new TSP.layers.Conv2d( {
 
-    // 10
-    // output: 28*28*512 ==> 401,408
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
+                kernelSize: 3,
+                filters: 64,
+                strides: 1,
+                padding: "same"
 
-    // 11
-    // output: 28*28*512 ==> 401,408
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
+            } ) );
 
-    // 12
-    // output: 28*28*512 ==> 401,408
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
+            model.add( new TSP.layers.Pooling2d( {
 
-    // 13
-    // output: 14*14*512 ==> 100,352
-    model.add(new TSP.layers.Pooling2d({
-        poolSize: [2, 2],
-        strides: [2, 2]
-    }));
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
 
-    // 14
-    // output: 14*14*512 ==> 100,352
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
+            } ) );
 
-    // 15
-    // output: 14*14*512 ==> 100,352
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
+            model.add( new TSP.layers.Conv2d( {
 
-    // 16
-    // output: 14*14*512 ==> 100,352
-    model.add(new TSP.layers.Conv2d({
-        kernelSize: 3,
-        filters: 512,
-        strides: 1,
-        padding: "same"
-    }));
+                kernelSize: 3,
+                filters: 128,
+                strides: 1,
+                padding: "same"
 
-    // 17
-    // output: 7*7*512 ==> 25,088
-    model.add(new TSP.layers.Pooling2d({
-        poolSize: [2, 2],
-        strides: [2, 2]
-    }));
+            } ) );
 
-    // 18
-    model.add(new TSP.layers.Dense({
-        units: 4096,
-		paging: true,
-		segmentLength: 400
-    }));
+            model.add( new TSP.layers.Conv2d( {
 
-    // 19
-    model.add(new TSP.layers.Dense({
-        units: 4096,
-		paging: true,
-		segmentLength: 400
-    }));
+                kernelSize: 3,
+                filters: 128,
+                strides: 1,
+                padding: "same"
 
-    // 20
-	model.add(new TSP.layers.Output1d({
-		units: 1000,
-		paging: true,
-		segmentLength: 400,
-		outputs: result
-	}));
+            } ) );
 
-    model.load({
-        type: "tfjs",
-        url: './vgg16Model/model.json'
-    });
+            model.add( new TSP.layers.Pooling2d( {
 
-    model.init(function() {
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
 
-        model.predict(data);
-        $("#loadingPad").hide();
+            } ) );
 
-    });
+            model.add( new TSP.layers.Conv2d( {
 
-</script>
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
 
-</body>
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Dense( {
+
+                units: 4096,
+                paging: true,
+                segmentLength: 400
+
+            } ) );
+
+            model.add( new TSP.layers.Dense( {
+
+                units: 4096,
+                paging: true,
+                segmentLength: 400
+
+            } ) );
+
+            model.add( new TSP.layers.Output1d( {
+
+                units: 1000,
+                paging: true,
+                segmentLength: 400,
+                outputs: result
+
+            } ) );
+
+            model.load( {
+
+                type: "tfjs",
+                url: './vgg16Model/model.json'
+
+            } );
+
+            model.init( function() {
+
+                model.predict( data );
+                $( "#loadingPad" ).hide();
+
+            } );
+
+        </script>
+    </body>
 </html>
