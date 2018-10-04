@@ -1,5 +1,6 @@
 /**
  * @author syt123450 / https://github.com/syt123450
+ * @author zchholmes / https://github.com/zchholmes
  */
 
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
@@ -11,8 +12,8 @@ import { MapAggregation } from "../../elements/MapAggregation";
 import { NativeLayer } from "./NativeLayer";
 
 /**
- * NativeLayer3d, abstract layer, can not be initialized by TensorSpace user.
- * Base class for Conv2d, Activation3d, GlobalPooling2d, BasicLayer3d, Pooling2d, Reshape2d, UpSampling2d, Cropping2d
+ * NativeLayer3d, abstract layer, should not be initialized directly.
+ * Base class for Conv2d, Activation3d, GlobalPooling2d, BasicLayer3d, Pooling2d, Reshape2d, UpSampling2d, Cropping2d.
  * The characteristic for classes which inherit from NativeLayer3d is that their output shape has three dimension, for example, [width, height, depth]
  *
  * @param config, user's configuration for NativeLayer3d
