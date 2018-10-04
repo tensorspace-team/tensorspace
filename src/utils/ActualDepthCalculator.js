@@ -2,15 +2,15 @@ import { MaxDepthInLayer } from "./Constant";
 
 let ActualDepthCalculator = (function() {
 
-	function calculateDepths( model ) {
+	function calculateDepths( layers ) {
 
 		let depthList = [];
 		let maxDepthValue = 0;
 		let actualDepthList = [];
 
-		for ( let i = 0; i < model.layers.length; i ++ ) {
+		for ( let i = 0; i < layers.length; i ++ ) {
 
-			let layerDepth = model.layers[ i ].depth;
+			let layerDepth = layers[ i ].depth;
 
 			if ( layerDepth !== undefined ) {
 
@@ -25,7 +25,7 @@ let ActualDepthCalculator = (function() {
 
 		}
 
-		for ( let i = 0; i < model.layers.length; i ++ ) {
+		for ( let i = 0; i < layers.length; i ++ ) {
 
 			if ( depthList[ i ] / maxDepthValue * MaxDepthInLayer > 1 ) {
 

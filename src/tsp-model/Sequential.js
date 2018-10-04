@@ -278,7 +278,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	createModelElements: function() {
 
 		let layersPos = LayerLocator.calculateLayersPos( this.layers );
-		let layerActualDepth = ActualDepthCalculator.calculateDepths( this );
+		let layerActualDepth = ActualDepthCalculator.calculateDepths( this.layers );
 
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 

@@ -4,18 +4,18 @@
   "description": "Neural network 3D visualization framework",
   "main": "build/tensorspace.module.js",
   "scripts": {
-    "test": "echo test; mocha; echo end;",
+    "test": "mocha",
     "build": "rollup -c",
-    "build-uglify": "rollup -c && uglifyjs build/tensorspace.js -cm --preamble \"// https://github.com/syt123450/tensorspace/blob/master/LICENSE\" --output build/tensorspace.min.js",
+    "build-publish": "rollup -c && uglifyjs build/tensorspace.js -cm --preamble \"// https://github.com/syt123450/tensorspace/blob/master/LICENSE\" --output build/tensorspace.min.js",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },
   "directories": {
     "assets": "static resource for github repo",
     "docs": "document for users and contributors",
-    "examples": "examples showing how to use tensorspace.js",
+    "examples": "tensorspace.js show cases",
     "test": "test scripts",
-    "build": "release files, build code for different environment",
+    "build": "released files, build code for different environment",
     "src": "source code"
   },
   "dependencies": {
@@ -40,7 +40,7 @@
     "url": "git+https://github.com/syt123450/tensorspace.git"
   },
   "homepage": "https://github.com/syt123450/tensorspace#readme",
-  "author": "tensorspace",
+  "author": "tensorspace-team",
   "license": "Apache-2.0",
   "contributors": [
     {

@@ -1,6 +1,13 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { AbstractModel } from "./AbstractModel";
 import { ModelConfiguration } from "../configure/ModelConfiguration";
 import { ModelLayerInterval } from "../utils/Constant";
+import { LayerStackGenerator } from "../utils/LayerStackGenerator";
+import { LevelStackGenerator } from "../utils/LevelStackGenerator";
+import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
 
 // TODO functional model API
 
@@ -13,11 +20,9 @@ function Model( container, config ) {
 	this.inputs = config.inputs;
 	this.outputs = config.outputs;
 
-	this.layers = [];
+	this.layers = undefined;
 
-	this.layersLevelMap = undefined;
-
-	this.levelLookupMap = undefined;
+	this.levelMap = undefined;
 
 	this.modelDepth = undefined;
 
@@ -46,20 +51,6 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		this.registerModelEvent();
 		this.animate();
 
-		// let model = this;
-
-		// setTimeout(function() {
-		//
-		// 	model.layers[ 1 ].translateLayer( {
-		//
-		// 		x: 50,
-		// 		y: 30,
-		// 		z: 20
-		//
-		// 	}, 2000 );
-		//
-		// });
-
 		this.isInitialized = true;
 
 
@@ -67,9 +58,9 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	assembleLayers: function() {
 
-		for ( let i = 0; i < this.levelLookupMap.length; i ++ ) {
+		for ( let i = 0; i < this.levelMap.length; i ++ ) {
 
-			let layerIndexList = this.levelLookupMap[ i ];
+			let layerIndexList = this.levelMap[ i ];
 
 			for ( let j = 0; j < layerIndexList.length; j ++ ) {
 
@@ -87,26 +78,13 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	},
 
-	calculateActualDepth: function() {
-
-		let depthList = [];
-
-		for ( let i = 0; i < this.layers.length; i ++ ) {
-
-			depthList.push(2);
-
-		}
-
-		return depthList;
-
-	},
-
 	createModelElements: function() {
 
 		let centers = this.createLayerCenters();
-		let depths = this.calculateActualDepth();
 
-		for ( let i = 0; i < this.layers.length; i++ ) {
+		let depths = ActualDepthCalculator.calculateDepths( this.layers );
+
+		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].init( centers[ i ], depths[ i ] );
 
@@ -136,267 +114,16 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	createGraph: function() {
 
-		this.getAllLayers();
-		this.calculateLayerLevel();
-		this.alignOutputs();
-		this.createLevelLookup();
+		this.layers = LayerStackGenerator.createStack( this.outputs );
+
+		let levelMetric = LevelStackGenerator.createStack( this.layers, this.inputs, this.outputs );
+
+		this.levelMap = levelMetric.levelMap;
+		this.layerLookupMap = levelMetric.layerLookupMap;
+
+		this.modelDepth = this.levelMap.length;
+
 		this.createLayerCenters();
-
-	},
-
-	// get all layers infer from outputs, store them into layers
-	getAllLayers: function() {
-
-		let layers = [];
-
-		for ( let i = 0; i < this.outputs.length; i ++ ) {
-
-			getRelativeLayers( this.outputs[ i ] );
-
-		}
-
-		this.layers = layers;
-
-		function getRelativeLayers( layer ) {
-
-			storeLayer( layer );
-
-			if ( layer.isMerged ) {
-
-				for ( let i = 0; i < layer.mergedElements.length; i ++ ) {
-
-					getRelativeLayers( layer.mergedElements[ i ] );
-
-				}
-
-			} else {
-
-				if ( layer.lastLayer !== undefined ) {
-
-					getRelativeLayers( layer.lastLayer );
-
-				}
-
-			}
-
-		}
-
-		function storeLayer( layer ) {
-
-			if ( !layers.includes( layer ) ) {
-
-				layers.push( layer );
-
-			}
-
-		}
-
-	},
-
-	createRelationMatrix: function() {
-
-		let layerNum = this.layers.length;
-
-		let matrix = new Array( layerNum );
-
-		for ( let i = 0; i < layerNum; i ++ ) {
-
-			matrix[ i ] = new Array( layerNum );
-
-		}
-
-		for ( let i = 0; i < layerNum; i ++ ) {
-
-			for ( let j = 0; j < layerNum; j ++ ) {
-
-				matrix[ i ][ j ] = false;
-
-			}
-
-		}
-
-		for ( let i = 0; i < this.layers.length; i ++ ) {
-
-			let layer = this.layers[ i ];
-			let layerIndex = this.layers.indexOf( layer );
-
-			if ( layer.isMerged ) {
-
-				for ( let j = 0; j < layer.mergedElements.length; j ++ ) {
-
-					let mergedElements = layer.mergedElements[ j ];
-
-					let elementIndexInLayers = this.layers.indexOf( mergedElements );
-
-					matrix[ elementIndexInLayers ][ layerIndex ] = true;
-
-				}
-
-			} else {
-
-				let lastLayer = layer.lastLayer;
-
-				if ( lastLayer !== undefined ) {
-
-					let lastLayerIndex = this.layers.indexOf( lastLayer );
-
-					matrix[ lastLayerIndex ][ layerIndex ] =  true;
-
-				}
-
-			}
-
-		}
-
-		return matrix;
-
-	},
-
-	initLayerIndexMap: function() {
-
-		let indexMap = [];
-
-		for ( let i = 0; i < this.layers.length; i ++ ) {
-
-			let unit = {
-
-				index: i,
-				position: -1
-
-			};
-
-			indexMap.push( unit );
-
-		}
-
-		// for ( let i = 0; i < indexMap.length; i++ ) {
-		//
-		// 	console.log( indexMap[i] );
-		//
-		// }
-
-		return indexMap;
-
-	},
-
-	calculateLayerLevel: function() {
-
-		let relationMatrix = this.createRelationMatrix();
-
-		let indexMap = this.initLayerIndexMap();
-
-		for ( let i = 0; i < this.inputs.length; i ++ ) {
-
-			let input = this.inputs[ i ];
-
-			let inputIndex = this.layers.indexOf( input );
-
-			indexMap[ inputIndex ].position = 0;
-
-		}
-
-		let searchLayers = this.inputs;
-		let layerLevel = 0;
-
-		while( !allOutputs(this.outputs, searchLayers) ) {
-
-			let newSearchLayers = [];
-
-			for ( let i = 0; i < searchLayers.length; i ++ ) {
-
-				let layer = searchLayers[ i ];
-				let layerIndex = this.layers.indexOf( layer );
-
-				for ( let j = 0; j < this.layers.length; j ++ ) {
-
-					if ( relationMatrix[ layerIndex ][ j ] ) {
-
-						indexMap[ j ].position = layerLevel + 1;
-						newSearchLayers.push( this.layers[ j ] );
-
-					}
-
-				}
-
-			}
-
-			layerLevel ++;
-			searchLayers = newSearchLayers;
-
-		}
-
-		this.layersLevelMap = indexMap;
-
-		function allOutputs( outputs, searchLayers ) {
-
-			for ( let i = 0; i < searchLayers.length; i ++ ) {
-
-				if ( !outputs.includes( searchLayers[ i ] ) ) {
-
-					return false;
-
-				}
-
-			}
-
-			return true;
-
-		}
-	},
-
-	alignOutputs: function() {
-
-		let modelDepth = 0;
-
-		for ( let i = 0; i < this.layersLevelMap.length; i ++ ) {
-
-			modelDepth = Math.max( modelDepth, this.layersLevelMap[ i ].position );
-
-		}
-
-		this.modelDepth = modelDepth + 1;
-
-		for ( let i = 0; i < this.layers.length; i ++ ) {
-
-			let layer = this.layers[ i ];
-
-			if ( this.outputs.includes( layer ) ) {
-
-				this.layersLevelMap[ i ].position = modelDepth;
-
-			}
-
-		}
-
-	},
-
-	createLevelLookup: function() {
-
-		let modelDepth = 0;
-
-		for ( let i = 0; i < this.layersLevelMap.length; i ++ ) {
-
-			modelDepth = Math.max( modelDepth, this.layersLevelMap[ i ].position );
-
-		}
-
-		let lookupMap = [];
-
-		for ( let i = 0; i <= modelDepth; i++ ) {
-
-			lookupMap.push( [] );
-
-		}
-
-		for ( let i = 0; i < this.layersLevelMap.length; i ++ ) {
-
-			let levelUnit = this.layersLevelMap[ i ];
-
-			lookupMap[ levelUnit.position ].push( levelUnit.index );
-
-		}
-
-		this.levelLookupMap = lookupMap;
 
 	},
 
@@ -409,10 +136,6 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		let xInterval = 300;
 
 		// console.log("---result---");
-		//
-		// console.log( this.layers );
-		// console.log( this.levelLookupMap );
-		// console.log( layerCenters );
 
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
@@ -424,13 +147,13 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		// console.log(yList);
 
-		for ( let i = 0; i < this.levelLookupMap.length; i ++ ) {
+		for ( let i = 0; i < this.levelMap.length; i ++ ) {
 
 			let level = i;
 
 			// console.log("level " + i);
 
-			let layerIndexList = this.levelLookupMap[ level ];
+			let layerIndexList = this.levelMap[ level ];
 			let layerLength = layerIndexList.length;
 
 			let initX = - xInterval * ( layerLength - 1 ) / 2;
