@@ -7,17 +7,17 @@ import { OpenTime, SeparateTime } from "../../utils/Constant";
 import { LayerTranslateFactory } from "../../animation/LayerTranslateTween";
 
 /**
- * Layer, abstract layer, can not be initialized by TensorSpace user.
+ * Layer, abstract layer, should not be initialized directly.
  * Base class for NativeLayer, MergedLayer
  *
- * @param config, user's configuration for Layer
+ * @param config, customized configuration for Layer
  * @constructor
  */
 
 function Layer( config ) {
 
 	/**
-	 * Actual THREE.js scene.
+	 * scene object of THREE.js.
 	 *
 	 * @type { THREE.Scene }
 	 */
@@ -25,7 +25,7 @@ function Layer( config ) {
 	this.scene = undefined;
 
 	/**
-	 * Layer's order in model.
+	 * Order index number of the layer in model.
 	 *
 	 * @type { number }
 	 */
@@ -33,7 +33,7 @@ function Layer( config ) {
 	this.layerIndex = undefined;
 
 	/**
-	 * Layer's center (x, y, z) relative to model.
+	 * The center (x, y, z) coordinates of the layer, related to the model.
 	 *
 	 * @type { Object } {x: double, y: double, z: double}
 	 */
@@ -58,8 +58,8 @@ function Layer( config ) {
 	this.neuralValue = undefined;
 
 	/**
-	 * Important Shape for layer.
-	 * Shape length depends on layer's dimension.
+     * Important property
+     * Shape describes input and output dimensions of the layer.
 	 *
 	 * @type { Array }
 	 */
@@ -68,8 +68,8 @@ function Layer( config ) {
 	this.outputShape = [];
 
 	/**
-	 * Elements wrapper for layer.
-	 * All actual element in layer will be add to this group.
+     * Wrapper object represented the layer object in scene.
+     * All Three.js objects within the layer should be added to neuralGroup.
 	 *
 	 * @type { THREE.Object }
 	 */
@@ -77,7 +77,7 @@ function Layer( config ) {
 	this.neuralGroup = undefined;
 
 	/**
-	 * Color for layer visualization.
+     * Color of the layer for visualization.
 	 *
 	 * @type { HEX }
 	 */
@@ -85,7 +85,7 @@ function Layer( config ) {
 	this.color = undefined;
 
 	/**
-	 * Store handler for layer aggregation.
+	 * Handler for layer aggregation.
 	 *
 	 * @type { Object }
 	 */
@@ -93,7 +93,7 @@ function Layer( config ) {
 	this.aggregationHandler = undefined;
 
 	/**
-	 * Store handler for close button.
+	 * Handler for close button.
 	 *
 	 * @type { Object }
 	 */
@@ -111,8 +111,8 @@ function Layer( config ) {
 	this.hasCloseButton = true;
 
 	/**
-	 * User's external control for close button.
-	 * Close button will multiply this size to get the final size.
+     * Config of close button size.
+     * Close button size is multiplied by the ratio number
 	 *
 	 * @type { number }
 	 */
@@ -120,7 +120,7 @@ function Layer( config ) {
 	this.closeButtonSizeRatio = 1;
 
 	/**
-	 * Minimum opacity to control layer's visualization effect.
+	 * Minimum opacity of the layer.
 	 *
 	 * @type { double } [0, 1]
 	 */
@@ -128,8 +128,9 @@ function Layer( config ) {
 	this.minOpacity = undefined;
 
 	/**
-	 * Actual width and height in three.js scene.
-	 * 1d layer and 2d layer do not have actualHeight.
+	 * Width and height in Three.js scene.
+     * actualWidth = unitLength * width
+	 * (1d layer and 2d layer do not have actualHeight).
 	 *
 	 * @type { double }
 	 */
@@ -138,7 +139,7 @@ function Layer( config ) {
 	this.actualHeight = undefined;
 
 	/**
-	 * Actual depth for layer aggregation.
+	 * Depth of the layer object in the scene.
 	 *
 	 * @type { double }
 	 */
@@ -146,9 +147,9 @@ function Layer( config ) {
 	this.actualDepth = undefined;
 
 	/**
-	 * Unit length, quantitatively, actualWidth = unitLength * width.
+	 * Unit length used to render layer object.
 	 *
-	 * If layer is not the first layer in model, value is get from last layer.
+	 * If the layer is not the first layer in model, value is from last layer.
 	 * this.unitLength = this.lastLayer.unitLength;
 	 *
 	 * If layer is the first layer in model, checkout input layer for more information.
@@ -160,7 +161,7 @@ function Layer( config ) {
 	this.unitLength = undefined;
 
 	/**
-	 * Handler for element which is showing text.
+	 * Handler for object which is showing text.
 	 *
 	 * @type { Object }
 	 */
@@ -168,7 +169,7 @@ function Layer( config ) {
 	this.textElementHandler = undefined;
 
 	/**
-	 * Store handler for line group.
+	 * Handler for line group.
 	 *
 	 * @type { Object }
 	 */
@@ -184,7 +185,9 @@ function Layer( config ) {
 	this.textSystem = undefined;
 
 	/**
-	 * Config to control showing relation line in layer.
+	 * Config of whether show relation line or not.
+     * true -- show relation lines.
+     * false -- do not show relation lines.
 	 *
 	 * @type { boolean }
 	 */
@@ -192,9 +195,9 @@ function Layer( config ) {
 	this.relationSystem = undefined;
 
 	/**
-	 * Layer status.
-	 * true -- open;
-	 * false -- close.
+	 * Layer status on whether the layer is expanded or collapsed.
+	 * true -- expanded;
+	 * false -- collapsed.
 	 *
 	 * @type { boolean }
 	 */
@@ -202,7 +205,7 @@ function Layer( config ) {
 	this.isOpen = undefined;
 
 	/**
-	 * Parameters for animation time.
+     * Config on the speed of layer expansion and collapsion.
 	 *
 	 * @type { number }
 	 */
@@ -212,7 +215,7 @@ function Layer( config ) {
 	this.separateTime = SeparateTime;
 
 	/**
-	 * Identity whether the layer is a group for layers.
+     * Whether the layer is a group or not.
 	 *
 	 * @type { boolean }
 	 */
@@ -222,14 +225,14 @@ function Layer( config ) {
 	/**
 	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
 	 * For example, YoloGrid can automatically detect the output from last layer,
-	 * user do not need to add value for YoloGrid value when they are preprocessing multi-output for the model.
+	 * users do not need to add value for YoloGrid value when they are preprocessing multi-output for the model.
 	 *
 	 * @type { boolean }
 	 */
 
 	this.autoOutputDetect = undefined;
 
-	// Load user's common config into layer's attribute.
+	// Load layer config.
 
 	this.loadBasicLayerConfig( config );
 
@@ -238,10 +241,10 @@ function Layer( config ) {
 Layer.prototype = {
 
 	/**
-	 * loadBasicLayerConfig() Load user's common config into layer's attribute.
-	 * Called when "Layer" is initializing.
+	 * loadBasicLayerConfig() Load layer config.
+     * execute while initialization
 	 *
-	 * @param { JSON } config, user's layer configuration.
+	 * @param { JSON } config, layer config.
 	 */
 
 	loadBasicLayerConfig: function( config ) {
@@ -318,9 +321,9 @@ Layer.prototype = {
 	},
 
 	/**
-	 * loadBasicLayerConfig() Load model's common config into layer's attribute. Called by model before "assemble".
+	 * loadBasicLayerConfig() Load model config for layers. Model execute before "assemble".
 	 *
-	 * @param { JSON } modelConfig, model's configuration, including model's default configuration and user's model configuration.
+	 * @param { JSON } modelConfig, model config, including default and customized model config.
 	 */
 
 	loadBasicModelConfig: function( modelConfig ) {
@@ -355,9 +358,9 @@ Layer.prototype = {
 	},
 
 	/**
-	 * setLastLayer(), store last layer's reference.
+	 * setLastLayer(), hold reference for last layer.
 	 *
-	 * @param { Layer } layer, reference of last layer which positioned before this layer in model.
+	 * @param { Layer } layer, reference of last layer which positioned before current layer in model.
 	 */
 
 	setLastLayer: function( layer ) {
@@ -367,10 +370,10 @@ Layer.prototype = {
 	},
 
 	/**
-	 * setEnvironment(), store THREE.js scene and model
+	 * setEnvironment(), hold ref of THREE.js scene and model
 	 *
-	 * @param { THREE.Object } scene, THREE.js scene, can add elements into it.
-	 * @param { Model } model, model object this layer will be added to.
+	 * @param { THREE.Object } scene, THREE.js scene.
+	 * @param { Model } model, the model object current layer be added.
 	 */
 
 	setEnvironment: function( scene, model ) {
@@ -381,7 +384,7 @@ Layer.prototype = {
 	},
 
 	/**
-	 * initCloseButton() init close button, add it to layer's neural group, and store close button handler.
+	 * initCloseButton() init close button, add to neural group, and store close button handler.
 	 */
 
 	initCloseButton: function() {
@@ -455,16 +458,16 @@ Layer.prototype = {
 	 * ============
 	 *
 	 * Functions below are abstract method for Layer.
-	 * SubClasses ( specific layers ) override these abstract method to get Layer's characters.
+	 * SubClasses ( specific layers ) override these abstract methods.
 	 *
 	 * ============
 	 */
 
 	/**
 	 * init() abstract method
-	 * Create actual THREE.Object in Layer, warp them into a group, and add it to THREE.js's scene.
+	 * Initialize THREE.Object in Layer, warp them into a group, and add to THREE.js scene.
 	 *
-	 * Model passes two parameters, center and actualDepth, to Layer when call init() to initialize Layer.
+	 * Model passes two parameters, center and actualDepth.
 	 *
 	 * @param { JSON } center, layer's center (x, y, z) relative to model
 	 * @param { double } actualDepth, layer aggregation's depth

@@ -1,161 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>AlexNet</title>
-    <meta name="author" content="zchholmes / https://github.com/zchholmes">
-    <meta name="author" content="syt123450 / https://github.com/syt123450">
-    <style>
+    <head>
+        <title>TensorSpace - AlexNet Demo</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="zchholmes / https://github.com/zchholmes">
+        <meta name="author" content="syt123450 / https://github.com/syt123450">
+        <style>
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
+            html, body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
 
-        #container {
-            width: 100%;
-            height: 100%;
-        }
+            #container {
+                width: 100%;
+                height: 100%;
+            }
 
-        #loadingPanel {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fff;
-        }
+            #loadingPanel {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #fff;
+            }
 
-        #loading {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            top: 150px;
-            left: 550px;
-        }
+            #loading {
+                position: fixed;
+                width: 400px;
+                height: 400px;
+                top: 150px;
+                left: 550px;
+            }
 
-    </style>
+        </style>
+    </head>
+    <body>
 
-</head>
-<body>
+        <div id="container"></div>
+        <div id="loadingPanel">
+            <img id="loading" src="./assets/loading.gif">
+        </div>
 
-<div id="container"></div>
-<div id="loadingPanel">
-    <img id="loading" src="./assets/loading.gif">
-</div>
+        <script src="../../build/tensorspace.js"></script>
+        <script src="../lib/jquery.min.js"></script>
+        <script src="../lib/three.min.js"></script>
+        <script src="../lib/stats.min.js"></script>
+        <script src="../lib/tween.min.js"></script>
+        <script src="../lib/TrackballControls.js"></script>
+        <script src="../lib/tf.min.js"></script>
 
-<script src="../lib/jquery.min.js"></script>
-<script src="../lib/three.min.js"></script>
-<script src="../lib/stats.min.js"></script>
-<script src="../lib/tween.min.js"></script>
-<script src="../lib/TrackballControls.js"></script>
-<script src="../lib/tf.min.js"></script>
-<script src="../../build/tensorspace.js"></script>
+        <script src="data/pikapika.js"></script>
+        <script src="data/imagenet_result.js"></script>
 
-<script src="data/pikapika.js"></script>
-<script src="data/imagenet_result.js"></script>
+        <script>
 
-<script>
+            let container = document.getElementById("container");
 
-	let container = document.getElementById("container");
+            let model = new TSP.model.Sequential( container, {
 
-	let model = new TSP.model.Sequential(container, {
-		layerShape: "rect",
-		layerInitStatus: "close",
-		color: {
-			input3d: 0x00ff00,
-			conv2d: 0xff00ff,
-			pooling2d: 0x00ffff
-		}
-	});
+                layerShape: "rect",
+                layerInitStatus: "close",
+                color: {
 
-	model.add(new TSP.layers.Input3d({
-		shape: [227, 227, 3]
-	}));
-	// shape: [55, 55]
-	model.add(new TSP.layers.Conv2d({
-		filters: 96,
-		kernelSize: 11,
-		strides: 4
-	}));
-	// shape: [27, 27]
-	model.add(new TSP.layers.Pooling2d({
-		poolSize: [3, 3],
-		strides: [2, 2]
-    }));
-	// shape [27, 27]
-	model.add(new TSP.layers.Conv2d({
-        filters: 256,
-        kernelSize: 5,
-        strides: 1,
-        padding: "same"
-    }));
-	// shape: [13, 13]
-	model.add(new TSP.layers.Pooling2d({
-		poolSize: [3, 3],
-		strides: [2, 2]
-    }));
-	// shape [13, 13]
-    model.add(new TSP.layers.Conv2d({
-        filters: 384,
-        kernelSize: 3,
-        strides: 1,
-        padding: "same"
-    }));
-	// shape [13, 13]
-    model.add(new TSP.layers.Conv2d({
-        filters: 384,
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
-    }));
-	// shape [13, 13]
-    model.add(new TSP.layers.Conv2d({
-        filters: 256,
-		kernelSize: 3,
-		strides: 1,
-        padding: "same"
-    }));
-    // shape: [6, 6]
-    model.add(new TSP.layers.Pooling2d({
-		poolSize: [3, 3],
-		strides: [2, 2]
-    }));
-    model.add(new TSP.layers.Dense({
-        units: 4096,
-		paging: true,
-		segmentLength: 400
-    }));
-	model.add(new TSP.layers.Dense({
-		units: 4096,
-		paging: true,
-		segmentLength: 400,
-        overview: true
-	}));
-	model.add(new TSP.layers.Output1d({
-		units: 1000,
-		paging: true,
-		segmentLength: 400,
-		outputs: result,
-        overview: true
-	}));
+                    input3d: 0x00ff00,
+                    conv2d: 0xff00ff,
+                    pooling2d: 0x00ffff
 
-	model.load({
-		type: "tensorflow",
-		modelUrl: "./alexnet/tensorflowjs_model.pb",
-		weightUrl: "./alexnet/weights_manifest.json",
-		outputsName: ["norm1", "pool1", "norm2", "pool2", "conv3_1", "conv4_1", "conv5_1", "pool5", "Relu", "Relu_1", "Softmax"]
-	});
+                }
 
-	model.init(function() {
-		model.predict(data);
-		$("#loadingPanel").hide();
+            } );
 
-    });
+            model.add( new TSP.layers.Input3d( {
 
-</script>
+                shape: [ 227, 227, 3 ]
 
-</body>
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                filters: 96,
+                kernelSize: 11,
+                strides: 4
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 3, 3 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                filters: 256,
+                kernelSize: 5,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 3, 3 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                filters: 384,
+                kernelSize: 3,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                filters: 384,
+                kernelSize: 3,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                filters: 256,
+                kernelSize: 3,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 3, 3 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Dense( {
+
+                units: 4096,
+                paging: true,
+                segmentLength: 400
+
+            } ) );
+
+            model.add( new TSP.layers.Dense( {
+
+                units: 4096,
+                paging: true,
+                segmentLength: 400
+
+            } ) );
+
+            model.add( new TSP.layers.Output1d( {
+
+                units: 1000,
+                paging: true,
+                segmentLength: 400,
+                outputs: result
+
+            } ) );
+
+            model.load( {
+
+                type: "tensorflow",
+                modelUrl: "./alexnet/tensorflowjs_model.pb",
+                weightUrl: "./alexnet/weights_manifest.json",
+                outputsName: [ "norm1", "pool1", "norm2", "pool2", "conv3_1", "conv4_1", "conv5_1", "pool5", "Relu", "Relu_1", "Softmax" ]
+
+            } );
+
+            model.init( function() {
+
+                model.predict( data );
+                $( "#loadingPanel" ).hide();
+
+            } );
+
+        </script>
+    </body>
 </html>
