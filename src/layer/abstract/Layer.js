@@ -598,6 +598,20 @@ Layer.prototype = {
 			z: 0
 		};
 
+	},
+
+	getBoundingWidth: function() {
+
+		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
+
+			return 300;
+
+		} else {
+
+			return 100;
+
+		}
+
 	}
 
 };

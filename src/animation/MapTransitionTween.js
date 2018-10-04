@@ -41,6 +41,7 @@ let MapTransitionFactory = ( function() {
 
 		} ).onStart( function() {
 
+			layer.isWaitOpen = false;
 			layer.isOpen = true;
 
 		} ).onComplete( function() {
@@ -50,6 +51,8 @@ let MapTransitionFactory = ( function() {
 		} );
 
 		fmTween.start();
+
+		layer.isWaitOpen = true;
 
 	}
 
@@ -85,7 +88,7 @@ let MapTransitionFactory = ( function() {
 
 			}
 
-		} ).onStart(function() {
+		} ).onStart( function() {
 
 			layer.disposeCloseButton();
 
@@ -93,11 +96,14 @@ let MapTransitionFactory = ( function() {
 
 			layer.disposeSegregationElements();
 			layer.initAggregationElement();
+			layer.isWaitClose = false;
 			layer.isOpen = false;
 
 		} );
 
 		fmTween.start();
+
+		layer.isWaitClose = true;
 
 	}
 

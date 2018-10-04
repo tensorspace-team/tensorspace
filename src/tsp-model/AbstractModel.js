@@ -9,7 +9,7 @@ import { TfLoader } from "../loader/TfLoader";
 
 /**
  * AbstractModel, abstract model, can not be initialized by TensorSpace user.
- * Base class for Sequential
+ * Base class for Sequential, Model
  *
  * @param container, a DOM element where TSP model will be rendered to.
  * @constructor

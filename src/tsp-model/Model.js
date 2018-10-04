@@ -24,6 +24,7 @@ function Model( container, config ) {
 	this.layers = undefined;
 
 	this.levelMap = undefined;
+	this.layerLookupMap = undefined;
 
 	this.modelDepth = undefined;
 
@@ -117,6 +118,11 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 					selectedLayer.handleClick( selectedElement );
 
+					let translateTime = selectedLayer.openTime;
+					let level = this.layerLookupMap[ selectedElement.layerIndex ];
+
+					model.rearrangeLayerInLevel( level, translateTime );
+
 					break;
 
 				}
@@ -174,6 +180,10 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	},
 
+	predict: function() {
+
+	},
+
 	clear: function() {
 
 	},
@@ -199,8 +209,6 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		this.levelCenters = LayerLocator.calculateLevelCenters( this.modelDepth );
 
-		this.createLayerCenters();
-
 	},
 
 	createLayerCenters: function() {
@@ -209,7 +217,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
-			layerCenters.push({});
+			layerCenters.push( {  } );
 
 		}
 
@@ -239,15 +247,43 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		}
 
-		// console.log(layerCenters);
-
 		return layerCenters;
 
 	},
 
-	arrangeLayerInLevel: function() {
+	rearrangeLayerInLevel: function( level, translateTime ) {
 
+		let layerIndexList = this.levelMap[ level ];
 
+		let levelLayers = [];
+
+		for ( let i = 0; i < layerIndexList.length; i ++ ) {
+
+			levelLayers.push( this.layers[ layerIndexList[ i ] ] );
+
+		}
+
+		let xTranslateList = InLevelAligner.getXTranslate( levelLayers );
+
+		let layerCenters = [];
+
+		for ( let i = 0; i < this.levelMap[ level ].length; i ++ ) {
+
+			layerCenters.push( {
+
+				x: this.levelCenters[ level ].x + xTranslateList[ i ],
+				y: this.levelCenters[ level ].y,
+				z: this.levelCenters[ level ].z
+
+			} );
+
+		}
+
+		for ( let i = 0; i < levelLayers.length; i ++ ) {
+
+			levelLayers[ i ].translateLayer( layerCenters[ i ], translateTime );
+
+		}
 
 	}
 
