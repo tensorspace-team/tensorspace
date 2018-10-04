@@ -46,6 +46,20 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		this.registerModelEvent();
 		this.animate();
 
+		// let model = this;
+
+		// setTimeout(function() {
+		//
+		// 	model.layers[ 1 ].translateLayer( {
+		//
+		// 		x: 50,
+		// 		y: 30,
+		// 		z: 20
+		//
+		// 	}, 2000 );
+		//
+		// });
+
 		this.isInitialized = true;
 
 

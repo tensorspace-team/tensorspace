@@ -4,6 +4,7 @@
 
 import { CloseButton } from "../../elements/CloseButton";
 import { OpenTime, SeparateTime } from "../../utils/Constant";
+import { LayerTranslateFactory } from "../../animation/LayerTranslateTween";
 
 /**
  * Layer, abstract layer, should not be initialized directly.
@@ -434,6 +435,22 @@ Layer.prototype = {
 	apply: function( lastLayer ) {
 
 		this.lastLayer = lastLayer;
+
+	},
+
+	translateLayer: function( xTranslate, translateTime ) {
+
+		LayerTranslateFactory.translate( this, xTranslate, translateTime );
+
+	},
+
+	setCenterPos: function( center ) {
+
+		this.center.x = center.x;
+		this.center.y = center.y;
+		this.center.z = center.z;
+
+		this.neuralGroup.position.set( this.center );
 
 	},
 
