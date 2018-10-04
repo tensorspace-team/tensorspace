@@ -5,4 +5,14 @@ function BoundingBox() {
 
 }
 
+BoundingBox.prototype = {
+
+	getBoxWidth: function() {
+
+		return this.rightBoundary - this.leftBoundary;
+
+	}
+
+};
+
 export { BoundingBox };

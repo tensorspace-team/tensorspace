@@ -1,6 +1,6 @@
 let LayerTranslateFactory = ( function() {
 
-	function translate( layer, xTranslate, translateTime ) {
+	function translate( layer, targetCenter, translateTime ) {
 
 		let init = {
 
@@ -22,9 +22,9 @@ let LayerTranslateFactory = ( function() {
 
 			let pos = {
 
-				x: init.ratio * xTranslate + startPos.x,
-				y: startPos.y,
-				z: startPos.z
+				x: init.ratio * ( targetCenter.x - startPos.x ) + startPos.x,
+				y: init.ratio * ( targetCenter.y - startPos.y ) + startPos.y,
+				z: init.ratio * ( targetCenter.z - startPos.z ) + startPos.z
 
 			};
 
@@ -36,9 +36,9 @@ let LayerTranslateFactory = ( function() {
 
 			layer.center = {
 
-				x: startPos.x + xTranslate,
-				y: startPos.y,
-				z: startPos.z
+				x: targetCenter.x,
+				y: targetCenter.y,
+				z: targetCenter.z
 
 			};
 

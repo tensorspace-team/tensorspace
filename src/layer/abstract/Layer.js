@@ -439,9 +439,9 @@ Layer.prototype = {
 
 	},
 
-	translateLayer: function( xTranslate, translateTime ) {
+	translateLayer: function( targetCenter, translateTime ) {
 
-		LayerTranslateFactory.translate( this, xTranslate, translateTime );
+		LayerTranslateFactory.translate( this, targetCenter, translateTime );
 
 	},
 
@@ -598,6 +598,20 @@ Layer.prototype = {
 			y: 0,
 			z: 0
 		};
+
+	},
+
+	getBoundingWidth: function() {
+
+		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
+
+			return 300;
+
+		} else {
+
+			return 100;
+
+		}
 
 	}
 
