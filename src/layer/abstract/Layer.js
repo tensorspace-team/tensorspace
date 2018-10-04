@@ -438,9 +438,9 @@ Layer.prototype = {
 
 	},
 
-	translateLayer: function( xTranslate, translateTime ) {
+	translateLayer: function( targetCenter, translateTime ) {
 
-		LayerTranslateFactory.translate( this, xTranslate, translateTime );
+		LayerTranslateFactory.translate( this, targetCenter, translateTime );
 
 	},
 

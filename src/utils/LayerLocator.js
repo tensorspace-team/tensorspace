@@ -1,6 +1,6 @@
 import { ModelLayerInterval } from "./Constant";
 
-let LayerLocator = (function() {
+let LayerLocator = ( function() {
 
 	function calculateLayersPos( layers ) {
 
@@ -61,12 +61,36 @@ let LayerLocator = (function() {
 
 	}
 
-	return {
+	function calculateLevelCenters( levels ) {
 
-		calculateLayersPos: calculateLayersPos
+		let centers = [];
+
+		let initY = - ( levels - 1 ) / 2 * ModelLayerInterval;
+
+		for ( let i = 0; i < levels; i ++ ) {
+
+			centers.push( {
+
+				x: 0,
+				y: initY + ModelLayerInterval * i,
+				z: 0
+
+			} );
+
+		}
+
+		return centers;
 
 	}
 
-})();
+	return {
+
+		calculateLayersPos: calculateLayersPos,
+
+		calculateLevelCenters: calculateLevelCenters
+
+	}
+
+} )();
 
 export { LayerLocator };

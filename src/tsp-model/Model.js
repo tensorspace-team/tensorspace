@@ -4,10 +4,11 @@
 
 import { AbstractModel } from "./AbstractModel";
 import { ModelConfiguration } from "../configure/ModelConfiguration";
-import { ModelLayerInterval } from "../utils/Constant";
 import { LayerStackGenerator } from "../utils/LayerStackGenerator";
 import { LevelStackGenerator } from "../utils/LevelStackGenerator";
 import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
+import { LayerLocator } from "../utils/LayerLocator";
+import { InLevelAligner } from "../utils/InLevelAligner";
 
 // TODO functional model API
 
@@ -25,6 +26,8 @@ function Model( container, config ) {
 	this.levelMap = undefined;
 
 	this.modelDepth = undefined;
+
+	this.levelCenters = undefined;
 
 	this.loadModelConfig( config );
 
@@ -52,7 +55,6 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		this.animate();
 
 		this.isInitialized = true;
-
 
 	},
 
@@ -92,11 +94,83 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	},
 
-	onClick: function() {
+	onClick: function( event ) {
+
+		let model = this;
+
+		// Use Raycaster to capture clicked element.
+
+		model.raycaster.setFromCamera( model.mouse, model.camera );
+		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
+
+		for ( let i = 0; i < intersects.length; i ++ ) {
+
+			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
+
+				let selectedElement = intersects[ i ].object;
+
+				if ( selectedElement.clickable === true ) {
+
+					// Let the layer to handle actual click event.
+
+					let selectedLayer = this.layers[ selectedElement.layerIndex ];
+
+					selectedLayer.handleClick( selectedElement );
+
+					break;
+
+				}
+
+			}
+
+		}
 
 	},
 
-	onMouseMove: function() {
+	onMouseMove: function( event ) {
+
+		// calculate mouse position..
+
+		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+		this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+		let model = this;
+
+		if ( model.hoveredLayer !== undefined ) {
+
+			model.hoveredLayer.handleHoverOut();
+			model.hoveredLayer = undefined;
+
+		}
+
+		// Use Raycaster to capture hovered element.
+
+		model.raycaster.setFromCamera( model.mouse, model.camera );
+		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
+
+		for ( let i = 0; i < intersects.length; i ++ ) {
+
+			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
+
+				let selectedElement = intersects[ i ].object;
+
+				if ( selectedElement.hoverable === true ) {
+
+					let selectedLayer = this.layers[ selectedElement.layerIndex ];
+
+					// Let the layer to handle actual hover event.
+
+					selectedLayer.handleHoverIn( selectedElement );
+
+					this.hoveredLayer = selectedLayer;
+
+					break;
+
+				}
+
+			}
+
+		}
 
 	},
 
@@ -123,6 +197,8 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		this.modelDepth = this.levelMap.length;
 
+		this.levelCenters = LayerLocator.calculateLevelCenters( this.modelDepth );
+
 		this.createLayerCenters();
 
 	},
@@ -131,44 +207,33 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		let layerCenters = [];
 
-		// stable interval now.
-
-		let xInterval = 300;
-
-		// console.log("---result---");
-
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			layerCenters.push({});
 
 		}
 
-		let yList = this.calculateLevelY( this.modelDepth );
-
-		// console.log(yList);
-
 		for ( let i = 0; i < this.levelMap.length; i ++ ) {
 
-			let level = i;
+			let levelLayers = [];
 
-			// console.log("level " + i);
+			for ( let j = 0; j < this.levelMap[ i ].length; j ++ ) {
 
-			let layerIndexList = this.levelMap[ level ];
-			let layerLength = layerIndexList.length;
+				levelLayers.push( this.layers[ this.levelMap[ i ][ j ] ] );
 
-			let initX = - xInterval * ( layerLength - 1 ) / 2;
+			}
 
-			for ( let j = 0; j < layerLength; j ++ ) {
+			let xTranslateList = InLevelAligner.getXTranslate( levelLayers );
 
-				let center = {
+			for ( let j = 0; j < this.levelMap[ i ].length; j ++ ) {
 
-					x: initX + xInterval * j,
-					y: yList[ level ],
-					z: 0
+				layerCenters[ this.levelMap[ i ][ j ] ] = {
+
+					x: this.levelCenters[i].x + xTranslateList[ j ],
+					y: this.levelCenters[i].y,
+					z: this.levelCenters[i].z
 
 				};
-
-				layerCenters[ layerIndexList[ j ] ] = center;
 
 			}
 
@@ -180,20 +245,9 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	},
 
-	calculateLevelY: function( depth ) {
+	arrangeLayerInLevel: function() {
 
-		let yList = [];
 
-		let initY = - ( depth - 1 ) / 2 * ModelLayerInterval;
-
-		for ( let i = 0; i < depth; i ++ ) {
-
-			let yPos = initY + ModelLayerInterval * i;
-			yList.push( yPos );
-
-		}
-
-		return yList;
 
 	}
 

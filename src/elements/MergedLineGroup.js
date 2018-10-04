@@ -149,8 +149,6 @@ MergedLineGroup.prototype = {
 
 		let lineGroupParameters = this.getLineGroupParameters( selectedElement );
 
-		console.log(lineGroupParameters);
-
 		let straightParameters = lineGroupParameters.straight;
 		let curveParameters = lineGroupParameters.curve;
 
