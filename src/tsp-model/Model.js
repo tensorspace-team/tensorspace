@@ -21,6 +21,8 @@ function Model( container, config ) {
 	this.inputs = config.inputs;
 	this.outputs = config.outputs;
 
+	this.outputsOrder = config.outputsOrder;
+
 	this.layers = undefined;
 
 	this.levelMap = undefined;
@@ -182,15 +184,27 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	},
 
-	predict: function() {
+	predict: function( input, callback ) {
 
+		this.inputValue = input;
 
+		if ( this.resource !== undefined ) {
+
+			this.predictResult = this.predictor.predict( input, callback );
+
+			this.updateVis();
+
+		} else {
+
+			this.updateInputVis();
+
+		}
 
 	},
 
 	clear: function() {
 
-		for ( let i = 0; i < this.layers.length; i++ ) {
+		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].clear();
 
@@ -200,21 +214,38 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	reset: function() {
 
-	},
-
-	loadModelConfig: function() {
+		this.clear();
+		this.cameraControls.reset();
+		this.updateCamera();
 
 	},
 
 	updateVis: function() {
 
+		this.updateInputVis();
+		this.updateLayerVis();
+
 	},
 
 	updateInputVis: function() {
 
+		for ( let i = 0; i < this.inputs.length; i ++ ) {
+
+			this.inputs[ i ].updateVis( this.inputValue[ i ] );
+
+		}
+
 	},
 
 	updateLayerVis: function() {
+
+		for ( let i = 0; i < this.predictResult.length; i ++ ) {
+
+			let layer = this.getLayerByName( this.outputsOrder[ i ] );
+
+			layer.updateVis( this.predictResult[ i ] );
+
+		}
 
 	},
 
@@ -304,6 +335,20 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		for ( let i = 0; i < levelLayers.length; i ++ ) {
 
 			levelLayers[ i ].translateLayer( layerCenters[ i ], translateTime );
+
+		}
+
+	},
+
+	getLayerByName: function( name ) {
+
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+
+			if ( this.layers[ i ].name === name ) {
+
+				return this.layers[ i ];
+
+			}
 
 		}
 
