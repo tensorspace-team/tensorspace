@@ -4,6 +4,14 @@
 
 import { MergedLayer3d } from "../layer/abstract/MergedLayer3d";
 
+/**
+ * Performs element-wise addition on layers.
+ *
+ * @param layerList, input a list of layers.
+ * @param config, user's config for add function
+ * @constructor
+ */
+
 function Add( layerList, config ) {
 
 	let operatorType = "add";

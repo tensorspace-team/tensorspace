@@ -601,17 +601,22 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData( this.neuralValue, this.depth );
 
-		// Get colors to render the surface of grid lines.
-
-		let colors = ColorUtils.getAdjustValues( layerOutputValues, this.minOpacity );
-
 		let gridLineLength = this.width;
 
 		// Each grid line handler execute its own update function.
 
 		for ( let i = 0; i < this.depth; i ++ ) {
 
-			this.queueHandlers[ i ].updateVis( colors.slice( i * gridLineLength, ( i + 1 ) * gridLineLength ) );
+			// Get colors to render the surface of grid lines.
+
+			let colors = ColorUtils.getAdjustValues(
+
+				layerOutputValues.slice( i * gridLineLength, ( i + 1 ) * gridLineLength ),
+				this.minOpacity
+
+			);
+
+			this.queueHandlers[ i ].updateVis( colors );
 
 		}
 

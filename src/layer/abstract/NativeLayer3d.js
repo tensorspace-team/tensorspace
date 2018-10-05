@@ -637,17 +637,22 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData( this.neuralValue, this.depth );
 
-		// Get colors to render the surface of feature maps.
-
-		let colors = ColorUtils.getAdjustValues( layerOutputValues, this.minOpacity );
-
 		let featureMapSize = this.width * this.height;
 
 		// Each feature map handler execute its own update function.
 
 		for ( let i = 0; i < this.depth; i ++ ) {
 
-			this.segregationHandlers[ i ].updateVis( colors.slice( i * featureMapSize, ( i + 1 ) * featureMapSize ) );
+			// Get colors to render the surface of feature maps.
+
+			let colors = ColorUtils.getAdjustValues(
+
+				layerOutputValues.slice( i * featureMapSize, ( i + 1 ) * featureMapSize ),
+				this.minOpacity
+
+			);
+
+			this.segregationHandlers[ i ].updateVis( colors );
 
 		}
 

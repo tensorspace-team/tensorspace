@@ -8,7 +8,7 @@ import { Subtract3d } from "../strategy/Subtract3d";
 import { Multiply3d } from "../strategy/Multiply3d";
 import { Dot3d } from "../strategy/Dot3d";
 import { Maximum3d } from "../strategy/Maximum3d";
-import { Average3d}  from "../strategy/Average3d";
+import { Average3d }  from "../strategy/Average3d";
 
 let StrategyFactory = ( function() {
 
