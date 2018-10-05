@@ -495,6 +495,28 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	},
 
+	getBoundingWidth: function() {
+
+		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
+
+			let maxX = this.openResultPos[ 0 ].x;
+
+			for ( let i = 0; i < this.openResultPos.length; i ++ ) {
+
+				maxX = this.openResultPos[ i ] > maxX ? this.openResultPos[ i ] : maxX;
+
+			}
+
+			return maxX - this.calcCloseButtonPos().x + this.calcCloseButtonSize();
+
+		} else {
+
+			return this.actualWidth;
+
+		}
+
+	},
+
 	/**
 	 * ============
 	 *

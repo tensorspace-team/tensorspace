@@ -423,6 +423,28 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	},
 
+	getBoundingWidth: function() {
+
+		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
+
+			let maxX = this.openFmCenters[ 0 ].x;
+
+			for ( let i = 0; i < this.openFmCenters.length; i ++ ) {
+
+				maxX = this.openFmCenters[ i ].x > maxX ? this.openFmCenters[ i ].x : maxX;
+
+			}
+
+			return maxX - this.calcCloseButtonPos().x + this.calcCloseButtonSize() + this.actualWidth;
+
+		} else {
+
+			return this.actualWidth;
+
+		}
+
+	},
+
 	/**
 	 * ============
 	 *

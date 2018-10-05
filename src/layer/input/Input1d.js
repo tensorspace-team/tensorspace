@@ -270,6 +270,12 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	},
 
+	getBoundingWidth: function() {
+
+		return this.actualWidth;
+
+	},
+
 	/**
 	 * ============
 	 *

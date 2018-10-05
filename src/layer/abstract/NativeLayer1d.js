@@ -449,6 +449,20 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	},
 
+	getBoundingWidth: function() {
+
+		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
+
+			return this.actualWidth / 2 - this.calcCloseButtonPos().x + this.calcCloseButtonSize();
+
+		} else {
+
+			return this.aggregationWidth;
+
+		}
+
+	},
+
 	/**
 	 * ============
 	 *

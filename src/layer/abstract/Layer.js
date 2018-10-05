@@ -602,15 +602,7 @@ Layer.prototype = {
 
 	getBoundingWidth: function() {
 
-		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
-
-			return 300;
-
-		} else {
-
-			return 100;
-
-		}
+		return 100;
 
 	}
 

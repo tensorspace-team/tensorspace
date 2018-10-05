@@ -32,8 +32,6 @@ function Model( container, config ) {
 
 	this.levelCenters = undefined;
 
-	this.loadModelConfig( config );
-
 	// Pass configuration to three.js scene.
 
 	this.loadSceneConfig( this.configuration );
