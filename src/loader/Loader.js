@@ -100,60 +100,6 @@ Loader.prototype = {
 	},
 
 	/**
-	 * Add input shape to predictor.
-	 *
-	 * @param predictor
-	 */
-
-	configInputShape: function( predictor ) {
-
-		if ( this.config.multiInput !== undefined && this.config.multiInput ) {
-
-			this.setShapeList( predictor);
-
-		} else {
-
-			this.setSingleShape( predictor );
-
-		}
-
-	},
-
-	/**
-	 * setSingleShape(), set an input shape to predictor.
-	 * If the model has only one input, get input shape from TSP model and set it to predictor.
-	 *
-	 * @param predictor
-	 */
-
-	setSingleShape: function( predictor ) {
-
-		// Get input shape from TSP model's first layer.
-
-		predictor.inputShape = this.model.layers[ 0 ].outputShape;
-
-	},
-
-	/**
-	 * setShapeList(), set input shape list to predictor.
-	 * If the model has multiple inputs, get input shapes from user's configuration and set them to predictor.
-	 *
-	 * @param predictor
-	 */
-
-	setShapeList: function( predictor ) {
-
-		// Set multiple inputs identity.
-
-		predictor.multiInputs = true;
-
-		// Get multiple input shapes from "inputShapes" attribute.
-
-		predictor.inputShapes = this.config.inputShapes;
-
-	},
-
-	/**
 	 * ============
 	 *
 	 * Functions below are abstract method for Predictor.

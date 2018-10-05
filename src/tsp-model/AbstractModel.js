@@ -77,7 +77,7 @@ function AbstractModel( container ) {
 
 	/**
 	 * Prediction model type.
-	 * Three types now: "tfjs", "keras", "tensorflow"
+	 * Three types now: "Model", "Sequential"
 	 *
 	 * @type { string }
 	 */

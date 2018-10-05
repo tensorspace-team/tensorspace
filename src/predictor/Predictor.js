@@ -9,10 +9,11 @@
  * Base class for KerasPredictor, TfjsPredictor, TfPredictor.
  *
  * @param model, model context
+ * @param config, Predictor config
  * @constructor
  */
 
-function Predictor( model ) {
+function Predictor( model, config ) {
 
 	/**
 	 * Store model context.
@@ -46,9 +47,45 @@ function Predictor( model ) {
 
 	this.inputShape = undefined;
 
+	this.loadPredictorConfig( config );
+
 }
 
 Predictor.prototype = {
+
+	loadPredictorConfig: function( config ) {
+
+		if ( this.model.modelType === "Sequential" ) {
+
+			if ( config.multiInputs !== undefined && config.multiInputs === true ) {
+
+				this.multiInputs = true;
+
+				this.inputShapes = config.inputShapes;
+
+			} else {
+
+				this.inputShape = this.model.layers[ 0 ].outputShape;
+
+			}
+
+		} else {
+
+			this.multiInputs = true;
+
+			let inputShapes = [];
+
+			for ( let i = 0; i < this.model.inputs.length; i++ ) {
+
+				inputShapes.push( this.model.inputs[ i ] );
+
+			}
+
+			this.inputShapes = inputShapes;
+
+		}
+
+	},
 
 	/**
 	 * createInputTensor(), create tfjs Tensor which can be used for prediction.

@@ -40,6 +40,8 @@ function Model( container, config ) {
 
 	this.createScene();
 
+	this.modelType = "Model";
+
 }
 
 Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
@@ -182,9 +184,17 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	predict: function() {
 
+
+
 	},
 
 	clear: function() {
+
+		for ( let i = 0; i < this.layers.length; i++ ) {
+
+			this.layers[ i ].clear();
+
+		}
 
 	},
 
@@ -193,6 +203,18 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 	},
 
 	loadModelConfig: function() {
+
+	},
+
+	updateVis: function() {
+
+	},
+
+	updateInputVis: function() {
+
+	},
+
+	updateLayerVis: function() {
 
 	},
 

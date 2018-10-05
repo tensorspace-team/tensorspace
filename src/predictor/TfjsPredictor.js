@@ -8,14 +8,15 @@ import { Predictor } from "./Predictor";
  * Handle prediction for tfjs model.
  *
  * @param model, model context
+ * @param config, Predictor config
  * @constructor
  */
 
-function TfjsPredictor( model ) {
+function TfjsPredictor( model, config ) {
 
 	// "TfjsPredictor" inherits from abstract predictor "Predictor".
 
-	Predictor.call( this, model );
+	Predictor.call( this, model, config );
 
 	this.predictorType = "TfjsPredictor";
 

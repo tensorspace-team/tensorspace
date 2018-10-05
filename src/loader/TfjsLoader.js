@@ -65,7 +65,6 @@ TfjsLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		const loadedModel = await tf.loadModel( this.url );
 
 		this.model.resource = loadedModel;
-		this.model.modelType = "tfjs";
 
 		this.setPredictor();
 
@@ -83,8 +82,7 @@ TfjsLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	setPredictor: function() {
 
-		let tfjsPredictor = new TfjsPredictor( this.model );
-		this.configInputShape( tfjsPredictor );
+		let tfjsPredictor = new TfjsPredictor( this.model, this.config );
 
 		this.model.predictor = tfjsPredictor;
 
