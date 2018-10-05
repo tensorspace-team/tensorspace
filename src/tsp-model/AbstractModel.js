@@ -6,16 +6,18 @@ import { SceneInitializer } from '../scene/SceneInitializer';
 import { TfjsLoader } from '../loader/TfjsLoader';
 import { KerasLoader } from "../loader/KerasLoader";
 import { TfLoader } from "../loader/TfLoader";
+import { ModelConfiguration } from "../configure/ModelConfiguration";
 
 /**
  * AbstractModel, abstract model, can not be initialized by TensorSpace user.
  * Base class for Sequential, Model
  *
  * @param container, a DOM element where TSP model will be rendered to.
+ * @param config, user's config for Sequential model.
  * @constructor
  */
 
-function AbstractModel( container ) {
+function AbstractModel( container, config ) {
 
 	// AbstractModel mixin "SceneInitializer".
 
@@ -60,6 +62,14 @@ function AbstractModel( container ) {
 	this.resource = undefined;
 
 	/**
+	 * Store user's input value for prediction.
+	 *
+	 * @type { Array }
+	 */
+
+	this.inputValue = undefined;
+
+	/**
 	 * Store prediction result from prediction model.
 	 *
 	 * @type { undefined }
@@ -83,6 +93,39 @@ function AbstractModel( container ) {
 	 */
 
 	this.modelType = undefined;
+
+	/**
+	 * Store all layers in Model.
+	 *
+	 * @type { Layer[] }
+	 */
+
+	this.layers = [];
+
+	/**
+	 * Record layer hovered by mouse now.
+	 *
+	 * @type { Layer }
+	 */
+
+	this.hoveredLayer = undefined;
+
+	/**
+	 * Model configuration.
+	 * Initialized with user's model config and default model config.
+	 *
+	 * @type { ModelConfiguration }
+	 */
+
+	this.configuration = new ModelConfiguration( config );
+
+	// Pass configuration to three.js scene.
+
+	this.loadSceneConfig( this.configuration );
+
+	// Create actual three.js scene.
+
+	this.createScene();
 
 }
 
@@ -164,6 +207,165 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 	setLoader: function( loader ) {
 
 		this.loader = loader;
+
+	},
+
+	/**
+	 * Get TSP layer stored in model by name.
+	 *
+	 * @param name
+	 * @return { Layer }, layer with given name.
+	 */
+
+	getLayerByName: function( name ) {
+
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+
+			if ( this.layers[ i ].name === name ) {
+
+				return this.layers[ i ];
+
+			}
+
+		}
+
+	},
+
+	/**
+	 * Get all TSP layer stored in model.
+	 *
+	 * @return { Layer[] }, layer list.
+	 */
+
+	getAllLayers: function() {
+
+		return this.layers;
+
+	},
+
+	/**
+	 * init(), Init model,
+	 * As TSP is applying lazy initialization strategy, time-consuming work will be done in this process.
+	 * After init process, the model will be rendered onto container.
+	 *
+	 * @param callback, user's predefined callback function, fired when init process completed.
+	 */
+
+	init: function( callback ) {
+
+		if ( this.hasLoader ) {
+
+			// If has a predefined loader, load model before init sequential elements.
+
+			let self = this;
+			this.loader.load().then( function() {
+
+				// Init sequential elements.
+
+				self.initTSPModel();
+
+				// Execute callback at the end if callback function is predefined.
+
+				if ( callback !== undefined ) {
+
+					callback();
+
+				}
+
+			} );
+
+		} else {
+
+			// Init sequential elements.
+
+			this.initTSPModel();
+
+			// Execute callback at the end if callback function is predefined.
+
+			if ( callback !== undefined ) {
+
+				callback();
+
+			}
+
+		}
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for Layer.
+	 * SubClasses ( specific Model ) override these abstract methods.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * predict(), abstract method
+	 *
+	 * Generates output predictions for the input sample.
+	 *
+	 * @param input, user's input data
+	 * @param callback, user' predefined callback function, execute after prediction.
+	 */
+
+	predict: function( input, callback ) {
+
+
+	},
+
+	/**
+	 * clear(), abstract method
+	 *
+	 * Override to clear all layers' visualization and model's input data.
+	 */
+
+	clear: function() {
+
+	},
+
+	/**
+	 * reset(), abstract method
+	 *
+	 * Override to add reset model.
+	 */
+
+	reset: function() {
+
+	},
+
+	/**
+	 * onClick(), abstract method.
+	 *
+	 * override this function to add handler for click event.
+	 *
+	 * @param event
+	 */
+
+	onClick: function( event ) {
+
+	},
+
+	/**
+	 * onMouseMove(), abstract method.
+	 *
+	 * Override this function to add handler for mouse move event.
+	 *
+	 * @param event
+	 */
+
+	onMouseMove: function( event ) {
+
+	},
+
+	/**
+	 * initTSPModel(), abstract method
+	 *
+	 * Override to handle actual element creation.
+	 */
+
+	initTSPModel: function() {
 
 	}
 

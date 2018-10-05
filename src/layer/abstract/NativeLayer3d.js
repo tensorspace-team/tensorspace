@@ -101,7 +101,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 *
 	 * NativeLayer3d overrides NativeLayer's function:
 	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut
-	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements
+	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements, getBoundingWidth
 	 *
 	 * ============
 	 */
@@ -404,6 +404,12 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 		};
 
 	},
+
+	/**
+	 * getBoundingWidth(), provide bounding box's width based on layer's status.
+	 *
+	 * @return { number }
+	 */
 
 	getBoundingWidth: function() {
 

@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 let LayerTranslateFactory = ( function() {
 
 	function translate( layer, targetCenter, translateTime ) {

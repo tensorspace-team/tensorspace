@@ -101,7 +101,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	 *
 	 * MergedLayer3d overrides MergedLayer's function:
 	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, loadModelConfig,
-	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, provideRelativeElements
+	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, provideRelativeElements, getBoundingWidth
 	 *
 	 * ============
 	 */
@@ -527,6 +527,12 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 		};
 
 	},
+
+	/**
+	 * getBoundingWidth(), provide bounding box's width based on layer's status.
+	 *
+	 * @return { number }
+	 */
 
 	getBoundingWidth: function() {
 

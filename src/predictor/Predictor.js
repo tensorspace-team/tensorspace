@@ -9,7 +9,7 @@
  * Base class for KerasPredictor, TfjsPredictor, TfPredictor.
  *
  * @param model, model context
- * @param config, Predictor config
+ * @param config, Predictor config, get it from loader
  * @constructor
  */
 
@@ -47,17 +47,31 @@ function Predictor( model, config ) {
 
 	this.inputShape = undefined;
 
+	// Load Predictor's basic configuration.
+
 	this.loadPredictorConfig( config );
 
 }
 
 Predictor.prototype = {
 
+	/**
+	 * Load Predictor's basic configuration.
+	 *
+	 * @param config, user's Predictor configuration
+	 */
+
 	loadPredictorConfig: function( config ) {
+
+		// Add inputShape or inputShapes from config.
 
 		if ( this.model.modelType === "Sequential" ) {
 
+			// In Sequential, has two input type.
+
 			if ( config.multiInputs !== undefined && config.multiInputs === true ) {
+
+				// Multiple inputs
 
 				this.multiInputs = true;
 
@@ -65,17 +79,21 @@ Predictor.prototype = {
 
 			} else {
 
+				// Single input.
+
 				this.inputShape = this.model.layers[ 0 ].outputShape;
 
 			}
 
 		} else {
 
+			// In Model, multiple inputs.
+
 			this.multiInputs = true;
 
 			let inputShapes = [];
 
-			for ( let i = 0; i < this.model.inputs.length; i++ ) {
+			for ( let i = 0; i < this.model.inputs.length; i ++ ) {
 
 				inputShapes.push( this.model.inputs[ i ] );
 

@@ -48,9 +48,9 @@ function Loader( model, config ) {
 Loader.prototype = {
 
 	/**
-	 * Load loader's basic configuration.
+	 * Load Loader's basic configuration.
 	 *
-	 * @param config, user's loader configuration
+	 * @param config, user's Loader configuration
 	 */
 
 	loadLoaderConfig: function( config ) {

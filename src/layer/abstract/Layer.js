@@ -432,25 +432,18 @@ Layer.prototype = {
 
 	},
 
-	apply: function( lastLayer ) {
-
-		this.lastLayer = lastLayer;
-
-	},
+	/**
+	 * translateLayer(), translate layer to a target center.
+	 *
+	 * @param targetCenter, target center the layer is moving to
+	 * @param translateTime, animation time
+	 */
 
 	translateLayer: function( targetCenter, translateTime ) {
 
+		// LayerTranslateFactory handles actual translate animation, checkout "LayerTranslateTween.js" for more information.
+
 		LayerTranslateFactory.translate( this, targetCenter, translateTime );
-
-	},
-
-	setCenterPos: function( center ) {
-
-		this.center.x = center.x;
-		this.center.y = center.y;
-		this.center.z = center.z;
-
-		this.neuralGroup.position.set( this.center );
 
 	},
 
@@ -599,6 +592,14 @@ Layer.prototype = {
 		};
 
 	},
+
+	/**
+	 * getBoundingWidth(), abstract layer
+	 *
+	 * Override this function to provide layer's bounding width based on layer's status.
+	 *
+	 * @return { number }
+	 */
 
 	getBoundingWidth: function() {
 

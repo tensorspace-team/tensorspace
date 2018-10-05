@@ -156,7 +156,7 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 *
 	 * YoloGrid overrides NativeLayer's function:
 	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, loadModelConfig,
-	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, provideRelativeElements,
+	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, provideRelativeElements, getBoundingWidth
 	 *
 	 * ============
 	 */
@@ -494,6 +494,12 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		};
 
 	},
+
+	/**
+	 * getBoundingWidth(), provide bounding box's width based on layer's status.
+	 *
+	 * @return { number }
+	 */
 
 	getBoundingWidth: function() {
 

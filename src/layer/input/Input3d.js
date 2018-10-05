@@ -138,7 +138,7 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 *
 	 * Input3d overrides NativeLayer's function:
 	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, loadModelConfig,
-	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements
+	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements, getBoundingWidth
 	 *
 	 * ============
 	 */
@@ -422,6 +422,12 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		};
 
 	},
+
+	/**
+	 * getBoundingWidth(), provide bounding box's width based on layer's status.
+	 *
+	 * @return { number }
+	 */
 
 	getBoundingWidth: function() {
 

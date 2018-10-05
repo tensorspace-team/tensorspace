@@ -149,7 +149,7 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 *
 	 * Output1d overrides NativeLayer's function:
 	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut,
-	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements
+	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, getBoundingWidth
 	 *
 	 * ============
 	 */
@@ -483,6 +483,12 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		return relativeElements;
 
 	},
+
+	/**
+	 * getBoundingWidth(), provide bounding box's width based on layer's status.
+	 *
+	 * @return { number }
+	 */
 
 	getBoundingWidth: function() {
 
