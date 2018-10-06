@@ -98,7 +98,7 @@ Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 * Functions below override base class NativeLayer's abstract method
 	 *
 	 * Input2d overrides NativeLayer's function:
-	 * init, assemble, updateValue, clear, handleHoverIn, handleHoverOut, loadModelConfig, provideRelativeElements
+	 * init, assemble, updateValue, clear, handleHoverIn, handleHoverOut, loadModelConfig, provideRelativeElements, getBoundingWidth
 	 *
 	 * ============
 	 */
@@ -268,6 +268,18 @@ Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 			elementList: relativeElements
 
 		};
+
+	},
+
+	/**
+	 * getBoundingWidth(), provide bounding box's width based on layer's status.
+	 *
+	 * @return { number }
+	 */
+
+	getBoundingWidth: function() {
+
+		return this.actualWidth;
 
 	},
 

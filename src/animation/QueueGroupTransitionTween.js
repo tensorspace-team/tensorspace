@@ -38,19 +38,21 @@ let QueueGroupTweenFactory = ( function() {
 
 		} ).onStart( function() {
 
-			console.log( "start open layer" );
 			layer.disposeAggregationElement();
 			layer.initSegregationElements( layer.closeCenterList );
+
+			layer.isWaitOpen = false;
 			layer.isOpen = true;
 
 		} ).onComplete( function() {
 
-			console.log( "end open layer" );
 			layer.initCloseButton();
 
 		} );
 
 		openTween.start();
+
+		layer.isWaitOpen = true;
 
 	}
 
@@ -88,19 +90,21 @@ let QueueGroupTweenFactory = ( function() {
 
 		} ).onStart( function() {
 
-			console.log( "start close layer" );
 			layer.disposeCloseButton();
 
 		} ).onComplete( function() {
 
-			console.log( "end close layer" );
 			layer.disposeSegregationElements();
 			layer.initAggregationElement();
+
+			layer.isWaitClose = false;
 			layer.isOpen = false;
 
 		} );
 
 		fmTween.start();
+
+		layer.isWaitClose = true;
 
 	}
 

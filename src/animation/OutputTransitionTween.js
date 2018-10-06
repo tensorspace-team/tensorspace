@@ -23,7 +23,6 @@ let OutputTransitionFactory = ( function() {
 
 		layer.disposeAggregationElement();
 		layer.initOutputElement("close");
-		layer.isOpen = true;
 
 		openTween.onUpdate( function() {
 
@@ -47,11 +46,11 @@ let OutputTransitionFactory = ( function() {
 
 		} ).onStart( function() {
 
-			console.log( "start open output layer" );
+			layer.isWaitOpen = false;
+			layer.isOpen = true;
 
 		} ).onComplete( function() {
 
-			console.log( "finish open output layer" );
 			layer.initCloseButton();
 
 			if ( layer.paging ) {
@@ -63,6 +62,8 @@ let OutputTransitionFactory = ( function() {
 		} );
 
 		openTween.start();
+
+		layer.isWaitOpen = true;
 
 	}
 
@@ -107,8 +108,6 @@ let OutputTransitionFactory = ( function() {
 
 		} ).onStart( function() {
 
-			console.log( "start close output layer" );
-
 			if ( layer.paging ) {
 
 				layer.hidePaginationButton();
@@ -120,11 +119,15 @@ let OutputTransitionFactory = ( function() {
 			console.log( "end close output layer" );
 			layer.disposeOutputElement();
 			layer.initAggregationElement();
+
+			layer.isWaitClose = false;
 			layer.isOpen = false;
 
 		} );
 
 		closeTween.start();
+
+		layer.isWaitClose = true;
 
 	}
 

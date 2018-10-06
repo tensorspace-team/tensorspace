@@ -65,7 +65,6 @@ KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		const loadedModel = await tf.loadModel( this.url );
 
 		this.model.resource = loadedModel;
-		this.model.modelType = "keras";
 
 		this.setPredictor();
 
@@ -83,8 +82,8 @@ KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	setPredictor: function() {
 
-		let kerasPredictor = new KerasPredictor( this.model );
-		this.configInputShape( kerasPredictor );
+		let kerasPredictor = new KerasPredictor( this.model, this.config );
+
 		this.model.predictor = kerasPredictor;
 
 	},

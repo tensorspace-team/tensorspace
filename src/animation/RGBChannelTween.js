@@ -64,14 +64,13 @@ let RGBTweenFactory = ( function() {
 
 		} ).onStart( function() {
 
-			console.log( "start separate layer" );
 			layer.disposeAggregationElement();
 			layer.initSegregationElements();
+
+			layer.isWaitOpen = false;
 			layer.isOpen = true;
 
 		} ).onComplete( function() {
-
-			console.log( "end separate layer" );
 
 		} );
 
@@ -134,17 +133,16 @@ let RGBTweenFactory = ( function() {
 
 		} ).onStart( function() {
 
-			console.log( "start journey layer" );
-
 		} ).onComplete( function() {
 
-			console.log( "end journey layer" );
 			layer.initCloseButton();
 
 		} );
 
 		separateTween.chain( journeyTween );
 		separateTween.start();
+
+		layer.isWaitOpen = true;
 
 	}
 
@@ -209,12 +207,9 @@ let RGBTweenFactory = ( function() {
 
 		} ).onStart(function() {
 
-			console.log( "start homing layer" );
 			layer.disposeCloseButton();
 
 		} ).onComplete( function() {
-
-			console.log( "end homing layer" );
 
 		} );
 
@@ -223,6 +218,7 @@ let RGBTweenFactory = ( function() {
 			ratio: 1
 
 		};
+
 		let aggregateEnd = {
 
 			ratio: 0
@@ -276,19 +272,20 @@ let RGBTweenFactory = ( function() {
 
 		} ).onStart( function() {
 
-			console.log( "start aggregate layer" );
-
 		} ).onComplete(function() {
 
-			console.log( "end aggregate layer" );
 			layer.disposeSegregationElements();
 			layer.initAggregationElement();
+
+			layer.isWaitClose = false;
 			layer.isOpen = false;
 
 		} );
 
 		homingTween.chain( aggregateTween );
 		homingTween.start();
+
+		layer.isWaitClose = true;
 
 	}
 

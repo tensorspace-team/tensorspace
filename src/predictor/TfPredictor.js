@@ -9,14 +9,15 @@ import { Predictor } from "./Predictor";
  * Handle prediction for tensorflow model.
  *
  * @param model, model context
+ * @param config, Predictor config
  * @constructor
  */
 
-function TfPredictor( model ) {
+function TfPredictor( model, config ) {
 
 	// "TfPredictor" inherits from abstract predictor "Predictor".
 
-	Predictor.call( this, model );
+	Predictor.call( this, model, config );
 
 	/**
 	 * list of output node names.

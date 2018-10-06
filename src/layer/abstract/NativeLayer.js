@@ -66,6 +66,18 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
+	 * Connect to last layer.
+	 *
+	 * @param lastLayer
+	 */
+
+	apply: function( lastLayer ) {
+
+		this.lastLayer = lastLayer;
+
+	},
+
+	/**
 	 * ============
 	 *
 	 * Functions below are abstract for Layer.

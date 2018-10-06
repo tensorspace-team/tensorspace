@@ -3,7 +3,6 @@
  */
 
 import { AbstractModel } from './AbstractModel';
-import { ModelConfiguration } from "../configure/ModelConfiguration";
 import { LayerLocator } from "../utils/LayerLocator";
 import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
 
@@ -19,48 +18,7 @@ function Sequential( container, config ) {
 
 	// "Sequential" inherits from abstract Model "AbstractModel".
 
-	AbstractModel.call( this, container );
-
-	/**
-	 * Store all layers in the sequential in order.
-	 *
-	 * @type { Layer[] }
-	 */
-
-	this.layers = [];
-
-	/**
-	 * Model configuration.
-	 * Initialized with user's model config and default model config.
-	 *
-	 * @type { ModelConfiguration }
-	 */
-
-	this.configuration = new ModelConfiguration( config );
-
-	/**
-	 * Record layer hovered by mouse now.
-	 *
-	 * @type { Layer }
-	 */
-
-	this.hoveredLayer = undefined;
-
-	/**
-	 * Store user's input value for prediction.
-	 *
-	 * @type { Array }
-	 */
-
-	this.inputValue = undefined;
-
-	// Pass configuration to three.js scene.
-
-	this.loadSceneConfig( this.configuration );
-
-	// Create actual three.js scene.
-
-	this.createScene();
+	AbstractModel.call( this, container, config );
 
 	this.modelType = "Sequential";
 
@@ -69,89 +27,112 @@ function Sequential( container, config ) {
 Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	/**
-	 * add(), add a new TSP layer to sequential model
+	 * ============
 	 *
-	 * Four main task in adding process:
-	 * 1. Set previous layer for the new TSP layer.
-	 * 2. Config environment for new TSP layer.
-	 * 3. Add a TSP layer instance on top of the layer stack.
-	 * 4. Assemble new layer, which mean that calculate the layer's shape.
+	 * Functions below override base class AbstractModel's abstract method
 	 *
-	 * @param layer, new TSP layer
+	 * Sequential overrides AbstractModel's function:
+	 * predict, clear, reset, onClick, onMouseMove, initTSPModel
+	 *
+	 * ============
 	 */
 
-	add: function( layer ) {
+	/**
+	 * predict(), Generates output predictions for the input sample.
+	 *
+	 * @param input
+	 * @param callback
+	 */
 
-		// Set last layer for native layer.
+	predict: function( input, callback ) {
 
-		if ( this.layers.length !== 0 ) {
+		this.inputValue = input;
 
-			if ( !layer.isMerged ) {
+		if ( this.resource !== undefined ) {
 
-				let tailLayer = this.layers[ this.layers.length - 1 ];
-				layer.setLastLayer( tailLayer );
+			// If a prediction model has already been loaded into TSP, use predictor to get the prediction result.
 
-			}
+			this.predictResult = this.predictor.predict( input, callback );
+
+			// Update all layer's visualization.
+
+			this.updateVis();
+
+		} else {
+
+			// If no prediction model be loaded into TSP, just update the input layer.
+
+			this.updateInputVis();
 
 		}
-
-		// Config environment for new layer.
-
-		layer.setEnvironment( this.scene, this );
-		layer.loadModelConfig( this.configuration );
-
-		// Add layer on top of layer stack.
-
-		this.layers.push( layer ) ;
-
-		// Assemble new layer.
-
-		layer.assemble( this.layers.length );
 
 	},
 
 	/**
-	 * init(), Init sequential model,
-	 * As TSP is applying lazy initialization strategy, time-consuming work will be done in this process.
-	 * After init process, the model will be rendered onto container.
-	 *
-	 * @param callback, user's predefined callback function, fired when init process completed.
+	 * clear(), clear all layers' visualization and model's input data.
 	 */
 
-	init: function( callback ) {
+	clear: function() {
 
-		if ( this.hasLoader ) {
+		for ( let i = 0; i < this.layers.length; i ++ ) {
 
-			// If has a predefined loader, load model before init sequential elements.
+			this.layers[ i ].clear();
 
-			let self = this;
-			this.loader.load().then( function() {
+		}
 
-				// Init sequential elements.
+		this.inputValue = undefined;
 
-				self.initTSPModel();
+	},
 
-				// Execute callback at the end if callback function is predefined.
+	/**
+	 * reset(), reset the model.
+	 *
+	 * Three steps:
+	 * 1. clear the layer visualization;
+	 * 2. reset TrackballControl;
+	 * 3. update camera setting in TSP.
+	 */
 
-				if ( callback !== undefined ) {
+	reset: function() {
 
-					callback();
+		this.clear();
+		this.cameraControls.reset();
+		this.updateCamera();
+
+	},
+
+	/**
+	 * onClick(), Handler for move click event.
+	 *
+	 * @param event
+	 */
+
+	onClick: function ( event ) {
+
+		let model = this;
+
+		// Use Raycaster to capture clicked element.
+
+		model.raycaster.setFromCamera( model.mouse, model.camera );
+		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
+
+		for ( let i = 0; i < intersects.length; i ++ ) {
+
+			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
+
+				let selectedElement = intersects[ i ].object;
+
+				if ( selectedElement.clickable === true ) {
+
+					// Let the layer to handle actual click event.
+
+					let selectedLayer = this.layers[ selectedElement.layerIndex - 1 ];
+
+					selectedLayer.handleClick( selectedElement );
+
+					break;
 
 				}
-
-			} );
-
-		} else {
-
-			// Init sequential elements.
-
-			this.initTSPModel();
-
-			// Execute callback at the end if callback function is predefined.
-
-			if ( callback !== undefined ) {
-
-				callback();
 
 			}
 
@@ -167,7 +148,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	onMouseMove: function( event ) {
 
-		// calculate mouse position..
+		// calculate mouse position.
 
 		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 		this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -213,45 +194,6 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	},
 
 	/**
-	 * onClick(), Handler for move click event.
-	 *
-	 * @param event
-	 */
-
-	onClick: function ( event ) {
-
-		let model = this;
-
-		// Use Raycaster to capture clicked element.
-
-		model.raycaster.setFromCamera( model.mouse, model.camera );
-		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
-
-		for ( let i = 0; i < intersects.length; i ++ ) {
-
-			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
-
-				let selectedElement = intersects[ i ].object;
-
-				if ( selectedElement.clickable === true ) {
-
-					// Let the layer to handle actual click event.
-
-					let selectedLayer = this.layers[ selectedElement.layerIndex - 1 ];
-
-					selectedLayer.handleClick( selectedElement );
-
-					break;
-
-				}
-
- 			}
-
-		}
-
-	},
-
-	/**
 	 * initTSPModel(), call all functions required in model initialization process.
 	 */
 
@@ -263,6 +205,57 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 		this.animate();
 
 		this.isInitialized = true;
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for Model.
+	 * SubClasses ( specific Model ) override these abstract methods.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * add(), add a new TSP layer to sequential model
+	 *
+	 * Four main task in adding process:
+	 * 1. Set previous layer for the new TSP layer.
+	 * 2. Config environment for new TSP layer.
+	 * 3. Add a TSP layer instance on top of the layer stack.
+	 * 4. Assemble new layer, which mean that calculate the layer's shape.
+	 *
+	 * @param layer, new TSP layer
+	 */
+
+	add: function( layer ) {
+
+		// Set last layer for native layer.
+
+		if ( this.layers.length !== 0 ) {
+
+			if ( !layer.isMerged ) {
+
+				let tailLayer = this.layers[ this.layers.length - 1 ];
+				layer.setLastLayer( tailLayer );
+
+			}
+
+		}
+
+		// Config environment for new layer.
+
+		layer.setEnvironment( this.scene, this );
+		layer.loadModelConfig( this.configuration );
+
+		// Add layer on top of layer stack.
+
+		this.layers.push( layer ) ;
+
+		// Assemble new layer.
+
+		layer.assemble( this.layers.length );
 
 	},
 
@@ -289,41 +282,10 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	},
 
 	/**
-	 * predict(), Generates output predictions for the input sample.
-	 *
-	 * @param input
-	 * @param callback
+	 * updateVis(), update input layer and other layer separately based on input and prediction result.
 	 */
 
-	predict: function( input, callback ) {
-
-		this.inputValue = input;
-
-		if ( this.resource !== undefined ) {
-
-			// If a prediction model has already been loaded into TSP, use predictor to get the prediction result.
-
-			this.predictResult = this.predictor.predict( input, callback );
-
-			// Update all layer's visualization.
-
-			this.updateLayerVis();
-
-		} else {
-
-			// If no prediction model be loaded into TSP, just update the input layer.
-
-			this.updateInputVis();
-
-		}
-
-	},
-
-	/**
-	 * updateLayerVis(), update input layer and other layer separately based on input and prediction result.
-	 */
-
-	updateLayerVis: function() {
+	updateVis: function() {
 
 		// Update input layer's visualization.
 
@@ -382,39 +344,6 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 			}
 
 		}
-
-	},
-
-	/**
-	 * clear(), clear all layers' visualization and model's input data.
-	 */
-
-	clear: function() {
-
-		for ( let i = 0; i < this.layers.length; i ++ ) {
-
-			this.layers[ i ].clear();
-
-		}
-
-		this.inputValue = undefined;
-
-	},
-
-	/**
-	 * reset(), reset the model.
-	 *
-	 * Three steps:
-	 * 1. clear the layer visualization;
-	 * 2. reset TrackballControl;
-	 * 3. update camera setting in TSP.
-	 */
-
-	reset: function() {
-
-		this.clear();
-		this.cameraControls.reset();
-		this.updateCamera();
 
 	}
 

@@ -66,7 +66,7 @@ MergedLineGroup.prototype = {
 
 		}
 
-		let forward = true;
+		let forward = false;
 
 		for ( let i = 0; i < curveElements.length; i ++ ) {
 
@@ -125,6 +125,8 @@ MergedLineGroup.prototype = {
 
 		}
 
+		console.log( curveLineVertices );
+
 		return {
 
 			straight: {
@@ -145,7 +147,7 @@ MergedLineGroup.prototype = {
 
 	},
 
-	showLines: function(selectedElement ) {
+	showLines: function( selectedElement ) {
 
 		let lineGroupParameters = this.getLineGroupParameters( selectedElement );
 
@@ -186,7 +188,7 @@ MergedLineGroup.prototype = {
 
 	},
 
-	createGroupGeometry: function(lineVertices, lineColors) {
+	createGroupGeometry: function( lineVertices, lineColors) {
 
 		let geometry = new THREE.Geometry( {
 

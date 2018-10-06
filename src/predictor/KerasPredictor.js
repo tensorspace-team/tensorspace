@@ -8,14 +8,15 @@ import { Predictor } from "./Predictor";
  * Handle prediction for keras model.
  *
  * @param model, model context
+ * @param config, Predictor config
  * @constructor
  */
 
-function KerasPredictor( model ) {
+function KerasPredictor( model, config ) {
 
 	// "KerasPredictor" inherits from abstract predictor "Predictor".
 
-	Predictor.call( this, model );
+	Predictor.call( this, model, config );
 
 	this.predictorType = "KerasPredictor";
 

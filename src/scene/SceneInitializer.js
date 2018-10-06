@@ -177,6 +177,39 @@ SceneInitializer.prototype = {
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
 
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for Layer.
+	 * SubClasses ( specific Model ) override these abstract methods.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * onClick(), abstract method.
+	 *
+	 * Override this function to add handler for click event.
+	 *
+	 * @param event
+	 */
+
+	onClick: function( event ) {
+
+	},
+
+	/**
+	 * onMouseMove(), abstract method.
+	 *
+	 * Override this function to add handler for mouse move event.
+	 *
+	 * @param event
+	 */
+
+	onMouseMove: function( event ) {
+
 	}
 
 };

@@ -51,14 +51,12 @@ let QueueTransitionFactory = ( function() {
 
 		} ).onStart( function() {
 
-			console.log( "start open queue layer" );
 			layer.disposeAggregationElement();
 			layer.neuralGroup.add( variableLengthObject );
 			layer.isTransition = true;
 
 		} ).onComplete( function() {
 
-			console.log( "end open queue layer" );
 			layer.neuralGroup.remove( variableLengthObject );
 			layer.initQueueElement();
 			layer.initCloseButton();
@@ -70,11 +68,14 @@ let QueueTransitionFactory = ( function() {
 			}
 
 			layer.isTransition = false;
+			layer.isWaitOpen = false;
 			layer.isOpen = true;
 
 		} );
 
 		fmTween.start();
+
+		layer.isWaitOpen = true;
 
 	}
 
@@ -151,12 +152,16 @@ let QueueTransitionFactory = ( function() {
 
 			layer.neuralGroup.remove( variableLengthObject );
 			layer.initAggregationElement();
+
 			layer.isTransition = false;
+			layer.isWaitClose = false;
 			layer.isOpen = false;
 
 		} );
 
 		fmTween.start();
+
+		layer.isWaitClose = true;
 
 	}
 

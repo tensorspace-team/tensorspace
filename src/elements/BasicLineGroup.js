@@ -73,7 +73,7 @@ BasicLineGroup.prototype = {
 
 	},
 
-	showLines: function(selectedElement ) {
+	showLines: function( selectedElement ) {
 
 		let lineGroupParameters = this.getLineGroupParameters( selectedElement );
 

@@ -3,25 +3,30 @@
  */
 
 import { AbstractModel } from "./AbstractModel";
-import { ModelConfiguration } from "../configure/ModelConfiguration";
 import { LayerStackGenerator } from "../utils/LayerStackGenerator";
 import { LevelStackGenerator } from "../utils/LevelStackGenerator";
 import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
 import { LayerLocator } from "../utils/LayerLocator";
 import { InLevelAligner } from "../utils/InLevelAligner";
 
-// TODO functional model API
+/**
+ * A Model is a directed, acyclic graph.
+ *
+ * @param container, a DOM element where TSP model will be rendered to.
+ * @param config, user's config for Model.
+ * @constructor
+ */
 
 function Model( container, config ) {
 
-	AbstractModel.call( this, container );
+	// "Model" inherits from abstract Model "AbstractModel".
 
-	this.configuration = new ModelConfiguration( config );
+	AbstractModel.call( this, container, config );
 
-	this.inputs = config.inputs;
-	this.outputs = config.outputs;
+	this.inputs = undefined;
+	this.outputs = undefined;
 
-	this.layers = undefined;
+	this.outputsOrder = undefined;
 
 	this.levelMap = undefined;
 	this.layerLookupMap = undefined;
@@ -30,70 +35,96 @@ function Model( container, config ) {
 
 	this.levelCenters = undefined;
 
+	this.modelType = "Model";
+
 	this.loadModelConfig( config );
-
-	// Pass configuration to three.js scene.
-
-	this.loadSceneConfig( this.configuration );
-
-	// Create actual three.js scene.
-
-	this.createScene();
 
 }
 
 Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
-	init: function() {
+	/**
+	 * ============
+	 *
+	 * Functions below override base class AbstractModel's abstract method
+	 *
+	 * Sequential overrides AbstractModel's function:
+	 * predict, clear, reset, onClick, onMouseMove, initTSPModel
+	 *
+	 * ============
+	 */
 
-		this.createGraph();
+	/**
+	 * predict(), Generates output predictions for the input sample.
+	 *
+	 * @param input
+	 * @param callback
+	 */
 
-		this.assembleLayers();
+	predict: function( input, callback ) {
 
-		this.updateCamera( this.layers.length );
-		this.createModelElements();
-		this.registerModelEvent();
-		this.animate();
+		this.inputValue = input;
 
-		this.isInitialized = true;
+		if ( this.resource !== undefined ) {
 
-	},
+			// If a prediction model has already been loaded into TSP, use predictor to get the prediction result.
 
-	assembleLayers: function() {
+			this.predictResult = this.predictor.predict( input, callback );
 
-		for ( let i = 0; i < this.levelMap.length; i ++ ) {
+			// Update all layer's visualization.
 
-			let layerIndexList = this.levelMap[ i ];
+			this.updateVis();
 
-			for ( let j = 0; j < layerIndexList.length; j ++ ) {
+		} else {
 
-				let layerIndex = layerIndexList[ j ];
+			// If no prediction model be loaded into TSP, just update the input layer.
 
-				let layer = this.layers[ layerIndex ];
-
-				layer.setEnvironment( this.scene, this );
-				layer.loadModelConfig( this.configuration );
-				layer.assemble( layerIndex );
-
-			}
+			this.updateInputVis();
 
 		}
 
 	},
 
-	createModelElements: function() {
+	/**
+	 * clear(), clear all layers' visualization and model's input data.
+	 */
 
-		let centers = this.createLayerCenters();
-
-		let depths = ActualDepthCalculator.calculateDepths( this.layers );
+	clear: function() {
 
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
-			this.layers[ i ].init( centers[ i ], depths[ i ] );
+			this.layers[ i ].clear();
 
 		}
 
+		this.inputValue = undefined;
+
 	},
+
+	/**
+	 * reset(), reset the model.
+	 *
+	 * Three steps:
+	 * 1. clear the layer visualization;
+	 * 2. reset TrackballControl;
+	 * 3. update camera setting in TSP.
+	 */
+
+	// TODO: add rearrange.
+
+	reset: function() {
+
+		this.clear();
+		this.cameraControls.reset();
+		this.updateCamera();
+
+	},
+
+	/**
+	 * onClick(), Handler for move click event.
+	 *
+	 * @param event
+	 */
 
 	onClick: function( event ) {
 
@@ -118,6 +149,8 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 					selectedLayer.handleClick( selectedElement );
 
+					// Rearrange layer
+
 					let translateTime = selectedLayer.openTime;
 					let level = this.layerLookupMap[ selectedElement.layerIndex ];
 
@@ -133,9 +166,15 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	},
 
+	/**
+	 * onMouseMove(), Handler for mouse move event.
+	 *
+	 * @param event
+	 */
+
 	onMouseMove: function( event ) {
 
-		// calculate mouse position..
+		// calculate mouse position.
 
 		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 		this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -180,19 +219,63 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	},
 
-	predict: function() {
+	/**
+	 * initTSPModel(), call all functions required in model initialization process.
+	 */
+
+	initTSPModel: function() {
+
+		this.createGraph();
+		this.assembleLayers();
+		this.updateCamera( this.layers.length );
+		this.createModelElements();
+		this.registerModelEvent();
+		this.animate();
+
+		this.isInitialized = true;
 
 	},
 
-	clear: function() {
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for Model.
+	 * SubClasses ( specific Model ) override these abstract methods.
+	 *
+	 * ============
+	 */
 
-	},
+	loadModelConfig: function( config ) {
 
-	reset: function() {
+		if ( config.inputs !== undefined ) {
 
-	},
+			this.inputs = config.inputs;
 
-	loadModelConfig: function() {
+		} else {
+
+			console.error( "\"inputs\" is required for Model." );
+
+		}
+
+		if ( config.outputs !== undefined ) {
+
+			this.outputs = config.outputs;
+
+		} else {
+
+			console.error( "\"outputs\" is required for Model." );
+
+		}
+
+		if ( config.outputsOrder !== undefined ) {
+
+			this.outputsOrder = config.outputsOrder;
+
+		} else {
+
+			console.error( "\"outputsOrder\" is required for Model." );
+
+		}
 
 	},
 
@@ -208,6 +291,71 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		this.modelDepth = this.levelMap.length;
 
 		this.levelCenters = LayerLocator.calculateLevelCenters( this.modelDepth );
+
+	},
+
+	assembleLayers: function() {
+
+		for ( let i = 0; i < this.levelMap.length; i ++ ) {
+
+			let layerIndexList = this.levelMap[ i ];
+
+			for ( let j = 0; j < layerIndexList.length; j ++ ) {
+
+				let layerIndex = layerIndexList[ j ];
+
+				let layer = this.layers[ layerIndex ];
+
+				layer.setEnvironment( this.scene, this );
+				layer.loadModelConfig( this.configuration );
+				layer.assemble( layerIndex );
+
+			}
+
+		}
+
+	},
+
+	createModelElements: function() {
+
+		let centers = this.createLayerCenters();
+
+		let depths = ActualDepthCalculator.calculateDepths( this.layers );
+
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+
+			this.layers[ i ].init( centers[ i ], depths[ i ] );
+
+		}
+
+	},
+
+	updateVis: function() {
+
+		this.updateInputVis();
+		this.updateLayerVis();
+
+	},
+
+	updateInputVis: function() {
+
+		for ( let i = 0; i < this.inputs.length; i ++ ) {
+
+			this.inputs[ i ].updateVis( this.inputValue[ i ] );
+
+		}
+
+	},
+
+	updateLayerVis: function() {
+
+		for ( let i = 0; i < this.predictResult.length; i ++ ) {
+
+			let layer = this.getLayerByName( this.outputsOrder[ i ] );
+
+			layer.updateVis( this.predictResult[ i ] );
+
+		}
 
 	},
 

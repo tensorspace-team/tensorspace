@@ -14,6 +14,7 @@ let YoloTweenFactory = ( function() {
 			ratio: 0
 
 		};
+
 		let end = {
 
 			ratio: 1
@@ -41,6 +42,7 @@ let YoloTweenFactory = ( function() {
 
 		} ).onStart( function() {
 
+			layer.isWaitOpen = false;
 			layer.isOpen = true;
 
 		} ).onComplete( function() {
@@ -50,6 +52,8 @@ let YoloTweenFactory = ( function() {
 		} );
 
 		yoloOutputTween.start();
+
+		layer.isWaitOpen = true;
 
 	}
 
@@ -93,11 +97,15 @@ let YoloTweenFactory = ( function() {
 
 			layer.disposeSegregationElements();
 			layer.initAggregationElement();
+
+			layer.isWaitClose = false;
 			layer.isOpen = false;
 
 		} );
 
 		fmTween.start();
+
+		layer.isWaitClose = true;
 
 	}
 

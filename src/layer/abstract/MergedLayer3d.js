@@ -101,7 +101,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	 *
 	 * MergedLayer3d overrides MergedLayer's function:
 	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, loadModelConfig,
-	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, provideRelativeElements
+	 * calcCloseButtonSize, calcCloseButtonPos, getRelativeElements, provideRelativeElements, getBoundingWidth
 	 *
 	 * ============
 	 */
@@ -529,6 +529,34 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	},
 
 	/**
+	 * getBoundingWidth(), provide bounding box's width based on layer's status.
+	 *
+	 * @return { number }
+	 */
+
+	getBoundingWidth: function() {
+
+		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
+
+			let maxX = this.openFmCenters[ 0 ].x;
+
+			for ( let i = 0; i < this.openFmCenters.length; i ++ ) {
+
+				maxX = this.openFmCenters[ i ].x > maxX ? this.openFmCenters[ i ].x : maxX;
+
+			}
+
+			return maxX - this.calcCloseButtonPos().x + this.calcCloseButtonSize() + this.actualWidth;
+
+		} else {
+
+			return this.actualWidth;
+
+		}
+
+	},
+
+	/**
 	 * ============
 	 *
 	 * Functions above override base class MergedLayer's abstract method.
@@ -773,17 +801,22 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		let layerOutputValues = ChannelDataGenerator.generateChannelData( this.neuralValue, this.depth );
 
-		// Get colors to render the surface of feature maps.
-
-		let colors = ColorUtils.getAdjustValues( layerOutputValues, this.minOpacity );
-
 		let featureMapSize = this.width * this.height;
 
 		// Each feature map handler execute its own update function.
 
 		for ( let i = 0; i < this.depth; i ++ ) {
 
-			this.segregationHandlers[ i ].updateVis( colors.slice( i * featureMapSize, ( i + 1 ) * featureMapSize ) );
+			// Get colors to render the surface of feature maps.
+
+			let colors = ColorUtils.getAdjustValues(
+
+				layerOutputValues.slice( i * featureMapSize, ( i + 1 ) * featureMapSize ),
+				this.minOpacity
+
+			);
+
+			this.segregationHandlers[ i ].updateVis( colors );
 
 		}
 
