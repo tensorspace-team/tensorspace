@@ -134,7 +134,7 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 *
      * Override for any clicked event required.
 	 *
-	 * @param { THREE.Object } clickedElement, clicked element from model Raycaster.
+	 * @param { THREE.Object } clickedElement, clicked element from Raycaster.
 	 */
 
 	handleClick: function( clickedElement ) {
@@ -147,7 +147,7 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 *
 	 * Override for any hover event required.
 	 *
-	 * @param { THREE.Object } hoveredElement, hovered element from model Raycaster.
+	 * @param { THREE.Object } hoveredElement, hovered element from Raycaster.
 	 */
 
 	handleHoverIn: function( hoveredElement ) {
