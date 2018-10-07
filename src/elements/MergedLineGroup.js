@@ -125,8 +125,6 @@ MergedLineGroup.prototype = {
 
 		}
 
-		console.log( curveLineVertices );
-
 		return {
 
 			straight: {
