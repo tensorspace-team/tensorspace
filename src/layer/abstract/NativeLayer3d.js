@@ -1,5 +1,6 @@
 /**
  * @author syt123450 / https://github.com/syt123450
+ * @author zchholmes / https://github.com/zchholmes
  */
 
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
@@ -11,9 +12,12 @@ import { MapAggregation } from "../../elements/MapAggregation";
 import { NativeLayer } from "./NativeLayer";
 
 /**
- * NativeLayer3d, abstract layer, can not be initialized by TensorSpace user.
- * Base class for Conv2d, Activation3d, GlobalPooling2d, BasicLayer3d, Pooling2d, Reshape2d, UpSampling2d, Cropping2d
- * The characteristic for classes which inherit from NativeLayer3d is that their output shape has three dimension, for example, [width, height, depth]
+ * NativeLayer3d, abstract layer, should not be initialized directly.
+ * Output shape of NativeLayer3d is 3 dimensional: [width, height, depth]
+ * Base class for:
+ *      Conv2d, GlobalPooling2d, Pooling2d,
+ *      Reshape2d, UpSampling2d, Cropping2d,
+ *      Activation3d, BasicLayer3d.
  *
  * @param config, user's configuration for NativeLayer3d
  * @constructor
@@ -36,7 +40,7 @@ function NativeLayer3d( config ) {
 	this.depth = undefined;
 
 	/**
-	 * Feature map's handlers list.
+     * Handler list of feature map.
 	 *
 	 * @type { Array }
 	 */
@@ -44,7 +48,7 @@ function NativeLayer3d( config ) {
 	this.segregationHandlers = [];
 
 	/**
-	 * Feature maps's centers when layer is totally open.
+     * Feature map centers while this.isOpen === true.
 	 *
 	 * @type { Array }
 	 */
@@ -52,7 +56,7 @@ function NativeLayer3d( config ) {
 	this.openFmCenters = [];
 
 	/**
-	 * Feature maps' centers when layer is closed.
+     * Feature map centers while this.isOpen === false.
 	 *
 	 * @type { Array }
 	 */
@@ -60,9 +64,9 @@ function NativeLayer3d( config ) {
 	this.closeFmCenters = [];
 
 	/**
-	 * Feature maps arrange mode.
+	 * Feature map shapes while expanded
 	 * "line" or "rect", default to "rect".
-	 * Defined in "ModelConfiguration.js".
+	 * Check "ModelConfiguration.js" for more details.
 	 *
 	 * @type { string }
 	 */
@@ -72,7 +76,7 @@ function NativeLayer3d( config ) {
 	/**
 	 * Aggregation mode.
 	 * "max" or "average", default to "average".
-	 * Defined in "ModelConfiguration.js".
+     * Check "ModelConfiguration.js" for more details.
 	 *
 	 * @type { string }
 	 */
@@ -80,8 +84,11 @@ function NativeLayer3d( config ) {
 	this.aggregationStrategy = undefined;
 
 	/**
-	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * Label to define whether layer need an "output value" from ML model (tfjs, keras, or tf).
 	 * False means that user need to add value for NativeLayer3d when they are preprocessing multi-output for the model.
+     *
+     * Config on whether to calculate the output shape automatically or not.
+     * "false" means user has to provide outputShape while preprocessing ML model.
 	 *
 	 * @type { boolean }
 	 */
@@ -97,9 +104,9 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	/**
 	 * ============
 	 *
-	 * Functions below override base class NativeLayer's abstract method
+	 * Functions below override abstract functions of base class NativeLayer.
 	 *
-	 * NativeLayer3d overrides NativeLayer's function:
+	 * NativeLayer3d overrides (from NativeLayer):
 	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut
 	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements, getBoundingWidth
 	 *
@@ -107,7 +114,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 */
 
 	/**
-	 * init() create actual THREE.Object in NativeLayer3d, warp them into a group, and add it to THREE.js's scene.
+	 * init() creates actual THREE.Object in NativeLayer3d, warp them into a group, and add it to THREE.js's scene.
 	 *
 	 * Model passes two parameters, center and actualDepth, to NativeLayer3d when call init() to initialize NativeLayer3d.
 	 *
@@ -120,7 +127,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 		this.center = center;
 		this.actualDepth = actualDepth;
 
-		// Init a neuralGroup as the wrapper for all THREE.Object in NativeLayer3d.
+		// Init a neuralGroup as the wrapper for all THREE.Objects in NativeLayer3d.
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
@@ -138,7 +145,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 			if ( this.isOpen ) {
 
-				// Init all feature maps and display them to totally opened positions.
+                // Init feature maps with expanded positions.
 
 				this.initSegregationElements( this.openFmCenters );
 
@@ -148,7 +155,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 			} else {
 
-				// Init aggregation when layer is closed.
+				// Init aggregation.
 
 				this.initAggregationElement();
 
@@ -156,7 +163,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		}
 
-		// Add the wrapper object to the actual THREE.js scene.
+		// Add wrapper object to THREE.js scene.
 
 		this.scene.add( this.neuralGroup );
 
@@ -167,7 +174,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
-	 * updateValue() accept layer output value from model, update layer visualization if required.
+	 * updateValue() accepts layer output value from model, updates layer visualization if required.
 	 *
 	 * Model passes layer's output value to layer through updateValue method.
 	 *
@@ -176,19 +183,19 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	updateValue: function( value ) {
 
-		// Store layer output value in "neuralValue" attribute, this attribute can be get by TensorSpace user.
+        // Provide external accessibility of layer output
 
 		this.neuralValue = value;
 
 		if ( this.isOpen ) {
 
-			// If layer is open, update feature maps' visualization.
+			// If open, refresh and render feature maps.
 
 			this.updateSegregationVis();
 
 		} else {
 
-			// If layer is closed, update feature maps' aggregation's visualization.
+			// If close, refresh and render aggregation.
 
 			this.updateAggregationVis();
 
@@ -204,7 +211,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		if ( this.neuralValue !== undefined ) {
 
-			// Use handlers to clear visualization.
+            // Clean up feature maps by handlers.
 
 			if ( this.isOpen ) {
 
@@ -220,7 +227,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 			}
 
-			// Clear layer data.
+			// Clean up layer data.
 
 			this.neuralValue = undefined;
 
@@ -229,22 +236,22 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
-	 * handleClick() If clickable element in this layer is clicked, execute this handle function.
+     * handleClick() be executed while clickable element is clicked.
 	 *
-	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
+	 * @param { THREE.Object } clickedElement, clicked element from Raycaster.
 	 */
 
 	handleClick: function( clickedElement ) {
 
 		if ( clickedElement.elementType === "aggregationElement" ) {
 
-			// If aggregation element is clicked, open layer.
+			// If clicked aggregation element, open layer.
 
 			this.openLayer();
 
 		} else if ( clickedElement.elementType === "closeButton" ) {
 
-			// If close button is clicked, close layer.
+			// If clicked close button, close layer.
 
 			this.closeLayer();
 
@@ -253,14 +260,14 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
-	 * handleHoverIn() If hoverable element in this layer picked by Raycaster, execute this handle function.
+     * handleHoverIn() be executed while any hoverable element is detected by Raycaster.
 	 *
-	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
+	 * @param { THREE.Object } hoveredElement, hovered element from Raycaster.
 	 */
 
 	handleHoverIn: function( hoveredElement ) {
 
-		// If relationSystem is enabled, show relation lines.
+		// To enable relationSystem to show relation lines.
 
 		if ( this.relationSystem ) {
 
@@ -268,7 +275,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		}
 
-		// If textSystem is enabled, show hint text, for example, show feature map size.
+        // To enable textSystem to show hint text. For example, to show feature map size.
 
 		if ( this.textSystem ) {
 
@@ -279,12 +286,12 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
-	 * handleHoverOut() called by model if mouse hover out of this layer.
+     * handleHoverOut() called when mouse hover out.
 	 */
 
 	handleHoverOut: function() {
 
-		// If relationSystem is enabled, hide relation lines.
+		// To enable relationSystem to hide relation lines.
 
 		if ( this.relationSystem ) {
 
@@ -292,7 +299,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		}
 
-		// If textSystem is enabled, hide hint text, for example, hide feature map size.
+		// To enable textSystem to hide hint text. For example, to hide feature map size.
 
 		if ( this.textSystem ) {
 
@@ -303,10 +310,10 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
-	 * calcCloseButtonSize() get close button size.
-	 * Called by initCloseButton function in abstract class "Layer",
+	 * calcCloseButtonSize() calculate close button size.
+     * Called by "initCloseButton" from "Layer"
 	 *
-	 * @return { number } size, close button size
+	 * @return { number } size, calculated close button size
 	 */
 
 	calcCloseButtonSize: function() {
@@ -320,10 +327,10 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**                                                                                                                                                 y        y                        /**
-	 * calcCloseButtonPos() get close button position.
-	 * Called by initCloseButton function in abstract class "Layer",
+	 * calcCloseButtonPos() calculate close button position.
+     * Called by "initCloseButton" from "Layer"
 	 *
-	 * @return { JSON } position, close button position, relative to layer.
+	 * @return { JSON } position, calculated close button position, relative to layer.
 	 */
 
 	calcCloseButtonPos: function() {
@@ -344,9 +351,9 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	/**
 	 * provideRelativeElements() return relative elements.
 	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+     * Bridge design patten:
+     * 1. "getRelativeElements" request for relative elements from previous layer;
+     * 2. "provideRelativeElements" of previous layer response to request, returns relative elements.
 	 *
 	 * @param { JSON } request, parameter configured by request layer
 	 * @return { Object } { isOpen: boolean, elementList: elements }
@@ -378,9 +385,11 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 			if ( request.index !== undefined ) {
 
+                // If index attribute is set in request.
+
 				if ( this.isOpen ) {
 
-					// If index attribute is set in request, and layer is open, return feature map element which has the same index.
+					// If layer is open, return feature map element with the same index.
 
 					relativeElements.push( this.segregationHandlers[ request.index ].getElement() );
 
@@ -436,7 +445,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	/**
 	 * ============
 	 *
-	 * Functions above override base class NativeLayer's abstract method.
+	 * Functions above override abstract functions of base class "NativeLayer".
 	 *
 	 * ============
 	 */
@@ -460,16 +469,14 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	},
 
 	/**
-	 * closeLayer() close NativeLayer3d, switch layer status from "open" to "close".
-	 *
-	 * This API is exposed to TensorSpace user.
+	 * closeLayer() to collapse feature maps of NativeLayer3d. Switch layer status from "open" to "close".
 	 */
 
 	closeLayer: function() {
 
 		if ( this.isOpen ) {
 
-			// MapTransitionFactory handles actual close animation, checkout "MapTransitionTween.js" for more information.
+			// MapTransitionFactory handles close animation, checkout "MapTransitionTween.js" for more details.
 
 			MapTransitionFactory.closeLayer( this );
 

@@ -1,14 +1,20 @@
 /**
  * @author syt123450 / https://github.com/syt123450
+ * @author zchholmes / https://github.com/zchholmes
  */
 
 import { Layer } from "./Layer";
 import { BasicLineGroup } from "../../elements/BasicLineGroup";
 
 /**
- * NativeLayer, abstract layer, can not be initialized by TensorSpace user.
- * Base class for NativeLayer1d, NativeLayer2d, NativeLayer3d, Input1d, Input2d, Input3d, Output1d, Output2d, OutputDetection, YoloGrid.
- * NativeLayer add basic line group character into "Layer".
+ * NativeLayer, abstract layer, should not be initialized directly.
+ * NativeLayer inherits from "Layer".
+ * NativeLayer extends "Layer" to include basic line group.
+ * Base class for:
+ *      NativeLayer1d, NativeLayer2d, NativeLayer3d,
+ *      Input1d, Input2d, Input3d,
+ *      Output1d, Output2d,
+ *      OutputDetection, YoloGrid.
  *
  * @param config, user's configuration for NativeLayer.
  * @constructor
@@ -21,7 +27,7 @@ function NativeLayer( config ) {
 	Layer.call( this, config );
 
 	/**
-	 * Store handler for line group.
+	 * Hold handler for line group.
 	 *
 	 * @type { Object }
 	 */
@@ -29,8 +35,8 @@ function NativeLayer( config ) {
 	this.lineGroupHandler = undefined;
 
 	/**
-	 * Identity whether the layer is merged layer.
-	 * The different between native layer and merge layer is that the the native layer's "isMerged" attribute is false.
+	 * Identify whether layer is a merged layer or not.
+     * If it's a NativeLayer, "isMerged" is always false.
 	 *
 	 * @type {boolean}
 	 */
@@ -42,7 +48,7 @@ function NativeLayer( config ) {
 NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
-	 * addLineGroup() add basic line group element to layer, store its handler.
+	 * addLineGroup() adds basic line group element to layer and holds the handler.
 	 */
 
 	addLineGroup: function() {
@@ -74,15 +80,15 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	/**
 	 * ============
 	 *
-	 * Functions below are abstract method for Layer.
-	 * SubClasses ( specific layers ) override these abstract method to get Layer's characters.
+	 * Functions below are abstract for Layer.
+	 * SubClasses ( specific layers ) override these abstract functions to get Layer's features.
 	 *
 	 * ============
 	 */
 
 	/**
 	 * init() abstract method
-	 * Create actual THREE.Object in Layer, warp them into a group, and add it to THREE.js's scene.
+	 * Create actual THREE.Object, wrap them into a group, and add to THREE.js scene.
 	 *
 	 * Model passes two parameters, center and actualDepth, to Layer when call init() to initialize Layer.
 	 *
@@ -96,9 +102,10 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
 	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * Configure layer index in the model
+     * Calculate the shape and parameters based on previous layer.
 	 *
-	 * Override this function to get information from previous layer
+	 * Override this function to get information from previous layer.
 	 *
 	 * @param { int } layerIndex, this layer's order in model
 	 */
@@ -109,11 +116,11 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
 	 * updateValue() abstract method
-	 * Accept layer output value from model, update layer visualization if required.
+	 * Accept layer output value from model, update layer visualization if necessary.
 	 *
-	 * Model passes layer's output value to layer through updateValue method.
+	 * Model passes layer output value to layer through updateValue method.
 	 *
-	 * Override this function to implement layer's own value update strategy.
+     * Override for customized layer update strategy.
 	 *
 	 * @param { double[] } value, neural output value.
 	 */
@@ -126,7 +133,7 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 * clear() abstract method
 	 * Clear data and visualization in layer.
 	 *
-	 * Override this function to implement layer's own clear function.
+     * Override for customized layer clean up.
 	 */
 
 	clear: function() {
@@ -135,11 +142,11 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
 	 * handleClick() abstract method
-	 * Event callback, if clickable element in this layer is clicked, execute this handle function.
+     * Event callback, be executed if any clickable element is clicked.
 	 *
-	 * Override this function if layer has any clicked event.
+     * Override for any clicked event required.
 	 *
-	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
+	 * @param { THREE.Object } clickedElement, clicked element from Raycaster.
 	 */
 
 	handleClick: function( clickedElement ) {
@@ -148,11 +155,11 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
 	 * handleHoverIn() abstract method
-	 * Event callback, if hoverable element in this layer picked by Raycaster, execute this handle function.
+     * Event callback, be executed if any hoverable element is detected by Raycaster.
 	 *
-	 * Override this function if layer has any hover event.
+	 * Override for any hover event required.
 	 *
-	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
+	 * @param { THREE.Object } hoveredElement, hovered element from Raycaster.
 	 */
 
 	handleHoverIn: function( hoveredElement ) {
@@ -160,10 +167,10 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * handleHoverOut() abstract method
-	 * Event callback, called by model if mouse hover out of this layer.
+	 * handleHoverOut() abstract method.
+     * Event callback, called when mouse hover out.
 	 *
-	 * Override this function if layer has some hover event.
+     * Override for any hover out event required.
 	 */
 
 	handleHoverOut: function() {
@@ -171,10 +178,10 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * loadModelConfig() abstract method
-	 * Load model's configuration into layer object.
+	 * loadModelConfig() abstract method.
+     * Load model configurations to layer object.
 	 *
-	 * Override this function if there are some specific model configurations for layer.
+     * Override for any customized model configurations for layer.
 	 *
 	 * @param { JSON } modelConfig, default and user's configuration for model
 	 */
@@ -184,10 +191,10 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * calcCloseButtonSize() abstract method
-	 * Called by initCloseButton function in abstract class "Layer", get close button size.
+	 * calcCloseButtonSize() abstract method.
+     * Called for providing close button size to initCloseButton in "Layer".
 	 *
-	 * Override this function to implement layer's own button size calculation strategy.
+     * Override for customized button size calculation strategy.
 	 *
 	 * @return { number } size, close button size
 	 */
@@ -200,11 +207,11 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**                                                                                                                                                 y        y                        /**
 	 * calcCloseButtonPos() abstract method
-	 * Called by initCloseButton function in abstract class "Layer", get close button position.
+     * Called for providing close button position to initCloseButton in "Layer".
 	 *
-	 * Override this function to implement layer's own button position calculation strategy.
+     * Override for customized button position calculation strategy.
 	 *
-	 * @return { Object } close button position, { x: double, y: double, z: double }, relative to layer.
+	 * @return { Object } close button position, { x: double, y: double, z: double }, relative to layer position.
 	 */
 
 	calcCloseButtonPos: function() {
@@ -219,25 +226,25 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
 	 * ============
-	 *
-	 * As native layer add basic line group element to layer,
-	 * the inherited layer need to implement two more abstract class than directly implement "Layer",
-	 * "getRelativeElements" and "provideRelativeElements" to enable line system.
+     *
+     * Since NativeLayer adds basic line group based on "Layer",
+     * it is required to implement "getRelativeElements" and "provideRelativeElements" to enable line system.
 	 *
 	 * ============
 	 */
 
 	/**
-	 * getRelativeElements() abstract method
+	 * getRelativeElements() abstract function
 	 * Get relative element in last layer for relative lines based on given hovered element.
 	 *
 	 * Override this function to define relative element from previous layer.
+     * Override to define relative element from previous layer.
 	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 * Bridge design patten:
+	 * 1. "getRelativeElements" request for relative elements from previous layer;
+	 * 2. "provideRelativeElements" of previous layer response to request, returns relative elements.
 	 *
-	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @param { THREE.Object } selectedElement, hovered element detected by Raycaster
 	 * @return { THREE.Object[] } relativeElements
 	 */
 
@@ -248,14 +255,15 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	},
 
 	/**
-	 * provideRelativeElements() abstract method
+	 * provideRelativeElements() abstract function
 	 * Return relative elements.
 	 *
 	 * Override this function to return relative elements based on request information.
+     * Override to return relative elements based on request.
 	 *
-	 * Use bridge design patten:
-	 * 1. "getRelativeElements" send request to previous layer for relative elements;
-	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+     * Bridge design patten:
+     * 1. "getRelativeElements" request for relative elements from previous layer;
+     * 2. "provideRelativeElements" of previous layer response to request, returns relative elements.
 	 *
 	 * @param { JSON } request, parameter configured by request layer
 	 * @return { Object } { isOpen: boolean, elementList: THREE.Object[] }
