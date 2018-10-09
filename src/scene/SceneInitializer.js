@@ -63,7 +63,7 @@ SceneInitializer.prototype = {
 		} );
 
 		this.renderer.setSize( sceneArea.width, sceneArea.height );
-		container.appendChild( this.renderer.domElement );
+		this.container.appendChild( this.renderer.domElement );
 
 		this.camera = new THREE.PerspectiveCamera();
 		this.camera.fov = 45;
@@ -81,7 +81,7 @@ SceneInitializer.prototype = {
 
 			this.stats = new Stats();
 			this.stats.showPanel( 0 );
-			container.appendChild( this.stats.dom );
+			this.container.appendChild( this.stats.dom );
 
 		}
 
