@@ -5,7 +5,7 @@
 
 #introduce {
 
-    min-height: 680px;
+    height: 680px;
     width: 100%;
     box-sizing: border-box;
     padding-top: 60px;
@@ -15,55 +15,55 @@
 
 #introduce > div {
     margin-top: 30px;
-    padding-left: 80px;
-    padding-right: 80px;
 }
 
 #imgWrapper {
 
-    height: 300px;
-    width: 300px;
+    width: 200px;
     float: left;
 }
 
 #imgWrapper > img {
     padding: 50px;
     box-sizing: border-box;
-    height: 100%;
+    width: 100%;
     float: left;
 }
 
 #description {
-    width: 60%;
-    min-height: 300px;
+    width: calc(100% - 200px);
+    height: 200px;
     float: left;
 }
 
-#description > p {
-
-    margin-top: 40px;
-    width: 100%;
-    font-size: 35px;
-    font-family: SourceSansPro-Regular, sans-serif;
-    padding: 0 40px;
-    box-sizing: border-box;
-
+#description > img {
+    width: 80%;
+    margin-top: 5%;
+    margin-left: 10%;
 }
 
-#description > div {
-
+#iconGroup {
     width: 100%;
-    margin-top: 30px;
+    float: left;
+    margin-top: 10px;
+    position: relative;
 }
 
-#description > div > div {
+#iconGroup > div {
 
     width : 33%;
     float: left;
+    position: relative;
 }
 
-#description > div > div > div {
+#iconGroup > div > div {
 
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
     width: 150px;
     height: 45px;
     line-height: 45px;
@@ -73,21 +73,22 @@
     transition-duration: 0.3s;
 }
 
-#description > div > div > div > img {
+#iconGroup > div > div > img {
 
     float: left;
 }
 
-#description > div > div > div > p {
+#iconGroup > div > div > p {
 
     width: auto;
     float: left;
+    margin-top: 8px;
 }
 
 #toStart {
 
-    color: white;
-    background: linear-gradient(to right, #0071bc, #29abe2);
+    color: #000;
+    background-color: #83FBFF;
     font-family: SourceSansPro-Regular, sans-serif;
 }
 
@@ -105,12 +106,12 @@
 }
 
 #toPlayground {
-    color: #4d4d4d;
-    border: 1px solid #29A6DD;
+    color: #83FBFF;
+    border: 1px solid #83FBFF;
     font-family: SourceSansPro-Regular, sans-serif;
 }
 
-#description #toPlayground {
+#iconGroup #toPlayground {
     line-height: 42px;
 }
 
@@ -151,6 +152,7 @@
 
     width: 100%;
     min-height: 200px;
+    margin-top: 50px;
     float: left;
     clear: both;
 }
@@ -167,16 +169,17 @@
     text-align: center;
     font-size: 20px;
     margin-top: 20px;
-    color: #0071bc;
+    color: #83FBFF;
     font-family: SourceSansPro-Regular, sans-serif;
 }
 
 #explanation > div > div {
     margin-top: 40px;
     font-size: 18px;
-    padding: 0 60px 0 70px;
+    padding: 0 20px;
     margin-bottom: 20px;
     text-align: center;
+    color: #cacaca;
 }
 
 #globeArea {
@@ -223,7 +226,7 @@
     line-height: 50px;
     font-size: 30px;
     margin-bottom: 20px;
-    font-family: SourceSansPro-Regular, sans-serif;
+    font-family: SourceSansPro-Bold, sans-serif;
 
 }
 
@@ -241,13 +244,13 @@
 
     width: 100%;
     height: 35px;
-    color: #0071bc;
+    color: #0340D8;
     line-height: 35px;
-    border: 1px solid #0071bc;
+    border: 1px solid #0340D8;
     border-radius: 5px;
     box-sizing: border-box;
     padding-left: 15px;
-    background-color: #e6e6e6;
+    background-color: #e3e3e3;
     font-family: SourceSansPro-Regular, sans-serif;
 }
 

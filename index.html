@@ -12,22 +12,86 @@
     <link rel="stylesheet" href="assets/csslib/bootstrap.min.css">
     <script src="assets/jslib/bootstrap.min.js"></script>
     <script src="assets/jslib/three.min.js"></script>
+    <script src="assets/jslib/tween.min.js"></script>
+    <script src="assets/jslib/tf.min.js"></script>
+    <script src="assets/jslib/TrackballControls.js"></script>
+    <script src="assets/jslib/tensorspace.min.js"></script>
 
     <link rel="stylesheet" href="assets/csslib/material.fonts.css">
     <link rel="stylesheet" href="assets/csslib/material.min.css">
     <script src="assets/jslib/material.min.js"></script>
 
     <script src="js/index.js"></script>
+    <script src="js/lenetDemo.js"></script>
 
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/common.css">
 
     <style>
 
+        #infoArea {
+            width: 60%;
+            float: left;
+        }
+
+        #modelArea {
+            width: 40%;
+            height: 80%;
+            background-color: #000;
+            float: left;
+        }
+
         #gallery {
 
             width: 100%;
             background: linear-gradient(to bottom, #000, #96D3FF);
+
+        }
+
+        #gallery-background {
+
+            width: 100%;
+            height: 100%;
+            background: url("./assets/img/index/galleryBackground.png") no-repeat;
+
+        }
+
+        #gallery-shadow {
+
+            background: rgba( 0, 0, 0, 0.1 );
+
+        }
+
+        #galleryTitle {
+            color: #83FBFF;
+            text-align: center;
+        }
+
+        #galleryTitleIcon {
+
+            width: 50px;
+
+        }
+
+        #galleryTitleMain {
+
+            font-family: SourceSansPro-Bold, sans-serif;
+            font-size: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+        }
+
+        #galleryTitleIntro {
+
+            font-family: SourceSansPro-Regular, sans-serif;
+            font-size: 18px;
+
+        }
+
+        #cardArea {
+
+            padding: 20px 0;
 
         }
 
@@ -50,8 +114,10 @@
         }
 
         .net-name {
+            font-family: SourceSansPro-Bold, sans-serif;
             text-align: center;
             background-color: #D3ECFF;
+            padding: 10px 0;
         }
 
     </style>
@@ -116,15 +182,20 @@
 
 <div id="introduce">
 
-    <div class="container">
+    <div style="height: 100%;" class="container">
 
-        <div id="imgWrapper">
-            <img src="assets/img/index/logo.png">
-        </div>
+        <div id="infoArea">
 
-        <div id="description">
-            <p>A Declarative 3D Globe Data Visualization Library built with Three.js</p>
-            <div>
+            <div id="imgWrapper">
+                <img src="assets/img/index/logo.png">
+            </div>
+
+            <div id="description">
+                <img src="./assets/img/index/slogan.png">
+            </div>
+
+            <div id="iconGroup">
+
                 <div id="button1">
                     <div id="toStart">
                         <img src="assets/img/index/startIcon.png">
@@ -143,24 +214,31 @@
                         <p>GitHub</p>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div id="explanation">
-            <div>
-                <p>Simplicity</p>
-                <div>Create a 3D global data visualization model with your own data in just four lines of javascript
-                    code
+            </div>
+
+            <div id="explanation">
+                <div>
+                    <p>Simplicity</p>
+                    <div>Create a 3D global data visualization model with your own data in just four lines of javascript
+                        code
+                    </div>
+                </div>
+                <div>
+                    <p>Customization</p>
+                    <div>Design your own globe style with easy to use APIs in Gio.js</div>
+                </div>
+                <div>
+                    <p>Modernization</p>
+                    <div>Build a responsible, fully interactive, rich 3D frontend application using Gio.js</div>
                 </div>
             </div>
-            <div>
-                <p>Customization</p>
-                <div>Design your own globe style with easy to use APIs in Gio.js</div>
-            </div>
-            <div>
-                <p>Modernization</p>
-                <div>Build a responsible, fully interactive, rich 3D frontend application using Gio.js</div>
-            </div>
+
+        </div>
+
+        <div id="modelArea">
+
+
         </div>
 
     </div>
@@ -169,90 +247,98 @@
 
 <div id="gallery">
 
-    <div>
+    <div id="gallery-background">
 
-        <img src="">
-        <p>Gallery</p>
-        <p>See what others have been creating with TensorSpace.js</p>
+        <div id="gallery-shadow">
 
-    </div>
+            <div id="galleryTitle">
 
-    <div class="container">
+                <img id="galleryTitleIcon" src="./assets/img/index/gallery.png">
+                <p id="galleryTitleMain">Gallery</p>
+                <p id="galleryTitleIntro">See what others have been creating with TensorSpace.js</p>
 
-        <div class="card-wrapper">
-
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                    <img class="img33" src="./assets/img/index/33.jpg">
-                </div>
-                <div class="mdl-card__actions mdl-card--border net-name">
-                    LeNet
-                </div>
             </div>
 
-        </div>
+            <div id="cardArea" class="container">
 
-        <div class="card-wrapper">
+                <div class="card-wrapper">
 
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                    <img class="img33" src="./assets/img/index/33.jpg">
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/33.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            LeNet
+                        </div>
+                    </div>
+
                 </div>
-                <div class="mdl-card__actions mdl-card--border net-name">
-                    LeNet
+
+                <div class="card-wrapper">
+
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/33.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            LeNet
+                        </div>
+                    </div>
+
                 </div>
-            </div>
 
-        </div>
+                <div class="card-wrapper">
 
-        <div class="card-wrapper">
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/33.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            LeNet
+                        </div>
+                    </div>
 
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                    <img class="img33" src="./assets/img/index/33.jpg">
                 </div>
-                <div class="mdl-card__actions mdl-card--border net-name">
-                    LeNet
+
+                <div class="card-wrapper">
+
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/33.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            LeNet
+                        </div>
+                    </div>
+
                 </div>
-            </div>
 
-        </div>
+                <div class="card-wrapper">
 
-        <div class="card-wrapper">
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/33.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            LeNet
+                        </div>
+                    </div>
 
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                    <img class="img33" src="./assets/img/index/33.jpg">
                 </div>
-                <div class="mdl-card__actions mdl-card--border net-name">
-                    LeNet
+
+                <div class="card-wrapper">
+
+                    <div class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/33.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            LeNet
+                        </div>
+                    </div>
+
                 </div>
-            </div>
 
-        </div>
-
-        <div class="card-wrapper">
-
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                    <img class="img33" src="./assets/img/index/33.jpg">
-                </div>
-                <div class="mdl-card__actions mdl-card--border net-name">
-                    LeNet
-                </div>
-            </div>
-
-        </div>
-
-        <div class="card-wrapper">
-
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                    <img class="img33" src="./assets/img/index/33.jpg">
-                </div>
-                <div class="mdl-card__actions mdl-card--border net-name">
-                    LeNet
-                </div>
             </div>
 
         </div>
