@@ -1,0 +1,429 @@
+#downloadNav {
+
+    cursor: pointer;
+}
+
+#introduce {
+
+    min-height: 680px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 60px;
+    background-color: #000;
+
+}
+
+#introduce > div {
+    margin-top: 30px;
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+#imgWrapper {
+
+    height: 300px;
+    width: 300px;
+    float: left;
+}
+
+#imgWrapper > img {
+    padding: 50px;
+    box-sizing: border-box;
+    height: 100%;
+    float: left;
+}
+
+#description {
+    width: 60%;
+    min-height: 300px;
+    float: left;
+}
+
+#description > p {
+
+    margin-top: 40px;
+    width: 100%;
+    font-size: 35px;
+    font-family: SourceSansPro-Regular, sans-serif;
+    padding: 0 40px;
+    box-sizing: border-box;
+
+}
+
+#description > div {
+
+    width: 100%;
+    margin-top: 30px;
+}
+
+#description > div > div {
+
+    width : 33%;
+    float: left;
+}
+
+#description > div > div > div {
+
+    width: 150px;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 22px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+#description > div > div > div > img {
+
+    float: left;
+}
+
+#description > div > div > div > p {
+
+    width: auto;
+    float: left;
+}
+
+#toStart {
+
+    color: white;
+    background: linear-gradient(to right, #0071bc, #29abe2);
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+#toStart:hover {
+
+    background: linear-gradient(to right, #0c50bc, #299ae2);
+}
+
+#toStart > img {
+
+    height: 20px;
+    margin-left: 13px;
+    margin-top: 13px;
+    margin-right: 5px;
+}
+
+#toPlayground {
+    color: #4d4d4d;
+    border: 1px solid #29A6DD;
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+#description #toPlayground {
+    line-height: 42px;
+}
+
+#toPlayground:hover {
+
+    border-color: #0c50bc;
+
+}
+
+#toPlayground > img {
+
+    height: 30px;
+    margin-left: 12px;
+    margin-top: 7px;
+    margin-right: 8px;
+}
+
+#toGithub {
+    background-color: #f2f2f2;
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+#toGithub:hover {
+
+    background-color: #e6e6e6;
+}
+
+
+#toGithub > img {
+
+    height: 40px;
+    margin-left: 5px;
+    margin-top: 2px;
+    margin-right: 20px;
+}
+
+#explanation {
+
+    width: 100%;
+    min-height: 200px;
+    float: left;
+    clear: both;
+}
+
+#explanation > div {
+
+    width: 33%;
+    height: 100%;
+    float: left;
+}
+
+#explanation > div > p {
+
+    text-align: center;
+    font-size: 20px;
+    margin-top: 20px;
+    color: #0071bc;
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+#explanation > div > div {
+    margin-top: 40px;
+    font-size: 18px;
+    padding: 0 60px 0 70px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#globeArea {
+    height: 84%;
+    width: 100%;
+    margin-top: 7%;
+}
+
+#download {
+
+    height: 650px;
+    width: 100%;
+    min-height: 650px;
+    background-color: #fff;
+    box-sizing: border-box;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    font-size: 18px;
+    clear: both;
+}
+
+#download > div {
+    height: 100%;
+}
+
+#download > div > div {
+    width: 50%;
+    float: left;
+}
+
+#download > div > div:first-child {
+    text-align: center;
+}
+
+#download > div > div > img {
+    width: 60%;
+    margin-left: 10%;
+    margin-top: 15%;
+}
+
+#download > div > div > header {
+
+    height: 50px;
+    line-height: 50px;
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-family: SourceSansPro-Regular, sans-serif;
+
+}
+
+#download > div > div > p.sub-title {
+
+    height: 30px;
+    line-height: 30px;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#download > div > div > div.code {
+
+    width: 100%;
+    height: 35px;
+    color: #0071bc;
+    line-height: 35px;
+    border: 1px solid #0071bc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding-left: 15px;
+    background-color: #e6e6e6;
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+footer {
+
+    height: 50px;
+    width: 100%;
+    font-size: 16px;
+    color: #fff;
+    line-height: 50px;
+    box-sizing: border-box;
+    background-color: #333;
+    text-align: center;
+    clear: both;
+}
+
+@media (max-width: 1200px) {
+
+    #explanation > div > div {
+        padding: 0 30px;
+    }
+
+}
+
+@media (max-width: 995px) {
+
+    #imgWrapper {
+
+        width: 100%;
+        height: 240px;
+        text-align: center;
+    }
+
+    #imgWrapper > img {
+
+        float: none;
+        padding: 20px;
+    }
+
+    #description {
+
+        width: 100%;
+        min-height: 200px;
+    }
+
+    #description > p {
+
+        margin-top: 10px;
+        text-align: center;
+        font-size: 30px;
+        padding: 0;
+    }
+
+    #explanation > div {
+        width: 100%;
+    }
+
+    #start {
+        height: 1290px;
+    }
+
+    #start > div > div {
+        width: 100%;
+        height: 50%;
+    }
+
+    #start > div > div > header {
+        text-align: center;
+    }
+
+    #start .description {
+        width: 100%;
+    }
+
+    #start .code {
+        width: 100%;
+    }
+
+    #download > div > div {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 0 30px;
+    }
+
+    #download > div > div > header {
+        margin-top: -10px;
+    }
+
+    #download > div > div > img {
+
+        margin-left: 0;
+        margin-top: 5%;
+        width: 300px;
+    }
+
+    #download > div > div > header {
+        text-align: center;
+    }
+
+    #globeWrapper {
+        padding: 50px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    #description > div > #button1, #description > div > #button2 {
+        width: 50%;
+        margin-bottom: 20px;
+        text-align: center;
+        float: left;
+    }
+
+    #description > div > #button3 {
+
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+        float: left;
+
+    }
+
+    #description > div > div > div {
+
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #explanation > div > div {
+
+        font-size: 16px;
+        margin-top: 10px;
+        padding: 0;
+
+    }
+
+}
+
+@media (max-width: 490px) {
+
+    #description > p {
+        font-size: 25px;
+    }
+
+    #description > div > div > div {
+        width: 100px;
+    }
+
+    #description > div > div > div > img {
+        display: none;
+    }
+
+    #description > div > div > div > p {
+        width: 100%;
+        text-align: center;
+    }
+
+    #start {
+        height: 1080px;
+        font-size: 16px;
+    }
+
+    #start > div > div {
+        height: 75%;
+    }
+
+    #globeWrapper {
+        padding: 30px;
+    }
+
+    #start #globeWrapper {
+        height: 30%;
+    }
+
+    #download {
+        font-size: 16px;
+    }
+
+}
