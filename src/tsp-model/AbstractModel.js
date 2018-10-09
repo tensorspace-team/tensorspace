@@ -1,5 +1,6 @@
 /**
  * @author syt123450 / https://github.com/syt123450
+ * @author zchholmes / https://github.com/zchholmes
  */
 
 import { SceneInitializer } from '../scene/SceneInitializer';
@@ -9,7 +10,7 @@ import { TfLoader } from "../loader/TfLoader";
 import { ModelConfiguration } from "../configure/ModelConfiguration";
 
 /**
- * AbstractModel, abstract model, can not be initialized by TensorSpace user.
+ * AbstractModel, abstract model, should not be initialized directly.
  * Base class for Sequential, Model
  *
  * @param container, a DOM element where TSP model will be rendered to.
