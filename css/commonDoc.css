@@ -190,11 +190,12 @@ main > div > ul > li > span {
 }
 
 main > div > ul > li > a {
-    color: #29abe2;
+    color: #0c50bc;
+    font-size: 18px;
 }
 
 main > div > ul > li > a:hover {
-    border-bottom: 1px solid #29abe2;
+    border-bottom: 1px solid #0c50bc;
     cursor: pointer;
 }
 
