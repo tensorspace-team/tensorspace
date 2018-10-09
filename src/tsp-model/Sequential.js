@@ -5,6 +5,7 @@
 import { AbstractModel } from './AbstractModel';
 import { LayerLocator } from "../utils/LayerLocator";
 import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
+import { MouseCaptureHelper } from "../utils/MouseCapturer";
 
 /**
  * A model with linear stack of layers.
@@ -150,8 +151,8 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		// calculate mouse position.
 
-		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-		this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+		this.mouse.x = ( ( event.clientX - MouseCaptureHelper.getElementViewLeft( this.sceneArea ) ) / this.sceneArea.clientWidth ) * 2 - 1;
+		this.mouse.y = - ( ( event.clientY - MouseCaptureHelper.getElementViewTop( this.sceneArea ) )  / this.sceneArea.clientHeight ) * 2 + 1;
 
 		let model = this;
 

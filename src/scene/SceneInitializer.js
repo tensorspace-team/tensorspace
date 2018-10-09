@@ -22,6 +22,8 @@ function SceneInitializer( container ) {
 
 	this.backgroundColor = undefined;
 
+	this.sceneArea = undefined;
+
 }
 
 SceneInitializer.prototype = {
@@ -35,9 +37,9 @@ SceneInitializer.prototype = {
 
 	createScene: function() {
 
-		console.log( "creating scene..." );
-
 		let sceneArea = document.createElement( "canvas" );
+
+		this.sceneArea = sceneArea;
 
 		let cs = getComputedStyle( this.container );
 
@@ -61,7 +63,7 @@ SceneInitializer.prototype = {
 		} );
 
 		this.renderer.setSize( sceneArea.width, sceneArea.height );
-		container.appendChild( this.renderer.domElement );
+		this.container.appendChild( this.renderer.domElement );
 
 		this.camera = new THREE.PerspectiveCamera();
 		this.camera.fov = 45;
@@ -78,8 +80,8 @@ SceneInitializer.prototype = {
 		if ( this.hasStats ) {
 
 			this.stats = new Stats();
-			this.stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-			container.appendChild( this.stats.dom );
+			this.stats.showPanel( 0 );
+			this.container.appendChild( this.stats.dom );
 
 		}
 
@@ -97,11 +99,16 @@ SceneInitializer.prototype = {
 
 	updateCamera: function() {
 
-		console.log( "update camera." );
-
 		let modelDepth = this.layers.length;
 		let controlRatio = getControlRatio( modelDepth );
-		this.camera.position.set( 0, 0, controlRatio * DefaultCameraPos * modelDepth / DefaultLayerDepth );
+
+		this.camera.position.set(
+
+			0,
+			0,
+			controlRatio * DefaultCameraPos * modelDepth / DefaultLayerDepth
+
+		);
 
 		// as strategy can not directly be applied to model when layer depth is too small, add a control ratio to move camera farther
 		function getControlRatio( depth ) {

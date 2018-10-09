@@ -128,7 +128,7 @@
     model.load({
         type: "tfjs",
         url: './acganGenModel/model.json',
-        multiInput: true,
+		multiInputs: true,
         inputShapes: [[100], [1]]
     });
 
@@ -136,7 +136,7 @@
 
     model.init(function() {
 
-        model.predict( [randomData, [3]] );
+        model.predict( [randomData, [0]] );
 		$("#loadingPad").hide();
 
     });
