@@ -498,6 +498,18 @@ footer {
     width: 90%;
 }
 
+.img-label {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.img-label-number {
+
+    font-family: SourceSansPro-Bold, sans-serif;
+
+}
+
 @media (max-width: 1200px) {
     .style-item > div.code {
         font-size: 10px;
