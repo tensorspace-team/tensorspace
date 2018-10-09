@@ -35,6 +35,10 @@ html, body {
     width: 100%;
 }
 
+a, a:hover {
+    color: #0340D8;
+}
+
 a:hover,
 a:link {
     text-decoration: none;
@@ -143,24 +147,24 @@ body > nav  > div > ul > li > a {
 
 body > nav > div > ul > li:hover {
 
-    border-bottom: 3px solid #0071bc;
+    border-bottom: 3px solid #0340D8;
 }
 
 body > nav > div > ul > li:hover > a {
 
     font-weight: bold;
-    color: #0071bc;
+    color: #0340D8;
 }
 
 .now {
 
-    border-bottom: 3px solid #0071bc;
+    border-bottom: 3px solid #0340D8;
 
 }
 
 .now > a {
 
-    color: #0071bc;
+    color: #0340D8;
     font-weight: bold;
 
 }
@@ -184,7 +188,7 @@ body > nav > div > ul > li:hover > a {
 
 #more li a {
 
-    color: #0071bc;
+    color: #0340D8;
 }
 
 #nav-collapse {
@@ -239,13 +243,13 @@ body > nav > div > ul > li:hover > a {
 }
 
 .language > div:hover > div {
-    border-bottom: 2px solid #0071bc;
+    border-bottom: 2px solid #0340D8;
 }
 
 .language > div.selected > div {
-    border-bottom: 2px solid #0071bc;
+    border-bottom: 2px solid #0340D8;
     cursor: default;
-    color: #0071bc;
+    color: #0340D8;
 }
 
 .language > div:first-child {
@@ -260,7 +264,7 @@ body > nav > div > ul > li:hover > a {
 }
 
 .language > div > div:hover > a {
-    color: #0071bc;
+    color: #0340D8;
 }
 
 .github-corner:hover .octo-arm {
