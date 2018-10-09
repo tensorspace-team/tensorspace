@@ -2,9 +2,324 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Layer - Activation3d</title>
+
+    <meta name="description" content="Documentation page of TensorSpace.js">
+    <meta name="author" content="syt123450 / https://github.com/syt123450">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <script src="../../assets/jslib/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../assets/csslib/bootstrap.min.css">
+    <script src="../../assets/jslib/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="../../assets/csslib/material.fonts.css">
+    <link rel="stylesheet" href="../../assets/csslib/material.min.css">
+    <script src="../../assets/jslib/material.min.js"></script>
+
+    <script src="../../js/websiteUtil.js"></script>
+    <script src="../../js/commonDoc.js"></script>
+
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/commonDoc.css">
+
 </head>
 <body>
 
+<nav>
+
+    <div class="container">
+
+        <div id="logo">
+            <a href="../../index.html">
+                <img src="../../assets/img/common/logoSmall.png">
+                <div>TensorSpace.js</div>
+            </a>
+        </div>
+
+        <ul class="hidden-xs">
+            <li class="now"><a href="index.html">Documentation</a></li>
+            <li><a href="../playground/index.html">Playground</a></li>
+            <li><a href="../gallery.html">Gallery</a></li>
+            <li><a href="../../index.html#download">Download</a></li>
+            <li><a href="../developer.html">Developer</a></li>
+
+            <a href="https://github.com/syt123450/Gio.js" class="github-corner" aria-label="View source on Github">
+                <svg viewBox="0 0 250 250" aria-hidden="true">
+                    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+                    <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+                          fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+                    <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+                          fill="currentColor" class="octo-body"></path>
+                </svg>
+            </a>
+
+        </ul>
+
+    </div>
+
+    <ul id="more" class="nav nav-tabs visible-xs">
+        <li>
+            <a>
+                <span class="glyphicon glyphicon-th-large"></span>
+            </a>
+        </li>
+    </ul>
+
+    <ul id="nav-collapse" class="nav navbar-nav">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../index.html#download">Download</a></li>
+        <li><a href="../developer.html">Developer</a></li>
+    </ul>
+
+    <div class="language">
+        <div class="selected">
+            <div>EN</div>
+        </div>
+        <div>
+            <div><a href="index_zh.html">中</a></div>
+        </div>
+    </div>
+
+</nav>
+
+<div id="smallGuide">
+    <span class="glyphicon glyphicon-list"></span>
+</div>
+
+<div id="hideNav">
+
+    <img id="ContentLogo" src="../../assets/images/logo_white.png">
+
+    <header>TensorSpace.js</header>
+
+    <div>
+        <div id="startLabelS">
+            Getting Start<img src="../../assets/img/docs/document_arrow.png">
+        </div>
+        <ul id="startS">
+            <li><a href="startIntro.html">Introduce</a></li>
+            <li><a href="startSystem.html">System Requirements</a></li>
+            <li><a href="startInstall.html">Installation</a></li>
+            <li><a href="startHello.html">TensorSpace Hello World</a></li>
+            <li><a href="startOther.html">More Resources</a></li>
+        </ul>
+    </div>
+    <div>
+        <div id="basicLabelS">
+            Basic Concepts<img src="../../assets/img/docs/document_arrow.png">
+        </div>
+        <ul id="basicS">
+            <li><a href="basicIntro.html">Introduce</a></li>
+            <li><a href="basicModel.html">Model</a></li>
+            <li><a href="basicLayer.html">Layer</a></li>
+            <li><a href="basicPreprocessing.html">Preprocessing</a></li>
+            <li><a href="basicLoad.html">Load Model</a></li>
+            <li><a href="basicPredict.html">Predict</a></li>
+            <li><a href="basicClose.html">Close Button</a></li>
+            <li><a href="basicPaging.html">Paging</a></li>
+            <li><a href="basicMetrics.html">Layer Metrics</a></li>
+            <li><a href="basicDimension.html">Layer Dimension</a></li>
+            <li><a href="basicColor.html">Layer Color</a></li>
+            <li><a href="basicStats.html">Stats</a></li>
+        </ul>
+    </div>
+    <div>
+        <div id="preprocessingLabelS">
+            Model Preprocessing<img src="../../assets/img/docs/document_arrow.png">
+        </div>
+        <ul id="preprocessingS">
+            <li><a href="preIntro.html">Introduce</a></li>
+            <li><a href="preTf.html">TensorFlow</a></li>
+            <li><a href="preKeras.html">Keras</a></li>
+            <li><a href="preTfKeras.html">tf.Keras</a></li>
+            <li><a href="preTfjs.html">TensorFlow.js</a></li>
+        </ul>
+    </div>
+    <div>
+        <div id="modelLabelS">
+            Models<img src="../../assets/img/docs/document_arrow.png">
+        </div>
+        <ul id="modelS">
+            <li><a href="modelIntro.html">Introduce</a></li>
+            <li><a href="modelFunctional.html">Function Model</a></li>
+            <li><a href="modelSequential.html">Sequential Model</a></li>
+        </ul>
+    </div>
+    <div class="open initLabel">
+        <div id="layerLabelS">
+            Layers<img src="../../assets/img/docs/document_arrow.png">
+        </div>
+        <ul id="layerS">
+            <li><a href="layerIntro.html">Introduce</a></li>
+            <li><a href="layerConv1d.html">Conv1d</a></li>
+            <li><a href="layerConv2d.html">Conv2d</a></li>
+            <li><a href="layerTranspose.html">Conv2dTranspose</a></li>
+            <li><a href="layerCropping1d.html">Cropping1d</a></li>
+            <li><a href="layerCropping2d.html">Cropping2d</a></li>
+            <li><a href="layerDense.html">Dense</a></li>
+            <li><a href="layerFlatten.html">Flatten</a></li>
+            <li><a href="layerGlobalPooling1d.html">GlobalPooling1d</a></li>
+            <li><a href="layerGlobalPooling2d.html">GlobalPooling2d</a></li>
+            <li><a href="layerPadding1d.html">Padding1d</a></li>
+            <li><a href="layerPadding2d.html">Padding2d</a></li>
+            <li><a href="layerPooling1d.html">Pooling1d</a></li>
+            <li><a href="layerPooling2d.html">Pooling2d</a></li>
+            <li><a href="layerReshape.html">Reshape</a></li>
+            <li><a href="layerUpSampling1d.html">UpSampling1d</a></li>
+            <li><a href="layerUpSampling2d.html">UpSampling2d</a></li>
+            <li><a href="layerActivation1d.html">Activation1d</a></li>
+            <li><a href="layerActivation2d.html">Activation2d</a></li>
+            <li class="nowLabel">Activation3d</li>
+            <li><a href="layerLayer1d.html">Layer1d</a></li>
+            <li><a href="layerLayer2d.html">Layer2d</a></li>
+            <li><a href="layerLayer3d.html">Layer3d</a></li>
+            <li><a href="layerInput1d.html">Input1d</a></li>
+            <li><a href="layerInput2d.html">Input2d</a></li>
+            <li><a href="layerInput3d.html">Input3d</a></li>
+            <li><a href="layerOutput1d.html">Output1d</a></li>
+            <li><a href="layerOutputDetect.html">OutputDetection</a></li>
+            <li><a href="layerYoloGrid.html">YoloGrid</a></li>
+        </ul>
+    </div>
+    <div>
+        <div id="mergeLabelS">
+            Merge Function<img src="../../assets/img/docs/document_arrow.png">
+        </div>
+        <ul id="mergeS">
+            <li><a href="mergeIntro.html">Introduce</a></li>
+            <li><a href="mergeAdd.html">Add</a></li>
+            <li><a href="mergeSub.html">Subtract</a></li>
+            <li><a href="mergeMul.html">Multiply</a></li>
+            <li><a href="mergeMax.html">Maximum</a></li>
+            <li><a href="mergeAver.html">Average</a></li>
+            <li><a href="mergeConcate.html">Concatenate</a></li>
+        </ul>
+    </div>
+
+    <img id="close" src="../../assets/img/docs/close.png">
+
+</div>
+
+<div id="curtain"></div>
+
+<div id="documentArea" class="container">
+
+    <aside>
+        <div>
+            <div id="startLabel">
+                Getting Start<img src="../../assets/img/docs/document_arrow.png">
+            </div>
+            <ul id="start">
+                <li><a href="startIntro.html">Introduce</a></li>
+                <li><a href="startSystem.html">System Requirements</a></li>
+                <li><a href="startInstall.html">Installation</a></li>
+                <li><a href="startHello.html">TensorSpace Hello World</a></li>
+                <li><a href="startOther.html">More Resources</a></li>
+            </ul>
+        </div>
+        <div>
+            <div id="basicLabel">
+                Basic Concepts<img src="../../assets/img/docs/document_arrow.png">
+            </div>
+            <ul id="basic">
+                <li><a href="basicIntro.html">Introduce</a></li>
+                <li><a href="basicModel.html">Model</a></li>
+                <li><a href="basicLayer.html">Layer</a></li>
+                <li><a href="basicPreprocessing.html">Preprocessing</a></li>
+                <li><a href="basicLoad.html">Load Model</a></li>
+                <li><a href="basicPredict.html">Predict</a></li>
+                <li><a href="basicClose.html">Close Button</a></li>
+                <li><a href="basicPaging.html">Paging</a></li>
+                <li><a href="basicMetrics.html">Layer Metrics</a></li>
+                <li><a href="basicDimension.html">Layer Dimension</a></li>
+                <li><a href="basicColor.html">Layer Color</a></li>
+                <li><a href="basicStats.html">Stats</a></li>
+            </ul>
+        </div>
+        <div>
+            <div id="preprocessingLabel">
+                Model Preprocessing<img src="../../assets/img/docs/document_arrow.png">
+            </div>
+            <ul id="preprocessing">
+                <li><a href="preIntro.html">Introduce</a></li>
+                <li><a href="preTf.html">TensorFlow</a></li>
+                <li><a href="preKeras.html">Keras</a></li>
+                <li><a href="preTfKeras.html">tf.Keras</a></li>
+                <li><a href="preTfjs.html">TensorFlow.js</a></li>
+            </ul>
+        </div>
+        <div>
+            <div id="modelLabel">
+                Models<img src="../../assets/img/docs/document_arrow.png">
+            </div>
+            <ul id="model">
+                <li><a href="modelIntro.html">Introduce</a></li>
+                <li><a href="modelFunctional.html">Function Model</a></li>
+                <li><a href="modelSequential.html">Sequential Model</a></li>
+            </ul>
+        </div>
+        <div class="open initLabel">
+            <div id="layerLabel">
+                Layers<img src="../../assets/img/docs/document_arrow.png">
+            </div>
+            <ul id="layer">
+                <li><a href="layerIntro.html">Introduce</a></li>
+                <li><a href="layerConv1d.html">Conv1d</a></li>
+                <li><a href="layerConv2d.html">Conv2d</a></li>
+                <li><a href="layerTranspose.html">Conv2dTranspose</a></li>
+                <li><a href="layerCropping1d.html">Cropping1d</a></li>
+                <li><a href="layerCropping2d.html">Cropping2d</a></li>
+                <li><a href="layerDense.html">Dense</a></li>
+                <li><a href="layerFlatten.html">Flatten</a></li>
+                <li><a href="layerGlobalPooling1d.html">GlobalPooling1d</a></li>
+                <li><a href="layerGlobalPooling2d.html">GlobalPooling2d</a></li>
+                <li><a href="layerPadding1d.html">Padding1d</a></li>
+                <li><a href="layerPadding2d.html">Padding2d</a></li>
+                <li><a href="layerPooling1d.html">Pooling1d</a></li>
+                <li><a href="layerPooling2d.html">Pooling2d</a></li>
+                <li><a href="layerReshape.html">Reshape</a></li>
+                <li><a href="layerUpSampling1d.html">UpSampling1d</a></li>
+                <li><a href="layerUpSampling2d.html">UpSampling2d</a></li>
+                <li><a href="layerActivation1d.html">Activation1d</a></li>
+                <li><a href="layerActivation2d.html">Activation2d</a></li>
+                <li class="nowLabel">Activation3d</li>
+                <li><a href="layerLayer1d.html">Layer1d</a></li>
+                <li><a href="layerLayer2d.html">Layer2d</a></li>
+                <li><a href="layerLayer3d.html">Layer3d</a></li>
+                <li><a href="layerInput1d.html">Input1d</a></li>
+                <li><a href="layerInput2d.html">Input2d</a></li>
+                <li><a href="layerInput3d.html">Input3d</a></li>
+                <li><a href="layerOutput1d.html">Output1d</a></li>
+                <li><a href="layerOutputDetect.html">OutputDetection</a></li>
+                <li><a href="layerYoloGrid.html">YoloGrid</a></li>
+            </ul>
+        </div>
+        <div>
+            <div id="mergeLabel">
+                Merge Function<img src="../../assets/img/docs/document_arrow.png">
+            </div>
+            <ul id="merge">
+                <li><a href="mergeIntro.html">Introduce</a></li>
+                <li><a href="mergeAdd.html">Add</a></li>
+                <li><a href="mergeSub.html">Subtract</a></li>
+                <li><a href="mergeMul.html">Multiply</a></li>
+                <li><a href="mergeMax.html">Maximum</a></li>
+                <li><a href="mergeAver.html">Average</a></li>
+                <li><a href="mergeConcate.html">Concatenate</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <main>
+        <header>Activation3d</header>
+        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+    </main>
+</div>
+
+<footer>
+    Copyright © 2018 TensorSpace.js. All rights reserved
+</footer>
+
 </body>
+
 </html>
