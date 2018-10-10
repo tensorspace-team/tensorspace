@@ -315,8 +315,38 @@
     </aside>
 
     <main>
+        <p align="center">
+            <img width=400 src="../../assets/img/docs/keras.png">
+        </p>
         <header>Preprocessing Keras Model</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>In this chapter, we will introduce how to preprocess a Keras model to adapt the multiple intermediate layer outputs for applying TensorSpace. If you have read the <a href="preTfKeras.html">tf.keras preprocessing tutorial</a>, since the close relations between the two APIs, the workflows are very similar.</div>
+
+        <div>The sample files that are used for the tutorial are listed below:</div>
+        <div>
+            <ul>
+                <!--<i class="material-icons">filter_center_focus</i>-->
+                <li><a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py">keras_model.py</a></li>
+                <li><a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh">convert_keras.sh</a></li>
+                <li><a href="https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/Keras/models">all model files</a></li>
+            </ul>
+        </div>
+
+        <div>For the tutorial, we use Python 3.6.5 and the following libraries:</div>
+
+        <div>
+            <pre><code class="Python">
+    import tensorflow as tf
+    import numpy as np
+    from keras.models import Sequential, Model
+    from keras.layers import Dense, Input, InputLayer, Conv2D, MaxPooling2D, Reshape, Flatten
+    from keras.models import load_model
+            </code></pre>
+        </div>
+
+
+
+
     </main>
 </div>
 
