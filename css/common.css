@@ -28,6 +28,21 @@
     src: url('../fonts/SourceSansPro-Regular.ttf');
 }
 
+@font-face {
+    font-family: "PingFang-SC-Light";
+    src: url('../fonts/PingFang-SC-Light.ttf');
+}
+
+@font-face {
+    font-family: "PingFang-SC-Regular";
+    src: url('../fonts/PingFang-SC-Regular.ttf');
+}
+
+@font-face {
+    font-family: "PingFang-SC-Bold";
+    src: url('../fonts/PingFang-SC-Bold.ttf');
+}
+
 html, body {
     margin: 0;
     padding: 0;
