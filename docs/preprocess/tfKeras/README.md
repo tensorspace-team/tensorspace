@@ -4,11 +4,11 @@
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
 </p>
 
-In this chapter, we will introduce how to preprocess a tf.keras model to adapt the multiple intermediate layer outputs for applying TensorSpace. If you have read the [Keras preprocessing tutorial](https://github.com/syt123450/tensorspace/wiki/%5BTutorial%5D--Keras-preprocessing-tutorial), since the close relations between the two APIs, the workflows are very similar.
+In this chapter, we will introduce how to preprocess a tf.keras model to adapt the multiple intermediate layer outputs for applying TensorSpace. If you have read the [Keras preprocessing tutorial](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/README.md), since the close relations between the two APIs, the workflows are very similar.
 
 The sample files that are used for the tutorial are listed below:
-* [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/tf_keras_model.py)
-* [convert_tf_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/convert_tf_keras.sh)
+* [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py)
+* [convert_tf_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_sh/convert_tf_keras.sh)
 * [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/tfKeras/models)
 
 For the tutorial, we use Python 3.6.5 and the following libraries:
