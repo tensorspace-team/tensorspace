@@ -19,6 +19,10 @@
     <script src="../../js/websiteUtil.js"></script>
     <script src="../../js/commonDoc.js"></script>
 
+    <link rel="stylesheet" href="../../assets/csslib/mono-blue.css">
+    <script src="../../assets/jslib/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/commonDoc.css">
 
@@ -312,7 +316,22 @@
 
     <main>
         <header>Preprocessing tf.Keras Model</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <pre><code class="Python">
+def create_sequential_model():
+    single_output_model = Sequential([
+        InputLayer(input_shape=(28, 28)),
+        Reshape((28,28,1),input_shape=(28,28,)),
+        Conv2D(filters=6, kernel_size=5, strides=1, input_shape=(28, 28, 1), name="Conv2D_1"),
+        MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name="MaxPooling2D_1"),
+        Conv2D(filters=16, kernel_size=5, strides=1, name="Conv2D_2"),
+        MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name="MaxPooling2D_2"),
+        Flatten(),
+        Dense(120, activation="relu", name="Dense_1"),
+        Dense(84, activation="relu", name="Dense_2"),
+        Dense(10, activation="softmax", name="Softmax")
+    ])
+    return single_output_model
+        </code></pre>
     </main>
 </div>
 
