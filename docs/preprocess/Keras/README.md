@@ -7,8 +7,8 @@
 In this chapter, we will introduce how to preprocess a Keras model to adapt the multiple intermediate layer outputs for applying TensorSpace. If you have read the [tf.keras preprocessing tutorial](https://github.com/syt123450/tensorspace/wiki/%5BTutorial%5D--tf.keras-preprocessing-tutorial), since the close relations between the two APIs, the workflows are very similar.
 
 The sample files that are used for the tutorial are listed below:
-* [keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/keras_model.py)
-* [convert_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/convert_keras.sh)
+* [keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py)
+* [convert_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh)
 * [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/Keras/models)
 
 For the tutorial, we use Python 3.6.5 and the following libraries:
