@@ -153,7 +153,6 @@ main > header {
     margin-top: 10px;
     margin-bottom: 30px;
     font-size: 25px;
-    font-family:SourceSansPro-Bold, sans-serif;
     color: #4d4d4d;
     text-align: center;
 }
@@ -213,18 +212,6 @@ main > div > ul > li > div {
     margin-bottom: 10px;
 }
 
-.span_code {
-
-    font-family: SourceCodePro-Regular, sans-serif;
-
-}
-
-.span_bold {
-
-    font-family: SourceSansPro-Bold, sans-serif;
-
-}
-
 .more-content-ul {
     margin-top: 60px;
     margin-left: 10px;
@@ -245,13 +232,11 @@ main > div > ul > li > div {
     width: 90%;
     /*margin-left: 5%;*/
     border-radius: 10px;
-    font-family: SourceCodePro-Regular, sans-serif;
     padding: 10px 30px 10px 30px;
 }
 
 .sub-title {
 
-    font-family: SourceSansPro-Bold, sans-serif;
     margin-top: 20px;
     margin-bottom: 10px;
 }
@@ -503,12 +488,6 @@ footer {
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
-}
-
-.img-label-number {
-
-    font-family: SourceSansPro-Bold, sans-serif;
-
 }
 
 @media (max-width: 1200px) {
