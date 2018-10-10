@@ -1,0 +1,19 @@
+body {
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+main > header {
+    font-family:SourceSansPro-Bold, sans-serif;
+}
+
+.span_bold {
+    font-family: SourceSansPro-Bold, sans-serif;
+}
+
+.sub-title {
+    font-family: SourceSansPro-Bold, sans-serif;
+}
+
+.img-label-number {
+    font-family: SourceSansPro-Bold, sans-serif;
+}
