@@ -1,7 +1,10 @@
-
 ## Preprocessing a TensorFlow.js Model
 
-In the following chapter, we will introduce how to preprocess a TensorFlow.js (or "tfjs") model before applying TensorSpace, which requires the intermediate outputs from internal layers.
+<p align="center">
+<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tfjs.png">
+</p>
+
+In the following chapter, we will introduce how to preprocess a TensorFlow.js (AKA. "tfjs") model before applying TensorSpace, which requires the intermediate outputs from internal layers.
 
 If you are new for a tfjs model, we highly recommend you to go through the [guide](https://js.tensorflow.org/tutorials/) from TensorFlow.js first.
 
@@ -10,38 +13,44 @@ The sample files we used in the tutorial are listed below:
 * [loadTfjsModel.html]() (TBA)
 * [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlowjs/models)(TBA)
 
-For the tutorial, please make sure to import tf.
+For the tutorial, make sure to install and import TensorFlow.js.
+
+To install TensorFlow.js, just use the NPM install:
+```bash
+npm install @tensorflow/tfjs
+```
+
+To import TensorFlow.js, include tf.min.js in html.
 ```html
 <script src="libs/tf.min.js"></script>
 ```
  
-To install TensorFlow.js, just use the pip install:
-```bash
-$ pip install tensorflowjs
-```
+
  
 For preprocessing a tfjs model, we have a general process like:
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tfjs/tfjs_general_process.png" alt="general TFjs process" width="830" >
+<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_general_process.png" alt="general TFjs process" width="830" >
 </p>
 
-In the tutorial, we introduce the process in two use cases:
-* [1. To train a TSP compatible model](#trainModel)
-* [2. To convert an existed model to TSP compatible](#loadModel)
+In this tutorial, we will introduce the process in two use cases:
+* [1. To train a TensorSpace compatible tfjs model](#trainModel)
+* [2. To convert an existing tfjs model to make it compatible with TensorSpace](#loadModel)
 
 All cases use LeNet with MNIST dataset as an example.
 
-### <div id="trainModel">1 To train a TSP compatible model</div>
+### <div id="trainModel">1 To train a TensorSpace compatible tfjs model</div>
 #### 1.1 Train a new model
 If you do not have any existed model in hands, let's train a TensorFlow.js model together.
 
-First, let's take a look on LeNet structure:
+First, let's take a look at the LeNet structure:
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
 </p> 
 
 By following the structure, we can build a basic model:
 ```html
+
+// Initialize layer.
 const input = tf.input({shape: [28, 28, 1]});
 const conv1 = tf.layers.conv2d({
     kernelSize: 5,
@@ -84,13 +93,14 @@ const dense2 = tf.layers.dense({
     activation: 'relu',
     name: 'MyDense_2'
 });
-const dense3 = tf.layers.dense({
+const softmaxLayer = tf.layers.dense({
     units: 10,
     kernelInitializer: 'VarianceScaling',
     activation: 'softmax',
     name: 'MySoftMax'
 });
 
+// Make layer connection.
 const conv1Output = conv1.apply(input);
 const maxPool1Output = maxPool1.apply(conv1Output);
 const conv2Output = conv2.apply(maxPool1Output);
@@ -98,21 +108,22 @@ const maxPool2Output = maxPool2.apply(conv2Output);
 const flattenOutput = flatten.apply(maxPool2Output);
 const dense1Output = dense1.apply(flattenOutput);
 const dense2Output = dense2.apply(dense1Output);
-const dense3Output = dense3.apply(dense2Output);
+const softMaxOutput = softmaxLayer.apply(dense2Output);
 
+// For multiple outputs purpose, we use function tf.model API to build the model.
 const model = tf.model({
     inputs: input,
-    outputs: dense3Output
+    outputs: softMaxOutput
 });
 
 
 ```
 
 **Note:**
-* Because of the limitation of TensorFlow.js library, we have to use the traditional `tf.model()` and `layer.apply` techniques to construct the model. All layer output objects will be used later for the multiple outputs of the encapsulated model.
-* If build the model by `tf.sequential()`, you probably want to check [2. To convert an existed model to TSP compatible](#loadModel).
+* Because of the limitations of TensorFlow.js library, we have to use the traditional `tf.model()` and `layer.apply()` techniques to construct the model. All layer output objects will be used later for the multiple outputs of the encapsulated model.
+* If you build the model by `tf.sequential()`, you probably want to check [2. To convert an existing tfjs model to make it compatible with TensorSpace](#loadModel).
 
-After creating the model, we can load the data, compile the model and train:
+After creating the model, we can load the data, compile the model and train it: (The training script is modified from tfjs's [official tutorial](https://js.tensorflow.org/tutorials/mnist.html))
 ```html
 const LEARNING_RATE = 0.0001;
 const optimizer = tf.train.adam(LEARNING_RATE);
@@ -146,7 +157,10 @@ async function train() {
         if (i % TEST_ITERATION_FREQUENCY === 0) {
             testBatch = data.nextTestBatch(TEST_BATCH_SIZE);
             validationData = [
-                testBatch.xs.reshape([TEST_BATCH_SIZE, 28, 28, 1]), testBatch.labels
+                testBatch.xs.reshape(
+                    [TEST_BATCH_SIZE, 28, 28, 1]
+                ), 
+                testBatch.labels
             ];
         }
 
@@ -174,11 +188,12 @@ await train();
 
 ```
 #### 1.2 Collect internal outputs from intermediate layers
-Since we construct the model by applying the output from the previous layer, we can encapsulate all or our desired layer output into a new model:
+Since we construct the model by applying the output from the previous layer, we can encapsulate all or our desired layer outputs into a new model:
 ```html
 const encModel = tf.model({
     inputs: input,
-    outputs: [conv1Output, maxPool1Output, conv2Output, maxPool2Output, dense1Output, dense2Output, dense3Output]
+    outputs: [conv1Output, maxPool1Output, conv2Output, 
+    maxPool2Output, dense1Output, dense2Output, softMaxOutput]
 });
 ``` 
 
@@ -198,14 +213,21 @@ async function saveModel() {
 
 **Note:**
 * `downloads://` means to download from the browser.
-* For other save method, please check the offical [guide](https://js.tensorflow.org/tutorials/model-save-load.html).
+* There are two types of files created:
+  * `.json` is for the model structure
+  * `.bin` is the trained weights
+* Checkout [tf.Model.save](https://js.tensorflow.org/api/0.13.0/#tf.Model.save) for more information.
+* For other save method, please checkout the offical [guide](https://js.tensorflow.org/tutorials/model-save-load.html).
 
+After downloading from the browser, we shall have the following files:
 
-### <div id="loadModel">2 To convert an existed model to TSP compatible</div>
-#### 2.1 Load an existed model
-To load an existed tfjs model, just simply load like:
+<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_created_model.png" alt="models" width="400" >
+
+### <div id="loadModel">2 To convert an existing tfjs model to make it compatible with TensorSpace</div>
+#### 2.1 Load an existing model
+To load an existing tfjs model, just simply load like:
 ```html
-const loadedModel = await tf.loadModel('/PATH/TO/MODEL/JSON/model.json');
+const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
 ```
 
 #### 2.2 Collect internal outputs from intermediate layers 
@@ -234,13 +256,13 @@ console.log(outputList);
 ```
 
 
-The console output shoule be:
- ```html
-// TO INSERT IMAGE of layer outputs
-```
+The console output shall be:
+
+<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_1.png" alt="layer outputs" width="575" >
 
 **Note:**
-* Since the limitation of TensorFlow.js, we have to apply each layer its corresponding input. In our example, since the model structure is simple: a single workflow from start to the end, we just need to iterate every layer and set the layer output as the input for the next layer. If you have a complex structure, please double check the input you required to apply for each layer.
+* Because of the limitations of TensorFlow.js, we have to apply each layer to its corresponding input manually. 
+* In our example, since the model structure is simple: a single workflow from start to the end, we just need to iterate every layer and set the layer output as the input for the next layer. However, if you have a complex structure, please double check the inputs the layer required.
 
 Then, we can encapsulate the desired outputs into a new model with the same input as the original model:
 ```html
@@ -252,9 +274,8 @@ const encModel = tf.model({
 singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
 console.log(singleOutput);
 ```
-```html
-// INSERT IMAGE console output
-```
+
+<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_2.png" alt="enc model output" width="575" >
 
 #### 2.3 Save the encapsulated model 
 After completing the previous steps, we can save the encapsulated model:

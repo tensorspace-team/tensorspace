@@ -1,8 +1,8 @@
-## Preprocessing a TensorFlow Model
-
 <p align="center">
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
 </p>
+
+## Preprocessing a TensorFlow Model
 
 In the following chapter, we will introduce how to prepare a TensorFlow model (saved model, frozen model and checkpoint) before applying TensorSpace.
 
@@ -209,7 +209,6 @@ We can see some evaluation outputs like:
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_training_evaluations.png" alt="evaluations" width="705" >
 
 #### 1.2 Load a Model
-(STILL IN CONSTRUCTION)
 If you have already had a tensorflow model trained in hand, let's try to load the model.
 
 We can load the model from a saved model, frozen model or a checkpoint:

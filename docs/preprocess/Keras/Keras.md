@@ -1,8 +1,8 @@
-## Preprocessing a Keras Model
- 
 <p align="center">
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/keras.png">
 </p>
+
+## Preprocessing a Keras Model
 
 In this chapter, we will introduce how to preprocess a Keras model to adapt the multiple intermediate layer outputs for applying TensorSpace. If you have read the [tf.keras preprocessing tutorial](https://github.com/syt123450/tensorspace/wiki/%5BTutorial%5D--tf.keras-preprocessing-tutorial), since the close relations between the two APIs, the workflows are very similar.
 
