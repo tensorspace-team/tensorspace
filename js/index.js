@@ -1,6 +1,21 @@
 $(function() {
 
-	console.log(222);
+	$("#more").click(function() {
+
+		if ($("#nav-collapse").is(":visible")) {
+			$("#nav-collapse").slideUp(function() {
+				$("#smallGuide").show();
+			});
+		} else {
+			$("#nav-collapse").slideDown();
+			$("#smallGuide").hide();
+		}
+
+	});
+
+	$("#logo").click(function() {
+		window.location.href = "../../index.html";
+	});
 
 	let container = document.getElementById( "modelArea" );
 
@@ -115,12 +130,6 @@ $(function() {
 
 		type: "tfjs",
 		url: './assets/model/lenet/mnist.json',
-
-		// onComplete: function() {
-		//
-		// 	console.log( "Complete load model." );
-		//
-		// }
 
 	} );
 

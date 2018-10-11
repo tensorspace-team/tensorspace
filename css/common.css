@@ -326,7 +326,7 @@ body > nav > div > ul > li:hover > a {
 
 @media (max-width: 820px) {
     .language {
-        right: 65px;
+        right: 55px;
     }
 }
 

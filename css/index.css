@@ -17,6 +17,11 @@
     margin-top: 30px;
 }
 
+#infoArea {
+    width: 60%;
+    float: left;
+}
+
 #imgWrapper {
 
     width: 200px;
@@ -182,10 +187,91 @@
     color: #cacaca;
 }
 
-#globeArea {
-    height: 84%;
+#modelArea {
+    width: 40%;
+    height: 80%;
+    background-color: #000;
+    float: left;
+}
+
+#gallery {
+
     width: 100%;
-    margin-top: 7%;
+    background: linear-gradient(to bottom, #000, #96D3FF);
+
+}
+
+#gallery-background {
+
+    width: 100%;
+    height: 100%;
+    background: url("../assets/img/index/galleryBackground.png") center no-repeat;
+
+}
+
+#gallery-shadow {
+
+    background: rgba( 0, 0, 0, 0.1 );
+
+}
+
+#galleryTitle {
+    color: #83FBFF;
+    text-align: center;
+    clear: both;
+}
+
+#galleryTitleIcon {
+
+    width: 50px;
+
+}
+
+#galleryTitleMain {
+
+    font-family: SourceSansPro-Bold, sans-serif;
+    font-size: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+#galleryTitleIntro {
+
+    font-family: SourceSansPro-Regular, sans-serif;
+    font-size: 18px;
+
+}
+
+#cardArea {
+
+    padding: 20px 0;
+
+}
+
+.card-wrapper {
+
+    width: 33%;
+    box-sizing: border-box;
+    padding: 20px;
+    float: left;
+
+}
+
+.img33 {
+    width: 100%;
+    height: 100%;
+}
+
+.mdl-card {
+    width: 100%;
+}
+
+.net-name {
+    font-family: SourceSansPro-Bold, sans-serif;
+    text-align: center;
+    background-color: #D3ECFF;
+    padding: 10px 0;
 }
 
 #download {
@@ -254,6 +340,10 @@
     font-family: SourceSansPro-Regular, sans-serif;
 }
 
+#download a:hover {
+    border-bottom: 1px solid #0340D8;
+}
+
 footer {
 
     height: 50px;
@@ -267,19 +357,33 @@ footer {
     clear: both;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
 
-    #explanation > div > div {
-        padding: 0 30px;
+    #description > img {
+        margin-top: 12%;
     }
 
 }
 
-@media (max-width: 995px) {
+@media (max-width: 1000px) {
+
+    #introduce {
+        height: 1200px;
+    }
+
+    #infoArea {
+        width: 100%;
+    }
+
+    #modelArea {
+        width: 80%;
+        height: 42%;
+        margin-left: 10%;
+    }
 
     #imgWrapper {
 
-        width: 100%;
+        width: 200px;
         height: 240px;
         text-align: center;
     }
@@ -291,21 +395,13 @@ footer {
     }
 
     #description {
-
-        width: 100%;
         min-height: 200px;
     }
 
-    #description > p {
-
-        margin-top: 10px;
-        text-align: center;
-        font-size: 30px;
-        padding: 0;
-    }
-
-    #explanation > div {
-        width: 100%;
+    #description > img {
+        margin-top: 0;
+        width: 70%;
+        margin-left: 15%;
     }
 
     #start {
@@ -350,34 +446,66 @@ footer {
         text-align: center;
     }
 
-    #globeWrapper {
-        padding: 50px;
+}
+
+@media (max-width: 991px) {
+
+    #description > img {
+        margin-top: 5%;
     }
+
+}
+
+@media (max-width: 700px) {
+
+    #introduce {
+        height: 1300px;
+    }
+
+    #infoArea {
+        width: 100%;
+    }
+
+    #imgWrapper {
+
+        width: 100%;
+        height: 200px;
+    }
+
+    #imgWrapper > img {
+
+        width: 200px;
+    }
+
+    #description {
+        width: 100%;
+        min-height: 0;
+        height: 160px;
+    }
+
+    #description > img {
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 0;
+    }
+
+    #modelArea {
+        width: 80%;
+        height: 30%;
+        margin-left: 10%;
+    }
+
+    #explanation > div {
+        width: 100%;
+    }
+
+    .card-wrapper {
+        width: 50%;
+    }
+
 }
 
 @media (max-width: 650px) {
-
-    #description > div > #button1, #description > div > #button2 {
-        width: 50%;
-        margin-bottom: 20px;
-        text-align: center;
-        float: left;
-    }
-
-    #description > div > #button3 {
-
-        width: 100%;
-        margin-bottom: 20px;
-        text-align: center;
-        float: left;
-
-    }
-
-    #description > div > div > div {
-
-        margin-left: auto;
-        margin-right: auto;
-    }
 
     #explanation > div > div {
 
@@ -391,21 +519,40 @@ footer {
 
 @media (max-width: 490px) {
 
-    #description > p {
-        font-size: 25px;
+    #introduce {
+        height: 1350px;
     }
 
-    #description > div > div > div {
+    #iconGroup > div > div {
+
         width: 100px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    #description > div > div > div > img {
+    #iconGroup > div > div > img {
         display: none;
     }
 
-    #description > div > div > div > p {
+    #iconGroup > div > div > p {
         width: 100%;
         text-align: center;
+    }
+
+    #iconGroup > #button1, #iconGroup> #button2 {
+        width: 50%;
+        margin-bottom: 20px;
+        text-align: center;
+        float: left;
+    }
+
+    #iconGroup > #button3 {
+
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+        float: left;
+
     }
 
     #start {
@@ -417,16 +564,19 @@ footer {
         height: 75%;
     }
 
-    #globeWrapper {
-        padding: 30px;
-    }
-
-    #start #globeWrapper {
-        height: 30%;
-    }
-
     #download {
         font-size: 16px;
+    }
+
+    .card-wrapper {
+
+        padding: 10px;
+
+    }
+
+    #description > img {
+        width: 80%;
+        margin-left: 10%;
     }
 
 }
