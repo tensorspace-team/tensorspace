@@ -328,6 +328,10 @@ body > nav > div > ul > li:hover > a {
     .language {
         right: 55px;
     }
+
+    footer {
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 500px) {

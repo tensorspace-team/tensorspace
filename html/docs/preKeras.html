@@ -357,7 +357,7 @@
 
         <div>For the tutorial, we use Python 3.6.5 and the following libraries:</div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="Python">
 import tensorflow as tf
 import numpy as np
@@ -390,7 +390,7 @@ from keras.models import load_model
             useful tool from TensorFlow.js):
         </div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="Bash">
 $ pip install tensorflowjs
             </code></pre>
@@ -441,7 +441,7 @@ $ pip install tensorflowjs
         <div>In the tutorial, we try to preprocess a Keras model of LeNet with MNIST dataset as an example.</div>
 
         <div class="sub-title" id="loadModel">1 Train/Load Model</div>
-        <div>1.1 Train a new model</div>
+        <div><span class="span_bold">1.1 Train a new model</span></div>
 
         <div>If you don't have your model trained yet or not sure how to generate a proper model for TensorSpace from a
             scratch, let's train a model together~
@@ -456,8 +456,8 @@ $ pip install tensorflowjs
 
         <div>We can generate a LeNet model as the following:</div>
 
-        <div>
-            <pre><code clase="python">
+        <div class="code-snippet">
+            <pre><code class="python">
 def create_sequential_model():
     single_output_model = Sequential([
         InputLayer(input_shape=(28, 28)),
@@ -491,7 +491,7 @@ def create_sequential_model():
 
         <div>After constructing the model structure, we compile and train it with the MNIST dataset.</div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
@@ -508,7 +508,7 @@ model.fit(x_train, y_train, epochs=5, batch_size=32)
 
         <div>We can try to predict a result from a random generated input:</div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
@@ -520,11 +520,11 @@ print(model.predict(input_sample))
 
         <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_1.png" alt="predict output 1">
 
-        <div>1.2 Load an existed model</div>
+        <div><span class="span_bold">1.2 Load an existed model</span></div>
 
         <div>If you have already had a model in hand, let's load the model:</div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 model = load_model("/PATH_TO_Keras/model.h5")
             </code></pre>
@@ -532,7 +532,7 @@ model = load_model("/PATH_TO_Keras/model.h5")
 
         <div>Or if the model and weights are stored separately, we can load like:</div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 json_path = "PATH_TO_JSON/model.json"
 weight_path = "PATH_TO_WEIGHT/weights.hdf5"
@@ -548,7 +548,7 @@ model.load_weights(weight_path)
             weights of the network. We can try to predict a result from a random generated input:
         </div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
@@ -573,7 +573,7 @@ print(model.predict(input_sample))
             names.
         </div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 model.summary()
 for layer in model.layers:
@@ -605,7 +605,7 @@ for layer in model.layers:
         <div>Let's pick up the layers we want to present by TensorSpace and encapsulate a new model with the desired
             outputs:
         </div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 output_layer_names = [
     "Conv2D_1", "MaxPooling2D_1", "Conv2D_2", "MaxPooling2D_2",
@@ -621,7 +621,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
         </div>
 
         <div>Or if we want them all, we can do like:</div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 def generate_encapsulate_model(model):
     enc_model = Model(
@@ -648,7 +648,7 @@ def generate_encapsulate_model(model):
         </div>
 
         <div>Then we can generate our encapsulated model which contains multiple intermediate outputs:</div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
 # OR
@@ -657,7 +657,7 @@ enc_model = generate_encapsulate_model_with_output_layer_names(model, output_lay
         </div>
 
         <div>We can try to predict an input sample with the encapsulated model:</div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 print(enc_model.predict(input_sample))
             </code></pre>
@@ -686,7 +686,7 @@ print(enc_model.predict(input_sample))
             </ul>
         </div>
 
-        <div>
+        <div class="code-snippet">
             <pre><code class="python">
 enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
@@ -701,7 +701,7 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
         </div>
 
         <div>The tfjs-converter can be used like:</div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="bash">
 tensorflowjs_converter \
     --input_format=keras \

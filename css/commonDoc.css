@@ -193,13 +193,13 @@ main > header {
     line-height: 30px;
     margin-top: 10px;
     margin-bottom: 30px;
-    font-size: 25px;
+    font-size: 30px;
     color: #4d4d4d;
     text-align: center;
 }
 
 main {
-    padding: 10px 50px;
+    padding: 10px 50px 50px 50px;
     font-size: 18px;
 }
 
@@ -276,6 +276,13 @@ td, th {
 
 }
 
+.code-snippet {
+
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+}
+
 .tag-img {
     width:95%;
     /*margin-left: 5%;*/
@@ -316,7 +323,7 @@ td, th {
 
 .sub-title {
 
-    margin-top: 40px;
+    margin-top: 50px;
     margin-bottom: 30px;
     font-size: 20px;
 }
