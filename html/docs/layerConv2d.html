@@ -319,15 +319,15 @@
         <header>Conv2d</header>
         <div class="sub-title">Constructor</div>
         <div>Two methods to create a new layer. Arguments are required.</div>
-        <div>〔Method 1〕Use <span class="highlight-text">filters</span>, <span class="highlight-text">kernalSize</span>
-            and <span class="highlight-text">strides</span></div>
-        <div>
+        <div>〔Method 1〕Use <span class="span_bold">filters</span>, <span class="span_bold">kernalSize</span>
+            and <span class="span_bold">strides</span></div>
+        <div class="code-snippet">
             <pre><code class="Javascript">
 TSP.layers.Conv2d( { filters : Int, kernaleSize: Int, strides: Int } );
             </code></pre>
         </div>
-        <div>〔Method 2〕Use <span class="highlight-text">shape</span> and <span class="highlight-text">filters</span></div>
-        <div>
+        <div>〔Method 2〕Use <span class="span_bold">shape</span> and <span class="span_bold">filters</span></div>
+        <div class="code-snippet">
             <pre><code class="Javascript">
 TSP.layers.Conv2d( { fileters : Int , shape : [ Int, Int ] } )
             </code></pre>
@@ -515,7 +515,7 @@ TSP.layers.Conv2d( { fileters : Int , shape : [ Int, Int ] } )
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Click on the layer directly to open it by interacting directly with the object in the 3D scene</div>
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="Javascript">
 let conv2dLayer = new TSP.layers.Conv2d( {
 
@@ -539,7 +539,7 @@ conv2dLayer.openLayer();
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To close by interacting directly with objects in a 3D scene by clicking the close button</div>
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="Javascript">
 let conv2dLayer = new TSP.layers.Conv2d( {
 
@@ -562,7 +562,7 @@ conv2dLayer.closeLayer();
         <div class="sub-title">Example</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of Conv2D to facilitate reuse</div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="Javascript">
 let convLayer = new TSP.layers.Conv2d( {
 
@@ -581,7 +581,7 @@ model.add( convLayer );
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add Conv2D directly</div>
-        <div>
+        <div class="code-snippet">
             <pre><code class="Javascript">
 model.add(new TSP.layers.Conv2d( {
 
