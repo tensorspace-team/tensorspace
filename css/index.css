@@ -344,6 +344,11 @@
     border-bottom: 1px solid #0340D8;
 }
 
+pre {
+    padding: 0;
+    padding-left: 20px;
+}
+
 footer {
 
     height: 50px;
