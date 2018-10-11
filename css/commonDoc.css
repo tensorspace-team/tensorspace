@@ -1,3 +1,25 @@
+.panel-heading {
+    padding: 10px 15px 0 15px;
+}
+
+.panel-heading > i{
+
+    vertical-align: middle !important;
+    margin-right: 10px;
+
+}
+
+.mdl-list__item {
+    min-height: 0;
+    padding: 5px;
+}
+
+.mdl-list__item .mdl-list__item-primary-content .mdl-list__item-icon {
+
+    margin-right: 10px;
+
+}
+
 .working {
     width: 40%;
     margin-left: 30%;
@@ -11,6 +33,25 @@ body {
     height: 90%;
     padding-top: 80px;
     box-sizing: border-box;
+}
+
+main i {
+    line-height: 20px;
+}
+
+.list-content {
+
+    color: black;
+    list-style-type: none;
+    margin-bottom: 30px;
+
+}
+
+.list-indent {
+
+    list-style-type: none;
+    padding-left: 10px;
+
 }
 
 aside {
@@ -162,6 +203,10 @@ main {
     font-size: 18px;
 }
 
+main ul {
+    font-size: 18px;
+}
+
 main > div {
     margin-top: 10px;
 }
@@ -170,7 +215,6 @@ main > div > ul {
     list-style-type: circle;
     list-style-position: inside;
     padding: 0;
-    margin-top: 30px;
     color: #0c50bc;
 }
 
@@ -205,11 +249,27 @@ main > div > ul > li > div {
     margin-bottom: 5px;
 }
 
+.logo-img {
+
+    width: 60%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+}
+
 .tag-img {
     width:95%;
     /*margin-left: 5%;*/
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.tag-img-vertical {
+
+    width: 30%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
 }
 
 .more-content-ul {
