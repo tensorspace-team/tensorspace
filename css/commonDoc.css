@@ -238,7 +238,6 @@ main > div > ul > li > span {
 
 main > div > ul > li > a {
     color: #0c50bc;
-    font-size: 18px;
 }
 
 main a:hover {
@@ -257,8 +256,12 @@ main > div > ul > li > div {
     margin-bottom: 5px;
 }
 
+table { table-layout: fixed; }
+table td { word-wrap: break-word; }
+
 td, th {
     text-align: center;
+    word-wrap: break-word;
 }
 
 .highlight-text {
@@ -581,6 +584,18 @@ footer {
 
     main {
         padding: 10px 20px;
+        font-size: 15px;
+    }
+
+    main ul {
+        font-size: 15px;
+    }
+
+    main ul a {
+        font-size: 15px;
+    }
+
+    main p {
         font-size: 15px;
     }
 }

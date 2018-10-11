@@ -191,6 +191,7 @@ body > nav > div > ul > li:hover > a {
     right: 20px;
     border-bottom: 0;
     cursor: pointer;
+    display: none;
 
 }
 
@@ -309,6 +310,18 @@ body > nav > div > ul > li:hover > a {
     40%, 80% {
         transform: rotate(10deg)
     }
+}
+
+@media (max-width: 1000px) {
+
+    #largeNav {
+        display: none;
+    }
+
+    #more {
+        display: block;
+    }
+
 }
 
 @media (max-width: 820px) {
