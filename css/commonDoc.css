@@ -334,6 +334,14 @@ td, th {
 
 }
 
+.color-block {
+
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+
+}
+
 .live-demo {
     width: 100px;
     height: 30px;
