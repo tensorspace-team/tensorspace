@@ -120,7 +120,7 @@ body > nav > div {
     line-height: 60px;
     float: left;
     margin-left: 20px;
-    font-family: SourceSansPro-Regular, sans-serif;
+    font-family: SourceSansPro-Bold, sans-serif;
     font-weight: bold;
     color: #4d4d4d;
 
@@ -182,6 +182,10 @@ body > nav > div > ul > li:hover > a {
     color: #0340D8;
     font-weight: bold;
 
+}
+
+.navbar-nav > li {
+    float: none;
 }
 
 #more {
@@ -341,5 +345,17 @@ body > nav > div > ul > li:hover > a {
 
     .github-corner .octo-arm {
         animation: octocat-wave 560ms ease-in-out
+    }
+
+    #logo > a > img {
+
+        height: 60%;
+        margin-top: 8%;
+        float: left;
+    }
+
+    #logo > a > div {
+        font-size: 18px;
+        margin-left: 10px;
     }
 }
