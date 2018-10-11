@@ -237,7 +237,7 @@ main > div > ul > li > a {
     font-size: 18px;
 }
 
-main > div > ul > li > a:hover {
+main a:hover {
     border-bottom: 1px solid #0c50bc;
     cursor: pointer;
 }
