@@ -94,7 +94,6 @@
 
     color: #000;
     background-color: #83FBFF;
-    font-family: SourceSansPro-Regular, sans-serif;
 }
 
 #toStart:hover {
@@ -113,7 +112,6 @@
 #toPlayground {
     color: #83FBFF;
     border: 1px solid #83FBFF;
-    font-family: SourceSansPro-Regular, sans-serif;
 }
 
 #iconGroup #toPlayground {
@@ -136,7 +134,6 @@
 
 #toGithub {
     background-color: #f2f2f2;
-    font-family: SourceSansPro-Regular, sans-serif;
 }
 
 #toGithub:hover {
@@ -170,12 +167,10 @@
 }
 
 #explanation > div > p {
-
     text-align: center;
     font-size: 20px;
     margin-top: 20px;
     color: #0340D8;
-    font-family: SourceSansPro-Regular, sans-serif;
 }
 
 #explanation > div > div {
@@ -229,7 +224,6 @@
 
 #galleryTitleMain {
 
-    font-family: SourceSansPro-Bold, sans-serif;
     font-size: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -238,7 +232,6 @@
 
 #galleryTitleIntro {
 
-    font-family: SourceSansPro-Regular, sans-serif;
     font-size: 18px;
 
 }
@@ -268,7 +261,6 @@
 }
 
 .net-name {
-    font-family: SourceSansPro-Bold, sans-serif;
     text-align: center;
     background-color: #D3ECFF;
     padding: 10px 0;
@@ -312,7 +304,6 @@
     line-height: 50px;
     font-size: 30px;
     margin-bottom: 20px;
-    font-family: SourceSansPro-Bold, sans-serif;
 
 }
 
@@ -337,7 +328,6 @@
     box-sizing: border-box;
     padding-left: 15px;
     background-color: #e3e3e3;
-    font-family: SourceSansPro-Regular, sans-serif;
 }
 
 #download a:hover {

@@ -1,0 +1,35 @@
+#toStart {
+    font-family: PingFang-SC-Regular, sans-serif;
+}
+
+#toPlayground {
+    font-family: PingFang-SC-Regular, sans-serif;
+}
+
+#toGithub {
+    font-family: PingFang-SC-Regular, sans-serif;
+}
+
+#explanation > div > p {
+    font-family: PingFang-SC-Regular, sans-serif;
+}
+
+#galleryTitleMain {
+    font-family: PingFang-SC-Bold, sans-serif;
+}
+
+#galleryTitleIntro {
+    font-family: PingFang-SC-Regular, sans-serif;
+}
+
+.net-name {
+    font-family: PingFang-SC-Bold, sans-serif;
+}
+
+#download > div > div > header {
+    font-family: PingFang-SC-Bold, sans-serif;
+}
+
+#download > div > div > div.code {
+    font-family: PingFang-SC-Regular, sans-serif;
+}

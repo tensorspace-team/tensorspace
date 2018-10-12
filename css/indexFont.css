@@ -1,0 +1,35 @@
+#toStart {
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+#toPlayground {
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+#toGithub {
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+#explanation > div > p {
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+#galleryTitleMain {
+    font-family: SourceSansPro-Bold, sans-serif;
+}
+
+#galleryTitleIntro {
+    font-family: SourceSansPro-Regular, sans-serif;
+}
+
+.net-name {
+    font-family: SourceSansPro-Bold, sans-serif;
+}
+
+#download > div > div > header {
+    font-family: SourceSansPro-Bold, sans-serif;
+}
+
+#download > div > div > div.code {
+    font-family: SourceSansPro-Regular, sans-serif;
+}
