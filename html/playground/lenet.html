@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TensorSpace Playground</title>
+    <title>TensorSpace Playground - LeNet</title>
 
     <meta name="description" content="TensorSpace.js Playground">
     <meta name="author" content="syt123450 / https://github.com/syt123450">
@@ -23,6 +23,17 @@
 
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/playground.css">
+
+    <script src="../../js/lenet.js"></script>
+
+    <style>
+
+        #modelArea {
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
 
 </head>
 <body>
@@ -78,15 +89,15 @@
             <div>EN</div>
         </div>
         <div>
-            <div><a href="index_zh.html">中</a></div>
+            <div><a href="lenet_zh.html">中</a></div>
         </div>
     </div>
 
 </nav>
 
 <aside>
-    <div class="now-label">Introduction</div>
-    <div><a href="lenet.html">LeNet</a></div>
+    <div><a href="index.html">Introduction</a></div>
+    <div class="now-label">LeNet</div>
     <div><a href="alexnet.html">AlexNet</a></div>
     <div><a href="vgg16.html">VGG-16</a></div>
     <div><a href="resnet50.html">ResNet-50</a></div>
@@ -97,6 +108,7 @@
 
 <main>
 
+    <div id="modelArea"></div>
 
 </main>
 
