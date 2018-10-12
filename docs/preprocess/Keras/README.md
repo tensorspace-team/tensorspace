@@ -31,14 +31,16 @@ $ pip install tensorflowjs
 If you are new on training a ML model by Keras, we highly recommand you to read the [guide](https://keras.io/#getting-started-30-seconds-to-keras) from [Keras](https://keras.io/) first.
 
 To preprocess a Keras model, we have the following steps:
-<p align="center">
+<p align="center" verticle-align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_general_process.png" alt="general TF process" width="830" >
+<br/>
+<b>Fig. 1</b> - Steps to preprocess a Keras model
 </p>
 
 * [1. Train/Load model](#loadModel)
 * [2. Insert multiple intermediate outputs](#addOutputs)
 * [3. Save encapsulated model](#saveModel)
-* [4. Convert to TensorFlow.js model](#convertModel)
+* [4. Convert to TensorSpace compatible model](#convertModel)
  
 In the tutorial, we try to preprocess a Keras model of LeNet with MNIST dataset as an example.
 
@@ -49,6 +51,8 @@ If you don't have your model trained yet or not sure how to generate a proper mo
 By following the structure of the LeNet,
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+<br/>
+<b>Fig. 2</b> - LeNet structure
 </p>
  
 We can generate a LeNet model as the following:
@@ -93,7 +97,12 @@ print(model.predict(input_sample))
 ````
 
 And then we get the probabilities predicted by the model.
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_1.png" alt="predict output 1" width="705" >
+<br/>
+<b>Fig. 3</b> - Single list prediction output from trained model
+</p>
 
 #### 1.2 Load an existed model 
 If you have already had a model in hand, let's load the model:
@@ -120,7 +129,11 @@ print(model.predict(input_sample))
 ````
 
 And then we get the probabilities predicted by the model.
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_1.png" alt="predict output 1" width="705" >
+<br/>
+<b>Fig. 4</b> - Single list prediction output from loaded model
+</p>
 
 ### <div id="addOutputs">2 Insert multiple intermediate outputs</div>
 We can observe that the output from predicting an input is a single array (softmax result). Each value of the array represents the probability of the corresponding digit that the input image could be.
@@ -133,7 +146,12 @@ model.summary()
 for layer in model.layers:
      print(layer.name)
 ````
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_summary.png" alt="summary and layers" width="705" >
+<br/>
+<b>Fig. 5</b> - Model summary and layer names
+</p>
 
 **Note:**
  * If a `name` property is set for a layer, we can see the name from `summary()`.
@@ -184,10 +202,20 @@ print(enc_model.predict(input_sample))
 ````
 
 The output is a list which contains all output data of the layers we selected.
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_2.png" alt="predict output 2" width="705" >
+<br/>
+<b>Fig. 6</b> - Multiple list outputs after preprocessing
+</p>
 
 The last output is the same as the one we predicted from the original model
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_3.png" alt="predict output 3" width="705" >
+<br/>
+<b>Fig. 7</b> - Last list output is the same as the original inferences
+</p>
+
 
 ### <div id="saveModel">3 Save encapsulated model</div>
 For further convertion, we have to save the encapsulate model.
@@ -202,8 +230,8 @@ enc_model.compile(optimizer='adam',
 save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
 ````
 
-### <div id="convertModel">4 Convert to TensorFlow.js model</div>
-The last step is to convert the Keras model which contains multiple intermediate outputs to a TensorFlow.js compatible model by [tfjs-converter](https://github.com/tensorflow/tfjs-converter)
+### <div id="convertModel">4 Convert to TensorSpace compatible model</div>
+The last step is to convert the Keras model which contains multiple intermediate outputs to a TensorSpace compatible model by [tfjs-converter](https://github.com/tensorflow/tfjs-converter)
 
 The tfjs-converter can be used like:
 ````shell
@@ -212,7 +240,12 @@ tensorflowjs_converter \
     ../models/enc_keras_model.h5 \
     ../models/json_models/keras
 ````
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_models.png" alt="tfjs models" width="530" >
+<br/>
+<b>Fig. 8</b> - Saved model files
+</p>
 
 **Note:**
 * There are two types of file generated:
@@ -222,4 +255,4 @@ tensorflowjs_converter \
 * The weight files are named like "group1-shard1of1" which are used and written within the `model.json` file. Hence we **DO NOT** suggest to modify the name of weight files, unless really necessary. If you really want to modify them, please modify the content in the `.json` (i.e. `model.json`) as well.
 * For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
 
-If everything looks good, you shall be ready for the next step - "2. Apply TensorSpace API from the model structure".
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model]()(TBD).
