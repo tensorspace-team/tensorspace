@@ -293,19 +293,24 @@ td, th {
 
 .tag-img-vertical {
 
-    width: 30%;
+    width: 20%;
     margin-top: 10px;
     margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 
 }
 
 .more-content-ul {
+
     margin-top: 60px;
     margin-left: 10px;
     font-size: 18px;
 }
 
 .more-content-ul > li {
+
     height: 40px;
     line-height: 40px;
 
