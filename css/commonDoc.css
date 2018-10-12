@@ -200,15 +200,15 @@ main > header {
 
 main {
     padding: 10px 50px 50px 50px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 main ul {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 main p {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 main > div {
@@ -265,7 +265,8 @@ td, th {
 }
 
 .highlight-text {
-    background-color: #dfedff;
+    background-color: #f5f5f5;
+    border-radius: 3px;
 }
 
 .logo-img {
@@ -278,7 +279,7 @@ td, th {
 
 .code-snippet {
 
-    margin-top: 30px;
+    margin-top: 15px;
     margin-bottom: 30px;
 
 }
