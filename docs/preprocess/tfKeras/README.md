@@ -27,12 +27,14 @@ If you are new and have no idea about how to train a ML model with tf.keras, we 
 To preprocess a tf.keras model, make sure you satisfy the followings:
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_general_process.png" alt="general TF process" width="830" >
+<br/>
+<b>Fig. 1</b> - Steps to preprocess a tf.keras model
 </p>
 
 * [1. Train/Load model](#loadModel)
 * [2. Insert multiple intermediate outputs](#addOutputs)
 * [3. Save encapsulated model](#saveModel)
-* [4. Convert to TensorFlow.js model](#convertModel)
+* [4. Convert to TensorSpace compatible model](#convertModel)
 
 The following instruction preprocesses a LeNet with MNIST dataset as an example.
 
@@ -43,6 +45,8 @@ Let's train a simple LeNet model to recognize MNIST handwritten digit, if you do
 By following the structure of the LeNet,
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+<br/>
+<b>Fig. 2</b> - LeNet structure
 </p>
 
 we can build our model like:
@@ -96,8 +100,11 @@ print(model.predict(input_sample))
 ```
 Then we have a single array with 10 probabilities:
 
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
-
+<br/>
+<b>Fig. 3</b> - Single list prediction output from trained model
+</p>
 
 #### 1.2 Load from an existed model
 For an existed model, we can load the model as:
@@ -127,7 +134,12 @@ print(model.predict(input_sample))
 ```
 The same length 10 array output:
 
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
+<br/>
+<b>Fig. 4</b> - Single list prediction output from loaded model
+</p>
 
 **Note:** 
 * Since the we used a random input, the output would be random as well.
@@ -143,7 +155,12 @@ model.summary()
 for layer in model.layers:
      print(layer.name)
 ```
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_summary.png" alt="summary" width="705" >
+<br/>
+<b>Fig. 5</b> - Model summary and layer names
+</p>
 	
 If the layers are given proper names (i.e. if add a **"name"** property while building the model), we can find them from the summary.
 
@@ -189,11 +206,20 @@ Now, we can try to predict by the new model:
 ```python
 print(enc_model.predict(input_sample))
 ```
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_2.png" alt="predict output 2" width="705" >
+<br/>
+<b>Fig. 6</b> - Multiple list outputs after preprocessing
+</p>
 
 And we can see the last output is the same as the one from the prediction of the original model.
 
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_3.png" alt="predict output 3" width="705" >
+<br/>
+<b>Fig. 7</b> - Last list output is the same as the original inferences
+</p>
 
 You can see the output now is a list which contains all outputs from selected layers.
 
@@ -216,8 +242,8 @@ tf.keras.models.save_model(
 )
 ```
 
-### <div id="convertModel">4 Convert to TensorFlow.js model</div>
-Last, let's convert our multiple output model into a TensorFlow.js compatable model by [tfjs-converter](https://github.com/tensorflow/tfjs-converter).
+### <div id="convertModel">4 Convert to TensorSpace compatible model</div>
+Last, let's convert our multiple output model into a TensorSpace compatible model by [tfjs-converter](https://github.com/tensorflow/tfjs-converter).
 
 The tfjs-converter should be used by the following script:
 ```shell
@@ -226,7 +252,12 @@ tensorflowjs_converter \
     ../models/enc_tf_keras_model.h5 \
     ../models/json_models/tf_keras
 ```
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_models.png" alt="models" width="530" >
+<br/>
+<b>Fig. 8</b> - Saved model files
+</p>
 
 **Note:**
 * There are two types of file generated:
@@ -236,4 +267,4 @@ tensorflowjs_converter \
 * The weight files are named like "group1-shard1of1" which are used and written within the "model.json" file. Hence we **DO NOT** suggest to modify the name of weight files, unless really necessary. If you really want to modify them, please modify the content in the .json (i.e. "model.json") as well.
 * For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
 
-If everything looks good, you shall be ready for the next step - "2. Apply TensorSpace API from the model structure".
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model]()(TBD).
