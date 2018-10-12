@@ -54,15 +54,25 @@ MergedLineGroup.prototype = {
 		let straightElements = relatedElements.straight;
 		let curveElements = relatedElements.curve;
 
-		let startPosition = selectedElement.getWorldPosition().sub( this.neuralGroup.getWorldPosition() );
+		let neuralGroupPos = new THREE.Vector3();
+		this.neuralGroup.getWorldPosition( neuralGroupPos );
+
+		let globalStartPos = new THREE.Vector3();
+
+		selectedElement.getWorldPosition( globalStartPos );
+
+		let lineStartPos = globalStartPos.sub( neuralGroupPos );
 
 		for ( let i = 0; i < straightElements.length; i ++ ) {
 
 			straightLineColors.push( new THREE.Color( this.color ) );
 			straightLineColors.push( new THREE.Color( this.color ) );
 
-			straightLineVertices.push( straightElements[ i ].getWorldPosition().sub( this.neuralGroup.getWorldPosition() ) );
-			straightLineVertices.push( startPosition );
+			let globalRelativePos = new THREE.Vector3();
+			relatedElements[ i ].getWorldPosition( globalRelativePos );
+
+			straightLineVertices.push( globalRelativePos.sub( neuralGroupPos  ) );
+			straightLineVertices.push( lineStartPos );
 
 		}
 
@@ -70,11 +80,13 @@ MergedLineGroup.prototype = {
 
 		for ( let i = 0; i < curveElements.length; i ++ ) {
 
-			let startPos = startPosition;
-			let endPos = curveElements[ i ].getWorldPosition().sub( this.neuralGroup.getWorldPosition() );
+			let startPos = lineStartPos;
 
+			let endGlobalPos = new THREE.Vector3();
+			curveElements[ i ].getWorldPosition( endGlobalPos );
+
+			let endPos = endGlobalPos.sub( neuralGroupPos );
 			let startEndDistance = startPos.y - endPos.y;
-
 			let controlTranslateXVector;
 
 			if ( startPos.x >= 0 ) {

@@ -164,13 +164,13 @@ SceneInitializer.prototype = {
 
 		}.bind( this ), false );
 
-		document.addEventListener( 'mousemove', function( event ) {
+		this.sceneArea.addEventListener( 'mousemove', function( event ) {
 
 			this.onMouseMove( event );
 
 		}.bind( this ), true );
 
-		document.addEventListener( 'click', function( event ) {
+		this.sceneArea.addEventListener( 'click', function( event ) {
 
 			this.onClick( event );
 
