@@ -291,6 +291,10 @@ body > nav > div > ul > li:hover > a {
     animation: octocat-wave 560ms ease-in-out;
 }
 
+pre {
+    padding: 0 0 0 0;
+}
+
 .github-corner svg {
 
     height: 100px;
