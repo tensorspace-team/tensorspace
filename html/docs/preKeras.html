@@ -327,32 +327,22 @@
         </div>
 
         <div>The sample files that are used for the tutorial are listed below:</div>
-        <div>
-            <ul class="demo-list-icon mdl-list">
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-    <a
-            href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py">keras_model.py</a>
-</span>
-                </li>
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-   <a
-           href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh">convert_keras.sh</a>
-  </span>
-                </li>
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-    <a
-            href="https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/Keras/models">all
-                    model files</a>
-  </span>
-                </li>
-            </ul>
 
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a
+                    href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py">keras_model.py</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a
+                    href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh">convert_keras.sh</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a
+                    href="https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/Keras/models">all
+                model files</a>
         </div>
 
         <div>For the tutorial, we use Python 3.6.5 and the following libraries:</div>
@@ -369,21 +359,13 @@ from keras.models import load_model
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
 
-        <div>
-            <ul class="demo-list-icon mdl-list">
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-    The core libraries are `keras` and `numpy`.
-</span>
-                </li>
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-   `tf.keras` is used to provide dataset only.
-  </span>
-                </li>
-            </ul>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            The core libraries are `keras` and `numpy`.
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            `tf.keras` is used to provide dataset only.
         </div>
 
         <div>It is also required to install <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a> (a
@@ -407,35 +389,21 @@ $ pip install tensorflowjs
             <img class="tag-img" src="../../assets/img/docs/Keras/Keras_general_process.png" alt="general TF process">
         </p>
 
-        <div>
-
-            <ul class="demo-list-icon mdl-list">
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-    <a href="#loadModel">1. Train/Load model</a>
-</span>
-                </li>
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-   <a href="#addOutputs">2. Insert multiple intermediate outputs</a>
-  </span>
-                </li>
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-    <a href="#saveModel">3. Save encapsulated model</a>
-  </span>
-                </li>
-                <li class="mdl-list__item">
-    <span class="mdl-list__item-primary-content">
-    <i class="material-icons mdl-list__item-icon">filter_center_focus</i>
-   <a href="#convertModel">4. Convert to TensorFlow.js model</a>
-  </span>
-                </li>
-            </ul>
-
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="#loadModel">1. Train/Load model</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="#addOutputs">2. Insert multiple intermediate outputs</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="#saveModel">3. Save encapsulated model</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="#convertModel">4. Convert to TensorFlow.js model</a>
         </div>
 
         <div>In the tutorial, we try to preprocess a Keras model of LeNet with MNIST dataset as an example.</div>
@@ -585,15 +553,13 @@ for layer in model.layers:
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
 
-        <div>
-            <ul class="list-content">
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>If a `name` property is set for a layer, we can see
-                    the name from `summary()`.
-                </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>If a model is loaded from an existed model, the
-                    layer name is related to the class names in most cases.
-                </li>
-            </ul>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            If a `name` property is set for a layer, we can see the name from `summary()`.
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            If a model is loaded from an existed model, the layer name is related to the class names in most cases.
         </div>
 
         <div>Based on the summary, we can learn the general structure of a LeNet:</div>
