@@ -442,30 +442,30 @@ TSP.layers.Conv2d( { fileters : Int , shape : [ Int, Int ] } )
 
         <div class="sub-title">属性</div>
 
-        <div><a href="">.inputShape</a> : [Int]</div>
+        <div class="property-title"><a href="">.inputShape</a> : [Int]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，Dataformat默认通道值在最后，例如inputShape = [ 28, 28, 3 ] 表示输入为3个特征图，每个图大小为28*28</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined</div>
 
-        <div><a href="">.outputShape</a> : [Int]</div>
+        <div class="property-title"><a href="">.outputShape</a> : [Int]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为3维 <a href="basicDimension.html">3️⃣</a></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Dataformat默认通道值在最后，例如outputShape = [ 32, 32, 4 ] 表示经过此层处理后，有4个特征图，每个图大小为32*32</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined</div>
 
-        <div><a href="">.neuralValue</a> : [Int]</div>
+        <div class="property-title"><a href="">.neuralValue</a> : [Int]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层层间输出值数组。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>载入模型，在 model.predict() 后才可以拿到数据，否则为undefined。</div>
 
-        <div><a href="">.name</a> : String</div>
+        <div class="property-title"><a href="">.name</a> : String</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的自定义名称。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
-        <div><a href="">.layerType</a> : String</div>
+        <div class="property-title"><a href="">.layerType</a> : String</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的类型，返回一个定值，字符串Conv2d。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
-        <div class="sub-title">Method</div>
+        <div class="sub-title">方法</div>
 
-        <div><a href="">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -489,7 +489,7 @@ conv2dLayer.openLayer();
             </code></pre>
         </div>
 
-        <div><a href="">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互点击按钮关闭。</div>
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
