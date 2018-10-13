@@ -443,7 +443,7 @@ $ pip install tensorflowjs
         <div>
             It is different from the preprocessing of a Keras or tf.Keras model: we don't need to encapsulate
             an intermediate TensorFlow model. All we want is to catch the correct corresponding
-            <span class="span_bold">tensor names</span> and convert original model to TensorFlow.js compatible model
+            <span class="span_bold">tensor names</span> and convert original model to TensorSpace compatible model
             directly by tfjs-converter.
         </div>
 
@@ -841,7 +841,7 @@ print(sess.run(outputs, feed_dict={x:x_test}))
 
         <div class="sub-title" id="convertModel">3 Convert to TensorSpace compatible model</div>
 
-        <div>If everything so far looks good, we can use the following script to dump out a TensorFlow.js compatable model:</div>
+        <div>If everything so far looks good, we can use the following script to dump out a TensorSpace compatable model:</div>
 
         <div class="code-snippet">
             <pre><code class="Bash">
