@@ -33,15 +33,18 @@ $ pip install tensorflowjs
 ```
 
 In general, the preprocess of a TensorFlow model is:
-<p align="center">
+
+<p align="center" verticle-align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process.png" alt="general TF process" width="830" >
+<br/>
+<b>Fig. 1</b> - Steps to preprocess a TensorFlow model
 </p>
 
-* [1 Train/Load model](#loadModel)
-* [2 Find Out Tensor Names](#findNames)
-* [3 Convert to TensorFlow.js Model](#convertModel)
+* [1 Train/Load a model](#loadModel)
+* [2 Find out tensor names](#findNames)
+* [3 Convert to TensorSpace compatible Model](#convertModel)
 
-It is different from the preprocessing of a Keras or tf.Keras model: we don't need to encapsulate an intermediate TensorFlow model. All we want is to catch the correct corresponding **tensor names** and convert original model to TensorFlow.js compatible model directly by tfjs-converter.
+It is different from the preprocessing of a Keras or tf.Keras model: we don't need to encapsulate an intermediate TensorFlow model. All we want is to catch the correct corresponding **tensor names** and convert original model to TensorSpace compatible model directly by tfjs-converter.
 
 **Note:**
 * The collected tensor names are stored as a list which is used as **"outputNames"** in the TensorSpace.
@@ -70,6 +73,8 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 Next, based on the structure of an LeNet_v5:
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+<br/>
+<b>Fig. 2</b> - LeNet structure
 </p>
 
 we should have 2 Conv2D+MaxPooling together with 3 dense layers. The model is implemented like:
@@ -138,7 +143,7 @@ def LeNet_5(x):
 **Note:**
 * We put a **"name"** property for the tensor that we want to apply TensorSpace later. A specified name can speed up the process of creating **"outputNames"** list.
 * You may notice that we do not mark the tensor exactly in the tensor for the core action. For example, we don't put a name in the `tf.nn.conv2d`, but mark `tf.nn.relu` as the **"MyConv2D_*"**. The reason is that our desired output of a "Convolution Layer" is the result of the activation function, which provides a better visualization.
-* We only have 2 dense (or fully connection) tensors in the function. The last Softmax dense will be used for trianing, so we treat it a little different.
+* We only have 2 dense (or fully connection) tensors in the function. The last Softmax dense will be used for training, so we treat it a little different.
 
 After building up the structure, let's train the model:
 ```Python
@@ -206,7 +211,12 @@ with tf.Session() as sess:
 * Don't forget to declare an extra Softmax tensor for the prediction output and give a proper **"name"**.
 
 We can see some evaluation outputs like:
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_training_evaluations.png" alt="evaluations" width="705" >
+<br/>
+<b>Fig. 3</b> - Training evaluations
+</p>
 
 #### 1.2 Load a Model
 If you have already had a tensorflow model trained in hand, let's try to load the model.
@@ -221,11 +231,12 @@ with tf.Session(graph=tf.Graph()) as sess:
     )
 ``` 
 ```Python
-with tf.Session(graph=tf.Graph()) as sess:
-        dir_path = '/PATH/TO/DIR/tensorflow_model_ckpt/'
-        ckpt_name = 'lenet.ckpt'
-        saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
-        saver.restore(sess, tf.train.latest_checkpoint(dir_path))
+with tf.Session() as sess:
+    model_filename ='/PATH/TO/PB/model.pb'
+    with gfile.FastGFile(model_filename, 'rb') as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+        g_in = tf.import_graph_def(graph_def)
 ``` 
 ```Python
 with tf.Session(graph=tf.Graph()) as sess:
@@ -269,7 +280,13 @@ for n in tf.get_default_graph().as_graph_def().node:
     print(n.name)
 ```
 You may get a lot, even the model is not that large. From the model we just built, we have 400+ tensors:
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_tensor_names_all.png" alt="all tensor names" width="705" >
+<br/>
+<b>Fig. 4</b> - Tensor names
+</p>
+
 **Note:**
 * Don't worry about every tensors, most of them are used as parameter or for training only. You only need to focus on the ones which are used for prediction.
 * If you trained a model by providing **"name"** properties, you can find them all quickly in the list, which indicates everything follows expectations. 
@@ -289,15 +306,25 @@ x = graph.get_tensor_by_name("MyInput:0")
 outputs = list(map(lambda on: graph.get_tensor_by_name(on+":0"), output_names))
 print(sess.run(outputs, feed_dict={x:x_test}))
 ```
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_prediction_1.png" alt="predict output 1" width="705" >
+<br/>
+<b>Fig. 5</b> - Multiple list outputs after preprocessing
+</p>
+
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_prediction_2.png" alt="predict output 2" width="705" >
+<br/>
+<b>Fig. 6</b> - Last list is the original output
+</p>
 
 **Note:**
 * You have to add **":0"** for the output from the tensor object. If not, it returns the tensor object (i.e. rise exceptions).
 * Please save the **name list** which will be used as **outputNames** in TensorSpace.
 
-### <div id="convertModel">3 Convert to TensorFlow.js Model</div>
-If everything so far looks good, we can use the following script to dump out a TensorFlow.js compatable model:
+### <div id="convertModel">3 Convert to TensorSpace compatible model</div>
+If everything so far looks good, we can use the following script to dump out a TensorSpace compatable model:
 ```Bash
 onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
 tensorflowjs_converter \
@@ -314,7 +341,11 @@ tensorflowjs_converter \
 * Select the `input_format` based on your model type.
 * Put name list as a parameter of the script (no extra space or quotes).
 
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_models.png" alt="models" width="530" >
+<br/>
+<b>Fig. 7</b> - Saved model files
+</p>
 
 **Note:**
 * There are three types of file generated:
