@@ -81,6 +81,7 @@ SceneInitializer.prototype = {
 
 			this.stats = new Stats();
 			this.stats.dom.style.position = "absolute";
+			this.stats.dom.style.zIndex = "1";
 			this.stats.showPanel( 0 );
 			this.container.appendChild( this.stats.dom );
 
