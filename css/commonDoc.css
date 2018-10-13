@@ -274,6 +274,9 @@ td, th {
     width: 60%;
     margin-top: 10px;
     margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 
 }
 
