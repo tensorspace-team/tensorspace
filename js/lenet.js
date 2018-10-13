@@ -1,3 +1,5 @@
+let model
+
 $(function() {
 
 	createModel();
@@ -18,13 +20,21 @@ $(function() {
 		moveOutHiddenContent();
 	});
 
+	$("#clear").click(function() {
+
+		signaturePad.clear();
+		model.clear();
+		clearResult();
+
+	});
+
 });
 
 function createModel() {
 
 	let container = document.getElementById( "modelArea" );
 
-	let model = new TSP.model.Sequential( container, {
+	model = new TSP.model.Sequential( container, {
 
 		layerInitStatus: "close",
 		aggregationStrategy: "max",
