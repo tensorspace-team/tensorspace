@@ -27,16 +27,6 @@
 
     <script src="../../js/acgan.js"></script>
 
-    <style>
-
-        #modelArea {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-    </style>
-
 </head>
 <body>
 
@@ -97,7 +87,7 @@
 
 </nav>
 
-<aside>
+<aside id="playgroundNav">
     <div><a href="index.html">Introduction</a></div>
     <div><a href="lenet.html">LeNet</a></div>
     <div><a href="alexnet.html">AlexNet</a></div>
@@ -105,12 +95,21 @@
     <div><a href="resnet50.html">ResNet-50</a></div>
     <div><a href="yolov2-tiny.html">YOLOv2-tiny</a></div>
     <div class="now-label">ACGAN</div>
-    <div><a href="help.html">Help</a></div>
 </aside>
+
+<div id="curtain"></div>
+
+<div id="playgroundMenu"><i class="material-icons">menu</i></div>
 
 <main>
 
     <div id="modelArea"></div>
+
+    <div id="controlPanel">
+
+        <div class="panelTitle">ACGAN</div>
+
+    </div>
 
 </main>
 

@@ -1,0 +1,18 @@
+#controlPanel > img {
+
+    width: 80%;
+    margin-left: 10%;
+
+}
+
+#selectorTrigger {
+
+    width: 60%;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 20%;
+    margin-top: 20px;
+    background-color: red;
+    text-align: center;
+
+}
