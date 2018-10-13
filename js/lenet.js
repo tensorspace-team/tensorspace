@@ -10,6 +10,7 @@ $(function() {
 		textSystem: "enable",
 		relationSystem: "enable",
 		animationTimeRatio: 0.1,
+		stats: true,
 
 		color: {
 
