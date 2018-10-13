@@ -138,7 +138,7 @@ def LeNet_5(x):
 **Note:**
 * We put a **"name"** property for the tensor that we want to apply TensorSpace later. A specified name can speed up the process of creating **"outputNames"** list.
 * You may notice that we do not mark the tensor exactly in the tensor for the core action. For example, we don't put a name in the `tf.nn.conv2d`, but mark `tf.nn.relu` as the **"MyConv2D_*"**. The reason is that our desired output of a "Convolution Layer" is the result of the activation function, which provides a better visualization.
-* We only have 2 dense (or fully connection) tensors in the function. The last Softmax dense will be used for trianing, so we treat it a little different.
+* We only have 2 dense (or fully connection) tensors in the function. The last Softmax dense will be used for training, so we treat it a little different.
 
 After building up the structure, let's train the model:
 ```Python
