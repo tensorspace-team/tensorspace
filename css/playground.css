@@ -125,3 +125,9 @@ main {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+#modelArea {
+    width: calc( 100% - 300px );
+    height: 100%;
+    position: relative;
+}

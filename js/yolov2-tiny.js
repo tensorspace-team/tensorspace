@@ -1,8 +1,32 @@
+let model;
+
 $(function() {
+
+	createModel();
+
+	$("#playgroundMenu").click(function() {
+		moveInHiddenContent();
+	});
+
+	$("#curtain").click(function() {
+		moveOutHiddenContent();
+	});
+
+	$("#close").hover(function() {
+		$("#close").attr("src", "../../assets/img/docs/close_hover.png");
+	}, function() {
+		$("#close").attr("src", "../../assets/img/docs/close.png");
+	}).click(function() {
+		moveOutHiddenContent();
+	});
+
+});
+
+function createModel() {
 
 	let container = document.getElementById( "modelArea" );
 
-	let model = new TSP.model.Sequential( container, {
+	model = new TSP.model.Sequential( container, {
 
 		aggregationStrategy: "average",
 		layerShape: "rect",
@@ -199,16 +223,34 @@ $(function() {
 
 	} );
 
-	function onYoloCeilClicked( ceilData, rectList ) {
+}
 
-		outputDetectionLayer.addRectangleList( rectList );
+function onYoloCeilClicked( ceilData, rectList ) {
 
-		if ( !outputDetectionLayer.isOpen ) {
+	outputDetectionLayer.addRectangleList( rectList );
 
-			outputDetectionLayer.openLayer();
+	if ( !outputDetectionLayer.isOpen ) {
 
-		}
+		outputDetectionLayer.openLayer();
 
 	}
 
-});
+}
+
+function moveInHiddenContent() {
+
+	$("#playgroundNav").animate({
+		left:"+=200px"
+	},500);
+	$("#curtain").fadeIn(500);
+
+}
+
+function moveOutHiddenContent() {
+
+	$("#playgroundNav").animate({
+		left:"-=200px"
+	},500);
+	$("#curtain").fadeOut(500);
+
+}

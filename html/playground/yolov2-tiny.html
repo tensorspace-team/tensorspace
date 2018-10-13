@@ -24,18 +24,10 @@
 
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/playground.css">
+    <link rel="stylesheet" href="../../css/playgroundYolo.css">
 
     <script src="../../js/yolov2-tiny.js"></script>
 
-    <style>
-
-        #modelArea {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-    </style>
 
 </head>
 <body>
@@ -97,7 +89,7 @@
 
 </nav>
 
-<aside>
+<aside id="playgroundNav">
     <div><a href="index.html">Introduction</a></div>
     <div><a href="lenet.html">LeNet</a></div>
     <div><a href="alexnet.html">AlexNet</a></div>
@@ -105,7 +97,12 @@
     <div><a href="resnet50.html">ResNet-50</a></div>
     <div class="now-label">YOLOv2-tiny</div>
     <div><a href="acgan.html">ACGAN</a></div>
+    <img id="close" src="../../assets/img/docs/close.png">
 </aside>
+
+<div id="curtain"></div>
+
+<div id="playgroundMenu"><i class="material-icons">menu</i></div>
 
 <main>
 
@@ -113,6 +110,15 @@
         <img id="loading" src="../../assets/img/loading/loading.gif">
     </div>
     <div id="modelArea"></div>
+    <div id="controlPanel">
+
+        <div class="panelTitle">YOLOv2-tiny</div>
+
+        <img src="../../assets/img/playground/33.jpg">
+
+        <div id="selectorTrigger">Select an image</div>
+
+    </div>
 
 </main>
 
