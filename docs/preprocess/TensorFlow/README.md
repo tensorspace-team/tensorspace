@@ -221,11 +221,12 @@ with tf.Session(graph=tf.Graph()) as sess:
     )
 ``` 
 ```Python
-with tf.Session(graph=tf.Graph()) as sess:
-        dir_path = '/PATH/TO/DIR/tensorflow_model_ckpt/'
-        ckpt_name = 'lenet.ckpt'
-        saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
-        saver.restore(sess, tf.train.latest_checkpoint(dir_path))
+with tf.Session() as sess:
+    model_filename ='/PATH/TO/PB/model.pb'
+    with gfile.FastGFile(model_filename, 'rb') as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+        g_in = tf.import_graph_def(graph_def)
 ``` 
 ```Python
 with tf.Session(graph=tf.Graph()) as sess:
