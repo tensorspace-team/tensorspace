@@ -17,6 +17,7 @@
     <script src="../../assets/jslib/TrackballControls.js"></script>
     <script src="../../assets/jslib/stats.min.js"></script>
     <script src="../../assets/jslib/tensorspace.min.js"></script>
+    <script src="../../assets/jslib/signature_pad.min.js"></script>
 
     <link rel="stylesheet" href="../../assets/csslib/material.fonts.css">
     <link rel="stylesheet" href="../../assets/csslib/material.min.css">
@@ -30,9 +31,14 @@
     <style>
 
         #modelArea {
-            width: 100%;
+            width: calc( 100% - 300px );
             height: 100%;
             position: relative;
+        }
+
+        .signature-pad {
+            position: relative;
+            border: 1px solid #000;
         }
 
     </style>
@@ -53,7 +59,7 @@
 
         <ul class="hidden-xs">
             <li><a href="../docs/index.html">Documentation</a></li>
-            <li class="now">Playground</li>
+            <li class="now"><a href="index.html">Playground</a></li>
             <li><a href="../gallery.html">Gallery</a></li>
             <li><a href="../../index.html#download">Download</a></li>
             <li><a href="../developer.html">Developer</a></li>
@@ -97,7 +103,7 @@
 
 </nav>
 
-<aside>
+<aside id="playgroundNav">
     <div><a href="index.html">Introduction</a></div>
     <div class="now-label">LeNet</div>
     <div><a href="alexnet.html">AlexNet</a></div>
@@ -105,14 +111,59 @@
     <div><a href="resnet50.html">ResNet-50</a></div>
     <div><a href="yolov2-tiny.html">YOLOv2-tiny</a></div>
     <div><a href="acgan.html">ACGAN</a></div>
-    <div><a href="help.html">Help</a></div>
+    <img id="close" src="../../assets/img/docs/close.png">
 </aside>
+
+<div id="curtain"></div>
 
 <main>
 
+    <div id="playgroundMenu"><i class="material-icons">menu</i></div>
+
     <div id="modelArea"></div>
+    <div id="controlPanel">
+        <canvas id="signature-pad" class="signature-pad" width=224 height=224></canvas>
+    </div>
 
 </main>
+
+<script>
+
+	let signaturePad = new SignaturePad( document.getElementById( 'signature-pad' ), {
+
+		minWidth: 10,
+		backgroundColor: 'rgba(255, 255, 255, 0)',
+		penColor: 'rgb(0, 0, 0)',
+		onEnd: getImage
+
+	} );
+
+	function getImage() {
+
+		let canvas = document.getElementById( "signature-pad" );
+		let context = canvas.getContext( '2d' );
+		let imgData = context.getImageData( 0, 0, canvas.width, canvas.height );
+
+		let signatureData = [];
+
+		for ( let i = 0; i < 224; i += 8 ) {
+
+			for ( let j = 3; j < 896; j += 32 ) {
+
+				signatureData.push( imgData.data[ 896 * i + j ] / 255 );
+
+			}
+
+		}
+
+//		model.predict( signatureData, function( predictResult ) {
+//			// console.log(predictResult);
+//		});
+
+	}
+
+
+</script>
 
 </body>
 </html>
