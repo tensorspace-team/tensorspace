@@ -6,6 +6,7 @@ $(function() {
 		aggregationStrategy: "average",
 		layerShape: "rect",
 		layerInitStatus: "close",
+		stats: true,
 		color: {
 			conv2d: 0xff00ff,
 			pooling2d: 0x00ffff
