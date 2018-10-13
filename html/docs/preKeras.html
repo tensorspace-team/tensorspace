@@ -51,9 +51,16 @@
             <a href="https://github.com/syt123450/Gio.js" class="github-corner" aria-label="View source on Github">
                 <svg viewBox="0 0 250 250" aria-hidden="true">
                     <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-                    <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+                    <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6
+                    C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9
+                    134.4,103.2"
                           fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-                    <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+                    <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4
+                    142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4
+                    163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4
+                    C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0
+                    205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1
+                    C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
                           fill="currentColor" class="octo-body"></path>
                 </svg>
             </a>
@@ -321,28 +328,32 @@
         </p>
         <header>Preprocessing Keras Model</header>
 
-        <div>In this chapter, we will introduce how to preprocess a Keras model to adapt the multiple intermediate layer
-            outputs for applying TensorSpace. If you have read the <a href="preTfKeras.html">tf.keras preprocessing
-                tutorial</a>, since the close relations between the two APIs, the workflows are very similar.
+        <div>
+            In this chapter, we will introduce how to preprocess a Keras model to adapt the multiple intermediate
+            layer outputs for applying TensorSpace. If you have read the
+            <a href="preTfKeras.html">tf.keras preprocessing tutorial</a>
+            , since the close relations between the two APIs, the workflows are very similar.
         </div>
 
         <div>The sample files that are used for the tutorial are listed below:</div>
 
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a
-                    href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py">keras_model.py</a>
+            <a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py">
+                keras_model.py
+            </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a
-                    href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh">convert_keras.sh</a>
+            <a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh">
+                convert_keras.sh
+            </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a
-                    href="https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/Keras/models">all
-                model files</a>
+            <a href="https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/Keras/models">
+                all model files
+            </a>
         </div>
 
         <div>For the tutorial, we use Python 3.6.5 and the following libraries:</div>
@@ -361,11 +372,12 @@ from keras.models import load_model
 
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            The core libraries are `keras` and `numpy`.
+            The core libraries
+            are <span class="highlight-text">keras</span> and <span class="highlight-text">numpy</span>.
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            `tf.keras` is used to provide dataset only.
+            <span class="highlight-text">tf.keras</span> is used to provide dataset only.
         </div>
 
         <div>It is also required to install <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a> (a
@@ -378,16 +390,18 @@ $ pip install tensorflowjs
             </code></pre>
         </div>
 
-        <div>If you are new on training a ML model by Keras, we highly recommand you to read the <a
-                href="https://keras.io/#getting-started-30-seconds-to-keras">guide</a> from <a href="https://keras.io/">Keras</a>
-            first.
+        <div>
+            If you are new on training a ML model by Keras, we highly recommand you to read the
+            <a href="https://keras.io/#getting-started-30-seconds-to-keras">guide</a> from
+            <a href="https://keras.io/">Keras</a> first.
         </div>
 
         <div>To preprocess a Keras model, we have the following steps:</div>
 
-        <p align="center">
-            <img class="tag-img" src="../../assets/img/docs/Keras/Keras_general_process.png" alt="general TF process">
-        </p>
+        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_general_process.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Steps to preprocess a Keras model
+        </div>
 
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
@@ -403,7 +417,7 @@ $ pip install tensorflowjs
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="#convertModel">4. Convert to TensorFlow.js model</a>
+            <a href="#convertModel">4. Convert to TensorSpace compatible model</a>
         </div>
 
         <div>In the tutorial, we try to preprocess a Keras model of LeNet with MNIST dataset as an example.</div>
@@ -411,21 +425,22 @@ $ pip install tensorflowjs
         <div class="sub-title" id="loadModel">1 Train/Load Model</div>
         <div><span class="span_bold">1.1 Train a new model</span></div>
 
-        <div>If you don't have your model trained yet or not sure how to generate a proper model for TensorSpace from a
+        <div>
+            If you don't have your model trained yet or not sure how to generate a proper model for TensorSpace from a
             scratch, let's train a model together~
         </div>
 
         <div>By following the structure of the LeNet,</div>
 
-        <p align="center">
-
-            <img class="tag-img-vertical" src="../../assets/img/docs/General/LeNet_Structure.png" alt="LeNet structure">
-        </p>
+        <img class="tag-img-vertical" src="../../assets/img/docs/General/LeNet_Structure.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 2</span> - LeNet structure
+        </div>
 
         <div>We can generate a LeNet model as the following:</div>
 
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 def create_sequential_model():
     single_output_model = Sequential([
         InputLayer(input_shape=(28, 28)),
@@ -447,12 +462,13 @@ def create_sequential_model():
 
         <div>
             <ul class="list-content">
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>We add the "name" property for each layers that we
-                    want to apply TensorSpace.
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    We add the '<span class="span_bold highlight-text">name</span>' property for each layers
+                    that we want to apply TensorSpace.
                 </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>The <a
-                        href="https://keras.io/#getting-started-30-seconds-to-keras">Guide</a> from Keras can help you
-                    learn how to use the Keras library for more details.
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <a href="https://keras.io/#getting-started-30-seconds-to-keras">Guide</a>
+                    from Keras can help you learn how to use the Keras library for more details.
                 </li>
             </ul>
         </div>
@@ -460,7 +476,7 @@ def create_sequential_model():
         <div>After constructing the model structure, we compile and train it with the MNIST dataset.</div>
 
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
@@ -472,12 +488,15 @@ model.fit(x_train, y_train, epochs=5, batch_size=32)
             </code></pre>
         </div>
 
-        <div>After training, we should have a `model` which contains the structure and weights of the network.</div>
+        <div>
+            After training, we should have a <span class="highlight-text">model</span> which contains the structure
+            and weights of the network.
+        </div>
 
         <div>We can try to predict a result from a random generated input:</div>
 
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))
@@ -486,14 +505,17 @@ print(model.predict(input_sample))
 
         <div>And then we get the probabilities predicted by the model.</div>
 
-        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_1.png" alt="predict output 1">
+        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_1.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 3</span> - Single list prediction output from trained model
+        </div>
 
         <div><span class="span_bold">1.2 Load an existed model</span></div>
 
         <div>If you have already had a model in hand, let's load the model:</div>
 
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 model = load_model("/PATH_TO_Keras/model.h5")
             </code></pre>
         </div>
@@ -501,7 +523,7 @@ model = load_model("/PATH_TO_Keras/model.h5")
         <div>Or if the model and weights are stored separately, we can load like:</div>
 
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 json_path = "PATH_TO_JSON/model.json"
 weight_path = "PATH_TO_WEIGHT/weights.hdf5"
 structure = open(json_path, "r")
@@ -512,12 +534,14 @@ model.load_weights(weight_path)
             </code></pre>
         </div>
 
-        <div>Similar to training a new model, after loading, we should have a `model` which contains the structure and
-            weights of the network. We can try to predict a result from a random generated input:
+        <div>
+            Similar to training a new model, after loading, we should have a <span class="highlight-text">model</span>
+            which contains the structure and weights of the network.
+            We can try to predict a result from a random generated input:
         </div>
 
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))
@@ -526,36 +550,46 @@ print(model.predict(input_sample))
 
         <div>And then we get the probabilities predicted by the model.</div>
 
-        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_1.png" alt="predict output 1">
-
-        <div class="sub-title" id="addOutputs">2 Insert multiple intermediate outputs</div>
-        <div>We can observe that the output from predicting an input is a single array (softmax result). Each value of
-            the array represents the probability of the corresponding digit that the input image could be.
+        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_1.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 4</span> - Single list prediction output from loaded model
         </div>
 
-        <div>Since TensorSpace presents the relations among different layers, which show the outputs from intermediate
+        <div class="sub-title" id="addOutputs">2 Insert multiple intermediate outputs</div>
+        <div>
+            We can observe that the output from predicting an input is a single list (softmax result). Each value of
+            the list represents the probability of the corresponding digit that the input image could be.
+        </div>
+
+        <div>
+            Since TensorSpace presents the relations among different layers, which show the outputs from intermediate
             layers, we need to collect necessary output data for TensorSpace to "draw" on the visualization model.
         </div>
 
-        <div>First, we can use the `summary()` function to check the layer information. We can also loop all layer
-            names.
+        <div>
+            First, we can use the <span class="highlight-text">summary()</span> function to check
+            the layer information. We can also loop all layer names.
         </div>
 
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 model.summary()
 for layer in model.layers:
      print(layer.name)
             </code></pre>
         </div>
 
-        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_summary.png" alt="summary and layers">
+        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_summary.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 5</span> - Model summary and layer names
+        </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
 
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            If a `name` property is set for a layer, we can see the name from `summary()`.
+            If a <span class="span_bold highlight-text">name</span> property is set for a layer,
+            we can see the name from <span class="highlight-text">summary()</span>.
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
@@ -564,15 +598,17 @@ for layer in model.layers:
 
         <div>Based on the summary, we can learn the general structure of a LeNet:</div>
 
-        <div>It has two combinations of Conv2D and MaxPooling. Then after a flatten layer, it has three dense layers.
+        <div>
+            It has two combinations of Conv2D and MaxPooling. Then after a flatten layer, it has three dense layers.
             All layers names are listed.
         </div>
 
-        <div>Let's pick up the layers we want to present by TensorSpace and encapsulate a new model with the desired
+        <div>
+            Let's pick up the layers we want to present by TensorSpace and encapsulate a new model with the desired
             outputs:
         </div>
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 output_layer_names = [
     "Conv2D_1", "MaxPooling2D_1", "Conv2D_2", "MaxPooling2D_2",
     "Dense_1", "Dense_2", "Softmax"
@@ -588,7 +624,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
 
         <div>Or if we want them all, we can do like:</div>
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 def generate_encapsulate_model(model):
     enc_model = Model(
         inputs=model.input,
@@ -603,19 +639,21 @@ def generate_encapsulate_model(model):
 
         <div>
             <ul class="list-content">
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>Do not include the 'input' or `input_layer`, since
-                    if the model is constructed by using `Model()`, it is possible to have the input as an tensor (np
-                    array) instead of an actual Keras layer.
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Do not include the <span class="highlight-text">input</span>
+                    or <span class="highlight-text">input_layer</span>, since if the model is constructed by
+                    using <span class="highlight-text">Model()</span>,
+                    it is possible to have the input as an tensor (np array) instead of an actual Keras layer.
                 </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>Double check the layers you want, make sure you put
-                    them in a proper order.
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Double check the layers you want, make sure you put them in a proper order.
                 </li>
             </ul>
         </div>
 
         <div>Then we can generate our encapsulated model which contains multiple intermediate outputs:</div>
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
 # OR
 # enc_model = generate_encapsulate_model(model)
@@ -624,36 +662,44 @@ enc_model = generate_encapsulate_model_with_output_layer_names(model, output_lay
 
         <div>We can try to predict an input sample with the encapsulated model:</div>
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 print(enc_model.predict(input_sample))
             </code></pre>
         </div>
 
         <div>The output is a list which contains all output data of the layers we selected.</div>
 
-        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_2.png" alt="predict output 2">
+        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_2.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 6</span> - Multiple list outputs after preprocessing
+        </div>
 
         <div>The last output is the same as the one we predicted from the original model</div>
-        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_3.png" alt="predict output 3">
+
+        <img class="tag-img" src="../../assets/img/docs/Keras/Keras_predict_3.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 7</span> - Last list output is the same as the original inferences
+        </div>
 
         <div class="sub-title" id="saveModel">3 Save encapsulated model</div>
-        <div>For further convertion, we have to save the encapsulate model.</div>
+        <div>For further conversion, we have to save the encapsulate model.</div>
 
         <div>
             <ul class="list-content">
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>For Keras, we don't need to compile the encapsulate
-                    model as long as we don't further train the model. So don't worry too much about the arisen warning
-                    about model compiling
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    For Keras, we don't need to compile the encapsulate model as long as we don't further train
+                    the model. So don't worry too much about the arisen warning about model compiling.
                 </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>If you want to continue with the encapsulated
-                    model, feel free to put proper configurations. Here, we just use "adam" and
-                    "sparse_categorical_crossentropy" as an example.
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    If you want to continue with the encapsulated model, feel free to put proper configurations.
+                    Here, we just use <span class="highlight-text">adam</span>
+                    and <span class="highlight-text">sparse_categorical_crossentropy</span> as an example.
                 </li>
             </ul>
         </div>
 
         <div class="code-snippet">
-            <pre><code class="python">
+            <pre><code class="Python">
 enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
@@ -661,8 +707,9 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
             </code></pre>
         </div>
 
-        <div class="sub-title" id="convertModel">4 Convert to TensorFlow.js model</div>
-        <div>The last step is to convert the Keras model which contains multiple intermediate outputs to a TensorFlow.js
+        <div class="sub-title" id="convertModel">4 Convert to TensorSpace compatible model</div>
+        <div>
+            The last step is to convert the Keras model which contains multiple intermediate outputs to a TensorSpace
             compatible model by <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a>.
         </div>
 
@@ -677,37 +724,45 @@ tensorflowjs_converter \
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/Keras/Keras_models.png" alt="tfjs models">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 8</span> - Saved model files
+        </div>
 
         <div>
             <ul class="list-content">
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
                     There are two types of file generated:
                     <ul class="list-indent">
-                        <li class="panel-heading"><i class="material-icons">flare</i>One `model.json` file which describe the structure of our
-                            model (defined multiple outputs)
+                        <li class="panel-heading"><i class="material-icons">flare</i>
+                            One "model.json" file which describe the structure of our model (defined multiple outputs)
                         </li>
-                        <li class="panel-heading"><i class="material-icons">flare</i>Some weight files which contains trained weights. The
-                            number of weight files is dependent on the size and structure of the given model.
+                        <li class="panel-heading"><i class="material-icons">flare</i>
+                            Some weight files which contains trained weights. The number of weight files is dependent on
+                            the size and structure of the given model.
                         </li>
                     </ul>
                 </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>By default, the structure file has the name
-                    `model.json` which you <span class="span_bold">can</span> modify later.
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    By default, the structure file has the name "model.json" which you
+                    <span class="span_bold">can</span> modify later.
                 </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>The weight files are named like "group1-shard1of1"
-                    which are used and written within the `model.json` file. Hence we <span class="span_bold">DO NOT</span> suggest to modify
-                    the name of weight files, unless really necessary. If you really want to modify them, please modify
-                    the content in the `.json` (i.e. `model.json`) as well.
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The weight files are named like "group1-shard1of1" which are used and written within the
+                    "model.json" file. Hence we <span class="span_bold">DO NOT</span> suggest to modify the name of
+                    weight files, unless really necessary. If you really want to modify them, please modify
+                    the content in the ".json" (i.e. "model.json") as well.
                 </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>For more detailed information about tfjs-converter,
-                    you can visit <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a>.
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    For more detailed information about tfjs-converter, you can
+                    visit <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a>.
                 </li>
             </ul>
 
         </div>
 
-        <div>If everything looks good, you shall be ready for the next step - "2. Apply TensorSpace API from the model
-            structure".
+        <div>
+            If everything looks good, you shall be ready for the next step
+            - <a href="basicLoad.html">Load a TensorSpace compatible model</a>
         </div>
 
     </main>
