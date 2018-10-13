@@ -190,8 +190,10 @@ $(function() {
 			async: true,
 			dataType: 'json',
 			success: function (data) {
-				model.predict( data );
-				$( "#loadingPad" ).hide();
+				model.predict( data, function(){
+					$( "#loadingPad" ).hide();
+				} );
+
 			}
 		});
 
