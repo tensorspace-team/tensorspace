@@ -80,6 +80,7 @@ SceneInitializer.prototype = {
 		if ( this.hasStats ) {
 
 			this.stats = new Stats();
+			this.stats.dom.style.position = "absolute";
 			this.stats.showPanel( 0 );
 			this.container.appendChild( this.stats.dom );
 
