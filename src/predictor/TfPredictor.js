@@ -48,10 +48,9 @@ TfPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 	 * predict(), Called by model to get prediction result.
 	 *
 	 * @param data, input data
-	 * @param callback, callback function fired when finishing prediction.
 	 */
 
-	predict: function( data, callback ) {
+	predict: function( data ) {
 
 		// Create input tensor for prediction.
 
@@ -70,14 +69,6 @@ TfPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 			// If outputsName is undefined, use predict to get prediction result.
 
 			predictResult = this.model.resource.predict( inputTensor );
-
-		}
-
-		// Execute callback function if defined.
-
-		if ( callback !== undefined ) {
-
-			callback( predictResult[ predictResult.length - 1 ].dataSync() );
 
 		}
 

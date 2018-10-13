@@ -70,7 +70,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 			// If a prediction model has already been loaded into TSP, use predictor to get the prediction result.
 
-			this.predictResult = this.predictor.predict( input, callback );
+			this.predictResult = this.predictor.predict( input );
 
 			// Update all layer's visualization.
 
@@ -81,6 +81,12 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 			// If no prediction model be loaded into TSP, just update the input layer.
 
 			this.updateInputVis();
+
+		}
+
+		if ( callback !== undefined ) {
+
+			callback( this.predictResult[ this.predictResult.length - 1 ].dataSync() );
 
 		}
 

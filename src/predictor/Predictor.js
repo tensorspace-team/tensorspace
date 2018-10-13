@@ -182,10 +182,9 @@ Predictor.prototype = {
 	 * Override this function to implement actual prediction work
 	 *
 	 * @param data, input data
-	 * @param callback, callback function fired when finishing prediction.
 	 */
 
-	predict: function( data, callback ) {
+	predict: function( data ) {
 
 		return [];
 
