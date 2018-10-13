@@ -316,10 +316,177 @@
     </aside>
 
     <main>
-        <header>Padding2d</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <h1>Padding2d <img src="https://placehold.it/15/6eb6ff/000000?text=+" alt="#6eb6ff"></h1>
+        <p>对前一层进行padding操作，在矩阵（二维向量）的四周补零</p>
+        <h2>构造器 3️⃣</h2>
+        <pre class="hljs language-javascript"><code>TSP.layers.Padding2d( { <span class="hljs-attr">padding</span> : [ Int, Int ] } )
+</code></pre>
+        <h3>参数列表</h3>
+        <table>
+            <thead>
+            <tr>
+                <th style="text-align:center">参数名<br />标签</th>
+                <th style="text-align:center">类型</th>
+                <th style="text-align:center">简介</th>
+                <th style="text-align:center">具体用法细节和例子</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="text-align:center"><a href="">padding</a> <br />⭐️⚙️</td>
+                <td style="text-align:center"><code>[Int]</code></td>
+                <td style="text-align:center">四周加0的数量</td>
+                <td style="text-align:center">例如，<code>padding=[ 2, 2 ]</code>，第一个值表示向<strong>左右</strong>分别加<code>2</code>个零，第二个值表示向<strong>上下</strong>加<code>2</code>个0</td>
+            </tr>
+            <tr>
+                <td style="text-align:center"><a href="">name</a> <br />🔧</td>
+                <td style="text-align:center"><code>String</code></td>
+                <td style="text-align:center">层的命名，建议添加</td>
+                <td style="text-align:center"><code>name: &quot;layerName&quot;</code></td>
+            </tr>
+            <tr>
+                <td style="text-align:center"><a href="">color</a> <br />🎨⚙️</td>
+                <td style="text-align:center"><code>color format</code></td>
+                <td style="text-align:center">层的颜色</td>
+                <td style="text-align:center"><code>Padding2d</code>默认颜色是<strong>浅蓝色</strong> <img src="https://placehold.it/15/6eb6ff/000000?text=+" alt="#6eb6ff"></td>
+            </tr>
+            <tr>
+                <td style="text-align:center"><code>closeButton</code>* <br />🎨⚙️</td>
+                <td style="text-align:center"><code>Dict</code></td>
+                <td style="text-align:center">层关闭按钮外观控制<strong>列表</strong></td>
+                <td style="text-align:center"><a href="">display</a> : <code>Bool</code>  <code>true</code> [default] 显示按钮 <code>false</code> 隐藏按钮<br /><a href="">ratio</a> : <code>Int</code> 为正常大小的几倍，默认为1倍<br />例如，设为2为正常大小的2倍大</td>
+            </tr>
+            <tr>
+                <td style="text-align:center"><a href="">initStatus</a> <br />🎦⚙️</td>
+                <td style="text-align:center"><code>String</code></td>
+                <td style="text-align:center">初始化时，本层是否收缩</td>
+                <td style="text-align:center"><code>close</code>[default] : 收缩</td>
+            </tr>
+            <tr>
+                <td style="text-align:center"><a href="">animationTimeRatio</a> <br />🎦⚙️</td>
+                <td style="text-align:center"><code>Int</code></td>
+                <td style="text-align:center">张开和伸缩的调整速度，呈倍速关系</td>
+                <td style="text-align:center">例如2就是2倍，<strong>数字越大速度越快</strong></td>
+            </tr>
+            </tbody>
+        </table>
+        <p>*<code>closeButton</code> 例子</p>
+        <pre class="hljs language-javascript"><code>closeButton {
+    <span class="hljs-attr">display</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">ratio</span>: <span class="hljs-number">2</span>,
+}
+</code></pre>
+        <h3>标签详情</h3>
+        <table>
+            <thead>
+            <tr>
+                <th style="text-align:center">符号</th>
+                <th style="text-align:center">参数性质</th>
+                <th style="text-align:center">说明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="text-align:center">⭐️</td>
+                <td style="text-align:center">必要</td>
+                <td style="text-align:center">使用时必须提供，不能为空<br/>只要提供了这些参数，就能正常创建实例，控制参数使用<code>默认值</code></td>
+            </tr>
+            <tr>
+                <td style="text-align:center">🔧</td>
+                <td style="text-align:center">推荐</td>
+                <td style="text-align:center">使用时推荐给定，未给定也可以运行，但在体验和易用性上有隐患</td>
+            </tr>
+            <tr>
+                <td style="text-align:center">⚙️</td>
+                <td style="text-align:center">可选</td>
+                <td style="text-align:center">根据模型配置参数<strong>选择性添加</strong><br/>这里的参数对于层的结构（3D可视化外观）没有影响</td>
+            </tr>
+            <tr>
+                <td style="text-align:center">📦</td>
+                <td style="text-align:center">模型</td>
+                <td style="text-align:center">配置层的相关参数，和模型设计有关</td>
+            </tr>
+            <tr>
+                <td style="text-align:center">🎨</td>
+                <td style="text-align:center">外观</td>
+                <td style="text-align:center">可覆盖<code>TSP.model.Sequential</code>下的属性进行细调，<a href="">详情点击</a></td>
+            </tr>
+            <tr>
+                <td style="text-align:center">🎦</td>
+                <td style="text-align:center">动画控制</td>
+                <td style="text-align:center">可覆盖<code>TSP.model.Sequential</code>下的属性进行细调，<a href="">详情点击</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <h3>调用结果</h3>
+        <ul>
+            <li>创建一个新的对象，往3D场景中添加一个<strong>padding层</strong></li>
+            <li>默认颜色: #6eb6ff  <img src="https://placehold.it/15/6eb6ff/000000?text=+" alt="#6eb6ff"></li>
+        </ul>
+        <div align="left"><img src="https://github.com/zchholmes/tsp_image/blob/master/Document/Padding2d.png" alt="" width="700"></div>
+        <h2>属性</h2>
+        <h3><a href="">.inputShape</a> : [Int]</h3>
+        <blockquote>
+            <p>在 <code>model.init()</code> 后才可拿到数据，否则为<code>undefined</code></p>
+        </blockquote>
+        <p>本层<strong>输入Tensor</strong>的形状。Dataformat默认通道值在最后，例如<code>inputShape = [ 28, 28, 3 ]</code> 表示输入为<code>3</code>个特征图，每个图大小为<code>28*28</code></p>
+        <h3><a href="">.outputShape</a> : [Int]</h3>
+        <blockquote>
+            <p>在 <code>model.init()</code> 后才可拿到数据，否则为<code>undefined</code></p>
+        </blockquote>
+        <p>本层<strong>输出Tensor</strong>的形状为<code>3维</code>，例如<code>outputShape = [ 32, 32 ]</code>  表示经过此层处理后，输出尺寸是<code>32*32</code></p>
+        <h3><a href="">.neuralValue</a> : [float32]</h3>
+        <blockquote>
+            <p>载入模型，在 <code>model.predict()</code> 后才可以拿到输入数据，否则为<code>undefined</code></p>
+        </blockquote>
+        <p>本层的<strong>层间输出</strong>值数组，<code>padding</code>层不改变输入的值，只是在边缘加0，输出的形状改变</p>
+        <h3><a href="">.name</a> : String</h3>
+        <blockquote>
+            <p>创建后即可取到</p>
+        </blockquote>
+        <p>本层的自定义名称</p>
+        <h3><a href="">.layerType</a> : String</h3>
+        <blockquote>
+            <p>创建后即可取到</p>
+        </blockquote>
+        <p>本层的类型，返回一个定值，字符串<code>Padding2d</code></p>
+        <h2>方法</h2>
+        <h3><a href="">.openLayer()</a> : void</h3>
+        <p>（1）通过直接和3d场景中物体交互<code>直接点击层</code>打开</p>
+        <div align="left"><img src="https://github.com/zchholmes/tsp_image/blob/master/Document/Padding2d-open.gif" alt="" width="400"></div>
+        <p>（2）代码中通过调用方法打开</p>
+        <pre class="hljs language-javascript"><code>model.init();
+TSP.layers.Padding2d.openLayer()
+</code></pre>
+        <h3><a href="">.closeLayer()</a> : void</h3>
+        <p>（1）通过直接和3d场景中物体交互<code>点击按钮</code>关闭</p>
+        <div align="left"><img src="https://github.com/zchholmes/tsp_image/blob/master/Document/Padding2d-close.gif" alt="" width="400"></div>
+        <p>（2）代码中通过调用方法打开</p>
+        <pre class="hljs language-javascript"><code>model.init();
+<span class="hljs-comment">// if this layer already opened</span>
+TSP.layers.Padding2d.closeLayer()
+</code></pre>
+        <h2>使用样例</h2>
+        <h3>添加层</h3>
+        <p>（1）声明一个<code>Padding2d</code>的实例，在左右加2个0，上下加3个0，方便复用</p>
+        <pre class="hljs language-javascript"><code><span class="hljs-keyword">let</span> paddingLayer = <span class="hljs-keyword">new</span> TSP.layers.Padding2d({
+    <span class="hljs-attr">padding</span>: [ <span class="hljs-number">2</span>, <span class="hljs-number">3</span> ],
+    <span class="hljs-attr">name</span>: <span class="hljs-string">"Padding2d1"</span>,
+    <span class="hljs-attr">initStatus</span>: <span class="hljs-string">"open"</span>,
+});
+model.add(paddingLayer);
+</code></pre>
+        <p>（2）直接添加<code>Padding2d</code></p>
+        <pre class="hljs language-javascript"><code>model.add(<span class="hljs-keyword">new</span> TSP.layers.Padding2d({
+    <span class="hljs-attr">padding</span>: [ <span class="hljs-number">2</span>, <span class="hljs-number">3</span> ],
+    <span class="hljs-attr">name</span>: <span class="hljs-string">"Padding2d2"</span>
+}));
+</code></pre>
+        <h3>源码</h3>
+        <p><a href="https://github.com/syt123450/tensorspace/blob/master/src/layer/intemediate/Padding2d.js">tensorspace/src/layer/intemediate/Padding2d.js</a></p>
     </main>
 </div>
+
 
 <footer>
     Copyright © 2018 TensorSpace.js. All rights reserved
