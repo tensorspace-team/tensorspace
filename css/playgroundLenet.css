@@ -1,0 +1,20 @@
+.signature-pad {
+    position: relative;
+}
+
+.wrapper {
+    width: 224px;
+    height: 224px;
+    margin-left: 38px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: red;
+}
+
+#clear {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+}
