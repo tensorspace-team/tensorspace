@@ -341,6 +341,7 @@ td, th {
 .property-title {
 
     font-size: 20px;
+    margin-top: 10px;
 
 }
 
@@ -645,6 +646,16 @@ footer {
 
     main > header {
         font-size: 20px;
+    }
+
+    .sub-title {
+
+        font-size: 18px;
+
+    }
+
+    .property-title {
+        font-size: 16px;
     }
 
     .code {
