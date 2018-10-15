@@ -30,6 +30,8 @@ To import TensorFlow.js, include tf.min.js in html.
 For preprocessing a tfjs model, we have a general process like:
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_general_process.png" alt="general TFjs process" width="830" >
+<br/>
+<b>Fig. 1</b> - Steps to preprocess a TensorFlow.js model
 </p>
 
 In this tutorial, we will introduce the process in two use cases:
@@ -43,9 +45,12 @@ All cases use LeNet with MNIST dataset as an example.
 If you do not have any existed model in hands, let's train a TensorFlow.js model together.
 
 First, let's take a look at the LeNet structure:
+
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
-</p> 
+<br/>
+<b>Fig. 2</b> - LeNet structure
+</p>
 
 By following the structure, we can build a basic model:
 ```html
@@ -221,7 +226,11 @@ async function saveModel() {
 
 After downloading from the browser, we shall have the following files:
 
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_created_model.png" alt="models" width="400" >
+<br/>
+<b>Fig. 3</b> - Saved model files
+</p>
 
 ### <div id="loadModel">2 To convert an existing tfjs model to make it compatible with TensorSpace</div>
 #### 2.1 Load an existing model
@@ -258,7 +267,11 @@ console.log(outputList);
 
 The console output shall be:
 
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_1.png" alt="layer outputs" width="575" >
+<br/>
+<b>Fig. 4</b> - Intermediate layer names and multiple outputs
+</p>
 
 **Note:**
 * Because of the limitations of TensorFlow.js, we have to apply each layer to its corresponding input manually. 
@@ -275,7 +288,11 @@ singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
 console.log(singleOutput);
 ```
 
+<p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_2.png" alt="enc model output" width="575" >
+<br/>
+<b>Fig. 5</b> - Multiple outputs from encapsulated model
+</p>
 
 #### 2.3 Save the encapsulated model 
 After completing the previous steps, we can save the encapsulated model:
@@ -286,4 +303,4 @@ async function saveModel() {
 saveModel();
 ```
 
-If everything looks good, you shall be ready for the next step - "2. Apply TensorSpace API from the model structure".
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model]()(TBD).
