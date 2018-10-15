@@ -460,10 +460,34 @@ TSP.layers.Conv2d( { fileters : Int , shape : [ Int, Int ] } )
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
         <div class="property-title"><a href="">.layerType</a> : String</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的类型，返回一个定值，字符串Conv2d。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的类型，返回一个定值，字符串<span class="span_bold">Conv2d</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
         <div class="sub-title">方法</div>
+
+        <div class="property-title"><a href="">.apply( layer )</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>此方法只在 <a href="modelFunctional_zh.html">Function Model</a> 中使用（非序列型，图结构）。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> 构建模型语法，直接添加层即可。</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+let inputLayer = new TSP.layers.Input2d( {
+
+    shape: [28, 28]
+
+} );
+
+let convLayer = new TSP.layers.Conv2d( {
+
+    kernelSize: 2,
+    filters: 16,
+    strides: 1
+
+} );
+
+convLayer.apply( inputLayer );
+            </code></pre>
+        </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
@@ -507,7 +531,7 @@ model.add( conv2dLayer );
 
 model.init();
 
-// 如果layer已经是打开状态，条用closeLayer API来关闭layer。
+// 如果layer已经是打开状态，调用closeLayer API来关闭layer。
 
 conv2dLayer.closeLayer();
             </code></pre>
@@ -611,12 +635,12 @@ model.add(new TSP.layers.Conv2d( {
             <tr id="iconStyle">
                 <th scope="row">🎨</th>
                 <td>外观</td>
-                <td>可覆盖TSP.model.Sequential下的属性进行细调，<a href="">查看详情</a></td>
+                <td>可覆盖TSP.model下的属性进行细调（<a href="modelIntro_zh.html#modelConfig">查看详情</a>）</td>
             </tr>
             <tr id="iconAnimation">
                 <th scope="row">🎦</th>
                 <td>动画控制</td>
-                <td>可覆盖TSP.model.Sequential下的属性进行细调，<a href="">查看详情</a></td>
+                <td>可覆盖TSP.model下的属性进行细调（<a href="modelIntro_zh.html#modelConfig">查看详情</a>）</td>
             </tr>
             </tbody>
         </table>

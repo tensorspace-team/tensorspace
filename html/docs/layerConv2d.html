@@ -358,7 +358,7 @@ TSP.layers.Conv2d( { fileters : Int , shape : [ Int, Int ] } )
                     <p><a href="#iconSuggest">🔧</a></p>
                 </th>
                 <td>String</td>
-                <td>Name of this layer. Highly recommend to arrange to make code more readable.</td>
+                <td>Name of this layer. <span class="span_bold">Highly recommend</span> to arrange to make code more readable.</td>
                 <td>name: "layerName"</td>
             </tr>
             <tr>
@@ -461,10 +461,34 @@ TSP.layers.Conv2d( { fileters : Int , shape : [ Int, Int ] } )
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 
         <div class="property-title"><a href="">.layerType</a> : String</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer, return a constant: string Conv2d.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer, return a constant: string <span class="span_bold">Conv2d</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 
         <div class="sub-title">Method</div>
+
+        <div class="property-title"><a href="">.apply( layer )</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>This method only used in <a href="modelFunctional.html">Function Model</a> (Non-sequential, Graph structure).</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+let inputLayer = new TSP.layers.Input2d( {
+
+    shape: [28, 28]
+
+} );
+
+let convLayer = new TSP.layers.Conv2d( {
+
+    kernelSize: 2,
+    filters: 16,
+    strides: 1
+
+} );
+
+convLayer.apply( inputLayer );
+            </code></pre>
+        </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Click on the layer directly to open it by interacting directly with the object in the 3D scene</div>
@@ -614,12 +638,12 @@ model.add(new TSP.layers.Conv2d( {
             <tr id="iconStyle">
                 <th scope="row">🎨</th>
                 <td>Style</td>
-                <td>Override the properties at TSP.model.Sequential to fine tuning the style <a href="">Click for details</a></td>
+                <td>Override the properties in TSP.model (<a href="modelIntro.html#modelConfig">model configuration</a>)</td>
             </tr>
             <tr id="iconAnimation">
                 <th scope="row">🎦</th>
                 <td>Animation</td>
-                <td>Override the properties at TSP.model.Sequential to fine tuning the style <a href="">Click for details.</a></td>
+                <td>Override the properties in TSP.model (<a href="modelIntro.html#modelConfig">model configuration</a>)</td>
             </tr>
             </tbody>
         </table>
