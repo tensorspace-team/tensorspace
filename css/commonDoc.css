@@ -213,6 +213,7 @@ main p {
 
 main > div {
     margin-top: 10px;
+    text-align: justify;
 }
 
 main > div > ul {
