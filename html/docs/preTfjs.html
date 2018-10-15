@@ -316,8 +316,379 @@
     </aside>
 
     <main>
+        <img class="logo-img" src="../../assets/img/docs/Logos/tfjs.png">
         <header>Preprocessing TensorFlow.js Model</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div>In the following chapter, we will introduce how to preprocess a TensorFlow.js (AKA. "tfjs") model before applying TensorSpace, which requires the intermediate outputs from internal layers.</div>
+        <div>If you are new for a tfjs model, we highly recommend you to go through the <a href="https://js.tensorflow.org/tutorials/">guide</a> from TensorFlow.js first.</div>
+        <div>The sample files we used in the tutorial are listed below:</div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html">
+                createTfjsModel.html
+            </a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html">
+                loadTfjsModel.html
+            </a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlowjs/models">
+                all model files
+            </a>
+        </div>
+        <div>For the tutorial, make sure to install and import TensorFlow.js.</div>
+        <div>To install TensorFlow.js, just use the NPM install:</div>
+        <div class="code-snippet">
+            <pre><code class="Bash">
+npm install @tensorflow/tfjs
+            </code></pre>
+        </div>
+        <div>To import TensorFlow.js, include tf.min.js in html.</div>
+        <div class="code-snippet">
+            <pre><code class="html">
+&lt;script src="libs/tf.min.js"&gt;&lt;/script&gt;
+            </code></pre>
+        </div>
+        <div>For preprocessing a tfjs model, we have a general process like:</div>
+        <img class="tag-img" src="../../assets/img/docs/TensorFlowJS/tfjs_general_process.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Steps to preprocess a TensorFlow.js model
+        </div>
+        <div>In this tutorial, we will introduce the process in two use cases:</div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="#toTrain">1. To train a TensorSpace compatible tfjs model</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="#toConvert">2. To convert an existing tfjs model to make it compatible with TensorSpace</a>
+        </div>
+        <div>All cases use LeNet with MNIST dataset as an example.</div>
+
+        <div id="toTrain" class="sub-title">1 To train a TensorSpace compatible tfjs model</div>
+
+        <div><span class="span_bold">1.1 Train a new model</span></div>
+
+        <div>If you do not have any existed model in hands, let's train a TensorFlow.js model together.</div>
+        <div>First, let's take a look at the LeNet structure:</div>
+
+        <img class="tag-img-vertical" src="../../assets/img/docs/General/LeNet_Structure.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 2</span> - LeNet structure
+        </div>
+        <div>By following the structure, we can build a basic model:</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+// Initialize layer.
+const input = tf.input({shape: [28, 28, 1]});
+const conv1 = tf.layers.conv2d({
+    kernelSize: 5,
+    filters: 6,
+    strides: 1,
+    activation: 'relu',
+    kernelInitializer: 'VarianceScaling',
+    name: 'MyConv2D_1'
+});
+const maxPool1 = tf.layers.maxPooling2d({
+    poolSize: [2, 2],
+    strides: [2, 2],
+    name: 'MyMaxPooling_1'
+});
+const conv2 = tf.layers.conv2d({
+    kernelSize: 5,
+    filters: 16,
+    strides: 1,
+    activation: 'relu',
+    kernelInitializer: 'VarianceScaling',
+    name: 'MyConv2D_2'
+});
+const maxPool2 = tf.layers.maxPooling2d({
+    poolSize: [2, 2],
+    strides: [2, 2],
+    name: 'MyMaxPooling_2'
+});
+
+const flatten = tf.layers.flatten();
+
+const dense1 = tf.layers.dense({
+    units: 120,
+    kernelInitializer: 'VarianceScaling',
+    activation: 'relu',
+    name: 'MyDense_1'
+});
+const dense2 = tf.layers.dense({
+    units: 84,
+    kernelInitializer: 'VarianceScaling',
+    activation: 'relu',
+    name: 'MyDense_2'
+});
+const softmaxLayer = tf.layers.dense({
+    units: 10,
+    kernelInitializer: 'VarianceScaling',
+    activation: 'softmax',
+    name: 'MySoftMax'
+});
+
+// Make layer connection.
+const conv1Output = conv1.apply(input);
+const maxPool1Output = maxPool1.apply(conv1Output);
+const conv2Output = conv2.apply(maxPool1Output);
+const maxPool2Output = maxPool2.apply(conv2Output);
+const flattenOutput = flatten.apply(maxPool2Output);
+const dense1Output = dense1.apply(flattenOutput);
+const dense2Output = dense2.apply(dense1Output);
+const softMaxOutput = softmaxLayer.apply(dense2Output);
+
+// For multiple outputs purpose, we use function tf.model API to build the model.
+const model = tf.model({
+    inputs: input,
+    outputs: softMaxOutput
+});
+            </code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Because of the limitations of TensorFlow.js library, we have to use the traditional tf.model() and layer.apply() techniques to construct the model. All layer output objects will be used later for the multiple outputs of the encapsulated model.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    If you build the model by tf.sequential(), you probably want to check <a href="#toConvert">2. To convert an existing tfjs model to make it compatible with TensorSpace.</a>
+                </li>
+            </ul>
+        </div>
+
+        <div>After creating the model, we can load the data, compile the model and train it: (The training script is modified from tfjs's <a href="https://js.tensorflow.org/tutorials/mnist.html">official tutorial</a>)</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+const LEARNING_RATE = 0.0001;
+const optimizer = tf.train.adam(LEARNING_RATE);
+
+model.compile({
+    optimizer: optimizer,
+    loss: 'categoricalCrossentropy',
+    metrics: ['accuracy'],
+});
+
+let data;
+async function load() {
+    data = new MnistData();
+    await data.load();
+}
+
+async function train() {
+
+    const BATCH_SIZE = 50;
+    const TRAIN_BATCHES = 2;
+
+    const TEST_BATCH_SIZE = 1000;
+    const TEST_ITERATION_FREQUENCY = 100;
+
+    for (let i = 0; i < TRAIN_BATCHES; i++) {
+        const batch = data.nextTrainBatch(BATCH_SIZE);
+
+        let testBatch;
+        let validationData;
+
+        if (i % TEST_ITERATION_FREQUENCY === 0) {
+            testBatch = data.nextTestBatch(TEST_BATCH_SIZE);
+            validationData = [
+                testBatch.xs.reshape(
+                    [TEST_BATCH_SIZE, 28, 28, 1]
+                ),
+                testBatch.labels
+            ];
+        }
+
+        const history = await model.fit(
+            batch.xs.reshape([BATCH_SIZE, 28, 28, 1]),
+            batch.labels,
+            {
+                batchSize: BATCH_SIZE,
+                validationData,
+                epochs: 1
+            });
+
+        if (i % TEST_ITERATION_FREQUENCY === 0) {
+            const loss = history.history.loss[0];
+            const accuracy = history.history.acc[0];
+
+            console.log(accuracy);
+        }
+    }
+}
+
+await load();
+await train();
+            </code></pre>
+        </div>
+
+        <div><span class="span_bold">1.2 Collect internal outputs from intermediate layers</span></div>
+        <div>Since we construct the model by applying the output from the previous layer, we can encapsulate all or our desired layer outputs into a new model:</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+const encModel = tf.model({
+    inputs: input,
+    outputs: [conv1Output, maxPool1Output, conv2Output,
+    maxPool2Output, dense1Output, dense2Output, softMaxOutput]
+});
+            </code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">model</span> is the model which we train and evaluate following the common ML process.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">encModel</span> is the model with multiple intermediate outputs and will be saved later.
+                </li>
+            </ul>
+        </div>
+
+        <div><span class="span_bold">1.3 Save the encapsulated model</span></div>
+        <div>Last, we can save our encapsulated model:</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+async function saveModel() {
+    await encModel.save("downloads://YOUR_MODEL_NAME");
+}
+            </code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">downloads://</span> means to download from the browser.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    There are two types of files created:
+                    <ul class="list-indent">
+                        <li class="panel-heading"><i class="material-icons">flare</i>
+                            <span class="highlight-text">.json</span> is for the model structure
+                        </li>
+                        <li class="panel-heading"><i class="material-icons">flare</i>
+                            <span class="highlight-text">.bin</span> is the trained weights
+                        </li>
+                    </ul>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Checkout <a href="https://js.tensorflow.org/api/0.13.0/#tf.Model.save">tf.Model.save</a> for more information.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    For other save method, please checkout the official <a href="https://js.tensorflow.org/tutorials/model-save-load.html">guide</a>
+                </li>
+            </ul>
+        </div>
+
+        <div>After downloading from the browser, we shall have the following files:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/TensorFlowJS/tfjs_created_model.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 3</span> - Saved model files
+        </div>
+
+        <div id="toConvert" class="sub-title">2 To convert an existing tfjs model to make it compatible with TensorSpace</div>
+
+        <div><span class="span_bold">2.1 Load an existing model</span></div>
+        <div>To load an existing tfjs model, just simply load like:</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
+            </code></pre>
+        </div>
+
+        <div><span class="span_bold">2.2 Collect internal outputs from intermediate layers</span></div>
+        <div>All we want from the model is to collect the internal outputs from intermediate layers. We can collect the output from each desired layer:</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+// Hard code the input if you are sure about the shape
+// const input = tf.input({shape: [28, 28, 1]});
+const input = ((typeof loadedModel === 'undefined') ? layers[0].input : loadedModel.input);
+
+let targetLayerNameList = ["MyConv2D_1","MyMaxPooling_1","MyConv2D_2","MyMaxPooling_2","MySoftMax"];
+let outputList = [];
+let tempInput = input;
+let tempOutput = null;
+
+for (i =0; i<layers.length; i++) {
+    console.log("name: " + layers[i].name);
+    tempOutput = layers[i].apply(tempInput);
+
+    if (targetLayerNameList.indexOf(layers[i].name) >-1) {
+        outputList.push(tempOutput);
+    }
+    tempInput = tempOutput;
+}
+
+console.log(outputList);
+            </code></pre>
+        </div>
+
+        <div>The console output shall be:</div>
+        <img class="tag-img" src="../../assets/img/docs/TensorFlowJS/tfjs_console_output_1.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 4</span> - Intermediate layer names and multiple outputs
+        </div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Because of the limitations of TensorFlow.js, we have to apply each layer to its corresponding input manually.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    In our example, since the model structure is simple: a single workflow from start to the end, we just need to iterate every layer and set the layer output as the input for the next layer. However, if you have a complex structure, please double check the inputs the layer required.
+                </li>
+            </ul>
+        </div>
+
+        <div>Then, we can encapsulate the desired outputs into a new model with the same input as the original model:</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+const encModel = tf.model({
+    inputs: input,
+    outputs: outputList
+});
+
+singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
+console.log(singleOutput);
+            </code></pre>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/TensorFlowJS/tfjs_console_output_2.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 5</span> - Multiple outputs from encapsulated model
+        </div>
+
+        <div><span class="span_bold">2.3 Save the encapsulated model</span></div>
+        <div>After completing the previous steps, we can save the encapsulated model:</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+async function saveModel() {
+    await encModel.save("downloads://encModel");
+}
+saveModel();
+            </code></pre>
+        </div>
+
+        <div>
+            If everything looks good, you shall be ready for the next step
+            - <a href="basicLoad.html">Load a TensorSpace compatible model</a>
+        </div>
+
     </main>
 </div>
 
