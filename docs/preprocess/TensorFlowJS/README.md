@@ -1,8 +1,8 @@
-## Preprocessing a TensorFlow.js Model
-
 <p align="center">
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tfjs.png">
 </p>
+
+## Preprocessing a TensorFlow.js Model
 
 In the following chapter, we will introduce how to preprocess a TensorFlow.js (AKA. "tfjs") model before applying TensorSpace, which requires the intermediate outputs from internal layers.
 
@@ -217,7 +217,7 @@ async function saveModel() {
   * `.json` is for the model structure
   * `.bin` is the trained weights
 * Checkout [tf.Model.save](https://js.tensorflow.org/api/0.13.0/#tf.Model.save) for more information.
-* For other save method, please checkout the offical [guide](https://js.tensorflow.org/tutorials/model-save-load.html).
+* For other save method, please checkout the official [guide](https://js.tensorflow.org/tutorials/model-save-load.html).
 
 After downloading from the browser, we shall have the following files:
 
