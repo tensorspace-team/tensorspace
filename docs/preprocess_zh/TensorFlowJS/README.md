@@ -1,58 +1,56 @@
+## TensorFlow.js 模型预处理
+
 <p align="center">
-<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tfjs.png">
+<img width=600 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tfjs.png">
 </p>
 
-## Preprocessing a TensorFlow.js Model
+本篇将介绍如何预处理基于 TensorFlow.js （以下简写为 “tfjs” ）构建的网络模型以适配 TensorSpace。
 
-In the following chapter, we will introduce how to preprocess a TensorFlow.js (AKA. "tfjs") model before applying TensorSpace, which requires the intermediate outputs from internal layers.
+如果您是第一次使用 tfjs 的新手，我们强烈建议您先阅读由 TensorFlow.js 官方提供的网络训练[教程](https://js.tensorflow.org/tutorials/)。
 
-If you are new for a tfjs model, we highly recommend you to go through the [guide](https://js.tensorflow.org/tutorials/) from TensorFlow.js first.
-
-The sample files we used in the tutorial are listed below:
+以下为本篇教程所使用的代码及模型文件：
 * [createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html)
 * [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html)
-* [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlowjs/models)
+* [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlowjs/models)
 
-For the tutorial, make sure to install and import TensorFlow.js.
+请确保正确安装并引入 tfjs。
 
-To install TensorFlow.js, just use the NPM install:
+我们可以通过以下 NPM 代码安装 tfjs：
 ```bash
 npm install @tensorflow/tfjs
 ```
 
-To import TensorFlow.js, include tf.min.js in html.
+我们可以通过以下脚本在 html 中引入 tfjs：
 ```html
 <script src="libs/tf.min.js"></script>
 ```
  
-
- 
-For preprocessing a tfjs model, we have a general process like:
+预处理 tfjs 模型，我们需要以下步骤：
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_general_process.png" alt="general TFjs process" width="830" >
 <br/>
-<b>Fig. 1</b> - Steps to preprocess a TensorFlow.js model
+<b>图1</b> - 预处理 tfjs 模型的步骤
 </p>
 
-In this tutorial, we will introduce the process in two use cases:
-* [1. To train a TensorSpace compatible tfjs model](#trainModel)
-* [2. To convert an existing tfjs model to make it compatible with TensorSpace](#loadModel)
+本教程中，我们将分两种主要情况来介绍预处理的过程：
+* [1. 训练一个 TensorSpace 适配的模型](#trainModel)
+* [2. 转换一个 tfjs 模型以适配 TensorSpace](#loadModel)
 
-All cases use LeNet with MNIST dataset as an example.
+以下均使用 MNIST 数据集以及 LeNet 网络结构为例。
 
-### <div id="trainModel">1 To train a TensorSpace compatible tfjs model</div>
-#### 1.1 Train a new model
-If you do not have any existed model in hands, let's train a TensorFlow.js model together.
+### <div id="trainModel">1 训练一个 TensorSpace 适配的模型</div>
+#### 1.1 训练一个新模型
+若果您并没有任何可以直接使用的 tfjs 模型，您可以按照本小节的方法构筑一个新的样例模型。
 
-First, let's take a look at the LeNet structure:
+首先，让我们了解以下 LeNet 的网络结构：
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
 <br/>
-<b>Fig. 2</b> - LeNet structure
+<b>图2</b> - LeNet 网络结构
 </p>
 
-By following the structure, we can build a basic model:
+根据以上结构，我们可以搭建一个基本的网络：
 ```html
 
 // Initialize layer.
@@ -124,11 +122,13 @@ const model = tf.model({
 
 ```
 
-**Note:**
-* Because of the limitations of TensorFlow.js library, we have to use the traditional `tf.model()` and `layer.apply()` techniques to construct the model. All layer output objects will be used later for the multiple outputs of the encapsulated model.
-* If you build the model by `tf.sequential()`, you probably want to check [2. To convert an existing tfjs model to make it compatible with TensorSpace](#loadModel).
+**注意：**
+* 由于 tfjs 的限制，我们需要使用 `tf.model()` 和 `layer.apply()` 的组合来构建网络。所有的输出对象将在之后保存到嵌入后模型中。
+* 如果您需要使用 `tf.sequential()` 来构建网络，那么您需要参见 [2. 转换一个 tfjs 模型以适配 TensorSpace](#loadModel).
 
-After creating the model, we can load the data, compile the model and train it: (The training script is modified from tfjs's [official tutorial](https://js.tensorflow.org/tutorials/mnist.html))
+在构建网络结构之后，我们可以载入 MNIST 数据集来进行编译和训练：
+（注：训练用脚本来源自 [tfjs 官方教程](https://js.tensorflow.org/tutorials/mnist.html)）
+
 ```html
 const LEARNING_RATE = 0.0001;
 const optimizer = tf.train.adam(LEARNING_RATE);
@@ -192,8 +192,9 @@ await load();
 await train();
 
 ```
-#### 1.2 Collect internal outputs from intermediate layers
-Since we construct the model by applying the output from the previous layer, we can encapsulate all or our desired layer outputs into a new model:
+#### 1.2 收集中间层数据
+在构建时由于我们采用了将前一层输出用作下一层输入的方法，我们只要将我们所需要的中间层包裹植入一个新的模型之中：
+
 ```html
 const encModel = tf.model({
     inputs: input,
@@ -202,13 +203,14 @@ const encModel = tf.model({
 });
 ``` 
 
-**Note:**
-* We actually build two models:
-  * `model` is the model which we train and evaluate following the common ML process.
-  * `encModel` is the model with multiple intermediate outputs and will be saved later.
+**注意：**
+* 我们实际上创建了两个模型：
+    * `model` 是我们按照常规机器学习流程所创建的模型。
+    * `encModel` 是我们植入了中间层输出的嵌入后模型。我们将在稍后进行保存。
   
   
-#### 1.3 Save the encapsulated model
+#### 1.3 保存嵌入后模型
+最后，我们保存我们的嵌入后模型：
 Last, we can save our encapsulated model:
 ```html
 async function saveModel() {
@@ -216,31 +218,32 @@ async function saveModel() {
 }
 ``` 
 
-**Note:**
-* `downloads://` means to download from the browser.
-* There are two types of files created:
-  * `.json` is for the model structure
-  * `.bin` is the trained weights
-* Checkout [tf.Model.save](https://js.tensorflow.org/api/0.13.0/#tf.Model.save) for more information.
-* For other save method, please checkout the official [guide](https://js.tensorflow.org/tutorials/model-save-load.html).
+**注意：**
+* `downloads://` 是通过浏览器下载的方式将模型保存到本地。
+* 我们将会得到2种不同类型的文件：
+    * `.json` 包含神经网络结构。
+    * `.bin` 包含所训练得到的权重。
+* 关于保存 tfjs 模型，参见 [tf.Model.save](https://js.tensorflow.org/api/0.13.0/#tf.Model.save)。
+* 关于其他保存模型的方式，参见 [官方保存教程](https://js.tensorflow.org/tutorials/model-save-load.html)。
 
-After downloading from the browser, we shall have the following files:
+在保存文件之后，我们可以得到：
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_created_model.png" alt="models" width="400" >
 <br/>
-<b>Fig. 3</b> - Saved model files
+<b>图3</b> - 转换后所保存的最终模型文件
 </p>
 
-### <div id="loadModel">2 To convert an existing tfjs model to make it compatible with TensorSpace</div>
-#### 2.1 Load an existing model
-To load an existing tfjs model, just simply load like:
+### <div id="loadModel">2 转换一个 tfjs 模型以适配 TensorSpace</div>
+#### 2.1 载入一个现有模型
+我们可以通过以下代码来加载一个 tfjs 模型：
 ```html
 const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
 ```
 
-#### 2.2 Collect internal outputs from intermediate layers 
-All we want from the model is to collect the internal outputs from intermediate layers. We can collect the output from each desired layer: 
+#### 2.2 收集中间层数据
+我们可以通过以下方式收集中间层数据：
+
 ```html
 // Hard code the input if you are sure about the shape
 // const input = tf.input({shape: [28, 28, 1]});
@@ -265,19 +268,20 @@ console.log(outputList);
 ```
 
 
-The console output shall be:
+我们可以在控制台看到以下输出：
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_1.png" alt="layer outputs" width="575" >
 <br/>
-<b>Fig. 4</b> - Intermediate layer names and multiple outputs
+<b>图4</b> - 多中间层名称及输出
 </p>
 
-**Note:**
-* Because of the limitations of TensorFlow.js, we have to apply each layer to its corresponding input manually. 
-* In our example, since the model structure is simple: a single workflow from start to the end, we just need to iterate every layer and set the layer output as the input for the next layer. However, if you have a complex structure, please double check the inputs the layer required.
+**注意：**
+* 由于 tfjs 的局限性，我们需要为中间层逐一添加所对应的输入。
+* 在我们的例子中，由于模型结构比较简单：只有一条单一的计算链。我们只需要逐一遍历每一层对象，将其作为下一层的输入提供给下一层对象。但是当我们在遇到比较复杂的模型结构时，请根据实际情况调配合适的输入输出方法。
 
-Then, we can encapsulate the desired outputs into a new model with the same input as the original model:
+之后，我们只需要将我们提取到的层对象植入一个新的模型当中就可以了：
+
 ```html
 const encModel = tf.model({
     inputs: input,
@@ -291,11 +295,12 @@ console.log(singleOutput);
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_2.png" alt="enc model output" width="575" >
 <br/>
-<b>Fig. 5</b> - Multiple outputs from encapsulated model
+<b>图5</b> - 嵌入后模型的中间层输出
 </p>
 
-#### 2.3 Save the encapsulated model 
-After completing the previous steps, we can save the encapsulated model:
+#### 2.3 保存嵌入后模型
+在完成上述步骤之后，我们就可以保存我们的嵌入后模型了：
+
 ```html
 async function saveModel() {
     await encModel.save("downloads://encModel");
@@ -303,4 +308,4 @@ async function saveModel() {
 saveModel();
 ```
 
-If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model]()(TBD).
+若至此一切顺利，我们可以移步下一部分——[加载TensorSpace适配模型]()(TBD)。
