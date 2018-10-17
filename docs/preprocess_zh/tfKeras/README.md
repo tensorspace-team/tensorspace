@@ -1,55 +1,55 @@
-## Preprocessing a tf.keras Model
+## tf.keras 模型预处理
 
 <p align="center">
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
 </p>
 
-In this chapter, we will introduce how to preprocess a tf.keras model to adapt the multiple intermediate layer outputs for applying TensorSpace. If you have read the [Keras preprocessing tutorial](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/README.md), since the close relations between the two APIs, the workflows are very similar.
+本篇将介绍如何预处理基于 tf.keras 搭建的神经网络模型，以此来适配 TensorSpace 所需要的拥有中间层输出的模型。如果您之前已经了解过[Keras 模型预处理](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/README.md)，您将会发现两篇教程拥有许多相似之处。
 
-The sample files that are used for the tutorial are listed below:
+以下为本篇教程所使用的代码及模型文件：
 * [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py)
 * [convert_tf_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_sh/convert_tf_keras.sh)
-* [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/tfKeras/models)
+* [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/tfKeras/models)
 
-For the tutorial, we use Python 3.6.5 and the following libraries:
+在教程中我们将使用：Python 3.6.5 的运行环境。以下为我们所需要使用的库：
 ```Python
 import tensorflow as tf
 import numpy as np
 ```
 
-It is also required to install [tfjs-converter](https://github.com/tensorflow/tfjs-converter) (it is a tool from TensorFlow.js):
+此外，我们还需要安装 [tfjs-converter](https://github.com/tensorflow/tfjs-converter) (基于 TensorFlow.js 的转换工具)：
 ```shell
 $ pip install tensorflowjs
 ```
 
-If you are new and have no idea about how to train a ML model with tf.keras, we highly recommand you to go through this [guide](https://www.tensorflow.org/guide/keras) from TensorFlow first.
+如果您在此之前没有任何基于 tf.keras 的经验，那我们强烈建议您首先阅读由 TensorFlow 所撰写的[官方教程](https://www.tensorflow.org/guide/keras)
 
-To preprocess a tf.keras model, make sure you satisfy the followings:
+预处理 tf.keras 模型，我们需要以下步骤：
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_general_process.png" alt="general TF process" width="830" >
 <br/>
-<b>Fig. 1</b> - Steps to preprocess a tf.keras model
+<b>图1</b> - 预处理 tf.keras 模型的步骤
 </p>
 
-* [1. Train/Load model](#loadModel)
-* [2. Insert multiple intermediate outputs](#addOutputs)
-* [3. Save encapsulated model](#saveModel)
-* [4. Convert to TensorSpace compatible model](#convertModel)
+* [1. 训练/加载模型](#loadModel)
+* [2. 植入中间层输出](#addOutputs)
+* [3. 保存嵌入后的模型](#saveModel)
+* [4. 转换为 TensorSpace 适配的模型](#convertModel)
 
-The following instruction preprocesses a LeNet with MNIST dataset as an example.
+在本教程中，我们将使用 MNIST 数据集和 LeNet 神经网络结构来构筑一个 tf.keras 模型作为例子
 
-### <div id="loadModel">1 Train/Load Model</div>
-#### 1.1 Train a new model
-Let's train a simple LeNet model to recognize MNIST handwritten digit, if you don't have your model trained yet.
+### <div id="loadModel">1 训练/加载模型</div>
+#### 1.1 训练一个新模型
+若您目前还没有可以马上直接使用的 tf.keras 模型，您可以按照本小节的方法构筑一个新的 MNIST 手写识别的样例模型。
 
-By following the structure of the LeNet,
+根据 LeNet 的网络结构：
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
 <br/>
-<b>Fig. 2</b> - LeNet structure
+<b>图2</b> - LeNet 网络结构
 </p>
 
-we can build our model like:
+我们可以用一下代码迅速搭建其网络结构：
 
 ```python
 def create_sequential_model():
@@ -76,10 +76,10 @@ def create_sequential_model():
         ])
     return single_output_model
 ```
-**Note:** 
-* We add a **"name"** property for each layers that we want to apply for TensorSapce API later.
+**注意：** 
+* 我们为所有我们想展示的网络层均添加了 “**name**” 属性。
 
-After construction, we can compile and train the model with MNIST data:
+在完成网络结构的构筑之后，我们可以使用 MNIST 来训练我们的模型：
 ```python
 mnist = tf.keras.datasets.mnist
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
@@ -92,22 +92,22 @@ model.compile(optimizer='adam',
 model.fit(x_train, y_train, epochs=5)
 ```
 
-After training, we can give it a try by:
+在训练完成之后，我们应当得到一个具有完整结构及一定训练程度的 Keras 神经网络模型。我们可以通过以下代码来尝试我们的模型是否可以正常运行：
 ```python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))
 ```
-Then we have a single array with 10 probabilities:
 
+我们可以得到与下图相似的单一预测结果（一个长度为10的列表）：
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
 <br/>
-<b>Fig. 3</b> - Single list prediction output from trained model
+<b>图3</b> - 新 Keras 模型的单一预测结果
 </p>
 
-#### 1.2 Load from an existed model
-For an existed model, we can load the model as:
+#### 1.2 加载已有模型
+如果您已经拥有需要展示的模型，您可以使用以下代码来尝试加载：
 ```python
 model = tf.keras.models.load_model(
     "PATH_TO_MODEL/model.h5",
@@ -115,7 +115,7 @@ model = tf.keras.models.load_model(
     compile=True
 )
 ```
-Or if the model and weights are stored separately, we can load as:
+或者若该模型的结构与权重为分开保存，我们可以使用以下代码来加载
 ```python
 json_path = "PATH_TO_JSON/model.json"
 weight_path = "PATH_TO_WEIGHT/weights.hdf5"
@@ -126,30 +126,29 @@ model = tf.keras.models.model_from_json(
 model.load_weights(weight_path)
 ```
 
-Similar to training, we can try to use the model for prediction:
+与完成创建新模型之后相似，在完成加载以后我们可以通过以下代码来测试我们所加载的模型是否可以正常使用：
 ```python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))
 ```
-The same length 10 array output:
 
-
+我们应当可以得到与下图相似的单一预测结果：
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
 <br/>
-<b>Fig. 4</b> - Single list prediction output from loaded model
+<b>图4</b> - 加载已有 Keras 模型得到的单一预测结果
 </p>
 
-**Note:** 
-* Since the we used a random input, the output would be random as well.
+**注意：** 
+* 由于我们使用随机数最为输入，因此我们的输出也相对非常随机。
 
-### <div id="addOutputs">2 Insert multiple intermediate outputs</div>
-If the output from the previous step is correct, we can find the output is actually a single array(softmax result) predicted by the model. The array represents the probability of each digits that the input image could be.
+### <div id="addOutputs">2 植入中间层输出</div>
+通过第一步，我们已经可以获得 LeNet 所预测的结果——一个1维数组，长度为10，每一位代表该序号所对应的概率。
 
-One important purpose of TensorSpace is to show the internal relations among different layers, so we need to find the way to catch the outputs from intermediate layers during the prediction.
+使用 TensorSpace 的重要目的是为了展示中间层之间的关系，因此我们需要找到合适的方法来抓取中间层的预测结果。
 
-First, we can use `summary()` command to check the general structure. We can also loop all layers to find out all layer names.
+首先，我们可以使用 `summary()` 方法来得到中间层的信息（layer.name）。当然，我们也可以通过 layer 对象直接获取：
 ```
 model.summary()
 for layer in model.layers:
@@ -159,15 +158,14 @@ for layer in model.layers:
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_summary.png" alt="summary" width="705" >
 <br/>
-<b>Fig. 5</b> - Model summary and layer names
+<b>图5</b> - 中间层信息输出
 </p>
-	
-If the layers are given proper names (i.e. if add a **"name"** property while building the model), we can find them from the summary.
 
-**Note:** 
-* If the model is loaded from an existed model, the name of each layer should be relevant to the layer class in most cases.
+**注意：** 
+* 若在之前的步骤中已经设置了恰当的 `**name**` 属性，我们可以很迅速对发现其名称及对应信息。
+* 若该模型为加载已有模型所得，大多数情况下，中间层名称应与其所对应的类相关。
 
-Now, let's put our desired layer names in a list and encapsulate the model with the original input and the new outputs:
+现在我们可以通过以下方法提取我们所需要的中间层，并将其植入我们新创建的模型中：
 ```python
 output_layer_names = [
     "conv_1", "maxpool_1", "conv_2", "maxpool_2", 
@@ -181,7 +179,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
     return display_model
 ```
 
-Or if we want them all, just use:
+或者我们可以用以下方式添加所有的中间层：
 ```python
 def generate_encapsulate_model(model):
     display_model = tf.keras.models.Model(
@@ -191,18 +189,18 @@ def generate_encapsulate_model(model):
     )
     return display_model
 ```
-**Note:** 
-* Do not include the `input` or `input_layer`, the model constructed from `Model()` could use an input tensor instead of an inputLayer, which causes errors.
-* Double check the layers you included.
+**注意：** 
+* 请不要包括任何输入层（ 'input' 或是 `input_layer` ）。由于某些模型是由 Model() 构筑的，其输入部分并不是一个 tf.keras 层。
+* 请确认所需要的中间层并保证其顺序.
 
-Then we have our model with multiple intermediate outputs:
+然后,我们就可以生成一个新的带有中间层植入的嵌入模型：
 ```python
 enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
 # OR
 # enc_model = generate_encapsulate_model(model)
 ```
 
-Now, we can try to predict by the new model:
+我们可以尝试使用我们的嵌入式模型：
 ```python
 print(enc_model.predict(input_sample))
 ```
@@ -210,27 +208,26 @@ print(enc_model.predict(input_sample))
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_2.png" alt="predict output 2" width="705" >
 <br/>
-<b>Fig. 6</b> - Multiple list outputs after preprocessing
+<b>图6</b> - 经过预处理之后的中间层输出
 </p>
 
-And we can see the last output is the same as the one from the prediction of the original model.
+最后一层的输出对应原模型的预测结果，我们可以发现它们是一致的。
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_3.png" alt="predict output 3" width="705" >
 <br/>
-<b>Fig. 7</b> - Last list output is the same as the original inferences
+<b>图7</b> - 最后一层的输出与原模型预测结果一致
 </p>
 
-You can see the output now is a list which contains all outputs from selected layers.
+我们现在可以得到了所有想要的中间层输出。
 
-### <div id="saveModel">3 Save encapsulated model</div>
+### <div id="saveModel">3 保存嵌入后的模型</div>
 
-Next, let's dump out the encapsulated model.
+为了进一步转换模型，我们需要保存嵌入后的模型。
 
-**Note:** 
-* It is required to compile encapsulated model first, though the configurations used for compile will not affect the model. 
-* Since we use the model for visualization, we do not use the model for further training. 
-* If you want to continue with the encapsulated model, feel free to put proper configurations. Here, we just use "adam" and "sparse_categorical_crossentropy" as an example.
+**注意：** 
+* 因为我们并不需要进一步训练，所以我们并不需要编译我们的嵌入后模型。
+* 若您希望基于该嵌入后模型继续训练，您可以加入合适的编译器及损失计算方法。这里我们以 “adam” 和 “sparse_categorical_crossentropy” 为例。
 ```Python
 enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
@@ -242,10 +239,10 @@ tf.keras.models.save_model(
 )
 ```
 
-### <div id="convertModel">4 Convert to TensorSpace compatible model</div>
-Last, let's convert our multiple output model into a TensorSpace compatible model by [tfjs-converter](https://github.com/tensorflow/tfjs-converter).
+### <div id="convertModel">4 转换为 TensorSpace 适配的模型</div>
+最后一步是将我们先前得到的嵌入后模型转换为 TensorSpace 所适配的模型。我们将会用到 [tfjs-converter](https://github.com/tensorflow/tfjs-converter)。
 
-The tfjs-converter should be used by the following script:
+我们可以通过以下脚本来进行转换：
 ```shell
 tensorflowjs_converter \
     --input_format=keras \
@@ -256,15 +253,15 @@ tensorflowjs_converter \
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_models.png" alt="models" width="530" >
 <br/>
-<b>Fig. 8</b> - Saved model files
+<b>图8</b> - 转换后所保存的最终模型文件
 </p>
 
-**Note:**
-* There are two types of file generated:
-    * One "model.json" file which describe the structure of our model (defined multiple outputs)
-    * Some weight files which contains trained weights. The number of weight files is dependent on the size and structure of the given model.
-* By default, the structure file has the name "model.json" which you **can** modify later.
-* The weight files are named like "group1-shard1of1" which are used and written within the "model.json" file. Hence we **DO NOT** suggest to modify the name of weight files, unless really necessary. If you really want to modify them, please modify the content in the .json (i.e. "model.json") as well.
-* For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
+**注意：**
+* 我们将会得到两种类型的文件：
+    * 一份 `model.json` 文件：包含所得到的模型结构信息（包括中间层输出）。
+    * 一些权重文件：包含模型训练所得到的权重信息。权重文件的数量取决于模型的结构。
+* 默认设置下，模型结构文件将命名为 "model.json"，您**可以**修改其名称。
+* 权重文件都将以 "group1-shard1of1" 的格式命名并在 “model.json” 声明其关联性。因此，我们建议不要更改权重文件的名称。如有情况需要修改的，请妥善修改 “.json” (“model.json”) 中的关联信息。
+* 请访问[这里](https://github.com/tensorflow/tfjs-converter)以获取更多 tfjs-converter 的信息。
 
-If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model]()(TBD).
+若至此一切顺利，我们可以移步下一部分——[加载TensorSpace适配模型]()(TBD)。
