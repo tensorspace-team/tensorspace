@@ -52,15 +52,15 @@ main {
     width: 100%;
     height: 100%;
     /*position: relative;*/
-    background-color: #031D32;
     border: 0!important;
+    z-index: 2;
 }
 
 #loading {
     position: fixed;
-    left: 500px;
-    top: 200px;
-    width: 400px;
+    left: 350px;
+    top: 150px;
+    width: 300px;
 }
 
 #controlPanel {
