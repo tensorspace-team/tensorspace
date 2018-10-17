@@ -46,7 +46,7 @@ $ tensorflowjs_converter \
 预处理 TensorFlow 模型大致上分为以下几个步骤：
 
 <p align="center" verticle-align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process_zh.png" alt="general TF process" width="830" >
+<img src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png" alt="general TF process" width="830" >
 <br/>
 <b>Fig. 1</b> - 预处理 TensorSpace 模型的步骤
 </p>
@@ -64,7 +64,7 @@ $ tensorflowjs_converter \
 #### 1.1 训练模型
 如果您目前还没有可以马上使用的TensorFlow模型，您可以按照本小节的方法构筑一个新的样例模型。
 
-我们将使用 MNIST 数据集以及 LeNet 网络结构为例，使用 TensorFlow 来构建一个神经网络模型。（参考 [sujaybabruwad/LeNet-in-Tensorflow](https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png)）
+我们将使用 MNIST 数据集以及 LeNet 网络结构为例，使用 TensorFlow 来构建一个神经网络模型。（参考 [sujaybabruwad/LeNet-in-Tensorflow](https://github.com/sujaybabruwad/LeNet-in-Tensorflow)）
 
 首先，我们需要改变训练数据的形状：
 ```Python
