@@ -32,10 +32,21 @@ mnist = tf.keras.datasets.mnist
 $ pip install tensorflowjs
 ```
 
+安装完成后，`tensorflowjs_converter`成为系统可用关键字，可用下列命令来调用
+
+```shell
+$ tensorflowjs_converter \
+    --input_format=tf_saved_model \
+    --output_node_names=$onn \
+    --saved_model_tags=serve \
+    ../models/tensorflow_model \
+    ../models/json_models/tensorflow
+```
+
 预处理 TensorFlow 模型大致上分为以下几个步骤：
 
 <p align="center" verticle-align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process.png" alt="general TF process" width="830" >
+<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process_zh.png" alt="general TF process" width="830" >
 <br/>
 <b>Fig. 1</b> - 预处理 TensorSpace 模型的步骤
 </p>
@@ -53,7 +64,7 @@ $ pip install tensorflowjs
 #### 1.1 训练模型
 如果您目前还没有可以马上使用的TensorFlow模型，您可以按照本小节的方法构筑一个新的样例模型。
 
-我们将使用 MNIST 数据集以及 LeNet 网络结构为例，使用 TensorFlow 来构建一个神经网络模型。（参考 [sujaybabruwad/LeNet-in-Tensorflow](https://github.com/sujaybabruwad/LeNet-in-Tensorflow)）
+我们将使用 MNIST 数据集以及 LeNet 网络结构为例，使用 TensorFlow 来构建一个神经网络模型。（参考 [sujaybabruwad/LeNet-in-Tensorflow](https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png)）
 
 首先，我们需要改变训练数据的形状：
 ```Python
@@ -139,7 +150,7 @@ def LeNet_5(x):
     fc3_b = tf.Variable(tf.zeros(10))
     logits = tf.matmul(fc2, fc3_w) + fc3_b
     return logits
-``` 
+```
 **注意:**
 * 我们建议为之后我们需要应用 TensorSpace 的 tensor 添加 **"name"** 属性。这将为我们之后寻找指定 tensor 、生成 **"outputNames"** 的过程提供极大的便利。
 * 您可能注意到了：我们并没有将“正确的”名称添加到“正确的” tensor 内。例如：我们没有为 `tf.nn.conv2d` 标记名称为 **"MyConv2D_*"**。我们将 `tf.nn.relu` 标记为 **"MyConv2D_*"**。其中的理由是因为实际使用中，我们所希望得到的卷基层输出是来源于最终的激励函数，而并非之前真正实施卷积操作的卷基层。这将为我们提供更好的可视化效果。
@@ -205,7 +216,7 @@ with tf.Session() as sess:
 
     test_accuracy = evaluate(x_test, y_test)
     print("Test Accuracy = {:.3f}".format(test_accuracy))
-``` 
+```
 
 **注意:**
 * 我们需要在外部额外声明一个 Softmax tensor 并添加一个合适的名称（**"name"**），以用于提取预测的最终结果。
@@ -229,7 +240,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         [tag_constants.SERVING],
         '../models/tensorflow_model',
     )
-``` 
+```
 ```Python
 with tf.Session() as sess:
     model_filename ='/PATH/TO/PB/model.pb'
@@ -237,14 +248,14 @@ with tf.Session() as sess:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         g_in = tf.import_graph_def(graph_def)
-``` 
+```
 ```Python
 with tf.Session(graph=tf.Graph()) as sess:
     dir_path = '../DIR/SAVE/CKPT/'
     ckpt_name = 'lenet.ckpt'
     saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
     saver.restore(sess, tf.train.latest_checkpoint(dir_path))
-``` 
+```
 
 **注意:**
 * 如果您需要加载 Checkpoint，您需要将所加载的模型保存为 SavedModel 或者 FrozenModel 。因为 tfjs-converter 目前并不支持对于 Checkpoint 的转换适配。
@@ -269,7 +280,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         {"input":x},
         {"output":add_8}
     )
-``` 
+```
 
 ### <div id="findNames">2 找出中间层 tensor 名称</div>
 这是所有步骤中的重中之重。我们需要找出我们所希望可视化的中间层所对应的 tensor 名称（names）。
