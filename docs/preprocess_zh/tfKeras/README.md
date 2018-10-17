@@ -1,4 +1,4 @@
-## tf.keras 模型预处理
+# tf.keras 模型预处理
 
 <p align="center">
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
@@ -50,8 +50,10 @@ $ tensorflowjs_converter \
 
 在本教程中，我们将使用 MNIST 数据集和 LeNet 神经网络结构来构筑一个 tf.keras 模型作为例子
 
-### <div id="loadModel">1 训练/加载模型</div>
-#### 1.1 训练新模型
+## <div id="loadModel">1 训练/加载模型</div>
+
+### 1.1 训练新模型
+
 若没有可直接使用的 tf.keras 模型，可依照本小节的步骤构筑新的 MNIST 手写识别的样例模型。
 
 根据 LeNet 的网络结构：
@@ -156,7 +158,7 @@ print(model.predict(input_sample))
 **❗ 注意** 
 * 由于我们使用随机数作为输入，因此输出也相对非常随机。
 
-### <div id="addOutputs">2 添加中间层输出</div>
+## <div id="addOutputs">2 添加中间层输出</div>
 通过第一步，可得到 LeNet 的预测结果：1维数组，长度为10，每一位代表该序号所对应的概率。接下来获取中间层输出
 
 首先，我们可以使用 `summary()` 方法得到中间层信息（layer.name）。当然，也可通过 layer 对象直接获取。〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L111)
@@ -233,7 +235,7 @@ print(enc_model.predict(input_sample))
 
 新模型可以输出所有的你需要的层间数据
 
-### <div id="saveModel">3 保存嵌入后的多输出模型</div>
+## <div id="saveModel">3 保存嵌入后的多输出模型</div>
 
 为了进一步转换模型，需保存嵌入后的多输出模型。
 
@@ -252,7 +254,7 @@ tf.keras.models.save_model(
 )
 ```
 
-### <div id="convertModel">4 转换为 TensorSpace 适配的模型</div>
+## <div id="convertModel">4 转换为 TensorSpace 适配的模型</div>
 最后一步将先前得到的嵌入的多输出模型转换为 TensorSpace 支持的模型。我们将会用到 [tfjs-converter](https://github.com/tensorflow/tfjs-converter)。
 
 我们可以通过以下脚本来进行转换：
