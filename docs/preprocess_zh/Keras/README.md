@@ -279,7 +279,7 @@ tensorflowjs_converter \
 * 我们将会得到两种类型的文件
     * 一份 `model.json` 文件：包含所得到的模型结构信息（包括中间层输出）
     * 一些权重文件：包含模型训练所得到的权重信息。权重文件的数量取决于模型的结构。
-* 默认设置下，模型结构文件将命名为 `model.json`，***可修改名称**。
+* 默认设置下，模型结构文件将命名为 `model.json`，**可修改名称**。
 * 权重文件都将以 "group1-shard1of1" 的格式命名并在 `model.json` 声明其关联性。因此，我们建议**不要**更改权重文件的名称。如有情况需要修改的，请妥善修改 `.json` (`model.json`) 中的关联信息。
 * [点击链接](https://github.com/tensorflow/tfjs-converter)以获取更多 tfjs-converter 的信息。
 
