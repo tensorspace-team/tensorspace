@@ -2,19 +2,19 @@
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
 </p>
 
-## Preprocessing a TensorFlow Model
+## TensorFlow 模型预处理
 
-In the following chapter, we will introduce how to prepare a TensorFlow model (saved model, frozen model and checkpoint) before applying TensorSpace.
+本篇将介绍如何预处理基于 TensorFlow 搭建的神经网络模型 (saved model, frozen model and checkpoint)，以此来适配 TensorSpace 所需要的拥有中间层输出的模型。
 
-Here is the list of sample files we are using for the following tutorial:
+以下为本篇教程所使用的代码及模型文件：
 * [tensorflow_create_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py)
 * [tensorflow_load_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py)
 * [tensorflow_conversion.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_conversion.py)
 * [convert_tensorflow_saved_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh)
 * [convert_tensorflow_frozen_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_frozen_model.sh)
-* [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlow/models)
+* [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlow/models)
 
-For the tutorial, we use Python 3.6.5 and the following libraries:
+在教程中我们将使用：Python 3.6.5 的运行环境。以下为我们所需要使用的库：
 ```Python
 import tensorflow as tf
 import numpy as np
@@ -22,40 +22,40 @@ from tensorflow.contrib.layers import flatten
 from sklearn.utils import shuffle
 mnist = tf.keras.datasets.mnist
 ```
-**Note:**
-* The core libraries are `tensorflow` and `numpy`.
-* `tf.keras` is used to provide dataset only.
-* `sklearn.utils` is used for `shuffle` only.
+**注意:**
+* `tensorflow` 与 `numpy` 是最重要的核心库。
+* `tf.keras` 只用来提供训练所需要的数据集。
+* `sklearn.utils` 只用来提供 `shuffle`。
 
-It is also required to install [tfjs-converter](https://github.com/tensorflow/tfjs-converter) (it is a tool from TensorFlow.js):
+此外，我们还需要安装 [tfjs-converter](https://github.com/tensorflow/tfjs-converter)(基于 TensorFlow.js 的转换工具):
 ```shell
 $ pip install tensorflowjs
 ```
 
-In general, the preprocess of a TensorFlow model is:
+预处理 TensorFlow 模型大致上分为以下几个步骤：
 
 <p align="center" verticle-align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process.png" alt="general TF process" width="830" >
 <br/>
-<b>Fig. 1</b> - Steps to preprocess a TensorFlow model
+<b>Fig. 1</b> - 预处理 TensorSpace 模型的步骤
 </p>
 
-* [1 Train/Load a model](#loadModel)
-* [2 Find out tensor names](#findNames)
-* [3 Convert to TensorSpace compatible Model](#convertModel)
+* [1 训练/加载模型](#loadModel)
+* [2 找出中间层 tensor 名称](#findNames)
+* [3 转换为 TensorSpace 适配的模型](#convertModel)
 
-It is different from the preprocessing of a Keras or tf.Keras model: we don't need to encapsulate an intermediate TensorFlow model. All we want is to catch the correct corresponding **tensor names** and convert original model to TensorSpace compatible model directly by tfjs-converter.
+与预处理 Keras 和 tf.keras 模型不同的是，我们不需要额外生成包含中间层输出的嵌入后模型。我们只需要提取我们所需要的中间层 tensor 名称（**tensor names**），然后进行模型格式转换。
 
-**Note:**
-* The collected tensor names are stored as a list which is used as **"outputNames"** in the TensorSpace.
+**注意:**
+* 在 TensorSpace 中，所收集的 tensor 名称将保存于 **"outputNames"** 之中。
 
-### <div id="loadModel">1 Train/Load Model</div>
-#### 1.1 Train a Model
-If you do not have start to construct any model, let's build a LeNet by TensorFlow together~
+### <div id="loadModel">1 训练/加载模型</div>
+#### 1.1 训练模型
+如果您目前还没有可以马上使用的TensorFlow模型，您可以按照本小节的方法构筑一个新的样例模型。
 
-We use the LeNet with MNIST dataset as an example for the process, which is similar to the construction from [sujaybabruwad/LeNet-in-Tensorflow](https://github.com/sujaybabruwad/LeNet-in-Tensorflow)
+我们将使用 MNIST 数据集以及 LeNet 网络结构为例，使用 TensorFlow 来构建一个神经网络模型。（参考 [sujaybabruwad/LeNet-in-Tensorflow](https://github.com/sujaybabruwad/LeNet-in-Tensorflow)）
 
-First we have to reshape the input dataset to the required size:
+首先，我们需要改变训练数据的形状：
 ```Python
 # Raw input & normalization
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
@@ -70,14 +70,14 @@ x_train = np.pad(x_train, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 ```
 
-Next, based on the structure of an LeNet_v5:
+接下来，我们根据 LeNet_v5 的网络结构来构筑基本模型：
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
 <br/>
-<b>Fig. 2</b> - LeNet structure
+<b>图2</b> - LeNet 网络结构
 </p>
 
-we should have 2 Conv2D+MaxPooling together with 3 dense layers. The model is implemented like:
+我们的网络包括：2个 Conv2D + MaxPooling 的组合，紧接着3层 Dense：
 ```Python
 def LeNet_5(x):
     # Convolutional Layer. Input = 32x32x1, Output = 28x28x1.
@@ -140,12 +140,12 @@ def LeNet_5(x):
     logits = tf.matmul(fc2, fc3_w) + fc3_b
     return logits
 ``` 
-**Note:**
-* We put a **"name"** property for the tensor that we want to apply TensorSpace later. A specified name can speed up the process of creating **"outputNames"** list.
-* You may notice that we do not mark the tensor exactly in the tensor for the core action. For example, we don't put a name in the `tf.nn.conv2d`, but mark `tf.nn.relu` as the **"MyConv2D_*"**. The reason is that our desired output of a "Convolution Layer" is the result of the activation function, which provides a better visualization.
-* We only have 2 dense (or fully connection) tensors in the function. The last Softmax dense will be used for training, so we treat it a little different.
+**注意:**
+* 我们建议为之后我们需要应用 TensorSpace 的 tensor 添加 **"name"** 属性。这将为我们之后寻找指定 tensor 、生成 **"outputNames"** 的过程提供极大的便利。
+* 您可能注意到了：我们并没有将“正确的”名称添加到“正确的” tensor 内。例如：我们没有为 `tf.nn.conv2d` 标记名称为 **"MyConv2D_*"**。我们将 `tf.nn.relu` 标记为 **"MyConv2D_*"**。其中的理由是因为实际使用中，我们所希望得到的卷基层输出是来源于最终的激励函数，而并非之前真正实施卷积操作的卷基层。这将为我们提供更好的可视化效果。
+* 我们只添加了两层 Dense。因为最后的一层 Softmax Dense 将用于之后的训练，所以我们会对其进行不同的处理。
 
-After building up the structure, let's train the model:
+在搭建完网络结构之后，我们就可以来训练我们的模型了：
 ```Python
 x = tf.placeholder(tf.float32, shape=[None,32,32,1],name="MyInput")
 y = tf.placeholder(tf.int32, (None), name="y")
@@ -207,21 +207,21 @@ with tf.Session() as sess:
     print("Test Accuracy = {:.3f}".format(test_accuracy))
 ``` 
 
-**Note:**
-* Don't forget to declare an extra Softmax tensor for the prediction output and give a proper **"name"**.
+**注意:**
+* 我们需要在外部额外声明一个 Softmax tensor 并添加一个合适的名称（**"name"**），以用于提取预测的最终结果。
 
-We can see some evaluation outputs like:
+通过训练，我们可以看到一些对输出结果的分析：
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_training_evaluations.png" alt="evaluations" width="705" >
 <br/>
-<b>Fig. 3</b> - Training evaluations
+<b>图3</b> - 训练分析
 </p>
 
-#### 1.2 Load a Model
-If you have already had a tensorflow model trained in hand, let's try to load the model.
+#### 1.2 加载一个模型
+若您已有合适的可供使用的模型，那我们可以尝试加载它。
 
-We can load the model from a saved model, frozen model or a checkpoint:
+我们可以加载 saved model， frozen model 或者 checkpoint:
 ```Python
 with tf.Session(graph=tf.Graph()) as sess:
     tf.saved_model.loader.load(
@@ -246,9 +246,9 @@ with tf.Session(graph=tf.Graph()) as sess:
     saver.restore(sess, tf.train.latest_checkpoint(dir_path))
 ``` 
 
-**Note:**
-* If you are loading a model from Checkpoint, you have to dump the file to either SavedModel or FrozenModel. Since the tfjs-converter currently does not support the conversion from Checkpoint to TensorFlow.js compatible.
-* You can try the conversion similar to:
+**注意:**
+* 如果您需要加载 Checkpoint，您需要将所加载的模型保存为 SavedModel 或者 FrozenModel 。因为 tfjs-converter 目前并不支持对于 Checkpoint 的转换适配。
+* 如果您需要转换 Checkpoint，您可以尝试一下操作：
 ```Python
 with tf.Session(graph=tf.Graph()) as sess:
     dir_path = '../DIR/SAVE/CKPT/'
@@ -271,35 +271,35 @@ with tf.Session(graph=tf.Graph()) as sess:
     )
 ``` 
 
-### <div id="findNames">2 Find Out Tensor Names</div>
-It is actually the key step of the preprocess. We have to find out proper tensor names for our model.
+### <div id="findNames">2 找出中间层 tensor 名称</div>
+这是所有步骤中的重中之重。我们需要找出我们所希望可视化的中间层所对应的 tensor 名称（names）。
 
-We can try to output all tensor names like:
+我们可以先尝试输出所有的 tensor 名称：
 ```Python
 for n in tf.get_default_graph().as_graph_def().node:
     print(n.name)
 ```
-You may get a lot, even the model is not that large. From the model we just built, we have 400+ tensors:
+哪怕模型并不是很大，我们也可能得到许多 tensor 名称。例如我们在前例中所创建的 LeNet 网络模型，我们就可以得到 400+ 的 tensor 名称：
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_tensor_names_all.png" alt="all tensor names" width="705" >
 <br/>
-<b>Fig. 4</b> - Tensor names
+<b>图4</b> - Tensor 名称
 </p>
 
-**Note:**
-* Don't worry about every tensors, most of them are used as parameter or for training only. You only need to focus on the ones which are used for prediction.
-* If you trained a model by providing **"name"** properties, you can find them all quickly in the list, which indicates everything follows expectations. 
-* If you try to use an existed model, it may require some knowledge of the model structure.
-* In most cases, if a tensor **"name"** is not specified while construction, it is related to the constructor of TensorFlow.
+**注意:**
+* 我们并不需要关注所有的 tensor，因为大部分 tensor 是用来提供常数或者为训练模型所服务的。我们需要找出用于预测的关键 tensor。
+* 若您之前构建神经网络时，合适地添加了 **"name"** 属性，您可以非常快速地找出（确认）它们。这正是我们所希望的。
+* 若您加载了一个来自外部的模型，那么这可能需要对该模型的基本结构有所了解。
+* 在绝大多数情况下，tensor 的名称（**"name"**）与其在 TensorFlow 中构造器紧密相关。
 
-After we figured out the tensors we want, we have to put them in a name list:
+当我们找到所有我们需要的 tensor 名称后，我们可以将它们添加到一个列表中：
 ```Python
 output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_2",
                 "MyDense_1", "MyDense_2", "MySoftMax"]
 ```
 
-We can have a quick test for the tensors:
+我们可以快速测试一下我们的列表是否有效：
 ```Python
 graph = tf.get_default_graph()
 x = graph.get_tensor_by_name("MyInput:0")
@@ -310,21 +310,21 @@ print(sess.run(outputs, feed_dict={x:x_test}))
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_prediction_1.png" alt="predict output 1" width="705" >
 <br/>
-<b>Fig. 5</b> - Multiple list outputs after preprocessing
+<b>图5</b> - 模型预处理后的多中间层输出
 </p>
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_prediction_2.png" alt="predict output 2" width="705" >
 <br/>
-<b>Fig. 6</b> - Last list is the original output
+<b>图6</b> - 最终输出与原始模型一致
 </p>
 
-**Note:**
-* You have to add **":0"** for the output from the tensor object. If not, it returns the tensor object (i.e. rise exceptions).
-* Please save the **name list** which will be used as **outputNames** in TensorSpace.
+**注意:**
+* 您需要为每一个 tensor 对象添加 **":0"** 。 否则模型将返还 tensor 对象而不是其计算结果。
+* 请妥善保存 **tensor 名称列表** 。我们将在之后使用 TensorSpace 时继续使用（作为 **outputNames** ）。
 
-### <div id="convertModel">3 Convert to TensorSpace compatible model</div>
-If everything so far looks good, we can use the following script to dump out a TensorSpace compatable model:
+### <div id="convertModel">3 转换为 TensorSpace 适配的模型</div>
+如果一切顺利，我们就可以使用一下脚本来进行模型转换以适配 TensorSpace：
 ```Bash
 onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
 tensorflowjs_converter \
@@ -335,24 +335,23 @@ tensorflowjs_converter \
     ../models/json_models/tensorflow
 ```
 
-**Note:**
-* Please make sure you have installed tfjs-converter correctly.
-* If the model is a CheckPoint, you have to save it as a SavedModel or FrozenModel first, since the tfjs-converter does not support Checkpoint for now.
-* Select the `input_format` based on your model type.
-* Put name list as a parameter of the script (no extra space or quotes).
+**注意:**
+* 请确认 tfjs-converter 安装正确。
+* 如果该网络保存为 Checkpoint，您需要先将其转换为 SavedModel 或者 FrozenModel。 tfjs-converter 暂时不支持 Checkpoint 格式。
+* 请根据所保存的网络文件类型，选择合适的 `input_format`。
+* 请添加所保存的 tensor 名称列表至 `onn`（请勿包含任何空格或者引号）。
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_models.png" alt="models" width="530" >
 <br/>
-<b>Fig. 7</b> - Saved model files
+<b>图7</b> - 转换后所保存的最终模型文件
 </p>
 
-**Note:**
-* There are three types of file generated:
-    * One "tensorflowjs_model.pb" file which describe the structure of the model.
-    * One "weights_manifest.json" file which describe the weights manifest.
-    * Some weight files which contains actual weight values. The number of weight files is dependent on the size and structure of the given model.
-* For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
+**注意:**
+* 完成转换后，我们将得到三种类型的文件：
+    * 一份 “tensorflowjs_model.pb”：包含网络结构等重要信息。
+    * 一份 “weights_manifest.json”：包含所有权重文件的对应关系。
+    * 一些权重文件：对应训练所得到的各 tensor 权重信息。权重文件的数量取决于网络的结构。
+* 您可以访问 [这里](https://github.com/tensorflow/tfjs-converter) 来获取更多 tfjs-converter 的信息。
 
-If everything looks good, you shall be ready for the next step - "2. Apply TensorSpace API from the model structure".
-
+若至此一切顺利，我们可以移步下一部分——[加载 TensorSpace 适配模型]()(TBD)。
