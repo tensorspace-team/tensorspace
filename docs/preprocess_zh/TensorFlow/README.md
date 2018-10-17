@@ -46,7 +46,7 @@ $ tensorflowjs_converter \
 预处理 TensorFlow 模型大致上分为以下几个步骤：
 
 <p align="center" verticle-align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png" alt="general TF process" width="830" >
+<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process_zh.png" alt="general TF process" width="830" >
 <br/>
 <b>Fig. 1</b> - 预处理 TensorSpace 模型的步骤
 </p>
@@ -83,7 +83,7 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 
 接下来，我们根据 LeNet_v5 的网络结构来构筑基本模型：
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+<img src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png" alt="LeNet structure" width="175" >
 <br/>
 <b>图2</b> - LeNet 网络结构
 </p>
