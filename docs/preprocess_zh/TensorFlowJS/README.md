@@ -20,7 +20,7 @@
 npm install @tensorflow/tfjs
 ```
 
-以通过以下脚本在 html 中引入 tfjs
+以通过以下脚本在 html 中引入 tfjs：
 ```html
 <script src="libs/tf.min.js"></script>
 ```
@@ -54,7 +54,9 @@ npm install @tensorflow/tfjs
 </p>
 
 
-根据以上结构，搭建一个基本的网络。〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L14)
+根据以上结构，搭建一个基本的网络。
+
+〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L14)
 ```html
 
 // Initialize layer.
@@ -132,7 +134,9 @@ const model = tf.model({
 * 如果您需要使用 `tf.sequential()` 来构建网络，那么您需要参见 [2. 转换一个 tfjs 模型以适配 TensorSpace](#loadModel).
 
 在构建网络结构之后，载入 MNIST 数据集进行编译和训练：
-（注：训练用脚本来源自 [tfjs 官方教程](https://js.tensorflow.org/tutorials/mnist.html)）〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L88)
+（注：训练用脚本来源自 [tfjs 官方教程](https://js.tensorflow.org/tutorials/mnist.html)）
+
+〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L88)
 
 ```html
 const LEARNING_RATE = 0.0001;
@@ -198,7 +202,9 @@ await train();
 
 ```
 ### 1.2 收集中间层数据
-在构建时由于采用了将前一层输出用作下一层输入的方法，只要将所需要的中间层包裹植入一个新的模型之中即可。〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L77)
+在构建时由于采用了将前一层输出用作下一层输入的方法，我们只要将所需要的中间层包裹并植入一个新的模型之中即可。
+
+〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L77)
 
 ```html
 const encModel = tf.model({
@@ -212,11 +218,11 @@ const encModel = tf.model({
 
 * 实际上创建了两个模型：
     * `model` 是我们按照常规机器学习流程创建的模型。
-    * `encModel` 是我们添加了中间层输出的`嵌入的多输出模型`。稍后进行保存。
+    * `encModel` 是我们添加了中间层输出的`嵌入多输出模型`。稍后进行保存。
 
 
 ### 1.3 保存嵌入后模型
-一下代码用于保存嵌入的多输出模型。〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L143)
+以下代码用于保存嵌入的多输出模型。〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L143)
 ```html
 async function saveModel() {
     await encModel.save("downloads://YOUR_MODEL_NAME");
@@ -244,7 +250,9 @@ async function saveModel() {
 
 ### 2.1 载入现有模型
 
-通过以下代码加载 tfjs 模型。〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L19)
+通过以下代码加载 tfjs 模型。
+
+〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L19)
 ```html
 const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
 ```
@@ -289,7 +297,9 @@ console.log(outputList);
 * 由于 tfjs 的局限性，需要为中间层逐一添加所对应的输入。
 * 在例子中，由于模型结构比较简单。只需要**逐一遍历每一层对象**，将其作为下一层的输入提供给下一层的对象。但当我们在遇到比较复杂的模型结构时，请根据实际情况调整合适的输入输出方法。
 
-之后，将提取到的层对象添加到一个新的模型即可。〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L36)
+之后，将提取到的层对象添加到一个新的模型即可。
+
+〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L36)
 
 ```html
 const encModel = tf.model({
@@ -309,7 +319,9 @@ console.log(singleOutput);
 
 ### 2.3 保存嵌入的多输出模型
 
-完成上述步骤之后，使用下面代码保存多输出模型。〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L13)
+完成上述步骤之后，使用下面代码保存多输出模型。
+
+〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L13)
 
 ```html
 async function saveModel() {
