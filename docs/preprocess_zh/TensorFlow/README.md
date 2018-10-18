@@ -48,7 +48,7 @@ $ tensorflowjs_converter \
 <p align="center" verticle-align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process_zh.png" alt="general TF process" width="830" >
 <br/>
-<b>Fig. 1</b> - 预处理 TensorSpace 模型的步骤
+<b>图1</b> - 预处理 TensorSpace 模型的步骤
 </p>
 
 * [1. 训练/加载模型](#loadModel)
