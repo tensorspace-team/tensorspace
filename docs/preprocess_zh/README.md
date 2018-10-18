@@ -40,7 +40,7 @@
 
 通过预处理，将传统单一输出的神经网络模型转换为拥有中间层输出的`TensorSpace`适配模型。
 
-基于不同的神经网络构造框架，细分了不同的预处理教程（未来会不断支持更多的预训练模型，包括Pytorch，Mxnet等）
+基于不同的神经网络构造框架，细分了不同的预处理教程。
 
 * [TensorFlow 模型预处理](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess_zh/TensorFlow/README.md)
 * [Keras 模型预处理](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess_zh/Keras/README.md)
