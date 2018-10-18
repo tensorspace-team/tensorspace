@@ -14,7 +14,7 @@
 * [convert_tensorflow_frozen_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_frozen_model.sh)
 * [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlow/models)
 
-运行环境：Python 3.6.5。相关依赖如下
+运行环境：Python 3.6.5。相关依赖如下：
 ```Python
 import tensorflow as tf
 import numpy as np
@@ -32,7 +32,7 @@ mnist = tf.keras.datasets.mnist
 $ pip install tensorflowjs
 ```
 
-安装完成后，`tensorflowjs_converter`变为系统可用关键字，可用下列命令来调用
+安装完成后，`tensorflowjs_converter` 变为系统可用关键字，可用下列命令来调用
 
 ```shell
 $ tensorflowjs_converter \
@@ -51,9 +51,9 @@ $ tensorflowjs_converter \
 <b>Fig. 1</b> - 预处理 TensorSpace 模型的步骤
 </p>
 
-* [① 训练/加载模型](#loadModel)
-* [② 找出中间层 tensor 名称](#findNames)
-* [③ 转换为 TensorSpace 适配的模型](#convertModel)
+* [1. 训练/加载模型](#loadModel)
+* [2. 找出中间层 tensor 名称](#findNames)
+* [3. 转换为 TensorSpace 适配的模型](#convertModel)
 
 与预处理 Keras 和 tf.keras 模型不同的是，我们不需要额外生成包含中间层输出的`嵌入多输出模型`。我们只需要提取我们所需要的中间层 tensor 名称（**tensor names**），然后进行模型格式转换。
 
@@ -65,7 +65,7 @@ $ tensorflowjs_converter \
 
 ### 1.1 训练模型
 
-如果您目前还没有可以马上使用的TensorFlow模型，可以按照本小节的方法训练一个新的样例模型。
+如果您目前还没有可以马上使用的 TensorFlow 模型，可以按照本小节的方法训练一个新的样例模型。
 
 我们将使用 MNIST 数据集以及 LeNet 网络结构为例，使用 TensorFlow 构建一个神经网络模型。（参考 [sujaybabruwad/LeNet-in-Tensorflow](https://github.com/sujaybabruwad/LeNet-in-Tensorflow)）
 
@@ -95,7 +95,9 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 <b>图2</b> - LeNet 网络结构
 </p>
 
-网络包括：2个 Conv2D + MaxPooling 的组合，紧接着3层 Dense。〔源码〕[tensorflow_create_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L30)
+网络包括：2个 Conv2D + MaxPooling 的组合，紧接着3层 Dense。
+
+〔源码〕[tensorflow_create_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L30)
 
 ```Python
 def LeNet_5(x):
@@ -162,8 +164,8 @@ def LeNet_5(x):
 **❗ 注意**
 
 * **建议**对需要用 TensorSpace 3D可视化的层（tensor）添加 **"name"** 属性。这将为我们之后寻找指定 tensor 、生成 **"outputNames"** 的过程提供极大的便利。
-* 您可能注意到了：我们并没有将“正确的”名称添加到“正确的” tensor 内。例如：我们没有为 `tf.nn.conv2d` 标记名称为 **"MyConv2D_*"**。我们将 `tf.nn.relu` 标记为 **"MyConv2D_*"**。这取决于你需要哪一层处理后的层间数据，如果你希望获得卷积层后的数据，即对`tf.nn.conv2d`命名，如果将卷积层和激励函数看成一个整体，即在`tf.nn.relu`后添加名称
-* 我们只添加了两层 Dense。因为最后的一层 Softmax Dense 将用于之后的训练，所以我们会对其进行不同的处理
+* 您可能注意到了：我们并没有将“正确的”名称添加到“正确的” tensor 内。例如：我们没有为 `tf.nn.conv2d` 标记名称为 **"MyConv2D_*"** 。我们将 `tf.nn.relu` 标记为 **"MyConv2D_*"** 。这取决于你需要哪一层的层间数据：若你希望获得卷积层后的数据，就对 `tf.nn.conv2d` 命名；若将卷积层和激励函数看成一个整体，就在`tf.nn.relu`后添加名称。选择不同的命名方法可能会对所呈现的可视化效果产生不同的影响。
+* 我们只添加了两层 Dense。因为最后的一层 Softmax Dense 将用于之后的训练，所以我们会对其进行不同的处理。
 
 #### 第三步，训练模型
 
@@ -234,7 +236,7 @@ with tf.Session() as sess:
 
 * 我们需要在外部额外声明一个 Softmax tensor 并添加一个合适的名称（**"name"**），以用于提取预测的最终结果。
 
-下图是训练结果后的输出
+下图是训练结果后的输出：
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_training_evaluations.png" alt="evaluations" width="705" >
@@ -364,7 +366,9 @@ print(sess.run(outputs, feed_dict={x:x_test}))
 
 ## <div id="convertModel">3 转换为 TensorSpace 适配的模型</div>
 
-如果一切顺利，我们就可以使用一下脚本来进行模型转换以适配 TensorSpace。〔源码〕[convert_tensorflow_saved_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh)
+如果一切顺利，我们就可以使用一下脚本来进行模型转换以适配 TensorSpace。
+
+〔源码〕[convert_tensorflow_saved_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh)
 ```Bash
 onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
 tensorflowjs_converter \
@@ -382,9 +386,6 @@ tensorflowjs_converter \
 * 请根据所保存的预训练模型类型，选择合适的 `input_format`
   * `input_format=tf_saved_model` 对应 `saved model`
   * `input_format=tf_frozen_model` 对应`frozen model`
-  * `input_format=tf_hub` 对应 TensorFlow Hub Module
-  * `input_format=tensorflowjs` 对应 TensorFLow.js JSON Format
-  * `input_format=keras` 对应 Keras 的 `.hdf5` 或 `.h5`
 * 请添加所保存的 tensor 名称列表至 `onn`（**请勿包含任何空格或者引号**）。
 
 <p align="center">
