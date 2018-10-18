@@ -317,7 +317,15 @@
 
     <main>
         <header>网络层</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div>“网络层”（Layer）在 TensorSpace 中，是所有实体3D对象的容器（实例）。</div>
+        <div>与 <span class="highlight-text">Keras</span> 或 <span class="highlight-text">TensorFlow</span> 的“层”的基本概念相同：都是用于构成神经网络的基本组成元素，比如卷积层、池化层、全链接层等。</div>
+        <div>不同的是，我们的“网络层”不包含<span class="span_bold">计算功能</span>。它只是一个用来构成神经网络的<span class="span_bold">基本元素</span>和<span class="span_bold">储存数据</span>的容器，用来表示该“层”的数据形状以及数据特征。其主要目的是用作层间数据与结构的3D可视化展示。这也是 TensorSpace 的由来： Present Tensors in Space.</div>
+        <div>TensorSpace 的 API 参考 Keras, TensorFlow.js 的风格来设计，方便相关用户进行使用，对API的接口特征更加熟悉。</div>
+        <div><a href="layerIntro_zh.html">请点击链接查看有关层的详细文档</a></div>
+        <img class="tag-img" src="../../assets/img/docs/Model_layers.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - TensorSpace Layers
+        </div>
     </main>
 </div>
 
