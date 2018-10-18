@@ -317,7 +317,36 @@
 
     <main>
         <header>网络层系数</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div>每一个层都可以通过属性获取到：输入形状、输出形状和层间数据。</div>
+
+        <div class="sub-title">形状和维度</div>
+        <div>假设有一个三维数组<span class="highlight-text"> x = np.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]] </span>,那么它的形状为<span class="highlight-text"> x.shape == [2, 2, 2] </span>，表示的是在每一个维度中长度。它的维度<span class="highlight-text"> x.shape.length == 3 </span>，表示该数组在 3个维度中有意义。</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">维度</span>描述数组的维度特征，例如<span class="highlight-text"> [1,2,3] </span> 就是一维数组，维度为 <span class="highlight-text"> 1 </span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">形状</span>描述每一维的长度特征，例如<span class="highlight-text"> [[1,2],[3,4]] </span>是一个二维数组，形状为<span class="highlight-text"> [2,2] </span>,表示一维长度为<span class="highlight-text"> 2 </span>，二维长度为<span class="highlight-text"> 2 </span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    关于维度的详细说明，<a href="basicDimension_zh.html">点击链接获得更多的详细信息和例子</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div class="sub-title">输入和输出形状</div>
+        <div>某些层的形状是会发生变化的。例如卷积层，会增加一个维度，并且根据卷积核（过滤器）的特征改变长宽的值。</div>
+        <div>为了方便地展示层输入、输出的变化，我们提供 <span class="highlight-text">inputShape</span> 和 <span class="highlight-text">outputShape</span> 属性来方便地获取输入、输出的形状信息。</div>
+        <div>在 <span class="highlight-text">TensorSpace</span> 中，<span class="highlight-text">DataFormat</span> 默认通道数都在最后。例如，<span class="highlight-text">shape=[28 ,28, 3]</span>，就是指一个彩色图象的输入，通道数为<span class="highlight-text"> 3 </span>。</div>
+
+        <div class="sub-title">层间数据</div>
+        <div>在神经网络中，每一层都会有相对应的层间数据。经过<a href="basicPreprocessing_zh.html">预处理</a>，我们可以提取到所需要层间数据，并将它们渲染到所对应的3D实体表面。这样我们就可以更直观地观察曾见数据的数据特征与变化。</div>
+
+        <div class="span_bold">例子</div>
+
+
+
     </main>
 </div>
 

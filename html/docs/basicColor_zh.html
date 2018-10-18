@@ -317,7 +317,90 @@
 
     <main>
         <header>网络层颜色</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div class="sub-title">默认颜色配置</div>
+        <div><span class="highlight-text">TensorSpace</span> 提供了一套完整的默认颜色表达。例如：在默认情况下，卷积层为黄色、全链接层为绿色、池化层为蓝色、输入输出层为灰色。</div>
+        <div>我们设计默认配色的初衷是为了给所有使用者一种更直观、更统一的视觉感受：当看到黄色的层时，我们会联想到这是一个卷基层。以此来提高3D可视化模型的信息承载能力和表达能力。</div>
+        <div>使用者也可以通过覆盖对应的配置参数来选择自己喜欢的颜色。网络层配色支持基本的颜色编码方式。</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_MNIST.png">
+        <div class="img-label">
+            <span class="img-label-number">图1</span> - Layer Color
+        </div>
+
+        <div class="sub-title">基本颜色配置列表</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    卷积层 Convolution #FFFF2E <span class="color-block" style="background-color: #FFFF2E"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    输入层 Input #EEEEEE <span class="color-block" style="background-color: #EEEEEE"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    补零层 Padding #6eb6ff <span class="color-block" style="background-color: #6eb6ff"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    池化层 Pooling #00ffff <span class="color-block" style="background-color: #00ffff"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    全链接层 Dense #00ff00 <span class="color-block" style="background-color: #00ff00"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    输出层 Output #EEEEEE <span class="color-block" style="background-color: #EEEEEE"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    上采样层 UpSampling #30e3ca <span class="color-block" style="background-color: #30e3ca"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    变形层 Reshape #a287f4 <span class="color-block" style="background-color: #a287f4"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    平整层 Flatten #dfe2fe <span class="color-block" style="background-color: #dfe2fe"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    裁剪层 Cropping #cefc86 <span class="color-block" style="background-color: #cefc86"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    转置卷积层 TransposeConv #ff5722 <span class="color-block" style="background-color: #ff5722"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    全局池化层 GlobalPooling #0074e4 <span class="color-block" style="background-color: #0074e4"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    万能层 Layer #f08a5d <span class="color-block" style="background-color: #f08a5d"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    激活层 Activation #fc5c9c <span class="color-block" style="background-color: #fc5c9c"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sub-title">Merge</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    加法 Add #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    平均值 Average #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    取最大值 Maximum #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    乘法 Multiply #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    减法 Subtract #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    级联 Concatenate #f9a1bc <span class="color-block" style="background-color: #f9a1bc"></span>
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
