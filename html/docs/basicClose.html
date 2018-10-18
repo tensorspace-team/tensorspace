@@ -318,7 +318,75 @@
 
     <main>
         <header>Close Button</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>The CloseButton is one of the important elements of the <a href="basicLayer.html">Layer</a>.</div>
+        <div>Based on our specific requirements, we can customize the CloseButton. For example, we can config the <span class="highlight-text">CloseButton</span> like:</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+new TSP.layers.Conv2d( {
+    ...
+
+    closeButton: {
+        display: true,
+        ratio: 2
+    }
+
+    ...
+} );
+            </code></pre>
+        </div>
+
+        <div>By default, <span class="highlight-text">display</span> is <span class="highlight-text">true</span>, which indicates the button is displayed close to the feature maps when the layer is expaned:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_Spec.png">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - CloseButton
+        </div>
+
+        <div>After clicking the CloseButton, the layer collapse to the aggregation status and the CloseButton will be hidden.</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_collapsed.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 2</span> - Collapsed Layer
+        </div>
+
+        <div>The CloseButton size is calculated based on the size of the layer automatically. If we want to modify the button manually, we can config the ratio which indicates the <span class="highlight-text">ratio</span> between the actual object and the base object.</div>
+
+        <div>By default, the <span class="highlight-text">ratio</span> is set to 1:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_ratio_1.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 3</span> - CloseButton with ratio 1 (default)
+        </div>
+
+        <div>We can make the button larger to set the <span class="highlight-text">ratio</span> to 3:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_ratio_3.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 4</span> - CloseButton with ratio 3
+        </div>
+
+        <div>If you do not like our lovely CloseButton, we can set the <span class="highlight-text">display</span> to be <span class="highlight-text">false</span> and there will be no CloseButton displayed.</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_no_display.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 5</span> - Don't display CloseButton
+        </div>
+
+        <div>In this case, we can draw our customized button and call closeLayer function to perform the collapsing operation to the expanded layers.</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_customized.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 6</span> - Customized CloseButton
+        </div>
+
     </main>
 </div>
 

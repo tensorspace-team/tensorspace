@@ -318,7 +318,76 @@
 
     <main>
         <header>网络层关闭按钮</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div>关闭按钮是构成<a href="basicLayer_zh.html">网络层</a>的重要组成部分。</div>
+
+        <div>基于不同的需求，我们可以定制不同的关闭按钮。以下是一个配置关闭按钮的例子：</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+new TSP.layers.Conv2d( {
+    ...
+
+    closeButton: {
+        display: true,
+        ratio: 2
+    }
+
+    ...
+} );
+            </code></pre>
+        </div>
+
+
+        <div><span class="highlight-text">display</span> 的默认值为 <span class="highlight-text">true</span>。这表示我们将在展开状态下的层边上显示关闭按钮</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_Spec.png">
+
+        <div class="img-label">
+            <span class="img-label-number">图1</span> - 关闭按钮
+        </div>
+
+        <div>在单击关闭按钮之后，展开状态下的层会收拢，关闭按钮随之隐藏。</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_collapsed.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图2</span> - 收拢状态卷积层
+        </div>
+
+        <div>关闭按钮的默认大小是根据层的大小自动调整的。我们也可以通过修改 <span class="highlight-text">ratio</span> 参数来人工修改层的大小。<span class="highlight-text">ratio</span> 代表了实际显示大小与默认大小的比值。</div>
+
+        <div>在默认设置下，<span class="highlight-text">ratio</span> 为1：</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_ratio_1.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图3</span> - ratio 为1（默认）的关闭按钮
+        </div>
+
+        <div>当我们将 <span class="highlight-text">ratio</span> 调整至3之后，可以得到一个较大的按钮：</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_ratio_3.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图4</span> - ratio 为3的关闭按钮
+        </div>
+
+        <div>若您非常不喜欢我们可爱的关闭按钮的话… 您可以通过将 <span class="highlight-text">display</span> 设置为 <span class="highlight-text">false</span> 来不现实关闭按钮……</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_no_display.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图5</span> - 不显示关闭按钮
+        </div>
+
+        <div>在这种情况下，我们可以通过加入我们定制的关闭按钮来完成收拢层的操作：</div>
+
+        <img class="tag-img" src="../../assets/img/docs/CloseButton_customized.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图6</span> - 定制关闭按钮
+        </div>
+
     </main>
 </div>
 
