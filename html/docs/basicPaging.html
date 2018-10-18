@@ -318,7 +318,76 @@
 
     <main>
         <header>Paging</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div>Paging, aka pagination, is the feature used to handle long 1D layers: Input1d, Output1d, Activation1d and Dense.</div>
+
+        <div>By default, <span class="highlight-text">paging</span> is set to false which can be used to visualize most 1D layers:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_no_size_50.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - No Paging (Dense Layer size 50)
+        </div>
+
+        <div>If we do not apply the paging, we could end up with a very long (e.g. greater than 1000) 1D layer, which could make the model hard to visualize and cause performance issue:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_no_size_1000.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 2</span> - No Paging (Dense Layer size 1000)
+        </div>
+
+        <div>To use <span class="highlight-text">paging</span>, we can config like:</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+new TSP.layers.Dense( {
+
+    ...
+
+    units: 1000,
+    paging : true,
+    segmentLength : 200,
+    segmentIndex : 0,
+    overview : false
+
+    ...
+
+} );
+            </code></pre>
+        </div>
+
+        <div>After changing <span class="highlight-text">paging</span> to <span class="highlight-text">true</span>, we can handle long 1D layer:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_default.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 3</span> - Paging (Default)
+        </div>
+
+        <div><span class="highlight-text">segmentLength</span> configs the size of data presented on each "page". With <span class="highlight-text">segmentLength</span> to <span class="highlight-text">50</span>:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_50.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 4</span> - Paging (SegmentLength 50)
+        </div>
+
+        <div>We can use the Paging button to switch between different pages:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_button.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 5</span> - Paging button
+        </div>
+
+        <div>If we want to check the paging texts from a better visualization angle, we suggest to set the <span class="highlight-text">overview</span> to be <span class="highlight-text">true</span>, which rotates the text along the y-axis for 90 degrees.</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_overview.png">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 6</span> - Paging with overview
+        </div>
+
     </main>
 </div>
 

@@ -318,7 +318,76 @@
 
     <main>
         <header>网络层分页</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>分页功能是用来解决1D 层对象长度过长的问题。（1D 层对象包括但不限于：Input1d, Output1d, Activation1d and Dense。）</div>
+
+        <div>默认情况下，分页功能对于1D 层对象是关闭的：</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_no_size_50.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图1</span> - 无分页 （Dense层，长度50）
+        </div>
+
+        <div>当我们需要显示非常长的1D 层对象时，若我们不使用分页，我们可能很难得到一个很好的可视化效果：</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_no_size_1000.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图2</span> - 无分页 （Dense层，长度1000）
+        </div>
+
+        <div>我们可以通过一下脚本来设置使用分页功能：</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+new TSP.layers.Dense( {
+
+    ...
+
+    units: 1000,
+    paging : true,
+    segmentLength : 200,
+    segmentIndex : 0,
+    overview : false
+
+    ...
+
+} );
+            </code></pre>
+        </div>
+
+        <div>当我们将 <span class="highlight-text">paging</span> 设置为 <span class="highlight-text">true</span> 之后，我们就可以较好地展现较长的1D 层了：</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_default.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图3</span> - 分页（默认分页长度）
+        </div>
+
+        <div><span class="highlight-text">segmentLength</span> 用来设置每一页的长度。 当 <span class="highlight-text">segmentLength</span> 设置为<span class="highlight-text">50</span>时：</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_50.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图4</span> - 分页(分页长度50)
+        </div>
+
+        <div>我们可以使用换页按钮在不同的页面间进行切换：</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_button.jpg">
+
+        <div class="img-label">
+            <span class="img-label-number">图5</span> - 换页按钮
+        </div>
+
+        <div>在某些状况下，我们可以通过设置 <span class="highlight-text">overview</span> 来获得更好的分页文字展示角度。<span class="highlight-text">overview</span> 为 <span class="highlight-text">true</span> 时，文字内容将延 y 轴旋转90度。</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Paging_overview.png">
+
+        <div class="img-label">
+            <span class="img-label-number">图6</span> - 使用 overview 的分页
+        </div>
     </main>
 </div>
 
