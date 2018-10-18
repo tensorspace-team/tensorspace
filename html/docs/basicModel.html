@@ -319,7 +319,117 @@
 
     <main>
         <header>Model</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div>In the TensorSpace, the idea of a 'model' is not the models (aka ML model) we trained by other machine learning libraries (such as TensorFlow, Keras and TensorFlow.js). It is the fundamental concept of the TensorSpace, which is used to construct, render and maintain the neural network 3D visualization.</div>
+
+        <div class="sub-title">The model is not only a carrier</div>
+
+        <div>The elements used for both visualization and ML model inferences are maintained in the model. Developers can add different <a href="#layerDetail">layers</a> in the model as well as catch any existed layers from the model. Developers can <a href="#loadDetail">load</a> a pre-trained ML model as well as interact with the loaded ML models for inferences. All necessary components used to complete the neural network 3D visualization are covered in the TensorSpace model.</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_layers.png">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Layers in a TensorSpace model
+        </div>
+
+        <div class="sub-title">But also a linkage between the visualization and the inferences</div>
+
+        <div>The components used for visualization are actually <a href="#createDetail">created</a> within the model based on the provided ML model, which builds up the correct relations between the visualizing components and the ML models. While the ML model is computing for <a href="#inferencesDetail">inferences</a>, the intermediate outputs are rendered by the corresponded TensorSpace layers, the relations among different layers are linked by relation lines, the dimensions of feature maps are labeled by text utilities ... All visualizing components and loaded ML models are related in the model.</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_MNIST.png">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 2</span> - Visualize inference process
+        </div>
+
+        <div class="sub-title">Summary</div>
+
+        <div>The model integrates the process from preprocessing the ML model to rendering the intermediate outputs, which makes it possible to 3D visualize the neural network not only the structure but also the data flow among all hidden layers.</div>
+
+        <div class="sub-title">Highlights</div>
+
+        <div class="property-title" id="modelDetail">Model</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <span class="highlight-text">Model</span> object is one of the fundamental elements of TensorSpace.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is the implementation to maintain components.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="modelIntro.html">Model</a> for more details.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title" id="layerDetail">Layer</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <span class="highlight-text">Layer</span> object is one of the fundamental elements of TensorSpace.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is used to build the main structure of the visualization model.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Different <span class="highlight-text">Layer</span> objects could have different configurations, features and functionality.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicLayer.html">Layer</a> for more details.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title" id="createDetail">Created</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">init()</span> method is the actual start of the TensorSpace visualization.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    All objects involved in visualization are actually lazy initialization by using the configurations properly.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Since almost all of object creations are involved in the <span class="highlight-text">init()</span>, it takes the longest execution time to complete.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Once <span class="highlight-text">init()</span> is called, all objects are created and the updates on configuration may require new initializations for some objects.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    A callback function can be added as a parameter to handle events after <span class="highlight-text">init()</span> complete. E.g. to predict a sample input after initializing the model immediately.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title" id="loadDetail">Load</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">load()</span> method provides the way to involve pre-trained networks in 3D visualization.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicLoad.html">Load</a> for more details.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title" id="inferencesDetail">Inferences</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">predict()</span> method plays the role of a "bridge" which extract the output data from network to the visualization components.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicPredict.html">Predict</a> for more details.
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
