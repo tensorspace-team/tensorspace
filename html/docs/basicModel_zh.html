@@ -318,7 +318,118 @@
 
     <main>
         <header>模型</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>在 TensorSpace 中，“模型”的定义并不是我们在机器学习中所指的传统意义上的神经网络模型（如由 TensorFlow、Keras、TensorFlow.js 所训练的模型）。它是一个构成 TensorSpace 的基础概念。通过它，我们才能构造、渲染3D可视化的神经网络模型。</div>
+
+        <div class="sub-title">模型不仅是载体</div>
+
+        <div>对于 TensorSpace 来说，所有的基本对象——不管是神经网络模型的对象，还是可视化交互对象——都是由“模型”来进行承载的。开发者可以通过模型来添加、提取所需要的<a href="#layerDetail">网络层</a>；开发者也可以通过模型来<a href="#loadDetail">加载</a>、使用所需要的神经网络模型。所有用于神经网络 3D可视化的组件都包含于“模型”之中。</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_layers.png">
+
+        <div class="img-label">
+            <span class="img-label-number">图1</span> - TensorSpace 模型中的层
+        </div>
+
+        <div class="sub-title">模型更是连结</div>
+
+        <div>所有用于可视化的组件都是在模型中<a href="#createDetail">创建</a>的。在此过程中，模型确保为可视化组件与神经网络模型中的对应部分进行链接。因此当神经网络模型进行<a href="#predictDetail">预测</a>计算时：所有中间层的输出数据将在其对应的 TensorSpace层进行渲染；不同层之间的关系将由关系连线所连接；特征图上的信息将由文本组件展示…… 所有的可视化组件与神经网络模型都通过“模型”进行连结。</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_MNIST.png">
+
+        <div class="img-label">
+            <span class="img-label-number">图2</span> - 观察预测过程
+        </div>
+
+        <div class="sub-title">小结</div>
+
+        <div>“模型”集成了从神经网络模型预处理到中间层数据渲染的整个过程。它不仅仅展示了神经网络的结构，更呈现出神经网络中数据流动、关联的过程。</div>
+
+        <div class="sub-title">关键点</div>
+
+        <div class="property-title" id="modelDetail">模型对象</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    模型对象是 TensorSpace 的基本构成组件。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    它的主要作用是用来存储组件的。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="modelIntro_zh.html">模型</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title" id="layerDetail">网络层</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    “网络层”对象是 TensorSpace 的基本构成组件。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    它主要是用来搭建可视化网络结构的。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    不同的层拥有不同的配置方式、特征以及功能。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicLayer_zh.html">网络层</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title" id="createDetail">创建</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">init()</span> 方法是创建 TensorSpace 模型的真正开始。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    所有可视化对象的初始化均采用了：优先配置、延迟初始化以及统一初始化的策略。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    由于几乎所有的对象创建都在<span class="highlight-text">init()</span>中进行，因此<span class="highlight-text">init()</span>将花费较长的时间来完成运行。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    当<span class="highlight-text">init()</span>被调用之后，所有的对象将被创建。若需要更新对象或重新对某一对象更改配置，可能需要重新初始化。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    我们可以添加一个回调函数作为参数。当<span class="highlight-text">init()</span>执行完成后，它将触发这个回调函数。例如：我们可以以此计算出初始化当前模型的总用时。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title" id="loadDetail">加载</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">load()</span> 方法将神经网络模型的3D可视化展示变为可能。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicLoad_zh.html">加载</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title" id="predictDetail">预测</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">predict()</span> 方法在神经网络模型与3D可视化组件之间起到了连接的作用。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicPredict_zh.html">预测</a>。
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
