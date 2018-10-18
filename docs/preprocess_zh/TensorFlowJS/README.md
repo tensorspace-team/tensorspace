@@ -1,8 +1,8 @@
-# TensorFlow.js 模型预处理
-
 <p align="center">
 <img width=600 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tfjs.png">
 </p>
+
+# TensorFlow.js 模型预处理
 
 本篇将介绍如何预处理基于 TensorFlow.js （以下简写为 “tfjs” ）构建的网络模型以适配 TensorSpace。
 
@@ -20,7 +20,7 @@
 npm install @tensorflow/tfjs
 ```
 
-以通过以下脚本在 html 中引入 tfjs：
+通过以下脚本在 html 中引入 tfjs：
 ```html
 <script src="libs/tf.min.js"></script>
 ```

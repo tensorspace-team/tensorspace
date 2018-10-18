@@ -41,7 +41,7 @@ $ tensorflowjs_converter \
     ../models/json_models/tensorflow
 ```
 
-如果您在此之前没有任何机器学习的经验（0经验者），强烈建议先阅读由 [Keras](https://keras.io/) 官方所提供的 [Keras 模型训练教程](https://keras.io/#getting-started-30-seconds-to-keras)。
+如果您在此之前没有任何机器学习的经验，强烈建议先阅读由 [Keras](https://keras.io/) 官方所提供的 [Keras 模型训练教程](https://keras.io/#getting-started-30-seconds-to-keras)。
 
 
 预处理 Keras 模型，包含如下图所示的几个步骤：

@@ -1,8 +1,8 @@
-# tf.keras 模型预处理
-
 <p align="center">
 <img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
 </p>
+
+# tf.keras 模型预处理
 
 本篇将介绍如何预处理基于 tf.keras 搭建的神经网络模型，适配 TensorSpace 所需要的拥有中间层输出的模型。
 
@@ -186,6 +186,7 @@ for layer in model.layers:
 <br/>
 <b>图5</b> - 中间层信息输出
 </p>
+
 **❗ 注意** 
 
 * 若在之前步骤中已设置了恰当的 `name` 属性，可以很迅速的找到其**名称及对应信息**。
