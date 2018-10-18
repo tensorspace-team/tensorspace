@@ -11,7 +11,7 @@
 * [convert_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh)
 * [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/Keras/models)
 
-运行环境：Python 3.6.5。相关依赖如下
+运行环境：Python 3.6.5。相关依赖如下：
 ```Python
 import tensorflow as tf
 import numpy as np
@@ -24,13 +24,13 @@ from keras.models import load_model
 * `keras` 与 `numpy` 为核心库。
 * `tf.keras` 只用于提供训练所需要的数据集。
 
-此外，我们还需要安装[tfjs-converter](https://github.com/tensorflow/tfjs-converter) (基于 TensorFlow.js 的转换工具):
+此外，我们还需要安装 [tfjs-converter](https://github.com/tensorflow/tfjs-converter) (基于 TensorFlow.js 的转换工具)：
 
 ```shell
 $ pip install tensorflowjs
 ```
 
-安装完成后，`tensorflowjs_converter`变为系统可用关键字，可用下列命令来调用
+安装完成后，`tensorflowjs_converter`变为系统可用关键字，可用下列命令来调用：
 
 ```shell
 $ tensorflowjs_converter \
@@ -41,10 +41,10 @@ $ tensorflowjs_converter \
     ../models/json_models/tensorflow
 ```
 
-如果您在此之前没有任何机器学习的经验（0经验者），强烈建议先阅读由[Keras](https://keras.io/)官方所提供的[Keras 模型训练教程](https://keras.io/#getting-started-30-seconds-to-keras)。
+如果您在此之前没有任何机器学习的经验（0经验者），强烈建议先阅读由 [Keras](https://keras.io/) 官方所提供的 [Keras 模型训练教程](https://keras.io/#getting-started-30-seconds-to-keras)。
 
 
-预处理 Keras 模型，包含如下图所示的几个步骤
+预处理 Keras 模型，包含如下图所示的几个步骤：
 
 <p align="center" verticle-align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_general_process_zh.png" alt="general TF process" width="830" >
@@ -53,10 +53,10 @@ $ tensorflowjs_converter \
 </p>
 
 
-* [① 训练/加载模型](#loadModel)
-* [② 添加中间层输出](#addOutputs)
-* [③ 保存嵌入后的多输出模型](#saveModel)
-* [④ 转换为 TensorSpace 适配的模型](#convertModel)
+* [1. 训练/加载模型](#loadModel)
+* [2. 添加中间层输出](#addOutputs)
+* [3. 保存嵌入后的多输出模型](#saveModel)
+* [4. 转换为 TensorSpace 适配的模型](#convertModel)
 
 在本教程中，我们将使用 MNIST 数据集和 LeNet 神经网络结构来构建一个 Keras 模型。
 
@@ -66,14 +66,16 @@ $ tensorflowjs_converter \
 
 如果您目前还没有可以马上直接使用的 Keras 模型，您可以按照本小节的方法构筑一个新的样例模型。
 
-根据 LeNet 的网络结构
+根据 LeNet 的网络结构：
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png" alt="LeNet structure" width="800" >
 <br/>
 <b>图2</b> - LeNet 网络结构
 </p>
 
-我们可以用以下代码迅速搭建其网络结构。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L12)
+我们可以用以下代码迅速搭建其网络结构。
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L12)
 ````Python
 def create_sequential_model():
     single_output_model = Sequential([
@@ -95,7 +97,9 @@ def create_sequential_model():
 * **为所有我们想展示的网络层均添加了 “name” 属性**。
 * Keras 的[官方教程](https://keras.io/#getting-started-30-seconds-to-keras)能更好的帮助你学习并使用 Keras。
 
-完成网络结构的构筑之后，使用 MNIST 数据集训练模型。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L49)
+完成网络结构的构筑之后，使用 MNIST 数据集训练模型。
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L49)
 ````Python
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
@@ -107,14 +111,16 @@ model.compile(optimizer='adam',
 model.fit(x_train, y_train, epochs=5, batch_size=32)
 ````
 
-在训练完成之后，我们应当得到一个具有完整结构及一定训练程度的 Keras 神经网络模型。通过以下代码测试模型。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102)
+在训练完成之后，我们应当得到一个具有完整结构及一定训练程度的 Keras 神经网络模型。通过以下代码测试模型。
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102)
 ````Python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))
 ````
 
-如下图所示，得到单一预测结果
+如下图所示，得到单一预测结果：
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_1.png" alt="predict output 1" width="705" >
@@ -129,7 +135,9 @@ print(model.predict(input_sample))
 model = load_model("/PATH/TO/Keras/model.h5")
 ````
 
-或者若该模型的**结构与权重为分开保存格式**，用以下代码加载。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L67)
+或者若该模型的**结构**与**权重**为**分开**保存格式，用以下代码加载：
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L67)
 ````Python
 json_path = "PATH_TO_JSON/model.json"
 weight_path = "PATH_TO_WEIGHT/weights.hdf5"
@@ -140,14 +148,16 @@ model = model_from_json(
 model.load_weights(weight_path)
 ````
 
-使用以下验证模型可用性。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102)
+使用以下验证模型可用性：
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102)
 ````Python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))
 ````
 
-如下图所示，得到单一预测结果
+如下图所示，得到单一预测结果：
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_1.png" alt="predict output 1" width="705" >
 <br/>
@@ -177,12 +187,14 @@ for layer in model.layers:
 * 若在之前的步骤中已经设置了恰当的 `name` 属性，可快速找到对应层的位置。
 * 若该模型是加载预训练模型得到，大多数情况下，中间层名称应与其所对应的类相关。
 
-基于以上信息，我们可以迅速得出LeNet的基本结构：
-LeNet先有两对 Conv2D + MaxPooling 层的组合，然后紧接一层 Flatten 层，最终进行3层 Dense。名称列表已经列出
+基于以上信息，我们可以迅速得出 LeNet 的基本结构：
+LeNet 先有两对 Conv2D + MaxPooling 层的组合，然后紧接一层 Flatten 层，最终进行3层 Dense。
 
 ### 第二步，提取中间层并添加到新模型中
 
-可通过以下方法提取我们所需要的中间层，并将其添加到我们新创建的模型中。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L111)
+可通过以下方法提取我们所需要的中间层，并将其添加到我们新创建的模型中。
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L111)
 
 ````Python
 output_layer_names = [
@@ -197,7 +209,9 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
     return enc_model
 ````
 
-或者可用以下方式添加所有中间层。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L88)
+或者可用以下方式添加所有中间层。
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L88)
 ````Python
 def generate_encapsulate_model(model):
     enc_model = Model(
@@ -214,7 +228,9 @@ def generate_encapsulate_model(model):
 
 ### 第三步，生成新的多输出模型
 
-然后，可生成一个新的`嵌入多输出模型`。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L113)
+然后，可生成一个新的`嵌入多输出模型`。
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L113)
 
 ````Python
 enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
@@ -222,12 +238,12 @@ enc_model = generate_encapsulate_model_with_output_layer_names(model, output_lay
 # enc_model = generate_encapsulate_model(model)
 ````
 
-可使用以下语句输出模型的相关信息
+可使用以下语句来获得所选定的层的输出：
 ````Python
 print(enc_model.predict(input_sample))
 ````
 
-模型应该会输出我们所选择的所有中间层输出（若选择中包含最终输出，结果也应当包括最终预测输出）。
+模型应该会输出我们所选择的所有中间层输出。若选择中包含最终输出，结果也应当包括最终预测输出。
 
 <p align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_2.png" alt="predict output 2" width="705" >
@@ -249,7 +265,9 @@ print(enc_model.predict(input_sample))
 
 **❗ 注意**
 * 因为我们并不需要进一步训练，所以我们并不需要编译我们的嵌入的多输出模型。
-* 若您希望基于该嵌入后模型继续训练，您可以加入合适的优化和损失函数。这里我们以 “adam” 和 “sparse_categorical_crossentropy” 为例。〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L118)
+* 若您希望基于该嵌入后模型继续训练，您可以加入合适的优化和损失函数。这里我们以 “adam” 和 “sparse_categorical_crossentropy” 为例。
+
+〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L118)
 ````Python
 enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
@@ -261,7 +279,9 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
 
 最后一步是将我们先前得到的`嵌入的多输出模型`转换为 TensorSpace 所适配的模型。使用 [tfjs-converter](https://github.com/tensorflow/tfjs-converter)。
 
-我们可以通过以下脚本来进行转换。〔源码〕[convert_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh)
+我们可以通过以下脚本来进行转换。
+
+〔源码〕[convert_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh)
 ````shell
 tensorflowjs_converter \
     --input_format=keras \
