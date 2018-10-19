@@ -317,7 +317,221 @@
 
     <main>
         <header>顺序模型</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            与在 Keras 中的 有序模型实现方法类似，TensorSpace 中的 <span class="highlight-text">Sequential()</span>
+            创建了一个简单的层对象堆栈。
+        </div>
+
+        <div>如下，我们可以创建一个有序模型：</div>
+        <div class="code-snippet">
+            <pre><code class="Python">
+let seqModel = new TSP.model.Sequential( container, {
+
+    ...
+    // necessary configurations
+    layerInitStatus: "close",
+    aggregationStrategy: "max",
+    layerShape: "rect",
+    ...
+
+} );
+            </code></pre>
+        </div>
+
+
+        <div>然后我们可以在模型中根据我们的设计顺序，插入不同的层对象：</div>
+        <div class="code-snippet">
+            <pre><code class="Python">
+seqModel.add( new TSP.layers.Input2d( {
+
+    shape: [ 28, 28, 1 ],
+    name: "initInput",
+    color: 0xFFFFFF,
+
+} ) );
+
+seqModel.add( new TSP.layers.Padding2d( {
+
+    padding: [ 2, 2 ],
+
+} ) );
+
+let convLayer = new TSP.layers.Conv2d( {
+
+    kernelSize: 5,
+    filters: 6,
+    strides: 1,
+    name: "conv2d1",
+
+} );
+seqModel.add( convLayer );
+            </code></pre>
+        </div>
+
+        <div>我们可以插入一个声明过的层对象或者一个匿名层对象。</div>
+
+        <div>
+            在完成模型结构的创建之后，我们可以使用
+            <a href="#load"><span class="highlight-text">load()</span></a> 来载入对应的神经网络模型，
+            然后使用 <a href="#init"><span class="highlight-text">init()</span></a> 来创建所有的层对象：
+        </div>
+        <div class="code-snippet">
+            <pre><code class="Python">
+seqModel.load( {
+
+    type: "tfjs",
+    url: './lenetModel/mnist.json',
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+
+seqModel.init();
+            </code></pre>
+        </div>
+
+        <div>
+            <a href="#predict"><span class="highlight-text">predict()</span></a> 方法将接管所有层对象关于数据预测的处理。
+        </div>
+
+
+        <div class="sub-title" id="modelConfig"> 属性 </div>
+
+        <div><a href=""><span class="span_bold">.aggregationStrategy</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示聚合体表面渲染的策略。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerShape</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示特征图的排布方式。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerInitStatus</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示层初始化状态：展开为特征图或者收拢为聚合体。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.textSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    启用或者禁用层的文字显示功能。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.relationSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    启用或者禁用层间关系连线的显示功能。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.animationTimeRatio</span> : Double</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    实际动画时间与默认动画时间的比值。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.color</span> : color format</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    关于所有层对象的颜色配置以及场景背景颜色的配置。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.stats</span> : Boolean</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    是否启用并显示<span class="highlight-text">stats</span>控件。
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="sub-title" id="modelMethod"> 方法 </div>
+
+        <div id="init"><a href=""><span class="span_bold">.init( callbackFunction )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">init( callbackFunction )</span>方法使用所提供的配置信息创建模型中所有对象。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicModel.html">Model (concept)</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div id="load"><a href=""><span class="span_bold">.load( model_config )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">load()</span> 方法用于载入神经网络模型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicLoad.html">Load</a> 。
+                </li>
+            </ul>
+        </div>
+
+        <div id="predict"><a href=""><span class="span_bold">.predict( input_data )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">predict()</span> 方法将收集所有必要的层间数据并将其渲染至所对应的可视化对象中。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicPredict.html">Predict</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getAllLayers()</span> : Layer[]</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    以获取所有层对象。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getLayerByName( name )</span> : Layer</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    根据所提供的层名称（<span class="highlight-text">String</span>）来获取特定的层对象。
+                </li>
+            </ul>
+        </div>
+
+
     </main>
 </div>
 

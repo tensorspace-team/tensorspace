@@ -317,7 +317,296 @@
 
     <main>
         <header>函数式模型</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            <span class="highlight-text">Model()</span> 能用来创建 TensorSpace 模型。
+            与 <span class="highlight-text">Sequential()</span> 创建简单的层对象堆栈不同，
+            <span class="highlight-text">Model()</span> 需要提供关于每一层关系的细节信息。
+        </div>
+
+
+        <div>我们可以按照以下方式创建一个函数模型：</div>
+        <div class="code-snippet">
+            <pre><code class="Python">
+let model = new TSP.model.Model( container, {
+
+    ...
+    // necessary configurations
+    inputs: [input],
+    outputs: [addLayer],
+    outputsOrder: ["input", "conv1", "conv2", "conv3", "add"],
+    layerShape: "rect",
+    layerInitStatus: "close",
+    stats: true
+    ...
+
+} );
+            </code></pre>
+        </div>
+
+        <div>
+            我们可以通过添加层与层之间的对应输入输出关系来逐步地向模型中添加层对象。
+        </div>
+
+        <div class="code-snippet">
+            <pre><code class="Python">
+let input = new TSP.layers.Input2d({
+        shape: [28, 28, 1]
+});
+
+let layer1 = new TSP.layers.Conv2d({
+	kernelSize: 2,
+	filters: 36,
+	strides: 1,
+	padding: "same"
+});
+
+layer1.apply( input );
+
+let layer2 = new TSP.layers.Conv2d({
+	kernelSize: 2,
+	filters: 36,
+	strides: 1,
+	padding: "same"
+});
+
+layer2.apply( input );
+
+let layer3 = new TSP.layers.Conv2d({
+	kernelSize: 2,
+	filters: 4,
+	strides: 1,
+	padding: "same"
+});
+
+layer3.apply( layer2 );
+
+let addLayer = new TSP.layers.Add([layer1, layer3]);
+
+let model = new TSP.model.Model(container, {
+
+    ...
+    inputs: [input],
+    outputs: [addLayer],
+    outputsOrder: ["input", "conv1", "conv2", "conv3", "add"],
+    ...
+
+});
+            </code></pre>
+        </div>
+
+        <div>
+            在完成创建模型结构之后，我们可以使用
+            <a href="#load"><span class="highlight-text">load()</span></a> 载入所对应的神经网络模型，并通过
+            <a href="#init"><span class="highlight-text">init()</span></a> 初始化：
+        </div>
+
+        <div class="code-snippet">
+            <pre><code class="Python">
+model.load( {
+
+    type: "tfjs",
+    url: './lenetModel/mnist.json',
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+
+model.init();
+            </code></pre>
+        </div>
+
+        <div>
+            <a href="#predict"><span class="highlight-text">predict()</span></a>
+            方法方法将接管所有层对象关于数据预测的处理。所有结果将被用于渲染层对象。
+        </div>
+
+
+        <div class="sub-title" id="modelConfig"> Property </div>
+
+        <div><a href=""><span class="span_bold">.inputs</span> : Layer[]</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要</span>.
+                    只可用于<span class="highlight-text">Model()</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示该模型的输入层对象。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    如果模型使用多输入，我们必须使用 <span class="highlight-text">Model()</span> 来创建模型。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.outputs</span> : Layer[]</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要</span>.
+                    只可用于<span class="highlight-text">Model()</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示该模型的输出层对象。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    模型的输出可以为多个。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.outputsOrder</span> : String[]</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要</span>.
+                    只可用于<span class="highlight-text">Model()</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示输出层对象的名称列表。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    展示输出层对象的输出顺序。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    其输出顺序代表了预处理的神经网络模型的中间层计算输出的顺序。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.aggregationStrategy</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示聚合体表面渲染的策略。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerShape</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示特征图的排布方式。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerInitStatus</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示层初始化状态：展开为特征图或者收拢为聚合体。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.textSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    启用或者禁用层的文字显示功能。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.relationSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    启用或者禁用层间关系连线的显示功能。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.animationTimeRatio</span> : Double</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    实际动画时间与默认动画时间的比值。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.color</span> : color format</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    关于所有层对象的颜色配置以及场景背景颜色的配置。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.stats</span> : Boolean</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    是否启用并显示 <span class="highlight-text">stats</span> 控件。
+                </li>
+            </ul>
+        </div>
+
+        <div class="sub-title" id="modelMethod"> Method </div>
+
+        <div id="init"><a href=""><span class="span_bold">.init( callbackFunction )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">init( callbackFunction )</span>方法使用所提供的配置信息创建模型中所有对象。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicModel.html">Model (concept)</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div id="load"><a href=""><span class="span_bold">.load( model_config )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">load()</span> 方法用于载入神经网络模型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicLoad.html">Load</a> 。
+                </li>
+            </ul>
+        </div>
+
+        <div id="predict"><a href=""><span class="span_bold">.predict( input_data )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">predict()</span> 方法将收集所有必要的层间数据并将其渲染至所对应的可视化对象中。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicPredict.html">Predict</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getAllLayers()</span> : Layer[]</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    以获取所有层对象。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getLayerByName( name )</span> : Layer</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    根据所提供的层名称（<span class="highlight-text">String</span>）来获取特定的层对象。
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
