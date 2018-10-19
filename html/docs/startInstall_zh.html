@@ -317,7 +317,65 @@
 
     <main>
         <header>安装</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <span class="span_bold">第一步: 下载 TensorSpace.js</span>
+        </div>
+
+        <div>我们提供了三种下载 TensorSpace.js 的方法，它们分别是 npm、yarn 以及 来自 TensorSpace的 官方网站。</div>
+
+        <div>途径 1: NPM</div>
+
+        <div class="code-snippet">
+            <pre><code class="Bash">
+npm install tensorspace
+            </code></pre>
+        </div>
+
+        <div>途径 2: Yarn</div>
+        <div class="code-snippet">
+            <pre><code class="Bash">
+yarn add tensorspace
+            </code></pre>
+        </div>
+
+        <div>途径 3: <a href="index.html#download">官方网站下载</a></div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <span class="span_bold">第二步: 安装依赖库</span>
+        </div>
+
+        <div>
+            请在使用 TensorSapce.js 之前，引入
+            <a href="https://github.com/tensorflow/tfjs">Tensorflow.js</a>、
+            <a href="https://github.com/mrdoob/three.js">Three.js</a>、
+            <a href="https://github.com/tweenjs/tween.js">Tween.js</a> 以及
+            <a href="https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js">TrackballControl.js</a>
+            至所需要的 html 文件中，并置于 TensorSpace.js 的引用之前。
+        </div>
+
+        <div class="code-snippet">
+            <pre><code class="html">
+<script src="three.min.js"></script>
+<script src="tween.min.js"></script>
+<script src="TrackballControls.js"></script>
+<script src="tf.min.js"></script>
+            </code></pre>
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <span class="span_bold">第三步: 安装 Tensorspace.js</span>
+        </div>
+
+        <div>将 TensorSpace.js 引入 html 文件中：</div>
+        <div class="code-snippet">
+            <pre><code class="html">
+<script src="tensorspace.min.js"></script>
+            </code></pre>
+        </div>
+
     </main>
 </div>
 
