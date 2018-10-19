@@ -316,8 +316,384 @@
     </aside>
 
     <main>
-        <header>Model Introduction</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <header>TensorSpace Model Introduction</header>
+
+        <div>
+            The model object is one of the important components for TensorSpace. All layers are maintained
+            in the model which is the linkage between visualized objects and computed data.
+        </div>
+
+        <div>
+            There are two types of models:
+            <a href="modelSequential.html"><span class="highlight-text">Sequential()</span></a> and
+            <a href="modelFunctional.html"><span class="highlight-text">Model()</span></a>.
+            To construct a model object, we need two parameters: the
+            <span class="highlight-text">container</span> and the <span class="highlight-text">config</span>.
+        </div>
+
+        <div class="code-snippet">
+            <pre><code class="JavaScript">
+let model = new TSP.model.Sequential( container, config );
+            </code></pre>
+        </div>
+
+        <div>
+            The <span class="highlight-text">container</span>
+            is actually the element in the HTML pages we used to render the 3D model.
+        </div>
+
+        <div>
+            The <span class="highlight-text">config</span>
+            represents the model settings which contains different properties and methods. Let's check them below.
+        </div>
+
+        <div class="sub-title" id="modelConfig"> Property </div>
+
+        <div>
+            The model has several different configurations which are used as the default configurations of the model
+            including all layers and other utility components. For example, we can configure a
+            <a href="modelSequential.html"><span class="highlight-text">Sequential()</span></a> model like:
+        </div>
+
+        <div class="code-snippet">
+            <pre><code class="Python">
+let model = new TSP.model.Sequential( container, {
+
+    layerInitStatus: "close",
+    aggregationStrategy: "max",
+    layerShape: "rect",
+    textSystem: "enable",
+    relationSystem: "enable",
+    animationTimeRatio: 0.1,
+    stats: true,
+
+    color: {
+
+        background: 0x000000,
+        conv2d: 0xffff2E,
+        pooling2d: 0x00ffff,
+        dense: 0x00ff00,
+        padding2d: 0x6eb6ff
+
+    }
+
+} );
+            </code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The model configuration is a general, default configuration for the model. The detailed
+                    configurations of each element (e.g. layer) can be configured within the element, which
+                    override the model configurations.
+                </li>
+            </ul>
+        </div>
+
+        <div>The following shows the detailed configurations of the model:</div>
+
+        <div><a href=""><span class="span_bold">.aggregationStrategy</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the strategy of computing data used to render layer aggregation.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"max"</span> or
+                    <span class="highlight-text">"average"</span>. Default
+                    <span class="highlight-text">"average"</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"max"</span> to compute aggregation by using the max value of the
+                    same position in all channels;
+                    <span class="highlight-text">"average"</span> to compute aggregation by using the average value
+                    of the same position in all channels.
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_aggregation.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Aggregation object
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerShape</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the layout of expanded feature maps of a layer.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"line"</span> or
+                    <span class="highlight-text">"rect"</span>. Default
+                    <span class="highlight-text">"rect"</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"line"</span> linear arrangement;
+                    <span class="highlight-text">"rect"</span> the "best rectangle" arrangement of visualization.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    For more details about the "best rectangle", please check
+                    <a href=""><span class="span_bold">.layerShape</span></a>.
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_rect_fm.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 2</span> - Rectangle feature map arrangement
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_linear_fm.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 3</span> - Linear feature map arrangement
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerInitStatus</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the initial status of an expandable layer. Either "expanded" as feature maps
+                    or "collapsed" as an aggregation
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"close"</span> or
+                    <span class="highlight-text">"open"</span>. Default
+                    <span class="highlight-text">"close"</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"close"</span> to show layer as an aggregation;
+                    <span class="highlight-text">"open"</span> to show layer as expanded feature maps.
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_collapsed_layer.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 4</span> - Initial layer with collapsed status
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_expanded_layer.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 5</span> - Initial layer with expanded status
+        </div>
+
+        <div><a href=""><span class="span_bold">.textSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Enable or disable the display text information of each layers.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"enable"</span> or
+                    <span class="highlight-text">"disable"</span>. Default
+                    <span class="highlight-text">"enable"</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"enable"</span> to display text information;
+                    <span class="highlight-text">"disable"</span> not to display text information.
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_display_text.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 6</span> - Texts of the layer dimension
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_no_display_text.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 7</span> - No texts display
+        </div>
+
+        <div><a href=""><span class="span_bold">.relationSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Enable or disable the display of relation lines among layers.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"enable"</span> or
+                    <span class="highlight-text">"disable"</span>. Default
+                    <span class="highlight-text">"enable"</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"enable"</span> to display relation lines;
+                    <span class="highlight-text">"disable"</span> not to display relation lines.
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_display_lines.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 8</span> - Texts of the layer dimension
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_no_display_lines.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 9</span> - No texts display
+        </div>
+
+        <div><a href=""><span class="span_bold">.animationTimeRatio</span> : Double</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Ratio of time spent for actual animation over default animation.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Default to <span class="highlight-text">1</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The range of the value should be larger than 0.
+                </li>
+
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_animate_1.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 10</span> - Expansion animation with animationTimeRatio 1
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_animate_3.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 11</span> - Expansion animation with animationTimeRatio 3
+        </div>
+
+
+        <div><a href=""><span class="span_bold">.color</span> : color format</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    All necessary color configurations of different layers and the background.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    We can set the background color in the model configuration.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicColor.html">color</a> for more details.
+                </li>
+
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_background_purple.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 12</span> - Change background color Purple
+        </div>
+
+
+        <div><a href=""><span class="span_bold">.stats</span> : Boolean</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Whether to use <span class="highlight-text">stats</span> utility or not.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> or
+                    <span class="highlight-text">false</span>. Default
+                    <span class="highlight-text">false</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> to show stats utility;
+                    <span class="highlight-text">false</span> not to show stats utility.
+                </li>
+            </ul>
+        </div>
+
+        <div class="sub-title" id="modelMethod"> Method </div>
+
+        <div><a href=""><span class="span_bold">.init()</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <span class="highlight-text">init()</span> method use the provided configurations to create
+                    the actual objects of the model.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicModel.html">Model (concept)</a> for more details.
+                </li>
+
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.load( model_config )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <span class="highlight-text">load()</span> method is used to maintain the pre-trained ML model
+                    (from TensorFlow, Keras or TensorFlow.js).
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    We provide a callback function for extendable use.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicLoad.html">Load</a> for more details.
+                </li>
+
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.predict( input_data )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <span class="highlight-text">predict()</span> method uses the provided input data and the
+                    loaded ML model to compute all necessary predictions including the intermediate outputs and final
+                    inferences for rendering visualization objects.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    We provide a callback function for extendable use.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicPredict.html">Predict</a> for more details.
+                </li>
+
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getAllLayers()</span> : Layer[]</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    To get all layer objects within the model.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    If we want to config all layers or check for specific configurations, we can use the method
+                    to catch all layer objects.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getLayerByName( name )</span> : Layer</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    To get a specified layer object by its name (<span class="highlight-text">String</span>).
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    If any specific layer object is desired to be coordinated,
+                    we can use the method to find and layer object.
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="sub-title"> More </div>
+
+        <div>For more detailed implementations of different TensorSpace models, please check:</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <a href="modelSequential.html"><span class="highlight-text">Sequential()</span></a>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <a href="modelFunctional.html"><span class="highlight-text">Model()</span></a>
+                </li>
+            </ul>
+        </div>
     </main>
 </div>
 
