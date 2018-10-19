@@ -317,7 +317,88 @@
 
     <main>
         <header>Layer Introduction</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>This chapter contain all details of layer APIs. You can check the content in left side bar.</div>
+
+        <div>
+            The basic format of all layers API is referenced by
+            <a href="https://js.tensorflow.org/api/0.13.0/#Layers">Tensorflowjs</a>.
+        </div>
+
+        <span class="sub-title">Usage of Constructor</span>
+
+        <div>How to use constructor to create a new layer with the necessary arguments.</div>
+
+        <span class="sub-title">Opentional Constructor List</span>
+
+        <div>
+            <span class="highlight-text">Tag</span> represent the basic characteristic of argument.
+            You can check Lookup list as follows
+        </div>
+
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Tag Icon</th>
+                <th scope="col">Meaning</th>
+                <th scope="col">Instruction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="iconRequired">
+                <th scope="row">⭐️</th>
+                <td>Required</td>
+                <td>Must be provided, cannot be empty. Meanwhile constructor works properly if this arguments provided.
+                    Control arguments use default value.</td>
+            </tr>
+            <tr id="iconSuggest">
+                <th scope="row">🔧</th>
+                <td>Suggest</td>
+                <td>Recommended for giving. The API can work without them.</td>
+            </tr>
+            <tr id="iconOptional">
+                <th scope="row">⚙️</th>
+                <td>Optional</td>
+                <td>As an auxiliary adjustment parameter when used, selectively added according to the specific situation
+                    The parameters here have no effect on the structure of the layer (3D visualized form).</td>
+            </tr>
+            <tr id="iconModel">
+                <th scope="row">📦</th>
+                <td>Model</td>
+                <td>Configure the properties of Conv Layer. It changes the output shape.</td>
+            </tr>
+            <tr id="iconStyle">
+                <th scope="row">🎨</th>
+                <td>Style</td>
+                <td>Override the properties in TSP.model (<a href="modelIntro.html#modelConfig">model configuration</a>)</td>
+            </tr>
+            <tr id="iconAnimation">
+                <th scope="row">🎦</th>
+                <td>Animation</td>
+                <td>Override the properties in TSP.model (<a href="modelIntro.html#modelConfig">model configuration</a>)</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">Properties</div>
+
+        <div>
+            This properties can be accessed on the prototype chain, containing
+            <span class="highlight-text">inputShape</span>,
+            <span class="highlight-text">outputShape</span>,
+            <span class="highlight-text">neuralValue</span> of data,
+            <span class="highlight-text">layerType</span> and
+            <span class="highlight-text">name</span> set by user.
+        </div>
+
+        <div class="sub-title">Method</div>
+
+        <div>
+            When you use <span class="highlight-text">TensorSpace</span>, this method will be useful to be called
+            on the prototype chain, including <span class="highlight-text">expand</span> and
+            <span class="highlight-text">collapse</span>.
+        </div>
+
     </main>
 </div>
 
