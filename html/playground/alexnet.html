@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/playground.css">
     <link rel="stylesheet" href="../../css/playgroundAlex.css">
+    <link rel="stylesheet" href="../../css/imageSelector.css">
 
     <script src="../../js/alexnet.js"></script>
 
@@ -106,18 +107,38 @@
 <main>
 
     <div id="loadingPad">
-        <img id="loading" src="../../assets/img/loading/pikaLoading.gif">
+        <img id="loading" src="../../assets/img/loading/mouseLoading.gif">
     </div>
     <div id="modelArea"></div>
     <div id="controlPanel">
 
         <div class="panelTitle">AlexNet</div>
 
-        <img src="../../assets/img/playground/pikapika.jpg">
+        <img id="labelImage" src="../../assets/img/playground/pikapika.jpg">
 
         <div id="selectorTrigger">Select an image</div>
 
+        <div id="hint">VGG thinks its a</div>
+
+        <div id="PredictResult">?</div>
+
     </div>
+
+    <div id="selector">
+        <header>Select a Image to Predict</header>
+        <main>
+            <div>
+                <img id="data1" src="../../assets/img/playground/pikapika.jpg">
+            </div>
+        </main>
+        <footer>
+            <div id="executePredict">Predict</div>
+            <div id="cancelPredict">Cancel</div>
+        </footer>
+    </div>
+
+    <div id="selectorCurtain"></div>
+
 
 </main>
 
