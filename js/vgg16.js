@@ -300,7 +300,7 @@ function createModel() {
 
 			generateInference( finalResult );
 
-		} )
+		} );
 
 	} );
 
