@@ -250,6 +250,10 @@ main table {
     margin-top: 20px;
 }
 
+main table thead tr th p {
+    font-weight: bolder;
+}
+
 main > div > ul > li > div {
     padding-left: 30px;
     color: #4d4d4d;
@@ -258,7 +262,7 @@ main > div > ul > li > div {
 }
 
 table {
-    /*table-layout: fixed; */
+    table-layout: auto;
 }
 
 table td {
