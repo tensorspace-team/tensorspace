@@ -318,7 +318,89 @@
 
     <main>
         <header>Predict</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div>'Predict' is the way to gather the computed data from the loaded pre-trained models (e.g. TensorFlow, Keras, TensorFlow.js models). All outputs from intermediate layers are required and delivered to the corresponding visualization components.</div>
+        <div>The functionality of 'Predict' is realized by <span class="highlight-text">.predict( input_data )</span> method of the constructed model object.</div>
+        <div>After we <a href="basicLoad.html">Load</a> a ML model properly we can simply call the method as:</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+model.predict( predictData, predictCallback );
+            </code></pre>
+        </div>
+
+        <div class="sub-title">predict_data</div>
+
+        <div><span class="highlight-text">predict_data</span> is actually a list. It could be one or more lists of numbers.</div>
+
+        <div class="panel-heading span_bold"><i class="material-icons">filter_center_focus</i>
+            For <a href="modelSequential.html">Sequential()</a> models
+        </div>
+
+        <div>In most cases, we can configure the <span class="highlight-text">predict_data</span> like:</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+predict_data = [ 1, 2, 3, 4, 5 ];
+            </code></pre>
+        </div>
+
+        <div>The <span class="highlight-text">predict_data</span> is a single list of numbers which is the input image data we want to used for prediction.</div>
+
+        <div>If the model accepts multiple inputs, we ned to configure the <span class="highlight-text">predict_data</span> like:</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+let data1 = [ 1, 2, 3, 4, 5 ];
+let data2 = [ 1, 2, 3, 4, 5 ];
+predict_data = [ data1, data2 ];
+            </code></pre>
+        </div>
+
+        <div>The <span class="highlight-text">predict_data</span> contains some lists of numbers.</div>
+
+        <div class="panel-heading span_bold"><i class="material-icons">filter_center_focus</i>
+            For <a href="modelFunctional.html">Functional()</a> models
+        </div>
+
+        <div>For example, we can configure the <span class="highlight-text">predict_data</span> like:</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+let data1 = [ 1, 2, 3, 4, 5 ];
+let data2 = [ 1, 2, 3, 4, 5 ];
+predict_data = [ data1, data2 ];
+            </code></pre>
+        </div>
+
+        <div>The <span class="highlight-text">predict_data</span> contains some lists of numbers. Depends on the model structure, we may add one or more list in the <span class="highlight-text">predict_data</span>.</div>
+
+        <div class="sub-title">callback</div>
+
+        <div><span class="highlight-text">callback</span> function is fired when the prediction process complete. It passes the final inferences as the parameter in the callback function.</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+function predictCallback( finalResult ) {
+    console.log( finalResult );
+}
+            </code></pre>
+        </div>
+
+        <div>All the following steps are triggered by calling the <span class="highlight-text">.predict()</span> method: the model collects all necessary inferences data from each layer, then the collected data are used to render the corresponding 3D components.</div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Please check the configurations before you apply the multiple inputs.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicLoad.html">Load</a> for more details.
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
