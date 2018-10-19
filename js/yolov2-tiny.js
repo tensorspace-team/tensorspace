@@ -1,6 +1,7 @@
 let model;
 let predictDataKey = "three";
 let selectedDiv = undefined;
+let outputDetectionLayer;
 
 let dataLookup = {
 
@@ -244,7 +245,7 @@ function createModel() {
 
 	model.add( yoloGrid );
 
-	let outputDetectionLayer = new TSP.layers.OutputDetection();
+	outputDetectionLayer = new TSP.layers.OutputDetection();
 
 	model.add( outputDetectionLayer );
 
