@@ -10,11 +10,47 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-color: red;
+    background-color: #000;
+    border: 1px solid #4C9BBB;
+    border-radius: 3px;
 }
 
 #clear {
-    width: 100px;
-    height: 100px;
-    background-color: red;
+    margin-top: 10px;
+    width: 224px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 38px;
+    font-size: 25px;
+    color: #D6FDFF;
+    background-color: #000;
+    border: 1px solid #4C9BBB;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
 }
+
+#hint {
+    width: 100%;
+    text-align: center;
+    color: #D6FDFF;
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+.inferences {
+    width: 100%;
+    margin-top: 20px;
+    vertical-align: middle;
+}
+
+.inferences > span {
+    display: inline-block;
+    width: 19%;
+    text-align: center;
+    color: #456989;
+    font-size: 22px;
+    line-height: 35px;
+    height: 35px;
+}
+
