@@ -319,7 +319,86 @@
 
     <main>
         <header>TensorSpace.js Hello World</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            After installing TensorSpace successfully, let's use our provided
+            <a href="../../assets/model/lenet/mnist.json">preprocessed TensorSpace compatible LeNet model</a>
+            to create our first interactive 3D TensorSpace model.
+        </div>
+
+        <div>First, we need to new a TensorSpace model instance:</div>
+        <div class="code-snippet">
+            <pre><code class="JavaScript">
+let container = document.getElementById( "container" );
+let model = new TSP.model.Sequential( container );
+            </code></pre>
+        </div>
+
+        <div>
+            Next, based on the LeNet structure: Input + 2 X (Conv2D & Maxpooling) + 3 X (Dense),
+            we build the structure of the model:
+        </div>
+        <div class="code-snippet">
+            <pre><code class="JavaScript">
+model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
+model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
+model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
+model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
+model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 16, strides: 1 }) );
+model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
+model.add( new TSP.layers.Dense({ units: 120 }) );
+model.add( new TSP.layers.Dense({ units: 84 }) );
+model.add( new TSP.layers.Output1d({
+    units: 10,
+    outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+}) );
+            </code></pre>
+        </div>
+
+        <div>
+            Last, we can load our <a href="../../assets/model/lenet/mnist.json">preprocessed TensorSpace compatible model</a>
+            and use <span class="highlight-text">init()</span> method to create the model:
+        </div>
+        <div class="code-snippet">
+            <pre><code class="JavaScript">
+model.load({
+    type: "tfjs",
+    url: './lenetModel/mnist.json',
+    onComplete: function() {
+        console.log( "\"Hello World!\" from TensorSpace Loader." );
+    }
+});
+model.init();
+            </code></pre>
+        </div>
+
+        <div>We can get the following model in the browser:</div>
+
+        <img class="tag-img" src="../../assets/img/docs/HelloWorld_empty_lenet.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Generated LeNet model
+        </div>
+
+        <div>We provide a extracted file which is a handwritten "5" as the input of our model:</div>
+
+        <div class="code-snippet">
+            <pre><code class="JavaScript">
+model.init(function() {
+    model.predict( image_5 );
+});
+            </code></pre>
+        </div>
+
+        <div>
+            We put the <span class="highlight-text">predict( image_5 )</span> method in the callback function of
+            <span class="highlight-text">init()</span> to ensure the prediction is after the initialization complete.
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/HelloWorld_5.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 2</span> - Generated LeNet model with input data "5"
+        </div>
+
     </main>
 </div>
 
