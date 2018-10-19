@@ -28,7 +28,6 @@
 
     <script src="../../js/yolov2-tiny.js"></script>
 
-
 </head>
 <body>
 
@@ -114,9 +113,29 @@
 
         <div class="panelTitle">YOLOv2-tiny</div>
 
-        <img src="../../assets/img/playground/33.jpg">
+        <img id="labelImage" src="../../assets/img/playground/33.jpg">
 
         <div id="selectorTrigger">Select an image</div>
+
+    </div>
+
+    <div id="selector">
+        <header>Select a Image to Predict</header>
+        <main>
+            <div>
+                <img id="data1" src="../../assets/img/playground/33.jpg">
+            </div>
+            <div>
+                <img id="data2" src="../../assets/img/playground/bird.jpg">
+            </div>
+        </main>
+        <footer>
+            <div id="executePredict">Predict</div>
+            <div id="cancelPredict">Cancel</div>
+        </footer>
+    </div>
+
+    <div id="selectorCurtain">
 
     </div>
 
