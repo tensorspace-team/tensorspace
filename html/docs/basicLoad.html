@@ -318,7 +318,384 @@
 
     <main>
         <header>Load Model</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div>The 'Load' of TensorSpace is the process to read and store the pre-trained ML model in the TensorSpace model, which makes it possible to use the inference results from the pre-trained network by providing the input.</div>
+        <div>The functionality of 'Load' is realized by calling the <span class="highlight-text">.load()</span> method of the constructed model object.</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Load_concept.png">
+
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Load a preprocessed model
+        </div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    We must <a href="basicPreprocessing.html">preprocess</a> the deep learning models before really loading to the TensorSpace model.
+                </li>
+            </ul>
+        </div>
+
+        <div>Based on different formats of deep learning models, we list different loading situations below:</div>
+
+        <div id="loadKeras" class="sub-title">Load a preprocessed Keras model</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+model.load( {
+
+    type: "keras",
+    url: '/PATH/TO/NETWORK/model.json',
+    multiInputs: true,
+    inputShapes: [[100], [1]],
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+            </code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.type</a> : String</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">Required.</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents input ML model type.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Configure to "<span class="highlight-text">keras</span>". To load as a Keras model format.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    After specifying the type of network format, TensorSpace uses corresponded <span class="highlight-text">loader</span> object to handle the actual loading and prediction process.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.url</a> : String</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">Required.</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the URL to the target network structure file.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is usually a ".json" file which represents the structure of the network.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.multiInputs</a> : Boolean</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional. <span class="span_bold">Required</span> use for ML model with multiple inputs.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the input is multiple or not.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> or <span class="highlight-text">false</span>. Default <span class="highlight-text">false</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> if the input of the network is multiple; <span class="highlight-text">false</span> otherwise.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.inputShapes</a> : [Int]</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional. <span class="span_bold">Required</span> use for ML model with multiple inputs or using the <a href="modelFunctional.html">Model()</a> implementation.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the dimensions (shapes) for each claimed inputs.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The order of the shapes should follow the order of TensorSpace layers.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.onComplete()</a> : void</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Callback function used to notify the complete on loading ML model.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is designed for handling the event related to the loading complete, such as remove loading screen, console log time duration etc.
+                </li>
+            </ul>
+        </div>
+
+        <div id="loadTfjs" class="sub-title">Load a preprocessed TensorFlow.js model</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+model.load( {
+
+    type: "tfjs",
+    url: '/PATH/TO/NETWORK/mnist.json',
+    multiInputs: true,
+    inputShapes: [[100], [1]],
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+            </code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.type</a> : String</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">Required.</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents input ML model type.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Configure to "<span class="highlight-text">tfjs</span>". To load as a TensorFlow.js model format.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    After specifying the type of network format, TensorSpace uses corresponded <span class="highlight-text">loader</span> object to handle the actual loading and prediction process.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.url</a> : String</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">Required.</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the URL to the target network structure file.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is usually a ".json" file which represents the structure of the network.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.multiInputs</a> : Boolean</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional. <span class="span_bold">Required</span> use for ML model with multiple inputs.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the input is multiple or not.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> or <span class="highlight-text">false</span>. Default <span class="highlight-text">false</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> if the input of the network is multiple; <span class="highlight-text">false</span> otherwise.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.inputShapes</a> : [Int]</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional. <span class="span_bold">Required</span> use for ML model with multiple inputs or using the <a href="modelFunctional.html">Model()</a> implementation.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the dimensions (shapes) for each claimed inputs.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The order of the shapes should follow the order of TensorSpace layers.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.onComplete()</a> : void</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Callback function used to notify the complete on loading ML model.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is designed for handling the event related to the loading complete, such as remove loading screen, console log time duration etc.
+                </li>
+            </ul>
+        </div>
+
+        <div id="loadTf" class="sub-title">Load a preprocessed TensorFlow model</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+model.load( {
+
+    type: "tensorflow",
+    modelUrl: "/PATH/TO/NETWORK/tensorflowjs_model.pb",
+    weightUrl: "/PATH/TO/NETWORK/weights_manifest.json",
+    outputsName: [ "Maximum", "Const_1", "Maximum_1", "Const_2", "Maximum_2",
+        "Const_3", "Maximum_3", "Const_4", "Maximum_4", "Const_5",
+        "Maximum_5", "Const_6", "Const_7", "Const_8", "add_8" ],
+    multiInputs: true,
+    inputShapes: [[100], [1]],
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+            </code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.type</a> : String</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">Required.</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents input ML model type.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Configure to "<span class="highlight-text">tensorflow</span>". To load as a TensorFlow model format.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    After specifying the type of network format, TensorSpace uses corresponded <span class="highlight-text">loader</span> object to handle the actual loading and prediction process.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.modelUrl</a> : String</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">Required.</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the URL to the target ML model file.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is usually a ".pb" file which is converted after <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a>.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.weightUrl</a> : String</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">Required.</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the URL to the target ML model weight manifest.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is usually a ".json" file which represents the weight manifest of the corresponded network.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.outputsName</a> : [String]</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">Required</span> if the TensorFlow model is not preprocessed for multiple outputs.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The names listed should be valid tensor names which are used for collecting the data from corresponded intermediate tensors.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Make sure the name order is the same as the one implemented in TensorSpace.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.multiInputs</a> : Boolean</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional. <span class="span_bold">Required</span> use for ML model with multiple inputs.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the input is multiple or not.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> or <span class="highlight-text">false</span>. Default <span class="highlight-text">false</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> if the input of the network is multiple; <span class="highlight-text">false</span> otherwise.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.inputShapes</a> : [Int]</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional. <span class="span_bold">Required</span> use for ML model with multiple inputs or using the <a href="modelFunctional.html">Model()</a> implementation.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the dimensions (shapes) for each claimed inputs.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The order of the shapes should follow the order of TensorSpace layers.
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.onComplete()</a> : void</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Optional.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Callback function used to notify the complete on loading ML model.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    It is designed for handling the event related to the loading complete, such as remove loading screen, console log time duration etc.
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 

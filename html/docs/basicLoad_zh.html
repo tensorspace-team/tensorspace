@@ -318,7 +318,385 @@
 
     <main>
         <header>载入模型</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>在 TensorSpace 中，“加载”指的是将神经网络模型读取并存入 TensorSpace 模型的过程。这一过程使得使用中间层输出成为可能。</div>
+        <div>在功能上实现“加载”的是构建模型时所使用的 <span class="highlight-text">.load()</span> 方法。</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Load_concept.png">
+
+        <div class="img-label">
+            <span class="img-label-number">图1</span> - 加载经过预处理的模型
+        </div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    我们必须在加载到 TensorSpace 模型之前，对需要使用的神经网络模型进行<a href="basicPreprocessing_zh.html">预处理</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div>根据不同的预处理过程，我们列出了不同模型所需要的加载配置、属性以及方法：</div>
+
+        <div id="loadKeras" class="sub-title">加载经过预处理的 Keras 模型</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+model.load( {
+
+    type: "keras",
+    url: '/PATH/TO/NETWORK/model.json',
+    multiInputs: true,
+    inputShapes: [[100], [1]],
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+            </code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.type</a> : String</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要。</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示所输入的神经网络类型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    配置为 "<span class="highlight-text">keras</span>"，以此来加载 Keras 模型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    在完成指定神经网络模型的类型后，TensorSpace 将使用所对应的加载器对象完成加载和预测的过程。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.url</a> : String</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要。</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示目标神经网络模型文件的所在位置的URL。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    它通常是一个 “.json” 文件，表示神经网络的结构。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.multiInputs</a> : Boolean</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。当神经网络模型为多输入时，为<span class="span_bold">必要</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示输入为单输入或者多输入。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> 或 <span class="highlight-text">false</span>。 默认为 <span class="highlight-text">false</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">当多输入时为true</span>; 否则为 <span class="highlight-text">false</span>。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.inputShapes</a> : [Int]</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。当神经网络模型为多输入时，或者使用<a href="modelFunctional_zh.html">Model()</a>来创建模型时，为<span class="span_bold">必要</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示输入数据的形状（含维度）。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    形状的顺序应当与 TensorSpace 中层的顺序一致。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.onComplete()</a> : void</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    当完成加载时可以激发的回调函数。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    该函数被设计用来处理与加载完成相关的事件，如当加载完成时移除载入画面、记录载入时间等。
+                </li>
+            </ul>
+        </div>
+
+        <div id="loadTfjs" class="sub-title">加载经过预处理的 TensorFlow.js 模型</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+model.load( {
+
+    type: "tfjs",
+    url: '/PATH/TO/NETWORK/mnist.json',
+    multiInputs: true,
+    inputShapes: [[100], [1]],
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+            </code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.type</a> : String</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要。</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示所输入的神经网络类型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    配置为 "<span class="highlight-text">tfjs</span>"，以此来加载 tfjs 模型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    在完成指定神经网络模型的类型后，TensorSpace 将使用所对应的加载器对象完成加载和预测的过程。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.url</a> : String</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要。</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示目标神经网络模型文件的所在位置的URL。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    它通常是一个 “.json” 文件，表示神经网络的结构。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.multiInputs</a> : Boolean</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。当神经网络模型为多输入时，为<span class="span_bold">必要</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示输入为单输入或者多输入。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> 或 <span class="highlight-text">false</span>。 默认为 <span class="highlight-text">false</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">当多输入时为true</span>; 否则为 <span class="highlight-text">false</span>。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.inputShapes</a> : [Int]</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。当神经网络模型为多输入时，或者使用<a href="modelFunctional_zh.html">Model()</a>来创建模型时，为<span class="span_bold">必要</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示输入数据的形状（含维度）。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    形状的顺序应当与 TensorSpace 中层的顺序一致。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.onComplete()</a> : void</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    当完成加载时可以激发的回调函数。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    该函数被设计用来处理与加载完成相关的事件，如当加载完成时移除载入画面、记录载入时间等。
+                </li>
+            </ul>
+        </div>
+
+        <div id="loadTf" class="sub-title">Load a preprocessed TensorFlow model</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">
+model.load( {
+
+    type: "tensorflow",
+    modelUrl: "/PATH/TO/NETWORK/tensorflowjs_model.pb",
+    weightUrl: "/PATH/TO/NETWORK/weights_manifest.json",
+    outputsName: [ "Maximum", "Const_1", "Maximum_1", "Const_2", "Maximum_2",
+        "Const_3", "Maximum_3", "Const_4", "Maximum_4", "Const_5",
+        "Maximum_5", "Const_6", "Const_7", "Const_8", "add_8" ],
+    multiInputs: true,
+    inputShapes: [[100], [1]],
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+            </code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.type</a> : String</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要。</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示所输入的神经网络类型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    配置为 "<span class="highlight-text">tensorflow</span>"，以此来加载 TensorFlow 模型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    在完成指定神经网络模型的类型后，TensorSpace 将使用所对应的加载器对象完成加载和预测的过程。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.modelUrl</a> : String</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要。</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示目标神经网络模型文件的所在位置的URL。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    它通常是一个经过 <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a> 转换的 “.pb” 文件。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.weightUrl</a> : String</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="span_bold">必要。</span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示目标神经网络模型的权重清单文件所在位置的URL。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    它通常是一个“.json”文件，对应该模型的权重清单。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.outputsName</a> : [String]</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。当 TensorFlow 模型没有经过必要的预处理时，为<span class="span_bold">必要</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示用来展示的所有 tensor 名称列表（name list）。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    所罗列的 tensor 名称将被用来收集中间层输出数据。所有的 tensor 名称必须有效。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    请确保 tensor 名称的顺序与所构建的 TensorSpace 模型保持一致。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.multiInputs</a> : Boolean</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。当神经网络模型为多输入时，为<span class="span_bold">必要</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示输入为单输入或者多输入。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> 或 <span class="highlight-text">false</span>。 默认为 <span class="highlight-text">false</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">当多输入时为true</span>; 否则为 <span class="highlight-text">false</span>。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.inputShapes</a> : [Int]</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。当神经网络模型为多输入时，或者使用<a href="modelFunctional_zh.html">Model()</a>来创建模型时，为<span class="span_bold">必要</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示输入数据的形状（含维度）。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    形状的顺序应当与 TensorSpace 中层的顺序一致。
+                </li>
+            </ul>
+        </div>
+
+        <div class="property-title"><a href="">.onComplete()</a> : void</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    可选。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    当完成加载时可以激发的回调函数。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    该函数被设计用来处理与加载完成相关的事件，如当加载完成时移除载入画面、记录载入时间等。
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
