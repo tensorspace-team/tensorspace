@@ -1,0 +1,130 @@
+#selectorTrigger {
+
+    width: 60%;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 20%;
+    margin-top: 20px;
+    background-color: #000;
+    text-align: center;
+    color: #D6FDFF;
+    border: 1px solid #4C9BBB;
+    cursor: pointer;
+
+}
+
+#selector {
+
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    top: 150px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 100;
+    box-sizing: border-box;
+    background-color: #02242F;
+    border: 1px solid #6597AF;
+    transition: all 1s;
+    display: none;
+
+}
+
+#selector > header {
+
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+    border-bottom: 1px solid #6597AF;
+    box-sizing: border-box;
+    text-align: center;
+    color: #D6FDFF;
+
+}
+
+#selector > main {
+
+    padding-top: 0;
+    width: 100%;
+    height: calc( 100% - 100px );
+    border-bottom: 1px solid #6597AF;
+    box-sizing: border-box;
+    background-color: #02242F;
+    display: block;
+    overflow: scroll;
+
+}
+
+#selector > footer {
+
+    width: 100%;
+    height: 50px;
+    clear: both;
+    position: relative;
+
+}
+
+#selector > footer > div {
+
+    top: 10px;
+    height: 30px;
+    line-height: 30px;
+    width: 80px;
+    border: 1px solid #6597AF;
+    background-color: #000;
+    box-sizing: border-box;
+    color: #D6FDFF;
+    text-align: center;
+    position: absolute;
+    cursor: pointer;
+
+}
+
+#executePredict {
+
+    right: 140px;
+
+}
+
+#cancelPredict {
+
+    right: 20px;
+
+}
+
+#selector > main > div {
+    width: 33.3%;
+    float: left;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+#selector > main > div > img {
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.5s;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#selector > main > div > img:hover{
+    transform: scale(1.03);
+}
+
+#selectorCurtain {
+
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 5;
+    background-color: #000;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    transition: all 1s;
+    display: none;
+
+}

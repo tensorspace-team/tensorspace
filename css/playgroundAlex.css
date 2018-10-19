@@ -9,14 +9,20 @@
 
 }
 
-#selectorTrigger {
-
-    width: 60%;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 20%;
-    margin-top: 20px;
-    background-color: red;
+#hint {
+    width: 100%;
     text-align: center;
+    color: #D6FDFF;
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+#PredictResult {
+
+    width: 100%;
+    text-align: center;
+    color: #D6FDFF;
+    margin-top: 40px;
+    font-size: 40px;
 
 }
