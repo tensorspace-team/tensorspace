@@ -1,0 +1,46 @@
+.mdl-button {
+    min-width: 0;
+}
+
+.inputTitle {
+
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    font-size: 20px;
+    color: #D6FDFF;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
+
+}
+
+#labelHolder {
+
+    width: 100%;
+    line-height: 45px;
+
+}
+
+#labelHolder > button {
+
+    background-color: #233D45;
+    width: 30px!important;
+    height: 30px!important;
+    font-size: 15px;
+    margin-left: 13px;
+    margin-right: 13px;
+    color: #D6FDFF;
+}
+
+
+#generateButtonHolder {
+    width: 100%;
+    text-align: center;
+}
+
+#generateButtonHolder > button {
+
+    color: #D6FDFF;
+
+}
