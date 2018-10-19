@@ -1,4 +1,5 @@
 let model;
+let labelIndex = 0;
 
 $(function() {
 
@@ -18,6 +19,21 @@ $(function() {
 		$("#close").attr("src", "../../assets/img/docs/close.png");
 	}).click(function() {
 		moveOutHiddenContent();
+	});
+
+	$("#labelHolder > button").click(function() {
+		clearPreviousIndex();
+		labelIndex = parseInt($(this).attr("data-index"));
+
+		$(this).css( {
+			"background-color": "#D6FDFF",
+			"color": "#000000"
+		} );
+
+	});
+
+	$("#generateButton").click(function() {
+		generateDigitImage();
 	});
 
 });
@@ -103,11 +119,9 @@ function createModel() {
 		inputShapes: [[100], [1]]
 	});
 
-	let randomData = tf.randomNormal([1,100]).dataSync();
-
 	model.init(function() {
 
-		model.predict( [randomData, [0]] );
+		generateDigitImage();
 		$("#loadingPad").hide();
 
 	});
@@ -129,5 +143,23 @@ function moveOutHiddenContent() {
 		left:"-=200px"
 	},500);
 	$("#curtain").fadeOut(500);
+
+}
+
+function clearPreviousIndex() {
+
+	$("#labelHolder > button").each(function() {
+		$(this).css({
+			"background-color": "#233D45",
+			"color": "#D6FDFF"
+		});
+	})
+
+}
+
+function generateDigitImage() {
+
+	let randomData = tf.randomNormal([1,100]).dataSync();
+	model.predict( [randomData, [labelIndex]] );
 
 }
