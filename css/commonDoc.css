@@ -257,11 +257,17 @@ main > div > ul > li > div {
     margin-bottom: 5px;
 }
 
-table { table-layout: fixed; }
-table td { word-wrap: break-word; }
+table {
+    /*table-layout: fixed; */
+}
+
+table td {
+    word-wrap: break-word;
+}
 
 td, th {
     text-align: center;
+    vertical-align: middle !important;
     word-wrap: break-word;
 }
 
