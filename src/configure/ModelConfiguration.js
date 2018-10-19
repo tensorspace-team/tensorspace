@@ -7,7 +7,6 @@ function ModelConfiguration(config ) {
 	this.layerInitStatus = false;
 	this.layerShape = "rect";
 	this.aggregationStrategy = "average";
-	this.layerInitStatus = true;
 	this.relationSystem = true;
 	this.textSystem = true;
 	this.stats = false;
