@@ -316,8 +316,368 @@
     </aside>
 
     <main>
-        <header>模型简介</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <header>TensorSpace 模型简介</header>
+
+        <div>
+            模型对象是 TensorSpace 的重要组件之一。所有的层对象都保存在模型中。
+        </div>
+
+        <div>
+            TensorSpace 的模型可以由两种构造器创建所得：
+            <a href="modelSequential.html"><span class="highlight-text">Sequential()</span></a> 与
+            <a href="modelFunctional.html"><span class="highlight-text">Model()</span></a>。
+            我们需要提供两个参数：
+            <span class="highlight-text">container</span> 与 <span class="highlight-text">config</span>。
+        </div>
+
+        <div class="code-snippet">
+            <pre><code class="JavaScript">
+let model = new TSP.model.Sequential( container, config );
+            </code></pre>
+        </div>
+
+        <div>
+            其中<span class="highlight-text">container</span>对应的是 HTML 页面中用来渲染3D模型的元素。
+        </div>
+
+        <div>
+            <span class="highlight-text">config</span>表示的是模型配置，包含不同的属性和方法。
+        </div>
+
+        <div class="sub-title" id="modelConfig"> 属性 </div>
+
+        <div>
+            每个模型都有许多不同的配置。这些配置将作为该模型的默认配置为所有的层以及其他控件提供参数支持。
+            以构建一个<a href="modelSequential.html"><span class="highlight-text">Sequential()</span></a>模型为例：
+        </div>
+
+        <div class="code-snippet">
+            <pre><code class="Python">
+let model = new TSP.model.Sequential( container, {
+
+    layerInitStatus: "close",
+    aggregationStrategy: "max",
+    layerShape: "rect",
+    textSystem: "enable",
+    relationSystem: "enable",
+    animationTimeRatio: 0.1,
+    stats: true,
+
+    color: {
+
+        background: 0x000000,
+        conv2d: 0xffff2E,
+        pooling2d: 0x00ffff,
+        dense: 0x00ff00,
+        padding2d: 0x6eb6ff
+
+    }
+
+} );
+            </code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    模型的配置对于该模型来说是全局性的默认配置。我们可以针对每一个具体的元素（如层对象）进行细节上的配置，
+                    以此来覆盖模型的默认配置。
+                </li>
+            </ul>
+        </div>
+
+        <div>以下展示了模型配置的具体信息：</div>
+
+        <div><a href=""><span class="span_bold">.aggregationStrategy</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    R表示聚合体对象的数据计算及渲染策略。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"max"</span> 或
+                    <span class="highlight-text">"average"</span>。 默认为
+                    <span class="highlight-text">"average"</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"max"</span> 使用该位置所有通道中的最大值；
+                    <span class="highlight-text">"average"</span> 使用该位置所有通道中的平均值。
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_aggregation.png">
+        <div class="img-label">
+            <span class="img-label-number">图1</span> - 聚合体（收拢状态下的层）对象
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerShape</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示展开状态下，层对象的排列方式。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"line"</span> 或
+                    <span class="highlight-text">"rect"</span>。默认为
+                    <span class="highlight-text">"rect"</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"line"</span> 为线性排列；
+                    <span class="highlight-text">"rect"</span> 使用“最佳视觉矩形”方式排列。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    关于“最佳视觉矩形”，请参阅
+                    <a href=""><span class="span_bold">.layerShape</span></a>。
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_rect_fm.png">
+        <div class="img-label">
+            <span class="img-label-number">图2</span> - 矩形方式排列的特征图
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_linear_fm.png">
+        <div class="img-label">
+            <span class="img-label-number">图3</span> - 线性方式排列的特征图
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerInitStatus</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示层对象的初始状态：呈展开状态的特征图或者呈收拢状态的聚合体。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"close"</span> 或
+                    <span class="highlight-text">"open"</span>。默认为
+                    <span class="highlight-text">"close"</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"close"</span> 将层对象收拢为聚合体;
+                    <span class="highlight-text">"open"</span> 将层对象展开至特征图。
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_collapsed_layer.png">
+        <div class="img-label">
+            <span class="img-label-number">图4</span> - 初始状态为收拢的层
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_expanded_layer.png">
+        <div class="img-label">
+            <span class="img-label-number">图5</span> - 初始状态为展开的层
+        </div>
+
+        <div><a href=""><span class="span_bold">.textSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    启用或禁用层对象的文字显示。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"enable"</span> 或
+                    <span class="highlight-text">"disable"</span>。默认为
+                    <span class="highlight-text">"enable"</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"enable"</span> 以启用显示文字;
+                    <span class="highlight-text">"disable"</span> 以禁用显示文字。
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_display_text.png">
+        <div class="img-label">
+            <span class="img-label-number">图6</span> - 文字显示层的维度
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_no_display_text.png">
+        <div class="img-label">
+            <span class="img-label-number">图7</span> - 无文字显示的层
+        </div>
+
+        <div><a href=""><span class="span_bold">.relationSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    启用或禁用层间关系连线的显示。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"enable"</span> 或
+                    <span class="highlight-text">"disable"</span>。默认为
+                    <span class="highlight-text">"enable"</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">"enable"</span> 以启用关系连线的显示；
+                    <span class="highlight-text">"disable"</span> 以禁用关系连线的显示。
+                </li>
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_display_lines.png">
+        <div class="img-label">
+            <span class="img-label-number">图8</span> - 层间的关系连线
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_no_display_lines.png">
+        <div class="img-label">
+            <span class="img-label-number">图9</span> - 不显示层间的关系连线
+        </div>
+
+        <div><a href=""><span class="span_bold">.animationTimeRatio</span> : Double</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示实际动画时长与默认动画时长的比值。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    默认为 <span class="highlight-text">1</span>.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    范围：大于0的实数。
+                </li>
+
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_animate_1.png">
+        <div class="img-label">
+            <span class="img-label-number">图10</span> - 展开层动画（animationTimeRatio 为1）
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_animate_3.png">
+        <div class="img-label">
+            <span class="img-label-number">图11</span> - 展开层动画（animationTimeRatio 为3）
+        </div>
+
+
+        <div><a href=""><span class="span_bold">.color</span> : color format</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    所有必要颜色的配置，包括所有层对象以及场景的背景。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    我们能在此配置中设置合适的场景背景色。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    关于“颜色”，详情参见 <a href="basicColor.html">color</a>。
+                </li>
+
+            </ul>
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_background_purple.png">
+        <div class="img-label">
+            <span class="img-label-number">图12</span> - 改变场景背景色为紫
+        </div>
+
+
+        <div><a href=""><span class="span_bold">.stats</span> : Boolean</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示是否使用并展示<span class="highlight-text">stats</span>控件。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> 或
+                    <span class="highlight-text">false</span>。默认为
+                    <span class="highlight-text">false</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <span class="highlight-text">true</span> 启用并显示控件；
+                    <span class="highlight-text">false</span> 禁用并隐藏控件。
+                </li>
+            </ul>
+        </div>
+
+        <div class="sub-title" id="modelMethod"> 方法 </div>
+
+        <div><a href=""><span class="span_bold">.init( callbackFunction )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    该方法实际使用配置的参数来创建所有可视化对象。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicModel.html">Model (concept)</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.load( model_config )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    该方法实际载入神经网络模型。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    我们为该方法提供了回调函数。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicLoad.html">Load</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.predict( input_data )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    该方法收集由神经网络模型所计算的层间输出数据来渲染3D可视化对象。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    我们为该方法提供了回调函数。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    详情参见<a href="basicPredict.html">Predict</a>。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getAllLayers()</span> : Layer[]</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    获取在当前模型中的所有层对象。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    我们可以通过该方法获取所有层对象以进行配置或检查某些特殊配置。
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getLayerByName( name )</span> : Layer</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    通过层名称(<span class="highlight-text">String</span>)来获取特定层对象。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    我们可以通过该方法查找并更新某个特定的层对象。
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="sub-title"> 延伸 </div>
+
+        <div>更多关于在 TensorSpace 中不同的模型的实现方式，参见：</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <a href="modelSequential.html"><span class="highlight-text">Sequential()</span></a>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    <a href="modelFunctional.html"><span class="highlight-text">Model()</span></a>
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
