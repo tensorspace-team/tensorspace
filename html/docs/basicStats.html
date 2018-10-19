@@ -317,7 +317,49 @@
 
     <main>
         <header>Stats</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>For TensorSpace, it is required to add <span class="highlight-text">stats</span> library.</div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_no_states.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Disable stats display
+        </div>
+
+        <div>
+            The <span class="highlight-text">stats</span> is a performance monitor utility used by TensorSpace.
+            We can add and configure as the following to display the stats panel on the top-left conner of the browser.
+        </div>
+
+        <div class="code-snippet">
+            <pre><code class="Python">
+&lt;!-- import dependencies --&gt;
+&lt;script src="stats.min.js"&gt;&lt;/script&gt;
+&lt;script src="tensorspace.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- other HTML --&gt;
+
+&lt;script&gt;
+    let model = new TSP.model.Sequential(container, {
+        // ... other configurations ...
+        stats : true
+        // ... other configurations ...
+
+    });
+    // ... other TSP implementations ...
+&lt;/script&gt;
+
+&lt;!-- other HTML --&gt;
+            </code></pre>
+        </div>
+
+
+        <img class="tag-img" src="../../assets/img/docs/Model_states.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 2</span> - Enable stats display
+        </div>
+
+        <div>For more details, please check <a href="https://github.com/mrdoob/stats.js">stats.js</a>.</div>
+
     </main>
 </div>
 
