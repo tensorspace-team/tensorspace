@@ -317,7 +317,226 @@
 
     <main>
         <header>Sequential Model</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            Similar to Keras-style sequential model, <span class="highlight-text">Sequential()</span>
+            creates a model which is simply a stack of layers.
+        </div>
+
+        <div>We can create a sequential model, like:</div>
+        <div class="code-snippet">
+            <pre><code class="Python">
+let seqModel = new TSP.model.Sequential( container, {
+
+    ...
+    // necessary configurations
+    layerInitStatus: "close",
+    aggregationStrategy: "max",
+    layerShape: "rect",
+    ...
+
+} );
+            </code></pre>
+        </div>
+
+
+        <div>Then we can insert layers into the model by the designed order:</div>
+        <div class="code-snippet">
+            <pre><code class="Python">
+seqModel.add( new TSP.layers.Input2d( {
+
+    shape: [ 28, 28, 1 ],
+    name: "initInput",
+    color: 0xFFFFFF,
+
+} ) );
+
+seqModel.add( new TSP.layers.Padding2d( {
+
+    padding: [ 2, 2 ],
+
+} ) );
+
+let convLayer = new TSP.layers.Conv2d( {
+
+    kernelSize: 5,
+    filters: 6,
+    strides: 1,
+    name: "conv2d1",
+
+} );
+seqModel.add( convLayer );
+            </code></pre>
+        </div>
+
+        <div>We can add the layer either as a claimed layer or as an anonymous layer.</div>
+
+        <div>
+            After creating the structure of the model, we can
+            <a href="#load"><span class="highlight-text">load()</span></a> the pre-trained ML model and
+            <a href="#init"><span class="highlight-text">init()</span></a> to create the layer objects:
+        </div>
+        <div class="code-snippet">
+            <pre><code class="Python">
+seqModel.load( {
+
+    type: "tfjs",
+    url: './lenetModel/mnist.json',
+
+    onComplete: function() {
+
+        console.log( "Complete load model." );
+
+    }
+
+} );
+
+seqModel.init();
+            </code></pre>
+        </div>
+
+        <div>
+            <a href="#predict"><span class="highlight-text">predict()</span></a> method handles the prediction
+            process for all layers including the hidden layers.
+        </div>
+
+
+        <div class="sub-title" id="modelConfig"> Property </div>
+
+        <div><a href=""><span class="span_bold">.aggregationStrategy</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the strategy of computing data used to render layer aggregation.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerShape</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the layout of expanded feature maps of a layer.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.layerInitStatus</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Represents the initial status of an expandable layer.
+                    Either "expanded" as feature maps or "collapsed" as an aggregation.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.textSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Enable or disable the display text information of each layers.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.relationSystem</span> : String</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Enable or disable the display of relation lines among layers.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.animationTimeRatio</span> : Double</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Ratio of time spent for actual animation over default animation.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.color</span> : color format</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    All necessary color configurations of different layers and the background.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.stats</span> : Boolean</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Whether to use <span class="highlight-text">stats</span> utility or not.
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="sub-title" id="modelMethod"> Method </div>
+
+        <div id="init"><a href=""><span class="span_bold">.init( callbackFunction )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <span class="highlight-text">init( callbackFunction )</span> method use the provided
+                    configurations to create the actual objects of the model.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicModel.html">Model (concept)</a> for more details.
+                </li>
+            </ul>
+        </div>
+
+        <div id="load"><a href=""><span class="span_bold">.load( model_config )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <span class="highlight-text">load()</span> method is used to maintain the pre-trained ML model
+                    (from TensorFlow, Keras or TensorFlow.js).
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicLoad.html">Load</a> for more details.
+                </li>
+            </ul>
+        </div>
+
+        <div id="predict"><a href=""><span class="span_bold">.predict( input_data )</span> : void</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    The <span class="highlight-text">predict()</span> method uses the provided input data and the
+                    loaded ML model to compute all necessary predictions including the intermediate outputs and final
+                    inferences for rendering visualization objects.
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    See <a href="basicPredict.html">Predict</a> for more details.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getAllLayers()</span> : Layer[]</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    To get all layer objects within the model.
+                </li>
+            </ul>
+        </div>
+
+        <div><a href=""><span class="span_bold">.getLayerByName( name )</span> : Layer</a></div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    To get a specified layer object by its name (<span class="highlight-text">String</span>).
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
