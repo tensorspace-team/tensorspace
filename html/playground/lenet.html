@@ -122,24 +122,23 @@
             <canvas id="signature-pad" class="signature-pad" width=224 height=224></canvas>
         </div>
 
-        <div id="clear"></div>
+        <div id="clear">Clear</div>
 
-        <div id="result">
-            <p>Result</p>
-            <div>
-                <i id="result0" class="material-icons">exposure_zero</i>
-                <i id="result1" class="material-icons">filter_1</i>
-                <i id="result2" class="material-icons">filter_2</i>
-                <i id="result3" class="material-icons">filter_3</i>
-                <i id="result4" class="material-icons">filter_4</i>
-            </div>
-            <div>
-                <i id="result5" class="material-icons">filter_5</i>
-                <i id="result6" class="material-icons">filter_6</i>
-                <i id="result7" class="material-icons">filter_7</i>
-                <i id="result8" class="material-icons">filter_8</i>
-                <i id="result9" class="material-icons">filter_9</i>
-            </div>
+        <p id="hint">LeNet thinks you write a</p>
+
+        <div class="inferences">
+            <span id="result0">0</span>
+            <span id="result1">1</span>
+            <span id="result2">2</span>
+            <span id="result3">3</span>
+            <span id="result4">4</span>
+        </div>
+        <div class="inferences">
+            <span id="result5">5</span>
+            <span id="result6">6</span>
+            <span id="result7">7</span>
+            <span id="result8">8</span>
+            <span id="result9">9</span>
         </div>
 
     </div>
@@ -152,7 +151,7 @@
 
 		minWidth: 10,
 		backgroundColor: 'rgba(255, 255, 255, 0)',
-		penColor: 'rgb(0, 255, 0)',
+		penColor: 'rgb(214, 253, 255)',
 		onEnd: executePredict
 
 	} );
@@ -202,7 +201,9 @@
     function highLightResult( index ) {
 
 		let idString = "result" + index;
-		$("#" + idString).css("color", "green");
+		$("#" + idString).css( {
+            "color": "#D6FDFF"
+		} );
 
     }
 
@@ -211,7 +212,9 @@
 		for ( let i = 0; i < 10; i ++ ) {
 
 			let idString = "result" + i;
-			$("#" + idString).css("color", "#000");
+			$("#" + idString).css({
+                "color": "#456989"
+			});
 
         }
 
