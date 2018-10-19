@@ -66,9 +66,9 @@ main {
 
 #loading {
     position: fixed;
-    left: 350px;
-    top: 150px;
-    width: 300px;
+    left: 400px;
+    top: 200px;
+    width: 350px;
 }
 
 #controlPanel {
@@ -92,13 +92,12 @@ main {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    /*background-color: red;*/
     z-index: 1;
     user-select: none;
+    color: #D6FDFF;
 }
 
 #playgroundMenu > i {
-    color: #fff;
     font-size: 35px;
     cursor: pointer;
 }
