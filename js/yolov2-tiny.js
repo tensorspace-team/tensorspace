@@ -45,9 +45,6 @@ $(function() {
 
 	$("#selector > main > div > img").click(function() {
 		$(this).css("border", "1px solid #6597AF");
-
-		console.log( $(this).attr("id") );
-
 		selectedDiv = $(this).attr('id');
 	});
 
