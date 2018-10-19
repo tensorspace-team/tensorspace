@@ -77,7 +77,7 @@ $(function() {
 		hideSelector();
 		getDataAndPredict(function(finalResult) {
 			$("#labelImage").attr("src", dataLookup[ predictDataKey ].imageUrl);
-			console.log(generateInference( finalResult ));
+			generateInference( finalResult );
 		});
 
 	});

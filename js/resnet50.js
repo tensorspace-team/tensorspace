@@ -1,5 +1,27 @@
 let model;
 let imagenetResult;
+let predictDataKey = "diling";
+let selectedDiv = undefined;
+
+let dataLookup = {
+
+	diling: {
+
+		relativeDiv: "data1",
+		dataUrl: "../../assets/data/dilingdiling.json",
+		imageUrl: "../../assets/img/playground/dilingdiling.jpg"
+
+	},
+
+	doraemon: {
+
+		relativeDiv: "data2",
+		dataUrl: "../../assets/data/doraemon.json",
+		imageUrl: "../../assets/img/playground/doraemon.jpg"
+
+	}
+
+};
 
 $(function() {
 
@@ -32,13 +54,41 @@ $(function() {
 		moveOutHiddenContent();
 	});
 
+	$("#selector > main > div > img").click(function() {
+		$(this).css("border", "1px solid #6597AF");
+		selectedDiv = $(this).attr('id');
+	});
+
+	$("#cancelPredict").click(function() {
+		hideSelector()
+	});
+
+	$("#selectorCurtain").click(function() {
+		hideSelector();
+	});
+
+	$("#selectorTrigger").click(function() {
+		showSelector();
+	});
+
+	$("#executePredict").click(function() {
+
+		updatePredictDataKey();
+		hideSelector();
+		getDataAndPredict(function(finalResult) {
+			$("#labelImage").attr("src", dataLookup[ predictDataKey ].imageUrl);
+			generateInference( finalResult );
+		});
+
+	});
+
 });
 
 function createModel() {
 
 	let container = document.getElementById( "modelArea" );
 
-	let model = new TSP.model.Sequential( container, {
+	model = new TSP.model.Sequential( container, {
 
 		aggregationStrategy: "max",
 		layerShape: "rect",
@@ -885,18 +935,12 @@ function createModel() {
 
 	model.init( function() {
 
-		$.ajax({
-			url: '../../assets/data/dilingdiling.json',
-			type: 'GET',
-			async: true,
-			dataType: 'json',
-			success: function (data) {
-				model.predict( data, function(){
-					$( "#loadingPad" ).hide();
-				} );
+		getDataAndPredict( function( finalResult ) {
+			$( "#loadingPad" ).hide();
 
-			}
-		});
+			generateInference( finalResult );
+
+		} );
 
 	} );
 
@@ -917,5 +961,69 @@ function moveOutHiddenContent() {
 		left:"-=200px"
 	},500);
 	$("#curtain").fadeOut(500);
+
+}
+
+function getDataAndPredict( callback ) {
+
+	$.ajax({
+		url: dataLookup[ predictDataKey ].dataUrl,
+		type: 'GET',
+		async: true,
+		dataType: 'json',
+		success: function (data) {
+
+			model.predict( data, function( finalResult ){
+
+				if ( callback !== undefined ) {
+					callback( finalResult );
+				}
+
+			} );
+
+		}
+	});
+
+}
+
+function showSelector() {
+	$("#selector").show();
+	$("#selectorCurtain").show();
+}
+
+function hideSelector() {
+	$("#selector").hide();
+	$("#selectorCurtain").hide();
+	selectedDiv = undefined;
+}
+
+function updatePredictDataKey() {
+
+	for ( let key in dataLookup ) {
+
+		if ( dataLookup[ key ].relativeDiv === selectedDiv ) {
+
+			predictDataKey = key;
+			break;
+
+		}
+
+	}
+
+}
+
+function generateInference( finalResult ) {
+
+	let maxIndex = 0;
+
+	for ( let i = 1; i < finalResult.length; i ++ ) {
+
+		maxIndex = finalResult[ i ] > finalResult[ maxIndex ] ? i : maxIndex;
+
+	}
+
+	console.log( imagenetResult[ maxIndex ] );
+
+	$("#PredictResult").text(imagenetResult[ maxIndex ]);
 
 }
