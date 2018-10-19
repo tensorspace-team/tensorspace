@@ -2,7 +2,7 @@ aside {
 
     width: 200px;
     height: calc( 100% - 60px );
-    background-color: #00bcd4;
+    background-color: #000;
     padding-top: 60px;
     float: left;
     box-sizing: border-box;
@@ -10,7 +10,13 @@ aside {
     top: 60px;
     left: -200px;
     z-index: 10;
+    border-right: 1px solid #548CA9;
+    color: #548CA9;
 
+}
+
+aside a {
+    color: #548CA9;
 }
 
 aside > div {
@@ -34,7 +40,9 @@ aside > div > a {
 
 .now-label {
 
-    background-color: blue;
+    background-color: #0A36B0;
+    color: #D6FDFF;
+
 
 }
 
@@ -65,13 +73,15 @@ main {
 
 #controlPanel {
 
-    background-color: rgba( 0, 0, 200, 0.4 );
+    background-color: #02242F;
     position: absolute;
     right: 0;
     top: 0;
     width: 300px;
     height: 100%;
     padding-top: 60px;
+    border-left: 1px solid #6597AF;
+    box-sizing: border-box;
 
 }
 
@@ -121,7 +131,7 @@ main {
     width: 100%;
     text-align: center;
     font-size: 24px;
-    color: #fff;
+    color: #D6FDFF;
     margin-top: 20px;
     margin-bottom: 20px;
 }
