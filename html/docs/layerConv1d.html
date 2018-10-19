@@ -389,7 +389,7 @@ TSP.layers.Conv1d( { fileters : Int , shape : [ Int ] } )
                 </th>
                 <td>Int</td>
                 <td>The dimension of the convolution window</td>
-                <td>The 2d convolutional window is square. kernelSize: 3</td>
+                <td>kernelSize: 3 The 1d convolutional window is a vector. </td>
             </tr>
             <tr>
                 <th scope="row">
@@ -398,7 +398,7 @@ TSP.layers.Conv1d( { fileters : Int , shape : [ Int ] } )
                 </th>
                 <td>[Int]</td>
                 <td>The strides of the convolution</td>
-                <td>Strides in both dimensions are equal [default] Automatic inference strides = [1, 1]</td>
+                <td>[default] Automatic inference strides = 1</td>
             </tr>
             <tr>
                 <th scope="row">
