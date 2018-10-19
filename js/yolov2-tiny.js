@@ -1,4 +1,27 @@
 let model;
+let predictDataKey = "three";
+let selectedDiv = undefined;
+let outputDetectionLayer;
+
+let dataLookup = {
+
+	three: {
+
+		relativeDiv: "data1",
+		dataUrl: "../../assets/data/33.json",
+		imageUrl: "../../assets/img/playground/33.jpg"
+
+	},
+
+	bird: {
+
+		relativeDiv: "data2",
+		dataUrl: "../../assets/data/bird.json",
+		imageUrl: "../../assets/img/playground/bird.jpg"
+
+	}
+
+};
 
 $(function() {
 
@@ -18,6 +41,36 @@ $(function() {
 		$("#close").attr("src", "../../assets/img/docs/close.png");
 	}).click(function() {
 		moveOutHiddenContent();
+	});
+
+	$("#selector > main > div > img").click(function() {
+		$(this).css("border", "1px solid #6597AF");
+
+		console.log( $(this).attr("id") );
+
+		selectedDiv = $(this).attr('id');
+	});
+
+	$("#cancelPredict").click(function() {
+		hideSelector()
+	});
+
+	$("#selectorCurtain").click(function() {
+		hideSelector();
+	});
+
+	$("#selectorTrigger").click(function() {
+		showSelector();
+	});
+
+	$("#executePredict").click(function() {
+
+		updatePredictDataKey();
+		hideSelector();
+		getDataAndPredict(function() {
+			$("#labelImage").attr("src", dataLookup[ predictDataKey ].imageUrl);
+		});
+
 	});
 
 });
@@ -192,7 +245,7 @@ function createModel() {
 
 	model.add( yoloGrid );
 
-	let outputDetectionLayer = new TSP.layers.OutputDetection();
+	outputDetectionLayer = new TSP.layers.OutputDetection();
 
 	model.add( outputDetectionLayer );
 
@@ -208,18 +261,9 @@ function createModel() {
 
 	model.init( function() {
 
-		$.ajax({
-			url: '../../assets/data/33.json',
-			type: 'GET',
-			async: true,
-			dataType: 'json',
-			success: function (data) {
-				model.predict( data, function(){
-					$( "#loadingPad" ).hide();
-				} );
-
-			}
-		});
+		getDataAndPredict( function() {
+			$( "#loadingPad" ).hide();
+		} )
 
 	} );
 
@@ -252,5 +296,53 @@ function moveOutHiddenContent() {
 		left:"-=200px"
 	},500);
 	$("#curtain").fadeOut(500);
+
+}
+
+function showSelector() {
+	$("#selector").show();
+	$("#selectorCurtain").show();
+}
+
+function hideSelector() {
+	$("#selector").hide();
+	$("#selectorCurtain").hide();
+	selectedDiv = undefined;
+}
+
+function getDataAndPredict( callback ) {
+
+	$.ajax({
+		url: dataLookup[ predictDataKey ].dataUrl,
+		type: 'GET',
+		async: true,
+		dataType: 'json',
+		success: function (data) {
+
+			model.predict( data, function(){
+
+				if ( callback !== undefined ) {
+					callback();
+				}
+
+			} );
+
+		}
+	});
+
+}
+
+function updatePredictDataKey() {
+
+	for ( let key in dataLookup ) {
+
+		if ( dataLookup[ key ].relativeDiv === selectedDiv ) {
+
+			predictDataKey = key;
+			break;
+
+		}
+
+	}
 
 }
