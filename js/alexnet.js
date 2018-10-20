@@ -11,6 +11,14 @@ let dataLookup = {
 		dataUrl: "../../assets/data/pikapika.json",
 		imageUrl: "../../assets/img/playground/pikapika.jpg"
 
+	},
+
+	giraffe: {
+
+		relativeDiv: "data2",
+		dataUrl: "../../assets/data/giraffe.json",
+		imageUrl: "../../assets/img/playground/giraffe.jpg"
+
 	}
 
 };
