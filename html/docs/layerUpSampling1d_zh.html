@@ -321,9 +321,7 @@
         <div class="sub-title">构造器</div>
         <div>〔方法一〕使用<span class="span_bold"> size </span>参数进行构造</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.UpSampling1d( { size: Float32 } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.UpSampling1d( { size: Float32 } );</code></pre>
         </div>
 
         <div class="sub-title">参数列表</div>
@@ -358,7 +356,7 @@ TSP.layers.UpSampling1d( { size: Float32 } );
             <tr>
                 <th scope="row">
                     <p>color</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconStyle">🎨</a>️</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
                 </th>
                 <td>color format</td>
                 <td>层的颜色</td>
@@ -367,7 +365,7 @@ TSP.layers.UpSampling1d( { size: Float32 } );
             <tr>
                 <th scope="row">
                     <p>closeButton</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconStyle">🎨</a>️</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
                 </th>
                 <td>Dict</td>
                 <td>层关闭按钮外观控制列表， <a href="basicClose.html">查看详情</a></td>
@@ -378,7 +376,7 @@ TSP.layers.UpSampling1d( { size: Float32 } );
             <tr>
                 <th scope="row">
                     <p>initStatus</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconAnimation">️🎦</a></p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
                 </th>
                 <td>String</td>
                 <td>初始化时，本层是否收缩</td>
@@ -386,8 +384,8 @@ TSP.layers.UpSampling1d( { size: Float32 } );
             </tr>
             <tr>
                 <th scope="row">
-                    <p>animationTimeRatio</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconAnimation">🎦</a>️</p>
+                    <p>animation-<br>TimeRatio</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
                 </th>
                 <td>Int</td>
                 <td>张开和伸缩的调整速度，呈倍速关系</td>
@@ -426,8 +424,7 @@ TSP.layers.UpSampling1d( { size: Float32 } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> 构建模型语法，直接添加层即可。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let convLayer = new TSP.layers.Conv1d( {
+            <pre><code class="Javascript">let convLayer = new TSP.layers.Conv1d( {
 
     kernelSize: 2,
     filters: 16,
@@ -441,8 +438,7 @@ let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
 } );
 
-upSamplingLayer.apply( convLayer );
-            </code></pre>
+upSamplingLayer.apply( convLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -450,8 +446,7 @@ upSamplingLayer.apply( convLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let upSamplingLayer = new TSP.layers.UpSampling1d( {
+            <pre><code class="Javascript">let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
     // 配置UpSampling1d。
 
@@ -465,8 +460,7 @@ model.init();
 
 // 调用openLayer API来打开layer。
 
-upSamplingLayer.openLayer();
-            </code></pre>
+upSamplingLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -474,8 +468,7 @@ upSamplingLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let upSamplingLayer = new TSP.layers.UpSampling1d( {
+            <pre><code class="Javascript">let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
     // 配置UpSampling1d。
 
@@ -489,16 +482,14 @@ model.init();
 
 // 如果layer已经是打开状态，调用closeLayer API来关闭layer。
 
-upSamplingLayer.closeLayer();
-            </code></pre>
+upSamplingLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">使用样例</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>声明一个UpSampling1d的实例，方便复用</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let upSamplingLayer = new TSP.layers.UpSampling1d( {
+            <pre><code class="Javascript">let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
     size: 1.5,
     animationTimeRatio: 2,
@@ -508,20 +499,17 @@ let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
 } );
 
-model.add( upSamplingLayer );
-            </code></pre>
+model.add( upSamplingLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>直接添加UpSampling2d</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add(new TSP.layers.UpSampling1d( {
+            <pre><code class="Javascript">model.add(new TSP.layers.UpSampling1d( {
 
     size: [1.5, 2],
     name: "upSampling1d2"
 
-} ));
-            </code></pre>
+} ));</code></pre>
         </div>
 
         <div class="sub-title">什么时候用</div>

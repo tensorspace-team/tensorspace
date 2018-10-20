@@ -250,6 +250,10 @@ main table {
     margin-top: 20px;
 }
 
+main table thead tr th p {
+    font-weight: bolder;
+}
+
 main > div > ul > li > div {
     padding-left: 30px;
     color: #4d4d4d;
@@ -257,11 +261,17 @@ main > div > ul > li > div {
     margin-bottom: 5px;
 }
 
-table { table-layout: fixed; }
-table td { word-wrap: break-word; }
+table {
+    table-layout: auto;
+}
+
+table td {
+    word-wrap: break-word;
+}
 
 td, th {
     text-align: center;
+    vertical-align: middle !important;
     word-wrap: break-word;
 }
 
@@ -284,7 +294,7 @@ td, th {
 .code-snippet {
 
     margin-top: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 17px;
 
 }
 
@@ -332,8 +342,7 @@ td, th {
 }
 
 .sub-title {
-
-    margin-top: 50px;
+    margin-top: 45px;
     margin-bottom: 30px;
     font-size: 24px;
 }

@@ -365,13 +365,11 @@
         <div>运行环境：Python 3.6.5。相关依赖如下：</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-import tensorflow as tf
+            <pre><code class="Python">import tensorflow as tf
 import numpy as np
 from tensorflow.contrib.layers import flatten
 from sklearn.utils import shuffle
-mnist = tf.keras.datasets.mnist
-            </code></pre>
+mnist = tf.keras.datasets.mnist</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
@@ -396,8 +394,7 @@ mnist = tf.keras.datasets.mnist
 
         <div class="code-snippet">
             <pre><code class="Bash">
-$ pip install tensorflowjs
-            </code></pre>
+$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>安装完成后，<span class="highlight-text">tensorflowjs_converter</span> 变为系统可用关键字，可用下列命令来调用：</div>
@@ -409,8 +406,7 @@ $ tensorflowjs_converter \
     --output_node_names=$onn \
     --saved_model_tags=serve \
     ../models/tensorflow_model \
-    ../models/json_models/tensorflow
-            </code></pre>
+    ../models/json_models/tensorflow</code></pre>
         </div>
 
         <div>预处理 TensorFlow 模型大致上分为以下几个步骤：</div>
@@ -460,8 +456,7 @@ $ tensorflowjs_converter \
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L7">tensorflow_create_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-# Raw input & normalization
+            <pre><code class="Python"># Raw input & normalization
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
@@ -471,8 +466,7 @@ x_test = x_test.reshape((-1, 28, 28, 1)).astype(np.float32)
 
 # Add padding to 32x32
 x_train = np.pad(x_train, ((0,0), (2,2), (2,2), (0,0)), 'constant')
-x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
-            </code></pre>
+x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')</code></pre>
         </div>
 
         <div class="span_bold">第二步，根据 LeNet_v5 的网络结构来构建模型</div>
@@ -487,8 +481,7 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L30">tensorflow_create_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-def LeNet_5(x):
+            <pre><code class="Python">def LeNet_5(x):
     # Convolutional Layer. Input = 32x32x1, Output = 28x28x1.
     conv1_w = tf.Variable(
         tf.truncated_normal(
@@ -547,8 +540,7 @@ def LeNet_5(x):
             shape=(84, 10), mean=0, stddev=0.1))
     fc3_b = tf.Variable(tf.zeros(10))
     logits = tf.matmul(fc2, fc3_w) + fc3_b
-    return logits
-            </code></pre>
+    return logits</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
@@ -572,8 +564,7 @@ def LeNet_5(x):
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/d4392e17527e1be495fa94cd70b6a651e2aaac6b/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L92">tensorflow_create_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-x = tf.placeholder(tf.float32, shape=[None,32,32,1],name="MyInput")
+            <pre><code class="Python">x = tf.placeholder(tf.float32, shape=[None,32,32,1],name="MyInput")
 y = tf.placeholder(tf.int32, (None), name="y")
 one_hot_y = tf.one_hot(y, 10)
 
@@ -630,8 +621,7 @@ with tf.Session() as sess:
         print()
 
     test_accuracy = evaluate(x_test, y_test)
-    print("Test Accuracy = {:.3f}".format(test_accuracy))
-            </code></pre>
+    print("Test Accuracy = {:.3f}".format(test_accuracy))</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
@@ -660,39 +650,33 @@ with tf.Session() as sess:
         <div><span class="highlight-text">saved model</span>：一个<span class="highlight-text">.pb</span>文件，并有一个<span class="highlight-text">variables</span>文件夹，可能含有<span class="highlight-text">assets</span>文件夹。部署时使用此格式</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-with tf.Session(graph=tf.Graph()) as sess:
+            <pre><code class="Python">with tf.Session(graph=tf.Graph()) as sess:
     tf.saved_model.loader.load(
         sess,
         [tag_constants.SERVING],
         '../models/tensorflow_model',
-    )
-            </code></pre>
+    )</code></pre>
         </div>
 
         <div><span class="highlight-text">frozen model</span>：又被称为<span class="highlight-text">FrozenGraphDef</span>格式，<span class="highlight-text">.pb</span>文件。多用于移动端模型</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-with tf.Session() as sess:
+            <pre><code class="Python">with tf.Session() as sess:
     model_filename ='/PATH/TO/PB/model.pb'
     with gfile.FastGFile(model_filename, 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
-        g_in = tf.import_graph_def(graph_def)
-            </code></pre>
+        g_in = tf.import_graph_def(graph_def)</code></pre>
         </div>
 
         <div><span class="highlight-text">checkpoint</span>：含有<span class="highlight-text">checkpoint</span>文件，文件命名含有关键字<span class="highlight-text">ckpt</span>。信息完整，可用于迁移训练</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-with tf.Session(graph=tf.Graph()) as sess:
+            <pre><code class="Python">with tf.Session(graph=tf.Graph()) as sess:
     dir_path = '../DIR/SAVE/CKPT/'
     ckpt_name = 'lenet.ckpt'
     saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
-    saver.restore(sess, tf.train.latest_checkpoint(dir_path))
-            </code></pre>
+    saver.restore(sess, tf.train.latest_checkpoint(dir_path))</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
@@ -709,8 +693,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-with tf.Session(graph=tf.Graph()) as sess:
+            <pre><code class="Python">with tf.Session(graph=tf.Graph()) as sess:
     dir_path = '../DIR/SAVE/CKPT/'
     ckpt_name = 'lenet.ckpt'
     saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
@@ -728,8 +711,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         sess, output_dir,
         {"input":x},
         {"output":add_8}
-    )
-            </code></pre>
+    )</code></pre>
         </div>
 
         <div class="sub-title" id="findNames">2 找出中间层 tensor 名称</div>
@@ -739,10 +721,8 @@ with tf.Session(graph=tf.Graph()) as sess:
         <div>使用下面的代码<span class="span_bold">输出所有的 tensor 名称</span>。〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L62">tensorflow_load_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-for n in tf.get_default_graph().as_graph_def().node:
-    print(n.name)
-            </code></pre>
+            <pre><code class="Python">for n in tf.get_default_graph().as_graph_def().node:
+    print(n.name)</code></pre>
         </div>
 
         <div>哪怕模型并不是很大，也可能得到许多 tensor 名称。例如我们在前例中所创建的 LeNet 网络模型，也会输出 400+ 个 tensor 名称：</div>
@@ -774,21 +754,17 @@ for n in tf.get_default_graph().as_graph_def().node:
         <div>当我们找到所有我们需要的 tensor 名称后，将它们添加到一个列表中。〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L67">tensorflow_load_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_2",
-                "MyDense_1", "MyDense_2", "MySoftMax"]
-            </code></pre>
+            <pre><code class="Python">output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_2",
+                "MyDense_1", "MyDense_2", "MySoftMax"]</code></pre>
         </div>
 
         <div>使用下列代码测试列表的有效性。〔源码〕，<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L61">tensorflow_load_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-graph = tf.get_default_graph()
+            <pre><code class="Python">graph = tf.get_default_graph()
 x = graph.get_tensor_by_name("MyInput:0")
 outputs = list(map(lambda on: graph.get_tensor_by_name(on+":0"), output_names))
-print(sess.run(outputs, feed_dict={x:x_test}))
-            </code></pre>
+print(sess.run(outputs, feed_dict={x:x_test}))</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/TensorFlow/TensorFlow_prediction_1.png">
@@ -828,8 +804,7 @@ tensorflowjs_converter \
     --output_node_names=$onn \
     --saved_model_tags=serve \
     ../models/tensorflow_model \
-    ../models/json_models/tensorflow
-            </code></pre>
+    ../models/json_models/tensorflow</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>

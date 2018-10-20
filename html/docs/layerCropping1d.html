@@ -322,9 +322,7 @@
         <div class="sub-title">Constructor</div>
         <div>〔Method 1〕Use cropping</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.Cropping1d( { cropping : [1, 1] } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.Cropping1d( { cropping : [1, 1] } );</code></pre>
         </div>
 
         <div class="sub-title">Arguments</div>
@@ -359,7 +357,7 @@ TSP.layers.Cropping1d( { cropping : [1, 1] } );
             <tr>
                 <th scope="row">
                     <p>color</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconStyle">🎨</a>️</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
                 </th>
                 <td>color format</td>
                 <td>Color of layer</td>
@@ -368,7 +366,7 @@ TSP.layers.Cropping1d( { cropping : [1, 1] } );
             <tr>
                 <th scope="row">
                     <p>closeButton</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconStyle">🎨</a>️</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
                 </th>
                 <td>Dict</td>
                 <td>Close button appearance control dict, <a href="basicClose.html">more about close button</a></td>
@@ -380,7 +378,7 @@ TSP.layers.Cropping1d( { cropping : [1, 1] } );
             <tr>
                 <th scope="row">
                     <p>initStatus</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconAnimation">️🎦</a></p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
                 </th>
                 <td>String</td>
                 <td>Layer status at beginning. <span class="span_bold">Open</span> or <span class="span_bold">Close</span></td>
@@ -388,8 +386,8 @@ TSP.layers.Cropping1d( { cropping : [1, 1] } );
             </tr>
             <tr>
                 <th scope="row">
-                    <p>animationTimeRatio</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconAnimation">🎦</a>️</p>
+                    <p>animation-<br>TimeRatio</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
                 </th>
                 <td>Int</td>
                 <td>The speed of open and close animation</td>
@@ -428,8 +426,7 @@ TSP.layers.Cropping1d( { cropping : [1, 1] } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let inputLayer = new TSP.layers.Input1d( {
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input1d( {
 
     shape: [28]
 
@@ -441,8 +438,7 @@ let croppingLayer = new TSP.layers.Cropping1d( {
 
 } );
 
-croppingLayer.apply( inputLayer );
-            </code></pre>
+croppingLayer.apply( inputLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -450,8 +446,7 @@ croppingLayer.apply( inputLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let croppingLayer = new TSP.layers.Cropping1d( {
+            <pre><code class="Javascript">let croppingLayer = new TSP.layers.Cropping1d( {
 
     // configure some parameters for Cropping1d.
 
@@ -465,8 +460,7 @@ model.init();
 
 // Call openLayer API to open layer.
 
-croppingLayer.openLayer();
-            </code></pre>
+croppingLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -474,8 +468,7 @@ croppingLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let croppingLayer = new TSP.layers.Cropping1d( {
+            <pre><code class="Javascript">let croppingLayer = new TSP.layers.Cropping1d( {
 
     // configure some parameters for Cropping1d.
 
@@ -489,16 +482,14 @@ model.init();
 
 // If this layer already opened, call closeLayer API to close layer.
 
-croppingLayer.closeLayer();
-            </code></pre>
+croppingLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">Example</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of Cropping1d to facilitate reuse</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let croppingLayer = new TSP.layers.Cropping1d( {
+            <pre><code class="Javascript">let croppingLayer = new TSP.layers.Cropping1d( {
 
     cropping : [2, 2],
     animationTimeRatio: 2,
@@ -508,20 +499,17 @@ let croppingLayer = new TSP.layers.Cropping1d( {
 
 } );
 
-model.add( croppingLayer );
-            </code></pre>
+model.add( croppingLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add Cropping1d directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add(new TSP.layers.Cropping1d( {
+            <pre><code class="Javascript">model.add(new TSP.layers.Cropping1d( {
 
     cropping : [2, 2],
     name: "cropping1d2"
 
-} ));
-            </code></pre>
+} ));</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>

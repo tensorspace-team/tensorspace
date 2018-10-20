@@ -325,8 +325,7 @@
 
         <div>如下，我们可以创建一个有序模型：</div>
         <div class="code-snippet">
-            <pre><code class="Python">
-let seqModel = new TSP.model.Sequential( container, {
+            <pre><code class="Python">let seqModel = new TSP.model.Sequential( container, {
 
     ...
     // necessary configurations
@@ -335,15 +334,13 @@ let seqModel = new TSP.model.Sequential( container, {
     layerShape: "rect",
     ...
 
-} );
-            </code></pre>
+} );</code></pre>
         </div>
 
 
         <div>然后我们可以在模型中根据我们的设计顺序，插入不同的层对象：</div>
         <div class="code-snippet">
-            <pre><code class="Python">
-seqModel.add( new TSP.layers.Input2d( {
+            <pre><code class="Python">seqModel.add( new TSP.layers.Input2d( {
 
     shape: [ 28, 28, 1 ],
     name: "initInput",
@@ -365,8 +362,7 @@ let convLayer = new TSP.layers.Conv2d( {
     name: "conv2d1",
 
 } );
-seqModel.add( convLayer );
-            </code></pre>
+seqModel.add( convLayer );</code></pre>
         </div>
 
         <div>我们可以插入一个声明过的层对象或者一个匿名层对象。</div>
@@ -377,8 +373,7 @@ seqModel.add( convLayer );
             然后使用 <a href="#init"><span class="highlight-text">init()</span></a> 来创建所有的层对象：
         </div>
         <div class="code-snippet">
-            <pre><code class="Python">
-seqModel.load( {
+            <pre><code class="Python">seqModel.load( {
 
     type: "tfjs",
     url: './lenetModel/mnist.json',
@@ -391,8 +386,7 @@ seqModel.load( {
 
 } );
 
-seqModel.init();
-            </code></pre>
+seqModel.init();</code></pre>
         </div>
 
         <div>

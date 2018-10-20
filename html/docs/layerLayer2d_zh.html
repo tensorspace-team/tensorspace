@@ -325,9 +325,7 @@
         <div class="sub-title">构造器</div>
         <div>〔方法一〕使用<span class="span_bold"> shape </span></div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.Layer2d( { shape: [Int, Int] } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.Layer2d( { shape: [Int, Int] } );</code></pre>
         </div>
 
         <div class="sub-title">参数列表</div>
@@ -362,7 +360,7 @@ TSP.layers.Layer2d( { shape: [Int, Int] } );
             <tr>
                 <th scope="row">
                     <p>color</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconStyle">🎨</a>️</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
                 </th>
                 <td>color format</td>
                 <td>层的颜色</td>
@@ -371,7 +369,7 @@ TSP.layers.Layer2d( { shape: [Int, Int] } );
             <tr>
                 <th scope="row">
                     <p>closeButton</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconStyle">🎨</a>️</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
                 </th>
                 <td>Dict</td>
                 <td>层关闭按钮外观控制列表， <a href="basicClose.html">查看详情</a></td>
@@ -382,7 +380,7 @@ TSP.layers.Layer2d( { shape: [Int, Int] } );
             <tr>
                 <th scope="row">
                     <p>initStatus</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconAnimation">️🎦</a></p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
                 </th>
                 <td>String</td>
                 <td>初始化时，本层是否收缩</td>
@@ -390,8 +388,8 @@ TSP.layers.Layer2d( { shape: [Int, Int] } );
             </tr>
             <tr>
                 <th scope="row">
-                    <p>animationTimeRatio</p>
-                    <p><a href="#iconOptional">⚙</a><a href="#iconAnimation">🎦</a>️</p>
+                    <p>animation-<br>TimeRatio</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
                 </th>
                 <td>Int</td>
                 <td>张开和伸缩的调整速度，呈倍速关系</td>
@@ -430,8 +428,7 @@ TSP.layers.Layer2d( { shape: [Int, Int] } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> 构建模型语法，直接添加层即可。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let inputLayer = new TSP.layers.Input2d( {
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input2d( {
 
     shape: [28, 28]
 
@@ -443,8 +440,7 @@ let layer2d = new TSP.layers.Layer2d( {
 
 } );
 
-layer2d.apply( inputLayer );
-            </code></pre>
+layer2d.apply( inputLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -452,8 +448,7 @@ layer2d.apply( inputLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let layer2d = new TSP.layers.Layer2d( {
+            <pre><code class="Javascript">let layer2d = new TSP.layers.Layer2d( {
 
     // 配置Layer2d。
 
@@ -467,8 +462,7 @@ model.init();
 
 // 调用openLayer API来打开layer。
 
-layer2d.openLayer();
-            </code></pre>
+layer2d.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -476,8 +470,7 @@ layer2d.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let layer2d = new TSP.layers.Layer2d( {
+            <pre><code class="Javascript">let layer2d = new TSP.layers.Layer2d( {
 
     // 配置Layer2d。
 
@@ -491,16 +484,14 @@ model.init();
 
 // 如果layer已经是打开状态，调用closeLayer API来关闭layer。
 
-layer2d.closeLayer();
-            </code></pre>
+layer2d.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">使用样例</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>声明一个Layer2d的实例，方便复用</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let layer2d = new TSP.layers.Layer2d( {
+            <pre><code class="Javascript">let layer2d = new TSP.layers.Layer2d( {
 
     shape: [ 100, 100 ],
     name: "Layer2d1",
@@ -508,20 +499,17 @@ let layer2d = new TSP.layers.Layer2d( {
 
 } );
 
-model.add( layer2d );
-            </code></pre>
+model.add( layer2d );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>直接添加Layer2d</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add(new TSP.layers.Layer2d( {
+            <pre><code class="Javascript">model.add(new TSP.layers.Layer2d( {
 
     shape: [ 100, 100 ],
     name: "Layer2d2"
 
-} ));
-            </code></pre>
+} ));</code></pre>
         </div>
 
         <div class="sub-title">什么时候用</div>

@@ -325,18 +325,15 @@
 
         <div>首先，我们需要新建一个 TensorSpace 模型实例：</div>
         <div class="code-snippet">
-            <pre><code class="JavaScript">
-let container = document.getElementById( "container" );
-let model = new TSP.model.Sequential( container );
-            </code></pre>
+            <pre><code class="Javascript">let container = document.getElementById( "container" );
+let model = new TSP.model.Sequential( container );</code></pre>
         </div>
 
         <div>
             然后，基于 LeNet 网络的结构：输入层 + 2 X (Conv2D层 & Maxpooling层) + 3 X (Dense层)，我们可以搭建其模型结构：
         </div>
         <div class="code-snippet">
-            <pre><code class="JavaScript">
-model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
+            <pre><code class="Javascript">model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
 model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
 model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
 model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
@@ -347,8 +344,7 @@ model.add( new TSP.layers.Dense({ units: 84 }) );
 model.add( new TSP.layers.Output1d({
     units: 10,
     outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-}) );
-            </code></pre>
+}) );</code></pre>
         </div>
 
         <div>
@@ -356,16 +352,14 @@ model.add( new TSP.layers.Output1d({
             并使用<span class="highlight-text">init()</span>方法来创建模型对象：
         </div>
         <div class="code-snippet">
-            <pre><code class="JavaScript">
-model.load({
+            <pre><code class="Javascript">model.load({
     type: "tfjs",
     url: './lenetModel/mnist.json',
     onComplete: function() {
         console.log( "\"Hello World!\" from TensorSpace Loader." );
     }
 });
-model.init();
-            </code></pre>
+model.init();</code></pre>
         </div>
 
         <div>我们可以在浏览器中看到以下模型：</div>
@@ -378,11 +372,9 @@ model.init();
         <div>我们可以使用我们已经提取好的[手写“5”]()作为模型的输入：</div>
 
         <div class="code-snippet">
-            <pre><code class="JavaScript">
-model.init(function() {
+            <pre><code class="Javascript">model.init(function() {
     model.predict( image_5 );
-});
-            </code></pre>
+});</code></pre>
         </div>
 
         <div>
