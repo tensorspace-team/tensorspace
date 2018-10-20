@@ -19,6 +19,14 @@ let dataLookup = {
 		dataUrl: "../../assets/data/bird.json",
 		imageUrl: "../../assets/img/playground/bird.jpg"
 
+	},
+
+	dog: {
+
+		relativeDiv: "data3",
+		dataUrl: "../../assets/data/dog.json",
+		imageUrl: "../../assets/img/playground/dog.jpg"
+
 	}
 
 };
