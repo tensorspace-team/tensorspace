@@ -323,9 +323,7 @@
         <div class="sub-title">Constructor</div>
         <div>〔Method 1〕Use cropping</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.Cropping2d( { cropping : [ [2, 2], [1, 1] ] } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.Cropping2d( { cropping : [ [2, 2], [1, 1] ] } );</code></pre>
         </div>
 
         <div class="sub-title">Arguments</div>
@@ -429,8 +427,7 @@ TSP.layers.Cropping2d( { cropping : [ [2, 2], [1, 1] ] } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let inputLayer = new TSP.layers.Input2d( {
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input2d( {
 
     shape: [28, 28]
 
@@ -442,8 +439,7 @@ let croppingLayer = new TSP.layers.Cropping2d( {
 
 } );
 
-croppingLayer.apply( inputLayer );
-            </code></pre>
+croppingLayer.apply( inputLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -451,8 +447,7 @@ croppingLayer.apply( inputLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let croppingLayer = new TSP.layers.Cropping2d( {
+            <pre><code class="Javascript">let croppingLayer = new TSP.layers.Cropping2d( {
 
     // configure some parameters for Cropping2d.
 
@@ -466,8 +461,7 @@ model.init();
 
 // Call openLayer API to open layer.
 
-croppingLayer.openLayer();
-            </code></pre>
+croppingLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -475,8 +469,7 @@ croppingLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let croppingLayer = new TSP.layers.Cropping2d( {
+            <pre><code class="Javascript">let croppingLayer = new TSP.layers.Cropping2d( {
 
     // configure some parameters for Cropping2d.
 
@@ -490,16 +483,14 @@ model.init();
 
 // If this layer already opened, call closeLayer API to close layer.
 
-croppingLayer.closeLayer();
-            </code></pre>
+croppingLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">Example</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of Cropping2d to facilitate reuse</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let croppingLayer = new TSP.layers.Cropping2d( {
+            <pre><code class="Javascript">let croppingLayer = new TSP.layers.Cropping2d( {
 
     cropping : [ [2, 2], [1, 1] ],
     animationTimeRatio: 2,
@@ -509,20 +500,17 @@ let croppingLayer = new TSP.layers.Cropping2d( {
 
 } );
 
-model.add( croppingLayer );
-            </code></pre>
+model.add( croppingLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add Cropping2d directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add(new TSP.layers.Cropping2d( {
+            <pre><code class="Javascript">model.add(new TSP.layers.Cropping2d( {
 
     cropping : [ [2, 2], [1, 1] ],
     name: "cropping2d2"
 
-} ));
-            </code></pre>
+} ));</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>

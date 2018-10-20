@@ -321,9 +321,7 @@
         <div class="sub-title">Constructor</div>
         <div>〔Method 1〕Use <span class="span_bold">size</span></div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.UpSampling1d( { size: Float32 } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.UpSampling1d( { size: Float32 } );</code></pre>
         </div>
 
         <div class="sub-title">Arguments</div>
@@ -427,8 +425,7 @@ TSP.layers.UpSampling1d( { size: Float32 } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let convLayer = new TSP.layers.Conv1d( {
+            <pre><code class="Javascript">let convLayer = new TSP.layers.Conv1d( {
 
     kernelSize: 2,
     filters: 16,
@@ -442,8 +439,7 @@ let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
 } );
 
-upSamplingLayer.apply( convLayer );
-            </code></pre>
+upSamplingLayer.apply( convLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -451,8 +447,7 @@ upSamplingLayer.apply( convLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let upSamplingLayer = new TSP.layers.UpSampling1d( {
+            <pre><code class="Javascript">let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
     // configure some parameters for UpSampling1d.
 
@@ -466,8 +461,7 @@ model.init();
 
 // Call openLayer API to open layer.
 
-upSamplingLayer.openLayer();
-            </code></pre>
+upSamplingLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -475,8 +469,7 @@ upSamplingLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let upSamplingLayer = new TSP.layers.UpSampling1d( {
+            <pre><code class="Javascript">let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
     // configure some parameters for UpSampling1d.
 
@@ -490,16 +483,14 @@ model.init();
 
 // If this layer already opened, call closeLayer API to close layer.
 
-upSamplingLayer.closeLayer();
-            </code></pre>
+upSamplingLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">Example</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of UpSampling1d to facilitate reuse</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let upSamplingLayer = new TSP.layers.UpSampling1d( {
+            <pre><code class="Javascript">let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
     size: 1.5,
     animationTimeRatio: 2,
@@ -509,20 +500,17 @@ let upSamplingLayer = new TSP.layers.UpSampling1d( {
 
 } );
 
-model.add( upSamplingLayer );
-            </code></pre>
+model.add( upSamplingLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add UpSampling1d directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add(new TSP.layers.UpSampling1d( {
+            <pre><code class="Javascript">model.add(new TSP.layers.UpSampling1d( {
 
     size: 1.5,
     name: "upSampling1d2"
 
-} ));
-            </code></pre>
+} ));</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>

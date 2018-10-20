@@ -328,10 +328,8 @@
 
         <div>First, we need to new a TensorSpace model instance:</div>
         <div class="code-snippet">
-            <pre><code class="JavaScript">
-let container = document.getElementById( "container" );
-let model = new TSP.model.Sequential( container );
-            </code></pre>
+            <pre><code class="Javascript">let container = document.getElementById( "container" );
+let model = new TSP.model.Sequential( container );</code></pre>
         </div>
 
         <div>
@@ -339,8 +337,7 @@ let model = new TSP.model.Sequential( container );
             we build the structure of the model:
         </div>
         <div class="code-snippet">
-            <pre><code class="JavaScript">
-model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
+            <pre><code class="Javascript">model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
 model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
 model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
 model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
@@ -351,8 +348,7 @@ model.add( new TSP.layers.Dense({ units: 84 }) );
 model.add( new TSP.layers.Output1d({
     units: 10,
     outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-}) );
-            </code></pre>
+}) );</code></pre>
         </div>
 
         <div>
@@ -360,16 +356,14 @@ model.add( new TSP.layers.Output1d({
             and use <span class="highlight-text">init()</span> method to create the model:
         </div>
         <div class="code-snippet">
-            <pre><code class="JavaScript">
-model.load({
+            <pre><code class="Javascript">model.load({
     type: "tfjs",
     url: './lenetModel/mnist.json',
     onComplete: function() {
         console.log( "\"Hello World!\" from TensorSpace Loader." );
     }
 });
-model.init();
-            </code></pre>
+model.init();</code></pre>
         </div>
 
         <div>We can get the following model in the browser:</div>
@@ -382,11 +376,9 @@ model.init();
         <div>We provide a extracted file which is a handwritten "5" as the input of our model:</div>
 
         <div class="code-snippet">
-            <pre><code class="JavaScript">
-model.init(function() {
+            <pre><code class="Javascript">model.init(function() {
     model.predict( image_5 );
-});
-            </code></pre>
+});</code></pre>
         </div>
 
         <div>

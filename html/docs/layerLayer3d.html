@@ -325,9 +325,7 @@
         <div>Two methods to create a new layer. Arguments are required.</div>
         <div>〔Method 1〕Use <span class="span_bold">shape</span></div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.Layer3d( { shape: [ Int, Int, Int ] } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.Layer3d( { shape: [ Int, Int, Int ] } );</code></pre>
         </div>
 
         <div class="sub-title">Arguments</div>
@@ -431,8 +429,7 @@ TSP.layers.Layer3d( { shape: [ Int, Int, Int ] } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let inputLayer = new TSP.layers.Input2d( {
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input2d( {
 
     shape: [28, 28]
 
@@ -444,8 +441,7 @@ let layer3d = new TSP.layers.Layer3d( {
 
 } );
 
-layer3d.apply( inputLayer );
-            </code></pre>
+layer3d.apply( inputLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -453,8 +449,7 @@ layer3d.apply( inputLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let layer3d = new TSP.layers.Layer3d( {
+            <pre><code class="Javascript">let layer3d = new TSP.layers.Layer3d( {
 
     // configure some parameters for Layer3d.
 
@@ -468,8 +463,7 @@ model.init();
 
 // Call openLayer API to open layer.
 
-layer3d.openLayer();
-            </code></pre>
+layer3d.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -477,8 +471,7 @@ layer3d.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let layer3d = new TSP.layers.Layer3d( {
+            <pre><code class="Javascript">let layer3d = new TSP.layers.Layer3d( {
 
     // configure some parameters for Layer3d.
 
@@ -492,16 +485,14 @@ model.init();
 
 // If this layer already opened, call closeLayer API to close layer.
 
-layer3d.closeLayer();
-            </code></pre>
+layer3d.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">Example</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of Layer3d to facilitate reuse</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let layer3d = new TSP.layers.Layer3d( {
+            <pre><code class="Javascript">let layer3d = new TSP.layers.Layer3d( {
 
     shape: [ 100, 100, 3 ],
     name: "Layer3d1",
@@ -509,20 +500,17 @@ let layer3d = new TSP.layers.Layer3d( {
 
 } );
 
-model.add( layer3d );
-            </code></pre>
+model.add( layer3d );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add Layer3d directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add(new TSP.layers.Layer3d( {
+            <pre><code class="Javascript">model.add(new TSP.layers.Layer3d( {
 
     shape: [ 100, 100, 3 ],
     name: "Layer3d2"
 
-} ));
-            </code></pre>
+} ));</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>

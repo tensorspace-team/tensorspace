@@ -322,15 +322,11 @@
         <div>两种方法构造一个新建一个层，输入参数都是必要的。</div>
         <div>〔方法一〕使用<span class="span_bold"> poolSize </span>和<span class="span_bold"> strides </span>参数进行构造</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.Pooling1d( { poolSize : Int, strides: Int } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.Pooling1d( { poolSize : Int, strides: Int } );</code></pre>
         </div>
         <div>〔方法二〕使用<span class="span_bold"> shape </span>参数进行构造</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.Pooling1d( { shape : [ Int ] } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.Pooling1d( { shape : [ Int ] } );</code></pre>
         </div>
         <div class="sub-title">参数列表</div>
         <table class="table table-striped table-bordered table-hover">
@@ -462,8 +458,7 @@ TSP.layers.Pooling1d( { shape : [ Int ] } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> 构建模型语法，直接添加层即可。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let convLayer = new TSP.layers.Conv1d( {
+            <pre><code class="Javascript">let convLayer = new TSP.layers.Conv1d( {
 
     kernelSize: 2,
     filters: 16,
@@ -478,8 +473,7 @@ let poolingLayer = new TSP.layers.Pooling1d( {
 
 } );
 
-poolingLayer.apply( convLayer );
-            </code></pre>
+poolingLayer.apply( convLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -487,8 +481,7 @@ poolingLayer.apply( convLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let poolingLayer = new TSP.layers.Pooling1d( {
+            <pre><code class="Javascript">let poolingLayer = new TSP.layers.Pooling1d( {
 
     // 配置Pooling1d。
 
@@ -502,8 +495,7 @@ model.init();
 
 // 调用openLayer API来打开layer。
 
-poolingLayer.openLayer();
-            </code></pre>
+poolingLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -511,8 +503,7 @@ poolingLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let poolingLayer = new TSP.layers.Pooling1d( {
+            <pre><code class="Javascript">let poolingLayer = new TSP.layers.Pooling1d( {
 
     // 配置Pooling1d。
 
@@ -526,16 +517,14 @@ model.init();
 
 // 如果layer已经是打开状态，调用closeLayer API来关闭layer。
 
-poolingLayer.closeLayer();
-            </code></pre>
+poolingLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">使用样例</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>声明一个Pooling1d的实例，方便复用</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let poolingLayer = new TSP.layers.Pooling1d( {
+            <pre><code class="Javascript">let poolingLayer = new TSP.layers.Pooling1d( {
 
     poolingSize: 2,
     strides: 2,
@@ -546,21 +535,18 @@ let poolingLayer = new TSP.layers.Pooling1d( {
 
 } );
 
-model.add( poolingLayer );
-            </code></pre>
+model.add( poolingLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>直接添加Pooling1d</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add(new TSP.layers.Pooling1d( {
+            <pre><code class="Javascript">model.add(new TSP.layers.Pooling1d( {
 
     poolingSize: 2,
     strides: 2,
     name: "pooling1d2"
 
-} ));
-            </code></pre>
+} ));</code></pre>
         </div>
 
         <div class="sub-title">什么时候用</div>
