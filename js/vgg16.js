@@ -1,6 +1,6 @@
 let model;
 let imagenetResult;
-let predictDataKey = "diling";
+let predictDataKey = "person";
 let selectedDiv = undefined;
 
 let dataLookup = {
