@@ -321,9 +321,7 @@
         <div class="sub-title">构造器</div>
         <div>〔方法一〕直接构造</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.GlobalPooling1d();
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.GlobalPooling1d();</code></pre>
         </div>
 
         <div class="sub-title">参数列表</div>
@@ -417,8 +415,7 @@ TSP.layers.GlobalPooling1d();
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> 构建模型语法，直接添加层即可。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let conv1dLayer = new TSP.layers.Conv1d( {
+            <pre><code class="Javascript">let conv1dLayer = new TSP.layers.Conv1d( {
 
     kernelSize: 2,
     filters: 16,
@@ -428,8 +425,7 @@ let conv1dLayer = new TSP.layers.Conv1d( {
 
 let globalPooling1dLayer = new TSP.layers.GlobalPooling1d();
 
-globalPooling1dLayer.apply( conv1dLayer );
-            </code></pre>
+globalPooling1dLayer.apply( conv1dLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -437,8 +433,7 @@ globalPooling1dLayer.apply( conv1dLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let globalPooling1dLayer = new TSP.layers.GlobalPooling1d();
+            <pre><code class="Javascript">let globalPooling1dLayer = new TSP.layers.GlobalPooling1d();
 
 model.add( globalPooling1dLayer );
 
@@ -448,8 +443,7 @@ model.init();
 
 // 调用openLayer API来打开layer。
 
-globalPooling1dLayer.openLayer();
-            </code></pre>
+globalPooling1dLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -457,8 +451,7 @@ globalPooling1dLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let globalPooling1dLayer = new TSP.layers.GlobalPooling1d();
+            <pre><code class="Javascript">let globalPooling1dLayer = new TSP.layers.GlobalPooling1d();
 
 model.add( globalPooling1dLayer );
 
@@ -468,36 +461,31 @@ model.init();
 
 // 如果layer已经是打开状态，调用closeLayer API来关闭layer。
 
-globalPooling1dLayer.closeLayer();
-            </code></pre>
+globalPooling1dLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">使用样例</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>声明一个GlobalPooling1d的实例，方便复用</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let globalPooling1dLayer = new TSP.layers.GlobalPooling1d( {
+            <pre><code class="Javascript">let globalPooling1dLayer = new TSP.layers.GlobalPooling1d( {
 
     name: "GlobalPooling1d1",
     initStatus: "open"
 
 } );
 
-model.add( globalPooling1dLayer );
-            </code></pre>
+model.add( globalPooling1dLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>直接添加GlobalPooling1d</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add( new TSP.layers.GlobalPooling1d( {
+            <pre><code class="Javascript">model.add( new TSP.layers.GlobalPooling1d( {
 
     name: "GlobalPooling1d2",
     initStatus: "open"
 
-} ) );
-            </code></pre>
+} ) );</code></pre>
         </div>
 
         <div class="sub-title">什么时候用</div>

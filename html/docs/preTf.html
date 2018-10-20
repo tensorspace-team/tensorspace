@@ -386,8 +386,7 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.contrib.layers import flatten
 from sklearn.utils import shuffle
-mnist = tf.keras.datasets.mnist
-            </code></pre>
+mnist = tf.keras.datasets.mnist</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -416,8 +415,7 @@ mnist = tf.keras.datasets.mnist
 
         <div class="code-snippet">
             <pre><code class="Bash">
-$ pip install tensorflowjs
-            </code></pre>
+$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>In general, the preprocess of a TensorFlow model is:</div>
@@ -483,8 +481,7 @@ x_test = x_test.reshape((-1, 28, 28, 1)).astype(np.float32)
 
 # Add padding to 32x32
 x_train = np.pad(x_train, ((0,0), (2,2), (2,2), (0,0)), 'constant')
-x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
-            </code></pre>
+x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')</code></pre>
         </div>
 
         <div>Next, based on the structure of an LeNet_v5:</div>
@@ -559,8 +556,7 @@ def LeNet_5(x):
             shape=(84, 10), mean=0, stddev=0.1))
     fc3_b = tf.Variable(tf.zeros(10))
     logits = tf.matmul(fc2, fc3_w) + fc3_b
-    return logits
-            </code></pre>
+    return logits</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -647,8 +643,7 @@ with tf.Session() as sess:
         print()
 
     test_accuracy = evaluate(x_test, y_test)
-    print("Test Accuracy = {:.3f}".format(test_accuracy))
-            </code></pre>
+    print("Test Accuracy = {:.3f}".format(test_accuracy))</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -682,8 +677,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         sess,
         [tag_constants.SERVING],
         '../models/tensorflow_model',
-    )
-            </code></pre>
+    )</code></pre>
         </div>
 
         <div class="code-snippet">
@@ -693,8 +687,7 @@ with tf.Session() as sess:
     with gfile.FastGFile(model_filename, 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
-        g_in = tf.import_graph_def(graph_def)
-            </code></pre>
+        g_in = tf.import_graph_def(graph_def)</code></pre>
         </div>
 
         <div class="code-snippet">
@@ -703,8 +696,7 @@ with tf.Session(graph=tf.Graph()) as sess:
     dir_path = '../DIR/SAVE/CKPT/'
     ckpt_name = 'lenet.ckpt'
     saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
-    saver.restore(sess, tf.train.latest_checkpoint(dir_path))
-            </code></pre>
+    saver.restore(sess, tf.train.latest_checkpoint(dir_path))</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -743,8 +735,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         sess, output_dir,
         {"input":x},
         {"output":add_8}
-    )
-            </code></pre>
+    )</code></pre>
         </div>
 
         <div class="sub-title" id="findNames">2 Find out tensor names</div>
@@ -758,8 +749,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         <div class="code-snippet">
             <pre><code class="Python">
 for n in tf.get_default_graph().as_graph_def().node:
-    print(n.name)
-            </code></pre>
+    print(n.name)</code></pre>
         </div>
 
         <div>
@@ -798,8 +788,7 @@ for n in tf.get_default_graph().as_graph_def().node:
         <div class="code-snippet">
             <pre><code class="Python">
 output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_2",
-                "MyDense_1", "MyDense_2", "MySoftMax"]
-            </code></pre>
+                "MyDense_1", "MyDense_2", "MySoftMax"]</code></pre>
         </div>
 
 
@@ -810,8 +799,7 @@ output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_
 graph = tf.get_default_graph()
 x = graph.get_tensor_by_name("MyInput:0")
 outputs = list(map(lambda on: graph.get_tensor_by_name(on+":0"), output_names))
-print(sess.run(outputs, feed_dict={x:x_test}))
-            </code></pre>
+print(sess.run(outputs, feed_dict={x:x_test}))</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/TensorFlow/TensorFlow_prediction_1.png">
@@ -852,8 +840,7 @@ tensorflowjs_converter \
     --output_node_names=$onn \
     --saved_model_tags=serve \
     ../models/tensorflow_model \
-    ../models/json_models/tensorflow
-            </code></pre>
+    ../models/json_models/tensorflow</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>

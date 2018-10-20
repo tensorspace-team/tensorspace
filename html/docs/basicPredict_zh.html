@@ -323,9 +323,7 @@
         <div>在我们正确地加载神经网络模型之后，我们可以十分简单地使用 <span class="highlight-text">.predict()</span> 方法：</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.predict( predictData, predictCallback );
-            </code></pre>
+            <pre><code class="Javascript">model.predict( predictData, predictCallback );</code></pre>
         </div>
 
         <div class="sub-title">predict_data</div>
@@ -339,9 +337,7 @@ model.predict( predictData, predictCallback );
         <div>在大多数情况下，我们可以参照以下例子来提供合适的 <span class="highlight-text">predict_data</span> :</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-predict_data = [ 1, 2, 3, 4, 5 ];
-            </code></pre>
+            <pre><code class="Javascript">predict_data = [ 1, 2, 3, 4, 5 ];</code></pre>
         </div>
 
         <div>从上例可以看出， <span class="highlight-text">predict_data</span> 是一个单一的数的列表。它通常表示我们输入图像的信息。</div>
@@ -349,11 +345,9 @@ predict_data = [ 1, 2, 3, 4, 5 ];
         <div>若该模型的输入为多输入时，我们需要使用以下方式来进行配置：</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let data1 = [ 1, 2, 3, 4, 5 ];
+            <pre><code class="Javascript">let data1 = [ 1, 2, 3, 4, 5 ];
 let data2 = [ 1, 2, 3, 4, 5 ];
-predict_data = [ data1, data2 ];
-            </code></pre>
+predict_data = [ data1, data2 ];</code></pre>
         </div>
 
         <div>这时， <span class="highlight-text">predict_data</span> 包含了数的列表。</div>
@@ -365,11 +359,9 @@ predict_data = [ data1, data2 ];
         <div>我们可以参照以下例子来提供合适的 <span class="highlight-text">predict_data</span> ：</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let data1 = [ 1, 2, 3, 4, 5 ];
+            <pre><code class="Javascript">let data1 = [ 1, 2, 3, 4, 5 ];
 let data2 = [ 1, 2, 3, 4, 5 ];
-predict_data = [ data1, data2 ];
-            </code></pre>
+predict_data = [ data1, data2 ];</code></pre>
         </div>
 
         <div>这时，<span class="highlight-text">predictData</span> 包含了数的列表。而我们究竟需要放入一个或者多个数的列表，取决于当前神经网络模型的结构（是否多输入）。</div>
@@ -379,11 +371,9 @@ predict_data = [ data1, data2 ];
         <div>我们可以通过配置一个回调函数来将最终的预测结果作为参数提取出来，以作他用：</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-function predictCallback( finalResult ) {
+            <pre><code class="Javascript">function predictCallback( finalResult ) {
     console.log( finalResult );
-}
-            </code></pre>
+}</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>

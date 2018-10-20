@@ -321,9 +321,7 @@
         <div class="sub-title">Constructor</div>
         <div>〔Method 1〕Use <span class="span_bold">padding</span></div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.Padding1d( { padding : Int } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.Padding1d( { padding : Int } );</code></pre>
         </div>
 
         <div class="sub-title">Arguments</div>
@@ -427,8 +425,7 @@ TSP.layers.Padding1d( { padding : Int } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let inputLayer = new TSP.layers.Input1d( {
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input1d( {
 
     shape: [28]
 
@@ -440,8 +437,7 @@ let paddingLayer = new TSP.layers.Padding1d( {
 
 } );
 
-paddingLayer.apply( inputLayer );
-            </code></pre>
+paddingLayer.apply( inputLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -449,8 +445,7 @@ paddingLayer.apply( inputLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let paddingLayer = new TSP.layers.Padding1d( {
+            <pre><code class="Javascript">let paddingLayer = new TSP.layers.Padding1d( {
 
     // configure some parameters for Padding1d.
 
@@ -464,8 +459,7 @@ model.init();
 
 // Call openLayer API to open layer.
 
-paddingLayer.openLayer();
-            </code></pre>
+paddingLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -473,8 +467,7 @@ paddingLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let paddingLayer = new TSP.layers.Padding1d( {
+            <pre><code class="Javascript">let paddingLayer = new TSP.layers.Padding1d( {
 
     // configure some parameters for Padding1d.
 
@@ -488,16 +481,14 @@ model.init();
 
 // If this layer already opened, call closeLayer API to close layer.
 
-paddingLayer.closeLayer();
-            </code></pre>
+paddingLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">Example</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of Padding1d to facilitate reuse</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let paddingLayer = new TSP.layers.Padding1d( {
+            <pre><code class="Javascript">let paddingLayer = new TSP.layers.Padding1d( {
 
     padding: 2
     animationTimeRatio: 2,
@@ -507,14 +498,12 @@ let paddingLayer = new TSP.layers.Padding1d( {
 
 } );
 
-model.add( paddingLayer );
-            </code></pre>
+model.add( paddingLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add Padding1d directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add( new TSP.layers.Padding1d( {
+            <pre><code class="Javascript">model.add( new TSP.layers.Padding1d( {
 
     padding: 2,
     animationTimeRatio: 2,
@@ -522,8 +511,7 @@ model.add( new TSP.layers.Padding1d( {
     opacityRatio: 2
     initStatus: "open"
 
-} ) );
-            </code></pre>
+} ) );</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>

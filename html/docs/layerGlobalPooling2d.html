@@ -321,9 +321,7 @@
         <div class="sub-title">Constructor</div>
         <div>〔Method 1〕Create it directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.GlobalPooling2d();
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.GlobalPooling2d();</code></pre>
         </div>
 
         <div class="sub-title">Arguments</div>
@@ -418,8 +416,7 @@ TSP.layers.GlobalPooling2d();
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let conv2dLayer = new TSP.layers.Conv2d( {
+            <pre><code class="Javascript">let conv2dLayer = new TSP.layers.Conv2d( {
 
     kernelSize: 2,
     filters: 16,
@@ -429,8 +426,7 @@ let conv2dLayer = new TSP.layers.Conv2d( {
 
 let globalPooling2dLayer = new TSP.layers.GlobalPooling2d();
 
-globalPooling2dLayer.apply( conv2dLayer );
-            </code></pre>
+globalPooling2dLayer.apply( conv2dLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -438,8 +434,7 @@ globalPooling2dLayer.apply( conv2dLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let globalPooling2dLayer = new TSP.layers.GlobalPooling2d();
+            <pre><code class="Javascript">let globalPooling2dLayer = new TSP.layers.GlobalPooling2d();
 
 model.add( globalPooling2dLayer );
 
@@ -449,8 +444,7 @@ model.init();
 
 // Call openLayer API to open layer.
 
-globalPooling2dLayer.openLayer();
-            </code></pre>
+globalPooling2dLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -458,8 +452,7 @@ globalPooling2dLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let globalPooling2dLayer = new TSP.layers.GlobalPooling2d();
+            <pre><code class="Javascript">let globalPooling2dLayer = new TSP.layers.GlobalPooling2d();
 
 model.add( globalPooling2dLayer );
 
@@ -469,36 +462,31 @@ model.init();
 
 // If this layer already opened, call closeLayer API to close layer.
 
-globalPooling2dLayer.closeLayer();
-            </code></pre>
+globalPooling2dLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">Example</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of GlobalPooling2d to facilitate reuse</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let globalPooling2dLayer = new TSP.layers.GlobalPooling2d( {
+            <pre><code class="Javascript">let globalPooling2dLayer = new TSP.layers.GlobalPooling2d( {
 
     name: "GlobalPooling2d1",
     initStatus: "open"
 
 } );
 
-model.add( globalPooling2dLayer );
-            </code></pre>
+model.add( globalPooling2dLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add GlobalPooling2d directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add( new TSP.layers.GlobalPooling2d( {
+            <pre><code class="Javascript">model.add( new TSP.layers.GlobalPooling2d( {
 
     name: "GlobalPooling2d2",
     initStatus: "open"
 
-} ) );
-            </code></pre>
+} ) );</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>

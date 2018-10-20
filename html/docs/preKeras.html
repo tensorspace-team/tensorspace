@@ -364,8 +364,7 @@ import tensorflow as tf
 import numpy as np
 from keras.models import Sequential, Model
 from keras.layers import Dense, Input, InputLayer, Conv2D, MaxPooling2D, Reshape, Flatten
-from keras.models import load_model
-            </code></pre>
+from keras.models import load_model</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -386,8 +385,7 @@ from keras.models import load_model
 
         <div class="code-snippet">
             <pre><code class="Bash">
-$ pip install tensorflowjs
-            </code></pre>
+$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>
@@ -454,8 +452,7 @@ def create_sequential_model():
         Dense(84, activation="relu", name="Dense_2"),
         Dense(10, activation="softmax", name="Softmax")
     ])
-    return single_output_model
-            </code></pre>
+    return single_output_model</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -484,8 +481,7 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=5, batch_size=32)
-            </code></pre>
+model.fit(x_train, y_train, epochs=5, batch_size=32)</code></pre>
         </div>
 
         <div>
@@ -499,8 +495,7 @@ model.fit(x_train, y_train, epochs=5, batch_size=32)
             <pre><code class="Python">
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
-print(model.predict(input_sample))
-            </code></pre>
+print(model.predict(input_sample))</code></pre>
         </div>
 
         <div>And then we get the probabilities predicted by the model.</div>
@@ -516,8 +511,7 @@ print(model.predict(input_sample))
 
         <div class="code-snippet">
             <pre><code class="Python">
-model = load_model("/PATH_TO_Keras/model.h5")
-            </code></pre>
+model = load_model("/PATH_TO_Keras/model.h5")</code></pre>
         </div>
 
         <div>Or if the model and weights are stored separately, we can load like:</div>
@@ -530,8 +524,7 @@ structure = open(json_path, "r")
 model = model_from_json(
     structure
     )
-model.load_weights(weight_path)
-            </code></pre>
+model.load_weights(weight_path)</code></pre>
         </div>
 
         <div>
@@ -544,8 +537,7 @@ model.load_weights(weight_path)
             <pre><code class="Python">
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
-print(model.predict(input_sample))
-            </code></pre>
+print(model.predict(input_sample))</code></pre>
         </div>
 
         <div>And then we get the probabilities predicted by the model.</div>
@@ -575,8 +567,7 @@ print(model.predict(input_sample))
             <pre><code class="Python">
 model.summary()
 for layer in model.layers:
-     print(layer.name)
-            </code></pre>
+     print(layer.name)</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/Keras/Keras_summary.png">
@@ -618,8 +609,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
         inputs=model.input,
         outputs=list(map(lambda oln: model.get_layer(oln).output, output_layer_names))
     )
-    return enc_model
-            </code></pre>
+    return enc_model</code></pre>
         </div>
 
         <div>Or if we want them all, we can do like:</div>
@@ -631,8 +621,7 @@ def generate_encapsulate_model(model):
         # ignore 1st layer (input), since some old models do not have 1st layer as Keras layer
         outputs=list(map(lambda layer: layer.output, model.layers[1:]))
     )
-    return enc_model
-            </code></pre>
+    return enc_model</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -656,15 +645,13 @@ def generate_encapsulate_model(model):
             <pre><code class="Python">
 enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
 # OR
-# enc_model = generate_encapsulate_model(model)
-            </code></pre>
+# enc_model = generate_encapsulate_model(model)</code></pre>
         </div>
 
         <div>We can try to predict an input sample with the encapsulated model:</div>
         <div class="code-snippet">
             <pre><code class="Python">
-print(enc_model.predict(input_sample))
-            </code></pre>
+print(enc_model.predict(input_sample))</code></pre>
         </div>
 
         <div>The output is a list which contains all output data of the layers we selected.</div>
@@ -703,8 +690,7 @@ print(enc_model.predict(input_sample))
 enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
-save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
-            </code></pre>
+save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")</code></pre>
         </div>
 
         <div class="sub-title" id="convertModel">4 Convert to TensorSpace compatible model</div>
@@ -719,8 +705,7 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
 tensorflowjs_converter \
     --input_format=keras \
     ../models/enc_keras_model.h5 \
-    ../models/json_models/keras
-            </code></pre>
+    ../models/json_models/keras</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/Keras/Keras_models.png" alt="tfjs models">

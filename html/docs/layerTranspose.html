@@ -323,9 +323,7 @@
         <div>〔Method 1〕Use <span class="span_bold">filters</span>, <span class="span_bold">kernalSize</span>
             and <span class="span_bold">strides</span></div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-TSP.layers.Conv2dTranspose( { filters : Int, kernaleSize: Int, strides: Int } );
-            </code></pre>
+            <pre><code class="Javascript">TSP.layers.Conv2dTranspose( { filters : Int, kernaleSize: Int, strides: Int } );</code></pre>
         </div>
 
         <div class="sub-title">Arguments</div>
@@ -459,8 +457,7 @@ TSP.layers.Conv2dTranspose( { filters : Int, kernaleSize: Int, strides: Int } );
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let inputLayer = new TSP.layers.Input2d( {
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input2d( {
 
     shape: [28, 28]
 
@@ -474,8 +471,7 @@ let transposeLayer = new TSP.layers.Conv2dTranspose( {
 
 } );
 
-transposeLayer.apply( inputLayer );
-            </code></pre>
+transposeLayer.apply( inputLayer );</code></pre>
         </div>
 
         <div class="property-title"><a href="">.openLayer()</a> : void</div>
@@ -483,8 +479,7 @@ transposeLayer.apply( inputLayer );
         <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let transposeLayer = new TSP.layers.Conv2dTranspose( {
+            <pre><code class="Javascript">let transposeLayer = new TSP.layers.Conv2dTranspose( {
 
     // configure some parameters for Conv2dTranspose.
 
@@ -498,8 +493,7 @@ model.init();
 
 // Call openLayer API to open layer.
 
-transposeLayer.openLayer();
-            </code></pre>
+transposeLayer.openLayer();</code></pre>
         </div>
 
         <div class="property-title"><a href="">.closeLayer()</a> : void</div>
@@ -507,8 +501,7 @@ transposeLayer.openLayer();
         <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let transposeLayer = new TSP.layers.Conv2dTranspose( {
+            <pre><code class="Javascript">let transposeLayer = new TSP.layers.Conv2dTranspose( {
 
     // configure some parameters for Conv2dTranspose.
 
@@ -522,16 +515,14 @@ model.init();
 
 // If this layer already opened, call closeLayer API to close layer.
 
-transposeLayer.closeLayer();
-            </code></pre>
+transposeLayer.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">Example</div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of Conv2dTranspose to facilitate reuse</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let transposeLayer = new TSP.layers.Conv2dTranspose( {
+            <pre><code class="Javascript">let transposeLayer = new TSP.layers.Conv2dTranspose( {
 
     kernelSize: 5,
     filters: 6,
@@ -543,22 +534,19 @@ let transposeLayer = new TSP.layers.Conv2dTranspose( {
 
 } );
 
-model.add( transposeLayer );
-            </code></pre>
+model.add( transposeLayer );</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add Conv2dTranspose directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.add(new TSP.layers.Conv2dTranspose( {
+            <pre><code class="Javascript">model.add(new TSP.layers.Conv2dTranspose( {
 
     kernelSize: 5,
     filters: 16,
     strides: 1,
     name: "conv2dTranspose2"
 
-} ));
-            </code></pre>
+} ));</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>

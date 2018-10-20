@@ -355,8 +355,7 @@
         <div class="code-snippet">
             <pre><code class="Python">
 import tensorflow as tf
-import numpy as np
-            </code></pre>
+import numpy as np</code></pre>
         </div>
 
         <div>
@@ -367,8 +366,7 @@ import numpy as np
 
         <div class="code-snippet">
             <pre><code class="Bash">
-$ pip install tensorflowjs
-            </code></pre>
+$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>
@@ -444,8 +442,7 @@ def create_sequential_model():
             tf.keras.layers.Dense(84, activation=tf.nn.relu, name="dense_2"),
             tf.keras.layers.Dense(10, activation=tf.nn.softmax, name="softmax")
         ])
-    return single_output_model
-            </code></pre>
+    return single_output_model</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -470,8 +467,7 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=5)
-            </code></pre>
+model.fit(x_train, y_train, epochs=5)</code></pre>
         </div>
 
         <div>After training, we can give it a try by:</div>
@@ -480,8 +476,7 @@ model.fit(x_train, y_train, epochs=5)
             <pre><code class="Python">
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
-print(model.predict(input_sample))
-            </code></pre>
+print(model.predict(input_sample))</code></pre>
         </div>
 
         <div>Then we have a single array with 10 probabilities:</div>
@@ -501,8 +496,7 @@ model = tf.keras.models.load_model(
     "PATH_TO_MODEL/model.h5",
     custom_objects=None,
     compile=True
-)
-            </code></pre>
+)</code></pre>
         </div>
 
         <div>Or if the model and weights are stored separately, we can load as:</div>
@@ -515,8 +509,7 @@ structure = open(json_path, "r")
 model = tf.keras.models.model_from_json(
     structure
 )
-model.load_weights(weight_path)
-            </code></pre>
+model.load_weights(weight_path)</code></pre>
         </div>
 
         <div>Similar to training, we can try to use the model for prediction:</div>
@@ -525,8 +518,7 @@ model.load_weights(weight_path)
             <pre><code class="Python">
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
-print(model.predict(input_sample))
-            </code></pre>
+print(model.predict(input_sample))</code></pre>
         </div>
 
         <div>The same length 10 list output:</div>
@@ -568,8 +560,7 @@ print(model.predict(input_sample))
             <pre><code class="Python">
 model.summary()
 for layer in model.layers:
-     print(layer.name)
-            </code></pre>
+     print(layer.name)</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/tf_keras/tf_keras_summary.png">
@@ -604,8 +595,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
         inputs=model.input,
         outputs=list(map(lambda oln: model.get_layer(oln).output, output_layer_names))
     )
-    return display_model
-            </code></pre>
+    return display_model</code></pre>
         </div>
 
         <div>Or if we want them all, just use:</div>
@@ -618,8 +608,7 @@ def generate_encapsulate_model(model):
         # ignore 1st layer (input), since some old models do not have 1st layer as tf.layer
         outputs=list(map(lambda layer: layer.output, model.layers[1:]))
     )
-    return display_model
-            </code></pre>
+    return display_model</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
@@ -644,15 +633,13 @@ def generate_encapsulate_model(model):
             <pre><code class="Python">
 enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
 # OR
-# enc_model = generate_encapsulate_model(model)
-            </code></pre>
+# enc_model = generate_encapsulate_model(model)</code></pre>
         </div>
 
         <div>Now, we can try to predict by the new model:</div>
         <div class="code-snippet">
             <pre><code class="Python">
-print(enc_model.predict(input_sample))
-            </code></pre>
+print(enc_model.predict(input_sample))</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/tf_keras/tf_keras_predict_2.png">
@@ -701,8 +688,7 @@ tf.keras.models.save_model(
     gen_dis_model,
     "/PATH_TO_NEW_MODEL/enc_model.h5",
     overwrite=True
-)
-            </code></pre>
+)</code></pre>
         </div>
 
         <div class="sub-title" id="convertModel">4 Convert to TensorSpace compatible model</div>
@@ -719,8 +705,7 @@ tf.keras.models.save_model(
 tensorflowjs_converter \
     --input_format=keras \
     ../models/enc_tf_keras_model.h5 \
-    ../models/json_models/tf_keras
-            </code></pre>
+    ../models/json_models/tf_keras</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/tf_keras/tf_keras_models.png" alt="tfjs models">
