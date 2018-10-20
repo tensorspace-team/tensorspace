@@ -381,8 +381,7 @@
         <div>For the tutorial, we use Python 3.6.5 and the following libraries:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-import tensorflow as tf
+            <pre><code class="Python">import tensorflow as tf
 import numpy as np
 from tensorflow.contrib.layers import flatten
 from sklearn.utils import shuffle
@@ -470,8 +469,7 @@ $ pip install tensorflowjs</code></pre>
         <div>First we have to reshape the input dataset to the required size:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-# Raw input & normalization
+            <pre><code class="Python"># Raw input & normalization
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
@@ -496,8 +494,7 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')</code></pre>
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-def LeNet_5(x):
+            <pre><code class="Python">def LeNet_5(x):
     # Convolutional Layer. Input = 32x32x1, Output = 28x28x1.
     conv1_w = tf.Variable(
         tf.truncated_normal(
@@ -585,8 +582,7 @@ def LeNet_5(x):
         <div>After building up the structure, let's train the model:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-x = tf.placeholder(tf.float32, shape=[None,32,32,1],name="MyInput")
+            <pre><code class="Python">x = tf.placeholder(tf.float32, shape=[None,32,32,1],name="MyInput")
 y = tf.placeholder(tf.int32, (None), name="y")
 one_hot_y = tf.one_hot(y, 10)
 
@@ -671,8 +667,7 @@ with tf.Session() as sess:
         <div>We can load the model from a saved model, frozen model or a checkpoint:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-with tf.Session(graph=tf.Graph()) as sess:
+            <pre><code class="Python">with tf.Session(graph=tf.Graph()) as sess:
     tf.saved_model.loader.load(
         sess,
         [tag_constants.SERVING],
@@ -681,8 +676,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-with tf.Session() as sess:
+            <pre><code class="Python">with tf.Session() as sess:
     model_filename ='/PATH/TO/PB/model.pb'
     with gfile.FastGFile(model_filename, 'rb') as f:
         graph_def = tf.GraphDef()
@@ -691,8 +685,7 @@ with tf.Session() as sess:
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-with tf.Session(graph=tf.Graph()) as sess:
+            <pre><code class="Python">with tf.Session(graph=tf.Graph()) as sess:
     dir_path = '../DIR/SAVE/CKPT/'
     ckpt_name = 'lenet.ckpt'
     saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
@@ -716,8 +709,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-with tf.Session(graph=tf.Graph()) as sess:
+            <pre><code class="Python">with tf.Session(graph=tf.Graph()) as sess:
     dir_path = '../DIR/SAVE/CKPT/'
     ckpt_name = 'lenet.ckpt'
     saver = tf.train.import_meta_graph(dir_path + ckpt_name + '.meta')
@@ -747,8 +739,7 @@ with tf.Session(graph=tf.Graph()) as sess:
         <div>We can try to output all tensor names like:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-for n in tf.get_default_graph().as_graph_def().node:
+            <pre><code class="Python">for n in tf.get_default_graph().as_graph_def().node:
     print(n.name)</code></pre>
         </div>
 
@@ -786,8 +777,7 @@ for n in tf.get_default_graph().as_graph_def().node:
         <div>After we figured out the tensors we want, we have to put them in a name list:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_2",
+            <pre><code class="Python">output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_2",
                 "MyDense_1", "MyDense_2", "MySoftMax"]</code></pre>
         </div>
 
@@ -795,8 +785,7 @@ output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_
         <div>We can have a quick test for the tensors:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-graph = tf.get_default_graph()
+            <pre><code class="Python">graph = tf.get_default_graph()
 x = graph.get_tensor_by_name("MyInput:0")
 outputs = list(map(lambda on: graph.get_tensor_by_name(on+":0"), output_names))
 print(sess.run(outputs, feed_dict={x:x_test}))</code></pre>

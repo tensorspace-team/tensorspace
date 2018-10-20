@@ -359,8 +359,7 @@
         <div>For the tutorial, we use Python 3.6.5 and the following libraries:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-import tensorflow as tf
+            <pre><code class="Python">import tensorflow as tf
 import numpy as np
 from keras.models import Sequential, Model
 from keras.layers import Dense, Input, InputLayer, Conv2D, MaxPooling2D, Reshape, Flatten
@@ -438,8 +437,7 @@ $ pip install tensorflowjs</code></pre>
         <div>We can generate a LeNet model as the following:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-def create_sequential_model():
+            <pre><code class="Python">def create_sequential_model():
     single_output_model = Sequential([
         InputLayer(input_shape=(28, 28)),
         Reshape((28,28,1),input_shape=(28,28,)),
@@ -473,8 +471,7 @@ def create_sequential_model():
         <div>After constructing the model structure, we compile and train it with the MNIST dataset.</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
+            <pre><code class="Python">(x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
 model.compile(optimizer='adam',
@@ -492,8 +489,7 @@ model.fit(x_train, y_train, epochs=5, batch_size=32)</code></pre>
         <div>We can try to predict a result from a random generated input:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
+            <pre><code class="Python">input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))</code></pre>
         </div>
@@ -510,15 +506,13 @@ print(model.predict(input_sample))</code></pre>
         <div>If you have already had a model in hand, let's load the model:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-model = load_model("/PATH_TO_Keras/model.h5")</code></pre>
+            <pre><code class="Python">model = load_model("/PATH_TO_Keras/model.h5")</code></pre>
         </div>
 
         <div>Or if the model and weights are stored separately, we can load like:</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-json_path = "PATH_TO_JSON/model.json"
+            <pre><code class="Python">json_path = "PATH_TO_JSON/model.json"
 weight_path = "PATH_TO_WEIGHT/weights.hdf5"
 structure = open(json_path, "r")
 model = model_from_json(
@@ -534,8 +528,7 @@ model.load_weights(weight_path)</code></pre>
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
+            <pre><code class="Python">input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
 print(model.predict(input_sample))</code></pre>
         </div>
@@ -564,8 +557,7 @@ print(model.predict(input_sample))</code></pre>
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-model.summary()
+            <pre><code class="Python">model.summary()
 for layer in model.layers:
      print(layer.name)</code></pre>
         </div>
@@ -599,8 +591,7 @@ for layer in model.layers:
             outputs:
         </div>
         <div class="code-snippet">
-            <pre><code class="Python">
-output_layer_names = [
+            <pre><code class="Python">output_layer_names = [
     "Conv2D_1", "MaxPooling2D_1", "Conv2D_2", "MaxPooling2D_2",
     "Dense_1", "Dense_2", "Softmax"
 ]
@@ -614,8 +605,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
 
         <div>Or if we want them all, we can do like:</div>
         <div class="code-snippet">
-            <pre><code class="Python">
-def generate_encapsulate_model(model):
+            <pre><code class="Python">def generate_encapsulate_model(model):
     enc_model = Model(
         inputs=model.input,
         # ignore 1st layer (input), since some old models do not have 1st layer as Keras layer
@@ -642,16 +632,14 @@ def generate_encapsulate_model(model):
 
         <div>Then we can generate our encapsulated model which contains multiple intermediate outputs:</div>
         <div class="code-snippet">
-            <pre><code class="Python">
-enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
+            <pre><code class="Python">enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
 # OR
 # enc_model = generate_encapsulate_model(model)</code></pre>
         </div>
 
         <div>We can try to predict an input sample with the encapsulated model:</div>
         <div class="code-snippet">
-            <pre><code class="Python">
-print(enc_model.predict(input_sample))</code></pre>
+            <pre><code class="Python">print(enc_model.predict(input_sample))</code></pre>
         </div>
 
         <div>The output is a list which contains all output data of the layers we selected.</div>
@@ -686,8 +674,7 @@ print(enc_model.predict(input_sample))</code></pre>
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-enc_model.compile(optimizer='adam',
+            <pre><code class="Python">enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")</code></pre>

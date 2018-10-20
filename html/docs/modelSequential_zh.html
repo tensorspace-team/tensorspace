@@ -325,8 +325,7 @@
 
         <div>如下，我们可以创建一个有序模型：</div>
         <div class="code-snippet">
-            <pre><code class="Python">
-let seqModel = new TSP.model.Sequential( container, {
+            <pre><code class="Python">let seqModel = new TSP.model.Sequential( container, {
 
     ...
     // necessary configurations
@@ -341,8 +340,7 @@ let seqModel = new TSP.model.Sequential( container, {
 
         <div>然后我们可以在模型中根据我们的设计顺序，插入不同的层对象：</div>
         <div class="code-snippet">
-            <pre><code class="Python">
-seqModel.add( new TSP.layers.Input2d( {
+            <pre><code class="Python">seqModel.add( new TSP.layers.Input2d( {
 
     shape: [ 28, 28, 1 ],
     name: "initInput",
@@ -375,8 +373,7 @@ seqModel.add( convLayer );</code></pre>
             然后使用 <a href="#init"><span class="highlight-text">init()</span></a> 来创建所有的层对象：
         </div>
         <div class="code-snippet">
-            <pre><code class="Python">
-seqModel.load( {
+            <pre><code class="Python">seqModel.load( {
 
     type: "tfjs",
     url: './lenetModel/mnist.json',
