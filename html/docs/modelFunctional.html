@@ -327,8 +327,7 @@
 
         <div>We can create a model like:</div>
         <div class="code-snippet">
-            <pre><code class="Python">
-let model = new TSP.model.Model( container, {
+            <pre><code class="Python">let model = new TSP.model.Model( container, {
 
     ...
     // necessary configurations
@@ -340,8 +339,7 @@ let model = new TSP.model.Model( container, {
     stats: true
     ...
 
-} );
-            </code></pre>
+} );</code></pre>
         </div>
 
         <div>
@@ -350,8 +348,7 @@ let model = new TSP.model.Model( container, {
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-let input = new TSP.layers.Input2d({
+            <pre><code class="Python">let input = new TSP.layers.Input2d({
         shape: [28, 28, 1]
 });
 
@@ -392,8 +389,7 @@ let model = new TSP.model.Model(container, {
     outputsOrder: ["input", "conv1", "conv2", "conv3", "add"],
     ...
 
-});
-            </code></pre>
+});</code></pre>
         </div>
 
         <div>
@@ -403,8 +399,7 @@ let model = new TSP.model.Model(container, {
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-model.load( {
+            <pre><code class="Python">model.load( {
 
     type: "tfjs",
     url: './lenetModel/mnist.json',
@@ -417,8 +412,7 @@ model.load( {
 
 } );
 
-model.init();
-            </code></pre>
+model.init();</code></pre>
         </div>
 
         <div>

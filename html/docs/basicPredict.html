@@ -323,9 +323,7 @@
         <div>After we <a href="basicLoad.html">Load</a> a ML model properly we can simply call the method as:</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-model.predict( predictData, predictCallback );
-            </code></pre>
+            <pre><code class="Javascript">model.predict( predictData, predictCallback );</code></pre>
         </div>
 
         <div class="sub-title">predict_data</div>
@@ -339,9 +337,7 @@ model.predict( predictData, predictCallback );
         <div>In most cases, we can configure the <span class="highlight-text">predict_data</span> like:</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-predict_data = [ 1, 2, 3, 4, 5 ];
-            </code></pre>
+            <pre><code class="Javascript">predict_data = [ 1, 2, 3, 4, 5 ];</code></pre>
         </div>
 
         <div>The <span class="highlight-text">predict_data</span> is a single list of numbers which is the input image data we want to used for prediction.</div>
@@ -349,11 +345,9 @@ predict_data = [ 1, 2, 3, 4, 5 ];
         <div>If the model accepts multiple inputs, we ned to configure the <span class="highlight-text">predict_data</span> like:</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let data1 = [ 1, 2, 3, 4, 5 ];
+            <pre><code class="Javascript">let data1 = [ 1, 2, 3, 4, 5 ];
 let data2 = [ 1, 2, 3, 4, 5 ];
-predict_data = [ data1, data2 ];
-            </code></pre>
+predict_data = [ data1, data2 ];</code></pre>
         </div>
 
         <div>The <span class="highlight-text">predict_data</span> contains some lists of numbers.</div>
@@ -365,11 +359,9 @@ predict_data = [ data1, data2 ];
         <div>For example, we can configure the <span class="highlight-text">predict_data</span> like:</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-let data1 = [ 1, 2, 3, 4, 5 ];
+            <pre><code class="Javascript">let data1 = [ 1, 2, 3, 4, 5 ];
 let data2 = [ 1, 2, 3, 4, 5 ];
-predict_data = [ data1, data2 ];
-            </code></pre>
+predict_data = [ data1, data2 ];</code></pre>
         </div>
 
         <div>The <span class="highlight-text">predict_data</span> contains some lists of numbers. Depends on the model structure, we may add one or more list in the <span class="highlight-text">predict_data</span>.</div>
@@ -379,11 +371,9 @@ predict_data = [ data1, data2 ];
         <div><span class="highlight-text">callback</span> function is fired when the prediction process complete. It passes the final inferences as the parameter in the callback function.</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">
-function predictCallback( finalResult ) {
+            <pre><code class="Javascript">function predictCallback( finalResult ) {
     console.log( finalResult );
-}
-            </code></pre>
+}</code></pre>
         </div>
 
         <div>All the following steps are triggered by calling the <span class="highlight-text">.predict()</span> method: the model collects all necessary inferences data from each layer, then the collected data are used to render the corresponding 3D components.</div>

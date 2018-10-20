@@ -349,13 +349,11 @@
         <div>运行环境：Python 3.6.5。相关依赖如下：</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-import tensorflow as tf
+            <pre><code class="Python">import tensorflow as tf
 import numpy as np
 from keras.models import Sequential, Model
 from keras.layers import Dense, Input, InputLayer, Conv2D, MaxPooling2D, Reshape, Flatten
-from keras.models import load_model
-            </code></pre>
+from keras.models import load_model</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
@@ -373,8 +371,7 @@ from keras.models import load_model
 
         <div class="code-snippet">
             <pre><code class="Bash">
-$ pip install tensorflowjs
-            </code></pre>
+$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>安装完成后，<span class="highlight-text">tensorflowjs_converter</span>变为系统可用关键字，可用下列命令来调用：</div>
@@ -386,8 +383,7 @@ $ tensorflowjs_converter \
     --output_node_names=$onn \
     --saved_model_tags=serve \
     ../models/tensorflow_model \
-    ../models/json_models/tensorflow
-            </code></pre>
+    ../models/json_models/tensorflow</code></pre>
         </div>
 
         <div>如果您在此之前没有任何机器学习的经验，强烈建议先阅读由 <a href="https://keras.io/">Keras</a> 官方所提供的 Keras 模型训练<a href="https://keras.io/#getting-started-30-seconds-to-keras"> 教程 </a>。</div>
@@ -435,8 +431,7 @@ $ tensorflowjs_converter \
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L12">keras_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-def create_sequential_model():
+            <pre><code class="Python">def create_sequential_model():
     single_output_model = Sequential([
         InputLayer(input_shape=(28, 28)),
         Reshape((28,28,1),input_shape=(28,28,)),
@@ -449,8 +444,7 @@ def create_sequential_model():
         Dense(84, activation="relu", name="Dense_2"),
         Dense(10, activation="softmax", name="Softmax")
     ])
-    return single_output_model
-            </code></pre>
+    return single_output_model</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
@@ -471,16 +465,14 @@ def create_sequential_model():
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L49">keras_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
+            <pre><code class="Python">(x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
 model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=5, batch_size=32)
-            </code></pre>
+model.fit(x_train, y_train, epochs=5, batch_size=32)</code></pre>
         </div>
 
         <div>在训练完成之后，我们应当得到一个具有完整结构及一定训练程度的 Keras 神经网络模型。通过以下代码测试模型。</div>
@@ -488,11 +480,9 @@ model.fit(x_train, y_train, epochs=5, batch_size=32)
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102">keras_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
+            <pre><code class="Python">input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
-print(model.predict(input_sample))
-            </code></pre>
+print(model.predict(input_sample))</code></pre>
         </div>
 
         <div>如下图所示，得到单一预测结果：</div>
@@ -507,34 +497,28 @@ print(model.predict(input_sample))
         <div>有预训练模型，使用以下代码加载：</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-model = load_model("/PATH_TO_Keras/model.h5")
-            </code></pre>
+            <pre><code class="Python">model = load_model("/PATH_TO_Keras/model.h5")</code></pre>
         </div>
 
         <div>或者若该模型的<span class="span_bold">结构</span>与<span class="span_bold">权重</span>为<span class="span_bold">分开</span>保存格式，用以下代码加载：</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-json_path = "PATH_TO_JSON/model.json"
+            <pre><code class="Python">json_path = "PATH_TO_JSON/model.json"
 weight_path = "PATH_TO_WEIGHT/weights.hdf5"
 structure = open(json_path, "r")
 model = model_from_json(
     structure
     )
-model.load_weights(weight_path)
-            </code></pre>
+model.load_weights(weight_path)</code></pre>
         </div>
 
         <div>使用以下验证模型可用性：</div>
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102">keras_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
+            <pre><code class="Python">input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
-print(model.predict(input_sample))
-            </code></pre>
+print(model.predict(input_sample))</code></pre>
         </div>
 
         <div>如下图所示，得到单一预测结果：</div>
@@ -551,11 +535,9 @@ print(model.predict(input_sample))
         <div>使用 <span class="highlight-text">summary()</span> 方法来得到中间层信息（layer.name）。也可通过 layer 对象直接获取：</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-model.summary()
+            <pre><code class="Python">model.summary()
 for layer in model.layers:
-     print(layer.name)
-            </code></pre>
+     print(layer.name)</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/Keras/Keras_summary.png">
@@ -583,8 +565,7 @@ for layer in model.layers:
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L111">keras_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-output_layer_names = [
+            <pre><code class="Python">output_layer_names = [
     "Conv2D_1", "MaxPooling2D_1", "Conv2D_2", "MaxPooling2D_2",
     "Dense_1", "Dense_2", "Softmax"
 ]
@@ -593,8 +574,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
         inputs=model.input,
         outputs=list(map(lambda oln: model.get_layer(oln).output, output_layer_names))
     )
-    return enc_model
-            </code></pre>
+    return enc_model</code></pre>
         </div>
 
         <div>或者可用以下方式添加所有中间层。</div>
@@ -602,15 +582,13 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L88">keras_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-def generate_encapsulate_model(model):
+            <pre><code class="Python">def generate_encapsulate_model(model):
     enc_model = Model(
         inputs=model.input,
         # ignore 1st layer (input), since some old models do not have 1st layer as Keras layer
         outputs=list(map(lambda layer: layer.output, model.layers[1:]))
     )
-    return enc_model
-            </code></pre>
+    return enc_model</code></pre>
         </div>
 
         <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
@@ -633,19 +611,15 @@ def generate_encapsulate_model(model):
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L113">keras_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
+            <pre><code class="Python">enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
 # OR
-# enc_model = generate_encapsulate_model(model)
-            </code></pre>
+# enc_model = generate_encapsulate_model(model)</code></pre>
         </div>
 
         <div>可使用以下语句来获得所选定的层的输出：</div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-print(enc_model.predict(input_sample))
-            </code></pre>
+            <pre><code class="Python">print(enc_model.predict(input_sample))</code></pre>
         </div>
 
         <div>模型应该会输出我们所选择的所有中间层输出。若选择中包含最终输出，结果也应当包括最终预测输出。</div>
@@ -681,12 +655,10 @@ print(enc_model.predict(input_sample))
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L118">keras_model.py</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Python">
-enc_model.compile(optimizer='adam',
+            <pre><code class="Python">enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
-save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
-            </code></pre>
+save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")</code></pre>
         </div>
 
         <div class="sub-title" id="convertModel">4 转换为 TensorSpace 适配的模型</div>
@@ -702,8 +674,7 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
 tensorflowjs_converter \
     --input_format=keras \
     ../models/enc_keras_model.h5 \
-    ../models/json_models/keras
-            </code></pre>
+    ../models/json_models/keras</code></pre>
         </div>
 
         <img class="tag-img" src="../../assets/img/docs/Keras/Keras_models.png" alt="tfjs models">
