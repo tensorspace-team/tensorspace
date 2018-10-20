@@ -19,9 +19,25 @@ let dataLookup = {
 		dataUrl: "../../assets/data/doraemon.json",
 		imageUrl: "../../assets/img/playground/doraemon.jpg"
 
+	},
+
+	person: {
+
+		relativeDiv: "data3",
+		dataUrl: "../../assets/data/person.json",
+		imageUrl: "../../assets/img/playground/person.jpg"
+
+	},
+
+	boat: {
+
+		relativeDiv: "data4",
+		dataUrl: "../../assets/data/boat.json",
+		imageUrl: "../../assets/img/playground/boat.jpg"
+
 	}
 
-};
+}
 
 $(function() {
 
