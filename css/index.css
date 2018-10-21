@@ -101,7 +101,7 @@
 #toStart {
 
     color: #000;
-    background-color: #83FBFF;
+    background-color: #22BFFB;
 }
 
 #toStart:hover {
@@ -109,17 +109,9 @@
     background: linear-gradient(to right, #0c50bc, #299ae2);
 }
 
-#toStart > img {
-
-    height: 20px;
-    margin-left: 13px;
-    margin-top: 13px;
-    margin-right: 5px;
-}
-
 #toPlayground {
-    color: #83FBFF;
-    border: 1px solid #83FBFF;
+    color: #22BFFB;
+    border: 1px solid #22BFFB;
 }
 
 #iconGroup #toPlayground {
@@ -132,14 +124,6 @@
 
 }
 
-#toPlayground > img {
-
-    height: 30px;
-    margin-left: 12px;
-    margin-top: 7px;
-    margin-right: 8px;
-}
-
 #toGithub {
     background-color: #f2f2f2;
 }
@@ -149,12 +133,21 @@
     background-color: #e6e6e6;
 }
 
-
-#toGithub > img {
-
+#iconGroup > div > div > img {
     height: 40px;
     margin-left: 5px;
     margin-top: 2px;
+}
+
+#toStart > img {
+    margin-right: 12px;
+}
+
+#toPlayground > img {
+    margin-right: 10px;
+}
+
+#toGithub > img {
     margin-right: 20px;
 }
 
@@ -178,13 +171,13 @@
     text-align: center;
     font-size: 20px;
     margin-top: 20px;
-    color: #0340D8;
+    color: #22BFFB;
 }
 
 #explanation > div > div {
     margin-top: 40px;
     font-size: 18px;
-    padding: 0 20px;
+    padding: 0 15px;
     margin-bottom: 20px;
     text-align: center;
     color: #cacaca;
