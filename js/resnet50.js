@@ -16,8 +16,8 @@ let dataLookup = {
 	doraemon: {
 
 		relativeDiv: "data2",
-		dataUrl: "../../assets/data/doraemon.json",
-		imageUrl: "../../assets/img/playground/doraemon.jpg"
+		dataUrl: "../../assets/data/dog_imagenet.json",
+		imageUrl: "../../assets/img/playground/dog_imagenet.jpg"
 
 	},
 
