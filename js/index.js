@@ -17,6 +17,15 @@ $(function() {
 		window.location.href = "../../index.html";
 	});
 
+	$("#downloadNav").click(function () {
+
+		$("#downloadNav").addClass("now");
+
+		$('html, body').animate({
+			scrollTop: $("#download").offset().top
+		}, 2000);
+	});
+
 	let container = document.getElementById( "modelArea" );
 
 	let model = new TSP.model.Sequential( container, {
