@@ -1,13 +1,29 @@
 let model;
-let predictDataKey = "three";
+let predictDataKey = "dog";
 let selectedDiv = undefined;
 let outputDetectionLayer;
 
 let dataLookup = {
 
-	three: {
+	dog: {
 
 		relativeDiv: "data1",
+		dataUrl: "../../assets/data/dog.json",
+		imageUrl: "../../assets/img/playground/dog.jpg"
+
+	},
+
+	giraffe: {
+
+		relativeDiv: "data2",
+		dataUrl: "../../assets/data/giraffe.json",
+		imageUrl: "../../assets/img/playground/giraffe.jpg"
+
+	},
+
+	three: {
+
+		relativeDiv: "data3",
 		dataUrl: "../../assets/data/33.json",
 		imageUrl: "../../assets/img/playground/33.jpg"
 
@@ -15,17 +31,9 @@ let dataLookup = {
 
 	bird: {
 
-		relativeDiv: "data2",
+		relativeDiv: "data4",
 		dataUrl: "../../assets/data/bird.json",
 		imageUrl: "../../assets/img/playground/bird.jpg"
-
-	},
-
-	dog: {
-
-		relativeDiv: "data3",
-		dataUrl: "../../assets/data/dog.json",
-		imageUrl: "../../assets/img/playground/dog.jpg"
 
 	}
 

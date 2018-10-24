@@ -1,39 +1,31 @@
 let model;
 let imagenetResult;
-let predictDataKey = "person";
+let predictDataKey = "coffeepot";
 let selectedDiv = undefined;
 
 let dataLookup = {
 
-	diling: {
+	coffeepot: {
 
 		relativeDiv: "data1",
-		dataUrl: "../../assets/data/dilingdiling.json",
-		imageUrl: "../../assets/img/playground/dilingdiling.jpg"
+		dataUrl: "../../assets/data/coffeepot.json",
+		imageUrl: "../../assets/img/playground/coffeepot.jpg"
 
 	},
 
-	doraemon: {
+	elephant: {
 
 		relativeDiv: "data2",
-		dataUrl: "../../assets/data/doraemon.json",
-		imageUrl: "../../assets/img/playground/doraemon.jpg"
+		dataUrl: "../../assets/data/elephant.json",
+		imageUrl: "../../assets/img/playground/elephant.jpg"
 
 	},
 
-	person: {
+	car: {
 
 		relativeDiv: "data3",
-		dataUrl: "../../assets/data/person.json",
-		imageUrl: "../../assets/img/playground/person.jpg"
-
-	},
-
-	boat: {
-
-		relativeDiv: "data4",
-		dataUrl: "../../assets/data/boat.json",
-		imageUrl: "../../assets/img/playground/boat.jpg"
+		dataUrl: "../../assets/data/car.json",
+		imageUrl: "../../assets/img/playground/car.jpg"
 
 	}
 
