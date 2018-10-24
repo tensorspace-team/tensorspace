@@ -37,7 +37,7 @@
 }
 
 #imgWrapper > img {
-    padding: 50px;
+    padding: 25px;
     box-sizing: border-box;
     width: 100%;
     float: left;
@@ -87,26 +87,24 @@
 }
 
 #iconGroup > div > div > img {
-
     float: left;
 }
 
 #iconGroup > div > div > p {
-
     width: auto;
     float: left;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 #toStart {
-
     color: #000;
     background-color: #22BFFB;
 }
 
 #toStart:hover {
-
     background: linear-gradient(to right, #0c50bc, #299ae2);
+    color: #FFF;
+    font-family: SourceSansPro-Bold, sans-serif;
 }
 
 #toPlayground {
@@ -119,9 +117,9 @@
 }
 
 #toPlayground:hover {
-
     border-color: #0c50bc;
-
+    color: #0c50bc;
+    font-family: SourceSansPro-Bold, sans-serif;
 }
 
 #toGithub {
@@ -129,8 +127,8 @@
 }
 
 #toGithub:hover {
-
-    background-color: #e6e6e6;
+    background-color: #bbbbbb;
+    font-family: SourceSansPro-Bold, sans-serif;
 }
 
 #iconGroup > div > div > img {

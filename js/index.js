@@ -28,17 +28,29 @@ $(function() {
 		}, 2000);
 	});
 
-	$("#toStart").click(function () {
-		window.location.href = "html/docs/startHello.html";
-	});
+    $('#toStart').click(function() {
+        window.location.href = "html/docs/startHello.html";
+    }).mouseover(function() {
+        $(this).find("img").attr("src", "assets/img/index/startIcon_white.png").delay(1000);
+    }).mouseout(function() {
+        $(this).find("img").attr("src", "assets/img/index/startIcon.png");
+    });
 
-	$("#toPlayground").click(function () {
-		window.location.href = "html/playground/index.html";
-	});
+    $('#toPlayground').click(function() {
+        window.location.href = "html/playground/index.html";
+    }).mouseover(function() {
+        $(this).find("img").attr("src", "assets/img/index/playgroundIcon_darkB.png").delay(400);
+    }).mouseout(function() {
+        $(this).find("img").attr("src", "assets/img/index/playgroundIcon.png");
+    });
 
-	$("#toGithub").click(function () {
-		window.location.href = "https://github.com/syt123450/Gio.js";
-	});
+    $('#toGithub').click(function() {
+        window.location.href = "https://github.com/syt123450/Gio.js";
+    }).mouseover(function() {
+        $(this).find("img").attr("src", "assets/img/index/github_black.png").fadeIn( 400 );
+    }).mouseout(function() {
+        $(this).find("img").attr("src", "assets/img/index/github.png");
+    });
 
 	createModel();
 
