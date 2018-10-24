@@ -1,43 +1,27 @@
 let model;
 let imagenetResult;
-let predictDataKey = "diling";
+let predictDataKey = "dog";
 let selectedDiv = undefined;
 
 let dataLookup = {
 
-	diling: {
+	dog: {
 
 		relativeDiv: "data1",
-		dataUrl: "../../assets/data/dilingdiling.json",
-		imageUrl: "../../assets/img/playground/dilingdiling.jpg"
-
-	},
-
-	doraemon: {
-
-		relativeDiv: "data2",
 		dataUrl: "../../assets/data/dog_imagenet.json",
 		imageUrl: "../../assets/img/playground/dog_imagenet.jpg"
 
 	},
 
-	person: {
+	cat: {
 
-		relativeDiv: "data3",
-		dataUrl: "../../assets/data/person.json",
-		imageUrl: "../../assets/img/playground/person.jpg"
-
-	},
-
-	boat: {
-
-		relativeDiv: "data4",
-		dataUrl: "../../assets/data/boat.json",
-		imageUrl: "../../assets/img/playground/boat.jpg"
+		relativeDiv: "data2",
+		dataUrl: "../../assets/data/cat.json",
+		imageUrl: "../../assets/img/playground/cat.jpg"
 
 	}
 
-}
+};
 
 $(function() {
 
