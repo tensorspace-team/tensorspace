@@ -46,59 +46,33 @@ function createModel() {
 
 	model = new TSP.model.Sequential( container, {
 
-		layerInitStatus: "close",
-		aggregationStrategy: "max",
-		layerShape: "rect",
-		textSystem: "enable",
-		relationSystem: "enable",
 		animationTimeRatio: 0.1,
-		stats: true,
-
-		color: {
-
-			background: 0x000000,
-			conv2d: 0xffff2E,
-			pooling2d: 0x00ffff,
-			dense: 0x00ff00,
-			padding2d: 0x6eb6ff
-
-		}
+		stats: true
 
 	} );
 
 	model.add( new TSP.layers.Input2d( {
 
 		shape: [ 28, 28, 1 ],
-		name: "initInput",
-		color: 0xFFFFFF,
+		name: "initInput"
 
 	} ) );
 
 	model.add( new TSP.layers.Padding2d( {
 
-		padding: [ 2, 2 ],
+		padding: [ 2, 2 ]
 
 	} ) );
 
-	let convLayer = new TSP.layers.Conv2d( {
+	model.add( new TSP.layers.Conv2d( {
 
 		kernelSize: 5,
 		filters: 6,
 		strides: 1,
-		name: "conv2d1",
-		// initStatus: "open"
+		initStatus: "open",
+		name: "conv2d1"
 
-	} );
-
-	model.add( convLayer );
-// model.add( new TSP.layers.Conv2d( {
-//
-// 	kernelSize: 5,
-// 	filters: 6,
-// 	strides: 1,
-// 	name: "conv2d1"
-//
-// } ) );
+	} ) );
 
 	model.add( new TSP.layers.Pooling2d( {
 
@@ -127,15 +101,12 @@ function createModel() {
 
 	} ) );
 
-	let denseLayer = new TSP.layers.Dense( {
+	model.add( new TSP.layers.Dense( {
 
 		units: 120,
-		name: "dense1",
-		animationTimeRatio: 1,
+		name: "dense1"
 
-	} );
-
-	model.add( denseLayer );
+	} ) );
 
 	model.add( new TSP.layers.Dense( {
 
@@ -148,6 +119,7 @@ function createModel() {
 
 		units: 10,
 		outputs: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
+		initStatus: "open",
 		name: "output"
 
 	} ) );
@@ -159,7 +131,21 @@ function createModel() {
 
 	} );
 
-	model.init();
+	model.init( function() {
+
+		$.ajax({
+			url: "../../assets/data/digit/5.json",
+			type: 'GET',
+			async: true,
+			dataType: 'json',
+			success: function (data) {
+
+				model.predict( data );
+
+			}
+		});
+
+	} );
 
 }
 
@@ -186,6 +172,8 @@ function executePredict() {
 	let canvas = document.getElementById( "signature-pad" );
 	let context = canvas.getContext( '2d' );
 	let imgData = context.getImageData( 0, 0, canvas.width, canvas.height );
+
+	console.log(signaturePad.toData());
 
 	let signatureData = [];
 

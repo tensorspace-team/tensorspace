@@ -101,16 +101,7 @@ function createModel() {
 
 	model = new TSP.model.Sequential( container, {
 
-		layerShape: "rect",
-		layerInitStatus: "close",
-		stats: true,
-		color: {
-
-			input3d: 0x00ff00,
-			conv2d: 0xff00ff,
-			pooling2d: 0x00ffff
-
-		}
+		stats: true
 
 	} );
 
