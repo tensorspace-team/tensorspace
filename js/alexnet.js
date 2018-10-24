@@ -1,23 +1,31 @@
 let model;
 let imagenetResult;
-let predictDataKey = "pikapika";
+let predictDataKey = "beagle";
 let selectedDiv = undefined;
 
 let dataLookup = {
 
-	pikapika: {
+	beagle: {
 
 		relativeDiv: "data1",
-		dataUrl: "../../assets/data/pikapika.json",
-		imageUrl: "../../assets/img/playground/pikapika.jpg"
+		dataUrl: "../../assets/data/beagle.json",
+		imageUrl: "../../assets/img/playground/beagle.jpg"
 
 	},
 
-	giraffe: {
+	macaw: {
 
 		relativeDiv: "data2",
-		dataUrl: "../../assets/data/giraffe.json",
-		imageUrl: "../../assets/img/playground/giraffe.jpg"
+		dataUrl: "../../assets/data/macaw.json",
+		imageUrl: "../../assets/img/playground/macaw.jpg"
+
+	},
+
+	tigerShark: {
+
+		relativeDiv: "data3",
+		dataUrl: "../../assets/data/tigerShark.json",
+		imageUrl: "../../assets/img/playground/tigerShark.jpg"
 
 	}
 
