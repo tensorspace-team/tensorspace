@@ -28,6 +28,18 @@ $(function() {
 		}, 2000);
 	});
 
+	$("#toStart").click(function () {
+		window.location.href = "html/docs/startHello.html";
+	});
+
+	$("#toPlayground").click(function () {
+		window.location.href = "html/playground/index.html";
+	});
+
+	$("#toGithub").click(function () {
+		window.location.href = "https://github.com/syt123450/Gio.js";
+	});
+
 	createModel();
 
 });
