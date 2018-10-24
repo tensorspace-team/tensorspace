@@ -56,6 +56,9 @@ $(function() {
 
 	$("#selector > main > div > img").click(function() {
 		$(this).css("border", "1px solid #6597AF");
+		if (selectedDiv !== undefined) {
+			$("#" + selectedDiv).css("border", "0");
+		}
 		selectedDiv = $(this).attr('id');
 	});
 
@@ -994,6 +997,9 @@ function showSelector() {
 function hideSelector() {
 	$("#selector").hide();
 	$("#selectorCurtain").hide();
+	if (selectedDiv !== undefined) {
+		$("#" + selectedDiv).css("border", "0");
+	}
 	selectedDiv = undefined;
 }
 
