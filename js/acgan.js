@@ -43,14 +43,9 @@ function createModel() {
 	let container = document.getElementById( "modelArea" );
 
 	model = new TSP.model.Sequential(container, {
-		aggregationStrategy: "average",
-		layerShape: "rect",
-		layerInitStatus: "close",
-		stats: true,
-		color: {
-			conv2d: 0xff00ff,
-			pooling2d: 0x00ffff
-		}
+
+		stats: true
+
 	});
 
 	// input_1: [1,100]

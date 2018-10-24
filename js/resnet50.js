@@ -93,18 +93,7 @@ function createModel() {
 
 	model = new TSP.model.Sequential( container, {
 
-		aggregationStrategy: "max",
-		layerShape: "rect",
-		layerInitStatus: "close",
-		stats: true,
-
-		color: {
-
-			conv2d: 0xff00ff,
-			pooling2d: 0x00ffff,
-			add: 0xff0000
-
-		}
+		stats: true
 
 	} );
 
