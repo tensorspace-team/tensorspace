@@ -319,7 +319,86 @@
 
     <main>
         <header>Layer Metrics</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            We can fetch the <span class="highlight-text">inputShape</span>,
+            <span class="highlight-text">outputShape</span> and
+            <span class="highlight-text">intermediate data</span> from each layer instance.
+        </div>
+
+        <div class="sub-title">Shape and Dimension</div>
+
+        <div>
+            Suppose that there is a three-dimensional array
+            <span class="highlight-text">x = np.array ([1,2], [3,4], [5,6]</span>,
+            then its shape is <span class="highlight-text">x.shape = [2,2,2]</span>,
+            which represents the length in each dimension. Its dimension
+            <span class="highlight-text">x.shape.length = 3</span>,
+            indicating that the array makes sense in three dimensions.
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <span class="highlight-text">Dimension</span> describes the dimensional characteristics of an array.
+            For example, <span class="highlight-text">[1, 2, 3]</span> is a one-dimensional array.
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <span class="highlight-text">Shapes</span> describe the length characteristics of each dimension.
+            For example, <span class="highlight-text">[[1, 2], [3, 4]]</span> is a two-dimensional array of shapes
+            <span class="highlight-text">[2, 2]</span>, representing a one-dimensional length of 2
+            and a two-dimensional length of 2.
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            See <a href="basicDimension.html">Layer Dimension</a> for more details.
+        </div>
+
+        <div class="sub-title">Shape of inputs and outputs</div>
+
+        <div>
+            The shape of some layers can change. The convolution layer, for example, adds a dimension and changes
+            the value of length and width according to the characteristics of the convolution kernel (filter).
+        </div>
+
+        <div>
+            We provide the <span class="highlight-text">inputShape</span> and
+            <span class="highlight-text">outputShape</span> properties to show the modifications
+            from the inputs and the outputs of the layers.
+        </div>
+
+        <div>
+            In TensorSpace, the "DataFormat" is default to be "channel last".
+            For example, <span class="highlight-text">shape = [28,28,3]</span>
+            is the input of a color image with 3 channels.
+        </div>
+
+        <div class="sub-title">Intermediate layer data</div>
+
+        <div>
+            In the neural network, data are transferred among different layers.
+            After preprocessing, we can extract the required intermediate layer data and render them to the
+            corresponding 3D visualizing objects.
+            In this way, we can observe the data characteristics and changes of the previous data intuitively.
+        </div>
+
+        <div>Code Snippet:</div>
+
+        <div class="code-snippet">
+            <pre><code class="JavaScript">
+// add some layers
+convLayer = new TSP.layers.Conv2d({...})
+// add some layers
+
+model.init();
+
+// Must be used AFTER init() method.
+console.log(convLayer.inputShape);
+console.log(convLayer.outputShape);
+console.log(convLayer.neuralValue);
+            </code></pre>
+        </div>
+
     </main>
 </div>
 
