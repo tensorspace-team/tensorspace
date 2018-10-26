@@ -319,7 +319,182 @@
 
     <main>
         <header>Layer Dimension</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div class="sub-title">Definition</div>
+
+        <div>
+            In machine learning, each layer all has a dimensional feature that is suffixed as
+            <span class="span_bold">1d</span>, <span class="span_bold">2d</span>
+            or <span class="span_bold">3d</span>.
+            It indicates the dimension of the layer <span class="span_bold">output</span>.
+        </div>
+
+        <div>
+            In TensorSpace, there are some special <span class="span_bold">2d</span> layers which have a different
+            output dimension as described above.
+            For example, the "2d convolutional layer", extracts features by using different filters which generate
+            feature maps. Let's say the input image size is <span class="span_bold">28x28</span>, after passing
+            through the 2d convolution layer, the output shape is <span class="span_bold">[28, 28, 3]</span>
+            which has one extra dimension (channel) appended. The number of channels represents the number of filters.
+        </div>
+
+        <div class="sub-title">Dimension of layer</div>
+
+        <div>
+            In TensorSpace, the dimension of the intermediate layer is determined by the shape of the output data.
+        </div>
+
+        <div>
+            When we construct the network, we have to consider the
+            <span class="span_bold">detailed rules of computation</span>.
+            For example, after <span class="highlight-text">Input1d</span>,
+            we have to use <span class="highlight-text">pooling1d</span>, <span class="span_bold">not</span>
+            <span class="highlight-text">pooling2d</span>.
+        </div>
+
+        <div class="sub-title">One dimension layers</div>
+
+        <div>
+            The output dimension is 1D (e.g. <span class="highlight-text">shape= [10]</span>):
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Dense
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Flatten
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Activation1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Layer1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Input1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Output1d
+        </div>
+
+        <div class="sub-title">Two dimension layers</div>
+
+        <div>
+            Two-dimensional output is a two-dimensional array, but in the sense of
+            <span class="span_bold">output</span>, there are two forms:
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            represents the size of the image. For example, <span class="highlight-text">shape= [28,28]</span>
+            means an image with both length and width 28.
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            the first value denotes the length. The second value is the number of channels.
+            For example, <span class="highlight-text">shape= [10,3]</span> denotes three Eigenvectors of length 10.
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Conv1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Cropping1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            GlobalPooling1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Padding1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Pooling1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Reshape1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            UpSampling1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Input2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Activation2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Layer2d
+        </div>
+
+        <div class="sub-title">Three dimension layer</div>
+
+        <div>
+            Three-dimensional output is a three-dimensional array.
+            For example, <span class="highlight-text">shape= [28, 28, 3]</span> denotes a color image corresponding
+            to three characteristic graphs of size 28x28 in the RGB 3 channel.
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Conv2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Conv2dTranspose
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Cropping2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            GlobalPooling2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Padding2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Pooling2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Reshape2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            UpSampling2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Input3d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Activation3d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Layer3d
+        </div>
+
     </main>
 </div>
 

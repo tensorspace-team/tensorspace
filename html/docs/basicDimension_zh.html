@@ -318,7 +318,176 @@
 
     <main>
         <header>网络层维度</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div class="sub-title">定义</div>
+
+        <div>
+            在机器学习中，所有的层都会有一个维度特征，以后缀形式记为
+            <span class="span_bold">1d</span>、<span class="span_bold">2d</span>
+            或 <span class="span_bold">3d</span>。
+            其表达的含义是本层<span class="span_bold">输出</span>数据的维度。
+        </div>
+
+        <div>
+            在 TensorSpace 中，有一些特殊的<span class="span_bold">2d</span>层，例如"2d卷积层"。
+            其使用过滤器提取特征，每一个过滤器会生成特征图，假设输入图像大小<span class="span_bold">28x28</span>，
+            经过一个有3个过滤器的卷积层，输出的是3维，形状为<span class="span_bold">[28, 28, 3]</span>。
+            即在输出的数据中会增加一个维度——通道数。通道数的值表示的过滤器的数量。
+        </div>
+
+        <div class="sub-title">层的维度</div>
+
+        <div>
+            在 TensorSpace 中层的维度由输出数据的形状决定。
+        </div>
+
+        <div>
+            在网络层链接上，请考虑此层的<span class="span_bold">具体计算规则</span>。
+            比如在<span class="highlight-text">Input1d</span>后用<span class="highlight-text">pooling1d</span>，
+            而<span class="span_bold">不是</span><span class="highlight-text">pooling2d</span>。
+        </div>
+
+        <div class="sub-title">1维层</div>
+
+        <div>
+            输出维度为1维，例如，（例如 <span class="highlight-text">shape= [10]</span>）：
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Dense
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Flatten
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Activation1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Layer1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Input1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Output1d
+        </div>
+
+        <div class="sub-title">2维层</div>
+
+        <div>
+            2维输出为一个二维数组，但在<span class="span_bold">输出</span>含义上有两种形式：
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            表示图像的大小。例如，<span class="highlight-text">shape= [28,28]</span> 表示一个长和宽分别为28，28的图像。
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            第一个数值表示长度，第二个数值是通道数。例如，<span class="highlight-text">shape= [10,3]</span>
+            表示3个长度为10的特征向量。
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Conv1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Cropping1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            GlobalPooling1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Padding1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Pooling1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Reshape1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            UpSampling1d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Input2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Activation2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Layer2d
+        </div>
+
+        <div class="sub-title">3维层</div>
+
+        <div>
+            3维输出为一个三维数组。
+            例如，<span class="highlight-text">shape= [28, 28, 3]</span> 表示一个彩色图像，
+            分别对应3张在 RGB 3通道中，大小为 28x28的特征图。
+        </div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Conv2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Conv2dTranspose
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Cropping2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            GlobalPooling2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Padding2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Pooling2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Reshape2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            UpSampling2d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Input3d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Activation3d
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            Layer3d
+        </div>
+
     </main>
 </div>
 

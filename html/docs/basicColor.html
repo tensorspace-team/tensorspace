@@ -319,7 +319,103 @@
 
     <main>
         <header>Layer Color</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div class="sub-title">Default color configuration</div>
+        <div>
+            TensorSpace provides a complete set of default color expression.
+            For example, by default, the convolution layer is yellow, the fully connected layer is green,
+            the pooling layer is blue, and the input/output layers are gray.
+        </div>
+
+        <div>
+            We hope the designed default color could build the image for the users: when we find a yellow layer,
+            we can realize the layer is a convolutional layer. It helps to improve the information carrying capacity
+            and expression ability of 3D visualization model.
+        </div>
+
+        <div>
+            Users can also choose their customized colors by overriding the corresponding configuration parameters.
+            The layer color supports the hex color codes.
+        </div>
+
+        <img class="tag-img" src="../../assets/img/docs/Model_MNIST.png">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Layer Color
+        </div>
+
+        <div class="sub-title">Default Layer Configurations</div>
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Convolution #FFFF2E <span class="color-block" style="background-color: #FFFF2E"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Input #EEEEEE <span class="color-block" style="background-color: #EEEEEE"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Padding #6eb6ff <span class="color-block" style="background-color: #6eb6ff"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Pooling #00ffff <span class="color-block" style="background-color: #00ffff"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Dense #00ff00 <span class="color-block" style="background-color: #00ff00"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Output #EEEEEE <span class="color-block" style="background-color: #EEEEEE"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    UpSampling #30e3ca <span class="color-block" style="background-color: #30e3ca"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Reshape #a287f4 <span class="color-block" style="background-color: #a287f4"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Flatten #dfe2fe <span class="color-block" style="background-color: #dfe2fe"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Cropping #cefc86 <span class="color-block" style="background-color: #cefc86"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    TransposeConv #ff5722 <span class="color-block" style="background-color: #ff5722"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    GlobalPooling #0074e4 <span class="color-block" style="background-color: #0074e4"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Layer #f08a5d <span class="color-block" style="background-color: #f08a5d"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Activation #fc5c9c <span class="color-block" style="background-color: #fc5c9c"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sub-title">Default Merge Configurations</div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Add #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Average #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Maximum #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Multiply #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Subtract #e23e57 <span class="color-block" style="background-color: #e23e57"></span>
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    Concatenate #f9a1bc <span class="color-block" style="background-color: #f9a1bc"></span>
+                </li>
+            </ul>
+        </div>
+
     </main>
 </div>
 
