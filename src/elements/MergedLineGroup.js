@@ -69,7 +69,7 @@ MergedLineGroup.prototype = {
 			straightLineColors.push( new THREE.Color( this.color ) );
 
 			let globalRelativePos = new THREE.Vector3();
-			relatedElements[ i ].getWorldPosition( globalRelativePos );
+			straightElements[ i ].getWorldPosition( globalRelativePos );
 
 			straightLineVertices.push( globalRelativePos.sub( neuralGroupPos  ) );
 			straightLineVertices.push( lineStartPos );
