@@ -11,7 +11,7 @@
 TensorSpace is a neural network 3D visualization framework built by TensorFlow.js and Three.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports to visualize pre-trained model from TensorFlow, Keras and TensorFlow.js.
 
 <p align="center">
-<img width=700 src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>Fig.1</b> - TensorSpace LeNet
@@ -124,7 +124,7 @@ model.init();
 
 We can get the following model in the browser if everything looks good:
 <p align="center">
-<img width=800 src="https://github.com/zchholmes/tsp_image/blob/master/GettingStart/HelloWorld_empty_lenet.jpg">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/GettingStart/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
 <b>Fig. 2</b> - Generated LeNet model
@@ -143,7 +143,7 @@ model.init(function() {
 We put the `predict( image_5 )` method in the callback function of `init()` to ensure the prediction is after the initialization complete.
 
 <p align="center">
-<img width=800 src="https://github.com/zchholmes/tsp_image/blob/master/GettingStart/HelloWorld_5.jpg">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/GettingStart/HelloWorld_5.jpg">
 </p>
 <p align="center">
 <b>Fig. 3</b> - Generated LeNet model with input data "5"
@@ -156,7 +156,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 [➡ Live Demo]()
 
 <p align="center">
-<img width=700 src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>Fig.4</b> - TensorSpace LeNet
@@ -167,7 +167,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 [➡ Live Demo]()
 
 <p align="center">
-<img width=700 src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_alexnet.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_alexnet.gif">
 </p>
 <p align="center">
 <b>Fig.5</b> - TensorSpace AlexNet
@@ -178,7 +178,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 [➡ Live Demo]()
 
 <p align="center">
-<img width=700 src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_yolov2.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_yolov2.gif">
 </p>
 <p align="center">
 <b>Fig.6</b> - TensorSpace YOLO-v2-tiny
@@ -189,7 +189,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 [➡ Live Demo]()
 
 <p align="center">
-<img width=700 src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>Fig.7</b> - TensorSpace LeNet
@@ -200,7 +200,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 [➡ Live Demo]()
 
 <p align="center">
-<img width=700 src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_vgg.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_vgg.gif">
 </p>
 <p align="center">
 <b>Fig.8</b> - TensorSpace VGG-16
@@ -211,7 +211,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 [➡ Live Demo]()
 
 <p align="center">
-<img width=700 src="https://github.com/zchholmes/tsp_image/blob/master/acgan.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/acgan.gif">
 </p>
 <p align="center">
 <b>Fig.9</b> - TensorSpace ACGAN
