@@ -30,10 +30,6 @@ $(function() {
 
     $('#toStart').click(function() {
         window.location.href = "html/docs/startHello.html";
-    }).mouseover(function() {
-        $(this).find("img").attr("src", "assets/img/index/startIcon_white.png").delay(1000);
-    }).mouseout(function() {
-        $(this).find("img").attr("src", "assets/img/index/startIcon.png");
     });
 
     $('#toPlayground').click(function() {

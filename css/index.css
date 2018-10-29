@@ -97,14 +97,12 @@
 }
 
 #toStart {
-    color: #000;
-    background-color: #22BFFB;
+    color: #FFF;
+    background: linear-gradient(to right, #0c50bc, #299ae2);
 }
 
 #toStart:hover {
-    background: linear-gradient(to right, #0c50bc, #299ae2);
-    color: #FFF;
-    font-family: SourceSansPro-Bold, sans-serif;
+    background: linear-gradient(to right, #0c4d97, #2883c5);
 }
 
 #toPlayground {
@@ -119,7 +117,6 @@
 #toPlayground:hover {
     border-color: #0c50bc;
     color: #0c50bc;
-    font-family: SourceSansPro-Bold, sans-serif;
 }
 
 #toGithub {
@@ -128,7 +125,6 @@
 
 #toGithub:hover {
     background-color: #bbbbbb;
-    font-family: SourceSansPro-Bold, sans-serif;
 }
 
 #iconGroup > div > div > img {
