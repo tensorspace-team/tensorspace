@@ -189,10 +189,10 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 [➡ Live Demo]()
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_resnet50.gif">
 </p>
 <p align="center">
-<b>Fig.7</b> - TensorSpace LeNet
+<b>Fig.7</b> - TensorSpace ResNet-50
 </p>
 
 * **Vgg16**

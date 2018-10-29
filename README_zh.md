@@ -193,7 +193,7 @@ model.init(function() {
 [➡ 在线演示]()
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_resnet50.gif">
 </p>
 <p align="center">
 <b>图7</b> - 使用 TensorSpace 构建 ResNet-50
