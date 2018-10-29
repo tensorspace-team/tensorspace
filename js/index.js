@@ -42,10 +42,6 @@ $(function() {
 
     $('#toGithub').click(function() {
         window.location.href = "https://github.com/syt123450/Gio.js";
-    }).mouseover(function() {
-        $(this).find("img").attr("src", "assets/img/index/github_black.png").fadeIn( 400 );
-    }).mouseout(function() {
-        $(this).find("img").attr("src", "assets/img/index/github.png");
     });
 
     $("#galleryLenet").hover(function(){
