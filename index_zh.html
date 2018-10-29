@@ -44,7 +44,7 @@
         </div>
 
         <ul id="largeNav">
-            <li><a href="html/docs/startIntro.html">文档</a></li>
+            <li><a href="html/docs/startIntro_zh.html">文档</a></li>
             <li><a href="html/playground/index_zh.html">体验TensorSpace</a></li>
             <!--<li><a href="html/gallery_zh.html">应用展示</a></li>-->
             <li id="downloadNav"><a>下载</a></li>
@@ -70,9 +70,9 @@
     </ul>
 
     <ul id="nav-collapse" class="nav navbar-nav">
-        <li><a href="html/docs/index.html">文档</a></li>
+        <li><a href="html/docs/startIntro_zh.html">文档</a></li>
         <li id="smallDownLoad"><a href="#download">下载</a></li>
-        <li><a href="html/developer.html">参与开发</a></li>
+        <!--<li><a href="html/developer.html">参与开发</a></li>-->
     </ul>
 
     <div class="language">
@@ -104,7 +104,7 @@
 
                 <div id="button1">
                     <div id="toStart">
-                        <img src="assets/img/index/startIcon.png">
+                        <img src="assets/img/index/startIcon_white.png">
                         <p>开始使用</p>
                     </div>
                 </div>
@@ -126,15 +126,15 @@
             <div id="explanation">
                 <div>
                     <p>交互</p>
-                    <div>Use Keras-like API to build interactive model</div>
+                    <div>使用类 Keras 的API构建浏览器端可交互模型</div>
                 </div>
                 <div>
                     <p>直观</p>
-                    <div>Visualize the information from intermediate inferences</div>
+                    <div>展示并观察模型中间层预测数据，直观展示模型推测过程</div>
                 </div>
                 <div>
                     <p>集成</p>
-                    <div>Support pre-trained models from TensorFlow, Keras, TensorFlow.js</div>
+                    <div>支持基于使用TensorFlow、Keras及TensorFlow.js训练的模型</div>
                 </div>
             </div>
 
@@ -167,9 +167,9 @@
 
                 <div class="card-wrapper">
 
-                    <div class="mdl-card mdl-shadow--2dp">
+                    <div id="galleryLenet" class="mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
-                            <img class="img33" src="./assets/img/index/33.jpg">
+                            <img class="img33" src="./assets/img/index/gallery_LeNet.jpg">
                         </div>
                         <div class="mdl-card__actions mdl-card--border net-name">
                             LeNet
@@ -180,12 +180,51 @@
 
                 <div class="card-wrapper">
 
-                    <div class="mdl-card mdl-shadow--2dp">
+                    <div id="galleryAlexnet" class="mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
-                            <img class="img33" src="./assets/img/index/33.jpg">
+                            <img class="img33" src="./assets/img/index/gallery_AlexNet.jpg">
                         </div>
                         <div class="mdl-card__actions mdl-card--border net-name">
-                            LeNet
+                            AlexNet
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-wrapper">
+
+                    <div id="galleryYolo" class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/gallery_yolov2.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            YOLOv2-tiny
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-wrapper">
+
+                    <div id="galleryVgg" class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/gallery_VGG16.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            VGG-16
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-wrapper">
+
+                    <div id="galleryResnet" class="mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <img class="img33" src="./assets/img/index/gallery_ResNet.jpg">
+                        </div>
+                        <div class="mdl-card__actions mdl-card--border net-name">
+                            ResNet-50
                         </div>
                     </div>
 
@@ -195,46 +234,7 @@
 
                     <div class="mdl-card mdl-shadow--2dp">
                         <div class="mdl-card__title">
-                            <img class="img33" src="./assets/img/index/33.jpg">
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border net-name">
-                            LeNet
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-wrapper">
-
-                    <div class="mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <img class="img33" src="./assets/img/index/33.jpg">
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border net-name">
-                            LeNet
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-wrapper">
-
-                    <div class="mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <img class="img33" src="./assets/img/index/33.jpg">
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border net-name">
-                            LeNet
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-wrapper">
-
-                    <div class="mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <img class="img33" src="./assets/img/index/33.jpg">
+                            <img class="img33" src="./assets/img/index/gallery_LeNet.jpg">
                         </div>
                         <div class="mdl-card__actions mdl-card--border net-name">
                             LeNet

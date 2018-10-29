@@ -415,8 +415,7 @@ mnist = tf.keras.datasets.mnist</code></pre>
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-$ pip install tensorflowjs</code></pre>
+            <pre><code class="Bash">$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>In general, the preprocess of a TensorFlow model is:</div>
@@ -824,8 +823,7 @@ print(sess.run(outputs, feed_dict={x:x_test}))</code></pre>
         <div>If everything so far looks good, we can use the following script to dump out a TensorSpace compatable model:</div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
+            <pre><code class="Bash">onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
 tensorflowjs_converter \
     --input_format=tf_saved_model \
     --output_node_names=$onn \

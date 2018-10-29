@@ -30,10 +30,6 @@ $(function() {
 
     $('#toStart').click(function() {
         window.location.href = "html/docs/startHello.html";
-    }).mouseover(function() {
-        $(this).find("img").attr("src", "assets/img/index/startIcon_white.png").delay(1000);
-    }).mouseout(function() {
-        $(this).find("img").attr("src", "assets/img/index/startIcon.png");
     });
 
     $('#toPlayground').click(function() {
@@ -51,6 +47,46 @@ $(function() {
     }).mouseout(function() {
         $(this).find("img").attr("src", "assets/img/index/github.png");
     });
+
+    $("#galleryLenet").hover(function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_LeNet.gif");
+	}, function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_LeNet.jpg");
+	}).click(function() {
+		location.href = "./html/playground/lenet.html";
+	});
+
+	$("#galleryAlexnet").hover(function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_AlexNet.gif");
+	}, function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_AlexNet.jpg");
+	}).click(function() {
+		location.href = "./html/playground/alexnet.html";
+	});
+
+	$("#galleryYolo").hover(function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_yolov2.gif");
+	}, function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_yolov2.jpg");
+	}).click(function() {
+		location.href = "./html/playground/yolov2-tiny.html";
+	});
+
+	$("#galleryVgg").hover(function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_VGG16.gif");
+	}, function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_VGG16.jpg");
+	}).click(function() {
+		location.href = "./html/playground/vgg16.html";
+	});
+
+	$("#galleryResnet").hover(function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_ResNet.gif");
+	}, function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_ResNet.jpg");
+	}).click(function() {
+		location.href = "./html/playground/resnet50.html";
+	});
 
 	createModel();
 
