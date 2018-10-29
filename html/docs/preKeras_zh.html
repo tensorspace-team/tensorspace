@@ -371,15 +371,13 @@ from keras.models import load_model</code></pre>
         <div>此外，我们还需要安装 <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a> (基于 TensorFlow.js 的转换工具)：</div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-$ pip install tensorflowjs</code></pre>
+            <pre><code class="Bash">$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>安装完成后，<span class="highlight-text">tensorflowjs_converter</span>变为系统可用关键字，可用下列命令来调用：</div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-$ tensorflowjs_converter \
+            <pre><code class="Bash">$ tensorflowjs_converter \
     --input_format=tf_saved_model \
     --output_node_names=$onn \
     --saved_model_tags=serve \
@@ -671,8 +669,7 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")</code></pre>
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh">convert_keras.sh</a></div>
 
         <div class="code-snippet">
-            <pre><code class="bash">
-tensorflowjs_converter \
+            <pre><code class="bash">tensorflowjs_converter \
     --input_format=keras \
     ../models/enc_keras_model.h5 \
     ../models/json_models/keras</code></pre>
