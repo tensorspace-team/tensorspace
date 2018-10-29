@@ -265,6 +265,12 @@
     padding: 10px 0;
 }
 
+#galleryLenet, #galleryAlexnet, #galleryYolo, #galleryVgg, #galleryResnet {
+
+    cursor: pointer;
+
+}
+
 #download {
 
     height: 650px;
