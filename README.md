@@ -151,7 +151,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 ## Example
 
-* LeNet 
+* **LeNet** 
 
 [➡ Live Demo]()
 
@@ -162,7 +162,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <b>Fig.4</b> - TensorSpace LeNet
 </p>
 
-* AlexNet 
+* **AlexNet** 
 
 [➡ Live Demo]()
 
@@ -173,7 +173,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <b>Fig.5</b> - TensorSpace AlexNet
 </p>
 
-* Yolov2-tiny
+* **Yolov2-tiny**
 
 [➡ Live Demo]()
 
@@ -184,7 +184,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <b>Fig.6</b> - TensorSpace YOLO-v2-tiny
 </p>
 
-* ResNet-50
+* **ResNet-50**
 
 [➡ Live Demo]()
 
@@ -195,7 +195,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <b>Fig.7</b> - TensorSpace LeNet
 </p>
 
-* Vgg16
+* **Vgg16**
 
 [➡ Live Demo]()
 
@@ -206,7 +206,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <b>Fig.8</b> - TensorSpace VGG-16
 </p>
 
-* ACGAN
+* **ACGAN**
 
 [➡ Live Demo]()
 
@@ -228,6 +228,11 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 ## Contributors
 
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars2.githubusercontent.com/u/7977100?v=4" width="100px;"/><br /><sub><b>syt123450</b></sub>](https://github.com/syt123450)<br />[💻](https://github.com/tensorspace-team/tensorspace/commits?author=syt123450 "Code") [🎨](#design-syt123450 "Design") [📖](https://github.com/tensorspace-team/tensorspace/commits?author=syt123450 "Documentation") [💡](#example-syt123450 "Examples") | [<img src="https://avatars3.githubusercontent.com/u/4524339?v=4" width="100px;"/><br /><sub><b>Chenhua Zhu</b></sub>](https://github.com/zchholmes)<br />[💻](https://github.com/tensorspace-team/tensorspace/commits?author=zchholmes "Code") [🎨](#design-zchholmes "Design") [✅](#tutorial-zchholmes "Tutorials") [💡](#example-zchholmes "Examples") | [<img src="https://avatars0.githubusercontent.com/u/21956621?v=4" width="100px;"/><br /><sub><b>YaoXing Liu</b></sub>](https://charlesliuyx.github.io/)<br />[💻](https://github.com/tensorspace-team/tensorspace/commits?author=CharlesLiuyx "Code") [🎨](#design-CharlesLiuyx "Design") [✅](#tutorial-CharlesLiuyx "Tutorials") [💡](#example-CharlesLiuyx "Examples") | [<img src="https://avatars2.githubusercontent.com/u/19629037?v=4" width="100px;"/><br /><sub><b>Qi(Nora)</b></sub>](https://github.com/lq3297401)<br />[💻](https://github.com/tensorspace-team/tensorspace/commits?author=lq3297401 "Code") [🎨](#design-lq3297401 "Design") |
+| :---: | :---: | :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 ## License
 
 [Apache License 2.0](https://github.com/syt123450/tensorspace/blob/master/LICENSE)

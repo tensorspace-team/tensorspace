@@ -1,0 +1,59 @@
+{
+  "projectName": "tensorspace",
+  "projectOwner": "tensorspace-team",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "syt123450",
+      "name": "syt123450",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7977100?v=4",
+      "profile": "https://github.com/syt123450",
+      "contributions": [
+        "code",
+        "design",
+        "doc",
+        "example"
+      ]
+    },
+    {
+      "login": "zchholmes",
+      "name": "Chenhua Zhu",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/4524339?v=4",
+      "profile": "https://github.com/zchholmes",
+      "contributions": [
+        "code",
+        "design",
+        "tutorial",
+        "example"
+      ]
+    },
+    {
+      "login": "CharlesLiuyx",
+      "name": "YaoXing Liu",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/21956621?v=4",
+      "profile": "https://charlesliuyx.github.io/",
+      "contributions": [
+        "code",
+        "design",
+        "tutorial",
+        "example"
+      ]
+    },
+    {
+      "login": "lq3297401",
+      "name": "Qi(Nora)",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/19629037?v=4",
+      "profile": "https://github.com/lq3297401",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    }
+  ]
+}
