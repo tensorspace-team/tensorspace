@@ -358,15 +358,13 @@ import numpy as np</code></pre>
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-$ pip install tensorflowjs</code></pre>
+            <pre><code class="Bash">$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>安装完成后，<span class="highlight-text">tensorflowjs_converter</span>变为系统可用关键字，可用下列命令来调用：</div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-$ tensorflowjs_converter \
+            <pre><code class="Bash">$ tensorflowjs_converter \
     --input_format=tf_saved_model \
     --output_node_names=$onn \
     --saved_model_tags=serve \
@@ -679,8 +677,7 @@ tf.keras.models.save_model(
         <div>我们可以通过以下脚本来进行转换：</div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-tensorflowjs_converter \
+            <pre><code class="Bash">tensorflowjs_converter \
     --input_format=keras \
     ../models/enc_tf_keras_model.h5 \
     ../models/json_models/tf_keras</code></pre>

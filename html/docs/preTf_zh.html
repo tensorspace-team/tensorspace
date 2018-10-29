@@ -394,15 +394,13 @@ mnist = tf.keras.datasets.mnist</code></pre>
         <div>此外，我们还需要安装 <a href="https://github.com/tensorflow/tfjs-converter">tfjs-converter</a> (基于 TensorFlow.js 的转换工具):</div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-$ pip install tensorflowjs</code></pre>
+            <pre><code class="Bash">$ pip install tensorflowjs</code></pre>
         </div>
 
         <div>安装完成后，<span class="highlight-text">tensorflowjs_converter</span> 变为系统可用关键字，可用下列命令来调用：</div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-$ tensorflowjs_converter \
+            <pre><code class="Bash">$ tensorflowjs_converter \
     --input_format=tf_saved_model \
     --output_node_names=$onn \
     --saved_model_tags=serve \
@@ -798,8 +796,7 @@ print(sess.run(outputs, feed_dict={x:x_test}))</code></pre>
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh">convert_tensorflow_saved_model.sh</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Bash">
-onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
+            <pre><code class="Bash">onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
 tensorflowjs_converter \
     --input_format=tf_saved_model \
     --output_node_names=$onn \
