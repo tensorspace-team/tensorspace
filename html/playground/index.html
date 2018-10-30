@@ -97,30 +97,56 @@
 </aside>
 
 <main>
-    <div class="panelTitle">Playground Introduction</div>
+    <header>TensorSpace Playground</header>
+    <p>TensorSpace Playground is the place we designed for presenting different pre-built models. In the "Playground", we can experience different pre-trained deep learning models, including object classification, object detections, image generations etc.</p>
+    <p>All models in the "Playground" are interactive. We can move the mouse to see the relation lines among layers; we can click the layer aggregation to check feature maps; we can move the camera to view from any direction... <span style="font-family: SourceSansPro-Bold, sans-serif; font-size: 18px">We highly recommend to try playground models with a better network condition due to the model sizes</span> (e.g. VGG-16 has > 500MB, AlexNet has > 250MB...). <span style="font-family: SourceSansPro-Bold, sans-serif; font-size: 18px">It may take some time to load some large models.</span></p>
+    <p>While we are still developing and expanding our model collections, enjoy the models and have fun~</p>
+    <div class="guide">Interaction Guide:</div>
+    <div id="guideLine">
 
-    <div class="mainContent">
-        TensorSpace Playground is the place we designed for presenting different pre-built models.
-    </div>
+        <div class="card-wrapper">
 
-    <div class="mainContent">
-        In the Playground, we can experience different pre-trained deep learning models.
-    </div>
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <img class="img33" src="../../assets/img/playground/left-click-drag.gif">
+                </div>
+                <div class="mdl-card__actions mdl-card--border operation-description">
+                    <p class="operation-title">- left click and drag -</p>
+                    <p class="operation-explanation">change camera angle</p>
+                </div>
+            </div>
 
-    <div class="mainContent">
-        Here are useful introductions on model interactions:
-    </div>
+        </div>
 
-    <div class="mainContent">
-        - left click and hold: coordinate the camera angle.
-    </div>
-    <div class="mainContent">
-        - right click and hold: coordinate the camera position.
-    </div>
-    <div class="mainContent">
-        - scroll up and down: coordinate the distance between camera and target center.
-    </div>
+        <div class="card-wrapper">
 
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <img class="img33" src="../../assets/img/playground/right-click-drag.gif">
+                </div>
+                <div class="mdl-card__actions mdl-card--border operation-description">
+                    <p class="operation-title">- right click and drag -</p>
+                    <p class="operation-explanation">change camera position</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-wrapper">
+
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <img class="img33" src="../../assets/img/playground/scroll.gif">
+                </div>
+                <div class="mdl-card__actions mdl-card--border operation-description">
+                    <p class="operation-title">- scroll up and down -</p>
+                    <p class="operation-explanation">move camera closer or further</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </main>
 
 </body>
