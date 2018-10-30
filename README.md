@@ -11,10 +11,10 @@
 TensorSpace is a neural network 3D visualization framework built by TensorFlow.js and Three.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports to visualize pre-trained model from TensorFlow, Keras and TensorFlow.js.
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
-<b>Fig.1</b> - TensorSpace Demo
+<b>Fig.1</b> - Interactive LeNet created by TensorSpace
 </p>
 
 ## Table of Content

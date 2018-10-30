@@ -14,10 +14,10 @@ TensorSpace可以使您更直观地观察神经网络模型，并了解该模型
 TensorSpace 支持3D可视化所有经过适当预处理之后的 TensorFlow、Keras、TensorFlow.js 模型。
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
-<b>图1</b> - TensorSpace 应用展示
+<b>图1</b> - 使用 TensorSpace 创建的交互式 LeNet 模型
 </p>
 
 ## 目录
@@ -228,7 +228,7 @@ model.init(function() {
 * 了解更多[基本概念]()。
 * 如何使用神经网络模型，查看[模型预处理]()。
 * 了解核心组成构件：[模型]()、[网络层]() 以及 [网络层融合]()。
-* 希望获取更多TensorSpace的咨询，请访问 TensorSpace 官方网站 [TensorSpace.org]()。
+* 希望获取更多 TensorSpace 的信息，请访问 TensorSpace 官方网站 [TensorSpace.org]()。
 
 ## <div id="contributors">开发人员</div>
 
