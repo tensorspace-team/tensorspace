@@ -93,10 +93,6 @@ SceneInitializer.prototype = {
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
 
-		let fogColor = new THREE.Color( 0xffffff );
-
-		this.scene.fog = new THREE.Fog( fogColor, 0.0025, 5000 );
-
 	},
 
 	updateCamera: function() {
