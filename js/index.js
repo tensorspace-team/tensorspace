@@ -98,7 +98,7 @@ function createModel() {
 
 	} );
 
-	model.add( new TSP.layers.Input2d( {
+	model.add( new TSP.layers.GreyscaleInput( {
 
 		shape: [ 28, 28, 1 ],
 		name: "initInput",

@@ -180,8 +180,8 @@
             <li><a href="layerLayer2d_zh.html">Layer2d</a></li>
             <li><a href="layerLayer3d_zh.html">Layer3d</a></li>
             <li><a href="layerInput1d_zh.html">Input1d</a></li>
-            <li><a href="layerInput2d_zh.html">Input2d</a></li>
-            <li><a href="layerInput3d_zh.html">Input3d</a></li>
+            <li><a href="layerGreyscaleInput_zh.html">GreyscaleInput</a></li>
+            <li><a href="layerRGBInput_zh.html">RGBInput</a></li>
             <li><a href="layerOutput1d_zh.html">Output1d</a></li>
             <li><a href="layerOutputDetect_zh.html">OutputDetection</a></li>
             <li><a href="layerYoloGrid_zh.html">YoloGrid</a></li>
@@ -293,8 +293,8 @@
                 <li><a href="layerLayer2d_zh.html">Layer2d</a></li>
                 <li><a href="layerLayer3d_zh.html">Layer3d</a></li>
                 <li><a href="layerInput1d_zh.html">Input1d</a></li>
-                <li><a href="layerInput2d_zh.html">Input2d</a></li>
-                <li><a href="layerInput3d_zh.html">Input3d</a></li>
+                <li><a href="layerGreyscaleInput_zh.html">GreyscaleInput</a></li>
+                <li><a href="layerRGBInput_zh.html">RGBInput</a></li>
                 <li><a href="layerOutput1d_zh.html">Output1d</a></li>
                 <li><a href="layerOutputDetect_zh.html">OutputDetection</a></li>
                 <li><a href="layerYoloGrid_zh.html">YoloGrid</a></li>
@@ -334,7 +334,7 @@ let model = new TSP.model.Sequential( container );</code></pre>
             然后，基于 LeNet 网络的结构：输入层 + 2 X (Conv2D层 & Maxpooling层) + 3 X (Dense层)，我们可以搭建其模型结构：
         </div>
         <div class="code-snippet">
-            <pre><code class="Javascript">model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
+            <pre><code class="Javascript">model.add( new TSP.layers.GreyscaleInput({ shape: [28, 28, 1] }) );
 model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
 model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
 model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
