@@ -4,6 +4,7 @@
 
 .mdl-card {
     min-height: 0;
+    width: 100%;
 }
 
 .mdl-card:hover {
@@ -256,10 +257,6 @@
 .img33 {
     width: 100%;
     /*height: 100%;*/
-}
-
-.mdl-card {
-    width: 100%;
 }
 
 .net-name {
