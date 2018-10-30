@@ -6,6 +6,12 @@
     min-height: 0;
 }
 
+.mdl-card:hover {
+    transform: scale(1.02);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
 #downloadNav {
 
     cursor: pointer;
