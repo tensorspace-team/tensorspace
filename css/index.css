@@ -213,15 +213,16 @@
 
 #galleryTitleIcon {
 
-    width: 50px;
+    width: 60px;
 
 }
 
 #galleryTitleMain {
 
-    font-size: 30px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    font-size: 40px;
+    /*margin-top: 10px;*/
+    padding-top: 30px;
+    margin-bottom: 30px;
 
 }
 
