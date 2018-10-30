@@ -61,7 +61,7 @@ npm install tensorspace
 yarn add tensorspace
 ```
 
-途径 3: [官方网站下载](https://tensorspace.org/index_zh.html#download)
+途径 3: [官方网站下载](http://tensorspace.org/index_zh.html#download)
 
 * **第二步: 安装依赖库**
 
@@ -160,7 +160,7 @@ model.init(function() {
 
 * **LeNet**
 
- [➡ 在线演示](https://tensorspace.org/html/playground/lenet_zh.html)
+ [➡ 在线演示](http://tensorspace.org/html/playground/lenet_zh.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
@@ -171,7 +171,7 @@ model.init(function() {
 
 * **AlexNet** 
 
-[➡ 在线演示](https://tensorspace.org/html/playground/alexnet_zh.html)
+[➡ 在线演示](http://tensorspace.org/html/playground/alexnet_zh.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_alexnet.gif">
@@ -182,7 +182,7 @@ model.init(function() {
 
 * **Yolov2-tiny** 
 
-[➡ 在线演示](https://tensorspace.org/html/playground/yolov2-tiny_zh.html)
+[➡ 在线演示](http://tensorspace.org/html/playground/yolov2-tiny_zh.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_yolov2.gif">
@@ -193,7 +193,7 @@ model.init(function() {
 
 * **ResNet-50**
 
-[➡ 在线演示](https://tensorspace.org/html/playground/resnet50_zh.html)
+[➡ 在线演示](http://tensorspace.org/html/playground/resnet50_zh.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_resnet50.gif">
@@ -204,7 +204,7 @@ model.init(function() {
 
 * **Vgg16**
 
-[➡ 在线演示](https://tensorspace.org/html/playground/vgg16_zh.html)
+[➡ 在线演示](http://tensorspace.org/html/playground/vgg16_zh.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_vgg.gif">
@@ -215,7 +215,7 @@ model.init(function() {
 
 * **ACGAN**
 
-[➡ 在线演示](https://tensorspace.org/html/playground/acgan_zh.html)
+[➡ 在线演示](http://tensorspace.org/html/playground/acgan_zh.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_acgan.gif">
@@ -226,12 +226,12 @@ model.init(function() {
 
 ## <div id="documentation">文档</div>
 
-* 迅速开始使用，参阅[开始使用](https://tensorspace.org/html/docs/startHello_zh.html)。
-* 下载并安装，查看[下载](https://tensorspace.org/index_zh.html#download)。
-* 了解更多[基本概念](https://tensorspace.org/html/docs/basicIntro_zh.html)。
-* 如何使用神经网络模型，查看[模型预处理](https://tensorspace.org/html/docs/preIntro_zh.html)。
-* 了解核心组成构件：[模型](https://tensorspace.org/html/docs/modelIntro_zh.html)、[网络层](https://tensorspace.org/html/docs/layerIntro_zh.html) 以及 [网络层融合](https://tensorspace.org/html/docs/mergeIntro_zh.html)。
-* 希望获取更多 TensorSpace 的信息，请访问 TensorSpace 官方网站 [TensorSpace.org](https://tensorspace.org/index_zh.html)。
+* 迅速开始使用，参阅[开始使用](http://tensorspace.org/html/docs/startHello_zh.html)。
+* 下载并安装，查看[下载](http://tensorspace.org/index_zh.html#download)。
+* 了解更多[基本概念](http://tensorspace.org/html/docs/basicIntro_zh.html)。
+* 如何使用神经网络模型，查看[模型预处理](http://tensorspace.org/html/docs/preIntro_zh.html)。
+* 了解核心组成构件：[模型](http://tensorspace.org/html/docs/modelIntro_zh.html)、[网络层](http://tensorspace.org/html/docs/layerIntro_zh.html) 以及 [网络层融合](http://tensorspace.org/html/docs/mergeIntro_zh.html)。
+* 希望获取更多 TensorSpace 的信息，请访问 TensorSpace 官方网站 [TensorSpace.org](http://tensorspace.org/index_zh.html)。
 
 ## <div id="contributors">开发人员</div>
 
