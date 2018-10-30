@@ -1,11 +1,11 @@
 <p align="center">
-<img width=150 src="https://github.com/zchholmes/tsp_image/blob/master/logo.png">
+<img width=150 src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/logo.png">
 </p>
 <h1 align="center">TensorSpace.js</h1>
 <p align="center"><b>Present Tensor in Space</b></p>
 
 <p align="center">
-<a href=""><strong>English</strong></a> | <strong>中文</strong>
+<a href="https://github.com/tensorspace-team/tensorspace/blob/master/README.md"><strong>English</strong></a> | <strong>中文</strong>
 </p>
 
 TensorSpace是一套用于构建神经网络3D可视化应用的框架。
@@ -61,11 +61,11 @@ npm install tensorspace
 yarn add tensorspace
 ```
 
-途径 3: [官方网站下载]()
+途径 3: [官方网站下载](https://tensorspace.org/index_zh.html#download)
 
 * **第二步: 安装依赖库**
 
-请在使用 TensorSapce.js 之前，引入[Tensorflow.js](https://github.com/tensorflow/tfjs)、 [Three.js](https://github.com/mrdoob/three.js)、 [Tween.js](https://github.com/tweenjs/tween.js) 和 [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) 至所需要的 html 文件中，并置于 TensorSpace.js 的引用之前。
+请在使用 TensorSapce.js 之前，引入[TensorFlow.js](https://github.com/tensorflow/tfjs)、 [Three.js](https://github.com/mrdoob/three.js)、 [Tween.js](https://github.com/tweenjs/tween.js) 和 [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) 至所需要的 html 文件中，并置于 TensorSpace.js 的引用之前。
 
 ```html
 <script src="tf.min.js"></script>
@@ -83,15 +83,18 @@ yarn add tensorspace
 
 ### 模型预处理
 
-为了获得神经网络中间层的运算结果，我们需要对已有的模型进行[模型预处理](https://github.com/syt123450/tensorspace/wiki/%5BTutorial%5D-Introduction:-Model-Preprocessing)。
+为了获得神经网络中间层的运算结果，我们需要对已有的模型进行[模型预处理](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess_zh)。
 
-基于不同的机器学习库，我们提供了 [TensorFlow 模型预处理教程]()、[Keras 模型预处理教程]() 以及 [TensorFlow.js 模型预处理教程]()。
+基于不同的机器学习库，我们提供了 [TensorFlow 模型预处理教程](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess_zh/TensorFlow)、[Keras 模型预处理教程](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess_zh/Keras) 以及 [TensorFlow.js 模型预处理教程](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess_zh/TensorFlowJS)。
 
 ### 使用
 
 在成功安装完成 TensorSpace 并完成神经网络模型预处理之后，我们可以来创建一个3D TensorSpace 模型。
 
-我们会使用我们所提供的[经过预处理的LeNet神经网络模型]()作为使用样例来进行说明。
+我们会使用我们所提供的[经过预处理的LeNet神经网络模型](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld/model)作为使用样例来进行说明。
+
+[helloworld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld)
+[5](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)
 
 首先，我们需要新建一个 TensorSpace 模型实例：
 ```JavaScript
@@ -129,7 +132,7 @@ model.init();
 
 我们可以在浏览器中看到以下模型：
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/GettingStart/HelloWorld_empty_lenet.jpg">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
 <b>图2</b> - 所创建的 LeNet 模型
@@ -146,7 +149,7 @@ model.init(function() {
 我们在这里将预测方法放入`init()`的回调函数中以确保预测在初始化完成之后进行。
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/GettingStart/HelloWorld_5.jpg">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
 <b>图3</b> - LeNet 模型判别输入 "5"
@@ -157,10 +160,10 @@ model.init(function() {
 
 * **LeNet**
 
- [➡ 在线演示]()
+ [➡ 在线演示](https://tensorspace.org/html/playground/lenet_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>图4</b> - 使用 TensorSpace 构建 LeNet
@@ -168,10 +171,10 @@ model.init(function() {
 
 * **AlexNet** 
 
-[➡ 在线演示]()
+[➡ 在线演示](https://tensorspace.org/html/playground/alexnet_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_alexnet.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_alexnet.gif">
 </p>
 <p align="center">
 <b>图5</b> - 使用 TensorSpace 构建 AlexNet
@@ -179,10 +182,10 @@ model.init(function() {
 
 * **Yolov2-tiny** 
 
-[➡ 在线演示]()
+[➡ 在线演示](https://tensorspace.org/html/playground/yolov2-tiny_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_yolov2.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_yolov2.gif">
 </p>
 <p align="center">
 <b>图6</b> - 使用 TensorSpace 构建 YOLO-v2-tiny
@@ -190,10 +193,10 @@ model.init(function() {
 
 * **ResNet-50**
 
-[➡ 在线演示]()
+[➡ 在线演示](https://tensorspace.org/html/playground/resnet50_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_resnet50.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_resnet50.gif">
 </p>
 <p align="center">
 <b>图7</b> - 使用 TensorSpace 构建 ResNet-50
@@ -201,21 +204,21 @@ model.init(function() {
 
 * **Vgg16**
 
-[➡ 在线演示]()
+[➡ 在线演示](https://tensorspace.org/html/playground/vgg16_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_vgg.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_vgg.gif">
 </p>
 <p align="center">
 <b>图8</b> - 使用 TensorSpace 构建 VGG-16
 </p>
 
-* ACGAN
+* **ACGAN**
 
-[➡ 在线演示]()
+[➡ 在线演示](https://tensorspace.org/html/playground/acgan_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/acgan.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_acgan.gif">
 </p>
 <p align="center">
 <b>图9</b> - 使用 TensorSpace 构建 ACGAN 生成网络
@@ -223,12 +226,12 @@ model.init(function() {
 
 ## <div id="documentation">文档</div>
 
-* 迅速开始使用，参阅[开始使用]()。
-* 下载并安装，查看[下载]()。
-* 了解更多[基本概念]()。
-* 如何使用神经网络模型，查看[模型预处理]()。
-* 了解核心组成构件：[模型]()、[网络层]() 以及 [网络层融合]()。
-* 希望获取更多 TensorSpace 的信息，请访问 TensorSpace 官方网站 [TensorSpace.org]()。
+* 迅速开始使用，参阅[开始使用](https://tensorspace.org/html/docs/startHello_zh.html)。
+* 下载并安装，查看[下载](https://tensorspace.org/index_zh.html#download)。
+* 了解更多[基本概念](https://tensorspace.org/html/docs/basicIntro_zh.html)。
+* 如何使用神经网络模型，查看[模型预处理](https://tensorspace.org/html/docs/preIntro_zh.html)。
+* 了解核心组成构件：[模型](https://tensorspace.org/html/docs/modelIntro_zh.html)、[网络层](https://tensorspace.org/html/docs/layerIntro_zh.html) 以及 [网络层融合](https://tensorspace.org/html/docs/mergeIntro_zh.html)。
+* 希望获取更多 TensorSpace 的信息，请访问 TensorSpace 官方网站 [TensorSpace.org](https://tensorspace.org/index_zh.html)。
 
 ## <div id="contributors">开发人员</div>
 
@@ -240,4 +243,4 @@ model.init(function() {
 
 ## <div id="license">许可证</div>
 
-[Apache License 2.0](https://github.com/syt123450/tensorspace/blob/master/LICENSE)
+[Apache License 2.0](https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE)

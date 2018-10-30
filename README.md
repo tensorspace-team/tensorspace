@@ -1,11 +1,11 @@
 <p align="center">
-<img width=150 src="https://github.com/zchholmes/tsp_image/blob/master/logo.png">
+<img width=150 src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/logo.png">
 </p>
 <h1 align="center">TensorSpace.js</h1>
 <p align="center"><b>Present Tensor in Space</b></p>
 
 <p align="center">
-<strong>English</strong> | <a href=""><strong>中文</strong></a>
+<strong>English</strong> | <a href="https://github.com/tensorspace-team/tensorspace/blob/master/README_zh.md"><strong>中文</strong></a>
 </p>
 
 TensorSpace is a neural network 3D visualization framework built by TensorFlow.js and Three.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports to visualize pre-trained model from TensorFlow, Keras and TensorFlow.js.
@@ -55,11 +55,11 @@ Option 2: Yarn
 yarn add tensorspace
 ```
 
-Option 3: [Website download page]()
+Option 3: [Website download page](https://tensorspace.org/index.html#download)
 
 * **Step 2: Install Dependency**
 
-Include [Tensorflow.js](https://github.com/tensorflow/tfjs), [Three.js](https://github.com/mrdoob/three.js), [Tween.js](https://github.com/tweenjs/tween.js), [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) in html file before include TensorSpace.js
+Include [TensorFlow.js](https://github.com/tensorflow/tfjs), [Three.js](https://github.com/mrdoob/three.js), [Tween.js](https://github.com/tweenjs/tween.js), [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) in html file before include TensorSpace.js
 
 ```html
 <script src="tf.min.js"></script>
@@ -77,16 +77,19 @@ Include TensorSpace.js into html file:
 
 ### Preprocessing
 
-For presenting multiple intermediate outputs, we need to [preprocess](https://github.com/syt123450/tensorspace/wiki/%5BTutorial%5D-Introduction:-Model-Preprocessing) the trained model.
+For presenting multiple intermediate outputs, we need to [preprocess](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess) the pre-trained model.
 
-Based on different training libraries, we provide [TensorFlow model preprocessing](), [Keras model preprocessing]() and [TensorFlow.js model preprocessing]().
+Based on different training libraries, we provide different tutorials: [TensorFlow model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlow), [Keras model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/Keras) and [TensorFlow.js model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlowJS).
 
 
 ### Usage
 
 If installed TensorSpace and preprocessed the pre-trained deep learning model successfully, let's create an interactive 3D TensorSpace model.
 
-We use a [preprocessed TensorSpace compatible LeNet model]() as an example to continue the process.
+We use a [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld/model) as an example to continue the process.
+
+[helloworld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld)
+[5](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)
 
 First, we need to new a TensorSpace model instance:
 ```JavaScript
@@ -124,7 +127,7 @@ model.init();
 
 We can get the following model in the browser if everything looks good:
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/GettingStart/HelloWorld_empty_lenet.jpg">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
 <b>Fig. 2</b> - Generated LeNet model
@@ -143,7 +146,7 @@ model.init(function() {
 We put the `predict( image_5 )` method in the callback function of `init()` to ensure the prediction is after the initialization complete.
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/GettingStart/HelloWorld_5.jpg">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
 <b>Fig. 3</b> - Generated LeNet model with input data "5"
@@ -153,10 +156,10 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **LeNet** 
 
-[➡ Live Demo]()
+[➡ Live Demo](https://tensorspace.org/html/playground/lenet.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_lenet.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>Fig.4</b> - TensorSpace LeNet
@@ -164,10 +167,10 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **AlexNet** 
 
-[➡ Live Demo]()
+[➡ Live Demo](https://tensorspace.org/html/playground/alexnet.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_alexnet.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_alexnet.gif">
 </p>
 <p align="center">
 <b>Fig.5</b> - TensorSpace AlexNet
@@ -175,10 +178,10 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **Yolov2-tiny**
 
-[➡ Live Demo]()
+[➡ Live Demo](https://tensorspace.org/html/playground/yolov2-tiny.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_yolov2.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_yolov2.gif">
 </p>
 <p align="center">
 <b>Fig.6</b> - TensorSpace YOLO-v2-tiny
@@ -186,7 +189,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **ResNet-50**
 
-[➡ Live Demo]()
+[➡ Live Demo](https://tensorspace.org/html/playground/resnet50.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_resnet50.gif">
@@ -197,10 +200,10 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **Vgg16**
 
-[➡ Live Demo]()
+[➡ Live Demo](https://tensorspace.org/html/playground/vgg16.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_vgg.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_vgg.gif">
 </p>
 <p align="center">
 <b>Fig.8</b> - TensorSpace VGG-16
@@ -208,10 +211,10 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **ACGAN**
 
-[➡ Live Demo]()
+[➡ Live Demo](https://tensorspace.org/html/playground/acgan.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/acgan.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_acgan.gif">
 </p>
 <p align="center">
 <b>Fig.9</b> - TensorSpace ACGAN
@@ -219,12 +222,12 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 ## Documentation
 
-* For a quick start, checkout [Getting Start]()
-* To download/install, see [Download]()
-* To learn more about the [Basic Concepts]()
-* To process a deep learning model, checkout [Model Preprocessing]()
-* To learn core components: [Models](), [Layers]() and [Merge Function]()
-* Checkout the official website [TensorSpace.org]() for more about TensorSpace.
+* For a quick start, checkout [Getting Start](https://tensorspace.org/html/docs/startHello.html)
+* To download/install, see [Download](https://tensorspace.org/index.html#download)
+* To learn more about the [Basic Concepts](https://tensorspace.org/html/docs/basicIntro.html)
+* To process a deep learning model, checkout [Model Preprocessing](https://tensorspace.org/html/docs/preIntro.html)
+* To learn core components: [Models](https://tensorspace.org/html/docs/modelIntro.html), [Layers](https://tensorspace.org/html/docs/layerIntro.html) and [Merge Function](https://tensorspace.org/html/docs/mergeIntro.html)
+* Checkout the official website [TensorSpace.org](https://tensorspace.org) for more about TensorSpace.
 
 ## Contributors
 
@@ -236,4 +239,4 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 ## License
 
-[Apache License 2.0](https://github.com/syt123450/tensorspace/blob/master/LICENSE)
+[Apache License 2.0](https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE)
