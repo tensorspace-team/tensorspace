@@ -181,8 +181,8 @@
             <li class="nowLabel">Layer2d</li>
             <li><a href="layerLayer3d.html">Layer3d</a></li>
             <li><a href="layerInput1d.html">Input1d</a></li>
-            <li><a href="layerInput2d.html">Input2d</a></li>
-            <li><a href="layerInput3d.html">Input3d</a></li>
+            <li><a href="layerGreyscaleInput.html">GreyscaleInput</a></li>
+            <li><a href="layerRGBInput.html">RGBInput</a></li>
             <li><a href="layerOutput1d.html">Output1d</a></li>
             <li><a href="layerOutputDetect.html">OutputDetection</a></li>
             <li><a href="layerYoloGrid.html">YoloGrid</a></li>
@@ -294,8 +294,8 @@
                 <li class="nowLabel">Layer2d</li>
                 <li><a href="layerLayer3d.html">Layer3d</a></li>
                 <li><a href="layerInput1d.html">Input1d</a></li>
-                <li><a href="layerInput2d.html">Input2d</a></li>
-                <li><a href="layerInput3d.html">Input3d</a></li>
+                <li><a href="layerGreyscaleInput.html">GreyscaleInput</a></li>
+                <li><a href="layerRGBInput.html">RGBInput</a></li>
                 <li><a href="layerOutput1d.html">Output1d</a></li>
                 <li><a href="layerOutputDetect.html">OutputDetection</a></li>
                 <li><a href="layerYoloGrid.html">YoloGrid</a></li>
@@ -431,7 +431,7 @@
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input2d( {
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.GreyscaleInput( {
 
     shape: [28, 28]
 
