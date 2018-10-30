@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Merge - Introduction</title>
+    <title>Merge Introduction</title>
 
     <meta name="description" content="Documentation page of TensorSpace.js">
     <meta name="author" content="syt123450 / https://github.com/syt123450">
@@ -319,7 +319,63 @@
 
     <main>
         <header>Merge Function Introduction</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            "Merge" functions are used to provide a way to present different "layer merging" operations
+            among different layers. There are some key points we want to highlight here for the "Merge" functions.
+        </div>
+
+        <div class="sub-title">Factory function</div>
+
+        <div>
+            We designed all merge function as a "Factory" for layer merging operation.
+            The factory returns a merged layer object with providing some proper parameters: a list of layer objects
+            need to be merged and some configurations of the returned merged object.
+        </div>
+
+        <div class="sub-title">List of input layers</div>
+
+        <div>
+            The list should contain layers need to be merged. The provided layers need to match the
+            <span class="highlight-text">shape</span> requirements
+            based on the corresponding merge function. For example, all layers for "Add" function should
+            have the same <span class="highlight-text">shape</span>.
+        </div>
+
+        <div class="sub-title">Output configurations</div>
+
+        <div>
+            The configurations is used to describe the generated merged layer object.
+            The configurations include the basic settings and status about the merged layer object.
+        </div>
+
+        <div class="sub-title">Supported Merge Functions</div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeAdd.html">Add</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeAver.html">Average</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeMax.html">Maximum</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeMul.html">Multiply</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeSub.html">Subtract</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeConcate.html">Concatenate</a>
+        </div>
+
     </main>
 </div>
 
