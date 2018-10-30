@@ -177,6 +177,7 @@
 
 #explanation > div > div {
     margin-top: 40px;
+    line-height: 24px;
     font-size: 18px;
     padding: 0 15px;
     margin-bottom: 20px;

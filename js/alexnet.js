@@ -105,7 +105,7 @@ function createModel() {
 
 	} );
 
-	model.add( new TSP.layers.Input3d( {
+	model.add( new TSP.layers.RGBInput( {
 
 		shape: [ 227, 227, 3 ]
 
