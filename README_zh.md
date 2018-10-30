@@ -37,11 +37,11 @@ TensorSpace 基于TensorFlow.js和Three.js开发，用于对神经网络进行3D
 TensorSpace 降低了前端开发者进行深度学习相关应用开发的门槛。
 我们期待看到更多基于 TensorSpace 开发的3D可视化应用。
 
-* **交互** -- 使用类 Keras 的API构建浏览器端可交互模型。
+* **交互** -- 使用类 Keras 的API，在浏览器中构建可交互的3D可视化模型。
 
-* **直观** -- 展示并观察模型中间层预测数据，直观展示模型推测过程。
+* **直观** -- 观察并展示模型中间层预测数据，直观演示模型推测过程。
 
-* **集成** -- 支持基于使用 TensorFlow、Keras及TensorFlow.js 训练的模型。
+* **集成** -- 支持使用 TensorFlow、Keras 以及 TensorFlow.js 训练的模型。
 
 ## <div id="getting-start">开始使用</div>
 
@@ -68,13 +68,13 @@ yarn add tensorspace
 请在使用 TensorSapce.js 之前，引入[Tensorflow.js](https://github.com/tensorflow/tfjs)、 [Three.js](https://github.com/mrdoob/three.js)、 [Tween.js](https://github.com/tweenjs/tween.js) 和 [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) 至所需要的 html 文件中，并置于 TensorSpace.js 的引用之前。
 
 ```html
+<script src="tf.min.js"></script>
 <script src="three.min.js"></script>
 <script src="tween.min.js"></script>
 <script src="TrackballControls.js"></script>
-<script src="tf.min.js"></script>
 ```
 
-* **第三步: 安装 Tensorspace.js**
+* **第三步: 安装 TensorSpace.js**
 
 将 TensorSpace.js 引入 html 文件中：
 ```html

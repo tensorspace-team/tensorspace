@@ -41,9 +41,9 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
 
 ### Install
 
-* **Step 1: Download Tensorspace.js**
+* **Step 1: Download TensorSpace.js**
 
-There are three ways to download Tensorspace.js: npm, yarn, or official website
+There are three ways to download TensorSpace.js: npm, yarn, or official website
 
 Option 1: NPM
 ```bash
@@ -59,18 +59,18 @@ Option 3: [Website download page]()
 
 * **Step 2: Install Dependency**
 
-Include [Tensorflow.js](https://github.com/tensorflow/tfjs), [Three.js](https://github.com/mrdoob/three.js), [Tween.js](https://github.com/tweenjs/tween.js), [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) in html file before include Tensorspace.js
+Include [Tensorflow.js](https://github.com/tensorflow/tfjs), [Three.js](https://github.com/mrdoob/three.js), [Tween.js](https://github.com/tweenjs/tween.js), [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) in html file before include TensorSpace.js
 
 ```html
+<script src="tf.min.js"></script>
 <script src="three.min.js"></script>
 <script src="tween.min.js"></script>
 <script src="TrackballControls.js"></script>
-<script src="tf.min.js"></script>
 ```
 
-* **Step 3: Install Tensorspace.js**
+* **Step 3: Install TensorSpace.js**
 
-Include Tensorspace.js into html file:
+Include TensorSpace.js into html file:
 ```html
 <script src="tensorspace.min.js"></script>
 ```
