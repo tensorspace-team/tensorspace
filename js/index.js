@@ -41,7 +41,7 @@ $(function() {
     });
 
     $('#toGithub').click(function() {
-        window.location.href = "https://github.com/syt123450/Gio.js";
+        window.location.href = "https://github.com/tensorspace-team/tensorspace";
     });
 
     $("#galleryLenet").hover(function(){
