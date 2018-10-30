@@ -180,8 +180,8 @@
             <li class="nowLabel">Layer2d</li>
             <li><a href="layerLayer3d_zh.html">Layer3d</a></li>
             <li><a href="layerInput1d_zh.html">Input1d</a></li>
-            <li><a href="layerInput2d_zh.html">Input2d</a></li>
-            <li><a href="layerInput3d_zh.html">Input3d</a></li>
+            <li><a href="layerGreyscaleInput_zh.html">GreyscaleInput</a></li>
+            <li><a href="layerRGBInput_zh.html">RGBInput</a></li>
             <li><a href="layerOutput1d_zh.html">Output1d</a></li>
             <li><a href="layerOutputDetect_zh.html">OutputDetection</a></li>
             <li><a href="layerYoloGrid_zh.html">YoloGrid</a></li>
@@ -293,8 +293,8 @@
                 <li class="nowLabel">Layer2d</li>
                 <li><a href="layerLayer3d_zh.html">Layer3d</a></li>
                 <li><a href="layerInput1d_zh.html">Input1d</a></li>
-                <li><a href="layerInput2d_zh.html">Input2d</a></li>
-                <li><a href="layerInput3d_zh.html">Input3d</a></li>
+                <li><a href="layerGreyscaleInput_zh.html">GreyscaleInput</a></li>
+                <li><a href="layerRGBInput_zh.html">RGBInput</a></li>
                 <li><a href="layerOutput1d_zh.html">Output1d</a></li>
                 <li><a href="layerOutputDetect_zh.html">OutputDetection</a></li>
                 <li><a href="layerYoloGrid_zh.html">YoloGrid</a></li>
@@ -429,7 +429,7 @@
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">Tensorflow.js</span> 构建模型语法，直接添加层即可。</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input2d( {
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.GreyscaleInput( {
 
     shape: [28, 28]
 
