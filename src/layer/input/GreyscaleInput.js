@@ -8,21 +8,21 @@ import { ColorUtils } from "../../utils/ColorUtils";
 import { ModelInitWidth } from "../../utils/Constant";
 
 /**
- * Input2d, input layer, can be initialized by TensorSpace user.
+ * GreyscaleInput, input layer, can be initialized by TensorSpace user.
  * Layer for gray scale image.
  *
- * @param config, user's configuration for Input2d.
+ * @param config, user's configuration for GreyscaleInput.
  * @constructor
  */
 
-function Input2d( config ) {
+function GreyscaleInput( config ) {
 
-	// Input2d inherits from abstract layer "NativeLayer".
+	// GreyscaleInput inherits from abstract layer "NativeLayer".
 
 	NativeLayer.call( this, config );
 
 	/**
-	 * Input2d has two output dimensions: [ width, height ].
+	 * GreyscaleInput has two output dimensions: [ width, height ].
 	 *
  	 * @type { int }
 	 */
@@ -38,12 +38,12 @@ function Input2d( config ) {
 	 */
 	this.depth = 1;
 
-	// Load user's Input2d configuration.
+	// Load user's GreyscaleInput configuration.
 
 	this.loadLayerConfig( config );
 
 	/**
-	 * As Input2d is the first layer model, actualWidth is defined as a const.
+	 * As GreyscaleInput is the first layer model, actualWidth is defined as a const.
 	 * Use actualWidth to calculate actualHeight.
 	 *
 	 * @type { double }
@@ -77,7 +77,7 @@ function Input2d( config ) {
 
 	/**
 	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
-	 * False means that user need to add value for Input2d when they are preprocessing multi-output for the model.
+	 * False means that user need to add value for GreyscaleInput when they are preprocessing multi-output for the model.
 	 *
 	 * @type { boolean }
 	 */
@@ -86,27 +86,27 @@ function Input2d( config ) {
 
 	this.layerDimension = 2;
 
-	this.layerType = "Input2d";
+	this.layerType = "GreyscaleInput";
 
 }
 
-Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
+GreyscaleInput.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	/**
 	 * ============
 	 *
 	 * Functions below override base class NativeLayer's abstract method
 	 *
-	 * Input2d overrides NativeLayer's function:
+	 * GreyscaleInput overrides NativeLayer's function:
 	 * init, assemble, updateValue, clear, handleHoverIn, handleHoverOut, loadModelConfig, provideRelativeElements, getBoundingWidth
 	 *
 	 * ============
 	 */
 
 	/**
-	 * init() create actual THREE.Object in Input2d, warp them into a group, and add it to THREE.js's scene.
+	 * init() create actual THREE.Object in GreyscaleInput, warp them into a group, and add it to THREE.js's scene.
 	 *
-	 * Model passes two parameters, center and actualDepth, to Input2d when call init() to initialize Input2d.
+	 * Model passes two parameters, center and actualDepth, to GreyscaleInput when call init() to initialize GreyscaleInput.
 	 *
 	 * @param { JSON } center, layer's center (x, y, z) relative to model
 	 * @param { double } actualDepth, layer aggregation's depth
@@ -117,7 +117,7 @@ Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		this.center = center;
 		this.actualDepth = actualDepth;
 
-		// Init a neuralGroup as the wrapper for all THREE.Object in Input2d.
+		// Init a neuralGroup as the wrapper for all THREE.Object in GreyscaleInput.
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
@@ -221,7 +221,7 @@ Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * loadModelConfig() load model's configuration into Input2d object,
+	 * loadModelConfig() load model's configuration into GreyscaleInput object,
 	 * If one specific attribute has been set before, model's configuration will not be loaded into it.
 	 *
 	 * Based on the passed in modelConfig parameter
@@ -292,10 +292,10 @@ Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 */
 
 	/**
-	 * loadLayerConfig() Load user's configuration into Input2d.
+	 * loadLayerConfig() Load user's configuration into GreyscaleInput.
 	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
 	 *
-	 * @param { JSON } layerConfig, user's configuration for Input3d.
+	 * @param { JSON } layerConfig, user's configuration for RGBInput.
 	 */
 
 	loadLayerConfig: function( layerConfig ) {
@@ -312,20 +312,20 @@ Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 			} else {
 
-				console.error( "\"shape\" property is required for Input2d layer" );
+				console.error( "\"shape\" property is required for GreyscaleInput layer" );
 
 			}
 
 		} else {
 
-			console.error( "Lack config for Input2d layer." );
+			console.error( "Lack config for GreyscaleInput layer." );
 
 		}
 
 	},
 
 	/**
-	 * initAggregationElement() create layer grey map's THREE.js Object, configure it, and add it to neuralGroup in Input3d.
+	 * initAggregationElement() create layer grey map's THREE.js Object, configure it, and add it to neuralGroup in RGBInput.
 	 */
 
 	initAggregationElement: function() {
@@ -397,4 +397,4 @@ Input2d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 } );
 
-export { Input2d };
+export { GreyscaleInput };

@@ -40,7 +40,7 @@
 		let container = document.getElementById( "container" );
 		let model = new TSP.model.Sequential( container );
 
-		model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
+		model.add( new TSP.layers.GreyscaleInput({ shape: [28, 28, 1] }) );
 		model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
 		model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
 		model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );

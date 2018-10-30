@@ -56,7 +56,7 @@ let RenderPreprocessor = ( function() {
 
 		preProcessPaddingColor: preProcessMapColor,
 
-		preProcessInput3dColor: preProcessMap3dColor,
+		preProcessRGBInputColor: preProcessMap3dColor,
 
 		preProcessQueueBackColor: preProcessQueueBackColor
 

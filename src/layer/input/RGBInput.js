@@ -12,24 +12,24 @@ import { ModelInitWidth } from "../../utils/Constant";
 import { CloseButtonRatio } from "../../utils/Constant";
 
 /**
- * Input3d, input layer, can be initialized by TensorSpace user.
+ * RGBInput, input layer, can be initialized by TensorSpace user.
  * Layer for RGB image.
  * RGB image has width and height, sometimes, we consider it a 2D input,
  * however, in TensorSpace when we separate RGB image into R, G, B channel,
  * we can find that the it actual has the third dimension depth = 3.
  *
- * @param config, user's configuration for Input3d.
+ * @param config, user's configuration for RGBInput.
  * @constructor
  */
 
-function Input3d( config ) {
+function RGBInput( config ) {
 
-	// Input3d inherits from abstract layer "NativeLayer".
+	// RGBInput inherits from abstract layer "NativeLayer".
 
 	NativeLayer.call( this, config );
 
 	/**
-	 * Input3d has three output dimensions: [ width, height, depth ].
+	 * RGBInput has three output dimensions: [ width, height, depth ].
 	 *
 	 * @type { int }
 	 */
@@ -38,12 +38,12 @@ function Input3d( config ) {
 	this.height = undefined;
 	this.depth = 3;
 
-	// Load user's Input3d configuration.
+	// Load user's RGBInput configuration.
 
 	this.loadLayerConfig( config );
 
 	/**
-	 * As Input3d is the first layer model, actualWidth is defined as a const.
+	 * As RGBInput is the first layer model, actualWidth is defined as a const.
 	 * Use actualWidth to calculate actualHeight.
 	 *
 	 * @type { double }
@@ -116,7 +116,7 @@ function Input3d( config ) {
 
 	/**
 	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
-	 * False means that user need to add value for Input3d when they are preprocessing multi-output for the model.
+	 * False means that user need to add value for RGBInput when they are preprocessing multi-output for the model.
 	 *
 	 * @type { boolean }
 	 */
@@ -125,18 +125,18 @@ function Input3d( config ) {
 
 	this.layerDimension = 3;
 
-	this.layerType = "Input3d";
+	this.layerType = "RGBInput";
 
 }
 
-Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
+RGBInput.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	/**
 	 * ============
 	 *
 	 * Functions below override base class NativeLayer's abstract method
 	 *
-	 * Input3d overrides NativeLayer's function:
+	 * RGBInput overrides NativeLayer's function:
 	 * init, assemble, updateValue, clear, handleClick, handleHoverIn, handleHoverOut, loadModelConfig,
 	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements, getBoundingWidth
 	 *
@@ -144,9 +144,9 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 */
 
 	/**
-	 * init() create actual THREE.Object in Input3d, warp them into a group, and add it to THREE.js's scene.
+	 * init() create actual THREE.Object in RGBInput, warp them into a group, and add it to THREE.js's scene.
 	 *
-	 * Model passes two parameters, center and actualDepth, to Input3d when call init() to initialize Input3d.
+	 * Model passes two parameters, center and actualDepth, to RGBInput when call init() to initialize RGBInput.
 	 *
 	 * @param { JSON } center, layer's center (x, y, z) relative to model
 	 * @param { double } actualDepth, layer aggregation's depth
@@ -157,7 +157,7 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		this.center = center;
 		this.actualDepth = actualDepth;
 
-		// Init a neuralGroup as the wrapper for all THREE.Object in Input3d.
+		// Init a neuralGroup as the wrapper for all THREE.Object in RGBInput.
 
 		this.neuralGroup = new THREE.Group();
 		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
@@ -305,7 +305,7 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * loadModelConfig() load model's configuration into Input3d object,
+	 * loadModelConfig() load model's configuration into RGBInput object,
 	 * If one specific attribute has been set before, model's configuration will not be loaded into it.
 	 *
 	 * Based on the passed in modelConfig parameter
@@ -460,7 +460,7 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 */
 
 	/**
-	 * openLayer() open Input3d, switch layer status from "close" to "open".
+	 * openLayer() open RGBInput, switch layer status from "close" to "open".
 	 *
 	 * This API is exposed to TensorSpace user.
 	 */
@@ -496,10 +496,10 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * loadLayerConfig() Load user's configuration into Input3d.
+	 * loadLayerConfig() Load user's configuration into RGBInput.
 	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
 	 *
-	 * @param { JSON } layerConfig, user's configuration for Input3d.
+	 * @param { JSON } layerConfig, user's configuration for RGBInput.
 	 */
 
 	loadLayerConfig: function( layerConfig ) {
@@ -515,14 +515,14 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		} else {
 
-			console.error( "\"shape\" property is require for Input3d layer." );
+			console.error( "\"shape\" property is require for RGBInput layer." );
 
 		}
 
 	},
 
 	/**
-	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in Input3d.
+	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in RGBInput.
 	 */
 
 	initAggregationElement: function() {
@@ -570,7 +570,7 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in Input3d.
+	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in RGBInput.
 	 */
 
 	disposeAggregationElement: function() {
@@ -581,7 +581,7 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * initSegregationElements() create Channel maps' THREE.js Object, configure them, and add them to neuralGroup in Input3d.
+	 * initSegregationElements() create Channel maps' THREE.js Object, configure them, and add them to neuralGroup in RGBInput.
 	 */
 
 	initSegregationElements: function() {
@@ -662,7 +662,7 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * disposeSegregationElements() remove feature maps from neuralGroup, clear their handlers, and dispose their THREE.js Object in Input3d.
+	 * disposeSegregationElements() remove feature maps from neuralGroup, clear their handlers, and dispose their THREE.js Object in RGBInput.
 	 */
 
 	disposeSegregationElements: function() {
@@ -774,4 +774,4 @@ Input3d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 } );
 
-export { Input3d };
+export { RGBInput };

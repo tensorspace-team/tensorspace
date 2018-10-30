@@ -107,7 +107,7 @@ let model = new TSP.model.Sequential( container );
 
 Next, based on the LeNet structure: Input + 2 X (Conv2D & Maxpooling) + 3 X (Dense), we build the structure of the model:
 ```JavaScript
-model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
+model.add( new TSP.layers.GreyscaleInput({ shape: [28, 28, 1] }) );
 model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
 model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
 model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );

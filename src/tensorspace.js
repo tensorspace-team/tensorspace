@@ -11,8 +11,8 @@ import { Conv2dTranspose } from "./layer/intermediate/Conv2dTranspose";
 import { Cropping1d } from "./layer/intermediate/Cropping1d";
 import { Cropping2d } from "./layer/intermediate/Cropping2d";
 import { Input1d } from "./layer/input/Input1d";
-import { Input2d } from "./layer/input/Input2d";
-import { Input3d } from "./layer/input/Input3d";
+import { GreyscaleInput } from "./layer/input/GreyscaleInput";
+import { RGBInput } from "./layer/input/RGBInput";
 import { Output1d } from "./layer/output/Output1d";
 import { OutputDetection } from "./layer/output/OutputDetection";
 import { YoloGrid } from "./layer/output/YoloGrid";
@@ -45,8 +45,8 @@ import { Multiply } from "./merge/Multiply";
 let layers = {
 
 	Input1d: Input1d,
-	Input2d: Input2d,
-	Input3d: Input3d,
+	GreyscaleInput: GreyscaleInput,
+	RGBInput: RGBInput,
 	Output1d: Output1d,
 	OutputDetection: OutputDetection,
 	YoloGrid: YoloGrid,

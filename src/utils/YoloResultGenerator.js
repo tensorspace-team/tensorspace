@@ -65,9 +65,9 @@ let YoloResultGenerator = (function() {
 			let bw = anchors[ box * 2 ] * Math.exp( channelData[ index + 2 ] );
 			let bh = anchors[ box * 2 + 1 ] * Math.exp( channelData[ index + 3 ] );
 
-            console.log("------------------Index: " + index + " ----------------------");
-            console.log( "bx: " + bx + " | by: " + by );
-            console.log( "bw: " + bw + " | bh: " + bh );
+            // console.log("------------------Index: " + index + " ----------------------");
+            // console.log( "bx: " + bx + " | by: " + by );
+            // console.log( "bw: " + bw + " | bh: " + bh );
 
 			let finalConfidence = sigmoid( channelData[ index + 4 ] );
 
@@ -81,8 +81,8 @@ let YoloResultGenerator = (function() {
 
 			let finalScore = bestClassScore * finalConfidence;
 
-            console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
-            console.log("Final Score: " + finalScore);
+            // console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
+            // console.log("Final Score: " + finalScore);
 
 			let width = bw / widthRange * outputShape[ 0 ];
 			let height = bh  / heightRange * outputShape[ 1 ];
@@ -99,7 +99,7 @@ let YoloResultGenerator = (function() {
             )
             {
 
-            	console.log("Class name: " + bestClassLabel + " | Confidence Score: " + finalScore);
+            	// console.log("Class name: " + bestClassLabel + " | Confidence Score: " + finalScore);
 
 				output.push( {
 

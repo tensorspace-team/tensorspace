@@ -112,7 +112,7 @@ let model = new TSP.model.Sequential( container );
 
 然后，基于 LeNet 网络的结构：输入层 + 2 X (Conv2D层 & Maxpooling层) + 3 X (Dense层)，我们可以搭建其模型结构：
 ```JavaScript
-model.add( new TSP.layers.Input2d({ shape: [28, 28, 1] }) );
+model.add( new TSP.layers.GreyscaleInput({ shape: [28, 28, 1] }) );
 model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
 model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
 model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );

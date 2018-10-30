@@ -294,7 +294,7 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 * loadLayerConfig() Load user's configuration into Input1d.
 	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
 	 *
-	 * @param { JSON } layerConfig, user's configuration for Input3d.
+	 * @param { JSON } layerConfig, user's configuration for RGBInput.
 	 */
 
 	loadLayerConfig: function( layerConfig ) {

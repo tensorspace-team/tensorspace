@@ -39,9 +39,9 @@
 
     <script>
 
-    function addInput3d( model ) {
+    function addRGBInput( model ) {
 
-        model.add( new TSP.layers.Input3d ( {
+        model.add( new TSP.layers.RGBInput ( {
 
             shape: [ 10, 10, 3],
 
@@ -49,9 +49,9 @@
 
     }
 
-    function addInput2d( model ) {
+    function addGreyscaleInput( model ) {
 
-        model.add( new TSP.layers.Input2d ( {
+        model.add( new TSP.layers.GreyscaleInput ( {
 
             shape: [ 10, 10 ],
 
@@ -79,17 +79,17 @@
 
                 break;
 
-            case "Input3d" :
+            case "RGBInput" :
 
                 break;
 
-            case "Input2d" :
+            case "GreyscaleInput" :
 
                 break;
 
             case "Pooling2d" :
 
-                addInput3d( model );
+                addRGBInput( model );
 
                 break;
 
@@ -101,19 +101,19 @@
 
             case "Output1d" :
 
-                addInput3d( model );
+                addRGBInput( model );
 
                 break;
 
             case "UpSampling2d" :
 
-                addInput3d( model );
+                addRGBInput( model );
 
                 break;
 
             case "Reshape" :
 
-                model.add( new TSP.layers.Input3d( {
+                model.add( new TSP.layers.RGBInput( {
                     shape: [10, 10, 3],
                 }));
 
@@ -121,19 +121,19 @@
 
             case "Flatten" :
 
-                addInput3d( model );
+                addRGBInput( model );
 
                 break;
 
             case "Cropping2d" :
 
-                addInput3d( model );
+                addRGBInput( model );
 
                 break;
 
             case "GlobalPooling1d" :
 
-                addInput2d( model );
+                addGreyscaleInput( model );
 
                 model.add(new TSP.layers.Conv1d({
 
@@ -147,13 +147,13 @@
 
             case "GlobalPooling2d" :
 
-                addInput3d( model );
+                addRGBInput( model );
 
                 break;
 
             case "Activation2d" :
 
-                addInput2d( model );
+                addGreyscaleInput( model );
 
                 // model.add(new TSP.layers.Conv1d({
                 //
@@ -174,7 +174,7 @@
 
             case "Activation3d" :
 
-                addInput2d( model );
+                addGreyscaleInput( model );
 
                 model.add(new TSP.layers.Conv2d({
 
@@ -213,13 +213,13 @@
         strides: 1,
     } );
 
-    let input2d = new TSP.layers.Input2d ( {
+    let input2d = new TSP.layers.GreyscaleInput ( {
 
         shape: [ 28, 28 ],
 
     } );
 
-    let input3d = new TSP.layers.Input3d ( {
+    let input3d = new TSP.layers.RGBInput ( {
 
         shape: [ 28, 28, 3 ],
 
@@ -292,9 +292,9 @@
 
     // layerIn = conv1d; addExample( model , "Conv1d", conv1d );
 
-    // layerIn = input2d; addExample( model, "Input2d", input2d );
+    // layerIn = input2d; addExample( model, "GreyscaleInput", input2d );
 
-    // layerIn = input3d; addExample( model, "Input3d", input3d );
+    // layerIn = input3d; addExample( model, "RGBInput", input3d );
 
     // layerIn = pooling2d; addExample( model, "Pooling2d", layerIn );
 

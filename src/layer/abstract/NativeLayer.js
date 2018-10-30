@@ -12,7 +12,7 @@ import { BasicLineGroup } from "../../elements/BasicLineGroup";
  * NativeLayer extends "Layer" to include basic line group.
  * Base class for:
  *      NativeLayer1d, NativeLayer2d, NativeLayer3d,
- *      Input1d, Input2d, Input3d,
+ *      Input1d, GreyscaleInput, RGBInput,
  *      Output1d, Output2d,
  *      OutputDetection, YoloGrid.
  *

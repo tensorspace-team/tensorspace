@@ -112,7 +112,7 @@ InputMap3d.prototype = {
 
 	updateVis: function( colors ) {
 
-		let renderData = RenderPreprocessor.preProcessInput3dColor( colors, this.width, this.height );
+		let renderData = RenderPreprocessor.preProcessRGBInputColor( colors, this.width, this.height );
 
 		for ( let i = 0; i < this.dataArray.length; i++ ) {
 
