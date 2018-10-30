@@ -318,7 +318,59 @@
 
     <main>
         <header>网络层融合简介</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            “Merge” 方法是用来展示不同网络层间所进行的“网络层融合”操作的。在这里，我们需要注意一下几点：
+        </div>
+
+        <div class="sub-title">工厂方法</div>
+
+        <div>
+            我们将网络层融合操作设计为“工厂方法”，即“工厂”将根据所提供的参数生成所对应的融合层对象。
+            “工厂”所需要的参数包括：一个输入层列表以及若干输出层配置。
+        </div>
+
+        <div class="sub-title">输入层列表</div>
+
+        <div>
+            该列表应当包括所有需要进行融合操作的网络层对象。
+            这些对象必须满足所使用的融合方法关于 <span class="highlight-text">shape</span> 的基本要求。
+            例如，对于 “Add” 方法来说，所有输入层的 <span class="highlight-text">shape</span> 必须相同。
+        </div>
+
+        <div class="sub-title">输出层配置</div>
+
+        <div>
+            该配置是用来描述输出层对象的基本参数。这些参数包括一些基本的设置以及初始状态。
+        </div>
+
+        <div class="sub-title">支持的融合方法</div>
+
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeAdd_zh.html">Add</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeAver_zh.html">Average</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeMax_zh.html">Maximum</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeMul_zh.html">Multiply</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeSub_zh.html">Subtract</a>
+        </div>
+        <div class="panel-heading">
+            <i class="material-icons material-icons--outline">filter_center_focus</i>
+            <a href="mergeConcate_zh.html">Concatenate</a>
+        </div>
+
     </main>
 </div>
 
