@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "build": "rollup -c",
-    "build-publish": "rollup -c && uglifyjs build/tensorspace.js -cm --preamble \"// https://github.com/syt123450/tensorspace/blob/master/LICENSE\" --output build/tensorspace.min.js",
+    "build-publish": "rollup -c && uglifyjs build/tensorspace.js -cm --preamble \"// https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE\" --output build/tensorspace.min.js",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },
@@ -37,9 +37,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/syt123450/tensorspace.git"
+    "url": "git+https://github.com/tensorspace-team/tensorspace.git"
   },
-  "homepage": "https://github.com/syt123450/tensorspace#readme",
+  "homepage": "https://github.com/tensorspace-team/tensorspace#readme",
   "author": "tensorspace-team",
   "license": "Apache-2.0",
   "contributors": [
