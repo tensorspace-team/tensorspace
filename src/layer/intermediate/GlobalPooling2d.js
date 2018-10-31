@@ -152,7 +152,7 @@ GlobalPooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
-		} else if ( selectedElement.elementType === "featureMap" ) {
+		} else if ( selectedElement.elementType === "globalPoolingElement" ) {
 
 			// Get element which has the same index.
 

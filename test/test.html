@@ -45,10 +45,10 @@
 
 	let container = document.getElementById("container");
 
-//    let model = new TSP.model.Sequential(container, {
-//        layerShape: "rect",
-//		layerInitStatus: "close"
-//    });
+    let model = new TSP.model.Sequential(container, {
+        layerShape: "rect",
+		layerInitStatus: "close"
+    });
 
     let input = new TSP.layers.GreyscaleInput({
         shape: [28, 28, 1]
@@ -61,65 +61,13 @@
 		padding: "same"
 	});
 
-    layer1.apply( input );
+    let globalpooling = new TSP.layers.GlobalPooling2d({});
 
-	let layer2 = new TSP.layers.Conv2d({
-		kernelSize: 2,
-		filters: 36,
-		strides: 1,
-		padding: "same"
-	});
+    model.add(input);
+    model.add(layer1);
+    model.add(globalpooling);
 
-	layer2.apply( input );
-
-	let layer3 = new TSP.layers.Conv2d({
-		kernelSize: 2,
-		filters: 4,
-		strides: 1,
-		padding: "same"
-	});
-
-	layer3.apply( layer2 );
-
-	let addLayer = new TSP.layers.Add([layer1, layer3]);
-
-	let model = new TSP.model.Model(container, {
-        inputs: [input],
-        outputs: [addLayer],
-        outputsOrder: ["input", "conv1", "conv2", "conv3", "add"],
-        layerShape: "rect",
-		layerInitStatus: "close",
-        stats: true
-
-	});
-
-//    model.add(input);
-//    model.add(layer2);
-//    model.add(layer3);
-
-//
-//    let layer2 = new TSP.layers.Conv2d({
-//		kernelSize: 2,
-//		filters: 4,
-//		strides: 1,
-//		padding: "same",
-////		closeButton: {
-////			ratio: 1,
-////			display: true
-////		}
-//	});
-//
-//    model.add(layer1);
-//    model.add(layer2);
-//
-//    let addLayer = TSP.layers.Add([layer1, layer2]);
-//
-//    model.add(addLayer);
-
-    model.init(function(){
-
-
-    });
+    model.init();
 
 </script>
 

@@ -151,7 +151,7 @@ GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototyp
 
 			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
-		} else if ( selectedElement.elementType === "gridLine" ) {
+		} else if ( selectedElement.elementType === "globalPoolingElement" ) {
 
 			// Get element which has the same index.
 
