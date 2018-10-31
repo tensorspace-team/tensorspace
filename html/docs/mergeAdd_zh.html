@@ -320,8 +320,7 @@
         <header>Add</header>
 
         <div>
-            "Add" 方法使用工厂方法来完成层的<span class="span_bold">加法</span>运算。该方法要求所有输入层形状相同（否则无法相加）
-            并返回一个<span class="span_bold">加法层实例</span>。
+            “Add” 方法使用工厂方法来完成层的<span class="span_bold">加法</span>运算。该方法要求所有输入层形状相同（否则无法相加）并返回一个<span class="span_bold">加法层实例</span>。
         </div>
 
         <div class="sub-title">工厂方法</div>
@@ -424,7 +423,7 @@
         </div>
 
         <div>
-            <a href="">.neuralValue</a> : <span class="span_bold">[float32]</span>
+            <a href="">.neuralValue</a> : <span class="span_bold">[Int]</span>
         </div>
 
         <div>
@@ -501,6 +500,7 @@ let mergedLayer = TSP.layers.Add( [ conv2d1, conv2d2 ] /* , configurations */ );
 
 // 添加融合层
 
+model.add( mergedLayer );
 model.init();
 
 // 调用 openLayer 来打开layer。
@@ -538,6 +538,7 @@ let mergedLayer = TSP.layers.Add( [ conv2d1, conv2d2 ] /* , configurations */ );
 
 // 添加融合层
 
+model.add( mergedLayer );
 model.init();
 
 // 如果 layer 已经是打开状态，调用 closeLayer 来关闭 layer。
@@ -547,7 +548,7 @@ mergedLayer.closeLayer();</code></pre>
 
         <div class="sub-title">使用样例</div>
 
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>声明一个Conv2D的实例，方便复用</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>声明一个 “MergedLayer3d” 的实例，方便复用</div>
         <div class="code-snippet">
             <pre><code class="Javascript">let mergedLayer = TSP.layers.Add(
 
@@ -565,7 +566,7 @@ mergedLayer.closeLayer();</code></pre>
 model.add( mergedLayer );</code></pre>
         </div>
 
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>直接添加Conv2D</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>直接添加</div>
         <div class="code-snippet">
             <pre><code class="Javascript">model.add(TSP.layers.Add(
 
