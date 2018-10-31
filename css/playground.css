@@ -19,6 +19,10 @@ aside a {
     color: #548CA9;
 }
 
+aside a:hover {
+    color: #D6FDFF;
+}
+
 aside > div {
 
     width: 100%;
