@@ -163,7 +163,11 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 				this.outputShape = [ layerConfig.units ];
 
-				this.totalSegments = Math.ceil( this.width / this.segmentLength );
+				if ( this.paging ) {
+
+					this.totalSegments = Math.ceil( this.width / this.segmentLength );
+
+				}
 
 			} else {
 

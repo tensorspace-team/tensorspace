@@ -520,7 +520,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 * @param { JSON } layerConfig, user's layer configuration.
 	 */
 
-	loadLayer1dConfig: function(layerConfig ) {
+	loadLayer1dConfig: function( layerConfig ) {
 
 		if ( layerConfig !== undefined ) {
 

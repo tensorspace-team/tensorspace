@@ -136,7 +136,11 @@ BasicLayer1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 
 			}
 
-			// TODO: add segment to BasicLayer1d.
+			if ( this.paging ) {
+
+				this.totalSegments = Math.ceil( this.width / this.segmentLength );
+
+			}
 
 		} else {
 

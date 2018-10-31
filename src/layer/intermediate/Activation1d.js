@@ -60,6 +60,12 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 
 		this.width = this.inputShape[ 0 ];
 
+		if ( this.paging ) {
+
+			this.totalSegments = Math.ceil( this.width / this.segmentLength );
+
+		}
+
 		// Activation1d layer's outputShape has one dimension, that's why Activation1d layer inherits from abstract layer "NativeLayer1d".
 
 		this.outputShape = [ this.width ];
@@ -180,8 +186,6 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 				console.error( "\"activation\" property is required for activation1d layer." );
 
 			}
-
-			// TODO: add segment to Activation1d.
 
 		} else {
 

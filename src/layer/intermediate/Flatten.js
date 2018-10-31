@@ -60,6 +60,12 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		this.width = units;
 
+		if ( this.paging ) {
+
+			this.totalSegments = Math.ceil( this.width / this.segmentLength );
+
+		}
+
 		// Flatten layer's outputShape has one dimension, that's why Flatten layer inherits from abstract layer "NativeLayer1d".
 
 		this.outputShape = [ this.width ];
@@ -166,12 +172,6 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	loadLayerConfig: function( layerConfig ) {
-
-		if ( layerConfig !== undefined ) {
-
-			// TODO: add segment to flatten.
-
-		}
 
 	}
 
