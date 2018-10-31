@@ -248,6 +248,12 @@ model.init(function() {
 | :---: | :---: | :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
+## <div id="contact">联系方式</div>
+若有任何疑问，欢迎通过以下方式联系我们：
+* Email: tensorspaceteam@gmail.com
+* GitHub Issues: [create issue](https://github.com/tensorspace-team/tensorspace/issues/new)
+* Slack: [#questions](https://tensorspace.slack.com/messages/CDSB58A5P)
+
 ## <div id="license">许可证</div>
 
 [Apache License 2.0](https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE)
