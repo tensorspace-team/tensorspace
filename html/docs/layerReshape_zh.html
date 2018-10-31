@@ -425,7 +425,7 @@
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
         <div class="property-title"><a href="">.layerType</a> : String</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的类型，返回值有三种可能：输入为1维，返回字符串 <span class="span_bold">Reshape1d</span>；输入为2维，返回字符串 <span class="span_bold">Reshape2d</span>；输入为3维，返回字符串 <span class="span_bold">Reshape3d</span>；</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的类型，返回值有三种可能：若 targetShape 长度为1，返回字符串 <span class="span_bold">Reshape1d</span>；若 targetShape 长度为2，返回字符串 <span class="span_bold">Reshape2d</span>；若 targetShape 长度为3，返回字符串 <span class="span_bold">Reshape3d</span>；</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
         <div class="sub-title">方法</div>
@@ -443,7 +443,7 @@
 
 let reshapeLayer = new TSP.layers.Reshape( {
 
-    targetShape: [ 24, 24 ],
+    targetShape: [ 7, 7, 16 ],
     name: "Reshape1",
     initStatus: "open",
     animationTimeRatio: 2
