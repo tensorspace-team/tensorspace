@@ -244,6 +244,12 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 | :---: | :---: | :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
+## Contact
+If you have any issue or doubt, please contact us by:
+* Email: tensorspaceteam@gmail.com
+* GitHub Issues: [create issue](https://github.com/tensorspace-team/tensorspace/issues/new)
+* Slack: [#questions](https://tensorspace.slack.com/messages/CDSB58A5P)
+
 ## License
 
 [Apache License 2.0](https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE)
