@@ -65,7 +65,7 @@ function createModel() {
 	// 1
 	// output: 128*7*7 = 6272
 	model.add(new TSP.layers.Reshape({
-		targetShape: [7, 7]
+		targetShape: [7, 7, 128]
 	}));
 
 	// 2
