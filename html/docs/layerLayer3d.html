@@ -320,7 +320,7 @@
     <main>
         <header>Layer3d</header>
         <div>Use this Layer when the API you are using cannot be found in the TensorSpace support list.</div>
-        <div>Create an abstract layer. You need to maintain the shape is the same as the shape of the data in the layer in your model. For example, 1-dimensional [100], use <a href="layerLayer1d.html">Layer1d</a> API; 2-dimensional [100, 100], use <a href="layerLayer2d.html">Layer2d</a> API; 3-dimensional [100, 100, 3]. Dataformat is channel last, use <a href="#">Layer3d</a> API.</div>
+        <div>Create an abstract layer. You need to maintain the shape is the same as the shape of the data in the layer in your model. For example, 1-dimensional [100], use <a href="layerLayer1d.html">Layer1d</a> API; 2-dimensional [100, 100], use <a href="layerLayer2d.html">Layer2d</a> API; 3-dimensional [100, 100, 3]. dataFormat is channel last, use <a href="#">Layer3d</a> API.</div>
         <div>⭐<span class="span_bold">Abstract Layer</span>, user can directly defined shape of the layer, but will not show any relation lines. Please submit <a href="https://github.com/syt123450/tensorspace/issues">Issue</a>, we will support the corresponding API as soon as possible.️</div>
 
         <div class="sub-title">Constructor</div>
@@ -346,7 +346,7 @@
                     <p>shape</p>
                     <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
                 </th>
-                <td>[Int]</td>
+                <td>Int[]</td>
                 <td>shape of output</td>
                 <td><span class="span_bold">shape=[100, 100, 3]</span> means the output is 3-dimensional array by 100*100 with 3 feature maps</td>
             </tr>
@@ -403,16 +403,16 @@
 
         <div class="sub-title">Properties</div>
 
-        <div class="property-title"><a href="">.inputShape</a> : [Int]</div>
+        <div class="property-title"><a href="">.inputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of input tensor, for example inputShape = [ 28, 28, 3 ] represents 3 feature maps and each one is 28 by 28.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined.</div>
 
-        <div class="property-title"><a href="">.outputShape</a> : [Int]</div>
+        <div class="property-title"><a href="">.outputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of output tensor is 3-dimensional. <a href="basicDimension.html">3️⃣</a></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Dataformat is channel last. for example outputShape = [ 32, 32, 4 ] represents the output through this layer has 4 feature maps and each one is 32 by 32</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat is channel last. for example outputShape = [ 32, 32, 4 ] represents the output through this layer has 4 feature maps and each one is 32 by 32</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined</div>
 
-        <div class="property-title"><a href="">.neuralValue</a> : [Int]</div>
+        <div class="property-title"><a href="">.neuralValue</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The intermediate raw data after this layer.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After load and model.predict() data is available, otherwise is undefined.</div>
 
