@@ -2,25 +2,26 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { NativeLayer1d } from "../abstract/NativeLayer1d";
-import { QueueCenterGenerator } from "../../utils/QueueCenterGenerator";
+import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
+import { NativeLayer3d } from "../abstract/NativeLayer3d";
 
 /**
- * Reshape an input to a certain 1d shape.
+ * Reshape an input to a certain 3d shape.
  *
- * @param config, user's configuration for Reshape1d layer
+ * @param config, user's configuration for Reshape3d layer
  * @constructor
  */
 
-function Reshape1d( config ) {
 
-	// "Reshape1d" inherits from abstract layer "NativeLayer1d".
+function Reshape3d( config ) {
 
-	NativeLayer1d.call( this, config );
+	// "Reshape3d" inherits from abstract layer "NativeLayer3d".
+
+	NativeLayer3d.call( this, config );
 
 	/**
-	 * Certain 1d shape the input will be reshape into.
-	 * For example: [ 3 ]
+	 * Certain 3d shape the input will be reshape into.
+	 * For example: [ 7, 7, 32 ]
 	 *
 	 * @type { Array }
 	 */
@@ -40,18 +41,18 @@ function Reshape1d( config ) {
 
 	this.loadLayerConfig( config );
 
-	this.layerType = "Reshape1d";
+	this.layerType = "Reshape3d";
 
 }
 
-Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
+Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 	/**
 	 * ============
 	 *
-	 * Functions below override base class NativeLayer1d's abstract method
+	 * Functions below override base class NativeLayer3d's abstract method
 	 *
-	 * Reshape1d overrides NativeLayer1d's function:
+	 * Reshape3d overrides NativeLayer3d's function:
 	 * assemble, loadModelConfig, getRelativeElements
 	 *
 	 * ============
@@ -79,9 +80,9 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		// Check whether the input shape can be reshape into target shape.
 
-		if ( this.totalSize !== this.width ) {
+		if  ( this.totalSize !== this.width * this.height * this.depth ) {
 
-			console.error( "input size " + this.totalSize + " can not be reshape to [" + this.width + "]" );
+			console.error( "Input size " + this.totalSize + " can not be reshape to [" + this.width + ", " + this.height + ", " + this.depth + "]" );
 
 		}
 
@@ -89,34 +90,38 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.width * this.unitLength;
+		this.actualHeight = this.height * this.unitLength;
 
-		// Calculate aggregation actual size.
+		// Calculate the feature map centers for close status.
 
-		if ( this.lastLayer.layerDimension === 1 ) {
+		for ( let i = 0; i < this.depth; i ++ ) {
 
-			if ( this.lastLayer.layerType === "Input1d" ) {
+			let closeFmCenter = {
 
-				this.aggregationWidth = 3 * this.unitLength;
-				this.aggregationHeight = 3 * this.unitLength;
+				x: 0,
+				y: 0,
+				z: 0
 
-			} else {
+			};
 
-				this.aggregationWidth = this.lastLayer.aggregationWidth;
-				this.aggregationHeight = this.lastLayer.aggregationHeight;
-
-			}
-
-		} else {
-
-			this.aggregationWidth = this.lastLayer.actualWidth;
-			this.aggregationHeight = this.lastLayer.actualHeight;
-
+			this.closeFmCenters.push( closeFmCenter );
 		}
+
+		// Calculate the feature map centers for open status.
+
+		this.openFmCenters = FmCenterGenerator.getFmCenters(
+
+			this.layerShape,
+			this.depth,
+			this.actualWidth,
+			this.actualHeight
+
+		);
 
 	},
 
 	/**
-	 * loadModelConfig() load model's configuration into Reshape1d object,
+	 * loadModelConfig() load model's configuration into Reshape3d object,
 	 * If one specific attribute has been set before, model's configuration will not be loaded into it.
 	 *
 	 * Based on the passed in modelConfig parameter
@@ -133,6 +138,18 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 		if ( this.color === undefined ) {
 
 			this.color = modelConfig.color.reshape;
+
+		}
+
+		if ( this.layerShape === undefined ) {
+
+			this.layerShape = modelConfig.layerShape;
+
+		}
+
+		if ( this.aggregationStrategy === undefined ) {
+
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
 
 		}
 
@@ -153,7 +170,7 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		let relativeElements = [];
 
-		if ( selectedElement.elementType === "aggregationElement" || selectedElement.elementType === "featureLine" ) {
+		if ( selectedElement.elementType === "aggregationElement" ) {
 
 			// "all" means get all "displayed" elements from last layer.
 
@@ -165,6 +182,10 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
+		} else if ( selectedElement.elementType === "featureMap" ) {
+
+			// As reshape layer's feature map number is different with last layer, will not show relation lines.
+
 		}
 
 		return relativeElements;
@@ -174,16 +195,16 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	/**
 	 * ============
 	 *
-	 * Functions above override base class NativeLayer1d's abstract method.
+	 * Functions above override base class NativeLayer3d's abstract method.
 	 *
 	 * ============
 	 */
 
 	/**
-	 * loadLayerConfig() Load user's configuration into Reshape1d.
+	 * loadLayerConfig() Load user's configuration into Reshape3d.
 	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
 	 *
-	 * @param { JSON } layerConfig, user's configuration for Reshape1d.
+	 * @param { JSON } layerConfig, user's configuration for Reshape3d.
 	 */
 
 	loadLayerConfig: function( layerConfig ) {
@@ -196,10 +217,12 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 				this.targetShape = layerConfig.targetShape;
 				this.width = layerConfig.targetShape[ 0 ];
+				this.height = layerConfig.targetShape[ 1 ];
+				this.depth = layerConfig.targetShape[ 2 ];
 
-				// Reshape1d layer's outputShape has one dimension, that's why Reshape1d layer inherits from abstract layer "NativeLayer1d".
+				// Reshape3d layer's outputShape has three dimension, that's why Reshape3d layer inherits from abstract layer "NativeLayer3d".
 
-				this.outputShape = [ this.width ];
+				this.outputShape = [ this.width, this.height, this.depth ];
 
 			} else {
 
@@ -217,4 +240,4 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 } );
 
-export { Reshape1d }
+export { Reshape3d };

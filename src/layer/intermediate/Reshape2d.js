@@ -2,8 +2,8 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { FmCenterGenerator } from "../../utils/FmCenterGenerator";
-import { NativeLayer3d } from "../abstract/NativeLayer3d";
+import { NativeLayer2d } from "../abstract/NativeLayer2d";
+import { QueueCenterGenerator } from "../../utils/QueueCenterGenerator";
 
 /**
  * Reshape an input to a certain 2d shape.
@@ -16,7 +16,7 @@ function Reshape2d( config ) {
 
 	// "Reshape2d" inherits from abstract layer "NativeLayer3d".
 
-	NativeLayer3d.call( this, config );
+	NativeLayer2d.call( this, config );
 
 	/**
 	 * Certain 2d shape the input will be reshape into.
@@ -44,14 +44,14 @@ function Reshape2d( config ) {
 
 }
 
-Reshape2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
+Reshape2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 	/**
 	 * ============
 	 *
-	 * Functions below override base class NativeLayer3d's abstract method
+	 * Functions below override base class NativeLayer2d's abstract method
 	 *
-	 * Reshape2d overrides NativeLayer3d's function:
+	 * Reshape2d overrides NativeLayer2d's function:
 	 * assemble, loadModelConfig, getRelativeElements
 	 *
 	 * ============
@@ -79,29 +79,22 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		// Check whether the input shape can be reshape into target shape.
 
-		if  ( this.totalSize % (this.width * this.height) !== 0 ) {
+		if ( this.totalSize !== this.width * this.depth ) {
 
-			console.error( "Input size " + this.totalSize + " can not be reshape to [" + this.width + ", " + this.height + "]" );
+			console.error( "input size " + this.totalSize + " can not be reshape to [" + this.width + ", " + this.depth + "]" );
 
 		}
-
-		this.depth = this.totalSize / ( this.width * this.height );
-
-		// Reshape2d layer's outputShape has three dimension, that's why Reshape2d layer inherits from abstract layer "NativeLayer3d".
-
-		this.outputShape = [ this.width, this.height, this.depth ];
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
 		this.unitLength = this.lastLayer.unitLength;
 		this.actualWidth = this.width * this.unitLength;
-		this.actualHeight = this.height * this.unitLength;
 
-		// Calculate the feature map centers for close status.
+		// Calculate the grid line centers for close status.
 
 		for ( let i = 0; i < this.depth; i ++ ) {
 
-			let closeFmCenter = {
+			let closeCenter = {
 
 				x: 0,
 				y: 0,
@@ -109,19 +102,13 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			};
 
-			this.closeFmCenters.push( closeFmCenter );
+			this.closeCenterList.push( closeCenter );
+
 		}
 
-		// Calculate the feature map centers for open status.
+		// Calculate the grid line centers for open status.
 
-		this.openFmCenters = FmCenterGenerator.getFmCenters(
-
-			this.layerShape,
-			this.depth,
-			this.actualWidth,
-			this.actualHeight
-
-		);
+		this.openCenterList = QueueCenterGenerator.getCenterList( this.actualWidth, this.depth );
 
 	},
 
@@ -187,9 +174,9 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
-		} else if ( selectedElement.elementType === "featureMap" ) {
+		} else if ( selectedElement.elementType === "gridLine" ) {
 
-			// As reshape layer's feature map number is different with last layer, will not show relation lines.
+			// As reshape layer's feature map number is different with last layer, will not show relation lines
 
 		}
 
@@ -200,7 +187,7 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	/**
 	 * ============
 	 *
-	 * Functions above override base class NativeLayer3d's abstract method.
+	 * Functions above override base class NativeLayer2d's abstract method.
 	 *
 	 * ============
 	 */
@@ -222,7 +209,11 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 				this.targetShape = layerConfig.targetShape;
 				this.width = layerConfig.targetShape[ 0 ];
-				this.height = layerConfig.targetShape[ 1 ];
+				this.depth = layerConfig.targetShape[ 1 ];
+
+				// Reshape2d layer's outputShape has two dimension, that's why Reshape2d layer inherits from abstract layer "NativeLayer2d".
+
+				this.outputShape = [ this.width, this.depth ];
 
 			} else {
 

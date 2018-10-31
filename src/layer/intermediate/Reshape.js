@@ -4,6 +4,7 @@
 
 import { Reshape1d } from "./Reshape1d";
 import { Reshape2d } from "./Reshape2d";
+import { Reshape3d } from "./Reshape3d";
 
 /**
  * Create actual reshape layer based on user's targetShape dimension.
@@ -38,6 +39,12 @@ Reshape.prototype = {
 				// If targetShape dimension is 2, create Reshape2d.
 
 				return new Reshape2d( config );
+
+			} else if ( config.targetShape.length === 3 ) {
+
+				// If targetShape dimension is 3, create Reshape3d.
+
+				return new Reshape3d( config );
 
 			} else {
 
