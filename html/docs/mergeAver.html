@@ -319,7 +319,275 @@
 
     <main>
         <header>Average</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            "Average" is constructed as a "factory" to complete the  "<span class="span_bold">average</span>" operation.
+            To apply the "Average" function, it is required that the shapes of all input layers are the same
+            (otherwise, we can't perform the operation). The "factory" returns a
+            <span class="span_bold">merged layer instance</span> as the output.
+        </div>
+
+        <div class="sub-title">Factory style</div>
+
+        <div class="code-snippet">
+            <pre><code class="JavaScript">layerAverageResult = TSP.layers.Average( [layer1, layer2, ...], { configs } )</code></pre>
+        </div>
+
+        <div>
+            The first parameter is a <span class="span_bold">list</span> of layer objects.
+            (TensorSpace currently only supports "Average" operations for 3D vectors. We will introduce others soon.)
+        </div>
+
+        <div>
+            The second parameter is the configurations of the output merged layer object.
+        </div>
+
+        <div class="sub-title">Configuration</div>
+
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col"><p>Name</p><p>Tag</p></th>
+                <th scope="col"><p>Type</p></th>
+                <th scope="col"><p>Instruction</p></th>
+                <th scope="col"><p>Usage Notes and Examples</p></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">
+                    <p>name</p>
+                    <p><a href="#iconSuggest">🔧</a></p>
+                </th>
+                <td>String</td>
+                <td>Name of this layer. <span class="span_bold">Highly recommend</span> to arrange to make code more readable.</td>
+                <td>name: "layerName"</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>color</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
+                </th>
+                <td>color format</td>
+                <td>Color of layer</td>
+                <td>Average default is red #E23E57 <span class="color-block" style="background-color: #E23E57"></span></td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>closeButton</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
+                </th>
+                <td>Dict</td>
+                <td>Close button appearance control dict, <a href="basicClose.html">more about close button</a></td>
+                <td><p><span class="span_bold">display</span> : Boolean. true[default] Show button, false Hide button</p>
+                    <p><span class="span_bold">ratio</span> : Int. Times to normal size, default is 1</p>
+                    <p>For example, 2 means twice the normal size</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>initStatus</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
+                </th>
+                <td>String</td>
+                <td>Layer status at beginning. <span class="span_bold">Open</span> or <span class="span_bold">Close</span></td>
+                <td>close[default] : Closed at beginning</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>animation-<br>TimeRatio</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
+                </th>
+                <td>Int</td>
+                <td>The speed of open and close animation</td>
+                <td>Integer for multiple of speed. For example, 2 for 2 times of basic speed</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">Properties</div>
+
+        <div class="property-title"><a href="">.outputShape</a> : [Int]</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of the output tensor is 3-dimensional. <a href="basicDimension.html">3️⃣</a></div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The DataFormat is "channel last". For example, <span class="highlight-text">outputShape = [ 32, 32, 4 ]</span> represents the output through this layer has 4 feature maps and each one is 32 by 32.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After <span class="highlight-text">model.init()</span> data is available, otherwise is undefined.</div>
+
+        <div class="property-title"><a href="">.neuralValue</a> : [Int]</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The intermediate raw data after this layer.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After load and <span class="highlight-text">model.init()</span>, the data are available. Otherwise is undefined.</div>
+
+        <div class="property-title"><a href="">.name</a> : String</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The custom name for this layer.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
+
+        <div class="property-title"><a href="">.layerType</a> : String</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer, return a constant: string <span class="span_bold">MergedLayer3d</span>.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
+
+        <div class="sub-title">Method</div>
+
+        <div class="property-title"><a href="">.openLayer()</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Click on the layer directly to open it by interacting directly with the object in the 3D scene</div>
+        <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
+
+        <div class="code-snippet">
+            <pre><code class="Javascript">let conv2d1 = new TSP.layers.Conv2d( {
+
+    // configure some parameters for Conv2d1.
+
+} );
+
+model.add( conv2d1 );
+
+let conv2d2 = new TSP.layers.Conv2d( {
+
+    /*
+     *  configure some parameters for Conv2d2.
+     *  Note the shape of Conv2d2 should be the same as Conv2d1.
+     */
+
+} );
+
+model.add( conv2d2 );
+
+// perform merge
+
+let mergedLayer = TSP.layers.Average( [ conv2d1, conv2d2 ] /* , configurations */ );
+
+// add merged layer
+
+model.add( mergedLayer );
+model.init();
+
+// call .openLayer() to expand the layer
+
+mergedLayer.openLayer();</code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.closeLayer()</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To close by interacting directly with objects in a 3D scene by clicking the close button</div>
+        <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let conv2d1 = new TSP.layers.Conv2d( {
+
+    // configure some parameters for Conv2d1.
+
+} );
+
+model.add( conv2d1 );
+
+let conv2d2 = new TSP.layers.Conv2d( {
+
+    /*
+     *  configure some parameters for Conv2d2.
+     *  Note the shape of Conv2d2 should be the same as Conv2d1.
+     */
+
+} );
+
+model.add( conv2d2 );
+
+// perform merge
+
+let mergedLayer = TSP.layers.Average( [ conv2d1, conv2d2 ] /* , configurations */ );
+
+// add merged layer
+
+model.add( mergedLayer );
+model.init();
+
+// if layer is expanded, then call .closeLayer() to collapse the layer.
+
+mergedLayer.closeLayer();</code></pre>
+        </div>
+
+        <div class="sub-title">Example</div>
+
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of "MergedLayer3d" to facilitate reuse</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let mergedLayer = TSP.layers.Average(
+
+    [ layer1, layer2 ],
+
+    {
+        animationTimeRatio: 2,
+        name: "conv2d1",
+        opacityRatio: 2,
+        initStatus: "open"
+    }
+
+);
+
+model.add( mergedLayer );</code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add directly</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">model.add(TSP.layers.Average(
+
+    [ layer1, layer2 ],
+
+    {
+        animationTimeRatio: 2,
+        name: "conv2d1",
+        opacityRatio: 2,
+        initStatus: "open"
+    }
+
+));</code></pre>
+        </div>
+
+        <div id="tagExplain" class="sub-title">Tag Lookup</div>
+
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Tag Icon</th>
+                <th scope="col">Meaning</th>
+                <th scope="col">Instruction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="iconRequired">
+                <th scope="row">⭐️</th>
+                <td>Required</td>
+                <td>Must be provided, cannot be empty. Meanwhile constructor works properly if this arguments provided.
+                    Control arguments use default value.</td>
+            </tr>
+            <tr id="iconSuggest">
+                <th scope="row">🔧</th>
+                <td>Suggest</td>
+                <td>Recommended for giving. The API can work without them.</td>
+            </tr>
+            <tr id="iconOptional">
+                <th scope="row">⚙️️</th>
+                <td>Optional</td>
+                <td>As an auxiliary adjustment parameter when used, selectively added according to the specific situation
+                    The parameters here have no effect on the structure of the layer (3D visualized form).</td>
+            </tr>
+            <tr id="iconModel">
+                <th scope="row">📦</th>
+                <td>Model</td>
+                <td>Configure the properties of Conv Layer. It changes the output shape.</td>
+            </tr>
+            <tr id="iconStyle">
+                <th scope="row">🎨</th>
+                <td>Style</td>
+                <td>Override the properties in TSP.model (<a href="modelIntro.html#modelConfig">model configuration</a>)</td>
+            </tr>
+            <tr id="iconAnimation">
+                <th scope="row">🎦</th>
+                <td>Animation</td>
+                <td>Override the properties in TSP.model (<a href="modelIntro.html#modelConfig">model configuration</a>)</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">Source Code</div>
+        <div><a href="https://github.com/tensorspace-team/tensorspace/blob/master/src/merge/Average.js">tensorspace/src/merge/Average.js</a></div>
+
     </main>
 </div>
 

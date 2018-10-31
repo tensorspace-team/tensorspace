@@ -318,7 +318,317 @@
 
     <main>
         <header>Multiply</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+
+        <div>
+            “Multiply” 方法使用工厂方法来完成计算层的<span class="span_bold">乘法</span>运算。该方法要求所有输入层形状相同（否则无法进行乘法运算）并返回一个<span class="span_bold">乘法层实例</span>。
+        </div>
+
+        <div class="sub-title">工厂方法</div>
+
+        <div class="code-snippet">
+            <pre><code class="JavaScript">layerMultiplyResult = TSP.layers.Multiply( [layer1, layer2, ...], { 配置参数列表 } )</code></pre>
+        </div>
+
+        <div>
+            参数一：<span class="span_bold">输入层数组</span>，
+            支持<span class="span_bold">一个或以上的输入层</span>。
+            （TensorSpace 目前只支持3维向量，之后将会加入1维以及2维相加的支持。）
+        </div>
+
+        <div>
+            参数二：外观动画等配置参数
+        </div>
+
+        <div class="sub-title">配置列表</div>
+
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col"><p>参数名</p><p>标签</p></th>
+                <th scope="col"><p>类型</p></th>
+                <th scope="col"><p>简介</p></th>
+                <th scope="col"><p>具体用法细节和例子</p></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">
+                    <p>name</p>
+                    <p><a href="#iconSuggest">🔧</a></p>
+                </th>
+                <td>String</td>
+                <td>层的命名，建议添加</td>
+                <td>name: "layerName"</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>color</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
+                </th>
+                <td>color format</td>
+                <td>层的颜色</td>
+                <td>Multiply默认颜色是红色 #E23E57 <span class="color-block" style="background-color: #E23E57"></span></td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>closeButton</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
+                </th>
+                <td>Dict</td>
+                <td>层关闭按钮外观控制列表， <a href="basicClose.html">查看详情</a></td>
+                <td><p><span class="span_bold">display</span> : Boolean. true [default] 显示按钮, false 隐藏按钮</p>
+                    <p><span class="span_bold">ratio</span> : Int 为正常大小的几倍，默认为1倍</p>
+                    <p>例如，设为2为正常大小的2倍大</p></td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>initStatus</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
+                </th>
+                <td>String</td>
+                <td>初始化时，本层是否收缩</td>
+                <td>close[default] : 收缩</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>animation-<br>TimeRatio</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
+                </th>
+                <td>Int</td>
+                <td>张开和伸缩的调整速度，呈倍速关系</td>
+                <td>例如2就是2倍，数字越大速度越快</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">属性</div>
+
+        <div>
+            <a href="">.outputShape</a> : <span class="span_bold">[Int]</span>
+        </div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示本层<span class="span_bold">输出Tensor</span>的形状为<span class="highlight-text">3维</span>。
+                    DataFormat默认通道值在最后，例如<span class="highlight-text">outputShape = [ 32, 32, 4 ]</span>
+                    表示经过此层处理后，有<span class="highlight-text">4</span>个特征图，
+                    每个图大小为<span class="highlight-text">32*32</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    在 <span class="highlight-text">model.init()</span> 后才可拿到数据，否则为
+                    <span class="highlight-text">undefined</span>。
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <a href="">.neuralValue</a> : <span class="span_bold">[Int]</span>
+        </div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示本层的<span class="span_bold">层间输出</span>值数组，加法层不改变输出的形状，和被加层的形状相同。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    在 <span class="highlight-text">model.init()</span> 后才可拿到数据，否则为
+                    <span class="highlight-text">undefined</span>。
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <a href="">.name</a> : <span class="span_bold">String</span>
+        </div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示本层的自定义名称。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    创建后即可取到。
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <a href="">.layerType</a> : <span class="span_bold">String</span>
+        </div>
+
+        <div>
+            <ul class="list-content">
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    表示本层的类型，返回一个定值，字符串<span class="highlight-text">MergedLayer3d</span>。
+                </li>
+                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
+                    创建后即可取到。
+                </li>
+            </ul>
+        </div>
+
+        <div class="highlight-text">方法</div>
+
+        <div class="property-title"><a href="">.openLayer()</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
+        <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let conv2d1 = new TSP.layers.Conv2d( {
+
+    // 配置Conv2d1。
+
+} );
+
+model.add( conv2d1 );
+
+let conv2d2 = new TSP.layers.Conv2d( {
+
+    /*
+     *  配置Conv2d2。
+     *  注意shape应与Conv2d1相同。
+     */
+
+} );
+
+model.add( conv2d2 );
+
+// 进行融合
+
+let mergedLayer = TSP.layers.Multiply( [ conv2d1, conv2d2 ] /* , configurations */ );
+
+// 添加融合层
+
+model.add( mergedLayer );
+model.init();
+
+// 调用 openLayer 来打开layer。
+
+mergedLayer.openLayer();</code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.closeLayer()</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互点击按钮关闭。</div>
+        <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let conv2d1 = new TSP.layers.Conv2d( {
+
+    // 配置Conv2d1。
+
+} );
+
+model.add( conv2d1 );
+
+let conv2d2 = new TSP.layers.Conv2d( {
+
+    /*
+     *  配置Conv2d2。
+     *  注意shape应与Conv2d1相同。
+     */
+
+} );
+
+model.add( conv2d2 );
+
+// 进行融合
+
+let mergedLayer = TSP.layers.Multiply( [ conv2d1, conv2d2 ] /* , configurations */ );
+
+// 添加融合层
+
+model.add( mergedLayer );
+model.init();
+
+// 如果 layer 已经是打开状态，调用 closeLayer 来关闭 layer。
+
+mergedLayer.closeLayer();</code></pre>
+        </div>
+
+        <div class="sub-title">使用样例</div>
+
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>声明一个 “MergedLayer3d” 的实例，方便复用</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let mergedLayer = TSP.layers.Multiply(
+
+    [ layer1, layer2 ],
+
+    {
+        animationTimeRatio: 2,
+        name: "conv2d1",
+        opacityRatio: 2,
+        initStatus: "open"
+    }
+
+);
+
+model.add( mergedLayer );</code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>直接添加</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">model.add(TSP.layers.Multiply(
+
+    [ layer1, layer2 ],
+
+    {
+        animationTimeRatio: 2,
+        name: "conv2d1",
+        opacityRatio: 2,
+        initStatus: "open"
+    }
+
+));</code></pre>
+        </div>
+
+        <div id="tagExplain" class="sub-title">标签详情</div>
+
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col">符号</th>
+                <th scope="col">参数性质</th>
+                <th scope="col">说明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="iconRequired">
+                <th scope="row">⭐️</th>
+                <td>必要</td>
+                <td>使用时必须提供，不能为空，只要提供了这些参数，就能正常创建实例，控制参数使用默认值。</td>
+            </tr>
+            <tr id="iconSuggest">
+                <th scope="row">🔧</th>
+                <td>推荐</td>
+                <td>使用时推荐给定，未给定也可以运行，但在体验和易用性上有隐患。</td>
+            </tr>
+            <tr id="iconOptional">
+                <th scope="row">⚙️</th>
+                <td>可选</td>
+                <td>根据模型配置参数选择性添加，这里的参数对于层的结构（3D可视化外观）没有影响。</td>
+            </tr>
+            <tr id="iconModel">
+                <th scope="row">📦</th>
+                <td>模型</td>
+                <td>配置卷积层的相关属性，并对输出特征图形状有影响。</td>
+            </tr>
+            <tr id="iconStyle">
+                <th scope="row">🎨</th>
+                <td>外观</td>
+                <td>可覆盖TSP.model下的属性进行细调（<a href="modelIntro_zh.html#modelConfig">查看详情</a>）</td>
+            </tr>
+            <tr id="iconAnimation">
+                <th scope="row">🎦</th>
+                <td>动画控制</td>
+                <td>可覆盖TSP.model下的属性进行细调（<a href="modelIntro_zh.html#modelConfig">查看详情</a>）</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">源码</div>
+        <div><a href="https://github.com/tensorspace-team/tensorspace/blob/master/src/merge/Multiply.js">tensorspace/src/merge/Multiply.js</a></div>
+
     </main>
 </div>
 
