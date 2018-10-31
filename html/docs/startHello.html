@@ -323,9 +323,26 @@
         <header>TensorSpace.js Hello World</header>
 
         <div>
-            After installing TensorSpace successfully, let's use our provided
-            <a href="../../assets/model/lenet/mnist.json">preprocessed TensorSpace compatible LeNet model</a>
-            to create our first interactive 3D TensorSpace model.
+            After installing TensorSpace successfully, let's create our first interactive 3D TensorSpace model!
+        </div>
+
+        <div>
+            For the convenience, feel free to use the resources from our
+            <a href="https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld">HelloWorld</a> directory.
+        </div>
+
+        <div>
+            We will use the
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json">
+                preprocessed TensorSpace compatible LeNet model
+            </a>
+            and
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json">
+                sample input data ("5")
+            </a>. All source code can be found from
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html">
+                helloworld.html
+            </a>.
         </div>
 
         <div>First, we need to new a TensorSpace model instance:</div>
@@ -335,7 +352,7 @@ let model = new TSP.model.Sequential( container );</code></pre>
         </div>
 
         <div>
-            Next, based on the LeNet structure: Input + 2 X (Conv2D & Maxpooling) + 3 X (Dense),
+            Next, based on the LeNet structure: Input + 2 * (Conv2D & Maxpooling) + 3 * (Dense),
             we build the structure of the model:
         </div>
         <div class="code-snippet">
@@ -354,7 +371,7 @@ model.add( new TSP.layers.Output1d({
         </div>
 
         <div>
-            Last, we can load our <a href="../../assets/model/lenet/mnist.json">preprocessed TensorSpace compatible model</a>
+            Last, we can load our <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json">preprocessed TensorSpace compatible model</a>
             and use <span class="highlight-text">init()</span> method to create the model:
         </div>
         <div class="code-snippet">
@@ -375,7 +392,10 @@ model.init();</code></pre>
             <span class="img-label-number">Fig. 1</span> - Generated LeNet model
         </div>
 
-        <div>We provide a extracted file which is a handwritten "5" as the input of our model:</div>
+        <div>
+            We provide a <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json">extracted file</a>
+            which is a handwritten "5" as the input of our model:
+        </div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">model.init(function() {

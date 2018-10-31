@@ -319,9 +319,27 @@
     <main>
         <header>TensorSpace.js Hello World</header>
         <div>
-            在成功安装完成 TensorSpace 之后，我们可以使用我们所提供的
-            <a href="../../assets/model/lenet/mnist.json">经过预处理的LeNet神经网络模型</a>
-            来创建我们的第一个3D TensorSpace模型。
+            在成功安装完成 TensorSpace 之后，我们就可以开始创建我们的第一个3D TensorSpace模型了！
+        </div>
+
+        <div>
+            为了简化步骤，请随意使用我们在
+            <a href="https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld">HelloWorld</a>
+            路径下所提供的资源。
+        </div>
+
+        <div>
+            我们将会用到
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json">
+                适配 TensorSpace 的预处理模型
+            </a>
+            以及
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json">
+                样例输入数据（“5”）
+            </a>。所有的源码都可以在
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html">
+                helloworld.html
+            </a> 文件中找到。
         </div>
 
         <div>首先，我们需要新建一个 TensorSpace 模型实例：</div>
@@ -349,7 +367,7 @@ model.add( new TSP.layers.Output1d({
         </div>
 
         <div>
-            最后，我们需要载入<a href="../../assets/model/lenet/mnist.json">经过预处理的 TensorSpace 适配模型</a>
+            最后，我们需要载入<a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json">经过预处理的 TensorSpace 适配模型</a>
             并使用<span class="highlight-text">init()</span>方法来创建模型对象：
         </div>
         <div class="code-snippet">
@@ -370,7 +388,11 @@ model.init();</code></pre>
             <span class="img-label-number">图1</span> - 所创建的 LeNet 模型
         </div>
 
-        <div>我们可以使用我们已经提取好的[手写“5”]()作为模型的输入：</div>
+        <div>
+            我们可以使用我们已经提取好的
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json">手写“5”</a>
+            作为模型的输入：
+        </div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">model.init(function() {
