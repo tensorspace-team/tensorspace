@@ -341,7 +341,7 @@
                     <p>cropping </p>
                     <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
                 </th>
-                <td>[[Int]]</td>
+                <td>[Int[]]</td>
                 <td>裁剪的值</td>
                 <td>例如，cropping : [ [2, 3], [1, 2] ]表示在第一纬左右各裁剪2和3，在第二维度上下各裁剪1和2</td>
             </tr>
@@ -397,16 +397,16 @@
 
         <div class="sub-title">属性</div>
 
-        <div class="property-title"><a href="">.inputShape</a> : [Int]</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，Dataformat默认通道值在最后，例如inputShape = [ 28, 28, 3 ] 表示输入为3个特征图，每个图大小为28*28</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined</div>
+        <div class="property-title"><a href="">.inputShape</a> : Int[]</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，dataFormat默认通道值在最后，例如inputShape = [ 28, 28, 3 ] 表示输入为3个特征图，每个图大小为28*28</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="">.outputShape</a> : [Int]</div>
+        <div class="property-title"><a href="">.outputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为3维 <a href="basicDimension_zh.html">3️⃣</a></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Dataformat默认通道值在最后，例如outputShape = [ 32, 32, 4 ] 表示经过此层处理后，有4个特征图，每个图大小为32*32</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat默认通道值在最后，例如outputShape = [ 32, 32, 4 ] 表示经过此层处理后，有4个特征图，每个图大小为32*32</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="">.neuralValue</a> : [Int]</div>
+        <div class="property-title"><a href="">.neuralValue</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层层间输出值数组。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>载入模型，在 model.predict() 后才可以拿到数据，否则为undefined。</div>
 
