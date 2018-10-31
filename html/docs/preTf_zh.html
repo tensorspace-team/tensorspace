@@ -321,7 +321,7 @@
 
         <img class="logo-img" src="../../assets/img/docs/Logos/tensorflow.png">
 
-        <header>预处理TensorFlow模型</header>
+        <header>预处理 TensorFlow 模型</header>
         <div>本篇将介绍如何预处理基于 TensorFlow 搭建的神经网络模型 (saved model, frozen model and checkpoint)，以此来适配 TensorSpace 所需要的拥有中间层输出的模型。</div>
 
         <div>本篇教程所使用的代码及模型源文件列表：</div>
@@ -448,7 +448,7 @@ mnist = tf.keras.datasets.mnist</code></pre>
 
         <div>如果您目前还没有可以马上使用的 TensorFlow 模型，可以按照本小节的方法训练一个新的样例模型。</div>
 
-        <div>我们将使用 MNIST 数据集以及 LeNet 网络结构为例，使用 TensorFlow 构建一个神经网络模型。（参考 <a href="https://github.com/sujaybabruwad/LeNet-in-Tensorflow">sujaybabruwad/LeNet-in-Tensorflow</a>）</div>
+        <div>我们将使用 MNIST 数据集以及 LeNet 网络结构为例，使用 TensorFlow 构建一个神经网络模型。（参考 <a href="https://github.com/sujaybabruwad/LeNet-in-TensorFlow">sujaybabruwad/LeNet-in-TensorFlow</a>）</div>
 
         <div class="span_bold">第一步，对训练数据进行预处理，改变训练数据的形状：</div>
 
@@ -642,7 +642,7 @@ with tf.Session() as sess:
 
         <div><span class="span_bold">1.2 加载一个模型</span></div>
 
-        <div>已有预训练模型，直接加载。Tensorflow有三种常见的预训练模型，<a href="https://cloud.tencent.com/developer/article/1009979">点击链接查看模型类别详情</a></div>
+        <div>已有预训练模型，直接加载。TensorFlow 有三种常见的预训练模型，<a href="https://cloud.tencent.com/developer/article/1009979">点击链接查看模型类别详情</a></div>
 
         <div>〔源码〕<a href="https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py">tensorflow_load_model.py</a></div>
 
@@ -657,7 +657,7 @@ with tf.Session() as sess:
     )</code></pre>
         </div>
 
-        <div><span class="highlight-text">frozen model</span>：又被称为<span class="highlight-text">FrozenGraphDef</span>格式，<span class="highlight-text">.pb</span>文件。多用于移动端模型</div>
+        <div><span class="highlight-text">frozen model</span>：又被称为 <span class="highlight-text">FrozenGraphDef</span> 格式，<span class="highlight-text">.pb</span> 文件。多用于移动端模型</div>
 
         <div class="code-snippet">
             <pre><code class="Python">with tf.Session() as sess:
@@ -668,7 +668,7 @@ with tf.Session() as sess:
         g_in = tf.import_graph_def(graph_def)</code></pre>
         </div>
 
-        <div><span class="highlight-text">checkpoint</span>：含有<span class="highlight-text">checkpoint</span>文件，文件命名含有关键字<span class="highlight-text">ckpt</span>。信息完整，可用于迁移训练</div>
+        <div><span class="highlight-text">checkpoint</span>：含有 <span class="highlight-text">checkpoint</span> 文件，文件命名含有关键字 <span class="highlight-text">ckpt</span>。信息完整，可用于迁移训练</div>
 
         <div class="code-snippet">
             <pre><code class="Python">with tf.Session(graph=tf.Graph()) as sess:

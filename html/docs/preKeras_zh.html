@@ -321,7 +321,7 @@
 
         <img class="logo-img" src="../../assets/img/docs/Logos/keras.png">
 
-        <header>预处理Keras模型</header>
+        <header>预处理 Keras 模型</header>
         <div>
             本篇将介绍如何预处理基于 Keras 搭建的神经网络模型，以此来适配 TensorSpace 所需要的拥有中间层输出的模型。如果您之前已经了解过 <a href="preTfKeras_zh.html">tf.keras</a> 模型预处理，您将会发现两篇教程拥有许多相似之处。
         </div>
@@ -374,7 +374,7 @@ from keras.models import load_model</code></pre>
             <pre><code class="Bash">$ pip install tensorflowjs</code></pre>
         </div>
 
-        <div>安装完成后，<span class="highlight-text">tensorflowjs_converter</span>变为系统可用关键字，可用下列命令来调用：</div>
+        <div>安装完成后，<span class="highlight-text">tensorflowjs_converter</span> 变为系统可用关键字，可用下列命令来调用：</div>
 
         <div class="code-snippet">
             <pre><code class="Bash">$ tensorflowjs_converter \
@@ -688,7 +688,7 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")</code></pre>
                     我们将会得到两种类型的文件
                     <ul class="list-indent">
                         <li class="panel-heading"><i class="material-icons">flare</i>
-                            一份 <span class="highlight-text">model.json</span>文件：包含所得到的模型结构信息（包括中间层输出）
+                            一份 <span class="highlight-text">model.json</span> 文件：包含所得到的模型结构信息（包括中间层输出）
                         </li>
                         <li class="panel-heading"><i class="material-icons">flare</i>
                             一些 <span class="highlight-text">权重</span> 文件：包含模型训练所得到的权重信息。权重文件的数量取决于模型的结构。
@@ -696,7 +696,7 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")</code></pre>
                     </ul>
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    默认设置下，模型结构文件将命名为 <span class="highlight-text">model.json</span>，<span class="span_bold">可修改名称</span>。
+                    默认设置下，模型结构文件将命名为 <span class="highlight-text">model.json</span>，<span class="span_bold"> 可修改名称</span>。
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
                     权重文件都将以 "group1-shard1of1" 的格式命名并在 <span class="highlight-text">model.json</span> 声明其关联性。因此，我们建议<span class="span_bold">不要</span>更改权重文件的名称。如有情况需要修改的，请妥善修改 <span class="highlight-text">.json</span> (<span class="highlight-text">model.json</span>) 中的关联信息。
