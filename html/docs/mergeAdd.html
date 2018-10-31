@@ -443,8 +443,6 @@ let conv2d1 = new TSP.layers.Conv2d( {
 
 } );
 
-model.add( conv2d1 );
-
 let conv2d2 = new TSP.layers.Conv2d( {
 
     /*
@@ -454,11 +452,15 @@ let conv2d2 = new TSP.layers.Conv2d( {
 
 } );
 
-model.add( conv2d2 );
-
 // perform merge
 
-let mergedLayer = TSP.layers.Add( [ conv2d1, conv2d2 ] /* , configurations */ );
+let mergedLayer = TSP.layers.Add( [ conv2d1, conv2d2 ], {
+
+        /* Configurations */
+
+    }
+
+);
 
 mergedLayer.apply( inputLayer );</code></pre>
         </div>
@@ -490,7 +492,13 @@ model.add( conv2d2 );
 
 // perform merge
 
-let mergedLayer = TSP.layers.Add( [ conv2d1, conv2d2 ] /* , configurations */ );
+let mergedLayer = TSP.layers.Add( [ conv2d1, conv2d2 ], {
+
+        /* Configurations */
+
+    }
+
+);
 
 // add merged layer
 
@@ -528,7 +536,13 @@ model.add( conv2d2 );
 
 // perform merge
 
-let mergedLayer = TSP.layers.Add( [ conv2d1, conv2d2 ] /* , configurations */ );
+let mergedLayer = TSP.layers.Add( [ conv2d1, conv2d2 ], {
+
+        /* Configurations */
+
+    }
+
+);
 
 // add merged layer
 
