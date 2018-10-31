@@ -319,7 +319,7 @@
     <main>
         <header>Layer3d</header>
         <div>当你使用的Layer无法在TensorSpace的支持列表中找到时，使用此API。</div>
-        <div>生成一个抽象层，你需要确保形状和你模型中本层的数据形状相同，例如，1维[100]使用<a href="layerLayer1d_zh.html">Layer1d</a>；2维[100, 100]使用<a href="layerLayer2d_zh.html">Layer2d</a>；3维，Dataformat为通道数最后，[100, 100, 3]，使用<a href="#">Layer3d</a></div>
+        <div>生成一个抽象层，你需要确保形状和你模型中本层的数据形状相同，例如，1维[100]使用<a href="layerLayer1d_zh.html">Layer1d</a>；2维[100, 100]使用<a href="layerLayer2d_zh.html">Layer2d</a>；3维，dataFormat为通道数最后，[100, 100, 3]，使用<a href="#">Layer3d</a></div>
         <div>⭐️<span class="span_bold">抽象层</span>这些层和前层没有线相连，请提交<a href="https://github.com/syt123450/tensorspace/issues">Issue</a>，我们会尽早支持对应的API。</div>
 
         <div class="sub-title">构造器</div>
@@ -344,7 +344,7 @@
                     <p>shape</p>
                     <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
                 </th>
-                <td>[Int]</td>
+                <td>Int[]</td>
                 <td>输出的形状</td>
                 <td>例如，<span class="span_bold">shape=[100, 100, 3]</span>，输出是一幅图像，2维100*100，有3个特征图</td>
             </tr>
@@ -400,16 +400,16 @@
 
         <div class="sub-title">属性</div>
 
-        <div class="property-title"><a href="">.inputShape</a> : [Int]</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，Dataformat默认通道值在最后，例如inputShape = [ 28, 28, 3 ] 表示输入为3个特征图，每个图大小为28*28。</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined</div>
+        <div class="property-title"><a href="">.inputShape</a> : Int[]</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，dataFormat默认通道值在最后，例如inputShape = [ 28, 28, 3 ] 表示输入为3个特征图，每个图大小为28*28。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="">.outputShape</a> : [Int]</div>
+        <div class="property-title"><a href="">.outputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为3维 <a href="basicDimension_zh.html">3️⃣</a></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Dataformat默认通道值在最后，例如outputShape = [ 32, 32, 4 ] 表示经过此层处理后，有4个特征图，每个图大小为32*32。</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat默认通道值在最后，例如outputShape = [ 32, 32, 4 ] 表示经过此层处理后，有4个特征图，每个图大小为32*32。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="">.neuralValue</a> : [Int]</div>
+        <div class="property-title"><a href="">.neuralValue</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层层间输出值数组。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>载入模型，在 model.predict() 后才可以拿到数据，否则为undefined。</div>
 

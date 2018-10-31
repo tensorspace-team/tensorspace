@@ -343,7 +343,7 @@
                     <p>cropping </p>
                     <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
                 </th>
-                <td>[Int]</td>
+                <td>Int[]</td>
                 <td>Cropping value</td>
                 <td>cropping : [2, 3] means to crop at [left=2, right=3]</td>
             </tr>
@@ -400,16 +400,16 @@
 
         <div class="sub-title">Properties</div>
 
-        <div class="property-title"><a href="">.inputShape</a> : [Int]</div>
+        <div class="property-title"><a href="">.inputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of input tensor, for example inputShape = [ 28, 2 ] represents 2 feature vectors and length of each one is 28.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined.</div>
 
-        <div class="property-title"><a href="">.outputShape</a> : [Int]</div>
+        <div class="property-title"><a href="">.outputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of output tensor is 2-dimensional. <a href="basicDimension.html">2️⃣</a></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Dataformat is channel last. for example outputShape = [ 32, 4 ] represents the output through this layer has 4 feature vectors and length of each one is 32.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat is channel last. for example outputShape = [ 32, 4 ] represents the output through this layer has 4 feature vectors and length of each one is 32.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined</div>
 
-        <div class="property-title"><a href="">.neuralValue</a> : [Int]</div>
+        <div class="property-title"><a href="">.neuralValue</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The intermediate raw data after this layer.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After load and model.predict() data is available, otherwise is undefined.</div>
 
