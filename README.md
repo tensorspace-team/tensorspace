@@ -94,10 +94,9 @@ Based on different training libraries, we provide different tutorials: [TensorFl
 
 If installed TensorSpace and preprocessed the pre-trained deep learning model successfully, let's create an interactive 3D TensorSpace model.
 
-We use a [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld/model) as an example to continue the process.
+For the convenience, feel free to use the resources from our [HelloWorld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld) directory.
 
-[helloworld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld)
-[5](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)
+We will use the [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json) and [sample input data ("5")](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json). All source code can be found from [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html).
 
 First, we need to new a TensorSpace model instance:
 ```JavaScript
@@ -121,7 +120,7 @@ model.add( new TSP.layers.Output1d({
 }) );
 ```
 
-Last, we should load our [preprocessed TensorSpace compatible model]() and use `init()` method to create the TensorSpace model:
+Last, we should load our [preprocessed TensorSpace compatible model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json) and use `init()` method to create the TensorSpace model:
 ```JavaScript
 model.load({
     type: "tfjs",
@@ -142,7 +141,7 @@ We can get the following model in the browser if everything looks good:
 </p>
 
 
-We provide a extracted file which is a handwritten "5" as the input of our model:
+We provide a [extracted file](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json) which is a handwritten "5" as the input of our model:
 
 ```
 model.init(function() {
