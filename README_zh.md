@@ -99,10 +99,9 @@ yarn add tensorspace
 
 在成功安装完成 TensorSpace 并完成神经网络模型预处理之后，我们可以来创建一个3D TensorSpace 模型。
 
-我们会使用我们所提供的[经过预处理的LeNet神经网络模型](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld/model)作为使用样例来进行说明。
+为了简化步骤，请随意使用我们在 [HelloWorld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld) 路径下所提供的资源。
 
-[helloworld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld)
-[5](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)
+我们将会用到[适配 TensorSpace 的预处理模型](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json) 以及[样例输入数据（“5”）](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)作为使用样例来进行说明。所有的源码都可以在 [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html) 文件中找到。
 
 首先，我们需要新建一个 TensorSpace 模型实例：
 ```JavaScript
@@ -126,7 +125,7 @@ model.add( new TSP.layers.Output1d({
 }) );
 ```
 
-最后，我们需要载入[经过预处理的 TensorSpace 适配模型]()并使用`init()`方法来创建模型对象：
+最后，我们需要载入[经过预处理的 TensorSpace 适配模型](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json)并使用`init()`方法来创建模型对象：
 ```JavaScript
 model.load({
     type: "tfjs",
@@ -146,7 +145,7 @@ model.init();
 <b>图2</b> - 所创建的 LeNet 模型
 </p>
 
-我们可以使用我们已经提取好的手写“5”作为模型的输入：
+我们可以使用我们已经提取好的[手写“5”](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)作为模型的输入：
 ```
 model.init(function() {
     model.predict( image_5 );
