@@ -351,7 +351,7 @@
                 </th>
                 <td>Int[]</td>
                 <td>Output shape</td>
-                <td>The output shape should match the input shape.</td>
+                <td>The product of both input and output shape dimension lengths should be the same.</td>
             </tr>
             <tr>
                 <th scope="row">
@@ -424,7 +424,7 @@
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 
         <div class="property-title"><a href="">.layerType</a> : String</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer. There are 3 possible types: if input is 1d, return string <span class="span_bold">Reshape1d</span>; if input is 2d, return string <span class="span_bold">Reshape2d</span>; if input is 3d, return string <span class="span_bold">Reshape3d</span>.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer. There are 3 possible types: if targetShape has length 1, return string <span class="span_bold">Reshape1d</span>; if targetShape has length 2, return string <span class="span_bold">Reshape2d</span>; if targetShape has length 3, return string <span class="span_bold">Reshape3d</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 
         <div class="sub-title">Method</div>
@@ -442,7 +442,7 @@
 
 let reshapeLayer = new TSP.layers.Reshape( {
 
-    targetShape: [ 24, 24 ],
+    targetShape: [ 7, 7, 16 ],
     name: "Reshape1",
     initStatus: "open",
     animationTimeRatio: 2
