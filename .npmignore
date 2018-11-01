@@ -1,1 +1,14 @@
-*
+node_modules/
+package-lock.json
+.idea/
+.idea
+.all-contributorsrc
+.babelrc
+.travis.yml
+
+test
+assets
+examples
+src
+
+rollup.config.js
