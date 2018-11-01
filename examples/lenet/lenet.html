@@ -17,6 +17,7 @@
             #container {
                 width: calc( 100% - 300px );
                 height: 100%;
+                background-color: #000;
             }
 
             #controlPanel {
@@ -138,9 +139,9 @@
 
         <script>
 
-            let container = document.getElementById( "container" );
+            let modelContainer = document.getElementById( "container" );
 
-            let model = new TSP.model.Sequential( container, {
+            let model = new TSP.model.Sequential( modelContainer, {
 
                 animationTimeRatio: 0.1,
                 stats: true
