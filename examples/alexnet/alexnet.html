@@ -26,14 +26,14 @@
                 width: 100%;
                 height: 100%;
                 background-color: #fff;
+                z-index: 2;
             }
 
             #loading {
                 position: fixed;
-                width: 400px;
-                height: 400px;
+                width: 30%;
                 top: 150px;
-                left: 550px;
+                margin-left: 35%;
             }
 
         </style>
@@ -62,15 +62,7 @@
 
             let model = new TSP.model.Sequential( container, {
 
-                layerShape: "rect",
-                layerInitStatus: "close",
-                color: {
-
-                    input3d: 0x00ff00,
-                    conv2d: 0xff00ff,
-                    pooling2d: 0x00ffff
-
-                }
+				stats: true
 
             } );
 

@@ -15,32 +15,50 @@
             }
 
             #container {
-                width: 100%;
+                width: calc( 100% - 300px );
                 height: 100%;
             }
 
             #controlPanel {
-                position: fixed;
-                left: 0;
-                top: 200px;
-                width: 224px;
+                width: 300px;
+                height: 100%;
+                position: absolute;
+                background-color: #04242E;
+                border-left: 1px solid #6797AE;
+                box-sizing: border-box;
+                right: 0;
             }
 
             #clear {
+                position: absolute;
+                top: 300px;
+                left: 38px;
                 width: 224px;
-                height: 100px;
-                background-color: red;
+                line-height: 50px;
+                height: 50px;
+                font-size: 25px;
+                text-align: center;
+                background-color: #000;
+                border: 1px solid #6797AE;
+                box-sizing: border-box;
+                color: #6797AE;
+                cursor: pointer;
             }
 
             .wrapper {
+                position: absolute;
                 width: 224px;
                 height: 224px;
+                left: 38px;
+                top: 50px;
                 -moz-user-select: none;
                 -webkit-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
                 z-index: 100;
-                background-color: white;
+                background-color: #000;
+                border: 1px solid #6797AE;
+                box-sizing: border-box;
             }
 
             .signature-pad {
@@ -78,7 +96,7 @@
 
                 minWidth: 10,
                 backgroundColor: 'rgba(255, 255, 255, 0)',
-                penColor: 'rgb(0, 0, 0)',
+                penColor: 'rgb(103, 151, 174)',
                 onEnd: getImage
 
             } );
@@ -101,9 +119,7 @@
 
                 }
 
-                model.predict( signatureData, function( predictResult ) {
-                    // console.log(predictResult);
-                });
+                model.predict( signatureData );
 
             }
 
@@ -126,65 +142,39 @@
 
             let model = new TSP.model.Sequential( container, {
 
-                layerInitStatus: "close",
-                aggregationStrategy: "max",
-                layerShape: "rect",
-                textSystem: "enable",
-                relationSystem: "enable",
                 animationTimeRatio: 0.1,
-                stats: true,
-
-                color: {
-
-                    background: 0x000000,
-                    conv2d: 0xffff2E,
-                    pooling2d: 0x00ffff,
-                    dense: 0x00ff00,
-                    padding2d: 0x6eb6ff
-
-                }
+                stats: true
 
             } );
 
             model.add( new TSP.layers.GreyscaleInput( {
 
                 shape: [ 28, 28, 1 ],
-                name: "initInput",
                 color: 0xFFFFFF,
+				name: "initInput"
 
             } ) );
 
             model.add( new TSP.layers.Padding2d( {
 
                 padding: [ 2, 2 ],
+                name: "padding"
 
             } ) );
 
-            let convLayer = new TSP.layers.Conv2d( {
+            model.add( new TSP.layers.Conv2d( {
 
-                kernelSize: 5,
-                filters: 6,
-                strides: 1,
-                name: "conv2d1",
-                // initStatus: "open"
+             	kernelSize: 5,
+             	filters: 6,
+             	strides: 1,
+             	name: "conv2d1"
 
-            } );
-
-            model.add( convLayer );
-            // model.add( new TSP.layers.Conv2d( {
-            //
-            // 	kernelSize: 5,
-            // 	filters: 6,
-            // 	strides: 1,
-            // 	name: "conv2d1"
-            //
-            // } ) );
+            } ) );
 
             model.add( new TSP.layers.Pooling2d( {
 
                 poolSize: [ 2, 2 ],
                 strides: [ 2, 2 ],
-
                 name: "maxPool2d1"
 
             } ) );
@@ -202,20 +192,16 @@
 
                 poolSize: [ 2, 2 ],
                 strides: [ 2, 2 ],
-
                 name: "maxPool2d2"
 
             } ) );
 
-            let denseLayer = new TSP.layers.Dense( {
+            model.add( new TSP.layers.Dense( {
 
-                units: 120,
-                name: "dense1",
-                animationTimeRatio: 1,
+				units: 120,
+				name: "dense1"
 
-            } );
-
-            model.add( denseLayer );
+			} ) );
 
             model.add( new TSP.layers.Dense( {
 
@@ -235,21 +221,11 @@
             model.load( {
 
                 type: "tfjs",
-                url: './lenetModel/mnist.json',
-
-                onComplete: function() {
-
-                    console.log( "Complete load model." );
-
-                }
+                url: './lenetModel/mnist.json'
 
             } );
 
             model.init();
-
-        //	setTimeout(function() {
-        //		model.reset();
-        //    }, 4000);
 
         </script>
     </body>

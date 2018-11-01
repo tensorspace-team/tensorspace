@@ -27,23 +27,17 @@
                 top: 0;
                 left: 0;
                 background-color: #031D32;
+                z-index: 2;
             }
 
             #loading {
                 position: fixed;
-                width: 400px;
-                height: 300px;
-                top: 200px;
-                left: 500px;
+                width: 30%;
+                top: 150px;
+                margin-left: 35%;
             }
 
-            .mdl-dialog {
-                width: fit-content!important;
-            }
         </style>
-        <link rel="stylesheet" href="../lib/material.min.css">
-        <link rel="stylesheet" href="../lib/material.fonts.css">
-        <link rel="stylesheet" href="../lib/dialog-polyfill.css">
     </head>
     <body>
 
@@ -52,24 +46,12 @@
             <img id="loading" src="./assets/loading.gif">
         </div>
 
-        <dialog class="mdl-dialog">
-            <h4 class="mdl-dialog__title">Yolo Output</h4>
-            <div class="mdl-dialog__content">
-                <canvas id="drawerPad" width=416 height="416"></canvas>
-            </div>
-            <div class="mdl-dialog__actions">
-                <button type="button" class="mdl-button close">Goodbye 33</button>
-            </div>
-        </dialog>
-
         <script src="../lib/jquery.min.js"></script>
         <script src="../lib/three.min.js"></script>
         <script src="../lib/stats.min.js"></script>
         <script src="../lib/tween.min.js"></script>
         <script src="../lib/TrackballControls.js"></script>
         <script src="../lib/tf.min.js"></script>
-        <script src="../lib/material.min.js"></script>
-        <script src="../lib/dialog-polyfill.js"></script>
         <script src="../../build/tensorspace.js"></script>
 
         <script src="./data/dog.js"></script>
@@ -80,17 +62,9 @@
 
             let model = new TSP.model.Sequential( container, {
 
-                aggregationStrategy: "average",
-                layerShape: "rect",
-                layerInitStatus: "close",
-                color: {
+				stats: true
 
-                    conv2d: 0xff00ff,
-                    pooling2d: 0x00ffff
-
-                }
-
-            } );
+			}  );
 
             model.add( new TSP.layers.RGBInput( {
 
