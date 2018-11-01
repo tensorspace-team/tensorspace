@@ -27,6 +27,22 @@ let dataLookup = {
 		dataUrl: "../../assets/data/tigerShark.json",
 		imageUrl: "../../assets/img/playground/tigerShark.jpg"
 
+	},
+
+	golfBall: {
+
+		relativeDiv: "data4",
+		dataUrl: "../../assets/data/golfBall.json",
+		imageUrl: "../../assets/img/playground/golfBall.jpg"
+
+	},
+
+	golfCart: {
+
+		relativeDiv: "data5",
+		dataUrl: "../../assets/data/golfCart.json",
+		imageUrl: "../../assets/img/playground/golfCart.jpg"
+
 	}
 
 };

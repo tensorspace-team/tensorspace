@@ -27,6 +27,22 @@ let dataLookup = {
 		dataUrl: "../../assets/data/car.json",
 		imageUrl: "../../assets/img/playground/car.jpg"
 
+	},
+
+	terrier: {
+
+		relativeDiv: "data4",
+		dataUrl: "../../assets/data/terrier.json",
+		imageUrl: "../../assets/img/playground/terrier.jpg"
+
+	},
+
+	hen: {
+
+		relativeDiv: "data5",
+		dataUrl: "../../assets/data/hen.json",
+		imageUrl: "../../assets/img/playground/hen.jpg"
+
 	}
 
 };
