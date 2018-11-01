@@ -173,8 +173,6 @@ function executePredict() {
 	let context = canvas.getContext( '2d' );
 	let imgData = context.getImageData( 0, 0, canvas.width, canvas.height );
 
-	console.log(signaturePad.toData());
-
 	let signatureData = [];
 
 	for ( let i = 0; i < 224; i += 8 ) {

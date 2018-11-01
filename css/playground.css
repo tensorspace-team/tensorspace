@@ -144,3 +144,7 @@ main {
     height: 100%;
     position: relative;
 }
+
+#nav-collapse {
+    z-index: 100!important;
+}

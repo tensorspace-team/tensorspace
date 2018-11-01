@@ -15,10 +15,6 @@ $(function() {
 
 	});
 
-	$("#logo").click(function() {
-		window.location.href = "../../index.html";
-	});
-
 	$("#downloadNav").click(function () {
 
 		$("#downloadNav").addClass("now");
