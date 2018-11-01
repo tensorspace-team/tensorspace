@@ -263,7 +263,7 @@ function createModel() {
 		weightUrl: "../../assets/model/yolov2-tiny/weights_manifest.json",
 		outputsName: [ "Maximum", "MaxPool", "Maximum_1", "MaxPool_1", "Maximum_2",
 			"MaxPool_2", "Maximum_3", "MaxPool_3", "Maximum_4", "MaxPool_4",
-			"Maximum_5", "MaxPool_5", "Const_7", "Const_8", "add_8" ],
+			"Maximum_5", "MaxPool_5", "Maximum_6", "Maximum_7", "add_8" ],
 	} );
 
 	model.init( function() {
