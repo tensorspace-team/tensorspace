@@ -4,12 +4,12 @@
 
 # Keras 模型预处理
 
-本篇将介绍如何预处理基于 Keras 搭建的神经网络模型，以此来适配 TensorSpace 所需要的拥有中间层输出的模型。如果您之前已经了解过[tf.keras 模型预处理](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/README.md)，您将会发现两篇教程拥有许多相似之处。
+本篇将介绍如何预处理基于 Keras 搭建的神经网络模型，以此来适配 TensorSpace 所需要的拥有中间层输出的模型。如果您之前已经了解过[tf.keras 模型预处理](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/README.md)，您将会发现两篇教程拥有许多相似之处。
 
 以下为本篇教程所使用的代码及模型文件：
-* [keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py)
-* [convert_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh)
-* [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/Keras/models)
+* [keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py)
+* [convert_keras.sh](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh)
+* [模型](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/Keras/models)
 
 运行环境：Python 3.6.5。相关依赖如下：
 ```Python
@@ -75,7 +75,7 @@ $ tensorflowjs_converter \
 
 我们可以用以下代码迅速搭建其网络结构。
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L12)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L12)
 ````Python
 def create_sequential_model():
     single_output_model = Sequential([
@@ -99,7 +99,7 @@ def create_sequential_model():
 
 完成网络结构的构筑之后，使用 MNIST 数据集训练模型。
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L49)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L49)
 ````Python
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
@@ -113,7 +113,7 @@ model.fit(x_train, y_train, epochs=5, batch_size=32)
 
 在训练完成之后，我们应当得到一个具有完整结构及一定训练程度的 Keras 神经网络模型。通过以下代码测试模型。
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102)
 ````Python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
@@ -137,7 +137,7 @@ model = load_model("/PATH/TO/Keras/model.h5")
 
 或者若该模型的**结构**与**权重**为**分开**保存格式，用以下代码加载：
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L67)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L67)
 ````Python
 json_path = "PATH_TO_JSON/model.json"
 weight_path = "PATH_TO_WEIGHT/weights.hdf5"
@@ -150,7 +150,7 @@ model.load_weights(weight_path)
 
 使用以下验证模型可用性：
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102)
 ````Python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
@@ -194,7 +194,7 @@ LeNet 先有两对 Conv2D + MaxPooling 层的组合，然后紧接一层 Flatten
 
 可通过以下方法提取我们所需要的中间层，并将其添加到我们新创建的模型中。
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L111)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L111)
 
 ````Python
 output_layer_names = [
@@ -211,7 +211,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
 
 或者可用以下方式添加所有中间层。
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L88)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L88)
 ````Python
 def generate_encapsulate_model(model):
     enc_model = Model(
@@ -230,7 +230,7 @@ def generate_encapsulate_model(model):
 
 然后，可生成一个新的`嵌入多输出模型`。
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L113)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L113)
 
 ````Python
 enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
@@ -267,7 +267,7 @@ print(enc_model.predict(input_sample))
 * 因为我们并不需要进一步训练，所以我们并不需要编译我们的嵌入的多输出模型。
 * 若您希望基于该嵌入后模型继续训练，您可以加入合适的优化和损失函数。这里我们以 “adam” 和 “sparse_categorical_crossentropy” 为例。
 
-〔源码〕[keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L118)
+〔源码〕[keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L118)
 ````Python
 enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
@@ -281,7 +281,7 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")
 
 我们可以通过以下脚本来进行转换。
 
-〔源码〕[convert_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh)
+〔源码〕[convert_keras.sh](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh)
 ````shell
 tensorflowjs_converter \
     --input_format=keras \

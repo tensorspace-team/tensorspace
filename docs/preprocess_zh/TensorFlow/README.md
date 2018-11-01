@@ -7,12 +7,12 @@
 本篇将介绍如何预处理基于 TensorFlow 搭建的神经网络模型 (saved model, frozen model and checkpoint)，以此来适配 TensorSpace 所需要的拥有中间层输出的模型。
 
 本篇教程所使用的代码及模型源文件列表：
-* [tensorflow_create_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py)
-* [tensorflow_load_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py)
-* [tensorflow_conversion.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_conversion.py)
-* [convert_tensorflow_saved_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh)
-* [convert_tensorflow_frozen_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_frozen_model.sh)
-* [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlow/models)
+* [tensorflow_create_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py)
+* [tensorflow_load_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py)
+* [tensorflow_conversion.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_conversion.py)
+* [convert_tensorflow_saved_model.sh](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh)
+* [convert_tensorflow_frozen_model.sh](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_frozen_model.sh)
+* [模型](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlow/models)
 
 运行环境：Python 3.6.5。相关依赖如下：
 ```Python
@@ -71,7 +71,7 @@ $ tensorflowjs_converter \
 
 #### 第一步，对训练数据进行预处理，改变训练数据的形状
 
-〔源码〕[tensorflow_create_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L7)
+〔源码〕[tensorflow_create_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L7)
 
 ```Python
 # Raw input & normalization
@@ -97,7 +97,7 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 
 网络包括：2个 Conv2D + MaxPooling 的组合，紧接着3层 Dense。
 
-〔源码〕[tensorflow_create_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L30)
+〔源码〕[tensorflow_create_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L30)
 
 ```Python
 def LeNet_5(x):
@@ -169,7 +169,7 @@ def LeNet_5(x):
 
 #### 第三步，训练模型
 
-〔源码〕[tensorflow_create_model.py](https://github.com/syt123450/tensorspace/blob/d4392e17527e1be495fa94cd70b6a651e2aaac6b/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L92)
+〔源码〕[tensorflow_create_model.py](https://github.com/tensorspace-team/tensorspace/blob/d4392e17527e1be495fa94cd70b6a651e2aaac6b/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L92)
 
 ```Python
 x = tf.placeholder(tf.float32, shape=[None,32,32,1],name="MyInput")
@@ -248,7 +248,7 @@ with tf.Session() as sess:
 
 已有预训练模型，直接加载。Tensorflow有三种常见的预训练模型，[点击链接查看模型类别详情](https://cloud.tencent.com/developer/article/1009979) 
 
-〔源码〕[tensorflow_load_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py)
+〔源码〕[tensorflow_load_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py)
 
 - `saved model`：一个`.pb`文件，并有一个`variables`文件夹，可能含有`assets`文件夹。部署时使用此格式
 
@@ -285,7 +285,7 @@ with tf.Session(graph=tf.Graph()) as sess:
 **❗ 注意**
 
 * 如果需要加载 Checkpoint，需要将所加载的模型保存为 SavedModel 或者 FrozenModel 。因为 tfjs-converter 目前并不支持对于 Checkpoint 的转换适配。
-* 如果需要转换 Checkpoint，运行以下代码段。〔源码〕[tensorflow_conversion.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_conversion.py)
+* 如果需要转换 Checkpoint，运行以下代码段。〔源码〕[tensorflow_conversion.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_conversion.py)
 ```Python
 with tf.Session(graph=tf.Graph()) as sess:
     dir_path = '../DIR/SAVE/CKPT/'
@@ -312,7 +312,7 @@ with tf.Session(graph=tf.Graph()) as sess:
 
 ⭐️**关键步骤**。我们需要找出需要可视化的中间层所对应的 tensor 名称（names）。
 
-使用下面的代码**输出所有的 tensor 名称**。〔源码〕[tensorflow_load_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L62)
+使用下面的代码**输出所有的 tensor 名称**。〔源码〕[tensorflow_load_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L62)
 ```Python
 for n in tf.get_default_graph().as_graph_def().node:
     print(n.name)
@@ -332,13 +332,13 @@ for n in tf.get_default_graph().as_graph_def().node:
 * 若您加载了一个来自外部的模型，那么可能需要**对该模型的基本结构有所了解**。
 * 在绝大多数情况下，tensor 的名称（**"name"**）与其在 TensorFlow 中构造器紧密相关。
 
-当我们找到所有我们需要的 tensor 名称后，将它们添加到一个列表中。〔源码〕[tensorflow_load_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L67)
+当我们找到所有我们需要的 tensor 名称后，将它们添加到一个列表中。〔源码〕[tensorflow_load_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L67)
 ```Python
 output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_2",
                 "MyDense_1", "MyDense_2", "MySoftMax"]
 ```
 
-使用下列代码测试列表的有效性。〔源码〕[tensorflow_load_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L61)
+使用下列代码测试列表的有效性。〔源码〕[tensorflow_load_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L61)
 ```Python
 graph = tf.get_default_graph()
 x = graph.get_tensor_by_name("MyInput:0")
@@ -368,7 +368,7 @@ print(sess.run(outputs, feed_dict={x:x_test}))
 
 如果一切顺利，我们就可以使用一下脚本来进行模型转换以适配 TensorSpace。
 
-〔源码〕[convert_tensorflow_saved_model.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh)
+〔源码〕[convert_tensorflow_saved_model.sh](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh)
 ```Bash
 onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'
 tensorflowjs_converter \

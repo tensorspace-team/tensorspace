@@ -9,9 +9,9 @@
 如果您是第一次使用 tfjs 的新手，建议先阅读由 TensorFlow.js 官方提供的网络训练[教程](https://js.tensorflow.org/tutorials/)。
 
 以下为本篇教程所使用的代码及模型文件：
-* [createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html)
-* [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html)
-* [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlowjs/models)
+* [createTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html)
+* [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html)
+* [模型](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlowjs/models)
 
 请确保正确安装并引入 tfjs。
 
@@ -56,7 +56,7 @@ npm install @tensorflow/tfjs
 
 根据以上结构，搭建一个基本的网络。
 
-〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L14)
+〔源码〕[createTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L14)
 ```html
 
 // Initialize layer.
@@ -136,7 +136,7 @@ const model = tf.model({
 在构建网络结构之后，载入 MNIST 数据集进行编译和训练：
 （注：训练用脚本来源自 [tfjs 官方教程](https://js.tensorflow.org/tutorials/mnist.html)）
 
-〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L88)
+〔源码〕[createTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L88)
 
 ```html
 const LEARNING_RATE = 0.0001;
@@ -204,7 +204,7 @@ await train();
 ### 1.2 收集中间层数据
 在构建时由于采用了将前一层输出用作下一层输入的方法，我们只要将所需要的中间层包裹并植入一个新的模型之中即可。
 
-〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L77)
+〔源码〕[createTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L77)
 
 ```html
 const encModel = tf.model({
@@ -222,7 +222,7 @@ const encModel = tf.model({
 
 
 ### 1.3 保存嵌入后模型
-以下代码用于保存嵌入的多输出模型。〔源码〕[createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L143)
+以下代码用于保存嵌入的多输出模型。〔源码〕[createTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L143)
 ```html
 async function saveModel() {
     await encModel.save("downloads://YOUR_MODEL_NAME");
@@ -252,14 +252,14 @@ async function saveModel() {
 
 通过以下代码加载 tfjs 模型。
 
-〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L19)
+〔源码〕 [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L19)
 ```html
 const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
 ```
 
 ### 2.2 收集中间层数据
 
-通过以下方式收集中间层数据。〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L23)
+通过以下方式收集中间层数据。〔源码〕 [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L23)
 
 ```html
 // Hard code the input if you are sure about the shape
@@ -299,7 +299,7 @@ console.log(outputList);
 
 之后，将提取到的层对象添加到一个新的模型即可。
 
-〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L36)
+〔源码〕 [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L36)
 
 ```html
 const encModel = tf.model({
@@ -321,7 +321,7 @@ console.log(singleOutput);
 
 完成上述步骤之后，使用下面代码保存多输出模型。
 
-〔源码〕 [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L13)
+〔源码〕 [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L13)
 
 ```html
 async function saveModel() {

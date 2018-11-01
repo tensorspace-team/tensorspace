@@ -7,9 +7,9 @@
 本篇将介绍如何预处理基于 tf.keras 搭建的神经网络模型，适配 TensorSpace 所需要的拥有中间层输出的模型。
 
 以下为本篇教程所使用的代码及模型文件：
-* [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py)
-* [convert_tf_keras.sh](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_sh/convert_tf_keras.sh)
-* [模型](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/tfKeras/models)
+* [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py)
+* [convert_tf_keras.sh](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_sh/convert_tf_keras.sh)
+* [模型](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/tfKeras/models)
 
 运行环境：Python 3.6.5。相关依赖如下：
 ```Python
@@ -66,7 +66,7 @@ $ tensorflowjs_converter \
 
 用以下代码迅速搭建其网络结构。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L5)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L5)
 
 ```python
 def create_sequential_model():
@@ -98,7 +98,7 @@ def create_sequential_model():
 
 在完成网络结构的构建后，使用 MNIST 数据集训练模型。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L45)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L45)
 ```python
 mnist = tf.keras.datasets.mnist
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
@@ -113,7 +113,7 @@ model.fit(x_train, y_train, epochs=5)
 
 训练完成后，得到一个具有完整结构及一定训练程度的 Keras 神经网络模型。通过以下代码查看结果是否正确。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L107)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L107)
 ```python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
@@ -130,7 +130,7 @@ print(model.predict(input_sample))
 #### 1.2 加载已有模型
 如已有预训练模型，可使用以下代码来加载。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L68)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L68)
 ```python
 model = tf.keras.models.load_model(
     "PATH_TO_MODEL/model.h5",
@@ -140,7 +140,7 @@ model = tf.keras.models.load_model(
 ```
 或者该模型的**结构与权重为分开保存**，使用以下代码来加载。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L75)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L75)
 ```python
 json_path = "PATH_TO_JSON/model.json"
 weight_path = "PATH_TO_WEIGHT/weights.hdf5"
@@ -151,7 +151,7 @@ model = tf.keras.models.model_from_json(
 model.load_weights(weight_path)
 ```
 
-与完成创建新模型相似，加载后通过以下代码检测输出是否正确。〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L107)
+与完成创建新模型相似，加载后通过以下代码检测输出是否正确。〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L107)
 ```python
 input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
 input_sample = np.expand_dims(input_sample, axis=0)
@@ -173,7 +173,7 @@ print(model.predict(input_sample))
 
 首先，我们可以使用 `summary()` 方法得到中间层信息（layer.name）。当然，也可通过 layer 对象直接获取。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L111)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L111)
 
 ```
 model.summary()
@@ -194,7 +194,7 @@ for layer in model.layers:
 
 通过以下方法提取所需要的中间层，并将其添加到新创建的模型中。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L116)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L116)
 ```python
 output_layer_names = [
     "conv_1", "maxpool_1", "conv_2", "maxpool_2", 
@@ -210,7 +210,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
 
 或者用以下方式添加所有中间层。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L93)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L93)
 ```python
 def generate_encapsulate_model(model):
     display_model = tf.keras.models.Model(
@@ -224,7 +224,7 @@ def generate_encapsulate_model(model):
 * 请不要包括任何输入层（ 'input' 或是 `input_layer` ）。由于某些模型是由 `Model()` 构建，其输入部分并不是一个 tf.keras 层。
 * 确认所需要的中间层并保证其顺序。
 
-然后，可生成`嵌入多输出模型`。〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L118)
+然后，可生成`嵌入多输出模型`。〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L118)
 ```python
 enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
 # OR
@@ -261,7 +261,7 @@ print(enc_model.predict(input_sample))
 * 因为我们并不需要进一步训练，所以不需要编译嵌入的多输出模型。
 * 若希望基于该嵌入后模型继续训练，可加入合适的损失和优化函数方法。这里我们以 “adam” 和 “sparse_categorical_crossentropy” 为例。
 
-〔源码〕 [tf_keras_model.py](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L123)
+〔源码〕 [tf_keras_model.py](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L123)
 ```Python
 enc_model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',

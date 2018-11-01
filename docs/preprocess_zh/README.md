@@ -42,7 +42,7 @@
 
 基于不同的神经网络构造框架，细分了不同的预处理教程。
 
-* [TensorFlow 模型预处理](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess_zh/TensorFlow/README.md)
-* [Keras 模型预处理](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess_zh/Keras/README.md)
-* [tf.keras 模型预处理](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess_zh/tfKeras/README.md)
-* [TensorFlow.js 模型预处理](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess_zh/TensorFlowJS/README.md)
+* [TensorFlow 模型预处理](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlow/README.md)
+* [Keras 模型预处理](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/Keras/README.md)
+* [tf.keras 模型预处理](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/tfKeras/README.md)
+* [TensorFlow.js 模型预处理](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlowJS/README.md)

@@ -9,9 +9,9 @@ In the following chapter, we will introduce how to preprocess a TensorFlow.js (A
 If you are new for a tfjs model, we highly recommend you to go through the [guide](https://js.tensorflow.org/tutorials/) from TensorFlow.js first.
 
 The sample files we used in the tutorial are listed below:
-* [createTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html)
-* [loadTfjsModel.html](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html)
-* [all model files](https://github.com/syt123450/tensorspace/tree/master/docs/preprocess/TensorFlowjs/models)
+* [createTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html)
+* [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html)
+* [all model files](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlowjs/models)
 
 For the tutorial, make sure to install and import TensorFlow.js.
 
