@@ -28,21 +28,11 @@ $(function() {
 		}, 2000);
 	});
 
-    $('#toStart').click(function() {
-        window.location.href = "html/docs/startHello.html";
-    });
-
-    $('#toPlayground').click(function() {
-        window.location.href = "html/playground/index.html";
-    }).mouseover(function() {
-        $(this).find("img").attr("src", "assets/img/index/playgroundIcon_darkB.png").delay(400);
-    }).mouseout(function() {
-        $(this).find("img").attr("src", "assets/img/index/playgroundIcon.png");
-    });
-
-    $('#toGithub').click(function() {
-        window.location.href = "https://github.com/tensorspace-team/tensorspace";
-    });
+    $('#toPlayground').mouseover(function() {
+		$(this).find("img").attr("src", "assets/img/index/playgroundIcon_darkB.png").delay(400);
+	}).mouseout(function() {
+		$(this).find("img").attr("src", "assets/img/index/playgroundIcon.png");
+	});
 
     $("#galleryLenet").hover(function(){
 		$(this).find(".img33").attr("src", "./assets/img/index/gallery_LeNet.gif");
