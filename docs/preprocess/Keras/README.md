@@ -1,5 +1,5 @@
 <p align="center">
-<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/keras.png">
+<img width=400 src="./img/keras.png">
 </p>
 
 ## Preprocessing a Keras Model
@@ -32,8 +32,7 @@ If you are new on training a ML model by Keras, we highly recommand you to read 
 
 To preprocess a Keras model, we have the following steps:
 <p align="center" verticle-align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_general_process.png" alt="general TF process" width="830" >
-<img src="/img/Keras_general_process.png" alt="general TF process" width="830" >
+<img src="./img/Keras_general_process.png" alt="general TF process" width="830" >
 <br/>
 <b>Fig. 1</b> - Steps to preprocess a Keras model
 </p>
@@ -51,7 +50,7 @@ If you don't have your model trained yet or not sure how to generate a proper mo
 
 By following the structure of the LeNet,
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+<img src="./img/LeNet_Structure.png" alt="LeNet structure" width="175" >
 <br/>
 <b>Fig. 2</b> - LeNet structure
 </p>
@@ -100,7 +99,7 @@ print(model.predict(input_sample))
 And then we get the probabilities predicted by the model.
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_1.png" alt="predict output 1" width="705" >
+<img src="./img/Keras_predict_1.png" alt="predict output 1" width="705" >
 <br/>
 <b>Fig. 3</b> - Single list prediction output from trained model
 </p>
@@ -131,7 +130,7 @@ print(model.predict(input_sample))
 
 And then we get the probabilities predicted by the model.
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_1.png" alt="predict output 1" width="705" >
+<img src="./img/Keras_predict_1.png" alt="predict output 1" width="705" >
 <br/>
 <b>Fig. 4</b> - Single list prediction output from loaded model
 </p>
@@ -149,7 +148,7 @@ for layer in model.layers:
 ````
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_summary.png" alt="summary and layers" width="705" >
+<img src="./img/Keras_summary.png" alt="summary and layers" width="705" >
 <br/>
 <b>Fig. 5</b> - Model summary and layer names
 </p>
@@ -205,14 +204,14 @@ print(enc_model.predict(input_sample))
 The output is a list which contains all output data of the layers we selected.
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_2.png" alt="predict output 2" width="705" >
+<img src="./img/Keras_predict_2.png" alt="predict output 2" width="705" >
 <br/>
 <b>Fig. 6</b> - Multiple list outputs after preprocessing
 </p>
 
 The last output is the same as the one we predicted from the original model
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_3.png" alt="predict output 3" width="705" >
+<img src="./img/Keras_predict_3.png" alt="predict output 3" width="705" >
 <br/>
 <b>Fig. 7</b> - Last list output is the same as the original inferences
 </p>
@@ -243,7 +242,7 @@ tensorflowjs_converter \
 ````
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_models.png" alt="tfjs models" width="530" >
+<img src="./img/Keras_models.png" alt="tfjs models" width="530" >
 <br/>
 <b>Fig. 8</b> - Saved model files
 </p>
