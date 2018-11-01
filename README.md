@@ -170,7 +170,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
-<b>Fig.4</b> - TensorSpace LeNet
+<b>Fig.4</b> - Interactive LeNet created by TensorSpace
 </p>
 
 * **AlexNet** 
@@ -181,7 +181,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_alexnet.gif">
 </p>
 <p align="center">
-<b>Fig.5</b> - TensorSpace AlexNet
+<b>Fig.5</b> - Interactive AlexNet created by TensorSpace
 </p>
 
 * **Yolov2-tiny**
@@ -192,7 +192,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_yolov2.gif">
 </p>
 <p align="center">
-<b>Fig.6</b> - TensorSpace YOLO-v2-tiny
+<b>Fig.6</b> - Interactive Yolov2-tiny created by TensorSpace
 </p>
 
 * **ResNet-50**
@@ -203,7 +203,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_resnet50.gif">
 </p>
 <p align="center">
-<b>Fig.7</b> - TensorSpace ResNet-50
+<b>Fig.7</b> - Interactive ResNet-50 created by TensorSpace
 </p>
 
 * **Vgg16**
@@ -214,7 +214,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_vgg.gif">
 </p>
 <p align="center">
-<b>Fig.8</b> - TensorSpace VGG-16
+<b>Fig.8</b> - Interactive Vgg16 created by TensorSpace
 </p>
 
 * **ACGAN**
@@ -225,7 +225,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_acgan.gif">
 </p>
 <p align="center">
-<b>Fig.9</b> - TensorSpace ACGAN
+<b>Fig.9</b> - Interactive ACGAN created by TensorSpace
 </p>
 
 ## Documentation
