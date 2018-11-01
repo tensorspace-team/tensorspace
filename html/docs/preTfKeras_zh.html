@@ -329,13 +329,13 @@
 
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/tfKeras/src_py/tf_keras_model.py">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/tfKeras/src_py/tf_keras_model.py">
                 tf_keras_model.py
             </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/tfKeras/src_sh/convert_tf_keras.sh">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/tfKeras/src_sh/convert_tf_keras.sh">
                 convert_tf_keras.sh
             </a>
         </div>
@@ -415,7 +415,7 @@ import numpy as np</code></pre>
         </div>
 
         <div>用以下代码迅速搭建其网络结构。</div>
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L5">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L5">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">def create_sequential_model():
@@ -455,7 +455,7 @@ import numpy as np</code></pre>
 
         <div>在完成网络结构的构建后，使用 MNIST 数据集训练模型。</div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L45">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L45">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">mnist = tf.keras.datasets.mnist
@@ -471,7 +471,7 @@ model.fit(x_train, y_train, epochs=5)</code></pre>
 
         <div>训练完成后，得到一个具有完整结构及一定训练程度的 Keras 神经网络模型。通过以下代码查看结果是否正确。</div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L107">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L107">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
@@ -490,7 +490,7 @@ print(model.predict(input_sample))</code></pre>
 
         <div>如已有预训练模型，可使用以下代码来加载。</div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L68">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L68">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">model = tf.keras.models.load_model(
@@ -502,7 +502,7 @@ print(model.predict(input_sample))</code></pre>
 
         <div>或者该模型的<span class="span_bold">结构与权重为分开保存</span>，使用以下代码来加载。</div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L75">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L75">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">json_path = "PATH_TO_JSON/model.json"
@@ -514,7 +514,7 @@ model = tf.keras.models.model_from_json(
 model.load_weights(weight_path)</code></pre>
         </div>
 
-        <div>与完成创建新模型相似，加载后通过以下代码检测输出是否正确。〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L107">tf_keras_model.py</a></div>
+        <div>与完成创建新模型相似，加载后通过以下代码检测输出是否正确。〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L107">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
@@ -545,7 +545,7 @@ print(model.predict(input_sample))</code></pre>
 
         <div>首先，我们可以使用 <span class="highlight-text">summary()</span> 方法得到中间层信息（layer.name）。当然，也可通过 layer 对象直接获取。</div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L111">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L111">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">model.summary()
@@ -571,7 +571,7 @@ for layer in model.layers:
 
         <div>通过以下方法提取所需要的中间层，并将其添加到新创建的模型中。</div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L116">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L116">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">output_layer_names = [
@@ -587,7 +587,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
         </div>
 
         <div>或者用以下方式添加所有中间层。</div>
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L93">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L93">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">def generate_encapsulate_model(model):
@@ -611,7 +611,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
         </div>
 
         <div>
-            然后，可生成<span class="highlight-text">嵌入多输出模型</span>。〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L118">tf_keras_model.py</a>
+            然后，可生成<span class="highlight-text">嵌入多输出模型</span>。〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L118">tf_keras_model.py</a>
         </div>
 
         <div class="code-snippet">
@@ -657,7 +657,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
             </ul>
         </div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/tfKeras/src_py/tf_keras_model.py#L123">tf_keras_model.py</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/tfKeras/src_py/tf_keras_model.py#L123">tf_keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">enc_model.compile(optimizer='adam',
