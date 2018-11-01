@@ -19,6 +19,30 @@ let dataLookup = {
 		dataUrl: "../../assets/data/cat.json",
 		imageUrl: "../../assets/img/playground/cat.jpg"
 
+	},
+
+	castle: {
+
+		relativeDiv: "data3",
+		dataUrl: "../../assets/data/castle.json",
+		imageUrl: "../../assets/img/playground/castle.jpg"
+
+	},
+
+	snail: {
+
+		relativeDiv: "data4",
+		dataUrl: "../../assets/data/snail.json",
+		imageUrl: "../../assets/img/playground/snail.jpg"
+
+	},
+
+	icecream: {
+
+		relativeDiv: "data5",
+		dataUrl: "../../assets/data/icecream.json",
+		imageUrl: "../../assets/img/playground/icecream.jpg"
+
 	}
 
 };
