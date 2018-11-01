@@ -10,7 +10,7 @@ A model preprocessing for TensorSpace is the process to detect necessary data (i
 Typically, the trained model consumes the input data from the users and then computes among different layers/tensors and finally returns the meaningful outputs which can be used for further evaluations.
 
 <p align="center">
-<img width=800 src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s.png">
+<img width=800 src="./img/intro_preprocess_s.png">
 </p>
 <p align="center">
 <b>Fig. 1</b> - Classic pre-trained model with single output
@@ -23,7 +23,7 @@ However, the beauties of TensorSpace as a 3D data visualization model are not on
 Hence, we need to find a way to collect the intermediate outputs from not only the last few output layers, but also from the intermediate hidden layers.
 
 <p align="center">
-<img width=800 src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_m.png">
+<img width=800 src="./img/intro_preprocess_m.png">
 </p> 
 <p align="center">
 <b>Fig. 2</b> - TensorSpace compatible model with intermediate outputs
@@ -33,7 +33,7 @@ Hence, we need to find a way to collect the intermediate outputs from not only t
 **How do we preprocess a model?**<br/>
 To fully apply the core functionality of TensorSpace, we need to transfer the classic model (only returns the final output) into a new model (generates all intermediate outputs we want to present). For the following sections, we introduce how to preprocess the models built by TensorFlow, Keras, tf.Keras and TensorFlow.js.
 
-* [TensorFlow model preprocessing tutorial](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlow/README.md)
-* [Keras model preprocessing tutorial](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/README.md)
-* [tf.keras model preprocessing tutorial](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/tfKeras/README.md)
-* [TensorFlow.js model preprocessing tutorial](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/TensorFlowJS/README.md)
+* [TensorFlow model preprocessing tutorial](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlow/README.md)
+* [Keras model preprocessing tutorial](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/Keras/README.md)
+* [tf.keras model preprocessing tutorial](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/tfKeras/README.md)
+* [TensorFlow.js model preprocessing tutorial](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlowJS/README.md)

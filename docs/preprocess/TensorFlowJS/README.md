@@ -1,5 +1,5 @@
 <p align="center">
-<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tfjs.png">
+<img width=400 src="./img/tfjs.png">
 </p>
 
 ## Preprocessing a TensorFlow.js Model
@@ -29,7 +29,7 @@ To import TensorFlow.js, include tf.min.js in html.
  
 For preprocessing a tfjs model, we have a general process like:
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_general_process.png" alt="general TFjs process" width="830" >
+<img src="./img/tfjs_general_process.png" alt="general TFjs process" width="830" >
 <br/>
 <b>Fig. 1</b> - Steps to preprocess a TensorFlow.js model
 </p>
@@ -47,7 +47,7 @@ If you do not have any existed model in hands, let's train a TensorFlow.js model
 First, let's take a look at the LeNet structure:
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+<img src="./img/LeNet_Structure.png" alt="LeNet structure" width="175" >
 <br/>
 <b>Fig. 2</b> - LeNet structure
 </p>
@@ -227,7 +227,7 @@ async function saveModel() {
 After downloading from the browser, we shall have the following files:
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_created_model.png" alt="models" width="400" >
+<img src="./img/tfjs_created_model.png" alt="models" width="400" >
 <br/>
 <b>Fig. 3</b> - Saved model files
 </p>
@@ -268,7 +268,7 @@ console.log(outputList);
 The console output shall be:
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_1.png" alt="layer outputs" width="575" >
+<img src="./img/tfjs_console_output_1.png" alt="layer outputs" width="575" >
 <br/>
 <b>Fig. 4</b> - Intermediate layer names and multiple outputs
 </p>
@@ -289,7 +289,7 @@ console.log(singleOutput);
 ```
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_2.png" alt="enc model output" width="575" >
+<img src="./img/tfjs_console_output_2.png" alt="enc model output" width="575" >
 <br/>
 <b>Fig. 5</b> - Multiple outputs from encapsulated model
 </p>
@@ -303,4 +303,4 @@ async function saveModel() {
 saveModel();
 ```
 
-If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model]()(TBD).
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](http://tensorspace.org/html/docs/basicLoad.html).

@@ -1,7 +1,7 @@
 ## Preprocessing a tf.keras Model
 
 <p align="center">
-<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
+<img width=400 src="./img/tensorflow.png">
 </p>
 
 In this chapter, we will introduce how to preprocess a tf.keras model to adapt the multiple intermediate layer outputs for applying TensorSpace. If you have read the [Keras preprocessing tutorial](https://github.com/syt123450/tensorspace/blob/master/docs/preprocess/Keras/README.md), since the close relations between the two APIs, the workflows are very similar.
@@ -26,7 +26,7 @@ If you are new and have no idea about how to train a ML model with tf.keras, we 
 
 To preprocess a tf.keras model, make sure you satisfy the followings:
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_general_process.png" alt="general TF process" width="830" >
+<img src="./img/tf_keras_general_process.png" alt="general TF process" width="830" >
 <br/>
 <b>Fig. 1</b> - Steps to preprocess a tf.keras model
 </p>
@@ -44,7 +44,7 @@ Let's train a simple LeNet model to recognize MNIST handwritten digit, if you do
 
 By following the structure of the LeNet,
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+<img src="./img/LeNet_Structure.png" alt="LeNet structure" width="175" >
 <br/>
 <b>Fig. 2</b> - LeNet structure
 </p>
@@ -101,7 +101,7 @@ print(model.predict(input_sample))
 Then we have a single array with 10 probabilities:
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
+<img src="./img/tf_keras_predict_1.png" alt="predict output 1" width="705" >
 <br/>
 <b>Fig. 3</b> - Single list prediction output from trained model
 </p>
@@ -136,7 +136,7 @@ The same length 10 array output:
 
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_1.png" alt="predict output 1" width="705" >
+<img src="./img/tf_keras_predict_1.png" alt="predict output 1" width="705" >
 <br/>
 <b>Fig. 4</b> - Single list prediction output from loaded model
 </p>
@@ -157,7 +157,7 @@ for layer in model.layers:
 ```
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_summary.png" alt="summary" width="705" >
+<img src="./img/tf_keras_summary.png" alt="summary" width="705" >
 <br/>
 <b>Fig. 5</b> - Model summary and layer names
 </p>
@@ -208,7 +208,7 @@ print(enc_model.predict(input_sample))
 ```
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_2.png" alt="predict output 2" width="705" >
+<img src="./img/tf_keras_predict_2.png" alt="predict output 2" width="705" >
 <br/>
 <b>Fig. 6</b> - Multiple list outputs after preprocessing
 </p>
@@ -216,7 +216,7 @@ print(enc_model.predict(input_sample))
 And we can see the last output is the same as the one from the prediction of the original model.
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_predict_3.png" alt="predict output 3" width="705" >
+<img src="./img/tf_keras_predict_3.png" alt="predict output 3" width="705" >
 <br/>
 <b>Fig. 7</b> - Last list output is the same as the original inferences
 </p>
@@ -254,7 +254,7 @@ tensorflowjs_converter \
 ```
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/tf_keras/tf_keras_models.png" alt="models" width="530" >
+<img src="./img/tf_keras_models.png" alt="models" width="530" >
 <br/>
 <b>Fig. 8</b> - Saved model files
 </p>
@@ -267,4 +267,4 @@ tensorflowjs_converter \
 * The weight files are named like "group1-shard1of1" which are used and written within the "model.json" file. Hence we **DO NOT** suggest to modify the name of weight files, unless really necessary. If you really want to modify them, please modify the content in the .json (i.e. "model.json") as well.
 * For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
 
-If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model]()(TBD).
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](http://tensorspace.org/html/docs/basicLoad.html).

@@ -1,5 +1,5 @@
 <p align="center">
-<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
+<img width=400 src="./img/tensorflow.png">
 </p>
 
 ## Preprocessing a TensorFlow Model
@@ -35,7 +35,7 @@ $ pip install tensorflowjs
 In general, the preprocess of a TensorFlow model is:
 
 <p align="center" verticle-align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process.png" alt="general TF process" width="830" >
+<img src="./img/TensorFlow_general_process.png" alt="general TF process" width="830" >
 <br/>
 <b>Fig. 1</b> - Steps to preprocess a TensorFlow model
 </p>
@@ -72,7 +72,7 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 
 Next, based on the structure of an LeNet_v5:
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/LeNet_Structure.png" alt="LeNet structure" width="175" >
+<img src="./img/LeNet_Structure.png" alt="LeNet structure" width="175" >
 <br/>
 <b>Fig. 2</b> - LeNet structure
 </p>
@@ -213,7 +213,7 @@ with tf.Session() as sess:
 We can see some evaluation outputs like:
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_training_evaluations.png" alt="evaluations" width="705" >
+<img src="./img/TensorFlow_training_evaluations.png" alt="evaluations" width="705" >
 <br/>
 <b>Fig. 3</b> - Training evaluations
 </p>
@@ -282,7 +282,7 @@ for n in tf.get_default_graph().as_graph_def().node:
 You may get a lot, even the model is not that large. From the model we just built, we have 400+ tensors:
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_tensor_names_all.png" alt="all tensor names" width="705" >
+<img src="./img/TensorFlow_tensor_names_all.png" alt="all tensor names" width="705" >
 <br/>
 <b>Fig. 4</b> - Tensor names
 </p>
@@ -308,13 +308,13 @@ print(sess.run(outputs, feed_dict={x:x_test}))
 ```
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_prediction_1.png" alt="predict output 1" width="705" >
+<img src="./img/TensorFlow_prediction_1.png" alt="predict output 1" width="705" >
 <br/>
 <b>Fig. 5</b> - Multiple list outputs after preprocessing
 </p>
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_prediction_2.png" alt="predict output 2" width="705" >
+<img src="./img/TensorFlow_prediction_2.png" alt="predict output 2" width="705" >
 <br/>
 <b>Fig. 6</b> - Last list is the original output
 </p>
@@ -342,7 +342,7 @@ tensorflowjs_converter \
 * Put name list as a parameter of the script (no extra space or quotes).
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_models.png" alt="models" width="530" >
+<img src="./img/TensorFlow_models.png" alt="models" width="530" >
 <br/>
 <b>Fig. 7</b> - Saved model files
 </p>
@@ -354,5 +354,5 @@ tensorflowjs_converter \
     * Some weight files which contains actual weight values. The number of weight files is dependent on the size and structure of the given model.
 * For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
 
-If everything looks good, you shall be ready for the next step - "2. Apply TensorSpace API from the model structure".
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](http://tensorspace.org/html/docs/basicLoad.html).
 
