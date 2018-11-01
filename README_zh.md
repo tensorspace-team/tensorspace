@@ -143,7 +143,7 @@ model.init();
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
-<b>图2</b> - 所创建的 LeNet 模型
+<b>图2</b> - 所创建的 LeNet 模型 (无输入数据）
 </p>
 
 我们可以使用我们已经提取好的[手写“5”](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)作为模型的输入：
@@ -160,7 +160,7 @@ model.init(function() {
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
-<b>图3</b> - LeNet 模型判别输入 "5"
+<b>图3</b> - LeNet 模型判别输入 “5”
 </p>
 
 

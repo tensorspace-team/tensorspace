@@ -138,7 +138,7 @@ We can get the following model in the browser if everything looks good:
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
-<b>Fig. 2</b> - Generated LeNet model
+<b>Fig. 2</b> - LeNet model without any input data
 </p>
 
 
@@ -157,7 +157,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
-<b>Fig. 3</b> - Generated LeNet model with input data "5"
+<b>Fig. 3</b> - LeNet model with input data "5"
 </p>
 
 ## Example
