@@ -64,6 +64,12 @@ $(function() {
 		$(this).find(".img33").attr("src", "./assets/img/index/gallery_ResNet.jpg");
 	});
 
+	$("#galleryMore").hover(function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_more.gif");
+	}, function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_LeNet.jpg");
+	});
+
 	createModel();
 
 });
