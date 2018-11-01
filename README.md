@@ -32,6 +32,7 @@ TensorSpace is a neural network 3D visualization framework built by TensorFlow.j
 * [Example](#example)
 * [Documentation](#documentation)
 * [Contributors](#contributors)
+* [Contact](#contact)
 * [License](#license)
 
 ## Motivation

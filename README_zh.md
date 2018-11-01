@@ -35,6 +35,7 @@ TensorSpace 支持3D可视化所有经过适当预处理之后的 TensorFlow、K
 * [使用样例](#example)
 * [文档](#documentation)
 * [开发人员](#contributors)
+* [联系方式](#contact)
 * [许可证](#license)
 
 ## <div id="motivation">TensorSpace 使用场景</div>
