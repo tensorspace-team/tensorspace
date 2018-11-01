@@ -233,8 +233,20 @@
 
             model.init( function() {
 
-                model.predict( data );
-                $( "#loadingPad" ).hide();
+				$.ajax( {
+
+					url: "./data/dog.json",
+					type: 'GET',
+					async: true,
+					dataType: 'json',
+					success: function ( data ) {
+
+						model.predict( data );
+						$( "#loadingPad" ).hide();
+
+					}
+
+				} );
 
             } );
 

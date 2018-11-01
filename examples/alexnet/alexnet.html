@@ -53,7 +53,6 @@
         <script src="../lib/tf.min.js"></script>
         <script src="../../build/tensorspace.js"></script>
 
-        <script src="data/pikapika.js"></script>
         <script src="data/imagenet_result.js"></script>
 
         <script>
@@ -173,8 +172,20 @@
 
             model.init( function() {
 
-                model.predict( data );
-                $( "#loadingPanel" ).hide();
+				$.ajax( {
+
+					url: "./data/macaw.json",
+					type: 'GET',
+					async: true,
+					dataType: 'json',
+					success: function ( data ) {
+
+						model.predict( data );
+						$( "#loadingPanel" ).hide();
+
+					}
+
+				} );
 
             } );
 
