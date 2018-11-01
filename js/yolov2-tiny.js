@@ -261,9 +261,9 @@ function createModel() {
 		type: "tensorflow",
 		modelUrl: "../../assets/model/yolov2-tiny/tensorflowjs_model.pb",
 		weightUrl: "../../assets/model/yolov2-tiny/weights_manifest.json",
-		outputsName: [ "Maximum", "Const_1", "Maximum_1", "Const_2", "Maximum_2",
-			"Const_3", "Maximum_3", "Const_4", "Maximum_4", "Const_5",
-			"Maximum_5", "Const_6", "Const_7", "Const_8", "add_8" ],
+		outputsName: [ "Maximum", "MaxPool", "Maximum_1", "MaxPool_1", "Maximum_2",
+			"MaxPool_2", "Maximum_3", "MaxPool_3", "Maximum_4", "MaxPool_4",
+			"Maximum_5", "MaxPool_5", "Maximum_6", "Maximum_7", "add_8" ],
 	} );
 
 	model.init( function() {
