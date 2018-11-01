@@ -584,21 +584,39 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 			let ceilData = this.getCeilOutputValues( outputIndex );
 
-			// Use YoloResultGenerator get rects.
+			let rectangleList = [];
 
-			let rectangleList = YoloResultGenerator.getChannelBox(
+			if ( widthIndex === 0 && heightIndex === 0 ) {
 
-				ceilData,
-				this.outputShape,
-				this.modelInputShape,
-				this.anchors,
-				this.classLabelList,
-				this.scoreThreshold,
-				this.isDrawFiveBoxes,
-				widthIndex,
-				heightIndex
+				// To get the boxes with detective objects.
 
-			);
+				rectangleList = YoloResultGenerator.getDetectedBox(
+					this.neuralValue,
+                    this.channelDepth,
+					this.outputShape,
+                    this.modelInputShape,
+                    this.anchors,
+                    this.classLabelList,
+                    this.scoreThreshold,
+				)
+
+			} else {
+
+				// Use YoloResultGenerator get rects.
+
+                rectangleList = YoloResultGenerator.getChannelBox(
+                    ceilData,
+                    this.outputShape,
+                    this.modelInputShape,
+                    this.anchors,
+                    this.classLabelList,
+                    this.scoreThreshold,
+                    this.isDrawFiveBoxes,
+                    widthIndex,
+                    heightIndex
+                );
+
+            }
 
 			// Pass two parameters, ceilData and rectangleList, to callback function.
 
