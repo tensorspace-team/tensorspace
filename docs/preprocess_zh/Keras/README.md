@@ -1,5 +1,5 @@
 <p align="center">
-<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/keras.png">
+<img width=400 src="./img/keras_zh.png">
 </p>
 
 # Keras 模型预处理
@@ -47,7 +47,7 @@ $ tensorflowjs_converter \
 预处理 Keras 模型，包含如下图所示的几个步骤：
 
 <p align="center" verticle-align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_general_process_zh.png" alt="general TF process" width="830" >
+<img src="./img/Keras_general_process_zh.png" alt="general TF process" width="830" >
 <br/>
 <b>图1</b> - 预处理 Keras 模型的步骤
 </p>
@@ -68,7 +68,7 @@ $ tensorflowjs_converter \
 
 根据 LeNet 的网络结构：
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png" alt="LeNet structure" width="800" >
+<img src="./img/intro_preprocess_s_zh.png" alt="LeNet structure" width="800" >
 <br/>
 <b>图2</b> - LeNet 网络结构
 </p>
@@ -123,7 +123,7 @@ print(model.predict(input_sample))
 如下图所示，得到单一预测结果：
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_1.png" alt="predict output 1" width="705" >
+<img src="./img/Keras_predict_1_zh.png" alt="predict output 1" width="705" >
 <br/>
 <b>图3</b> - 新 Keras 模型的单一预测结果
 </p>
@@ -159,7 +159,7 @@ print(model.predict(input_sample))
 
 如下图所示，得到单一预测结果：
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_1.png" alt="predict output 1" width="705" >
+<img src="./img/Keras_predict_1_zh.png" alt="predict output 1" width="705" >
 <br/>
 <b>图4</b> - 加载 Keras 预训练模型得到的单一预测结果
 </p>
@@ -178,7 +178,7 @@ for layer in model.layers:
 ````
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_summary.png" alt="summary and layers" width="705" >
+<img src="./img/Keras_summary_zh.png" alt="summary and layers" width="705" >
 <br/>
 <b>图5</b> - 中间层信息输出
 </p>
@@ -246,14 +246,14 @@ print(enc_model.predict(input_sample))
 模型应该会输出我们所选择的所有中间层输出。若选择中包含最终输出，结果也应当包括最终预测输出。
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_2.png" alt="predict output 2" width="705" >
+<img src="./img/Keras_predict_2_zh.png" alt="predict output 2" width="705" >
 <br/>
 <b>图6</b> - 经过预处理之后的中间层输出
 </p>
 
 最后一层的输出对应原模型的预测结果，确保它们是相同的。
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_predict_3.png" alt="predict output 3" width="705" >
+<img src="./img/Keras_predict_3_zh.png" alt="predict output 3" width="705" >
 <br/>
 <b>图7</b> - 最后一层的输出与原模型预测结果一致
 </p>
@@ -290,7 +290,7 @@ tensorflowjs_converter \
 ````
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_models.png" alt="tfjs models" width="530" >
+<img src="./img/Keras_models_zh.png" alt="tfjs models" width="530" >
 <br/>
 <b>图8</b> - 转换后所保存的最终模型文件
 </p>
@@ -303,4 +303,4 @@ tensorflowjs_converter \
 * 权重文件都将以 "group1-shard1of1" 的格式命名并在 `model.json` 声明其关联性。因此，我们建议**不要**更改权重文件的名称。如有情况需要修改的，请妥善修改 `.json` (`model.json`) 中的关联信息。
 * [点击链接](https://github.com/tensorflow/tfjs-converter)以获取更多 tfjs-converter 的信息。
 
-若至此一切顺利，可移步下一部分——[加载TensorSpace适配模型]()(TBD)。
+若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](http://tensorspace.org/html/docs/basicLoad_zh.html)。

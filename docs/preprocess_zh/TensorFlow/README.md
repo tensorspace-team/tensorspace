@@ -1,5 +1,5 @@
 <p align="center">
-<img width=400 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tensorflow.png">
+<img width=400 src="./img/tensorflow_zh.png">
 </p>
 
 # TensorFlow 模型预处理
@@ -46,7 +46,7 @@ $ tensorflowjs_converter \
 预处理 TensorFlow 模型大致上分为以下几个步骤：
 
 <p align="center" verticle-align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_general_process_zh.png" alt="general TF process" width="830" >
+<img src="./img/TensorFlow_general_process_zh.png" alt="general TF process" width="830" >
 <br/>
 <b>图1</b> - 预处理 TensorSpace 模型的步骤
 </p>
@@ -239,7 +239,7 @@ with tf.Session() as sess:
 下图是训练结果后的输出：
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_training_evaluations.png" alt="evaluations" width="705" >
+<img src="./img/TensorFlow_training_evaluations_zh.png" alt="evaluations" width="705" >
 <br/>
 <b>图3</b> - 训练分析
 </p>
@@ -320,7 +320,7 @@ for n in tf.get_default_graph().as_graph_def().node:
 哪怕模型并不是很大，也可能得到许多 tensor 名称。例如我们在前例中所创建的 LeNet 网络模型，也会输出 400+ 个 tensor 名称：
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_tensor_names_all.png" alt="all tensor names" width="705" >
+<img src="./img/TensorFlow_tensor_names_all_zh.png" alt="all tensor names" width="705" >
 <br/>
 <b>图4</b> - Tensor 名称
 </p>
@@ -347,14 +347,14 @@ print(sess.run(outputs, feed_dict={x:x_test}))
 ```
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_prediction_1.png" alt="predict output 1" width="705" >
+<img src="./img/TensorFlow_prediction_1_zh.png" alt="predict output 1" width="705" >
 <br/>
 <b>图5</b> - 模型预处理后的中间层多输出
 </p>
 
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_prediction_2.png" alt="predict output 2" width="705" >
+<img src="./img/TensorFlow_prediction_2_zh.png" alt="predict output 2" width="705" >
 <br/>
 <b>图6</b> - 最终输出与原始模型一致
 </p>
@@ -389,7 +389,7 @@ tensorflowjs_converter \
 * 请添加所保存的 tensor 名称列表至 `onn`（**请勿包含任何空格或者引号**）。
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlow/TensorFlow_models.png" alt="models" width="530" >
+<img src="./img/TensorFlow_models_zh.png" alt="models" width="530" >
 <br/>
 <b>图7</b> - 转换后所保存的最终模型文件
 </p>
@@ -402,4 +402,4 @@ tensorflowjs_converter \
     * `权重文件`：对应训练所得到的各 tensor 权重信息。权重文件的数量取决于网络的结构。
 * [点击链接](https://github.com/tensorflow/tfjs-converter) 获取更多 tfjs-converter 的信息。
 
-若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型]()(TBD)。
+若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](http://tensorspace.org/html/docs/basicLoad_zh.html)。

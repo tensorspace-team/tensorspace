@@ -1,5 +1,5 @@
 <p align="center">
-<img width=600 src="https://github.com/zchholmes/tsp_image/blob/master/Logos/tfjs.png">
+<img width=600 src="./img/tfjs_zh.png">
 </p>
 
 # TensorFlow.js 模型预处理
@@ -27,7 +27,7 @@ npm install @tensorflow/tfjs
 
 预处理 tfjs 模型，有以下几个步骤：
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_general_process_zh.png" alt="general TFjs process" width="830" >
+<img src="./img/tfjs_general_process_zh.png" alt="general TFjs process" width="830" >
 <br/>
 <b>图1</b> - 预处理 tfjs 模型的步骤
 </p>
@@ -48,7 +48,7 @@ npm install @tensorflow/tfjs
 首先，让我们了解以下 LeNet 的网络结构：
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png" alt="LeNet structure" width="800" >
+<img src="./img/intro_preprocess_s_zh.png" alt="LeNet structure" width="800" >
 <br/>
 <b>图2</b> - LeNet 网络结构
 </p>
@@ -241,7 +241,7 @@ async function saveModel() {
 在保存文件之后，可以得到：
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_created_model.png" alt="models" width="400" >
+<img src="./img/tfjs_created_model_zh.png" alt="models" width="400" >
 <br/>
 <b>图3</b> - 转换后所保存的最终模型文件
 </p>
@@ -288,7 +288,7 @@ console.log(outputList);
 浏览器控制台有以下输出：
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_1.png" alt="layer outputs" width="575" >
+<img src="./img/tfjs_console_output_1_zh.png" alt="layer outputs" width="575" >
 <br/>
 <b>图4</b> - 多中间层名称及输出
 </p>
@@ -312,7 +312,7 @@ console.log(singleOutput);
 ```
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/TensorFlowJS/tfjs_console_output_2.png" alt="enc model output" width="575" >
+<img src="./img/tfjs_console_output_2_zh.png" alt="enc model output" width="575" >
 <br/>
 <b>图5</b> - 嵌入后模型的中间层输出
 </p>
@@ -330,4 +330,4 @@ async function saveModel() {
 saveModel();
 ```
 
-若至此一切顺利，可移步下一部分——[加载TensorSpace适配模型]()(TBD)。
+若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](http://tensorspace.org/html/docs/basicLoad_zh.html)。

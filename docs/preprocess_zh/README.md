@@ -19,7 +19,7 @@
 例如，一个MNIST手写字符模型，常见的预训练模型（Tensorflow或Keras）只有一个最终输出，即经过最后softmax层的输出值（10个0-1之间的一个数，表示`0-9`数字的可能概率），如下图所示
 
 <p align="center">
-<img width=800 src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png">
+<img width=800 src="./img/intro_preprocess_s_zh.png">
 </p>
 <p align="center">
 <b>图1</b> - 传统情形下的单一输出
@@ -30,7 +30,7 @@
 为了达成这个效果，相对于图1，需要对模型进行预处理，使得可以从网上下载得到的预训练模型不仅仅输出最终结果，还会输出层间结果，而本教程就是为了说明如何定位层间节点的位置，如果生成多输出（层间输出）预训练模型，如下图所示
 
 <p align="center">
-<img width=800 src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_m_zh.png">
+<img width=800 src="./img/intro_preprocess_m_zh.png">
 </p> 
 <p align="center">
 <b>图2</b> - 拥有中间层输出的TensorSpace适配模型
