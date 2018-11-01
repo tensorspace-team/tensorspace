@@ -26,14 +26,14 @@
                 top: 0;
                 left: 0;
                 background-color: #031D32;
+                z-index: 2;
             }
 
             #loading {
                 position: fixed;
-                width: 400px;
-                height: 300px;
-                top: 200px;
-                left: 500px;
+                width: 30%;
+                top: 150px;
+                margin-left: 35%;
             }
 
         </style>
@@ -61,17 +61,9 @@
 
             let model = new TSP.model.Sequential( container, {
 
-                aggregationStrategy: "average",
-                layerShape: "rect",
-                layerInitStatus: "close",
-                color: {
+				stats: true
 
-                    conv2d: 0xff00ff,
-                    pooling2d: 0x00ffff
-
-                }
-
-            } );
+			}  );
 
             model.add( new TSP.layers.RGBInput( {
 
