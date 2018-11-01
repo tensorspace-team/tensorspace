@@ -33,6 +33,7 @@ If you are new on training a ML model by Keras, we highly recommand you to read 
 To preprocess a Keras model, we have the following steps:
 <p align="center" verticle-align="center">
 <img src="https://github.com/zchholmes/tsp_image/blob/master/Keras/Keras_general_process.png" alt="general TF process" width="830" >
+<img src="/img/Keras_general_process.png" alt="general TF process" width="830" >
 <br/>
 <b>Fig. 1</b> - Steps to preprocess a Keras model
 </p>
