@@ -30,10 +30,6 @@ $(function() {
 
 	});
 
-	$("#logo").click(function() {
-		window.location.href = "../../index.html";
-	});
-
 	bindLabelClickEvent();
 
 	$("#smallGuide").click(function() {
