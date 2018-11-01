@@ -200,7 +200,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 [➡ Live Demo](http://tensorspace.org/html/playground/resnet50.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/zchholmes/tsp_image/blob/master/tensorspace_resnet50.gif">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_resnet50.gif">
 </p>
 <p align="center">
 <b>Fig.7</b> - TensorSpace ResNet-50

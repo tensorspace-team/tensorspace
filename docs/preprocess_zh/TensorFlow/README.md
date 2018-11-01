@@ -90,7 +90,7 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')
 #### 第二步，根据 LeNet_v5 的网络结构来构建模型
 
 <p align="center">
-<img src="https://github.com/zchholmes/tsp_image/blob/master/General/intro_preprocess_s_zh.png" alt="LeNet structure" width="800" >
+<img src="./img/intro_preprocess_s_zh.png" alt="LeNet structure" width="800" >
 <br/>
 <b>图2</b> - LeNet 网络结构
 </p>
