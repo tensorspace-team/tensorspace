@@ -1,4 +1,4 @@
-let model;
+let model, conv2d;
 
 $(function() {
 
@@ -74,7 +74,7 @@ function createModel() {
 
 	model = new TSP.model.Sequential( container, {
 
-		animationTimeRatio: 0.1
+		animationTimeRatio: 0.8
 
 	} );
 
@@ -91,15 +91,16 @@ function createModel() {
 
 	} ) );
 
-	model.add( new TSP.layers.Conv2d( {
+	conv2d =  new TSP.layers.Conv2d( {
 
 		kernelSize: 5,
 		filters: 6,
 		strides: 1,
-		initStatus: "open",
 		name: "conv2d1"
 
-	} ) );
+	} );
+
+	model.add( conv2d );
 
 	model.add( new TSP.layers.Pooling2d( {
 
@@ -168,6 +169,7 @@ function createModel() {
 			success: function (data) {
 
 				model.predict( data );
+				conv2d.openLayer();
 				launchPredictor();
 
 			}
