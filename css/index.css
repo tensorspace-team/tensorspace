@@ -113,12 +113,13 @@
 }
 
 #toStart:hover {
-    background: linear-gradient(to right, #0c4d97, #2883c5);
+    background: linear-gradient(to right, #0c60f8, #60c1ff);
+    color: #FFF;
 }
 
 #toPlayground {
-    color: #22BFFB;
-    border: 1px solid #22BFFB;
+    color: #04BEFE;
+    border: 1px solid #04BEFE;
 }
 
 #iconGroup #toPlayground {
@@ -126,17 +127,17 @@
 }
 
 #toPlayground:hover {
-    border-color: #0c50bc;
-    color: #0c50bc;
+    border-color: #6edefe;
+    color: #6EDEFE;
 }
 
 #toGithub {
-    background-color: #f2f2f2;
+    background-color: #bbbbbb;
     color: #000;
 }
 
 #toGithub:hover {
-    background-color: #bbbbbb;
+    background-color: #f2f2f2;
 }
 
 #iconGroup > div > a > div > img {
@@ -219,7 +220,7 @@
 }
 
 #galleryTitle {
-    color: #83FBFF;
+    color: #22BFFB;
     text-align: center;
     clear: both;
 }
