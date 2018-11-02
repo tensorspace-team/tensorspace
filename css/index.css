@@ -108,13 +108,12 @@
 }
 
 #toStart {
-    color: #dbdbdb;
+    color: #CDCECF;
     background: linear-gradient(to right, #0c50bc, #299ae2);
 }
 
 #toStart:hover {
     background: linear-gradient(to right, #0c60f8, #60c1ff);
-    color: #FFF;
 }
 
 #toPlayground {
