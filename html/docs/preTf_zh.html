@@ -328,31 +328,31 @@
 
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/TensorFlow/src_py/tensorflow_create_model.py">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlow/src_py/tensorflow_create_model.py">
                 tensorflow_create_model.py
             </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/TensorFlow/src_py/tensorflow_load_model.py">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlow/src_py/tensorflow_load_model.py">
                 tensorflow_load_model.py
             </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/TensorFlow/src_py/tensorflow_conversion.py">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlow/src_py/tensorflow_conversion.py">
                 tensorflow_conversion.py
             </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/TensorFlow/src_sh/convert_tensorflow_saved_model.sh">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlow/src_sh/convert_tensorflow_saved_model.sh">
                 convert_tensorflow_saved_model.sh
             </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/TensorFlow/src_sh/convert_tensorflow_frozen_model.sh">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlow/src_sh/convert_tensorflow_frozen_model.sh">
                 convert_tensorflow_frozen_model.sh
             </a>
         </div>
@@ -452,7 +452,7 @@ mnist = tf.keras.datasets.mnist</code></pre>
 
         <div class="span_bold">第一步，对训练数据进行预处理，改变训练数据的形状：</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L7">tensorflow_create_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L7">tensorflow_create_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python"># Raw input & normalization
@@ -477,7 +477,7 @@ x_test = np.pad(x_test, ((0,0), (2,2), (2,2), (0,0)), 'constant')</code></pre>
 
         <div>网络包括：2个 Conv2D + MaxPooling 的组合，紧接着3层 Dense。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L30">tensorflow_create_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_create_model.py#L30">tensorflow_create_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">def LeNet_5(x):
@@ -644,7 +644,7 @@ with tf.Session() as sess:
 
         <div>已有预训练模型，直接加载。TensorFlow 有三种常见的预训练模型，<a href="https://cloud.tencent.com/developer/article/1009979">点击链接查看模型类别详情</a></div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlow/src_py/tensorflow_load_model.py">tensorflow_load_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py">tensorflow_load_model.py</a></div>
 
         <div><span class="highlight-text">saved model</span>：一个<span class="highlight-text">.pb</span>文件，并有一个<span class="highlight-text">variables</span>文件夹，可能含有<span class="highlight-text">assets</span>文件夹。部署时使用此格式</div>
 
@@ -686,7 +686,7 @@ with tf.Session() as sess:
                     如果需要加载 Checkpoint，需要将所加载的模型保存为 SavedModel 或者 FrozenModel 。因为 tfjs-converter 目前并不支持对于 Checkpoint 的转换适配。
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    如果需要转换 Checkpoint，运行以下代码段。〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlow/src_py/tensorflow_conversion.py">tensorflow_conversion.py</a>
+                    如果需要转换 Checkpoint，运行以下代码段。〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_conversion.py">tensorflow_conversion.py</a>
                 </li>
             </ul>
         </div>
@@ -717,7 +717,7 @@ with tf.Session() as sess:
 
         <div>⭐️<span class="span_bold">关键步骤</span>。我们需要找出需要可视化的中间层所对应的 tensor 名称（names）。</div>
 
-        <div>使用下面的代码<span class="span_bold">输出所有的 tensor 名称</span>。〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L62">tensorflow_load_model.py</a></div>
+        <div>使用下面的代码<span class="span_bold">输出所有的 tensor 名称</span>。〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L62">tensorflow_load_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">for n in tf.get_default_graph().as_graph_def().node:
@@ -750,14 +750,14 @@ with tf.Session() as sess:
             </ul>
         </div>
 
-        <div>当我们找到所有我们需要的 tensor 名称后，将它们添加到一个列表中。〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L67">tensorflow_load_model.py</a></div>
+        <div>当我们找到所有我们需要的 tensor 名称后，将它们添加到一个列表中。〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L67">tensorflow_load_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">output_names = ["MyConv2D_1", "MyMaxPooling2D_1", "MyConv2D_2", "MyMaxPooling2D_2",
                 "MyDense_1", "MyDense_2", "MySoftMax"]</code></pre>
         </div>
 
-        <div>使用下列代码测试列表的有效性。〔源码〕，<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L61">tensorflow_load_model.py</a></div>
+        <div>使用下列代码测试列表的有效性。〔源码〕，<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_py/tensorflow_load_model.py#L61">tensorflow_load_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">graph = tf.get_default_graph()
@@ -793,7 +793,7 @@ print(sess.run(outputs, feed_dict={x:x_test}))</code></pre>
 
         <div>如果一切顺利，我们就可以使用一下脚本来进行模型转换以适配 TensorSpace。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh">convert_tensorflow_saved_model.sh</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlow/src_sh/convert_tensorflow_saved_model.sh">convert_tensorflow_saved_model.sh</a></div>
 
         <div class="code-snippet">
             <pre><code class="Bash">onn='MyConv2D_1,MyMaxPooling2D_1,MyConv2D_2,MyMaxPooling2D_2,MyDense_1,MyDense_2,MySoftMax'

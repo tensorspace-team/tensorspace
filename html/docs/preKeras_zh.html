@@ -330,13 +330,13 @@
 
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/Keras/src_py/keras_model.py">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/Keras/src_py/keras_model.py">
                 keras_model.py
             </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/Keras/src_sh/convert_keras.sh">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/Keras/src_sh/convert_keras.sh">
                 convert_keras.sh
             </a>
         </div>
@@ -427,7 +427,7 @@ from keras.models import load_model</code></pre>
 
         <div>我们可以用以下代码迅速搭建其网络结构。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_py/keras_model.py#L12">keras_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L12">keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">def create_sequential_model():
@@ -461,7 +461,7 @@ from keras.models import load_model</code></pre>
 
         <div>完成网络结构的构筑之后，使用 MNIST 数据集训练模型。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_py/keras_model.py#L49">keras_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L49">keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">(x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -476,7 +476,7 @@ model.fit(x_train, y_train, epochs=5, batch_size=32)</code></pre>
 
         <div>在训练完成之后，我们应当得到一个具有完整结构及一定训练程度的 Keras 神经网络模型。通过以下代码测试模型。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_py/keras_model.py#L102">keras_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102">keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
@@ -512,7 +512,7 @@ model.load_weights(weight_path)</code></pre>
         </div>
 
         <div>使用以下验证模型可用性：</div>
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_py/keras_model.py#L102">keras_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L102">keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">input_sample = np.ndarray(shape=(28,28), buffer=np.random.rand(28,28))
@@ -561,7 +561,7 @@ for layer in model.layers:
 
         <div>可通过以下方法提取我们所需要的中间层，并将其添加到我们新创建的模型中。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_py/keras_model.py#L111">keras_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L111">keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">output_layer_names = [
@@ -578,7 +578,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
 
         <div>或者可用以下方式添加所有中间层。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_py/keras_model.py#L88">keras_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L88">keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">def generate_encapsulate_model(model):
@@ -607,7 +607,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
 
         <div>然后，可生成一个新的<span class="highlight-text">嵌入多输出模型</span>。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_py/keras_model.py#L113">keras_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L113">keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">enc_model = generate_encapsulate_model_with_output_layer_names(model, output_layer_names)
@@ -651,7 +651,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
             </ul>
         </div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_py/keras_model.py#L118">keras_model.py</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_py/keras_model.py#L118">keras_model.py</a></div>
 
         <div class="code-snippet">
             <pre><code class="Python">enc_model.compile(optimizer='adam',
@@ -666,7 +666,7 @@ save_model(enc_model, "/PATH_TO_NEW_MODEL/enc_model.h5")</code></pre>
 
         <div>我们可以通过以下脚本来进行转换。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/Keras/src_sh/convert_keras.sh">convert_keras.sh</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/Keras/src_sh/convert_keras.sh">convert_keras.sh</a></div>
 
         <div class="code-snippet">
             <pre><code class="bash">tensorflowjs_converter \
