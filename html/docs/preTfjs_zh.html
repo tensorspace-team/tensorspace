@@ -331,13 +331,13 @@
 
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/TensorFlowJS/src_html/createTfjsModel.html">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlowJS/src_html/createTfjsModel.html">
                 createTfjsModel.html
             </a>
         </div>
         <div class="panel-heading">
             <i class="material-icons material-icons--outline">filter_center_focus</i>
-            <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess_zh/TensorFlowJS/src_html/loadTfjsModel.html">
+            <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess_zh/TensorFlowJS/src_html/loadTfjsModel.html">
                 loadTfjsModel.html
             </a>
         </div>
@@ -386,7 +386,7 @@
         </div>
         <div>根据以上结构，搭建一个基本的网络。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L14">createTfjsModel.html</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L14">createTfjsModel.html</a></div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">// Initialize layer.
@@ -471,7 +471,7 @@ const model = tf.model({
 
         <div>在构建网络结构之后，载入 MNIST 数据集进行编译和训练： （注：训练用脚本来源自 tfjs <a href="https://js.tensorflow.org/tutorials/mnist.html">官方教程</a>）</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L88">createTfjsModel.html</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L88">createTfjsModel.html</a></div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">const LEARNING_RATE = 0.0001;
@@ -538,7 +538,7 @@ await train();</code></pre>
         <div><span class="span_bold">1.2 收集中间层数据</span></div>
         <div>在构建时由于采用了将前一层输出用作下一层输入的方法，我们只要将所需要的中间层包裹并植入一个新的模型之中即可。</div>
 
-        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L77">createTfjsModel.html</a></div>
+        <div>〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L77">createTfjsModel.html</a></div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">const encModel = tf.model({
@@ -567,7 +567,7 @@ await train();</code></pre>
         </div>
 
         <div><span class="span_bold">1.3 保存嵌入后模型</span></div>
-        <div>以下代码用于保存嵌入的多输出模型。〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L143">createTfjsModel.html</a></div>
+        <div>以下代码用于保存嵌入的多输出模型。〔源码〕<a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/createTfjsModel.html#L143">createTfjsModel.html</a></div>
         <div class="code-snippet">
             <pre><code class="Javascript">async function saveModel() {
     await encModel.save("downloads://YOUR_MODEL_NAME");
@@ -612,14 +612,14 @@ await train();</code></pre>
 
         <div><span class="span_bold">2.1 载入现有模型</span></div>
         <div>通过以下代码加载 tfjs 模型。</div>
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L19">loadTfjsModel.html</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L19">loadTfjsModel.html</a></div>
         <div class="code-snippet">
             <pre><code class="Javascript">const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');</code></pre>
         </div>
 
         <div><span class="span_bold">2.2 收集中间层数据</span></div>
 
-        <div>通过以下方式收集中间层数据。〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L23">loadTfjsModel.html</a></div>
+        <div>通过以下方式收集中间层数据。〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L23">loadTfjsModel.html</a></div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">// Hard code the input if you are sure about the shape
@@ -664,7 +664,7 @@ console.log(outputList);</code></pre>
 
         <div>之后，将提取到的层对象添加到一个新的模型即可。</div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L36">loadTfjsModel.html</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L36">loadTfjsModel.html</a></div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">const encModel = tf.model({
@@ -684,7 +684,7 @@ console.log(singleOutput);</code></pre>
         <div><span class="span_bold">2.3 保存嵌入的多输出模型</span></div>
         <div>完成上述步骤之后，使用下面代码保存多输出模型。</div>
 
-        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/masterdocs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L13">loadTfjsModel.html</a></div>
+        <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L13">loadTfjsModel.html</a></div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">async function saveModel() {
