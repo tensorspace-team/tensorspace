@@ -48,10 +48,10 @@ $(function() {
 		$(this).find(".img33").attr("src", "./assets/img/index/gallery_yolov2.jpg");
 	});
 
-	$("#galleryVgg").hover(function(){
-		$(this).find(".img33").attr("src", "./assets/img/index/gallery_VGG16.gif");
+	$("#galleryAcgan").hover(function(){
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_acgan.gif");
 	}, function(){
-		$(this).find(".img33").attr("src", "./assets/img/index/gallery_VGG16.jpg");
+		$(this).find(".img33").attr("src", "./assets/img/index/gallery_acgan.jpg");
 	});
 
 	$("#galleryResnet").hover(function(){
