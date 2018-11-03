@@ -61,7 +61,7 @@ $(function() {
 	});
 
 	$("#galleryMore").hover(function(){
-		$(this).find(".img33").attr("src", "./assets/img/index/gallery_more.gif");
+		$(this).find(".img33").attr("src", "./assets/img/index/more.gif");
 	}, function(){
 		$(this).find(".img33").attr("src", "./assets/img/index/more.jpg");
 	});
