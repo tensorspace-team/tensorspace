@@ -107,7 +107,7 @@ yarn add tensorspace
 首先，我们需要新建一个 TensorSpace 模型实例：
 ```JavaScript
 let container = document.getElementById( "container" );
-let model = new TSP.model.Sequential( container );
+let model = new TSP.models.Sequential( container );
 ```
 
 然后，基于 LeNet 网络的结构：输入层 + 2 X (Conv2D层 & Maxpooling层) + 3 X (Dense层)，我们可以搭建其模型结构：

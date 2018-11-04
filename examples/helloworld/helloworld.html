@@ -38,7 +38,7 @@
     $(function() {
 
 		let modelContainer = document.getElementById( "container" );
-		let model = new TSP.model.Sequential( modelContainer );
+		let model = new TSP.models.Sequential( modelContainer );
 
 		model.add( new TSP.layers.GreyscaleInput({ shape: [28, 28, 1] }) );
 		model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );

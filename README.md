@@ -102,7 +102,7 @@ We will use the [preprocessed TensorSpace compatible LeNet model](https://github
 First, we need to new a TensorSpace model instance:
 ```JavaScript
 let container = document.getElementById( "container" );
-let model = new TSP.model.Sequential( container );
+let model = new TSP.models.Sequential( container );
 ```
 
 Next, based on the LeNet structure: Input + 2 X (Conv2D & Maxpooling) + 3 X (Dense), we build the structure of the model:

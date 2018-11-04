@@ -83,11 +83,11 @@ let layers = {
 
 };
 
-let model = {
+let models = {
 
 	Sequential: Sequential,
 	Model: Model
 
 };
 
-export { model, layers };
+export { models, layers };
