@@ -5,12 +5,12 @@
 .mdl-card {
     min-height: 0;
     width: 100%;
+    -webkit-transition-duration: 1s;
+    transition-duration: 1s;
 }
 
 .mdl-card:hover {
     transform: scale(1.04);
-    -webkit-transition-duration: 0.35s;
-    transition-duration: 0.35s;
 }
 
 #downloadNav {

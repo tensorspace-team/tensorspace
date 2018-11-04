@@ -328,7 +328,7 @@
 
         <div>We can create a model like:</div>
         <div class="code-snippet">
-            <pre><code class="Python">let model = new TSP.model.Model( container, {
+            <pre><code class="Javascript">let model = new TSP.model.Model( container, {
 
     ...
     // necessary configurations
@@ -349,7 +349,7 @@
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">let input = new TSP.layers.GreyscaleInput({
+            <pre><code class="Javascript">let input = new TSP.layers.GreyscaleInput({
         shape: [28, 28, 1]
 });
 
@@ -400,7 +400,7 @@ let model = new TSP.model.Model(container, {
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Python">model.load( {
+            <pre><code class="Javascript">model.load( {
 
     type: "tfjs",
     url: './lenetModel/mnist.json',

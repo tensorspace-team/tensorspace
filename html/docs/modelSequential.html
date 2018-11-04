@@ -326,7 +326,7 @@
 
         <div>We can create a sequential model, like:</div>
         <div class="code-snippet">
-            <pre><code class="Python">let seqModel = new TSP.model.Sequential( container, {
+            <pre><code class="Javascript">let seqModel = new TSP.model.Sequential( container, {
 
     ...
     // necessary configurations
@@ -341,7 +341,7 @@
 
         <div>Then we can insert layers into the model by the designed order:</div>
         <div class="code-snippet">
-            <pre><code class="Python">seqModel.add( new TSP.layers.GreyscaleInput( {
+            <pre><code class="Javascript">seqModel.add( new TSP.layers.GreyscaleInput( {
 
     shape: [ 28, 28, 1 ],
     name: "initInput",
@@ -374,7 +374,7 @@ seqModel.add( convLayer );</code></pre>
             <a href="#init"><span class="highlight-text">init()</span></a> to create the layer objects:
         </div>
         <div class="code-snippet">
-            <pre><code class="Python">seqModel.load( {
+            <pre><code class="Javascript">seqModel.load( {
 
     type: "tfjs",
     url: './lenetModel/mnist.json',
