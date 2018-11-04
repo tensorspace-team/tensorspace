@@ -71,9 +71,9 @@ $(function() {
 	});
 
 	$("#close").hover(function() {
-		$("#close").attr("src", "../../assets/img/docs/close_hover.png");
+		$("#close").attr("src", "../../assets/img/playground/close_hover.png");
 	}, function() {
-		$("#close").attr("src", "../../assets/img/docs/close.png");
+		$("#close").attr("src", "../../assets/img/playground/close.png");
 	}).click(function() {
 		moveOutHiddenContent();
 	});

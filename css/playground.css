@@ -44,9 +44,8 @@ aside > div > a {
 
 .now-label {
 
-    background-color: #0A36B0;
-    color: #D6FDFF;
-
+    background-color: #548CA9;
+    color: #D7FDFF;
 
 }
 
@@ -91,13 +90,16 @@ main {
 
 #playgroundMenu {
 
-    width: 40px;
     height: 40px;
     position: fixed;
     bottom: 20px;
     left: 20px;
     z-index: 1;
     user-select: none;
+    color: #6597AF;
+}
+
+#playgroundMenu:hover {
     color: #D6FDFF;
 }
 
@@ -122,7 +124,7 @@ main {
 
 #close {
     width: 40px;
-    margin-left: 80px;
+    margin-left: 65px;
     margin-top: 30px;
     margin-bottom: 30px;
     cursor: pointer;

@@ -5,12 +5,17 @@
     line-height: 40px;
     margin-left: 20%;
     margin-top: 20px;
-    background-color: #000;
     text-align: center;
-    color: #D6FDFF;
+    color: #D7FDFF;
+    background-color: rgba(84, 140, 169, 0.4);
     border: 1px solid #4C9BBB;
     cursor: pointer;
+    text-transform: none;
 
+}
+
+#selectorTrigger:hover {
+    background-color: #548CA9;
 }
 
 #selector {

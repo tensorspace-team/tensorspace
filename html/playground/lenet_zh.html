@@ -99,11 +99,13 @@
     <div><a href="resnet50_zh.html">ResNet-50</a></div>
     <div><a href="yolov2-tiny_zh.html">YOLOv2-tiny</a></div>
     <div><a href="acgan_zh.html">ACGAN</a></div>
-    <img id="close" src="../../assets/img/docs/close.png">
+    <img id="close" src="../../assets/img/playground/close.png">
 </aside>
 
 <div id="curtain"></div>
-<div id="playgroundMenu"><i class="material-icons">menu</i></div>
+<button id="playgroundMenu" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+    <i class="material-icons">menu</i>
+</button>
 
 <main>
 
@@ -116,7 +118,9 @@
             <canvas id="signature-pad" class="signature-pad" width=224 height=224></canvas>
         </div>
 
-        <div id="clear">清空手写数据</div>
+        <button id="clear" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            清空手写数据
+        </button>
 
         <p id="hint">LeNet认为你刚才写了一个</p>
 
