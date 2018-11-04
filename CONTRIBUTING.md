@@ -7,11 +7,11 @@ We are excited that you would like to contribute to open source projects like we
 - [Development Setup](#development-setup)
 
 ## Pull Request Guidelines
-Do's:
+Suggest:
 1. Checkout a new branch from the relevant branch for development
 2. Run `npm test` and make sure all tests pass before submitting a PR
 
-Dont's:
+Notice:
 1. DO NOT submit PR against master branch.
 2. DO NOT check into `build` folder in commits.
 
