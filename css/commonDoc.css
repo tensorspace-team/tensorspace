@@ -299,6 +299,13 @@ td, th {
     margin-bottom: 10px;
 }
 
+.small-console {
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .tag-img-vertical {
 
     width: 20%;
@@ -692,5 +699,10 @@ footer {
 
     .cp_embed_wrapper {
         width: 100%;
+    }
+
+    .small-console {
+        width: 100%;
+        margin-left: 10%;
     }
 }
