@@ -42,7 +42,7 @@ function createModel() {
 
 	let container = document.getElementById( "modelArea" );
 
-	model = new TSP.model.Sequential(container, {
+	model = new TSP.models.Sequential(container, {
 
 		stats: true
 
