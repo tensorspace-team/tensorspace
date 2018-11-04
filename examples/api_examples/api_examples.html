@@ -41,31 +41,19 @@
 
     function addRGBInput( model ) {
 
-        model.add( new TSP.layers.RGBInput ( {
-
-            shape: [ 10, 10, 3],
-
-        }) );
+        model.add( new TSP.layers.RGBInput ( { shape: [ 10, 10, 3 ] }) );
 
     }
 
     function addGreyscaleInput( model ) {
 
-        model.add( new TSP.layers.GreyscaleInput ( {
-
-            shape: [ 10, 10 ],
-
-        }) );
+        model.add( new TSP.layers.GreyscaleInput ( { shape: [ 10, 10 ] }) );
 
     }
 
     function addInput1d( model ) {
 
-        model.add( new TSP.layers.Input1d ( {
-
-            shape: [ 28 ],
-
-        } ) );
+        model.add( new TSP.layers.Input1d ( { shape: [ 28 ] } ) );
 
     }
 
@@ -122,7 +110,7 @@
 
             case "Activation2d" :
                 addGreyscaleInput( model );
-                model.add(new TSP.layers.Pooling2d({ poolSize: [ 2, 2 ], strides: [ 2, 2 ],}));
+                model.add(new TSP.layers.Pooling1d({ poolSize: 2, strides: 2 }));
                 break;
 
             case "Activation3d" :
@@ -164,8 +152,8 @@
     let cropping2d = new TSP.layers.Cropping2d( { cropping: [[1, 1], [2, 2]],});
     let globalPooling1d = new TSP.layers.GlobalPooling1d( { });
     let globalPooling2d = new TSP.layers.GlobalPooling2d( { });
-    let activation2d = new TSP.layers.Activation2d( { activation: "softmax", });
-    let activation3d = new TSP.layers.Activation3d( { activation: "softmax",});
+    let activation2d = new TSP.layers.Activation2d( { activation: "softmax" });
+    let activation3d = new TSP.layers.Activation3d( { activation: "softmax" });
 
     // Uncomment line which you want to get the example of this API
 
@@ -180,9 +168,9 @@
     // layerIn = flatten; addExample( model, "Flatten", layerIn );
     // layerIn = cropping2d; addExample( model, "Cropping2d", layerIn );
     // layerIn = globalPooling2d; addExample( model, "GlobalPooling2d", layerIn );
-    // layerIn = activation2d; addExample( model, "Activation2d", layerIn );
+    layerIn = activation2d; addExample( model, "Activation2d", layerIn );
     // layerIn = activation3d; addExample( model, "Activation3d", layerIn );
-    layerIn = globalPooling1d; addExample( model, "GlobalPooling1d", layerIn );
+    // layerIn = globalPooling1d; addExample( model, "GlobalPooling1d", layerIn );
 
     model.init();
 
