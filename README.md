@@ -97,7 +97,7 @@ If installed TensorSpace and preprocessed the pre-trained deep learning model su
 
 For the convenience, feel free to use the resources from our [HelloWorld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld) directory.
 
-We will use the [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json) and [sample input data ("5")](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json). All source code can be found from [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html).
+We will use the [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model) and [sample input data ("5")](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json). All source code can be found from [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html).
 
 First, we need to new a TensorSpace model instance:
 ```JavaScript

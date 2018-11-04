@@ -102,7 +102,7 @@ yarn add tensorspace
 
 为了简化步骤，请随意使用我们在 [HelloWorld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld) 路径下所提供的资源。
 
-我们将会用到[适配 TensorSpace 的预处理模型](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json) 以及[样例输入数据（“5”）](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)作为使用样例来进行说明。所有的源码都可以在 [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html) 文件中找到。
+我们将会用到[适配 TensorSpace 的预处理模型](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model) 以及[样例输入数据（“5”）](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)作为使用样例来进行说明。所有的源码都可以在 [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html) 文件中找到。
 
 首先，我们需要新建一个 TensorSpace 模型实例：
 ```JavaScript
