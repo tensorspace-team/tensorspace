@@ -91,12 +91,6 @@ aside > div > div > a {
 
 }
 
-aside > div.initLabel > div > a:hover {
-
-    color: #fff;
-
-}
-
 aside > div > div > a:hover {
 
     color: #000;
@@ -106,7 +100,7 @@ aside > div > div > a:hover {
 aside > div > div:hover {
 
     color: #4d4d4d;
-    background-color: #96d5ef;
+    background-color: #A8BFE4;
 
 }
 
@@ -143,7 +137,7 @@ aside > div > ul > li {
 
 aside > div > ul > li:hover {
 
-    background-color: #96d5ef;
+    background-color: #A8BFE4;
 }
 
 aside > div > ul > li:hover > a {
@@ -158,8 +152,8 @@ aside > div > ul > li > a {
 }
 
 aside > div.open > div:hover {
-    color: #fff;
-    background-color: #29abe2;
+    color: #000;
+    background-color: #A8BFE4;
 }
 
 aside > div.open > div > img {
@@ -175,7 +169,7 @@ aside > div.initLabel > ul {
 aside > div.initLabel > ul >li.nowLabel {
 
     color: #4d4d4d;
-    background-color: #96d5ef;
+    background-color: #A8BFE4;
     cursor: default;
 }
 
@@ -452,8 +446,8 @@ footer {
 }
 
 #hideNav > div.open > div:hover {
-    color: #fff;
-    background-color: #29abe2;
+    color: #000;
+    background-color: #A8BFE4;
 }
 
 #hideNav > div.open > div > img {
@@ -487,7 +481,7 @@ footer {
 
 #hideNav > div.initLabel > div > a:hover {
 
-    color: #fff;
+    color: #000;
 
 }
 
@@ -504,7 +498,7 @@ footer {
 #hideNav > div > div:hover {
 
     color: #4d4d4d;
-    background-color: #96d5ef;
+    background-color: #A8BFE4;
 }
 
 #hideNav > div > div > img {
@@ -538,13 +532,13 @@ footer {
 
 #hideNav > div > ul > li:hover {
 
-    background-color: #96d5ef;
+    background-color: #A8BFE4;
 }
 
 #hideNav > div > ul > li.nowLabel {
 
     color: #4d4d4d;
-    background-color: #96d5ef;
+    background-color: #A8BFE4;
     cursor: default;
 }
 
