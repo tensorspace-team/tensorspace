@@ -318,7 +318,319 @@
 
     <main>
         <header>Output1d</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div class="sub-title">构造器</div>
+        <div>〔方法一〕使用<span class="span_bold"> units </span>和<span class="span_bold"> outputs </span>参数进行构造</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">TSP.layers.Output1d( { units: Int, outputs: String[] } );</code></pre>
+        </div>
+
+        <div class="sub-title">参数列表</div>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col"><p>参数名</p><p>标签</p></th>
+                <th scope="col"><p>类型</p></th>
+                <th scope="col"><p>简介</p></th>
+                <th scope="col"><p>具体用法细节和例子</p></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">
+                    <p>units</p>
+                    <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
+                </th>
+                <td>Int</td>
+                <td>全链接层的节点数量</td>
+                <td>例如，units = 100，本层全链接层有100个神经元节点</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>outputs </p>
+                    <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
+                </th>
+                <td>String[]</td>
+                <td>每个输出的注释文本数组，在场景中点击节点显示对应的文本结果</td>
+                <td>mnist outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>paging</p>
+                    <p><a href="#iconStyle">🎨</a><a href="#iconSuggest">🔧</a>️</p>
+                </th>
+                <td>Bool</td>
+                <td>是否使用分页，<a href="basicPaging_zh.html">paging详细解释</a></td>
+                <td>当全链接层太长时，使用分页方式来显示Dense层，<span class="span_bold">true</span> 使用分页；<span class="span_bold">false</span>[默认值] 不使用分页</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>segmentLength</p>
+                    <p><a href="#iconStyle">🎨</a><a href="#iconOptional">⚙️</a>️</p>
+                </th>
+                <td>Int</td>
+                <td>每页的结点数量，只有在paging是true时生效</td>
+                <td>200[默认值] 表示每页200个节点</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>segmentIndex</p>
+                    <p><a href="#iconStyle">🎨</a><a href="#iconOptional">⚙️</a>️</p>
+                </th>
+                <td>Int</td>
+                <td>分页第一次渲染显示的下标，只有在paging是true时生效</td>
+                <td>0[默认]</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>overview</p>
+                    <p><a href="#iconRequired">🎨</a><a href="#iconModel">⚙️</a>️</p>
+                </th>
+                <td>Bool</td>
+                <td>设置text角度<a href="basicPaging_zh.html">overview详细解释</a></td>
+                <td>false[Default]</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>name</p>
+                    <p><a href="#iconSuggest">🔧</a></p>
+                </th>
+                <td>String</td>
+                <td>层的命名，建议添加</td>
+                <td>name: "layerName"</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>color</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
+                </th>
+                <td>color format</td>
+                <td>层的颜色</td>
+                <td>Output1d默认颜色是 #EEEEEE <span class="color-block" style="background-color: #EEEEEE"></span></td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>closeButton</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
+                </th>
+                <td>Dict</td>
+                <td>层关闭按钮外观控制列表， <a href="basicClose.html">查看详情</a></td>
+                <td><p><span class="span_bold">display</span> : Boolean. true [default] 显示按钮, false 隐藏按钮</p>
+                    <p><span class="span_bold">ratio</span> : Int 为正常大小的几倍，默认为1倍</p>
+                    <p>例如，设为2为正常大小的2倍大</p></td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>initStatus</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
+                </th>
+                <td>String</td>
+                <td>初始化时，本层是否收缩</td>
+                <td>close[default] : 收缩</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>animation-<br>TimeRatio</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
+                </th>
+                <td>Int</td>
+                <td>张开和伸缩的调整速度，呈倍速关系</td>
+                <td>例如2就是2倍，数字越大速度越快</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">属性</div>
+
+        <div class="property-title"><a href="">.inputShape</a> : Int[]</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，dataFormat默认通道值在最后，例如inputShape = [ 28, 28, 3 ] 表示输入为3个特征图，每个图大小为28*28</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
+
+        <div class="property-title"><a href="">.outputShape</a> : Int[]</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为1维 <a href="basicDimension_zh.html">1️⃣</a></div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状，例如outputShape = [ 1000 ] 表示经过此层处理后，有1000个1维输出</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
+
+        <div class="property-title"><a href="">.neuralValue</a> : Int[]</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层层间输出值数组。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>载入模型，在 model.predict() 后才可以拿到数据，否则为undefined。</div>
+
+        <div class="property-title"><a href="">.name</a> : String</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的自定义名称。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
+
+        <div class="property-title"><a href="">.layerType</a> : String</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的类型，返回一个定值，字符串<span class="span_bold">Output1d</span>。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
+
+        <div class="sub-title">方法</div>
+
+        <div class="property-title"><a href="">.apply( layer )</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>此方法只在 <a href="modelFunctional_zh.html">Function Model</a> 中使用（非序列型，图结构）。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">TensorFlow.js</span> 构建模型语法，直接添加层即可。</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input1d( {
+
+    shape: [ 28 ]
+
+} );
+
+let outputLayer = new TSP.layers.Output1d( {
+
+    units: [ 10 ],
+    outputs: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
+
+} );
+
+outputLayer.apply( inputLayer );</code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.openLayer()</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
+        <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let outputLayer = new TSP.layers.Output1d( {
+
+    // 配置Output1d。
+
+} );
+
+model.add( outputLayer );
+
+// ... 给模型添加更多的layer。
+
+model.init();
+
+// 调用openLayer API来打开layer。
+
+outputLayer.openLayer();</code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.closeLayer()</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互点击按钮关闭。</div>
+        <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let outputLayer = new TSP.layers.Output1d( {
+
+    // 配置Output1d。
+
+} );
+
+model.add( outputLayer );
+
+// ... 给模型添加更多的layer。
+
+model.init();
+
+// 如果layer已经是打开状态，调用closeLayer API来关闭layer。
+
+outputLayer.closeLayer();</code></pre>
+        </div>
+
+        <div class="sub-title">使用样例</div>
+
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>声明一个Output1d的实例，方便复用</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let outputLayer = new TSP.layers.Output1d( {
+
+    units: 10,
+    outputs: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
+    name: "Output1d1",
+    initStatus: "open"
+
+} );
+model.add( outputLayer );</code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>直接添加Output1d</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">model.add( new TSP.layers.Output1d( {
+
+    units: 10,
+    outputs: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
+    name: "Output1d2"
+
+} ) );</code></pre>
+        </div>
+
+        <div class="sub-title">什么时候用</div>
+        <div>如果你是Keras | TensorFlow | tfjs 框架的使用者，构建模型时使用了卷积层Conv2D（下表列出了可能的使用情景）。一一对应的，在TensorSpace中，你应该使用此API。</div>
+        <table class="table table-striped table-bordered table-hover table-responsive">
+            <thead>
+            <tr>
+                <th scope="col">框架名称</th>
+                <th scope="col">文档格式</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row"><a href="https://keras.io/layers/convolutional/">Keras</a>️</th>
+                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
+
+            </tr>
+            <tr>
+                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d">TensorFlow</a></th>
+                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
+
+            </tr>
+            <tr>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d">TensorFlow.js</a>️</th>
+                <td>tf.layers.conv2d (filters, inputShape)</td>
+
+            </tr>
+            </tbody>
+        </table>
+
+        <div id="tagExplain" class="sub-title">标签详情</div>
+
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col">符号</th>
+                <th scope="col">参数性质</th>
+                <th scope="col">说明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="iconRequired">
+                <th scope="row">⭐️</th>
+                <td>必要</td>
+                <td>使用时必须提供，不能为空，只要提供了这些参数，就能正常创建实例，控制参数使用默认值。</td>
+            </tr>
+            <tr id="iconSuggest">
+                <th scope="row">🔧</th>
+                <td>推荐</td>
+                <td>使用时推荐给定，未给定也可以运行，但在体验和易用性上有隐患。</td>
+            </tr>
+            <tr id="iconOptional">
+                <th scope="row">⚙️</th>
+                <td>可选</td>
+                <td>根据模型配置参数选择性添加，这里的参数对于层的结构（3D可视化外观）没有影响。</td>
+            </tr>
+            <tr id="iconModel">
+                <th scope="row">📦</th>
+                <td>模型</td>
+                <td>配置卷积层的相关属性，并对输出特征图形状有影响。</td>
+            </tr>
+            <tr id="iconStyle">
+                <th scope="row">🎨</th>
+                <td>外观</td>
+                <td>可覆盖TSP.model下的属性进行细调（<a href="modelIntro_zh.html#modelConfig">查看详情</a>）</td>
+            </tr>
+            <tr id="iconAnimation">
+                <th scope="row">🎦</th>
+                <td>动画控制</td>
+                <td>可覆盖TSP.model下的属性进行细调（<a href="modelIntro_zh.html#modelConfig">查看详情</a>）</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">源码</div>
+        <div><a href="https://github.com/tensorspace-team/tensorspace/blob/master/src/layer/output/Output1d.js">tensorspace/src/layer/output/Output1d.js</a></div>
+
     </main>
 </div>
 
