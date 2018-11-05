@@ -22,16 +22,16 @@
 
         #container {
 
-            margin-top: 100px;
-            margin-left: 100px;
+            /*margin-top: 100px;*/
+            /*margin-left: 100px;*/
 
-            width: 50%;
-            height: 50%;
+            /*width: 50%;*/
+            /*height: 50%;*/
 
-            position: relative;
+            /*position: relative;*/
 
-            /*width: 100%;*/
-            /*height: 100%;*/
+            width: 100%;
+            height: 100%;
         }
 
     </style>
@@ -63,15 +63,14 @@
 
     model.add( conv2d );
 
-    let activation = new TSP.layers.Activation3d({
-		activation: "relu"
-	});
+    let depthwiseConv = new TSP.layers.DepthwiseConv2d({
+		kernelSize: 5,
+		depthMultiplier: 1,
+		strides: 1,
+        padding: "same"
+    });
 
-    model.add(activation);
-
-    let sub = TSP.layers.Subtract([conv2d, activation]);
-
-    model.add(sub);
+    model.add(depthwiseConv);
 
     model.init();
 

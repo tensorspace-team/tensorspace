@@ -8,6 +8,7 @@ import { Model } from "./tsp-model/Model";
 import { Conv1d } from "./layer/intermediate/Conv1d";
 import { Conv2d } from "./layer/intermediate/Conv2d";
 import { Conv2dTranspose } from "./layer/intermediate/Conv2dTranspose";
+import { DepthwiseConv2d } from "./layer/intermediate/DepthwiseConv2d";
 import { Cropping1d } from "./layer/intermediate/Cropping1d";
 import { Cropping2d } from "./layer/intermediate/Cropping2d";
 import { Input1d } from "./layer/input/Input1d";
@@ -53,6 +54,7 @@ let layers = {
 	Conv1d: Conv1d,
 	Conv2d: Conv2d,
 	Conv2dTranspose: Conv2dTranspose,
+	DepthwiseConv2d: DepthwiseConv2d,
 	Cropping1d: Cropping1d,
 	Cropping2d: Cropping2d,
 	Dense: Dense,

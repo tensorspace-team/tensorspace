@@ -20,6 +20,7 @@ function ModelConfiguration(config ) {
 		input3d: 0xEEEEEE,
 		conv1d: 0xF7FE2E,
 		conv2d: 0xF7FE2E,
+		depthwiseConv2d: 0xFBBF1F,
 		conv2dTranspose: 0xff5722,
 		cropping1d: 0xcefc86,
 		cropping2d: 0xcefc86,
