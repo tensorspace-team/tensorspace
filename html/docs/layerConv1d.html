@@ -330,6 +330,10 @@
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.Conv1d( { fileters : Int , shape : [ Int ] } )</code></pre>
         </div>
+        <img class="tag-img" src="../../assets/img/docs/Conv1d.jpg">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Conv1d layer collapse and expand
+        </div>
         <div class="sub-title">Arguments</div>
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -563,7 +567,7 @@ model.add( convLayer );</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>
-        <div>When you add convolutional layer Conv2D with Keras | TensorFlow | tfjs in your model the corresponding API is Conv2d in TensorSpace.</div>
+        <div>When you add convolution layer with Keras | TensorFlow | tfjs in your model the corresponding API is Conv1d in TensorSpace.</div>
         <table class="table table-striped table-bordered table-hover table-responsive">
             <thead>
             <tr>
@@ -575,17 +579,17 @@ model.add( convLayer );</code></pre>
             <tbody>
             <tr>
                 <th scope="row"><a href="https://keras.io/layers/convolutional/">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
+                <td>keras.layers.Conv1D(filters, kernel_size, strides=1)</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
+                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv1d">TensorFlow</a></th>
+                <td>tf.nn.conv1d(input, filter, strides, padding)</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv1d">TensorFlow.js</a>️</th>
+                <td>tf.layers.conv1d (filters, inputShape)</td>
 
             </tr>
             </tbody>
