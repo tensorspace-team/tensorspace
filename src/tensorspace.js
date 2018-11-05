@@ -39,7 +39,7 @@ import { Concatenate } from "./merge/Concatenate";
 import { Subtract } from "./merge/Subtract";
 import { Maximum } from "./merge/Maximum";
 import { Average } from "./merge/Average";
-import { Dot } from "./merge/Dot";
+// import { Dot } from "./merge/Dot";
 import { Multiply } from "./merge/Multiply";
 
 let layers = {
@@ -76,7 +76,7 @@ let layers = {
 	Add: Add,
 	Concatenate: Concatenate,
 	Subtract: Subtract,
-	Dot: Dot,
+	// Dot: Dot,
 	Multiply: Multiply,
 	Average: Average,
 	Maximum: Maximum
