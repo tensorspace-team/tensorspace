@@ -41,31 +41,31 @@
 
     function addRGBInput( model ) {
 
-        model.add( new TSP.layers.RGBInput ( {
-
-            shape: [ 10, 10, 3],
-
-        }) );
+        model.add( new TSP.layers.RGBInput ( { shape: [ 10, 10, 3 ] }) );
 
     }
 
     function addGreyscaleInput( model ) {
 
-        model.add( new TSP.layers.GreyscaleInput ( {
-
-            shape: [ 10, 10 ],
-
-        }) );
+        model.add( new TSP.layers.GreyscaleInput ( { shape: [ 10, 10, 1 ] }) );
 
     }
 
     function addInput1d( model ) {
 
-        model.add( new TSP.layers.Input1d ( {
+        model.add( new TSP.layers.Input1d ( { shape: [ 28 ] } ) );
 
-            shape: [ 28 ],
+    }
 
-        } ) );
+    function addConv1d( model ) {
+
+        model.add(new TSP.layers.Conv1d({ kernelSize: 2, filters: 3, strides: 1 }));
+
+    }
+
+    function addConv2d( model ) {
+
+        model.add(new TSP.layers.Conv2d({kernelSize: 2, filters: 6, strides: 1 }));
 
     }
 
@@ -75,6 +75,20 @@
 
             case "Conv1d" :
                 addInput1d( model );
+                break;
+
+            case "Conv2dTranspose" :
+                addRGBInput( model );
+                break;
+
+            case "Padding1d" :
+                addGreyscaleInput( model );
+                addConv1d( model );
+                break;
+
+            case "Padding2d" :
+                addGreyscaleInput( model );
+                addConv2d( model );
                 break;
 
             case "RGBInput" :
@@ -87,12 +101,22 @@
                 addRGBInput( model );
                 break;
 
+            case "Pooling1d" :
+                addGreyscaleInput( model );
+                addConv1d( model );
+                break;
+
             case "Dense" :
                 addInput1d( model );
                 break;
 
             case "Output1d" :
                 addRGBInput( model );
+                break;
+
+            case "UpSampling1d" :
+                addInput1d( model );
+                addConv1d( model );
                 break;
 
             case "UpSampling2d" :
@@ -107,29 +131,41 @@
                 addRGBInput( model );
                 break;
 
+            case "Cropping1d" :
+                addGreyscaleInput( model );
+                addConv1d( model );
+                break;
+
             case "Cropping2d" :
                 addRGBInput( model );
+                addConv2d( model );
                 break;
 
             case "GlobalPooling1d" :
                 addGreyscaleInput( model );
-                model.add(new TSP.layers.Conv1d({ kernelSize: 2, filters: 3, strides: 1 }));
+                addConv1d( model );
                 break;
 
             case "GlobalPooling2d" :
                 addRGBInput( model );
+                addConv2d( model );
+                break;
+
+            case "Activation1d" :
+                addInput1d( model );
+                model.add(new TSP.layers.Pooling1d({ poolSize: 2, strides: 2 }));
                 break;
 
             case "Activation2d" :
-                addGreyscaleInput( model );
-                model.add(new TSP.layers.Pooling2d({ poolSize: [ 2, 2 ], strides: [ 2, 2 ],}));
+                addInput1d( model );
+                addConv1d( model );
                 break;
 
             case "Activation3d" :
                 addGreyscaleInput( model );
-                model.add(new TSP.layers.Conv2d({kernelSize: 2, filters: 3, strides: 1 }));
+                addConv2d( model );
                 break;
-                
+
             default :
 
       }
@@ -153,36 +189,51 @@
     let layerIn;
 
     let conv1d = new TSP.layers.Conv1d( { filters: 6, kernelSize: 3, strides: 1, } );
-    let grescaleInput = new TSP.layers.GreyscaleInput ( { shape: [ 28, 28 ], } );
+    let conv2dTranspose = new TSP.layers.Conv2dTranspose( { filters: 6, kernelSize: 3, strides: 1, } );
+    let padding1d = new TSP.layers.Padding1d( { padding : 1 } );
+    let padding2d = new TSP.layers.Padding2d( { padding : [1, 1] } );
+    let greyscaleInput = new TSP.layers.GreyscaleInput ( { shape: [ 28, 28 ], } );
     let rgbInput = new TSP.layers.RGBInput ( { shape: [ 28, 28, 3 ] } );
+    let pooling1d = new TSP.layers.Pooling1d ( { poolSize: 2, strides: 2 });
     let pooling2d = new TSP.layers.Pooling2d ( { poolSize: [ 2, 2 ], strides: [ 2, 2 ] });
     let dense = new TSP.layers.Dense ( { units: 100, });
     let output1d = new TSP.layers.Output1d( { units: 3, outputs: ["0", "1", "2"], });
+    let upSampling1d = new TSP.layers.UpSampling1d( { size: [1.5], });
     let upSampling2d = new TSP.layers.UpSampling2d( { size: [1.5, 2], });
     let reshape = new TSP.layers.Reshape( { targetShape: [20, 5],});
     let flatten = new TSP.layers.Flatten( { });
+    let cropping1d = new TSP.layers.Cropping1d( { cropping: [1, 2] });
     let cropping2d = new TSP.layers.Cropping2d( { cropping: [[1, 1], [2, 2]],});
-    let globalPooling1d = new TSP.layers.GlobalPooling1d( { });
-    let globalPooling2d = new TSP.layers.GlobalPooling2d( { });
-    let activation2d = new TSP.layers.Activation2d( { activation: "softmax", });
-    let activation3d = new TSP.layers.Activation3d( { activation: "softmax",});
+    let globalPooling1d = new TSP.layers.GlobalPooling1d( { } );
+    let globalPooling2d = new TSP.layers.GlobalPooling2d( { } );
+    let activation1d = new TSP.layers.Activation1d( { activation: "softmax" });
+    let activation2d = new TSP.layers.Activation2d( { activation: "softmax" });
+    let activation3d = new TSP.layers.Activation3d( { activation: "softmax" });
 
     // Uncomment line which you want to get the example of this API
 
     // layerIn = conv1d; addExample( model , "Conv1d", conv1d );
-    // layerIn = grescaleInput; addExample( model, "GreyscaleInput", grescaleInput );
+    // layerIn = conv2dTranspose; addExample( model , "Conv2dTranspose", conv2dTranspose );
+    // layerIn = padding1d; addExample( model , "Padding1d", padding1d );
+    // layerIn = padding2d; addExample( model , "Padding2d", padding2d );
+    // layerIn = greyscaleInput; addExample( model, "GreyscaleInput", grescaleInput );
     // layerIn = rgbInput; addExample( model, "RGBInput", rgbInput );
+    layerIn = pooling1d; addExample( model, "Pooling1d", layerIn );
     // layerIn = pooling2d; addExample( model, "Pooling2d", layerIn );
     // layerIn = dense; addExample( model, "Dense", layerIn );
     // layerIn = output1d; addExample( model, "Output1d", layerIn );
+    // layerIn = upSampling1d; addExample( model, "UpSampling1d", layerIn );
     // layerIn = upSampling2d; addExample( model, "UpSampling2d", layerIn );
     // layerIn = reshape; addExample( model, "Reshape", layerIn );
     // layerIn = flatten; addExample( model, "Flatten", layerIn );
+    // layerIn = cropping1d; addExample( model, "Cropping1d", layerIn );
     // layerIn = cropping2d; addExample( model, "Cropping2d", layerIn );
     // layerIn = globalPooling2d; addExample( model, "GlobalPooling2d", layerIn );
+    // layerIn = activation1d; addExample( model, "Activation1d", layerIn );
     // layerIn = activation2d; addExample( model, "Activation2d", layerIn );
     // layerIn = activation3d; addExample( model, "Activation3d", layerIn );
-    layerIn = globalPooling1d; addExample( model, "GlobalPooling1d", layerIn );
+    // layerIn = globalPooling1d; addExample( model, "GlobalPooling1d", layerIn );
+
 
     model.init();
 
