@@ -329,6 +329,10 @@
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.Pooling1d( { shape : [ Int ] } );</code></pre>
         </div>
+        <img class="tag-img" src="../../assets/img/docs/Pooling1d.jpg">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Pooling1d 层示意图（左：收缩 | 右：展开）
+        </div>
         <div class="sub-title">参数列表</div>
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -477,7 +481,7 @@ let poolingLayer = new TSP.layers.Pooling1d( {
 poolingLayer.apply( convLayer );</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L412" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -499,7 +503,7 @@ model.init();
 poolingLayer.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L432" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互点击按钮关闭。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -562,18 +566,18 @@ model.add( poolingLayer );</code></pre>
             </thead>
             <tbody>
             <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/" target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
+                <th scope="row"><a href="https://keras.io/layers/pooling/#maxpooling1d" target="_blank">Keras</a>️</th>
+                <td>keras.layers.MaxPooling1D(pool_size=2, strides=None)</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
+                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/layers/max_pooling1d" target="_blank">TensorFlow</a></th>
+                <td>tf.layers.max_pooling1d( inputs, pool_size, strides)</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.maxPooling1d" target="_blank">TensorFlow.js</a>️</th>
+                <td>tf.layers.maxPooling1d (config)</td>
 
             </tr>
             </tbody>
