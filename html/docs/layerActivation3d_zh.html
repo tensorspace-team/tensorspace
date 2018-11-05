@@ -397,11 +397,11 @@
 
         <div class="sub-title">属性</div>
 
-        <div class="property-title"><a href="" target="_blank">.inputShape</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L68" target="_blank">.inputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，例如inputShape = [ 32, 32, 3 ] 表示输入有3个特征图，每张图大小为32*32。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="" target="_blank">.outputShape</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L69" target="_blank">.outputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为2维 <a href="basicDimension_zh.html">2️⃣</a></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状，例如outputShape = [ 32, 32, 3 ] 表示经过此层处理后，输出有3个特征图，每张图大小为32*32。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
@@ -410,7 +410,7 @@
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层层间输出值数组。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>载入模型，在 model.predict() 后才可以拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="" target="_blank">.name</a> : String</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/Layer.js#L242" target="_blank">.name</a> : String</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的自定义名称。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
@@ -420,7 +420,7 @@
 
         <div class="sub-title">方法</div>
 
-        <div class="property-title"><a href="" target="_blank">.apply( layer )</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer.js#L74" target="_blank">.apply( layer )</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>此方法只在 <a href="modelFunctional_zh.html">Functional Model</a> 中使用（非序列型，图结构）。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">TensorFlow.js</span> 构建模型语法，直接添加层即可。</div>

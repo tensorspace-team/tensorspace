@@ -427,11 +427,11 @@
 
         <div class="sub-title">Properties</div>
 
-        <div class="property-title"><a href="" target="_blank">.inputShape</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L68" target="_blank">.inputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of input tensor, for example inputShape = [ 28, 28, 3 ] represents 3 feature maps and each one is 28 by 28</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined.</div>
 
-        <div class="property-title"><a href="" target="_blank">.outputShape</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L69" target="_blank">.outputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of output tensor is 1-dimensional. <a href="basicDimension.html">1️⃣</a></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of output tensor. For example outputShape = [ 1000 ] represents the output through this layer has 1000 outputs</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined</div>
@@ -440,7 +440,7 @@
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The intermediate raw data after this layer.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After load and model.predict() data is available, otherwise is undefined.</div>
 
-        <div class="property-title"><a href="" target="_blank">.name</a> : String</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/Layer.js#L242" target="_blank">.name</a> : String</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The custom name for this layer.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 
@@ -450,7 +450,7 @@
 
         <div class="sub-title">Method</div>
 
-        <div class="property-title"><a href="" target="_blank">.apply( layer )</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer.js#L74" target="_blank">.apply( layer )</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>This method only used in <a href="modelFunctional.html">Functional Model</a> (Non-sequential, Graph structure).</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">TensorFlow.js</span> build the model syntax.</div>
