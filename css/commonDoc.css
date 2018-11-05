@@ -206,7 +206,7 @@ main p {
 }
 
 main > div {
-    margin-top: 10px;
+    margin-top: 3px;
     text-align: justify;
 }
 
@@ -352,8 +352,8 @@ td, th {
 
     font-size: 20px;
     margin-top: 12px;
-    margin-bottom: 3px;
-    padding-bottom: 5px;
+    margin-bottom: 7px;
+    padding-bottom: 3px;
     border-bottom: 1.5px solid rgba(50,50,50,0.1);
 
 }
