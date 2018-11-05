@@ -318,7 +318,292 @@
 
     <main>
         <header>YoloGrid</header>
-        <img class="tag-img" style="width: 50%; margin-left: 25%;" src="../../assets/img/docs/404.jpg">
+        <div><span class="highlight-text">YoloGrid</span> layer is specifically design for <span class="highlight-text">YOLO</span> model which is used to determine the center of the rectangle to mark the position of the object.</div>
+        <div>The main idea of <span class="highlight-text">YOLO</span> is to divide the image into regions and predicts bounding boxes and probabilities for each region. This <span class="highlight-text">YoloGird</span> is interactive with this feature map and each region. You can click at this layer to draw the rectangle at next layer: <a href="layerOutputDetect.html">ObjectDetection</a> which can draw a rectangle on the image.</div>
+        <div>The shape of the feature map will be calculate automatically according to <span class="highlight-text">inputShape</span></div>
+
+        <div class="sub-title">Constructor</div>
+        <div>Use <span class="span_bold">anchors</span> <span class="span_bold">classLabelList</span> configuration related to <span class="span_bold">YOLO</span> model and a callback function named <span class="span_bold">onCeilClicked</span> to construct.</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let yoloGrid = new TSP.layers.YoloGrid( {
+
+    anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ],
+
+    //voc class label name list
+    classLabelList: [ "aeroplane", "bicycle", "bird", "boat", "bottle",
+        "bus", "car", "cat", "chair", "cow",
+        "diningtable", "dog", "horse", "motorbike", "person",
+        "pottedplant", "sheep", "sofa", "train", "tvmonitor" ],
+
+    onCeilClicked: onYoloCeilClicked
+
+} );</code></pre>
+        </div>
+
+        <div class="sub-title">Arguments</div>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col"><p>Name</p><p>Tag</p></th>
+                <th scope="col"><p>Type</p></th>
+                <th scope="col"><p>Instruction</p></th>
+                <th scope="col"><p>Usage Notes and Examples</p></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">
+                    <p>anchors</p>
+                    <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
+                </th>
+                <td>Float32[]</td>
+                <td>Previous Probability of anchors</td>
+                <td>Check it at cfg file of darknet configuration, also can be found at our examples.</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>classLabelList</p>
+                    <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
+                </th>
+                <td>String[]</td>
+                <td>Output class label names</td>
+                <td>Depend on the data set: VOC has 20 classes，COCO has 80，ImageNet has 1000</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>onCeilClicked</p>
+                    <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
+                </th>
+                <td>function</td>
+                <td>Fired when ceil is clicked, return data array store in array</td>
+                <td>Check out <a href="https://github.com/tensorspace-team/tensorspace/blob/master/examples/yolo/yolo.html#L251">this</a> example for more information</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>name</p>
+                    <p><a href="#iconSuggest">🔧</a></p>
+                </th>
+                <td>String</td>
+                <td>Name of this layer. <span class="span_bold">Highly recommend</span> to arrange to make code more readable.</td>
+                <td>name: "layerName"</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>color</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
+                </th>
+                <td>color format</td>
+                <td>Color of layer</td>
+                <td>YoloGrid default is #EEEEEE <span class="color-block" style="background-color: #EEEEEE"></span></td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>closeButton</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
+                </th>
+                <td>Dict</td>
+                <td>Close button appearance control dict, <a href="basicClose.html">more about close button</a></td>
+                <td><p><span class="span_bold">display</span> : Boolean. true[default] Show button, false Hide button</p>
+                    <p><span class="span_bold">ratio</span> : Int. Times to normal size, default is 1</p>
+                    <p>For example, 2 means twice the normal size</p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>initStatus</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
+                </th>
+                <td>String</td>
+                <td>Layer status at beginning. <span class="span_bold">Open</span> or <span class="span_bold">Close</span></td>
+                <td>close[default] : Closed at beginning</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>animation-<br>TimeRatio</p>
+                    <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
+                </th>
+                <td>Int</td>
+                <td>The speed of open and close animation</td>
+                <td>Integer for multiple of speed. For example, 2 for 2 times of basic speed</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">Properties</div>
+
+        <div class="property-title"><a href="">.name</a> : String</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The custom name for this layer.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
+
+        <div class="property-title"><a href="">.layerType</a> : String</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer, return a constant: string <span class="span_bold">YoloGrid</span>.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
+
+        <div class="sub-title">Method</div>
+
+        <div class="property-title"><a href="">.apply( layer )</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>This method only used in <a href="modelFunctional.html">Functional Model</a> (Non-sequential, Graph structure).</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">TensorFlow.js</span> build the model syntax.</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let convLayer = new TSP.layers.Conv2d( {
+
+    // configure some parameters for Conv2d.
+
+} );
+
+let yoloGrid = new TSP.layers.YoloGrid( {
+
+    // configure some parameters for YoloGrid.
+
+} );
+
+yoloGrid.apply( convLayer );</code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.openLayer()</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Click on the layer directly to open it by interacting directly with the object in the 3D scene</div>
+        <img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let yoloGrid = new TSP.layers.YoloGrid( {
+
+    // configure some parameters for YoloGrid.
+
+} );
+
+model.add( yoloGrid );
+
+// ... add more layers for model.
+
+model.init();
+
+// Call openLayer API to open layer.
+
+yoloGrid.openLayer();</code></pre>
+        </div>
+
+        <div class="property-title"><a href="">.closeLayer()</a> : void</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To close by interacting directly with objects in a 3D scene by clicking the close button</div>
+        <img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let yoloGrid = new TSP.layers.YoloGrid( {
+
+    // configure some parameters for YoloGrid.
+
+} );
+
+model.add( yoloGrid );
+
+// ... add more layers for model.
+
+model.init();
+
+// If this layer already opened, call closeLayer API to close layer.
+
+yoloGrid.closeLayer();</code></pre>
+        </div>
+
+
+        <div class="sub-title">Example</div>
+
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of YoloGrid to facilitate reuse</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">let yoloGrid = new TSP.layers.YoloGrid( {
+
+    anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ],
+
+    //voc class label name list
+    classLabelList: [ "aeroplane", "bicycle", "bird", "boat", "bottle",
+        "bus", "car", "cat", "chair", "cow",
+        "diningtable", "dog", "horse", "motorbike", "person",
+        "pottedplant", "sheep", "sofa", "train", "tvmonitor" ],
+
+    onCeilClicked: onYoloCeilClicked
+
+} );
+model.add( yoloGrid );
+
+function onYoloCeilClicked( ceilData, rectList ) {
+
+    // some operation with ceilData and rectList
+
+}</code></pre>
+        </div>
+
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add YoloGrid directly</div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">model.add( new TSP.layers.YoloGrid( {
+
+    anchors: [ 1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52 ],
+
+    //voc class label name list
+    classLabelList: [ "aeroplane", "bicycle", "bird", "boat", "bottle",
+        "bus", "car", "cat", "chair", "cow",
+        "diningtable", "dog", "horse", "motorbike", "person",
+        "pottedplant", "sheep", "sofa", "train", "tvmonitor" ],
+
+    onCeilClicked: onYoloCeilClicked
+
+} ) );
+
+function onYoloCeilClicked( ceilData, rectList ) {
+
+    // some operation with ceilData and rectList
+
+}</code></pre>
+        </div>
+
+        <div id="tagExplain" class="sub-title">Tag Lookup</div>
+
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Tag Icon</th>
+                <th scope="col">Meaning</th>
+                <th scope="col">Instruction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="iconRequired">
+                <th scope="row">⭐️</th>
+                <td>Required</td>
+                <td>Must be provided, cannot be empty. Meanwhile constructor works properly if this arguments provided.
+                    Control arguments use default value.</td>
+            </tr>
+            <tr id="iconSuggest">
+                <th scope="row">🔧</th>
+                <td>Suggest</td>
+                <td>Recommended for giving. The API can work without them.</td>
+            </tr>
+            <tr id="iconOptional">
+                <th scope="row">⚙️</th>
+                <td>Optional</td>
+                <td>As an auxiliary adjustment parameter when used, selectively added according to the specific situation
+                    The parameters here have no effect on the structure of the layer (3D visualized form).</td>
+            </tr>
+            <tr id="iconModel">
+                <th scope="row">📦</th>
+                <td>Model</td>
+                <td>Configure the properties of the Layer. It changes the output shape.</td>
+            </tr>
+            <tr id="iconStyle">
+                <th scope="row">🎨</th>
+                <td>Style</td>
+                <td>Override the properties in TSP.model (<a href="modelIntro.html#modelConfig">model configuration</a>)</td>
+            </tr>
+            <tr id="iconAnimation">
+                <th scope="row">🎦</th>
+                <td>Animation</td>
+                <td>Override the properties in TSP.model (<a href="modelIntro.html#modelConfig">model configuration</a>)</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="sub-title">Source Code</div>
+        <div><a href="https://github.com/tensorspace-team/tensorspace/blob/master/src/layer/output/YoloGrid.js">tensorspace/src/layer/output/YoloGrid.js</a></div>
+
     </main>
 </div>
 
