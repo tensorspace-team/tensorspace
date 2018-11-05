@@ -233,6 +233,14 @@ function Layer( config ) {
 
 	this.autoOutputDetect = undefined;
 
+	/**
+	 * name of the layer.
+	 *
+	 * @type { String }
+	 */
+
+	this.name = undefined;
+
 	// Load layer config.
 
 	this.loadBasicLayerConfig( config );
