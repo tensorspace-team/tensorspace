@@ -90,7 +90,7 @@ InputMap3d.prototype = {
 
 		let cube = new THREE.Mesh( boxGeometry, materials );
 
-		cube.elementType = "input3dElement";
+		cube.elementType = "RGBInputElement";
 		cube.clickable = true;
 		cube.hoverable = true;
 

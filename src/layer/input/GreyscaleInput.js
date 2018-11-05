@@ -237,7 +237,7 @@ GreyscaleInput.prototype = Object.assign( Object.create( NativeLayer.prototype )
 
 		if ( this.color === undefined ) {
 
-			this.color = modelConfig.color.input2d;
+			this.color = modelConfig.color.greyscaleInput;
 
 		}
 

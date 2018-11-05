@@ -254,7 +254,7 @@ RGBInput.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 	handleClick: function( clickedElement ) {
 
-		if ( clickedElement.elementType === "input3dElement" ) {
+		if ( clickedElement.elementType === "RGBInputElement" ) {
 
 			// If aggregation element is clicked, open layer.
 
@@ -321,7 +321,7 @@ RGBInput.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		if ( this.color === undefined ) {
 
-			this.color = modelConfig.color.input3d;
+			this.color = modelConfig.color.RGBInput;
 
 		}
 
@@ -748,7 +748,7 @@ RGBInput.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 			this.segregationHandlers[ fmIndex ].showText();
 			this.textElementHandler = this.segregationHandlers[ fmIndex ];
 
-		} else if ( element.elementType === "input3dElement" ) {
+		} else if ( element.elementType === "RGBInputElement" ) {
 
 			this.aggregationHandler.showText();
 			this.textElementHandler = this.aggregationHandler;

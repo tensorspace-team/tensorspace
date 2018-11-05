@@ -16,8 +16,8 @@ function ModelConfiguration(config ) {
 
 		background: 0x000000,
 		input1d: 0xEEEEEE,
-		input2d: 0xEEEEEE,
-		input3d: 0xEEEEEE,
+		greyscaleInput: 0xEEEEEE,
+		RGBInput: 0xEEEEEE,
 		conv1d: 0xF7FE2E,
 		conv2d: 0xF7FE2E,
 		depthwiseConv2d: 0xFBBF1F,
@@ -172,15 +172,15 @@ function ModelConfiguration(config ) {
 
 			}
 
-			if ( config.color.input2d !== undefined ) {
+			if ( config.color.greyscaleInput !== undefined ) {
 
-				this.color.input2d = config.color.input2d;
+				this.color.greyscaleInput = config.color.greyscaleInput;
 
 			}
 
-			if ( config.color.input3d !== undefined ) {
+			if ( config.color.RGBInput !== undefined ) {
 
-				this.color.input3d = config.color.input3d;
+				this.color.RGBInput = config.color.RGBInput;
 
 			}
 
