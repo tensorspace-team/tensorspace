@@ -324,7 +324,10 @@
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.GlobalPooling1d();</code></pre>
         </div>
-
+        <img class="tag-img" src="../../assets/img/docs/GlobalPooling1d.jpg">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - GlobalPooling1d layer collapse and expand
+        </div>
         <div class="sub-title">Arguments</div>
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -430,7 +433,7 @@ let globalPooling1dLayer = new TSP.layers.GlobalPooling1d();
 globalPooling1dLayer.apply( conv1dLayer );</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L412" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Click on the layer directly to open it by interacting directly with the object in the 3D scene</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
@@ -448,7 +451,7 @@ model.init();
 globalPooling1dLayer.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L432" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To close by interacting directly with objects in a 3D scene by clicking the close button</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
@@ -502,18 +505,18 @@ model.add( globalPooling2dLayer );</code></pre>
             </thead>
             <tbody>
             <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/"target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
+                <th scope="row"><a href="https://keras.io/layers/pooling/#globalmaxpooling1d" target="_blank">Keras</a>️</th>
+                <td>keras.layers.GlobalMaxPooling1D(data_format='channels_last')</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
+                <th scope="row"><a href=https://www.tensorflow.org/api_docs/python/tf/keras/layers/GlobalMaxPool1D target="_blank">TensorFlow</a></th>
+                <td>tf.keras.layers.GlobalMaxPool1D</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.globalMaxPooling1d" target="_blank">TensorFlow.js</a>️</th>
+                <td>tf.layers.globalMaxPooling1d (config)</td>
 
             </tr>
             </tbody>
