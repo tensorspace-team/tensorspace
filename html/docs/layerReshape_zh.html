@@ -410,30 +410,30 @@
 
         <div class="sub-title">属性</div>
 
-        <div class="property-title"><a href="">.inputShape</a> : Int[]</div>
+        <div class="property-title"><a href="" target="_blank">.inputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，dataFormat默认通道值在最后，例如inputShape = [ 28, 28, 3 ] 表示输入为3个特征图，每个图大小为28*28。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="">.outputShape</a> : Int[]</div>
+        <div class="property-title"><a href="" target="_blank">.outputShape</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为3维 <a href="basicDimension_zh.html">3️⃣</a></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat默认通道值在最后，例如outputShape = [ 32, 32, 4 ] 表示经过此层处理后，有4个特征图，每个图大小为32*32。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="">.neuralValue</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52"target="_blank">.neuralValue</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层层间输出值数组。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>载入模型，在 model.predict() 后才可以拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="">.name</a> : String</div>
+        <div class="property-title"><a href="" target="_blank">.name</a> : String</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的自定义名称。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
-        <div class="property-title"><a href="">.layerType</a> : String</div>
+        <div class="property-title"><a href="" target="_blank">.layerType</a> : String</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的类型，返回值有三种可能：若 targetShape 长度为1，返回字符串 <span class="span_bold">Reshape1d</span>；若 targetShape 长度为2，返回字符串 <span class="span_bold">Reshape2d</span>；若 targetShape 长度为3，返回字符串 <span class="span_bold">Reshape3d</span>；</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
         <div class="sub-title">方法</div>
 
-        <div class="property-title"><a href="">.apply( layer )</a> : void</div>
+        <div class="property-title"><a href="" target="_blank">.apply( layer )</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>此方法只在 <a href="modelFunctional_zh.html">Functional Model</a> 中使用（非序列型，图结构）。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">TensorFlow.js</span> 构建模型语法，直接添加层即可。</div>
@@ -456,7 +456,7 @@ let reshapeLayer = new TSP.layers.Reshape( {
 reshapeLayer.apply( inputLayer );</code></pre>
         </div>
 
-        <div class="property-title"><a href="">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -478,7 +478,7 @@ model.init();
 reshapedLayer.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互点击按钮关闭。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
