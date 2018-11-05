@@ -51,21 +51,27 @@
     });
 
     let input = new TSP.layers.GreyscaleInput({
-        shape: [28, 28, 1]
+        shape: [28, 28]
     });
 
-    let layer1 = new TSP.layers.Conv2d({
-		kernelSize: 2,
-		filters: 36,
-		strides: 1,
-		padding: "same"
+    model.add(input);
+
+    let conv2d = new TSP.layers.Conv2d({
+       shape: [32, 32],
+       filters: 6
+    });
+
+    model.add( conv2d );
+
+    let activation = new TSP.layers.Activation3d({
+		activation: "relu"
 	});
 
-    let globalpooling = new TSP.layers.GlobalPooling2d({});
+    model.add(activation);
 
-    model.add(input);
-    model.add(layer1);
-    model.add(globalpooling);
+    let sub = TSP.layers.Subtract([conv2d, activation]);
+
+    model.add(sub);
 
     model.init();
 
