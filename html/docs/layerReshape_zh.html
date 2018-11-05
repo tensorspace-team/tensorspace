@@ -323,12 +323,12 @@
         <div>
             <span class="highlight-text">Reshape</span> 为工厂对象，
             根据参数 <span class="highlight-text">targetShape</span> 形状创建相对应的对象。
-            如果输入为1维，例如 <span class="highlight-text">targetShape=[100]</span>，
-            那么创建<span class="highlight-text">TSP.layers.Reshape1d</span>，输出为1维；
-            如果输入为2维，例如 <span class="highlight-text">targetShape=[24, 24]</span>，
-            那么创建<span class="highlight-text">TSP.layers.Reshape2d</span>，输出为2维；
-            如果输入为3维，例如 <span class="highlight-text">targetShape=[32, 32, 180]</span>，
-            那么创建<span class="highlight-text">TSP.layers.Reshape3d</span>，输出为3维；
+            <p>如果输入为1维，例如 <span class="highlight-text">targetShape=[100]</span>，
+                那么创建<span class="highlight-text">TSP.layers.Reshape1d</span>，输出为1维；</p>
+            <p>如果输入为2维，例如 <span class="highlight-text">targetShape=[24, 24]</span>，
+                那么创建<span class="highlight-text">TSP.layers.Reshape2d</span>，输出为2维；</p>
+            <p>如果输入为3维，例如 <span class="highlight-text">targetShape=[32, 32, 180]</span>，
+                那么创建<span class="highlight-text">TSP.layers.Reshape3d</span>，输出为3维；</p>
         </div>
         <div>〔方法一〕使用<span class="highlight-text"> targetShape </span>参数进行构造</div>
         <div class="code-snippet">
@@ -456,7 +456,7 @@ let reshapeLayer = new TSP.layers.Reshape( {
 reshapeLayer.apply( inputLayer );</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L412" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -478,7 +478,7 @@ model.init();
 reshapedLayer.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L432" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互点击按钮关闭。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -529,7 +529,7 @@ model.add( reshape );</code></pre>
         </div>
 
         <div class="sub-title">什么时候用</div>
-        <div>如果你熟悉Keras | TensorFlow | tfjs 框架，构建模型时使用了卷积层Conv2D（下表列出了可能的使用情景）。一一对应的，在TensorSpace中，你应该使用此API。</div>
+        <div>如果你熟悉Keras | TensorFlow | tfjs 框架，构建模型时使用了 Reshape 层（下表列出了可能的使用情景）。一一对应的，在TensorSpace中，你应该使用此API。</div>
         <table class="table table-striped table-bordered table-hover table-responsive">
             <thead>
             <tr>
@@ -540,18 +540,18 @@ model.add( reshape );</code></pre>
             </thead>
             <tbody>
             <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/" target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
+                <th scope="row"><a href="https://keras.io/layers/core/#reshape" target="_blank">Keras</a>️</th>
+                <td>keras.layers.Reshape(target_shape)</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
+                <th scope="row"><a href="https://www.tensorflow.org/versions/r1.5/api_docs/python/tf/reshape" target="_blank">TensorFlow</a></th>
+                <td>tf.reshape( tensor, shape )</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.reshape" target="_blank">TensorFlow.js</a>️</th>
+                <td>tf.layers.reshape({targetShape: [2, 6]})</td>
 
             </tr>
             </tbody>

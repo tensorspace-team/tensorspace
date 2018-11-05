@@ -270,8 +270,11 @@ td, th {
 }
 
 .highlight-text {
+    font-family: "Consolas", serif !important;
+    color: #E03C8A;
     background-color: #f5f5f5;
     border-radius: 3px;
+    padding: 0.5px;
 }
 
 .logo-img {
