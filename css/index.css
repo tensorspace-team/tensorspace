@@ -245,6 +245,10 @@
 
 }
 
+#galleryMore:hover {
+    transform: scale(1);
+}
+
 #cardArea {
 
     padding: 20px 0;
