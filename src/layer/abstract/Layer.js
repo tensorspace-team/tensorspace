@@ -241,6 +241,15 @@ function Layer( config ) {
 
 	this.name = undefined;
 
+	/**
+	 * Type of layer, each layer class has a specific layerType.
+	 * For example, "Conv2d", "Pooling2d".
+	 *
+	 * @type { String }
+	 */
+
+	this.layerType = undefined;
+
 	// Load layer config.
 
 	this.loadBasicLayerConfig( config );
