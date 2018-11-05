@@ -57,7 +57,7 @@ let YoloResultGenerator = (function() {
 
 		let nmsPredictions = [];
 
-		nmsPredictions.push( thresholdedPredictions[0] )
+		nmsPredictions.push( thresholdedPredictions[0] );
 
 		let i = 1;
 
@@ -167,7 +167,7 @@ let YoloResultGenerator = (function() {
 
                     if ( finalScore > scoreThreshold ) {
 
-                        console.log("Add 1 detective object");
+                        // console.log("Add 1 detective object");
 
                         output.push( {
 
@@ -195,7 +195,7 @@ let YoloResultGenerator = (function() {
 
 		}
 
-		console.log( thresholdedPredictions );
+		// console.log( thresholdedPredictions );
 
 		return output;
 
@@ -218,7 +218,7 @@ let YoloResultGenerator = (function() {
 
 		let output = [];
 
-		console.log( "cx: " + cx + "| cy: " + cy );
+		// console.log( "cx: " + cx + "| cy: " + cy );
 
 		for ( let box = 0; box < anchors.length / 2; box ++ ) {
 
@@ -228,7 +228,7 @@ let YoloResultGenerator = (function() {
 			let bw = anchors[ box * 2 ] * Math.exp( channelData[ index + 2 ] );
 			let bh = anchors[ box * 2 + 1 ] * Math.exp( channelData[ index + 3 ] );
 
-            console.log("------------------Index: " + index + " ----------------------");
+            // console.log("------------------Index: " + index + " ----------------------");
             // console.log( "bx: " + bx + " | by: " + by );
             // console.log( "bw: " + bw + " | bh: " + bh );
 
@@ -244,8 +244,8 @@ let YoloResultGenerator = (function() {
 
 			let finalScore = bestClassScore * finalConfidence;
 
-            console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
-            console.log("Final Score: " + finalScore);
+            // console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
+            // console.log("Final Score: " + finalScore);
 
 			let width = bw / widthRange * outputShape[ 0 ];
 			let height = bh  / heightRange * outputShape[ 1 ];
@@ -257,8 +257,7 @@ let YoloResultGenerator = (function() {
 				  checkRange( bw, widthRange ) && checkRange( bh, heightRange ) &&
 				  finalScore > scoreThreshold
                 )
-            )
-            {
+            ) {
 
 				output.push( {
 
