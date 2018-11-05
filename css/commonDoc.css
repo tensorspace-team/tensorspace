@@ -352,6 +352,9 @@ td, th {
 
     font-size: 20px;
     margin-top: 12px;
+    margin-bottom: 3px;
+    padding-bottom: 5px;
+    border-bottom: 1.5px solid rgba(50,50,50,0.1);
 
 }
 
