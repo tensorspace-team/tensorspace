@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TensorSpace - MobileNet Demo</title>
+    <meta name="author" content="syt123450 / https://github.com/syt123450">
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        #loadingPad {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background-color: #031D32;
+            z-index: 2;
+        }
+
+        #loading {
+            position: fixed;
+            width: 30%;
+            top: 150px;
+            margin-left: 35%;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="container"></div>
+<div id="loadingPad">
+    <img id="loading" src="./assets/loading.gif">
+</div>
+
+<script src="../lib/jquery.min.js"></script>
+<script src="../lib/three.min.js"></script>
+<script src="../lib/stats.min.js"></script>
+<script src="../lib/tween.min.js"></script>
+<script src="../lib/TrackballControls.js"></script>
+<script src="../lib/tf.min.js"></script>
+<script src="../../build/tensorspace.js"></script>
+
+<script src="data/imagenet_result.js"></script>
+
+<script>
+
+	let modelContainer = document.getElementById( "container" );
+
+	let model = new TSP.models.Sequential( modelContainer, {
+
+		stats: true
+
+	}  );
+
+	model.add( new TSP.layers.RGBInput( {
+
+		shape: [ 224, 224, 3 ]
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 3,
+		filters: 32,
+		strides: 2,
+		padding: "same"
+
+    } ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+    } ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 64,
+		strides: 1,
+		padding: "same"
+
+    } ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 2,
+		padding: "same"
+
+    } ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 128,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 128,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 2,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 256,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 256,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 2,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 512,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 512,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 512,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 512,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 512,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 512,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 2,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 1024,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.DepthwiseConv2d( {
+
+		kernelSize: 3,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.Conv2d( {
+
+		kernelSize: 1,
+		filters: 1024,
+		strides: 1,
+		padding: "same"
+
+	} ) );
+
+	model.add( new TSP.layers.GlobalPooling2d() );
+
+	model.add( new TSP.layers.Output1d( {
+
+		units: 1000,
+		paging: true,
+		segmentLength: 200,
+		outputs: result
+
+    } ) );
+
+	model.load( {
+
+		type: "keras",
+		url: './mobilenetv1/model.json'
+
+	} );
+
+	model.init(function() {
+
+		$.ajax( {
+
+			url: "./data/coffeepot.json",
+			type: 'GET',
+			async: true,
+			dataType: 'json',
+			success: function ( data ) {
+
+				model.predict( data );
+				$( "#loadingPad" ).hide();
+
+			}
+
+		} );
+
+    });
+
+</script>
+
+</body>
+</html>
