@@ -347,7 +347,7 @@
             <pre><code class="Javascript">model.load( {
 
     type: "keras",
-    url: '/PATH/TO/NETWORK/model.json',
+    url: '/PATH_TO_MODEL/model.json',
     multiInputs: true,
     inputShapes: [[100], [1]],
 
@@ -370,7 +370,7 @@
                     表示所输入的神经网络类型。
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    配置为 "<span class="highlight-text">keras</span>"，以此来加载 Keras 模型。
+                    配置为 “<span class="highlight-text">keras</span>”，以此来加载 Keras 模型。
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
                     在完成指定神经网络模型的类型后，TensorSpace 将使用所对应的加载器对象完成加载和预测的过程。
@@ -451,7 +451,7 @@
             <pre><code class="Javascript">model.load( {
 
     type: "tfjs",
-    url: '/PATH/TO/NETWORK/mnist.json',
+    url: '/PATH_TO_MODEL/mnist.json',
     multiInputs: true,
     inputShapes: [[100], [1]],
 
@@ -474,7 +474,7 @@
                     表示所输入的神经网络类型。
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    配置为 "<span class="highlight-text">tfjs</span>"，以此来加载 tfjs 模型。
+                    配置为 “<span class="highlight-text">tfjs</span>”，以此来加载 tfjs 模型。
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
                     在完成指定神经网络模型的类型后，TensorSpace 将使用所对应的加载器对象完成加载和预测的过程。
@@ -555,8 +555,8 @@
             <pre><code class="Javascript">model.load( {
 
     type: "tensorflow",
-    modelUrl: "/PATH/TO/NETWORK/tensorflowjs_model.pb",
-    weightUrl: "/PATH/TO/NETWORK/weights_manifest.json",
+    modelUrl: "/PATH_TO_MODEL/tensorflowjs_model.pb",
+    weightUrl: "/PATH_TO_MODEL/weights_manifest.json",
     outputsName: [ "Maximum", "Const_1", "Maximum_1", "Const_2", "Maximum_2",
         "Const_3", "Maximum_3", "Const_4", "Maximum_4", "Const_5",
         "Maximum_5", "Const_6", "Const_7", "Const_8", "add_8" ],
@@ -582,7 +582,7 @@
                     表示所输入的神经网络类型。
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    配置为 "<span class="highlight-text">tensorflow</span>"，以此来加载 TensorFlow 模型。
+                    配置为 “<span class="highlight-text">tensorflow</span>”，以此来加载 TensorFlow 模型。
                 </li>
                 <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
                     在完成指定神经网络模型的类型后，TensorSpace 将使用所对应的加载器对象完成加载和预测的过程。

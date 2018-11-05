@@ -319,15 +319,15 @@
     <main>
         <header>性能监控</header>
 
-        <div>对于 TensorSpace 来说，<span class="highlight-text">stats</span> 是一个必要的库。</div>
+        <div>TensorSpace 支持将 <span class="highlight-text">stats</span> 整合至应用之中。</div>
 
         <img class="tag-img" src="../../assets/img/docs/Model_no_states.png">
         <div class="img-label">
-            <span class="img-label-number">图1</span> - 禁用性能监控
+            <span class="img-label-number">图1</span> - 默认状态下，禁用Stats
         </div>
 
         <div>
-            <span class="highlight-text">stats</span> 是 TensorSpace 的性能监控组件。我们可以通过以下方法来添加并配置该组件：
+            在 TensorSpace 中，可以通过以下方法来启用并配置 <span class="highlight-text">stats</span> 组件：
         </div>
 
         <div class="code-snippet">
@@ -338,12 +338,12 @@
 &lt;!-- other HTML --&gt;
 
 &lt;script&gt;
-    let model = new TSP.models.Sequential(container, {
+    let model = new TSP.models.Sequential( container, {
         // ... other configurations ...
         stats : true
         // ... other configurations ...
 
-    });
+    } );
     // ... other TSP implementations ...
 &lt;/script&gt;
 
@@ -354,10 +354,10 @@
 
         <img class="tag-img" src="../../assets/img/docs/Model_stats.png">
         <div class="img-label">
-            <span class="img-label-number">图2</span> - 启用性能监控
+            <span class="img-label-number">图2</span> - 启用Stats
         </div>
 
-        <div>更多详情参见<a href="https://github.com/mrdoob/stats.js">stats.js</a>。</div>
+        <div>更多详情参见<a href="https://github.com/mrdoob/stats.js">Stats.js</a>。</div>
 
     </main>
 </div>
