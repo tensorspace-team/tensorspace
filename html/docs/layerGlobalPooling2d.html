@@ -328,6 +328,10 @@
         <div class="img-label">
             <span class="img-label-number">Fig. 1</span> - Pooling2d layer collapse and expand
         </div>
+        <img class="tag-img" src="../../assets/img/docs/GlobalPooling2d.jpg">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - GlobalPooling2d layer collapse and expand
+        </div>
         <div class="sub-title">Arguments</div>
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -401,7 +405,7 @@
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat is channel last. for example outputShape = [ 1, 1, 3 ] represents the output through this layer has 3 feature maps and each one is fixed 1*1.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52"target="_blank">.neuralValue</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52" target="_blank">.neuralValue</a> : Int[]</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The intermediate raw data after this layer.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After load and model.predict() data is available, otherwise is undefined.</div>
 
@@ -433,7 +437,7 @@ let globalPooling2dLayer = new TSP.layers.GlobalPooling2d();
 globalPooling2dLayer.apply( conv2dLayer );</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer3d.js#L459" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Click on the layer directly to open it by interacting directly with the object in the 3D scene</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
@@ -451,7 +455,7 @@ model.init();
 globalPooling2dLayer.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer3d.js#L475" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To close by interacting directly with objects in a 3D scene by clicking the close button</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
@@ -505,18 +509,18 @@ model.add( globalPooling2dLayer );</code></pre>
             </thead>
             <tbody>
             <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/"target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
+                <th scope="row"><a href="https://keras.io/layers/pooling/#globalmaxpooling2d" target="_blank">Keras</a>️</th>
+                <td>keras.layers.GlobalMaxPooling2D(data_format='channels_last')</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
+                <th scope="row"><a href=https://www.tensorflow.org/api_docs/python/tf/keras/layers/GlobalMaxPool2D target="_blank">TensorFlow</a></th>
+                <td>tf.keras.layers.GlobalMaxPool2D</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.globalMaxPooling2d" target="_blank">TensorFlow.js</a>️</th>
+                <td>tf.layers.globalMaxPooling2d (config)</td>
 
             </tr>
             </tbody>
