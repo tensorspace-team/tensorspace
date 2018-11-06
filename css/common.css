@@ -295,14 +295,18 @@ body > nav > div > ul > li:hover > a {
     animation: octocat-wave 560ms ease-in-out;
 }
 
+.github-corner-playground:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+}
+
 pre {
     padding: 0 0 0 0;
 }
 
 .github-corner svg {
 
-    height: 106px;
-    width: 106px;
+    height: 108px;
+    width: 108px;
     fill:#0340D8;
     color:#fff;
     position: absolute;
@@ -317,6 +321,19 @@ pre {
     height: 108px;
     width: 108px;
     fill:#000000;
+    color:#fff;
+    position: absolute;
+    top: 0;
+    border: 0;
+    right: 0;
+
+}
+
+.github-corner-playground svg {
+
+    height: 108px;
+    width: 108px;
+    fill:#02242F;
     color:#fff;
     position: absolute;
     top: 0;
