@@ -470,45 +470,6 @@
 
         <div class="sub-title">方法</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer.js#L74" target="_blank">.apply( layer )</a> : void</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>此方法只在 <a href="modelFunctional_zh.html">Functional Model</a> 中使用（非序列型，图结构）。</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>将此层连接到layer上，layer即此层的<span class="span_bold">上一层</span>。</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>使用此方法来建立一个连接。在 <a href="modelSequential_zh.html">Sequential Model</a> 中不需要专门使用此方法来建立链接，参照 <span class="span_bold">Keras</span> or <span class="span_bold">TensorFlow.js</span> 构建模型语法，直接添加层即可。</div>
-        <div class="code-snippet">
-            <pre><code class="Javascript">let inputLayer = new TSP.layers.GreyscaleInput( {
-
-    shape: [28, 28]
-
-} );
-
-let conv2d1 = new TSP.layers.Conv2d( {
-
-    // configure some parameters for Conv2d1.
-
-} );
-
-let conv2d2 = new TSP.layers.Conv2d( {
-
-    /*
-     *  configure some parameters for Conv2d2.
-     *  Note the shape of Conv2d2 should be the same as Conv2d1.
-     */
-
-} );
-
-// perform merge
-
-let mergedLayer = TSP.layers.Maximum( [ conv2d1, conv2d2 ], {
-
-        /* Configurations */
-
-    }
-
-);
-
-mergedLayer.apply( inputLayer );</code></pre>
-        </div>
-
         <div class="property-title"><a href="" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
