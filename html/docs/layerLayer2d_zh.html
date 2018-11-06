@@ -320,7 +320,7 @@
         <header>Layer2d</header>
 
         <div>当你使用的Layer无法在TensorSpace的支持列表中找到时，使用此API。</div>
-        <div>生成一个抽象层，你需要确保形状和你模型中本层的数据形状相同，例如，1维[100]使用<a href="layerLayer1d_zh.html">Layer1d</a>；2维[100, 100]使用<a href="#">Layer2d</a>；3维，dataFormat为通道数最后，[100, 100, 3]，使用<a href="layerLayer3d_zh.html">Layer3d</a></div>
+        <div>生成一个抽象层，你需要确保形状和你模型中本层的数据形状相同，例如，<span class="highlight-text">1维[100]</span>使用<a href="layerLayer1d_zh.html">Layer1d</a>；<span class="highlight-text">2维[100, 100]</span>使用<a href="#">Layer2d</a>；3维，dataFormat为通道数最后，<span class="highlight-text">[100, 100, 3]</span>，使用<a href="layerLayer3d_zh.html">Layer3d</a></div>
         <div>⭐️<span class="span_bold">抽象层</span>这些层和前层没有线相连，请提交<a href="https://github.com/syt123450/tensorspace/issues">Issue</a>，我们会尽早支持对应的API。</div>
 
         <div class="sub-title">构造器</div>
@@ -444,7 +444,7 @@ let layer2d = new TSP.layers.Layer2d( {
 layer2d.apply( inputLayer );</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L412" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互直接点击层打开。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -466,7 +466,7 @@ model.init();
 layer2d.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L432" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互点击按钮关闭。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -512,35 +512,6 @@ model.add( layer2d );</code></pre>
 
 } ));</code></pre>
         </div>
-
-        <div class="sub-title">什么时候用</div>
-        <div>如果你熟悉Keras | TensorFlow | tfjs 框架，构建模型时使用了卷积层Conv2D（下表列出了可能的使用情景）。一一对应的，在TensorSpace中，你应该使用此API。</div>
-        <table class="table table-striped table-bordered table-hover table-responsive">
-            <thead>
-            <tr>
-                <th scope="col">框架名称</th>
-                <th scope="col">对应框架中新建对象代码段</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/" target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
-
-            </tr>
-            <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
-
-            </tr>
-            <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
-
-            </tr>
-            </tbody>
-        </table>
 
         <div id="tagExplain" class="sub-title">标签详情</div>
 
