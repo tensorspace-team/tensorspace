@@ -1,47 +1,47 @@
 let model;
 let imagenetResult;
-let predictDataKey = "dog";
+let predictDataKey = "panda";
 let selectedDiv = undefined;
 
 let dataLookup = {
 
-	dog: {
+	panda: {
 
 		relativeDiv: "data1",
-		dataUrl: "../../assets/data/dog_imagenet.json",
-		imageUrl: "../../assets/img/playground/dog_imagenet.jpg"
+		dataUrl: "../../assets/data/panda.json",
+		imageUrl: "../../assets/img/playground/panda.jpg"
 
 	},
 
-	cat: {
+	tigerCat: {
 
 		relativeDiv: "data2",
-		dataUrl: "../../assets/data/cat.json",
-		imageUrl: "../../assets/img/playground/cat.jpg"
+		dataUrl: "../../assets/data/tigerCat.json",
+		imageUrl: "../../assets/img/playground/tigerCat.jpg"
 
 	},
 
-	castle: {
+	hummingbird: {
 
 		relativeDiv: "data3",
-		dataUrl: "../../assets/data/castle.json",
-		imageUrl: "../../assets/img/playground/castle.jpg"
+		dataUrl: "../../assets/data/hummingbird.json",
+		imageUrl: "../../assets/img/playground/hummingbird.jpg"
 
 	},
 
-	snail: {
+	peacock: {
 
 		relativeDiv: "data4",
-		dataUrl: "../../assets/data/snail.json",
-		imageUrl: "../../assets/img/playground/snail.jpg"
+		dataUrl: "../../assets/data/peacock.json",
+		imageUrl: "../../assets/img/playground/peacock.jpg"
 
 	},
 
-	icecream: {
+	squirrel: {
 
 		relativeDiv: "data5",
-		dataUrl: "../../assets/data/icecream.json",
-		imageUrl: "../../assets/img/playground/icecream.jpg"
+		dataUrl: "../../assets/data/squirrel.json",
+		imageUrl: "../../assets/img/playground/squirrel.jpg"
 
 	}
 
