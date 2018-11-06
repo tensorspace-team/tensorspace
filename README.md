@@ -228,6 +228,17 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 <b>Fig.9</b> - Interactive ACGAN created by TensorSpace
 </p>
 
+* **MobileNetv1**
+
+[➡ Live Demo](http://tensorspace.org/html/playground/mobilenetv1.html)
+
+<p align="center">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_mobilenetv1.gif">
+</p>
+<p align="center">
+<b>Fig.10</b> - Interactive MobileNetv1 created by TensorSpace
+</p>
+
 ## Documentation
 
 * For a quick start, checkout [Getting Start](http://tensorspace.org/html/docs/startHello.html)

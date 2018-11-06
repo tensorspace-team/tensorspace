@@ -232,6 +232,17 @@ model.init(function() {
 <b>图9</b> - 使用 TensorSpace 构建 ACGAN 生成网络
 </p>
 
+* **MobileNetv1**
+
+[➡ 在线演示](http://tensorspace.org/html/playground/mobilenetv1_zh.html)
+
+<p align="center">
+<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_mobilenetv1.gif">
+</p>
+<p align="center">
+<b>图10</b> - 使用 TensorSpace 构建 MobileNetv1 生成网络
+</p>
+
 ## <div id="documentation">文档</div>
 
 * 迅速开始使用，参阅[开始使用](http://tensorspace.org/html/docs/startHello_zh.html)。
