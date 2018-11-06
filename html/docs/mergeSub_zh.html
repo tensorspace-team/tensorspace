@@ -338,6 +338,11 @@
             参数二：外观动画等配置参数
         </div>
 
+        <img class="tag-img" src="../../assets/img/docs/Subtract.jpg">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - 减法层示意图（左：收缩 | 右：展开）
+        </div>
+
         <div class="sub-title">配置列表</div>
 
         <table class="table table-striped table-bordered table-hover">
@@ -513,7 +518,7 @@ model.init();
 mergedLayer.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer3d.js#L475" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>通过直接和3d场景中物体交互点击按钮关闭。</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>代码中通过调用方法打开。</div>
@@ -593,6 +598,36 @@ model.add( mergedLayer );</code></pre>
 ));</code></pre>
         </div>
 
+
+        <div class="sub-title">什么时候用</div>
+        <div>如果你熟悉Keras | TensorFlow | tfjs 框架，构建模型时使用了加法操作（下表列出了可能的使用情景）。一一对应的，在TensorSpace中，你应该使用此API。</div>
+        <table class="table table-striped table-bordered table-hover table-responsive">
+            <thead>
+            <tr>
+                <th scope="col">框架名称</th>
+                <th scope="col">对应框架中新建对象代码段</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row"><a href="https://keras.io/layers/merge/#subtract" target="_blank">Keras</a>️</th>
+                <td>keras.layers.Subtract()</td>
+
+            </tr>
+            <tr>
+                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/keras/layers/subtract" target="_blank">TensorFlow</a></th>
+                <td>tf.keras.layers.subtract( inputs, **kwargs )</td>
+
+            </tr>
+            <tr>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.add" target="_blank">TensorFlow.js</a>️</th>
+                <td>tf.layers.add (-config?)</td>
+
+            </tr>
+            </tbody>
+        </table>
+
         <div id="tagExplain" class="sub-title">标签详情</div>
 
         <table class="table table-striped table-bordered table-hover">
@@ -638,7 +673,7 @@ model.add( mergedLayer );</code></pre>
         </table>
 
         <div class="sub-title">源码</div>
-        <div><a href="https://github.com/tensorspace-team/tensorspace/blob/master/src/merge/Subtract.js">tensorspace/src/merge/Subtract.js</a></div>
+        <div><a href="https://github.com/tensorspace-team/tensorspace/blob/master/src/merge/Subtract.js" target="_blank">tensorspace/src/merge/Subtract.js</a></div>
     </main>
 </div>
 
