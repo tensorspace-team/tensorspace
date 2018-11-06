@@ -319,7 +319,7 @@
     <main>
         <header>Layer3d</header>
         <div>Use this Layer when the API you are using cannot be found in the TensorSpace support list.</div>
-        <div>Create an abstract layer. You need to maintain the shape is the same as the shape of the data in the layer in your model. For example, 1-dimensional [100], use <a href="layerLayer1d.html">Layer1d</a> API; 2-dimensional [100, 100], use <a href="layerLayer2d.html">Layer2d</a> API; 3-dimensional [100, 100, 3]. dataFormat is channel last, use <a href="#">Layer3d</a> API.</div>
+        <div>Create an abstract layer. You need to maintain the shape is the same as the shape of the data in the layer in your model. For example, 1-dimensional <span class="highlight-text">[100]</span>, use <a href="layerLayer1d.html">Layer1d</a> API; 2-dimensional <span class="highlight-text">[100, 100]</span>, use <a href="layerLayer2d.html">Layer2d</a> API; 3-dimensional <span class="highlight-text">[100, 100, 3]</span>. dataFormat is channel last, use <a href="#">Layer3d</a> API.</div>
         <div>⭐<span class="span_bold">Abstract Layer</span>, user can directly defined shape of the layer, but will not show any relation lines. Please submit <a href="https://github.com/syt123450/tensorspace/issues">Issue</a>, we will support the corresponding API as soon as possible.️</div>
 
         <div class="sub-title">Constructor</div>
@@ -347,7 +347,7 @@
                 </th>
                 <td>Int[]</td>
                 <td>shape of output</td>
-                <td><span class="span_bold">shape=[100, 100, 3]</span> means the output is 3-dimensional array by 100*100 with 3 feature maps</td>
+                <td><span class="highlight-text">shape=[100, 100, 3]</span> means the output is 3-dimensional array by 100*100 with 3 feature maps</td>
             </tr>
             <tr>
                 <th scope="row">
@@ -445,7 +445,7 @@ let layer3d = new TSP.layers.Layer3d( {
 layer3d.apply( inputLayer );</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer3d.js#L459" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Click on the layer directly to open it by interacting directly with the object in the 3D scene</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
@@ -467,7 +467,7 @@ model.init();
 layer3d.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="" target="_blank">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer3d.js#L475" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To close by interacting directly with objects in a 3D scene by clicking the close button</div>
         <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
@@ -513,35 +513,6 @@ model.add( layer3d );</code></pre>
 
 } ));</code></pre>
         </div>
-
-        <div class="sub-title">Use Case</div>
-        <div>When you add convolutional layer Conv2D with Keras | TensorFlow | tfjs in your model the corresponding API is Conv2d in TensorSpace.</div>
-        <table class="table table-striped table-bordered table-hover table-responsive">
-            <thead>
-            <tr>
-                <th scope="col">Framework</th>
-                <th scope="col">Documentation</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/" target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
-
-            </tr>
-            <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
-
-            </tr>
-            <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
-
-            </tr>
-            </tbody>
-        </table>
 
         <div id="tagExplain" class="sub-title">Tag Lookup</div>
 
