@@ -324,7 +324,10 @@
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.Input1d( { shape : [ Int ] } );</code></pre>
         </div>
-
+        <img class="tag-img" src="../../assets/img/docs/Input1d.jpg">
+        <div class="img-label">
+            <span class="img-label-number">Fig. 1</span> - Input1d 层示意图（左：收缩 | 右：展开）
+        </div>
         <div class="sub-title">参数列表</div>
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -437,35 +440,6 @@ model.add(inputLayer);</code></pre>
 
 } ) );</code></pre>
         </div>
-
-        <div class="sub-title">什么时候用</div>
-        <div>如果你熟悉Keras | TensorFlow | tfjs 框架，构建模型时使用了输入层Input1d（下表列出了可能的使用情景）。一一对应的，在TensorSpace中，你应该使用此API。</div>
-        <table class="table table-striped table-bordered table-hover table-responsive">
-            <thead>
-            <tr>
-                <th scope="col">框架名称</th>
-                <th scope="col">对应框架中新建对象代码段</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/" target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
-
-            </tr>
-            <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
-
-            </tr>
-            <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
-
-            </tr>
-            </tbody>
-        </table>
 
         <div id="tagExplain" class="sub-title">标签详情</div>
 
