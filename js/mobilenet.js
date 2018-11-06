@@ -371,7 +371,7 @@ function createModel() {
 	model.load( {
 
 		type: "tfjs",
-		url: '../../assets/model/resnet50/model.json'
+		url: '../../assets/model/mobilenetv1/model.json'
 
 	} );
 
