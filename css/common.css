@@ -81,7 +81,7 @@ body > nav {
     font-family: SourceSansPro-Regular, sans-serif;
     line-height: 60px;
     text-align: center;
-    border-bottom: 1px solid #0071bc;
+    border-bottom: 0px solid #0071bc;
     box-shadow: 0 2px 2px -2px #0071bc;
     box-sizing: border-box;
     position: fixed;
@@ -291,15 +291,32 @@ body > nav > div > ul > li:hover > a {
     animation: octocat-wave 560ms ease-in-out;
 }
 
+.github-corner-index:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+}
+
 pre {
     padding: 0 0 0 0;
 }
 
 .github-corner svg {
 
-    height: 100px;
-    width: 100px;
+    height: 106px;
+    width: 106px;
     fill:#0340D8;
+    color:#fff;
+    position: absolute;
+    top: 0;
+    border: 0;
+    right: 0;
+
+}
+
+.github-corner-index svg {
+
+    height: 108px;
+    width: 108px;
+    fill:#000000;
     color:#fff;
     position: absolute;
     top: 0;
