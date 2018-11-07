@@ -618,6 +618,48 @@ footer {
     margin-bottom: 20px;
 }
 
+#topButton {
+    display: none;
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color:rgba(242, 242, 242, 0.5);
+    color: #b3b3b3;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    width:60px;
+    height:60px;
+}
+
+.ripple{
+    overflow:hidden;
+}
+
+.ripple-effect{
+    position: absolute;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background: white;
+    animation: ripple-animation 2s;
+}
+
+@keyframes ripple-animation {
+    from {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    to {
+        transform: scale(100);
+        opacity: 0;
+    }
+}
+
 @media (max-width: 1200px) {
     .style-item > div.code {
         font-size: 10px;

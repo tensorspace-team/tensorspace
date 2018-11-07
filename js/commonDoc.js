@@ -48,6 +48,65 @@ $(function() {
 		moveOutHiddenContent();
 	});
 
+	$("#topButton").hover(function() {
+		$(this).css({
+			"background-color": "#0c50bc",
+			"color": "white"
+		})
+	}, function () {
+		$(this).css({
+			"background-color": "rgba(242, 242, 242, 0.5)",
+			"color": "#b3b3b3"
+		})
+	}).click(function () {
+
+		$('#topButton').css({
+			"background-color": "#0c50bc",
+			"color": "white"
+		});
+
+		$('main').animate({
+			scrollTop: 0
+		}, 800, function() {
+			$('#topButton').css({
+				"background-color": "rgba(242, 242, 242, 0.5)",
+				"color": "#b3b3b3"
+			});
+		});
+	});
+
+	$("main").scroll(function () {
+		if ($(this).scrollTop() > 650) {
+			$('#topButton').fadeIn();
+		} else {
+			$('#topButton').fadeOut();
+		}
+	});
+
+	$('.ripple').on('click', function (event) {
+		event.preventDefault();
+
+		var $div = $('<div/>'),
+			btnOffset = $(this).offset(),
+			xPos = event.pageX - btnOffset.left,
+			yPos = event.pageY - btnOffset.top;
+
+		$div.addClass('ripple-effect');
+		var $ripple = $(".ripple-effect");
+
+		$ripple.css("height", $(this).height());
+		$ripple.css("width", $(this).height());
+		$div.css({
+			top: yPos - ($ripple.height()/2),
+			left: xPos - ($ripple.width()/2),
+			background: $(this).data("ripple-color")
+		}).appendTo($(this));
+
+		window.setTimeout(function(){
+			$div.remove();
+		}, 2000);
+	});
+
 });
 
 function moveInHiddenContent() {
