@@ -25,13 +25,9 @@
     margin-left: 30%;
 }
 
-body {
-    background: linear-gradient(to top right, white, #0c50bc);
-}
-
 #documentArea {
-    height: 90%;
-    padding-top: 80px;
+    height: 100%;
+    padding-top: 60px;
     box-sizing: border-box;
 }
 
@@ -56,12 +52,14 @@ main i {
 
 aside {
 
-    width: 250px;
+    width: 300px;
     height: 100%;
     color: #fff;
     background-color: #0c50bc;
     float: left;
     overflow: auto;
+    /*padding-top: 50px;*/
+    padding: 50px 0;
 }
 
 aside > div {
@@ -77,10 +75,16 @@ aside > div > div {
     cursor: pointer;
     font-weight: bold;
     font-size: 18px;
-    padding-left: 10px;
+    padding-left: 30px;
     position: relative;
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
+}
+
+#startLabel {
+
+    border-top: 1px solid #fff;
+
 }
 
 aside > div > div > a {
@@ -107,7 +111,7 @@ aside > div > div:hover {
 aside > div > div > img {
 
     position: absolute;
-    right: 10px;
+    right: 20px;
     height: 20px;
     margin-top: 6px;
 
@@ -127,7 +131,7 @@ aside > div > ul > li {
     box-sizing: border-box;
     height: 30px;
     cursor: pointer;
-    padding-left: 20px;
+    padding-left: 40px;
     line-height: 30px;
     color: #fff;
     background-color: #0c50bc;
@@ -178,7 +182,8 @@ main {
     height: 100%;
     background-color: #fff;
     overflow: auto;
-    padding-bottom: 30px;
+    padding: 10px 90px 100px 90px;
+    font-size: 16px;
 }
 
 main > header {
@@ -190,11 +195,6 @@ main > header {
     font-size: 30px;
     color: #4d4d4d;
     text-align: center;
-}
-
-main {
-    padding: 10px 50px 50px 50px;
-    font-size: 16px;
 }
 
 main ul {
@@ -297,8 +297,7 @@ td, th {
 }
 
 .tag-img {
-    width:95%;
-    /*margin-left: 5%;*/
+    width:100%;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -382,8 +381,8 @@ td, th {
 
 footer {
 
-    position: fixed;
-    bottom: 0;
+    position: relative;
+    /*bottom: 0;*/
     height: 50px;
     width: 100%;
     font-size: 16px;
@@ -399,7 +398,7 @@ footer {
 
     display: none;
     position: fixed;
-    top: 90px;
+    top: 70px;
     left: 35px;
     height: 50px;
     width: 50px;
@@ -626,7 +625,7 @@ footer {
     }
 
     main {
-        padding: 10px 20px;
+        padding: 10px 40px 40px 40px;
         font-size: 15px;
     }
 
@@ -655,6 +654,10 @@ footer {
 
     aside {
         display: none;
+    }
+
+    main {
+        padding: 20px;
     }
 
     #smallGuide {
