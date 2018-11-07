@@ -20,6 +20,10 @@
 
 }
 
+main .cp_embed_wrapper {
+    width: 100%;
+}
+
 .working {
     width: 40%;
     margin-left: 30%;
