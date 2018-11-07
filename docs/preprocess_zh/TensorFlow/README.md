@@ -402,4 +402,4 @@ tensorflowjs_converter \
     * `权重文件`：对应训练所得到的各 tensor 权重信息。权重文件的数量取决于网络的结构。
 * [点击链接](https://github.com/tensorflow/tfjs-converter) 获取更多 tfjs-converter 的信息。
 
-若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](http://tensorspace.org/html/docs/basicLoad_zh.html)。
+若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](https://tensorspace.org/html/docs/basicLoad_zh.html)。

@@ -64,7 +64,7 @@ Option 2: Yarn
 yarn add tensorspace
 ```
 
-Option 3: [Website download page](http://tensorspace.org/index.html#download)
+Option 3: [Website download page](https://tensorspace.org/index.html#download)
 
 * **Step 2: Install Dependency**
 
@@ -164,7 +164,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **LeNet** 
 
-[➡ Live Demo](http://tensorspace.org/html/playground/lenet.html)
+[➡ Live Demo](https://tensorspace.org/html/playground/lenet.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
@@ -175,7 +175,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **AlexNet** 
 
-[➡ Live Demo](http://tensorspace.org/html/playground/alexnet.html)
+[➡ Live Demo](https://tensorspace.org/html/playground/alexnet.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_alexnet.gif">
@@ -186,7 +186,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **Yolov2-tiny**
 
-[➡ Live Demo](http://tensorspace.org/html/playground/yolov2-tiny.html)
+[➡ Live Demo](https://tensorspace.org/html/playground/yolov2-tiny.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_yolov2.gif">
@@ -197,7 +197,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **ResNet-50**
 
-[➡ Live Demo](http://tensorspace.org/html/playground/resnet50.html)
+[➡ Live Demo](https://tensorspace.org/html/playground/resnet50.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_resnet50.gif">
@@ -208,7 +208,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **Vgg16**
 
-[➡ Live Demo](http://tensorspace.org/html/playground/vgg16.html)
+[➡ Live Demo](https://tensorspace.org/html/playground/vgg16.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_vgg.gif">
@@ -219,7 +219,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **ACGAN**
 
-[➡ Live Demo](http://tensorspace.org/html/playground/acgan.html)
+[➡ Live Demo](https://tensorspace.org/html/playground/acgan.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_acgan.gif">
@@ -230,7 +230,7 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 * **MobileNetv1**
 
-[➡ Live Demo](http://tensorspace.org/html/playground/mobilenetv1.html)
+[➡ Live Demo](https://tensorspace.org/html/playground/mobilenetv1.html)
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_mobilenetv1.gif">
@@ -241,12 +241,12 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 
 ## Documentation
 
-* For a quick start, checkout [Getting Start](http://tensorspace.org/html/docs/startHello.html)
-* To download/install, see [Download](http://tensorspace.org/index.html#download)
-* To learn more about the [Basic Concepts](http://tensorspace.org/html/docs/basicIntro.html)
-* To process a deep learning model, checkout [Model Preprocessing](http://tensorspace.org/html/docs/preIntro.html)
-* To learn core components: [Models](http://tensorspace.org/html/docs/modelIntro.html), [Layers](http://tensorspace.org/html/docs/layerIntro.html) and [Merge Function](http://tensorspace.org/html/docs/mergeIntro.html)
-* Checkout the official website [TensorSpace.org](http://tensorspace.org) for more about TensorSpace.
+* For a quick start, checkout [Getting Start](https://tensorspace.org/html/docs/startHello.html)
+* To download/install, see [Download](https://tensorspace.org/index.html#download)
+* To learn more about the [Basic Concepts](https://tensorspace.org/html/docs/basicIntro.html)
+* To process a deep learning model, checkout [Model Preprocessing](https://tensorspace.org/html/docs/preIntro.html)
+* To learn core components: [Models](https://tensorspace.org/html/docs/modelIntro.html), [Layers](https://tensorspace.org/html/docs/layerIntro.html) and [Merge Function](https://tensorspace.org/html/docs/mergeIntro.html)
+* Checkout the official website [TensorSpace.org](https://tensorspace.org) for more about TensorSpace.
 
 ## Contributors
 

@@ -255,4 +255,4 @@ tensorflowjs_converter \
 * The weight files are named like "group1-shard1of1" which are used and written within the `model.json` file. Hence we **DO NOT** suggest to modify the name of weight files, unless really necessary. If you really want to modify them, please modify the content in the `.json` (i.e. `model.json`) as well.
 * For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
 
-If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](http://tensorspace.org/html/docs/basicLoad.html).
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](https://tensorspace.org/html/docs/basicLoad.html).

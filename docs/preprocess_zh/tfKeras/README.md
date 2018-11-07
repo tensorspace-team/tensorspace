@@ -299,4 +299,4 @@ tensorflowjs_converter \
 * 权重文件都将以 "group1-shard1of1" 的格式命名并在 “model.json” 声明其关联性。因此，我们建议不要更改权重文件的名称。如有情况需要修改的，请妥善修改 “.json” (“model.json”) 中的关联信息。
 * [点击链接](https://github.com/tensorflow/tfjs-converter)获取更多 tfjs-converter 的信息。
 
-若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](http://tensorspace.org/html/docs/basicLoad_zh.html)。
+若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](https://tensorspace.org/html/docs/basicLoad_zh.html)。

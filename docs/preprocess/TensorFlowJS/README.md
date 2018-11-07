@@ -303,4 +303,4 @@ async function saveModel() {
 saveModel();
 ```
 
-If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](http://tensorspace.org/html/docs/basicLoad.html).
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](https://tensorspace.org/html/docs/basicLoad.html).

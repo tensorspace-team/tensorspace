@@ -354,5 +354,5 @@ tensorflowjs_converter \
     * Some weight files which contains actual weight values. The number of weight files is dependent on the size and structure of the given model.
 * For more detailed information about tfjs-converter, you can visit [here](https://github.com/tensorflow/tfjs-converter).
 
-If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](http://tensorspace.org/html/docs/basicLoad.html).
+If everything looks good, you shall be ready for the next step - [Load a TensorSpace compatible model](https://tensorspace.org/html/docs/basicLoad.html).
 

@@ -330,4 +330,4 @@ async function saveModel() {
 saveModel();
 ```
 
-若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](http://tensorspace.org/html/docs/basicLoad_zh.html)。
+若至此一切顺利，可移步下一部分——[加载 TensorSpace 适配模型](https://tensorspace.org/html/docs/basicLoad_zh.html)。
