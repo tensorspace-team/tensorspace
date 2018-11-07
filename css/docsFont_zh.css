@@ -17,3 +17,7 @@ main > header {
 .img-label-number {
     font-family: PingFang-SC-Bold, sans-serif;
 }
+
+main {
+    line-height: 25px;
+}
