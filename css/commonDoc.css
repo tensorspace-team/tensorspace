@@ -611,11 +611,6 @@ footer {
     width: 100%;
 }
 
-.cp_embed_wrapper {
-    margin-top: 30px;
-    width: 90%;
-}
-
 .img-label {
     width: 100%;
     text-align: center;
@@ -628,16 +623,20 @@ footer {
     bottom: 60px;
     right: 20px;
     z-index: 99;
-    border: none;
     outline: none;
     background-color:rgba(242, 242, 242, 0.5);
     color: #b3b3b3;
     cursor: pointer;
     padding: 15px;
     border-radius: 10px;
-    font-size: 18px;
     width:60px;
     height:60px;
+    border: 1px solid #d9d9d9;
+
+}
+
+#topButton .material-icons {
+    font-size: 30px;
 }
 
 .ripple{
