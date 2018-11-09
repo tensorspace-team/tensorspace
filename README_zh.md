@@ -11,8 +11,9 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/tensorspace"><img src="https://img.shields.io/npm/v/tensorspace.svg" alt="npm version" height="18"></a>
   <a href="https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-green.svg" alt="license badge"></a>
-  <a href="https://github.com/mrdoob/three.js/"><img src="https://img.shields.io/badge/dependencies-Three.js-brightgreen.svg" alt="dependencies badge"></a>
-      <a href="https://github.com/tensorflow/tfjs"><img src="https://img.shields.io/badge/dependencies-TensorFlow.js-brightgreen.svg" alt="dependencies badge"></a>
+  <a href="https://github.com/tensorflow/tfjs"><img src="https://img.shields.io/badge/dependencies-tfjs-brightgreen.svg" alt="dependencies badge"></a>
+  <a href="https://github.com/mrdoob/three.js"><img src="https://img.shields.io/badge/dependencies-three.js-brightgreen.svg" alt="dependencies badge"></a>
+  <a href="https://github.com/tweenjs/tween.js"><img src="https://img.shields.io/badge/dependencies-tween.js-brightgreen.svg" alt="dependencies badge"></a>
   <a href="https://travis-ci.org/syt123450/giojs"><img src="https://travis-ci.org/syt123450/giojs.svg" alt="build"></a>
 </p>
 
@@ -40,7 +41,7 @@ TensorSpace 支持3D可视化所有经过适当预处理之后的 TensorFlow、K
 
 ## <div id="motivation">TensorSpace 使用场景</div>
 
-TensorSpace 基于TensorFlow.js和Three.js开发，用于对神经网络进行3D可视化呈现。通过使用 TensorSpace，不仅仅能展示神经网络的结构，还可以呈现网络的内部特征提取、中间层的数据交互以及最终的结果预测等一系列过程。
+TensorSpace 基于 TensorFlow.js、Three.js 和 Tween.js 开发，用于对神经网络进行3D可视化呈现。通过使用 TensorSpace，不仅仅能展示神经网络的结构，还可以呈现网络的内部特征提取、中间层的数据交互以及最终的结果预测等一系列过程。
 
 通过使用 TensorSpace，可以帮助您更直观地观察并理解基于TensorFlow、Keras或者TensorFlow.js开发的神经网络模型。
 TensorSpace 降低了前端开发者进行深度学习相关应用开发的门槛。

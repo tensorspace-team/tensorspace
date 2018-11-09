@@ -11,12 +11,13 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/tensorspace"><img src="https://img.shields.io/npm/v/tensorspace.svg" alt="npm version" height="18"></a>
   <a href="https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-green.svg" alt="license badge"></a>
-  <a href="https://github.com/mrdoob/three.js/"><img src="https://img.shields.io/badge/dependencies-Three.js-brightgreen.svg" alt="dependencies badge"></a>
-      <a href="https://github.com/tensorflow/tfjs"><img src="https://img.shields.io/badge/dependencies-TensorFlow.js-brightgreen.svg" alt="dependencies badge"></a>
+  <a href="https://github.com/tensorflow/tfjs"><img src="https://img.shields.io/badge/dependencies-tfjs-brightgreen.svg" alt="dependencies badge"></a>
+  <a href="https://github.com/mrdoob/three.js"><img src="https://img.shields.io/badge/dependencies-three.js-brightgreen.svg" alt="dependencies badge"></a>
+  <a href="https://github.com/tweenjs/tween.js"><img src="https://img.shields.io/badge/dependencies-tween.js-brightgreen.svg" alt="dependencies badge"></a>
   <a href="https://travis-ci.org/syt123450/giojs"><img src="https://travis-ci.org/syt123450/giojs.svg" alt="build"></a>
 </p>
 
-TensorSpace is a neural network 3D visualization framework built by TensorFlow.js and Three.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports to visualize pre-trained model from TensorFlow, Keras and TensorFlow.js.
+TensorSpace is a neural network 3D visualization framework built by TensorFlow.js, Three.js and Tween.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports to visualize pre-trained model from TensorFlow, Keras and TensorFlow.js.
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
