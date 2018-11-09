@@ -12,6 +12,7 @@ aside {
     z-index: 10;
     border-right: 1px solid #548CA9;
     color: #548CA9;
+    overflow: auto;
 
 }
 
@@ -85,6 +86,7 @@ main {
     padding-top: 60px;
     border-left: 1px solid #6597AF;
     box-sizing: border-box;
+    overflow: auto;
 
 }
 

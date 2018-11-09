@@ -5,22 +5,6 @@ $(function() {
 
 	createModel();
 
-	$("#playgroundMenu").click(function() {
-		moveInHiddenContent();
-	});
-
-	$("#curtain").click(function() {
-		moveOutHiddenContent();
-	});
-
-	$("#close").hover(function() {
-		$("#close").attr("src", "../../assets/img/playground/close_hover.png");
-	}, function() {
-		$("#close").attr("src", "../../assets/img/playground/close.png");
-	}).click(function() {
-		moveOutHiddenContent();
-	});
-
 	$("#labelHolder > button").click(function() {
 		clearPreviousIndex();
 		labelIndex = parseInt($(this).attr("data-index"));
@@ -120,24 +104,6 @@ function createModel() {
 		$("#loadingPad").hide();
 
 	});
-
-}
-
-function moveInHiddenContent() {
-
-	$("#playgroundNav").animate({
-		left:"+=200px"
-	},500);
-	$("#curtain").fadeIn(500);
-
-}
-
-function moveOutHiddenContent() {
-
-	$("#playgroundNav").animate({
-		left:"-=200px"
-	},500);
-	$("#curtain").fadeOut(500);
 
 }
 
