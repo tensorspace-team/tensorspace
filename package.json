@@ -19,11 +19,11 @@
     "src": "source code"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^0.12.7",
+    "@tensorflow/tfjs": "^0.13.4",
     "@tweenjs/tween.js": "^17.2.0",
     "install": "^0.12.1",
     "npm": "^6.4.1",
-    "three": "^0.97.0"
+    "three": "^0.98.0"
   },
   "devDependencies": {
     "all-contributors-cli": "^5.3.0",
