@@ -76,11 +76,11 @@
     position: relative;
 }
 
-#iconGroup > div > a {
+#iconGroup > div > div > a {
     display: block;
 }
 
-#iconGroup > div > a > div {
+#iconGroup > div > div {
 
     position: relative;
     left: 0;
@@ -97,19 +97,22 @@
     transition-duration: 0.35s;
 }
 
-#iconGroup > div > a > div > img {
+#iconGroup > div > div > a > img {
     float: left;
 }
 
-#iconGroup > div > a > div > p {
+#iconGroup > div > div > a > p {
     width: auto;
     float: left;
     margin-top: 10px;
 }
 
 #toStart {
-    color: #CDCECF;
     background: linear-gradient(to right, #0c50bc, #299ae2);
+}
+
+#toStart > a {
+    color: #CDCECF;
 }
 
 #toStart:hover {
@@ -117,8 +120,12 @@
 }
 
 #toPlayground {
-    color: #04BEFE;
     border: 1px solid #04BEFE;
+    color: #6EDEFE;
+}
+
+#toPlayground > a {
+    color: #04BEFE;
 }
 
 #iconGroup #toPlayground {
@@ -127,11 +134,17 @@
 
 #toPlayground:hover {
     border-color: #6edefe;
+}
+
+#toPlayground:hover > a {
     color: #6EDEFE;
 }
 
 #toGithub {
     background-color: #bbbbbb;
+}
+
+#toGithub > a {
     color: #000;
 }
 
@@ -139,21 +152,21 @@
     background-color: #f2f2f2;
 }
 
-#iconGroup > div > a > div > img {
+#iconGroup > div > div > a > img {
     height: 40px;
     margin-left: 5px;
     margin-top: 2px;
 }
 
-#toStart > img {
+#toStart > a > img {
     margin-right: 12px;
 }
 
-#toPlayground > img {
+#toPlayground > a > img {
     margin-right: 10px;
 }
 
-#toGithub > img {
+#toGithub > a > img {
     margin-right: 20px;
 }
 
