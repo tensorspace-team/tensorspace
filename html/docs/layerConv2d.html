@@ -321,14 +321,14 @@
         <div>Conv2d layer is often used in image processing model and extract the feature from the images.</div>
         <div class="sub-title">Constructor</div>
         <div>Two methods to create a new layer. Arguments are required.</div>
-        <div>〔Method 1〕Use <span class="span_bold">filters</span>, <span class="span_bold">kernalSize</span>
+        <div>〔Method 1〕Use <span class="span_bold">filters</span>, <span class="span_bold">kernelSize</span>
             and <span class="span_bold">strides</span></div>
         <div class="code-snippet">
-            <pre><code class="Javascript">TSP.layers.Conv2d( { filters : Int, kernaleSize: Int, strides: Int } );</code></pre>
+            <pre><code class="Javascript">TSP.layers.Conv2d( { filters : Int, kernelSize: Int, strides: Int } );</code></pre>
         </div>
         <div>〔Method 2〕Use <span class="span_bold">shape</span> and <span class="span_bold">filters</span></div>
         <div class="code-snippet">
-            <pre><code class="Javascript">TSP.layers.Conv2d( { fileters : Int , shape : [ Int, Int ] } )</code></pre>
+            <pre><code class="Javascript">TSP.layers.Conv2d( { filters : Int , shape : [ Int, Int ] } )</code></pre>
         </div>
         <img class="tag-img" src="../../assets/img/docs/Conv2d.jpg">
         <div class="img-label">
@@ -398,7 +398,7 @@
                     <p>strides</p>
                     <p><a href="#iconOptional">⚙️</a><a href="#iconModel">📦</a>️</p>
                 </th>
-                <td><span class="highlight-text">Int[]</span></td>
+                <td><span class="highlight-text">Int</span></td>
                 <td>The strides of the convolution</td>
                 <td>Strides in both dimensions are equal [default] Automatic inference strides = [1, 1]</td>
             </tr>
@@ -552,7 +552,6 @@ conv2dLayer.closeLayer();</code></pre>
     strides: 1,
     animationTimeRatio: 2,
     name: "conv2d1",
-    opacityRatio: 2,
     initStatus: "open"
 
 } );

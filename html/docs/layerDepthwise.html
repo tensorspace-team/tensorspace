@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Layer - Conv1d</title>
+    <title>Layer - DepthwiseConv2d</title>
 
     <meta name="description" content="Documentation page of TensorSpace.js">
     <meta name="author" content="syt123450 / https://github.com/syt123450">
@@ -43,7 +43,7 @@
         </div>
 
         <ul class="hidden-xs">
-             <li class="now"><a href="startIntro.html">Documentation</a></li>
+            <li class="now"><a href="startIntro.html">Documentation</a></li>
             <li><a href="../playground/index.html">Playground</a></li>
             <!--<li><a href="../gallery.html">Gallery</a></li>-->
             <li><a href="../../index.html#download">Download</a></li>
@@ -82,7 +82,7 @@
             <div>EN</div>
         </div>
         <div>
-            <div><a href="layerConv1d_zh.html">中</a></div>
+            <div><a href="layerDepthwise_zh.html">中</a></div>
         </div>
     </div>
 
@@ -157,9 +157,10 @@
         </div>
         <ul id="layerS">
             <li><a href="layerIntro.html">Introduction</a></li>
-            <li class="nowLabel">Conv1d</li>
+            <li><a href="layerConv1d.html">Conv1d</a></li>
             <li><a href="layerConv2d.html">Conv2d</a></li>
             <li><a href="layerTranspose.html">Conv2dTranspose</a></li>
+            <li class="nowLabel">DepthwiseConv2d</li>
             <li><a href="layerCropping1d.html">Cropping1d</a></li>
             <li><a href="layerCropping2d.html">Cropping2d</a></li>
             <li><a href="layerDense.html">Dense</a></li>
@@ -270,9 +271,10 @@
             </div>
             <ul id="layer">
                 <li><a href="layerIntro.html">Introduction</a></li>
-                <li class="nowLabel">Conv1d</li>
+                <li><a href="layerConv1d.html">Conv1d</a></li>
                 <li><a href="layerConv2d.html">Conv2d</a></li>
                 <li><a href="layerTranspose.html">Conv2dTranspose</a></li>
+                <li class="nowLabel">DepthwiseConv2d</li>
                 <li><a href="layerCropping1d.html">Cropping1d</a></li>
                 <li><a href="layerCropping2d.html">Cropping2d</a></li>
                 <li><a href="layerDense.html">Dense</a></li>
@@ -317,22 +319,18 @@
     </aside>
 
     <main>
-        <header>Conv1d</header>
-        <div>Conv1d layer is often used in pattern recognition model and extract the feature from the vectors.</div>
+        <header>DepthwiseConv2d</header>
+        <div>DepthwiseConv2d performs the first step in a depthwise spatial convolution, apply convolution operation on each input channel separately.</div>
         <div class="sub-title">Constructor</div>
         <div>Two methods to create a new layer. Arguments are required.</div>
-        <div>〔Method 1〕Use <span class="span_bold">filters</span>, <span class="span_bold">kernelSize</span>
+        <div>〔Method 1〕Use <span class="span_bold">kernelSize</span>
             and <span class="span_bold">strides</span></div>
         <div class="code-snippet">
-            <pre><code class="Javascript">TSP.layers.Conv1d( { filters : Int, kernelSize: Int, strides: Int } );</code></pre>
+            <pre><code class="Javascript">TSP.layers.DepthwiseConv2d( { kernelSize: Int, strides: Int } );</code></pre>
         </div>
-        <div>〔Method 2〕Use <span class="span_bold">shape</span> and <span class="span_bold">filters</span></div>
-        <div class="code-snippet">
-            <pre><code class="Javascript">TSP.layers.Conv1d( { filters : Int , shape : [ Int ] } );</code></pre>
-        </div>
-        <img class="tag-img" src="../../assets/img/docs/Conv1d.jpg">
+        <img class="tag-img" src="../../assets/img/docs/Conv2d.jpg">
         <div class="img-label">
-            <span class="img-label-number">Fig. 1</span> - Conv1d layer collapse and expand
+            <span class="img-label-number">Fig. 1</span> - DepthwiseConv2d layer collapse and expand
         </div>
         <div class="sub-title">Arguments</div>
         <table class="table table-striped table-bordered table-hover">
@@ -347,12 +345,21 @@
             <tbody>
             <tr>
                 <th scope="row">
-                    <p>filters</p>
+                    <p>kernelSize</p>
                     <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
                 </th>
                 <td><span class="highlight-text">Int</span></td>
-                <td>Amount of filters</td>
-                <td>filters: 16</td>
+                <td>The dimension of the convolution window</td>
+                <td>The 2d convolutional window is square. kernelSize: 3</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>strides</p>
+                    <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
+                </th>
+                <td><span class="highlight-text">Int</span></td>
+                <td>The strides of the convolution</td>
+                <td>Strides in both dimensions are equal [default] Automatic inference strides = [1, 1]</td>
             </tr>
             <tr>
                 <th scope="row">
@@ -377,30 +384,14 @@
             </tr>
             <tr>
                 <th scope="row">
-                    <p>shape</p>
-                    <p><a href="#iconOptional">⚙️</a><a href="#iconModel">📦</a>️</p>
-                </th>
-                <td><span class="highlight-text">Int[]</span></td>
-                <td>Output shape</td>
-                <td>Data format is channel last. For example, shape = [ 28, 6 ] represents 6 feature maps and each one is 28.</td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <p>kernelSize</p>
-                    <p><a href="#iconOptional">⚙️</a><a href="#iconModel">📦</a>️</p>
+                    <p>depthMultiplier</p>
+                    <p><a href="#iconSuggest">🔧</a><a href="#iconModel">📦</a></p>
                 </th>
                 <td><span class="highlight-text">Int</span></td>
-                <td>The dimension of the convolution window</td>
-                <td>kernelSize: 3 The 1d convolutional window is a vector. </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <p>strides</p>
-                    <p><a href="#iconOptional">⚙️</a><a href="#iconModel">📦</a>️</p>
-                </th>
-                <td><span class="highlight-text">Int[]</span></td>
-                <td>The strides of the convolution</td>
-                <td>[default] Automatic inference strides = 1</td>
+                <td>The number of depthwise convolution output channels for each input channel.</td>
+                <td>
+                    Default to 1. For example, if input channel is 32, the default output channel would be 32, if depthMultiplier = 2, the output channel would be 64.
+                </td>
             </tr>
             <tr>
                 <th scope="row">
@@ -409,7 +400,7 @@
                 </th>
                 <td>color format</td>
                 <td>Color of layer</td>
-                <td>Conv1d default is light yellow #FFFF2E <span class="color-block" style="background-color: #FFFF2E"></span></td>
+                <td>DepthwiseConv2d default is #FBBF1F <span class="color-block" style="background-color: #FBBF1F"></span></td>
             </tr>
             <tr>
                 <th scope="row">
@@ -434,7 +425,7 @@
             </tr>
             <tr>
                 <th scope="row">
-                    <br>animation-<br>TimeRatio</p>
+                    <p>animation-<br>TimeRatio</p>
                     <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
                 </th>
                 <td><span class="highlight-text">Int</span></td>
@@ -447,24 +438,24 @@
         <div class="sub-title">Properties</div>
 
         <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L68" target="_blank">.inputShape</a> : <span class="highlight-text">Int[]</span></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of input tensor, for example inputShape = [ 28, 2 ] represents 2 feature vectors and length of each one is 28.</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of input tensor. For example, <span class="highlight-text">inputShape = [ 28, 28, 3 ]</span> represents 3 feature maps and each one is 28 by 28.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After <span class="highlight-text">model.init()</span> data is available, otherwise is undefined.</div>
 
         <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L69" target="_blank">.outputShape</a> : <span class="highlight-text">Int[]</span></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of output tensor is 2-dimensional. <a href="basicDimension.html">2️⃣</a></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat is channel last. for example outputShape = [ 32, 4 ] represents the output through this layer has 4 feature vectors and length of each one is 32.</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of the output tensor is 3-dimensional. <a href="basicDimension.html">3️⃣</a></div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The dataFormat is "channel last". For example, <span class="highlight-text">outputShape = [ 32, 32, 4 ]</span> represents the output through this layer has 4 feature maps and each one is 32 by 32.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After <span class="highlight-text">model.init()</span> data is available, otherwise is undefined.</div>
 
         <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52" target="_blank">.neuralValue</a> : <span class="highlight-text">Int[]</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The intermediate raw data after this layer.</div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After load and model.predict() data is available, otherwise is undefined.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After load and <span class="highlight-text">model.init()</span>, the data are available. Otherwise is undefined.</div>
 
         <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/Layer.js#L242" target="_blank">.name</a> : <span class="highlight-text">String</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The custom name for this layer.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 
         <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/b51397827a38243c33ad38f993a56c6412c54c0e/src/layer/abstract/Layer.js#L251" target="_blank">.layerType</a> : <span class="highlight-text">String</span></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer, return a constant: string <span class="span_bold">Conv1d</span>.</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer, return a constant: string <span class="span_bold">DepthwiseConv2d</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 
         <div class="sub-title">Method</div>
@@ -474,35 +465,34 @@
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Link this layer to layer which is the <span class="span_bold">previous layer</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To crete a link between this layer and the previous layer. You don't need to use this method specifically to create links in <a href="modelSequential.html">Sequential Model</a>; Instead, you can simply add layers along the lines of <span class="span_bold">Keras</span> or <span class="span_bold">TensorFlow.js</span> build the model syntax.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">let inputLayer = new TSP.layers.Input1d( {
+            <pre><code class="Javascript">let conv2d = new TSP.layers.Conv2d( {
 
-    shape: [28]
+    shape: [28, 28],
+    filters: 32
 
 } );
 
-let convLayer = new TSP.layers.Conv1d( {
+let dwConv2d = new TSP.layers.DepthwiseConv2d( {
 
-    kernelSize: 2,
-    filters: 16,
+    kernelSize: 3,
     strides: 1
 
 } );
 
-convLayer.apply( inputLayer );</code></pre>
+dwConv2d.apply( conv2d );</code></pre>
         </div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L412" target="_blank">.openLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer3d.js#L459" target="_blank">.openLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Click on the layer directly to open it by interacting directly with the object in the 3D scene.</div>
-        <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-open.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>In code, calling the method to open it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">let conv1dLayer = new TSP.layers.Conv1d( {
+            <pre><code class="Javascript">let dwConv2d = new TSP.layers.DepthwiseConv2d( {
 
-    // configure some parameters for Conv1d.
+    // configure some parameters for DepthwiseConv2d.
 
 } );
 
-model.add( conv1dLayer );
+model.add( dwConv2d );
 
 // ... add more layers for model.
 
@@ -510,21 +500,20 @@ model.init();
 
 // Call openLayer API to open layer.
 
-conv1dLayer.openLayer();</code></pre>
+dwConv2d.openLayer();</code></pre>
         </div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer2d.js#L432" target="_blank">.closeLayer()</a> : void</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/NativeLayer3d.js#L475" target="_blank">.closeLayer()</a> : void</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>To close by interacting directly with objects in a 3D scene by clicking the close button.</div>
-        <!--<img class="tag-img" src="../../assets/img/docs/Conv2d-close.gif">-->
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i> In code, calling the method to close it.</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">let conv1dLayer = new TSP.layers.Conv1d( {
+            <pre><code class="Javascript">let dwConv2d = new TSP.layers.DepthwiseConv2d( {
 
-    // configure some parameters for Conv1d.
+    // configure some parameters for DepthwiseConv2d.
 
 } );
 
-model.add( conv1dLayer );
+model.add( dwConv2d );
 
 // ... add more layers for model.
 
@@ -532,41 +521,40 @@ model.init();
 
 // If this layer already opened, call closeLayer API to close layer.
 
-conv1dLayer.closeLayer();</code></pre>
+dwConv2d.closeLayer();</code></pre>
         </div>
 
         <div class="sub-title">Example</div>
 
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of Conv1D to facilitate reuse</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i> Declare an instance of DepthwiseConv2d to facilitate reuse</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">let convLayer = new TSP.layers.Conv1d( {
+            <pre><code class="Javascript">let dwConv2d = new TSP.layers.DepthwiseConv2d( {
 
-    kernelSize: 5,
-    filters: 6,
+    kernelSize: 3,
     strides: 1,
+    depthMultiplier: 2,
     animationTimeRatio: 2,
-    name: "conv1d1",
+    name: "depthwiseConv2d1",
     initStatus: "open"
 
 } );
 
-model.add( convLayer );</code></pre>
+model.add( dwConv2d );</code></pre>
         </div>
 
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add Conv1D directly</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Add DepthwiseConv2d directly</div>
         <div class="code-snippet">
-            <pre><code class="Javascript">model.add(new TSP.layers.Conv1d( {
+            <pre><code class="Javascript">model.add(new TSP.layers.DepthwiseConv2d( {
 
-    kernelSize: 5,
-    filters: 16,
+    kernelSize: 3,
     strides: 1,
-    name: "conv1d2"
+    name: "depthwiseConv2d2"
 
 } ));</code></pre>
         </div>
 
         <div class="sub-title">Use Case</div>
-        <div>When you add convolution layer with Keras | TensorFlow | tfjs in your model the corresponding API is Conv1d in TensorSpace.</div>
+        <div>When you add convolutional layer with Keras | TensorFlow | tfjs in your model the corresponding API is DepthwiseConv2d in TensorSpace.</div>
         <table class="table table-striped table-bordered table-hover table-responsive">
             <thead>
             <tr>
@@ -578,17 +566,17 @@ model.add( convLayer );</code></pre>
             <tbody>
             <tr>
                 <th scope="row"><a href="https://keras.io/layers/convolutional/" target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv1D(filters, kernel_size, strides=1)</td>
+                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv1d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv1d(input, filter, strides, padding)</td>
+                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
+                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv1d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv1d (filters, inputShape)</td>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
+                <td>tf.layers.conv2d (filters, inputShape)</td>
 
             </tr>
             </tbody>
@@ -617,7 +605,7 @@ model.add( convLayer );</code></pre>
                 <td>Recommended for giving. The API can work without them.</td>
             </tr>
             <tr id="iconOptional">
-                <th scope="row">⚙️</th>
+                <th scope="row">⚙️️</th>
                 <td>Optional</td>
                 <td>As an auxiliary adjustment parameter when used, selectively added according to the specific situation
                     The parameters here have no effect on the structure of the layer (3D visualized form).</td>
@@ -641,7 +629,7 @@ model.add( convLayer );</code></pre>
         </table>
 
         <div class="sub-title">Source Code</div>
-        <div><a href="https://github.com/tensorspace-team/tensorspace/blob/master/src/layer/intermediate/Conv1d.js" target="_blank">tensorspace/src/layer/intermediate/Conv1d.js</a></div>
+        <div><a href="https://github.com/tensorspace-team/tensorspace/blob/master/src/layer/intermediate/DepthwiseConv2d.js" target="_blank">tensorspace/src/layer/intermediate/DepthwiseConv2d.js</a></div>
 
     </main>
 </div>
