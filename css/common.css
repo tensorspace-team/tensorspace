@@ -396,4 +396,8 @@ pre {
         font-size: 18px;
         margin-left: 10px;
     }
+
+    .language {
+        right: 63px;
+    }
 }

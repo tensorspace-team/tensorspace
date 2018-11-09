@@ -104,15 +104,15 @@ main > p {
 
     display: none;
     position: fixed;
-    top: 70px;
+    top: 75px;
     left: 35px;
-    height: 50px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
     line-height: 50px;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.3);
     z-index: 2;
-    font-size: 30px;
+    font-size: 25px;
     color: #548CA9;
     cursor: pointer;
     border-radius: 5px;
