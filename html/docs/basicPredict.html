@@ -320,52 +320,52 @@
     <main>
         <header>Predict</header>
         <div>'Predict' is the way to gather the computed data from the loaded pre-trained models (e.g. TensorFlow, Keras, TensorFlow.js models). All outputs from intermediate layers are required and delivered to the corresponding visualization components.</div>
-        <div>The functionality of 'Predict' is realized by <span class="highlight-text">.predict( input_data )</span> method of the constructed model object.</div>
+        <div>The functionality of 'Predict' is realized by <span class="highlight-text">.predict( inputData, callback )</span> method of the constructed model object.</div>
         <div>After we <a href="basicLoad.html">Load</a> a ML model properly we can simply call the method as:</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">model.predict( predictData, predictCallback );</code></pre>
+            <pre><code class="Javascript">model.predict( predictData, callback );</code></pre>
         </div>
 
         <div class="sub-title">predictData</div>
 
-        <div><span class="highlight-text">predict_data</span> is actually a list. It could be one or more lists of numbers.</div>
+        <div><span class="highlight-text">predictData</span> is actually a list. It could be one or more lists of numbers.</div>
 
         <div class="panel-heading span_bold"><i class="material-icons">filter_center_focus</i>
             For <a href="modelSequential.html">Sequential()</a> models
         </div>
 
-        <div>In most cases, we can configure the <span class="highlight-text">predict_data</span> like:</div>
+        <div>In most cases, we can configure the <span class="highlight-text">predictData</span> like:</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">predict_data = [ 1, 2, 3, 4, 5 ];</code></pre>
+            <pre><code class="Javascript">predictData = [ 1, 2, 3, 4, 5 ];</code></pre>
         </div>
 
-        <div>The <span class="highlight-text">predict_data</span> is a single list of numbers which is the input image data we want to used for prediction.</div>
+        <div>The <span class="highlight-text">predictData</span> is a single list of numbers which is the input image data we want to used for prediction.</div>
 
-        <div>If the model accepts multiple inputs, we ned to configure the <span class="highlight-text">predict_data</span> like:</div>
+        <div>If the model accepts multiple inputs, we ned to configure the <span class="highlight-text">predictData</span> like:</div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">let data1 = [ 1, 2, 3, 4, 5 ];
 let data2 = [ 1, 2, 3, 4, 5 ];
-predict_data = [ data1, data2 ];</code></pre>
+predictData = [ data1, data2 ];</code></pre>
         </div>
 
-        <div>The <span class="highlight-text">predict_data</span> contains some lists of numbers.</div>
+        <div>The <span class="highlight-text">predictData</span> contains some lists of numbers.</div>
 
         <div class="panel-heading span_bold"><i class="material-icons">filter_center_focus</i>
             For <a href="modelFunctional.html">Model()</a> models
         </div>
 
-        <div>For example, we can configure the <span class="highlight-text">predict_data</span> like:</div>
+        <div>For example, we can configure the <span class="highlight-text">predictData</span> like:</div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">let data1 = [ 1, 2, 3, 4, 5 ];
 let data2 = [ 1, 2, 3, 4, 5 ];
-predict_data = [ data1, data2 ];</code></pre>
+predictData = [ data1, data2 ];</code></pre>
         </div>
 
-        <div>The <span class="highlight-text">predict_data</span> contains some lists of numbers. Depends on the model structure, we may add one or more list in the <span class="highlight-text">predict_data</span>.</div>
+        <div>The <span class="highlight-text">predictData</span> contains some lists of numbers. Depends on the model structure, we may add one or more list in the <span class="highlight-text">predictData</span>.</div>
 
         <div class="sub-title">callback</div>
 

@@ -320,49 +320,49 @@
     <main>
         <header>预测</header>
         <div>在 TensorSpace 中，“预测”指的是通过像加载的神经网络模型提供必要的输入数据，收集所有目标中间层的输出数据，并以此来渲染可视化模型的一系列过程。</div>
-        <div>“预测”的功能由各构建的 TensorSpace 模型中的 <span class="highlight-text">.predict( predictData, predictCallback )</span> 方法来实现。</div>
+        <div>“预测”的功能由各构建的 TensorSpace 模型中的 <span class="highlight-text">.predict( predictData, callback )</span> 方法来实现。</div>
         <div>在我们正确地加载神经网络模型之后，我们可以十分简单地使用 <span class="highlight-text">.predict()</span> 方法：</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">model.predict( predictData, predictCallback );</code></pre>
+            <pre><code class="Javascript">model.predict( predictData, callback );</code></pre>
         </div>
 
         <div class="sub-title">predictData</div>
 
-        <div><span class="highlight-text">predict_data</span> 实际上是一个列表. 它可以包含一个或多个数的列表。</div>
+        <div><span class="highlight-text">predictData</span> 实际上是一个列表. 它可以包含一个或多个数的列表。</div>
 
         <div class="panel-heading span_bold"><i class="material-icons">filter_center_focus</i>
             当使用 <a href="modelSequential_zh.html">Sequential()</a> 创建模型时
         </div>
 
-        <div>在大多数情况下，我们可以参照以下例子来提供合适的 <span class="highlight-text">predict_data</span> :</div>
+        <div>在大多数情况下，我们可以参照以下例子来提供合适的 <span class="highlight-text">predictData</span> :</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">predict_data = [ 1, 2, 3, 4, 5 ];</code></pre>
+            <pre><code class="Javascript">predictData = [ 1, 2, 3, 4, 5 ];</code></pre>
         </div>
 
-        <div>从上例可以看出， <span class="highlight-text">predict_data</span> 是一个单一的数的列表。它通常表示我们输入图像的信息。</div>
+        <div>从上例可以看出， <span class="highlight-text">predictData</span> 是一个单一的数的列表。它通常表示我们输入图像的信息。</div>
 
         <div>若该模型的输入为多输入时，我们需要使用以下方式来进行配置：</div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">let data1 = [ 1, 2, 3, 4, 5 ];
 let data2 = [ 1, 2, 3, 4, 5 ];
-predict_data = [ data1, data2 ];</code></pre>
+predictData = [ data1, data2 ];</code></pre>
         </div>
 
-        <div>这时， <span class="highlight-text">predict_data</span> 包含了数的列表。</div>
+        <div>这时， <span class="highlight-text">predictData</span> 包含了数的列表。</div>
 
         <div class="panel-heading span_bold"><i class="material-icons">filter_center_focus</i>
             当使用 <a href="modelFunctional_zh.html">Model()</a> 创建模型时
         </div>
 
-        <div>我们可以参照以下例子来提供合适的 <span class="highlight-text">predict_data</span> ：</div>
+        <div>我们可以参照以下例子来提供合适的 <span class="highlight-text">predictData</span> ：</div>
 
         <div class="code-snippet">
             <pre><code class="Javascript">let data1 = [ 1, 2, 3, 4, 5 ];
 let data2 = [ 1, 2, 3, 4, 5 ];
-predict_data = [ data1, data2 ];</code></pre>
+predictData = [ data1, data2 ];</code></pre>
         </div>
 
         <div>这时，<span class="highlight-text">predictData</span> 包含了数的列表。而我们究竟需要放入一个或者多个数的列表，取决于当前神经网络模型的结构（是否多输入）。</div>
