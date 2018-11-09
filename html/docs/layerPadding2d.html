@@ -353,7 +353,7 @@
                     <p>name</p>
                     <p><a href="#iconSuggest">🔧</a></p>
                 </th>
-                <td>String</td>
+                <td><span class="highlight-text">String</span></td>
                 <td>Name of this layer. <span class="span_bold">Highly recommend</span> to arrange to make code more readable.</td>
                 <td>name: "layerName"</td>
             </tr>
@@ -371,7 +371,7 @@
                     <p>closeButton</p>
                     <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
                 </th>
-                <td>Dict</td>
+                <td><span class="highlight-text">Dict</span></td>
                 <td>Close button appearance control dict, <a href="basicClose.html">more about close button</a></td>
                 <td><p><span class="span_bold">display</span> : Boolean. true[default] Show button, false Hide button</p>
                     <p><span class="span_bold">ratio</span> : Int. Times to normal size, default is 1</p>
@@ -383,7 +383,7 @@
                     <p>initStatus</p>
                     <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
                 </th>
-                <td>String</td>
+                <td><span class="highlight-text">String</span></td>
                 <td>Layer status at beginning. <span class="span_bold">Open</span> or <span class="span_bold">Close</span></td>
                 <td>close[default] : Closed at beginning</td>
             </tr>
@@ -392,7 +392,7 @@
                     <p>animation-<br>TimeRatio</p>
                     <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
                 </th>
-                <td>Int</td>
+                <td><span class="highlight-text">Int</span></td>
                 <td>The speed of open and close animation</td>
                 <td>Integer for multiple of speed. For example, 2 for 2 times of basic speed.</td>
             </tr>
@@ -401,24 +401,24 @@
 
         <div class="sub-title">Properties</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L68" target="_blank">.inputShape</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L68" target="_blank">.inputShape</a> : <span class="highlight-text">Int[]</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of input tensor, for example inputShape = [ 28, 28, 3 ] represents 3 feature maps and each one is 28 by 28.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined.</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L69" target="_blank">.outputShape</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L69" target="_blank">.outputShape</a> : <span class="highlight-text">Int[]</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The shape of output tensor is 3-dimensional. <a href="basicDimension.html">3️⃣</a></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat is channel last. for example outputShape = [ 32, 32, 4 ] represents the output through this layer has 4 feature maps and each one is 32 by 32</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After model.init() data is available, otherwise is undefined.</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52" target="_blank">.neuralValue</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52" target="_blank">.neuralValue</a> : <span class="highlight-text">Int[]</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The intermediate raw data after this layer.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>After load and model.predict() data is available, otherwise is undefined.</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/Layer.js#L242" target="_blank">.name</a> : String</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/Layer.js#L242" target="_blank">.name</a> : <span class="highlight-text">String</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>The custom name for this layer.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/b51397827a38243c33ad38f993a56c6412c54c0e/src/layer/abstract/Layer.js#L251" target="_blank">.layerType</a> : String</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/b51397827a38243c33ad38f993a56c6412c54c0e/src/layer/abstract/Layer.js#L251" target="_blank">.layerType</a> : <span class="highlight-text">String</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Type of this layer, return a constant: string <span class="span_bold">Padding2d</span>.</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>Once created, you can get it.</div>
 

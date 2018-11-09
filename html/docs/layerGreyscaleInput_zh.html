@@ -344,7 +344,7 @@
                     <p>shape</p>
                     <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
                 </th>
-                <td>Int[]</td>
+                <td><span class="highlight-text">Int[]</span></td>
                 <td>输出的形状</td>
                 <td>dataFormat默认通道值在最后，例如，<span class="span_bold">shape = [ 28, 28 ]</span>，每幅图大小<span class="span_bold">28*28</span></td>
             </tr>
@@ -353,7 +353,7 @@
                     <p>name</p>
                     <p><a href="#iconSuggest">🔧</a></p>
                 </th>
-                <td>String</td>
+                <td><span class="highlight-text">String</span></td>
                 <td>层的命名<br><span class="span_bold">建议添加</span></td>
                 <td>name: “layerName”</td>
             </tr>
@@ -371,7 +371,7 @@
                     <p>closeButton</p>
                     <p><a href="#iconOptional">⚙️</a><a href="#iconStyle">🎨</a>️</p>
                 </th>
-                <td>Dict</td>
+                <td><span class="highlight-text">Dict</span></td>
                 <td>层关闭按钮外观控制列表， <a href="basicClose.html">查看详情</a></td>
                 <td><p><span class="span_bold">display</span> : Boolean. true [default] 显示按钮, false 隐藏按钮</p>
                     <p><span class="span_bold">ratio</span> : Int 为正常大小的几倍，默认为1倍</p>
@@ -382,7 +382,7 @@
                     <p>initStatus</p>
                     <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">️🎦</a></p>
                 </th>
-                <td>String</td>
+                <td><span class="highlight-text">String</span></td>
                 <td>初始化时，本层是否收缩</td>
                 <td>close[default] : 收缩</td>
             </tr>
@@ -391,7 +391,7 @@
                     <p>animation-<br>TimeRatio</p>
                     <p><a href="#iconOptional">⚙️</a><a href="#iconAnimation">🎦</a>️</p>
                 </th>
-                <td>Int</td>
+                <td><span class="highlight-text">Int</span></td>
                 <td>张开和伸缩的调整速度，呈倍速关系</td>
                 <td>例如2就是2倍，数字越大速度越快</td>
             </tr>
@@ -400,20 +400,20 @@
 
         <div class="sub-title">属性</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L69" target="_blank">.outputShape</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L69" target="_blank">.outputShape</a> : <span class="highlight-text">Int[]</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为2维 <a href="basicDimension_zh.html">2️⃣</a></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为2维，例如outputShape = [ 32, 32] 表示经过此层处理后，输出尺寸是32*32。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52" target="_blank">.neuralValue</a> : Int[]</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52" target="_blank">.neuralValue</a> : <span class="highlight-text">Int[]</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层层间输出值数组。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>载入模型，在 model.predict() 后才可以拿到数据，否则为undefined。</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/Layer.js#L242" target="_blank">.name</a> : String</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/38650f71af638527502fce69d9908a8228934b6f/src/layer/abstract/Layer.js#L242" target="_blank">.name</a> : <span class="highlight-text">String</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的自定义名称。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
-        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/b51397827a38243c33ad38f993a56c6412c54c0e/src/layer/abstract/Layer.js#L251" target="_blank">.layerType</a> : String</div>
+        <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/b51397827a38243c33ad38f993a56c6412c54c0e/src/layer/abstract/Layer.js#L251" target="_blank">.layerType</a> : <span class="highlight-text">String</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层的类型，返回一个定值，字符串<span class="span_bold">GreyscaleInput</span>。</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>创建后即可取到。</div>
 
