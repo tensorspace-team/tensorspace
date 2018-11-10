@@ -72,7 +72,15 @@ $(function() {
 
 function createModel() {
 
-	let container = document.getElementById( "modelArea" );
+	let windowWidth = document.body.clientWidth;
+
+	let container;
+
+	if ( windowWidth > 490 ) {
+		container = document.getElementById( "modelArea" );
+	} else {
+		container = document.getElementById( "smallModelArea" );
+	}
 
 	model = new TSP.models.Sequential( container, {
 

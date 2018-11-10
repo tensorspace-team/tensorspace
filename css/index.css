@@ -208,6 +208,12 @@
     height: 80%;
     background-color: #000;
     float: left;
+    display: block;
+}
+
+#smallModelArea {
+    display: none;
+    background-color: #000;
 }
 
 #gallery {
@@ -491,10 +497,10 @@ footer {
     }
 
     #modelArea {
-        width: 80%;
-        height: 30%;
-        margin-left: 10%;
-    }
+         width: 80%;
+         height: 30%;
+         margin-left: 10%;
+     }
 
     #explanation > div {
         width: 100%;
@@ -570,9 +576,43 @@ footer {
 
     }
 
+    #imgWrapper {
+        height: 180px;
+    }
+
+    #imgWrapper > img {
+        width: 180px;
+    }
+
+    #description {
+        height: 120px;
+    }
+
     #description > img {
         width: 80%;
         margin-left: 10%;
+    }
+
+    #smallModelArea {
+        display: block;
+        width: 80%;
+        height: 300px;
+        margin-left: 10%;
+        margin-bottom: 20px;
+        clear: both;
+    }
+
+    #modelArea {
+        display: none;
+    }
+
+    #galleryTitleIntro {
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    #download > div > div {
+        padding: 0 15px;
     }
 
 }
