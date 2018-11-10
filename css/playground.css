@@ -13,6 +13,7 @@ aside {
     border-right: 1px solid #548CA9;
     color: #548CA9;
     overflow: auto;
+    display: block;
 
 }
 
