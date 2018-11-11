@@ -132,12 +132,11 @@ model.add( new TSP.layers.Output1d({
 ```JavaScript
 model.load({
     type: "tfjs",
-    url: './lenetModel/mnist.json',
-    onComplete: function() {
-        console.log( "\"Hello World!\" from TensorSpace Loader." );
-    }
+    url: './lenetModel/mnist.json'
 });
-model.init();
+model.init(function(){
+    console.log("Hello World from TensorSpace!");
+});
 ```
 
 我们可以在浏览器中看到以下模型：

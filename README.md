@@ -127,12 +127,11 @@ Last, we should load our [preprocessed TensorSpace compatible model](https://git
 ```JavaScript
 model.load({
     type: "tfjs",
-    url: './lenetModel/mnist.json',
-    onComplete: function() {
-        console.log( "\"Hello World!\" from TensorSpace Loader." );
-    }
+    url: './lenetModel/mnist.json'
 });
-model.init();
+model.init(function(){
+    console.log("Hello World from TensorSpace!");
+});
 ```
 
 We can get the following model in the browser if everything looks good:
