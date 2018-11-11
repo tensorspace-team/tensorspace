@@ -577,7 +577,7 @@ footer {
     }
 
     #imgWrapper {
-        height: 180px;
+        height: auto!important;
     }
 
     #imgWrapper > img {
@@ -585,7 +585,7 @@ footer {
     }
 
     #description {
-        height: 120px;
+        height: 100px;
     }
 
     #description > img {
@@ -613,6 +613,10 @@ footer {
 
     #download > div > div {
         padding: 0 15px;
+    }
+
+    #introduce > div {
+        margin-top: 0;
     }
 
 }
