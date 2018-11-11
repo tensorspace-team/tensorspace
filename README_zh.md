@@ -35,6 +35,7 @@ TensorSpace 支持3D可视化所有经过适当预处理之后的 TensorFlow、K
 * [开始使用](#getting-start)
 * [使用样例](#example)
 * [文档](#documentation)
+* [更新日志](#changelog)
 * [开发人员](#contributors)
 * [联系方式](#contact)
 * [许可证](#license)
@@ -252,6 +253,10 @@ model.init(function() {
 * 如何使用神经网络模型，查看[模型预处理](https://tensorspace.org/html/docs/preIntro_zh.html)。
 * 了解核心组成构件：[模型](https://tensorspace.org/html/docs/modelIntro_zh.html)、[网络层](https://tensorspace.org/html/docs/layerIntro_zh.html) 以及 [网络层融合](https://tensorspace.org/html/docs/mergeIntro_zh.html)。
 * 希望获取更多 TensorSpace 的信息，请访问 TensorSpace 官方网站 [TensorSpace.org](https://tensorspace.org/index_zh.html)。
+
+## <div id="changelog">更新日志</div>
+
+[Releases](https://github.com/tensorspace-team/tensorspace/releases)
 
 ## <div id="contributors">开发人员</div>
 

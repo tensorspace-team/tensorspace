@@ -32,6 +32,7 @@ TensorSpace is a neural network 3D visualization framework built by TensorFlow.j
 * [Getting Start](#getting-start)
 * [Example](#example)
 * [Documentation](#documentation)
+* [Changelog](#changelog)
 * [Contributors](#contributors)
 * [Contact](#contact)
 * [License](#license)
@@ -248,6 +249,10 @@ We put the `predict( image_5 )` method in the callback function of `init()` to e
 * To process a deep learning model, checkout [Model Preprocessing](https://tensorspace.org/html/docs/preIntro.html)
 * To learn core components: [Models](https://tensorspace.org/html/docs/modelIntro.html), [Layers](https://tensorspace.org/html/docs/layerIntro.html) and [Merge Function](https://tensorspace.org/html/docs/mergeIntro.html)
 * Checkout the official website [TensorSpace.org](https://tensorspace.org) for more about TensorSpace.
+
+## Changelog
+
+[Releases](https://github.com/tensorspace-team/tensorspace/releases)
 
 ## Contributors
 
