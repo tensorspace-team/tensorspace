@@ -185,6 +185,7 @@ main {
 
     height: 100%;
     background-color: #fff;
+    text-align: center;
     overflow: auto;
     padding: 10px 90px 100px 90px;
     font-size: 16px;
@@ -302,6 +303,7 @@ td, th {
 
 .tag-img {
     width:100%;
+    max-width: 950px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
