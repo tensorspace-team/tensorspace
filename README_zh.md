@@ -155,7 +155,9 @@ model.init(function() {
 
 ```
 
-我们在这里将预测方法放入`init()`的回调函数中以确保预测在初始化完成之后进行。
+我们在这里将预测方法放入`init()`的回调函数中以确保预测在初始化完成之后进行([在线演示](https://tensorspace.org/html/helloworld.html))。
+
+点击后面这个CodePen logo来在CodePen中试一下这个例子吧 ~ &nbsp;&nbsp;<a target="_blank" href="https://codepen.io/syt123450/pen/667a7943b0f23727790ca38c93389689"><img width=50 height=50 src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/codepen.png"></a>
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_5.jpg">

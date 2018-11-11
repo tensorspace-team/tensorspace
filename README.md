@@ -134,7 +134,8 @@ model.init(function(){
 });
 ```
 
-We can get the following model in the browser if everything looks good:
+We can get the following Fig. 2 model in the browser if everything looks good.
+
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
@@ -143,7 +144,7 @@ We can get the following model in the browser if everything looks good:
 </p>
 
 
-We provide a [extracted file](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json) which is a handwritten "5" as the input of our model:
+We provide a [extracted file](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json) which is a handwritten "5" as the input of our model:  ([online demo](https://tensorspace.org/html/helloworld.html))
 
 ```
 model.init(function() {
@@ -153,6 +154,8 @@ model.init(function() {
 ```
 
 We put the `predict( image_5 )` method in the callback function of `init()` to ensure the prediction is after the initialization complete.
+
+Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href="https://codepen.io/syt123450/pen/667a7943b0f23727790ca38c93389689"><img width=50 height=50 src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/codepen.png"></a>
 
 <p align="center">
 <img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_5.jpg">
