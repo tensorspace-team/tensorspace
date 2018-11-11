@@ -531,7 +531,7 @@ footer {
 @media (max-width: 490px) {
 
     #introduce {
-        height: 1350px;
+        height: 1200px;
     }
 
     #iconGroup > div > div {
@@ -606,6 +606,10 @@ footer {
         display: none;
     }
 
+    #explanation {
+        margin-top: 30px;
+    }
+
     #galleryTitleIntro {
         width: 90%;
         margin-left: 5%;
@@ -617,6 +621,10 @@ footer {
 
     #introduce > div {
         margin-top: 0;
+    }
+
+    .code-padding-front {
+        display: none;
     }
 
 }
