@@ -173,3 +173,9 @@ main {
     font-size:20px;
 
 }
+
+.nav-size-of-model {
+    position: absolute;
+    right: 5%;
+    font-size: 12px;
+}
