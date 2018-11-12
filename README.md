@@ -15,6 +15,7 @@
   <a href="https://github.com/mrdoob/three.js"><img src="https://img.shields.io/badge/dependencies-three.js-brightgreen.svg" alt="dependencies badge"></a>
   <a href="https://github.com/tweenjs/tween.js"><img src="https://img.shields.io/badge/dependencies-tween.js-brightgreen.svg" alt="dependencies badge"></a>
   <a href="https://travis-ci.org/syt123450/giojs"><img src="https://travis-ci.org/syt123450/giojs.svg" alt="build"></a>
+  <a href="https://gitter.im/tensorspacejs/Lobby#"><img src="https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg" alt="gitter"></a>
 </p>
 
 TensorSpace is a neural network 3D visualization framework built by TensorFlow.js, Three.js and Tween.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports to visualize pre-trained model from TensorFlow, Keras and TensorFlow.js.
@@ -271,6 +272,7 @@ If you have any issue or doubt, feel free to contact us by:
 * Email: tensorspaceteam@gmail.com
 * GitHub Issues: [create issue](https://github.com/tensorspace-team/tensorspace/issues/new)
 * Slack: [#questions](https://tensorspace.slack.com/messages/CDSB58A5P)
+* Gitter: [#Lobby](https://gitter.im/tensorspacejs/Lobby#)
 
 ## License
 

@@ -15,6 +15,7 @@
   <a href="https://github.com/mrdoob/three.js"><img src="https://img.shields.io/badge/dependencies-three.js-brightgreen.svg" alt="dependencies badge"></a>
   <a href="https://github.com/tweenjs/tween.js"><img src="https://img.shields.io/badge/dependencies-tween.js-brightgreen.svg" alt="dependencies badge"></a>
   <a href="https://travis-ci.org/syt123450/giojs"><img src="https://travis-ci.org/syt123450/giojs.svg" alt="build"></a>
+  <a href="https://gitter.im/tensorspacejs/Lobby#"><img src="https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg" alt="gitter"></a>
 </p>
 
 TensorSpace是一套用于构建神经网络3D可视化应用的框架。
@@ -272,6 +273,7 @@ model.init(function() {
 * Email: tensorspaceteam@gmail.com
 * GitHub Issues: [create issue](https://github.com/tensorspace-team/tensorspace/issues/new)
 * Slack: [#questions](https://tensorspace.slack.com/messages/CDSB58A5P)
+* Gitter: [#Lobby](https://gitter.im/tensorspacejs/Lobby#)
 
 ## <div id="license">许可证</div>
 
