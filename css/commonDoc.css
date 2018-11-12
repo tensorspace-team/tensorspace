@@ -185,7 +185,7 @@ main {
 
     height: 100%;
     background-color: #fff;
-    text-align: center;
+    text-align: justify;
     overflow: auto;
     padding: 10px 90px 100px 90px;
     font-size: 16px;
@@ -212,6 +212,7 @@ main p {
 
 main > div {
     margin-top: 3px;
+    max-width: 1000px;
     text-align: justify;
 }
 
@@ -297,6 +298,7 @@ td, th {
 .code-snippet {
 
     margin-top: 10px;
+    max-width: 900px;
     margin-bottom: 17px;
 
 }
