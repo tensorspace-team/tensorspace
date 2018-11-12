@@ -1,5 +1,5 @@
 <p align="center">
-<img width=150 src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/logo.png">
+<img width=150 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/logo.png">
 </p>
 <h1 align="center">TensorSpace.js</h1>
 <p align="center"><b>Present Tensor in Space</b></p>
@@ -21,7 +21,7 @@
 TensorSpace is a neural network 3D visualization framework built by TensorFlow.js, Three.js and Tween.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports to visualize pre-trained model from TensorFlow, Keras and TensorFlow.js.
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>Fig.1</b> - Interactive LeNet created by TensorSpace
@@ -138,7 +138,7 @@ model.init(function(){
 We can get the following Fig. 2 model in the browser if everything looks good.
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_empty_lenet.jpg">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
 <b>Fig. 2</b> - LeNet model without any input data
@@ -156,10 +156,10 @@ model.init(function() {
 
 We put the `predict( image_5 )` method in the callback function of `init()` to ensure the prediction is after the initialization complete.
 
-Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href="https://codepen.io/syt123450/pen/667a7943b0f23727790ca38c93389689"><img width=50 height=50 src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/codepen.png"></a>
+Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href="https://codepen.io/syt123450/pen/667a7943b0f23727790ca38c93389689"><img width=50 height=50 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/codepen.png"></a>
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_5.jpg">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
 <b>Fig. 3</b> - LeNet model with input data "5"
@@ -172,7 +172,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 [➡ Live Demo](https://tensorspace.org/html/playground/lenet.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>Fig.4</b> - Interactive LeNet created by TensorSpace
@@ -183,7 +183,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 [➡ Live Demo](https://tensorspace.org/html/playground/alexnet.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_alexnet.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_alexnet.gif">
 </p>
 <p align="center">
 <b>Fig.5</b> - Interactive AlexNet created by TensorSpace
@@ -194,7 +194,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 [➡ Live Demo](https://tensorspace.org/html/playground/yolov2-tiny.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_yolov2.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_yolov2.gif">
 </p>
 <p align="center">
 <b>Fig.6</b> - Interactive Yolov2-tiny created by TensorSpace
@@ -205,7 +205,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 [➡ Live Demo](https://tensorspace.org/html/playground/resnet50.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_resnet50.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_resnet50.gif">
 </p>
 <p align="center">
 <b>Fig.7</b> - Interactive ResNet-50 created by TensorSpace
@@ -216,7 +216,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 [➡ Live Demo](https://tensorspace.org/html/playground/vgg16.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_vgg.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_vgg.gif">
 </p>
 <p align="center">
 <b>Fig.8</b> - Interactive Vgg16 created by TensorSpace
@@ -227,7 +227,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 [➡ Live Demo](https://tensorspace.org/html/playground/acgan.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_acgan.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_acgan.gif">
 </p>
 <p align="center">
 <b>Fig.9</b> - Interactive ACGAN created by TensorSpace
@@ -238,7 +238,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 [➡ Live Demo](https://tensorspace.org/html/playground/mobilenetv1.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_mobilenetv1.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_mobilenetv1.gif">
 </p>
 <p align="center">
 <b>Fig.10</b> - Interactive MobileNetv1 created by TensorSpace

@@ -1,5 +1,5 @@
 <p align="center">
-<img width=150 src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/logo.png">
+<img width=150 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/logo.png">
 </p>
 <h1 align="center">TensorSpace.js</h1>
 <p align="center"><b>Present Tensor in Space</b></p>
@@ -21,10 +21,10 @@
 TensorSpace是一套用于构建神经网络3D可视化应用的框架。
 开发者可以使用类Keras风格的TensorSpace API，轻松创建可视化网络、加载神经网络模型并在浏览器中基于已加载的模型进行3D可交互呈现。
 TensorSpace可以使您更直观地观察神经网络模型，并了解该模型是如何通过中间层 tensor 的运算来得出最终结果的。
-TensorSpace 支持3D可视化所有经过适当预处理之后的 TensorFlow、Keras、TensorFlow.js 模型。
+TensorSpace 支持3D可视化经过适当预处理之后的 TensorFlow、Keras、TensorFlow.js 模型。
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>图1</b> - 使用 TensorSpace 创建的交互式 LeNet 模型
@@ -142,7 +142,7 @@ model.init(function(){
 
 我们可以在浏览器中看到以下模型：
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_empty_lenet.jpg">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
 <b>图2</b> - 所创建的 LeNet 模型 (无输入数据）
@@ -158,10 +158,10 @@ model.init(function() {
 
 我们在这里将预测方法放入`init()`的回调函数中以确保预测在初始化完成之后进行([在线演示](https://tensorspace.org/html/helloworld.html))。
 
-点击后面这个CodePen logo来在CodePen中试一下这个例子吧 ~ &nbsp;&nbsp;<a target="_blank" href="https://codepen.io/syt123450/pen/667a7943b0f23727790ca38c93389689"><img width=50 height=50 src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/codepen.png"></a>
+点击后面这个CodePen logo来在CodePen中试一下这个例子吧 ~ &nbsp;&nbsp;<a target="_blank" href="https://codepen.io/syt123450/pen/667a7943b0f23727790ca38c93389689"><img width=50 height=50 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/codepen.png"></a>
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/HelloWorld_5.jpg">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
 <b>图3</b> - LeNet 模型判别输入 “5”
@@ -175,7 +175,7 @@ model.init(function() {
  [➡ 在线演示](https://tensorspace.org/html/playground/lenet_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_lenet.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
 <b>图4</b> - 使用 TensorSpace 构建 LeNet
@@ -186,7 +186,7 @@ model.init(function() {
 [➡ 在线演示](https://tensorspace.org/html/playground/alexnet_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_alexnet.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_alexnet.gif">
 </p>
 <p align="center">
 <b>图5</b> - 使用 TensorSpace 构建 AlexNet
@@ -197,7 +197,7 @@ model.init(function() {
 [➡ 在线演示](https://tensorspace.org/html/playground/yolov2-tiny_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_yolov2.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_yolov2.gif">
 </p>
 <p align="center">
 <b>图6</b> - 使用 TensorSpace 构建 YOLO-v2-tiny
@@ -208,7 +208,7 @@ model.init(function() {
 [➡ 在线演示](https://tensorspace.org/html/playground/resnet50_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_resnet50.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_resnet50.gif">
 </p>
 <p align="center">
 <b>图7</b> - 使用 TensorSpace 构建 ResNet-50
@@ -219,7 +219,7 @@ model.init(function() {
 [➡ 在线演示](https://tensorspace.org/html/playground/vgg16_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_vgg.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_vgg.gif">
 </p>
 <p align="center">
 <b>图8</b> - 使用 TensorSpace 构建 VGG-16
@@ -230,7 +230,7 @@ model.init(function() {
 [➡ 在线演示](https://tensorspace.org/html/playground/acgan_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_acgan.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_acgan.gif">
 </p>
 <p align="center">
 <b>图9</b> - 使用 TensorSpace 构建 ACGAN 生成网络
@@ -241,7 +241,7 @@ model.init(function() {
 [➡ 在线演示](https://tensorspace.org/html/playground/mobilenetv1_zh.html)
 
 <p align="center">
-<img width="100%" src="https://github.com/tensorspace-team/tensorspace/blob/master/assets/tensorspace_mobilenetv1.gif">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_mobilenetv1.gif">
 </p>
 <p align="center">
 <b>图10</b> - 使用 TensorSpace 构建 MobileNetv1 生成网络
