@@ -320,13 +320,15 @@
 
     <main>
         <header>DepthwiseConv2d</header>
+        <div>Depthwise卷积层分别多多通道输入的每一个通道进行分别卷积。</div>
+        <div>可分离卷积首先按深度方向进行卷积（对每个输入通道分别卷积），然后逐点进行卷积，将上一步的卷积结果混合到输出通道中。直观来说，可分离卷积可以看做<span class="span_bold">将一个卷积核分解为两个小的卷积核</span>，或看作Inception模块的一种极端情况。</div>
         <div class="sub-title">构造器</div>
         <div>两种方法构造一个新建一个层，输入参数都是必要的。</div>
         <div>〔方法一〕使用<span class="span_bold"> kernelSize </span>和<span class="span_bold"> strides </span>参数进行构造</div>
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.Conv2d( { filters : Int, kernelSize: Int, strides: Int } );</code></pre>
         </div>
-        <img class="tag-img" src="../../assets/img/docs/Conv2d.jpg">
+        <img class="tag-img" src="../../assets/img/docs/DepthwiseConv2d.jpg">
         <div class="img-label">
             <span class="img-label-number">Fig. 1</span> - DepthwiseConv2d层示意图（左：收缩 | 右：展开）
         </div>
@@ -562,18 +564,18 @@ model.add( dwConv2d );</code></pre>
             </thead>
             <tbody>
             <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/" target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
+                <th scope="row"><a href="https://keras.io/layers/convolutional/#separableconv2d" target="_blank">Keras</a>️</th>
+                <td>keras.layers.SeparableConv2D(filters, kernel_size, strides=(1, 1))</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
+                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/depthwise_conv2d" target="_blank">TensorFlow</a></th>
+                <td>tf.nn.depthwise_conv2d( input, filter, strides )</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d(filters, inputShape)</td>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.depthwiseConv2d" target="_blank">TensorFlow.js</a>️</th>
+                <td>tf.layers.depthwiseConv2d (config)</td>
 
             </tr>
             </tbody>

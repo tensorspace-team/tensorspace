@@ -328,7 +328,7 @@
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.DepthwiseConv2d( { kernelSize: Int, strides: Int } );</code></pre>
         </div>
-        <img class="tag-img" src="../../assets/img/docs/Conv2d.jpg">
+        <img class="tag-img" src="../../assets/img/docs/DepthwiseConv2d.jpg">
         <div class="img-label">
             <span class="img-label-number">Fig. 1</span> - DepthwiseConv2d layer collapse and expand
         </div>
@@ -565,18 +565,18 @@ model.add( dwConv2d );</code></pre>
             </thead>
             <tbody>
             <tr>
-                <th scope="row"><a href="https://keras.io/layers/convolutional/" target="_blank">Keras</a>️</th>
-                <td>keras.layers.Conv2D(filters, kernel_size, strides=(1, 1))</td>
+                <th scope="row"><a href="https://keras.io/layers/convolutional/#separableconv2d" target="_blank">Keras</a>️</th>
+                <td>keras.layers.SeparableConv2D(filters, kernel_size, strides=(1, 1))</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/conv2d" target="_blank">TensorFlow</a></th>
-                <td>tf.nn.conv2d(input, filter, strides, padding)</td>
+                <th scope="row"><a href="https://www.tensorflow.org/api_docs/python/tf/nn/depthwise_conv2d" target="_blank">TensorFlow</a></th>
+                <td>tf.nn.depthwise_conv2d( input, filter, strides )</td>
 
             </tr>
             <tr>
-                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.conv2d" target="_blank">TensorFlow.js</a>️</th>
-                <td>tf.layers.conv2d (filters, inputShape)</td>
+                <th scope="row"><a href="https://js.tensorflow.org/api/0.13.0/#layers.depthwiseConv2d" target="_blank">TensorFlow.js</a>️</th>
+                <td>tf.layers.depthwiseConv2d (config)</td>
 
             </tr>
             </tbody>
