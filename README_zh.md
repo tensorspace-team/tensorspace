@@ -168,6 +168,20 @@ model.init(function() {
 </p>
 
 
+### 本地使用
+
+有些模型非常大，使用官网的`Playground`载入非常慢。如果你想获得更好的载入速度，把`TensorSpace`项目拷贝到本地是一个好选择
+
+- 第一步：`Clone` 项目文件夹到任意文件夹（无系统要求，这一步时间较长，大约2GB大小，都是预训练模型）
+
+```bash
+git clone https://github.com/tensorspace-team/tensorspace.git
+```
+
+- 第二步：本地使用 `WebStorm` 打开项目
+- 第三步：打开 `/examples` 文件夹，点选任意模型的 `.html` 文件（比如`/exampes/resnet50/resnet50.html`）
+- 第四步：点击**右上角**的Chrome图表在本地运行`.html` 文件（`js` 和 `css` ）直接可以在本地浏览器内查看对应模型
+
 ## <div id="example">样例展示</div>
 
 * **LeNet**
