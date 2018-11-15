@@ -182,3 +182,8 @@ main {
     margin-top: -10px;
     margin-bottom: 20px;
 }
+
+.aside-size-of-model {
+    position: absolute;
+    right: 5px;
+}
