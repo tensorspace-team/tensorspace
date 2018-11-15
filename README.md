@@ -244,6 +244,27 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <b>Fig.10</b> - Interactive MobileNetv1 created by TensorSpace
 </p>
 
+### View models locally
+
+As some models above are extremely large, view them locally may be a good choice.
+
+- Step 1: `clone` TensorSpace Repo
+
+```bash
+git clone https://github.com/tensorspace-team/tensorspace.git
+```
+
+- Step 2: `build` latest TensorSpace.js
+
+```bash
+cd tensorspace
+npm run build
+```
+
+- Step 3:  
+
+Open "html" file in examples folder in local web server.
+
 ## Documentation
 
 * For a quick start, checkout [Getting Start](https://tensorspace.org/html/docs/startHello.html)
