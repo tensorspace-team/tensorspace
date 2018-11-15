@@ -7,6 +7,7 @@ import { SceneInitializer } from '../scene/SceneInitializer';
 import { TfjsLoader } from '../loader/TfjsLoader';
 import { KerasLoader } from "../loader/KerasLoader";
 import { TfLoader } from "../loader/TfLoader";
+import { LiveLoader } from "../loader/LiveLoader";
 import { ModelConfiguration } from "../configure/ModelConfiguration";
 
 /**
@@ -152,6 +153,10 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 
 			this.loadTfModel( config );
 
+		} else if ( config.type = "live" ) {
+
+			this.loadLiveModel( config );
+
 		} else {
 
 			console.error( "Do not support to load model type " + config.type );
@@ -195,6 +200,13 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 	loadTfModel: function( config ) {
 
 		let loader = new TfLoader( this, config );
+		loader.preLoad();
+
+	},
+
+	loadLiveModel: function( config ) {
+
+		let loader = new LiveLoader( this, config );
 		loader.preLoad();
 
 	},
