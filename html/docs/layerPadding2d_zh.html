@@ -346,7 +346,7 @@
                     <p>padding</p>
                     <p><a href="#iconRequired">⭐</a><a href="#iconModel">📦</a>️</p>
                 </th>
-                <td>[Int, Int]</td>
+                <td><span class="highlight-text">[Int, Int]</span></td>
                 <td>四周加0的数量</td>
                 <td>例如，padding=[ 2, 2 ]，第一个值表示向<span class="span_bold">左右</span>分别加2个零，第二个值表示向<span class="span_bold">上下</span>加2个0</td>
             </tr>
@@ -403,12 +403,12 @@
         <div class="sub-title">属性</div>
 
         <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L68" target="_blank">.inputShape</a> : <span class="highlight-text">Int[]</span></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，dataFormat默认通道值在最后，例如inputShape = [ 28, 28, 3 ] 表示输入为3个特征图，每个图大小为28*28</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输入Tensor的形状，dataFormat默认通道值在最后，例如<span class="highlight-text">inputShape = [ 28, 28, 3 ]</span> 表示输入为3个特征图，每个图大小为28*28</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
         <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L69" target="_blank">.outputShape</a> : <span class="highlight-text">Int[]</span></div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>本层输出Tensor的形状为3维 <a href="basicDimension_zh.html">3️⃣</a></div>
-        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat默认通道值在最后，例如outputShape = [ 32, 32, 4 ] 表示经过此层处理后，有4个特征图，每个图大小为32*32</div>
+        <div class="panel-heading"><i class="material-icons">filter_center_focus</i>dataFormat默认通道值在最后，例如<span class="highlight-text">outputShape = [ 32, 32, 4 ]</span> 表示经过此层处理后，有4个特征图，每个图大小为32*32</div>
         <div class="panel-heading"><i class="material-icons">filter_center_focus</i>在 model.init() 后才可拿到数据，否则为undefined。</div>
 
         <div class="property-title"><a href="https://github.com/tensorspace-team/tensorspace/blob/10a1738e02dddcd1dc2c919611709dbab27c1c54/src/layer/abstract/Layer.js#L52" target="_blank">.neuralValue</a> : <span class="highlight-text">Int[]</span></div>

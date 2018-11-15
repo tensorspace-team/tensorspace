@@ -94,13 +94,13 @@
 
 <aside id="playgroundNav">
     <div><a href="index_zh.html">简介</a></div>
-    <div><a href="lenet_zh.html">LeNet</a></div>
-    <div><a href="alexnet_zh.html">AlexNet</a></div>
-    <div><a href="vgg16_zh.html">VGG-16</a></div>
-    <div class="now-label">ResNet-50</div>
-    <div><a href="mobilenetv1_zh.html">MobileNetv1</a></div>
-    <div><a href="yolov2-tiny_zh.html">YOLOv2-tiny</a></div>
-    <div><a href="acgan_zh.html">ACGAN</a></div>
+    <div><a href="lenet_zh.html">LeNet</a><span class="nav-size-of-model">0.2MB</span></div>
+    <div><a href="alexnet_zh.html">AlexNet</a><span class="nav-size-of-model">237MB</span></div>
+    <div><a href="vgg16_zh.html">VGG-16</a><span class="nav-size-of-model">527MB</span></div>
+    <div class="now-label">ResNet-50<span class="nav-size-of-model">98MB</span></div>
+    <div><a href="mobilenetv1_zh.html">MobileNetv1</a><span class="nav-size-of-model">16MB</span></div>
+    <div><a href="yolov2-tiny_zh.html">YOLOv2-tiny</a><span class="nav-size-of-model">60MB</span></div>
+    <div><a href="acgan_zh.html">ACGAN</a><span class="nav-size-of-model">3MB</span></div>
     <img id="close" src="../../assets/img/playground/close.png">
 </aside>
 
@@ -114,11 +114,14 @@
 
     <div id="loadingPad" style="background-color: #120A1C">
         <img id="loading" src="../../assets/img/loading/ringLoading.gif">
+        <div class="loading-label">
+            正在下载ResNet50预训练模型...<br>98MB <span class="span-estimate">- 估计50s到3min</span>
+        </div>
     </div>
     <div id="modelArea"></div>
     <div id="controlPanel">
 
-        <div class="panelTitle">ResNet-50</div>
+        <div class="panelTitle">ResNet-50<span class="nav-size-of-model">98MB</span></div>
 
         <img id="labelImage" src="../../assets/img/playground/dog_imagenet.jpg">
 
