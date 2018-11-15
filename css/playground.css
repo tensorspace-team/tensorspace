@@ -175,7 +175,10 @@ main {
 }
 
 .nav-size-of-model {
-    position: absolute;
-    right: 5%;
-    font-size: 12px;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    color: #D6FDFF;
+    margin-top: -10px;
+    margin-bottom: 20px;
 }
