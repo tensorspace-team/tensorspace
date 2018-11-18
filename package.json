@@ -19,7 +19,7 @@
     "src": "source code"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^0.13.3",
+    "@tensorflow/tfjs": "0.13.3",
     "@tweenjs/tween.js": "^17.2.0",
     "install": "^0.12.1",
     "npm": "^6.4.1",
@@ -47,15 +47,18 @@
       "name": "syt123450",
       "email": "syt123450@gmail.com",
       "url": "https://github.com/syt123450"
-    }, {
+    },
+    {
       "name": "zchholmes",
       "email": "zchholmes@gmail.com",
       "url": "https://github.com/zchholmes"
-    }, {
+    },
+    {
       "name": "CharlesLiuyx",
       "email": "charlesliuyx@gmail.com",
       "url": "https://github.com/CharlesLiuyx"
-    }, {
+    },
+    {
       "name": "lq3297401",
       "email": "noraliu3648@gmail.com",
       "url": "https://github.com/lq3297401"
