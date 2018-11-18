@@ -47,6 +47,8 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	predict: function( input, callback ) {
 
+		this.clear();
+
 		this.inputValue = input;
 
 		if ( this.resource !== undefined ) {
@@ -80,6 +82,18 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	 */
 
 	clear: function() {
+
+		if ( this.predictResult !== undefined ) {
+
+			for ( let i = 0; i < this.predictResult.length; i ++ ) {
+
+				tf.dispose( this.predictResult[ i ] );
+
+			}
+
+			this.predictResult = undefined;
+
+		}
 
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 

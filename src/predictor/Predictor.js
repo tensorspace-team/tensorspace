@@ -150,7 +150,7 @@ Predictor.prototype = {
 	 *
 	 * @param data, input data list, for example, [[...], [...], ..., [...]]
 	 * @param inputShapes
-	 * @returns { tf.Tensor }
+	 * @returns { tf.Tensor[] }
 	 */
 
 	createInputTensorList: function( data, inputShapes ) {
