@@ -52,25 +52,33 @@ TfPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
 	predict: function( data ) {
 
-		// Create input tensor for prediction.
+		let predictor = this;
 
-		let inputTensor = this.createInputTensor( data );
+		let predictResult = tf.tidy( () => {
 
-		let predictResult;
+			// Create input tensor for prediction.
 
-		if ( this.outputsName !== undefined ) {
+			let inputTensor = predictor.createInputTensor( data );
 
-			// If has outputsName, use execute to get prediction result.
+			let predictResult;
 
-			predictResult = this.model.resource.execute( inputTensor, this.outputsName );
+			if ( this.outputsName !== undefined ) {
 
-		} else {
+				// If has outputsName, use execute to get prediction result.
 
-			// If outputsName is undefined, use predict to get prediction result.
+				predictResult = predictor.model.resource.execute( inputTensor, this.outputsName );
 
-			predictResult = this.model.resource.predict( inputTensor );
+			} else {
 
-		}
+				// If outputsName is undefined, use predict to get prediction result.
+
+				predictResult = predictor.model.resource.predict( inputTensor );
+
+			}
+
+			return predictResult;
+
+		} );
 
 		return predictResult;
 

@@ -43,13 +43,19 @@ TfjsPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
 	predict: function( data ) {
 
-		// Create input tensor for prediction.
+		let predictor = this;
 
-		let inputTensor = this.createInputTensor( data );
+		let predictResult = tf.tidy( () => {
 
-		// Get prediction result from loaded model.
+			// Create input tensor for prediction.
 
-		let predictResult = this.model.resource.predict( inputTensor );
+			let inputTensor = predictor.createInputTensor( data );
+
+			// Get prediction result from loaded model.
+
+			return predictor.model.resource.predict( inputTensor );
+
+		} );
 
 		return predictResult;
 
