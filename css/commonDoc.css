@@ -193,6 +193,7 @@ main {
 
 main > header {
     width: 100%;
+    max-width: 1000px;
     height: 30px;
     line-height: 30px;
     margin-top: 25px;
