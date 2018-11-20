@@ -26,10 +26,13 @@
 
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/playground.css">
-    <link rel="stylesheet" href="../../css/playgroundLenet.css">
+    <link rel="stylesheet" href="../../css/imageSelector.css">
+    <link rel="stylesheet" href="../../css/playgroundLenetTrain.css">
 
     <script src="../../js/playground.js"></script>
-    <script src="../../js/lenet.js"></script>
+    <!--<script src="../../js/lenet.js"></script>-->
+    <script src="../../js/trainLenet.js"></script>
+    <script src="../../assets/data/training/mnist_data.js"></script>
 
 </head>
 <body>
@@ -114,35 +117,108 @@
     <div id="modelArea"></div>
     <div id="controlPanel">
 
-        <div class="panelTitle">LeNet</div>
-        <div class="nav-size-of-model">( Model Size: 0.2MB )</div>
+        <div class="panelTitle">LeNet在线训练</div>
 
-        <div class="wrapper">
-            <canvas id="signature-pad" class="signature-pad" width=224 height=224></canvas>
+        <p class="hint">Controls</p>
+
+        <div class="panel-item">
+            <label class="item-label">Test Image:</label>
+            <button id="changeTest" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Change
+            </button>
         </div>
 
-        <button id="clear" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-            清空手写数据
-        </button>
-
-        <p id="hint">LeNet认为你刚才写了一个</p>
-
-        <div class="inferences">
-            <span id="result0">0</span>
-            <span id="result1">1</span>
-            <span id="result2">2</span>
-            <span id="result3">3</span>
-            <span id="result4">4</span>
+        <div class="panel-item">
+            <label class="item-label">Reset:</label>
+            <button id="resetTrain" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                <i class="material-icons">
+                    replay
+                </i>
+            </button>
         </div>
-        <div class="inferences">
-            <span id="result5">5</span>
-            <span id="result6">6</span>
-            <span id="result7">7</span>
-            <span id="result8">8</span>
-            <span id="result9">9</span>
+        <div class="panel-item">
+            <label class="item-label">Start:</label>
+            <button id="startTrain" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                <i class="material-icons">
+                    play_arrow
+                </i>
+            </button>
+        </div>
+        <div class="panel-item">
+            <label class="item-label">Stop:</label>
+            <button id="stopTrain" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                <i class="material-icons">
+                    stop
+                </i>
+            </button>
+        </div>
+
+        <p class="hint">Training Metrics</p>
+
+        <div class="panel-item">
+            <label class="item-label">Batch Size:</label>
+            <span>10</span>
+        </div>
+        <div class="panel-item">
+            <label class="item-label">Batches:</label>
+            <span id="batchNum">0</span>
+        </div>
+        <div class="panel-item">
+            <label class="item-label">Loss:</label>
+            <span id="lossNum">?</span>
+        </div>
+        <div class="panel-item">
+            <label class="item-label">Accuracy:</label>
+            <span id="accuracyNum">?</span>
+        </div>
+        <div class="panel-item">
+            <label class="item-label">Inference:</label>
+            <span id="inferenceNum">?</span>
         </div>
 
     </div>
+
+    <div id="selector">
+        <header>选择一张数字图片</header>
+        <main>
+            <div>
+                <img id="data0" src="../../assets/img/playground/0.png">
+            </div>
+            <div>
+                <img id="data1" src="../../assets/img/playground/1.png">
+            </div>
+            <div>
+                <img id="data2" src="../../assets/img/playground/2.png">
+            </div>
+            <div>
+                <img id="data3" src="../../assets/img/playground/3.png">
+            </div>
+            <div>
+                <img id="data4" src="../../assets/img/playground/4.png">
+            </div>
+            <div>
+                <img id="data5" src="../../assets/img/playground/5.png">
+            </div>
+            <div>
+                <img id="data6" src="../../assets/img/playground/6.png">
+            </div>
+            <div>
+                <img id="data7" src="../../assets/img/playground/7.png">
+            </div>
+            <div>
+                <img id="data8" src="../../assets/img/playground/8.png">
+            </div>
+            <div>
+                <img id="data9" src="../../assets/img/playground/9.png">
+            </div>
+        </main>
+        <footer>
+            <div id="executePredict">确认</div>
+            <div id="cancelPredict">取消</div>
+        </footer>
+    </div>
+
+    <div id="selectorCurtain"></div>
 
 </main>
 
