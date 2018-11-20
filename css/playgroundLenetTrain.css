@@ -1,0 +1,51 @@
+.hint {
+    width: 100%;
+    text-align: center;
+    color: #D6FDFF;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    clear: both;
+}
+
+.panel-item {
+    height: 40px;
+    line-height: 40px;
+}
+
+.panel-item > label {
+    font-weight: normal;
+}
+
+.panel-item > button {
+    width: 80px;
+    text-align: center;
+    padding: 0;
+    background-color: #244E5F;
+    color: #D6FDFF;
+}
+
+.panel-item > button:hover {
+    background-color: #548CA9;
+}
+
+.item-label {
+    width: 150px;
+    display: inline-block;
+    color: #D6FDFF;
+    font-size: 18px;
+    padding-left: 30px;
+}
+
+.panel-item > span {
+    color: #D6FDFF;
+    font-size: 18px;
+}
+
+#selector > main > div {
+    width: 24%;
+    float: left;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+}

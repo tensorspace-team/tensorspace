@@ -1,11 +1,10 @@
-.panel-heading {
-    padding: 0 15px;
-}
+/*.panel-heading {*/
+    /*padding: 0 15px;*/
+/*}*/
 
 .panel-heading > i {
 
     vertical-align: middle !important;
-    margin-right: 10px;
 
 }
 
