@@ -71,7 +71,7 @@ $(function() {
 	});
 
 	$("#cancelPredict").click(function() {
-		hideSelector()
+		hideSelector();
 	});
 
 	$("#selectorCurtain").click(function() {
@@ -1006,8 +1006,6 @@ function generateInference( finalResult ) {
 		maxIndex = finalResult[ i ] > finalResult[ maxIndex ] ? i : maxIndex;
 
 	}
-
-	console.log( imagenetResult[ maxIndex ] );
 
 	$("#PredictResult").text(imagenetResult[ maxIndex ]);
 
