@@ -76,8 +76,6 @@ MergedLineGroup.prototype = {
 
 		}
 
-		let forward = false;
-
 		for ( let i = 0; i < curveElements.length; i ++ ) {
 
 			let startPos = lineStartPos;
@@ -113,27 +111,19 @@ MergedLineGroup.prototype = {
 
 			let points = curve.getPoints( 50 );
 
-			if ( forward ) {
+			for ( let i = 0; i < points.length; i ++ ) {
 
-				for ( let i = 0; i < points.length; i ++ ) {
-
-					curveLineVertices.push( points[ i ] );
-					curveLineColors.push( new THREE.Color( this.color ) );
-
-				}
-
-			} else {
-
-				for ( let i = points.length - 1; i >= 0; i -- ) {
-
-					curveLineVertices.push( points[ i ] );
-					curveLineColors.push( new THREE.Color( this.color ) );
-
-				}
+				curveLineVertices.push( points[ i ] );
+				curveLineColors.push( new THREE.Color( this.color ) );
 
 			}
 
-			forward = !forward;
+			for ( let i = points.length - 1; i >= 0; i -- ) {
+
+				curveLineVertices.push( points[ i ] );
+				curveLineColors.push( new THREE.Color( this.color ) );
+
+			}
 
 		}
 
