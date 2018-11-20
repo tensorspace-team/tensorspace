@@ -95,7 +95,7 @@ Predictor.prototype = {
 
 			for ( let i = 0; i < this.model.inputs.length; i ++ ) {
 
-				inputShapes.push( this.model.inputs[ i ] );
+				inputShapes.push( this.model.inputs[ i ].outputShape );
 
 			}
 
