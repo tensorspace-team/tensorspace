@@ -362,7 +362,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		for ( let i = 0; i < this.inputs.length; i ++ ) {
 
-			this.inputs[ i ].updateVis( this.inputValue[ i ] );
+			this.inputs[ i ].updateValue( this.inputValue[ i ] );
 
 		}
 
@@ -374,7 +374,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 			let layer = this.getLayerByName( this.outputsOrder[ i ] );
 
-			layer.updateVis( this.predictResult[ i ] );
+			layer.updateValue( this.predictResult[ i ].dataSync() );
 
 		}
 
