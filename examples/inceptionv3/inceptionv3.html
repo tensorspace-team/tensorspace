@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TensorSpace - Inceptionv3 Demo</title>
+    <meta name="author" content="syt123450 / https://github.com/syt123450">
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script src="../lib/jquery.min.js"></script>
+<script src="../lib/three.min.js"></script>
+<script src="../lib/tween.min.js"></script>
+<script src="../lib/TrackballControls.js"></script>
+<script src="../lib/tf.min.js"></script>
+<script src="../../build/tensorspace.js"></script>
+
+<script>
+
+	let modelContainer = document.getElementById( "container" );
+
+	let input = new TSP.layers.RGBInput({
+
+		shape: [ 299, 299, 3 ],
+        name: "Input"
+
+    });
+
+	let conv2d_1 = new TSP.layers.Conv2d({
+
+		kernelSize: 3,
+		filters: 32,
+		strides: 2,
+		padding: "valid",
+        name: "conv2d_1"
+
+    });
+
+	conv2d_1.apply( input );
+
+	let conv2d_2 = new TSP.layers.Conv2d({
+
+		kernelSize: 3,
+		filters: 32,
+		strides: 1,
+		padding: "valid",
+		name: "conv2d_2"
+
+	});
+
+	conv2d_2.apply( conv2d_1 );
+
+	let conv2d_3 = new TSP.layers.Conv2d({
+
+		kernelSize: 3,
+		filters: 64,
+		strides: 1,
+		padding: "same",
+		name: "conv2d_3"
+
+	});
+
+	conv2d_3.apply( conv2d_2 );
+
+	let max_pooling2d_1 = new TSP.layers.Pooling2d( {
+
+		poolSize: [ 3, 3 ],
+		strides: [ 2, 2 ],
+		padding: "valid",
+		name: "max_pooling2d_1"
+
+	} );
+
+	max_pooling2d_1.apply( conv2d_3 );
+
+	let conv2d_4 = new TSP.layers.Conv2d({
+
+		kernelSize: 1,
+		filters: 80,
+		strides: 1,
+		padding: "valid",
+		name: "conv2d_4"
+
+	});
+
+	conv2d_4.apply( max_pooling2d_1 );
+
+	let conv2d_5 = new TSP.layers.Conv2d({
+
+		kernelSize: 3,
+		filters: 192,
+		strides: 1,
+		padding: "valid",
+		name: "conv2d_5"
+
+	});
+
+	conv2d_5.apply( conv2d_4 );
+
+    let max_pooling2d_2 = new TSP.layers.Pooling2d( {
+
+		poolSize: [ 3, 3 ],
+		strides: [ 2, 2 ],
+		padding: "valid",
+		name: "max_pooling2d_2"
+
+	} );
+
+	max_pooling2d_2.apply( conv2d_5 );
+
+	let conv2d_9 = new TSP.layers.Conv2d({
+
+		kernelSize: 1,
+		filters: 64,
+		strides: 1,
+		padding: "same",
+		name: "conv2d_9"
+
+	});
+
+	conv2d_9.apply( max_pooling2d_2 );
+
+	let conv2d_10 = new TSP.layers.Conv2d({
+
+		kernelSize: 3,
+		filters: 96,
+		strides: 1,
+		padding: "same",
+		name: "conv2d_10"
+
+	});
+
+	conv2d_10.apply( conv2d_9 );
+
+	let conv2d_11 = new TSP.layers.Conv2d({
+
+		kernelSize: 3,
+		filters: 96,
+		strides: 1,
+		padding: "same",
+		name: "conv2d_11"
+
+	});
+
+	conv2d_11.apply( conv2d_10 );
+
+    let conv2d_7 = new TSP.layers.Conv2d({
+
+		kernelSize: 1,
+		filters: 48,
+		strides: 1,
+		padding: "same",
+		name: "conv2d_7"
+
+	});
+
+    conv2d_7.apply( max_pooling2d_2 );
+
+    let conv2d_8 = new TSP.layers.Conv2d({
+
+		kernelSize: 5,
+		filters: 64,
+		strides: 1,
+		padding: "same",
+		name: "conv2d_8"
+
+	});
+
+    conv2d_8.apply( conv2d_7 );
+
+    let average_pooling2d_1 = new TSP.layers.Pooling2d( {
+
+		poolSize: [ 3, 3 ],
+		strides: [ 1, 1 ],
+		padding: "same",
+		name: "average_pooling2d_1"
+
+	} );
+
+    average_pooling2d_1.apply( max_pooling2d_2 );
+
+    let conv2d_12 = new TSP.layers.Conv2d({
+
+		kernelSize: 1,
+		filters: 32,
+		strides: 1,
+		padding: "same",
+		name: "conv2d_12"
+
+	});
+
+    conv2d_12.apply( average_pooling2d_1 );
+
+    let conv2d_6 = new TSP.layers.Conv2d({
+
+		kernelSize: 1,
+		filters: 64,
+		strides: 1,
+		padding: "same",
+		name: "conv2d_6"
+
+    });
+
+    conv2d_6.apply( max_pooling2d_2 );
+
+    let mixed0 = new TSP.layers.Concatenate([ conv2d_11, conv2d_8, conv2d_12, conv2d_6 ], {
+		name: "mixed0"
+    });
+
+	let model = new TSP.models.Model( modelContainer, {
+
+		inputs: [input],
+		outputs: [mixed0],
+        outputsOrder: ["conv2d_1", "conv2d_2", "conv2d_3", "max_pooling2d_1", "conv2d_4", "conv2d_5", "max_pooling2d_2",
+            "conv2d_9", "conv2d_10", "conv2d_11", "conv2d_7", "conv2d_8", "average_pooling2d_1", "conv2d_12", "conv2d_6", "mixed0"]
+
+	} );
+
+	model.load( {
+
+		type: "keras",
+		url: './inceptionModel/model.json'
+
+	} );
+
+	model.init(function(){
+
+		$.ajax( {
+
+			url: "./data/33.json",
+			type: 'GET',
+			async: true,
+			dataType: 'json',
+			success: function ( data ) {
+
+				model.predict( [data] );
+
+			}
+
+		} );
+
+    });
+
+</script>
+</body>
+</html>
