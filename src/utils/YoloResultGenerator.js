@@ -26,7 +26,34 @@ let YoloResultGenerator = (function() {
 
     }
 
+    // Ascend
+    function sortBy(field) {
+
+        return function(a,b) {
+
+            return b[field] - a[field];
+
+        }
+
+    }
+
     //TODO implement iou & nms
+
+	function transferPrediction( prediction ) {
+
+    	// prediction = {x:, y:, width:, height:, finalScore:, labelName:}
+		// return a list of [ x1, y1, x2, y2]
+
+    	let list = [];
+
+    	list.push( prediction["x"] );
+    	list.push( prediction["y"] );
+    	list.push( prediction["x"] + prediction["width"]);
+    	list.push( prediction["y"] + prediction["height"]);
+
+    	return list;
+
+	}
 
 	function iou( boxA, boxB ) {
 
@@ -47,6 +74,7 @@ let YoloResultGenerator = (function() {
 		let boxBArea = ( boxB[2] - boxB[0] + 1 ) * ( boxB[3] - boxB[1] + 1 );
 
 		// Compute the IOU
+
 		return intersectionArea / ( boxAArea + boxBArea - intersectionArea );
 
 	}
@@ -61,25 +89,31 @@ let YoloResultGenerator = (function() {
 
 		let i = 1;
 
-		while (i < len(thresholdedPredictions) ) {
+		let toDelete = false;
 
-			let nBoxesToCheck = len(nmsPredictions);
+		while ( i < thresholdedPredictions.length ) {
 
-			let toDelete = false;
+			let nBoxesToCheck = nmsPredictions.length;
+
+			toDelete = false;
 
 			let j = 0;
 
 			while ( j < nBoxesToCheck ) {
 
-				let curIOU = iou( thresholdedPredictions[i][0], nmsPredictions[j][0] );
+				let boxA = transferPrediction( thresholdedPredictions[i] );
+
+				let boxB = transferPrediction( nmsPredictions[j] );
+
+				let curIOU = iou( boxA, boxB );
 
 				if ( curIOU > iouThreshold ) {
 
 					toDelete = true;
 
-					j++;
-
 				}
+
+                j++;
 
 			}
 
@@ -89,19 +123,13 @@ let YoloResultGenerator = (function() {
 
 			}
 
-			i++
+			i++;
 
 		}
 
 		return nmsPredictions;
 
 	}
-
-    function decode( modelOutput, featureMapSize = 13, num_class = 80 ) {
-
-        // modelOutput : array [71825] = [13*13*5*(5+80)]
-
-    }
 
     function checkRange(x, range) {
 
@@ -110,7 +138,8 @@ let YoloResultGenerator = (function() {
     }
 
     function getDetectedBox( neuralData, channelDepth, channelShape, outputShape,
-                             anchors, classLabelList, scoreThreshold = 0.5 ) {
+                             anchors, classLabelList, scoreThreshold, iouThreshold,
+							 isNMS) {
 
         // neuralData : array [71825] for coco; [21125] for VOC
         // channelShape ： array = [13, 13]
@@ -123,11 +152,11 @@ let YoloResultGenerator = (function() {
 
         let output = [];
 
-		for ( let row = 1; row <= widthRange; row ++ ) {
+		for ( let row = 0; row < widthRange; row ++ ) {
 
-			for ( let col = 1; col <= heightRange; col ++ ) {
+			for ( let col = 0; col < heightRange; col ++ ) {
 
-				let start = row * col - 1;
+				let start = row * widthRange + col;
 
 				let channelData = neuralData.slice( start * channelDepth, ( start + 1 ) * channelDepth );
 
@@ -136,18 +165,16 @@ let YoloResultGenerator = (function() {
 				for ( let box = 0; box < anchors.length / 2; box ++ ) {
 
                     let index = box * len;
-                    let bx = ( sigmoid( channelData[ index ] ) + col - 1 );
-                    let by = ( sigmoid( channelData[ index + 1 ] ) + row - 1 );
+                    let bx = ( sigmoid( channelData[ index ] ) + col );
+                    let by = ( sigmoid( channelData[ index + 1 ] ) + row );
                     let bw = anchors[ box * 2 ] * Math.exp( channelData[ index + 2 ] );
                     let bh = anchors[ box * 2 + 1 ] * Math.exp( channelData[ index + 3 ] );
 
-                    // console.log("------------------Index: " + index + " ----------------------");
-                    // console.log( "bx: " + bx + " | by: " + by );
-                    // console.log( "bw: " + bw + " | bh: " + bh );
-
                     let finalConfidence = sigmoid( channelData[ index + 4 ] );
 
-                    let classPrediction = softmax( channelData.slice( index + 5, index + 5 + len ) );
+                    let probability = channelData.slice( index + 5, index + len );
+
+                    let classPrediction = softmax( probability );
 
                     let bestClassIndex = classPrediction.indexOf( Math.max( ...classPrediction ) );
 
@@ -157,9 +184,6 @@ let YoloResultGenerator = (function() {
 
                     let finalScore = bestClassScore * finalConfidence;
 
-                    // console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
-                    // console.log("Final Score: " + finalScore);
-
                     let width = bw / widthRange * outputShape[ 0 ];
                     let height = bh  / heightRange * outputShape[ 1 ];
                     let x = bx / widthRange * outputShape[ 0 ] - width / 2;
@@ -167,25 +191,27 @@ let YoloResultGenerator = (function() {
 
                     if ( finalScore > scoreThreshold ) {
 
-                        // console.log("Add 1 detective object");
-
-                        output.push( {
-
-                            x: x,
-                            y: y,
-                            width: width,
-                            height: height,
-
+                        thresholdedPredictions.push( {
+                            "x": x,
+                            "y": y,
+                            "width": width,
+                            "height": height,
+							"finalScore": finalScore,
+							"className": bestClassLabel
                         } );
 
-                        thresholdedPredictions.push( {
-                            x: x,
-                            y: y,
-                            width: width,
-                            height: height,
-							finalScore: finalScore,
-							className: bestClassLabel
-                        } )
+                        if ( isNMS === false ) {
+
+                            output.push( {
+
+                                x: x,
+                                y: y,
+                                width: width,
+                                height: height
+
+                            });
+
+                        }
 
                     }
 
@@ -195,14 +221,34 @@ let YoloResultGenerator = (function() {
 
 		}
 
-		// console.log( thresholdedPredictions );
+		thresholdedPredictions.sort(sortBy("finalScore"));
+
+		let nmsPredictions = nonMaximalSuppression( thresholdedPredictions, iouThreshold );
+
+		if ( isNMS === true ) {
+
+            for ( let i = 0; i < nmsPredictions.length; i++ ) {
+
+                output.push( {
+
+                    x: nmsPredictions[i]["x"],
+                    y: nmsPredictions[i]["y"],
+                    width: nmsPredictions[i]["width"],
+                    height: nmsPredictions[i]["height"],
+
+                });
+
+            }
+
+		}
+
 
 		return output;
 
 	}
 
 	function getChannelBox( channelData, channelShape, outputShape,
-                            anchors, classLabelList, scoreThreshold, isDrawFiveBoxes,
+                            anchors, classLabelList, scoreThreshold, iouThreshold, isDrawFiveBoxes,
 							cx, cy ) {
 
         // channelData : array [425] for coco; [125] for VOC
@@ -218,8 +264,6 @@ let YoloResultGenerator = (function() {
 
 		let output = [];
 
-		// console.log( "cx: " + cx + "| cy: " + cy );
-
 		for ( let box = 0; box < anchors.length / 2; box ++ ) {
 
 			let index = box * len;
@@ -228,24 +272,15 @@ let YoloResultGenerator = (function() {
 			let bw = anchors[ box * 2 ] * Math.exp( channelData[ index + 2 ] );
 			let bh = anchors[ box * 2 + 1 ] * Math.exp( channelData[ index + 3 ] );
 
-            // console.log("------------------Index: " + index + " ----------------------");
-            // console.log( "bx: " + bx + " | by: " + by );
-            // console.log( "bw: " + bw + " | bh: " + bh );
-
 			let finalConfidence = sigmoid( channelData[ index + 4 ] );
 
-			let classPrediction = softmax( channelData.slice( index + 5, index + 5 + len ) );
+			let classPrediction = softmax( channelData.slice( index + 5, index + len ) );
 
 			let bestClassIndex = classPrediction.indexOf( Math.max( ...classPrediction ) );
-
-			let bestClassLabel = classLabelList[ bestClassIndex ];
 
 			let bestClassScore = classPrediction[ bestClassIndex ];
 
 			let finalScore = bestClassScore * finalConfidence;
-
-            // console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
-            // console.log("Final Score: " + finalScore);
 
 			let width = bw / widthRange * outputShape[ 0 ];
 			let height = bh  / heightRange * outputShape[ 1 ];
