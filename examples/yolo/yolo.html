@@ -60,7 +60,8 @@
 
             let model = new TSP.models.Sequential( modelContainer, {
 
-				stats: true
+				stats: true,
+                animationTimeRatio: 0.1,
 
 			}  );
 
@@ -203,11 +204,17 @@
                     "diningtable", "dog", "horse", "motorbike", "person",
                     "pottedplant", "sheep", "sofa", "train", "tvmonitor" ],
 
-                // defualt is 0.5
-                scoreThreshold: 0.7,
+                // default is 0.5
+                scoreThreshold: 0.3,
+
+                // default is 0.3
+                iouThreshold: 0.3,
 
                 // default is true
                 isDrawFiveBoxes: true,
+
+                // default is true
+                isNMS: true,
 
                 onCeilClicked: onYoloCeilClicked
 
@@ -233,7 +240,7 @@
 
 				$.ajax( {
 
-					url: "./data/dog.json",
+					url: "./data/person.json",
 					type: 'GET',
 					async: true,
 					dataType: 'json',

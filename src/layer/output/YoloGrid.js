@@ -123,6 +123,14 @@ function YoloGrid( config ) {
     this.isDrawFiveBoxes = false;
 
     /**
+     * The toggle to control whether to apply non-maximum suppression to the detection rectangles .
+     * [Default] true, means to apply nms.
+     * @type { bool }
+     */
+
+    this.isNMS = true;
+
+    /**
 	 * Model's input shape, the shape is the same as model's input layer.
 	 *
 	 * @type { Array }
@@ -598,6 +606,8 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
                     this.anchors,
                     this.classLabelList,
                     this.scoreThreshold,
+					this.iouThreshold,
+                    this.isNMS,
 				)
 
 			} else {
@@ -611,6 +621,7 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
                     this.anchors,
                     this.classLabelList,
                     this.scoreThreshold,
+                    this.iouThreshold,
                     this.isDrawFiveBoxes,
                     widthIndex,
                     heightIndex
@@ -673,7 +684,11 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
             this.scoreThreshold = layerConfig.scoreThreshold;
 
+            this.iouThreshold = layerConfig.iouThreshold;
+
             this.isDrawFiveBoxes = layerConfig.isDrawFiveBoxes;
+
+			this.isNMS = layerConfig.isNMS;
 
 		}
 

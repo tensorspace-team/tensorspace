@@ -20,12 +20,12 @@ function Conv2d( config ) {
 
 	/**
 	 * The dimension of the convolution window.
-	 * The 2d convolutional window is square.
+	 * The 2d convolutional window is rectangle.
 	 *
 	 * @type { int }
 	 */
 
-	this.kernelSize = undefined;
+	this.kernelSize = [ 1, 1 ];
 
 	/**
 	 * The depth of the layer output.
@@ -37,12 +37,12 @@ function Conv2d( config ) {
 
 	/**
 	 * The strides of the convolution.
-	 * Strides in both dimensions are equal.
+	 * Strides in both dimensions may be different.
 	 *
 	 * @type { int }
 	 */
 
-	this.strides = undefined;
+	this.strides = [ 1, 1 ];
 
 	/**
 	 * Padding mode.
@@ -121,15 +121,15 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 				// ceil[ ( W - F + 1 ) / S ]
 
-				this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize + 1 ) / this.strides );
-				this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize + 1 ) / this.strides );
+				this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize[ 0 ] + 1 ) / this.strides[ 0 ] );
+				this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize[ 1 ] + 1 ) / this.strides[ 1 ] );
 
 			} else if ( this.padding === "same" ) {
 
 				// ceil( W / S )
 
-				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides );
-				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides );
+				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides[ 0 ] );
+				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides[ 1 ] );
 
 			}
 
@@ -247,8 +247,37 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			// Optional configuration.
 
-			this.kernelSize = layerConfig.kernelSize;
-			this.strides = layerConfig.strides;
+			if ( layerConfig.kernelSize !== undefined ) {
+
+				if ( layerConfig.kernelSize instanceof Array ) {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+
+				} else {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+					this.kernelSize[ 1 ] = layerConfig.kernelSize;
+
+				}
+
+			}
+
+			if ( layerConfig.strides !== undefined ) {
+
+				if ( layerConfig.strides instanceof Array ) {
+
+					this.strides[ 0 ] = layerConfig.strides[ 0 ];
+					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+				} else {
+
+					this.strides[ 0 ] = layerConfig.strides;
+					this.strides[ 1 ] = layerConfig.strides;
+
+				}
+
+			}
 
 			// "filters" configuration is required.
 
