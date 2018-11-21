@@ -220,7 +220,9 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	initTSPModel: function() {
 
-		this.updateCamera( this.layers.length );
+		this.depth = this.layers.length;
+
+		this.updateCamera();
 		this.createModelElements();
 		this.registerModelEvent();
 		this.animate();
