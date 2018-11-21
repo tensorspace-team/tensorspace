@@ -113,6 +113,14 @@ function AbstractModel( container, config ) {
 	this.hoveredLayer = undefined;
 
 	/**
+	 * Model's depth in visualization.
+	 *
+	 * @type { Int }
+	 */
+
+	this.depth = undefined;
+
+	/**
 	 * Model configuration.
 	 * Initialized with user's model config and default model config.
 	 *

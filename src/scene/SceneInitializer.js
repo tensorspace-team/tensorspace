@@ -97,7 +97,7 @@ SceneInitializer.prototype = {
 
 	updateCamera: function() {
 
-		let modelDepth = this.layers.length;
+		let modelDepth = this.depth;
 		let controlRatio = getControlRatio( modelDepth );
 
 		this.camera.position.set(

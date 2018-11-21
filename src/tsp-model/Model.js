@@ -248,7 +248,10 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		this.createGraph();
 		this.assembleLayers();
-		this.updateCamera( this.layers.length );
+
+		this.depth = this.levelMap.length;
+
+		this.updateCamera();
 		this.createModelElements();
 		this.registerModelEvent();
 		this.animate();
