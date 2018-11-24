@@ -334,9 +334,9 @@
 
     ...
     // necessary configurations
-    inputs: [input],
-    outputs: [addLayer],
-    outputsOrder: ["input", "conv1", "conv2", "conv3", "add"],
+    inputs: [ input ],
+    outputs: [ addLayer ],
+    outputsOrder: [ "conv1", "conv2", "conv3", "add" ],
     layerShape: "rect",
     layerInitStatus: "close",
     stats: true
@@ -351,48 +351,65 @@
         </div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">let input = new TSP.layers.GreyscaleInput({
-        shape: [28, 28, 1]
-});
+            <pre><code class="Javascript">let input = new TSP.layers.GreyscaleInput( {
 
-let layer1 = new TSP.layers.Conv2d({
+        shape: [ 28, 28, 1 ]
+
+} );
+
+let layer1 = new TSP.layers.Conv2d( {
+
 	kernelSize: 2,
 	filters: 36,
 	strides: 1,
-	padding: "same"
-});
+	padding: "same",
+	name: "conv1"
+
+} );
 
 layer1.apply( input );
 
-let layer2 = new TSP.layers.Conv2d({
+let layer2 = new TSP.layers.Conv2d( {
+
 	kernelSize: 2,
 	filters: 36,
 	strides: 1,
-	padding: "same"
-});
+	padding: "same",
+	name: "conv2"
+
+} );
 
 layer2.apply( input );
 
-let layer3 = new TSP.layers.Conv2d({
+let layer3 = new TSP.layers.Conv2d( {
+
 	kernelSize: 2,
 	filters: 4,
 	strides: 1,
-	padding: "same"
-});
+	padding: "same",
+	name: "conv3"
+
+} );
 
 layer3.apply( layer2 );
 
-let addLayer = new TSP.layers.Add([layer1, layer3]);
+let addLayer = new TSP.layers.Add(
+
+    [ layer1, layer3 ],
+
+    { name: "add" }
+
+);
 
 let model = new TSP.model.Model(container, {
 
     ...
-    inputs: [input],
-    outputs: [addLayer],
-    outputsOrder: ["input", "conv1", "conv2", "conv3", "add"],
+    inputs: [ input ],
+    outputs: [ addLayer ],
+    outputsOrder: [ "conv1", "conv2", "conv3", "add" ],
     ...
 
-});</code></pre>
+} );</code></pre>
         </div>
 
         <div>
