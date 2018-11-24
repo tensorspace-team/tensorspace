@@ -8,7 +8,7 @@ function Subtract3d( mergedElements ) {
 
 	StableMerge3d.call( this, mergedElements );
 
-	this.strategyType = "subtract3d";
+	this.strategyType = "Subtract3d";
 
 }
 

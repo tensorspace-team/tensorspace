@@ -82,13 +82,20 @@ function MergedLayer3d( config ) {
 
 	this.autoOutputDetect = false;
 
+	/**
+	 * layerType will be set based on operation strategy.
+	 * For example: Add3d
+	 *
+	 * @type { String }
+	 */
+
+	this.layerType = undefined;
+
 	// Init concrete strategy based on config.
 
 	this.initStrategy( config );
 
 	this.layerDimension = 3;
-
-	this.layerType = "MergedLayer3d";
 
 }
 
@@ -634,6 +641,10 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 			// Get concrete strategy from factory.
 
 			this.operationStrategy = StrategyFactory.getOperationStrategy( this.operator, 3, this.mergedElements );
+
+			// Set layerType based on operation type.
+
+			this.layerType = this.operationStrategy.strategyType;
 
 		}
 

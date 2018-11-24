@@ -8,7 +8,7 @@ function Maximum3d( mergedElements ) {
 
 	StableMerge3d.call( this, mergedElements );
 
-	this.strategyType = "maximum3d";
+	this.strategyType = "Maximum3d";
 
 }
 

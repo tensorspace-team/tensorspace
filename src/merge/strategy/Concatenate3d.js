@@ -8,7 +8,7 @@ function Concatenate3d( mergedElements ) {
 
 	Strategy3d.call( this, mergedElements );
 
-	this.strategyType = "concatenate3d";
+	this.strategyType = "Concatenate3d";
 
 }
 

@@ -8,7 +8,7 @@ function Add3d( mergedElements ) {
 
 	StableMerge3d.call( this, mergedElements );
 
-	this.strategyType = "add3d";
+	this.strategyType = "Add3d";
 
 }
 

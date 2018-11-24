@@ -8,7 +8,7 @@ function Multiply3d( mergedElements ) {
 
 	StableMerge3d.call( this, mergedElements );
 
-	this.strategyType = "multiply3d";
+	this.strategyType = "Multiply3d";
 
 }
 

@@ -8,7 +8,7 @@ function Average3d( mergedElements ) {
 
 	StableMerge3d.call( this, mergedElements );
 
-	this.strategyType = "average3d";
+	this.strategyType = "Average3d";
 
 }
 
