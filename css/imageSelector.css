@@ -33,6 +33,7 @@
     border: 1px solid #6597AF;
     transition: all 1s;
     display: none;
+    overflow-x: hidden;
 
 }
 
