@@ -20,20 +20,22 @@ function Pooling2d( config ) {
 	/**
 	 * Factors by which to downscale in each dimension.
 	 * For example: [2, 3], 2 for width, 3 for height.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { Array }
 	 */
 
-	this.poolSize = undefined;
+	this.poolSize = [ 1, 1 ];
 
 	/**
 	 * The size of the stride in each dimension of the pooling window.
 	 * For example: [2, 2]
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { Array }
 	 */
 
-	this.strides = undefined;
+	this.strides = [ 1, 1 ];
 
 	/**
 	 * Padding mode.
@@ -249,7 +251,17 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			if ( layerConfig.poolSize !== undefined ) {
 
-				this.poolSize = layerConfig.poolSize;
+				if ( layerConfig.poolSize instanceof Array ) {
+
+					this.poolSize[ 0 ] = layerConfig.poolSize[ 0 ];
+					this.poolSize[ 1 ] = layerConfig.poolSize[ 1 ];
+
+				} else {
+
+					this.poolSize[ 0 ] = layerConfig.poolSize;
+					this.poolSize[ 1 ] = layerConfig.poolSize;
+
+				}
 
 			} else {
 
@@ -261,7 +273,17 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			if ( layerConfig.strides !== undefined ) {
 
-				this.strides = layerConfig.strides;
+				if ( layerConfig.strides instanceof Array ) {
+
+					this.strides[ 0 ] = layerConfig.strides[ 0 ];
+					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+				} else {
+
+					this.strides[ 0 ] = layerConfig.strides;
+					this.strides[ 1 ] = layerConfig.strides;
+
+				}
 
 			} else {
 

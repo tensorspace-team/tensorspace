@@ -20,12 +20,13 @@ function Conv2dTranspose( config ) {
 
 	/**
 	 * The dimension of the convolution window.
-	 * The 2d convolutional window is square.
+	 * The 2d convolutional window is rectangle.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
 
-	this.kernelSize = undefined;
+	this.kernelSize = [ 1, 1 ];
 
 	/**
 	 * The depth of the layer output.
@@ -37,12 +38,13 @@ function Conv2dTranspose( config ) {
 
 	/**
 	 * The strides of the convolution.
-	 * Strides in both dimensions are equal.
+	 * Strides in both dimensions may be different.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
 
-	this.strides = undefined;
+	this.strides = [ 1, 1 ];
 
 	/**
 	 * 2d feature map shape, stored as array.
@@ -124,8 +126,8 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 			// ( W - 1 ) * S + F
 
-			this.width = ( this.inputShape[ 0 ] - 1 ) * this.strides + this.kernelSize;
-			this.height = ( this.inputShape[ 1 ] - 1 ) * this.strides + this.kernelSize;
+			this.width = ( this.inputShape[ 0 ] - 1 ) * this.strides[ 0 ] + this.kernelSize[ 0 ];
+			this.height = ( this.inputShape[ 1 ] - 1 ) * this.strides[ 1 ] + this.kernelSize[ 1 ];
 
 		}
 
@@ -256,13 +258,33 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 			if ( layerConfig.kernelSize !== undefined ) {
 
-				this.kernelSize = layerConfig.kernelSize;
+				if ( layerConfig.kernelSize instanceof Array ) {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+
+				} else {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+
+				}
 
 			}
 
 			if ( layerConfig.strides !== undefined ) {
 
-				this.strides = layerConfig.strides;
+				if ( layerConfig.strides instanceof Array ) {
+
+					this.strides[ 0 ] = layerConfig.strides[ 0 ];
+					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+				} else {
+
+					this.strides[ 0 ] = layerConfig.strides;
+					this.strides[ 1 ] = layerConfig.strides;
+
+				}
 
 			}
 

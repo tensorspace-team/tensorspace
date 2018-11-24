@@ -21,6 +21,7 @@ function Conv2d( config ) {
 	/**
 	 * The dimension of the convolution window.
 	 * The 2d convolutional window is rectangle.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
@@ -38,6 +39,7 @@ function Conv2d( config ) {
 	/**
 	 * The strides of the convolution.
 	 * Strides in both dimensions may be different.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
