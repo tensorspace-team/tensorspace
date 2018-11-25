@@ -14,6 +14,7 @@ import { Subtract2d } from "../strategy/Subtract2d";
 import { Maximum2d } from "../strategy/Maximum2d";
 import { Average2d } from "../strategy/Average2d";
 import { Multiply2d } from "../strategy/Multiply2d";
+import { Concatenate2d } from "../strategy/Concatenate2d";
 
 let StrategyFactory = ( function() {
 
@@ -59,7 +60,7 @@ let StrategyFactory = ( function() {
 
 			} else if ( operator === "concatenate" ) {
 
-
+				return new Concatenate2d( mergedElements );
 
 			} else if ( operator === "subtract" ) {
 

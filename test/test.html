@@ -74,7 +74,7 @@
 
     model.add( conv1d2 );
 
-    let addLayer = TSP.layers.Multiply( [ conv1d1, conv1d2 ] );
+    let addLayer = TSP.layers.Concatenate( [ conv1d1, conv1d2 ] );
 
     model.add( addLayer );
 
