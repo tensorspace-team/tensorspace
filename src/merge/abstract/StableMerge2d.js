@@ -2,15 +2,15 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Strategy3d } from "../abstract/Strategy3d";
+import { Strategy2d } from "./Strategy2d";
 
-function StableMerge3d( mergedElements ) {
+function StableMerge2d( mergedElements ) {
 
-	Strategy3d.call( this, mergedElements );
+	Strategy2d.call( this, mergedElements );
 
 }
 
-StableMerge3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), {
+StableMerge2d.prototype = Object.assign( Object.create( Strategy2d.prototype ), {
 
 	validate: function() {
 
@@ -91,13 +91,13 @@ StableMerge3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), 
 
 			}
 
-		} else if ( selectedElement.elementType === "featureMap" ) {
+		} else if ( selectedElement.elementType === "gridLine" ) {
 
-			let fmIndex = selectedElement.fmIndex;
+			let gridIndex = selectedElement.gridIndex;
 
 			let request = {
 
-				index: fmIndex
+				index: gridIndex
 
 			};
 
@@ -152,4 +152,4 @@ StableMerge3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), 
 
 } );
 
-export { StableMerge3d };
+export { StableMerge2d };

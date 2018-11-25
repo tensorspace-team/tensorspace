@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { StableMerge3d } from "./StableMerge3d";
+import { StableMerge3d } from "../abstract/StableMerge3d";
 
 function Multiply3d( mergedElements ) {
 

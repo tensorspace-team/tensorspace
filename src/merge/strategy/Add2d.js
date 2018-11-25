@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { StableMerge2d } from "./StableMerge2d";
+import { StableMerge2d } from "../abstract/StableMerge2d";
 
 function Add2d( mergedElements ) {
 
