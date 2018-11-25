@@ -9,6 +9,7 @@ import { Multiply3d } from "../strategy/Multiply3d";
 import { Dot3d } from "../strategy/Dot3d";
 import { Maximum3d } from "../strategy/Maximum3d";
 import { Average3d }  from "../strategy/Average3d";
+import {Add2d} from "../strategy/Add2d";
 
 let StrategyFactory = ( function() {
 
@@ -47,6 +48,12 @@ let StrategyFactory = ( function() {
 			}
 
 		} else if ( dimension === 2 ) {
+
+			if ( operator === "add" ) {
+
+				return new Add2d( mergedElements );
+
+			}
 
 		} else if ( dimension === 1 ) {
 
