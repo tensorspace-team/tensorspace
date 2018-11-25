@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import { MergedLayer2d } from "../layer/abstract/MergedLayer2d";
 import { MergedLayer3d } from "../layer/abstract/MergedLayer3d";
 
 function Subtract( layerList, config ) {
@@ -43,6 +44,14 @@ function Subtract( layerList, config ) {
 		if ( layerList[ 0 ].layerDimension === 1 ) {
 
 		} else if ( layerList[ 0 ].layerDimension === 2 ) {
+
+			return new MergedLayer2d( {
+
+				operator: operatorType,
+				mergedElements: layerList,
+				userConfig: userConfig
+
+			} );
 
 		} else if ( layerList[ 0 ].layerDimension === 3 ) {
 
