@@ -68,7 +68,7 @@ Concatenate3d.prototype = Object.assign( Object.create( MergeStrategy3d.prototyp
 				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
 				let relativeElements = relativeResult.elementList;
 
-				if ( this.mergedElements[ i ].layerIndex === this.layerContext.layerIndex - 1 ) {
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
 
 					for ( let j = 0; j < relativeElements.length; j ++ ) {
 
@@ -132,7 +132,7 @@ Concatenate3d.prototype = Object.assign( Object.create( MergeStrategy3d.prototyp
 			let relativeResult = relativeLayer.provideRelativeElements( request );
 			let relativeElements = relativeResult.elementList;
 
-			if ( relativeLayer.layerIndex === this.layerContext.layerIndex - 1 ) {
+			if ( relativeLayer.layerLevel === this.layerContext.layerLevel - 1 ) {
 
 				for ( let i = 0; i < relativeElements.length; i ++ ) {
 

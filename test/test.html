@@ -45,32 +45,65 @@
 
 	let container = document.getElementById("container");
 
-    let model = new TSP.models.Sequential(container, {
-        layerShape: "rect",
-		layerInitStatus: "close"
+//    let model = new TSP.models.Sequential(container, {
+//        layerShape: "rect",
+//		layerInitStatus: "close"
+//    });
+//
+//    let input = new TSP.layers.Input1d({
+//        shape: [28]
+//    });
+//
+//    model.add(input);
+//
+//    let dense1 = new TSP.layers.Dense({
+//        units: 10
+//    });
+//
+//    model.add( dense1 );
+//
+//    let dense2 = new TSP.layers.Dense({
+//		units: 10
+//    });
+//
+//    model.add( dense2 );
+//
+//    let addLayer = TSP.layers.Concatenate( [ dense1, dense2 ] );
+//
+//    model.add( addLayer );
+
+    let input = new TSP.layers.GreyscaleInput({
+		shape: [28, 28]
     });
 
-    let input = new TSP.layers.Input1d({
-        shape: [28]
+    let conv2d1 = new TSP.layers.Conv2d({
+		kernelSize: 5,
+		filters: 6,
+		strides: 1,
+		name: "conv2d1",
+        padding: "same"
     });
 
-    model.add(input);
+    conv2d1.apply( input );
 
-    let dense1 = new TSP.layers.Dense({
-        units: 10
+	let conv2d2 = new TSP.layers.Conv2d({
+		kernelSize: 5,
+		filters: 6,
+		strides: 1,
+		name: "conv2d2",
+		padding: "same"
+	});
+
+	conv2d2.apply( input );
+
+	let addLayer = TSP.layers.Add( [ conv2d1, conv2d2 ] );
+
+	let model = new TSP.models.Model(container, {
+
+        inputs: [input],
+        outputs: [addLayer]
+
     });
-
-    model.add( dense1 );
-
-    let dense2 = new TSP.layers.Dense({
-		units: 10
-    });
-
-    model.add( dense2 );
-
-    let addLayer = TSP.layers.Concatenate( [ dense1, dense2 ] );
-
-    model.add( addLayer );
 
     model.init();
 
