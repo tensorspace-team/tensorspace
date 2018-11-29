@@ -1,47 +1,47 @@
 let model;
 let imagenetResult;
-let predictDataKey = "tabby";
+let predictDataKey = "persian";
 let selectedDiv = undefined;
 
 let dataLookup = {
 
-	tabby: {
+	persian: {
 
 		relativeDiv: "data1",
-		dataUrl: "../../assets/data/tabby.json",
-		imageUrl: "../../assets/img/playground/tabby.jpg"
+		dataUrl: "../../assets/data/persian.json",
+		imageUrl: "../../assets/img/playground/persian.jpg"
 
 	},
 
-	macaw: {
+	hamster: {
 
 		relativeDiv: "data2",
-		dataUrl: "../../assets/data/macaw.json",
-		imageUrl: "../../assets/img/playground/macaw.jpg"
+		dataUrl: "../../assets/data/hamster.json",
+		imageUrl: "../../assets/img/playground/hamster.jpg"
 
 	},
 
-	tigerShark: {
+	ram: {
 
 		relativeDiv: "data3",
-		dataUrl: "../../assets/data/tigerShark.json",
-		imageUrl: "../../assets/img/playground/tigerShark.jpg"
+		dataUrl: "../../assets/data/ram.json",
+		imageUrl: "../../assets/img/playground/ram.jpg"
 
 	},
 
-	golfBall: {
+	samoyed: {
 
 		relativeDiv: "data4",
-		dataUrl: "../../assets/data/golfBall.json",
-		imageUrl: "../../assets/img/playground/golfBall.jpg"
+		dataUrl: "../../assets/data/samoyed.json",
+		imageUrl: "../../assets/img/playground/samoyed.jpg"
 
 	},
 
-	golfCart: {
+	rabbit: {
 
 		relativeDiv: "data5",
-		dataUrl: "../../assets/data/golfCart.json",
-		imageUrl: "../../assets/img/playground/golfCart.jpg"
+		dataUrl: "../../assets/data/rabbit.json",
+		imageUrl: "../../assets/img/playground/rabbit.jpg"
 
 	}
 
