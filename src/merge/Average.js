@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import { MergedLayer1d } from "../layer/abstract/MergedLayer1d";
 import { MergedLayer2d } from "../layer/abstract/MergedLayer2d";
 import { MergedLayer3d } from "../layer/abstract/MergedLayer3d";
 
@@ -42,6 +43,14 @@ function Average( layerList, config ) {
 	function createMergedLayer( layerList, userConfig ) {
 
 		if ( layerList[ 0 ].layerDimension === 1 ) {
+
+			return new MergedLayer1d( {
+
+				operator: operatorType,
+				mergedElements: layerList,
+				userConfig: userConfig
+
+			} );
 
 		} else if ( layerList[ 0 ].layerDimension === 2 ) {
 

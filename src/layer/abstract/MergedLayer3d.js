@@ -82,15 +82,6 @@ function MergedLayer3d( config ) {
 
 	this.autoOutputDetect = false;
 
-	/**
-	 * layerType will be set based on operation strategy.
-	 * For example: Add3d
-	 *
-	 * @type { String }
-	 */
-
-	this.layerType = undefined;
-
 	// Init concrete strategy based on config.
 
 	this.initStrategy( config );
