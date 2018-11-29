@@ -24,7 +24,7 @@ TensorSpace is a neural network 3D visualization framework built by TensorFlow.j
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
-<b>Fig.1</b> - Interactive LeNet created by TensorSpace
+<b>Fig. 1</b> - Interactive LeNet created by TensorSpace
 </p>
 
 ## Table of Content
@@ -50,6 +50,13 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
 
 
 ## Getting Start
+
+<p align="center">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/workflow.png">
+</p>
+<p align="center">
+<b>Fig. 2</b> - TensorSpace Workflow
+</p>
 
 ### Install
 
@@ -141,7 +148,7 @@ We can get the following Fig. 2 model in the browser if everything looks good.
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
-<b>Fig. 2</b> - LeNet model without any input data
+<b>Fig. 3</b> - LeNet model without any input data
 </p>
 
 
@@ -162,7 +169,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
-<b>Fig. 3</b> - LeNet model with input data "5"
+<b>Fig. 4</b> - LeNet model with input data "5"
 </p>
 
 ## Example
@@ -175,7 +182,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
-<b>Fig.4</b> - Interactive LeNet created by TensorSpace
+<b>Fig. 5</b> - Interactive LeNet created by TensorSpace
 </p>
 
 * **AlexNet** 
@@ -186,7 +193,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_alexnet.gif">
 </p>
 <p align="center">
-<b>Fig.5</b> - Interactive AlexNet created by TensorSpace
+<b>Fig. 6</b> - Interactive AlexNet created by TensorSpace
 </p>
 
 * **Yolov2-tiny**
@@ -197,7 +204,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_yolov2.gif">
 </p>
 <p align="center">
-<b>Fig.6</b> - Interactive Yolov2-tiny created by TensorSpace
+<b>Fig. 7</b> - Interactive Yolov2-tiny created by TensorSpace
 </p>
 
 * **ResNet-50**
@@ -208,7 +215,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_resnet50.gif">
 </p>
 <p align="center">
-<b>Fig.7</b> - Interactive ResNet-50 created by TensorSpace
+<b>Fig. 8</b> - Interactive ResNet-50 created by TensorSpace
 </p>
 
 * **Vgg16**
@@ -219,7 +226,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_vgg.gif">
 </p>
 <p align="center">
-<b>Fig.8</b> - Interactive Vgg16 created by TensorSpace
+<b>Fig. 9</b> - Interactive Vgg16 created by TensorSpace
 </p>
 
 * **ACGAN**
@@ -230,7 +237,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_acgan.gif">
 </p>
 <p align="center">
-<b>Fig.9</b> - Interactive ACGAN created by TensorSpace
+<b>Fig. 10</b> - Interactive ACGAN created by TensorSpace
 </p>
 
 * **MobileNetv1**
@@ -241,7 +248,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_mobilenetv1.gif">
 </p>
 <p align="center">
-<b>Fig.10</b> - Interactive MobileNetv1 created by TensorSpace
+<b>Fig. 11</b> - Interactive MobileNetv1 created by TensorSpace
 </p>
 
 ### View models locally

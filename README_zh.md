@@ -57,6 +57,13 @@ TensorSpace 降低了前端开发者进行深度学习相关应用开发的门�
 
 ## <div id="getting-start">开始使用</div>
 
+<p align="center">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/workflow_zh.png">
+</p>
+<p align="center">
+<b>图2</b> - TensorSpace 使用流程
+</p>
+
 ### 安装
 
 * **第一步: 下载 TensorSpace.js**
@@ -145,7 +152,7 @@ model.init(function(){
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
-<b>图2</b> - 所创建的 LeNet 模型 (无输入数据）
+<b>图3</b> - 所创建的 LeNet 模型 (无输入数据）
 </p>
 
 我们可以使用我们已经提取好的[手写“5”](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json)作为模型的输入：
@@ -164,7 +171,7 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
-<b>图3</b> - LeNet 模型判别输入 “5”
+<b>图4</b> - LeNet 模型判别输入 “5”
 </p>
 
 ## <div id="example">样例展示</div>
@@ -177,7 +184,7 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
-<b>图4</b> - 使用 TensorSpace 构建 LeNet
+<b>图5</b> - 使用 TensorSpace 构建 LeNet
 </p>
 
 * **AlexNet** 
@@ -188,7 +195,7 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_alexnet.gif">
 </p>
 <p align="center">
-<b>图5</b> - 使用 TensorSpace 构建 AlexNet
+<b>图6</b> - 使用 TensorSpace 构建 AlexNet
 </p>
 
 * **Yolov2-tiny** 
@@ -199,7 +206,7 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_yolov2.gif">
 </p>
 <p align="center">
-<b>图6</b> - 使用 TensorSpace 构建 YOLO-v2-tiny
+<b>图7</b> - 使用 TensorSpace 构建 YOLO-v2-tiny
 </p>
 
 * **ResNet-50**
@@ -210,7 +217,7 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_resnet50.gif">
 </p>
 <p align="center">
-<b>图7</b> - 使用 TensorSpace 构建 ResNet-50
+<b>图8</b> - 使用 TensorSpace 构建 ResNet-50
 </p>
 
 * **Vgg16**
@@ -221,7 +228,7 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_vgg.gif">
 </p>
 <p align="center">
-<b>图8</b> - 使用 TensorSpace 构建 VGG-16
+<b>图9</b> - 使用 TensorSpace 构建 VGG-16
 </p>
 
 * **ACGAN**
@@ -232,7 +239,7 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_acgan.gif">
 </p>
 <p align="center">
-<b>图9</b> - 使用 TensorSpace 构建 ACGAN 生成网络
+<b>图10</b> - 使用 TensorSpace 构建 ACGAN 生成网络
 </p>
 
 * **MobileNetv1**
@@ -243,7 +250,7 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_mobilenetv1.gif">
 </p>
 <p align="center">
-<b>图10</b> - 使用 TensorSpace 构建 MobileNetv1 生成网络
+<b>图11</b> - 使用 TensorSpace 构建 MobileNetv1 生成网络
 </p>
 
 ### 本地查看以上模型
