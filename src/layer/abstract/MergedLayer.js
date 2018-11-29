@@ -54,6 +54,15 @@ function MergedLayer( config ) {
 
 	this.mergedElements = [];
 
+	/**
+	 * layerType will be set based on operation strategy.
+	 * For example: Add3d, Subtract1d, Maximum2d
+	 *
+	 * @type { String }
+	 */
+
+	this.layerType = undefined;
+
 }
 
 MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {

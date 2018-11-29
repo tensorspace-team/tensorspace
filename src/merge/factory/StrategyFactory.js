@@ -16,6 +16,10 @@ import { Average2d } from "../strategy/Average2d";
 import { Multiply2d } from "../strategy/Multiply2d";
 import { Concatenate2d } from "../strategy/Concatenate2d";
 import { Add1d } from "../strategy/Add1d";
+import { Subtract1d } from "../strategy/Subtract1d";
+import { Maximum1d } from "../strategy/Maximum1d";
+import { Average1d } from "../strategy/Average1d";
+import { Multiply1d } from "../strategy/Multiply1d";
 
 let StrategyFactory = ( function() {
 
@@ -89,7 +93,31 @@ let StrategyFactory = ( function() {
 
 			if ( operator === "add" ) {
 
-				return new Add1d( mergedElements );
+				return new Add2d( mergedElements );
+
+			} else if ( operator === "concatenate" ) {
+
+
+
+			} else if ( operator === "subtract" ) {
+
+				return new Subtract1d( mergedElements );
+
+			} else if ( operator === "multiply" ) {
+
+				return new Multiply1d( mergedElements );
+
+			} else if ( operator === "dot" ) {
+
+
+
+			} else if ( operator === "maximum" ) {
+
+				return new Maximum1d( mergedElements );
+
+			} else if ( operator === "average" ) {
+
+				return new Average1d( mergedElements );
 
 			}
 
