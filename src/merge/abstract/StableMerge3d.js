@@ -2,15 +2,15 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Strategy3d } from "./Strategy3d";
+import { MergeStrategy3d } from "./MergeStrategy3d";
 
 function StableMerge3d( mergedElements ) {
 
-	Strategy3d.call( this, mergedElements );
+	MergeStrategy3d.call( this, mergedElements );
 
 }
 
-StableMerge3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), {
+StableMerge3d.prototype = Object.assign( Object.create( MergeStrategy3d.prototype ), {
 
 	validate: function() {
 

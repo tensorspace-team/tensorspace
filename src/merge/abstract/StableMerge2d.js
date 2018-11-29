@@ -2,15 +2,15 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Strategy2d } from "./Strategy2d";
+import { MergeStrategy2d } from "./MergeStrategy2d";
 
 function StableMerge2d( mergedElements ) {
 
-	Strategy2d.call( this, mergedElements );
+	MergeStrategy2d.call( this, mergedElements );
 
 }
 
-StableMerge2d.prototype = Object.assign( Object.create( Strategy2d.prototype ), {
+StableMerge2d.prototype = Object.assign( Object.create( MergeStrategy2d.prototype ), {
 
 	validate: function() {
 

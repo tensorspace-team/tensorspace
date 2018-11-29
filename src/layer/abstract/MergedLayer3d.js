@@ -68,7 +68,7 @@ function MergedLayer3d( config ) {
 	 * Initialized in MergedLayer3d's initStrategy period.
 	 * Applicable strategy: Add3d, Average3d, Concatenate3d, Dot3d, Maximum3d, Multiply3d, Subtract3d.
 	 *
-	 * @type { Object }, Strategy3d
+	 * @type { Object }, MergeStrategy3d
 	 */
 
 	this.operationStrategy = undefined;

@@ -1,14 +1,18 @@
-import { Strategy2d } from "../abstract/Strategy2d";
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+import { MergeStrategy2d } from "../abstract/MergeStrategy2d";
 
 function Concatenate2d( mergedElements ) {
 
-	Strategy2d.call( this, mergedElements );
+	MergeStrategy2d.call( this, mergedElements );
 
 	this.strategyType = "Concatenate2d";
 
 }
 
-Concatenate2d.prototype = Object.assign( Object.create( Strategy2d.prototype ), {
+Concatenate2d.prototype = Object.assign( Object.create( MergeStrategy2d.prototype ), {
 
 	validate: function() {
 

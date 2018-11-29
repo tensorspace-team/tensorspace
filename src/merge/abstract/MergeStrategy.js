@@ -2,14 +2,14 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-function Strategy3d( mergedElements ) {
+function MergeStrategy( mergedElements ) {
 
 	this.mergedElements = mergedElements;
 	this.layerIndex = undefined;
 
 }
 
-Strategy3d.prototype = {
+MergeStrategy.prototype = {
 
 	setLayerIndex: function( layerIndex ) {
 
@@ -25,7 +25,7 @@ Strategy3d.prototype = {
 
 	getOutputShape: function() {
 
-		return [ 1, 1, 1 ];
+		return undefined;
 
 	},
 
@@ -42,4 +42,4 @@ Strategy3d.prototype = {
 
 };
 
-export { Strategy3d };
+export { MergeStrategy };

@@ -2,15 +2,15 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Strategy1d } from "./Strategy1d";
+import { MergeStrategy1d } from "./MergeStrategy1d";
 
 function StableMerge1d( mergedElements ) {
 
-	Strategy1d.call( this, mergedElements );
+	MergeStrategy1d.call( this, mergedElements );
 
 }
 
-StableMerge1d.prototype = Object.assign( Object.create( Strategy1d.prototype ), {
+StableMerge1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototype ), {
 
 	validate: function() {
 

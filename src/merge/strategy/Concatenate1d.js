@@ -1,14 +1,18 @@
-import { Strategy1d } from "../abstract/Strategy1d";
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+import { MergeStrategy1d } from "../abstract/MergeStrategy1d";
 
 function Concatenate1d( mergedElements ) {
 
-	Strategy1d.call( this, mergedElements );
+	MergeStrategy1d.call( this, mergedElements );
 
 	this.strategyType = "Concatenate1d";
 
 }
 
-Concatenate1d.prototype = Object.assign( Object.create( Strategy1d.prototype ), {
+Concatenate1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototype ), {
 
 	validate: function() {
 

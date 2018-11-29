@@ -2,17 +2,17 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Strategy3d } from "../abstract/Strategy3d";
+import { MergeStrategy3d } from "../abstract/MergeStrategy3d";
 
 function Concatenate3d( mergedElements ) {
 
-	Strategy3d.call( this, mergedElements );
+	MergeStrategy3d.call( this, mergedElements );
 
 	this.strategyType = "Concatenate3d";
 
 }
 
-Concatenate3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), {
+Concatenate3d.prototype = Object.assign( Object.create( MergeStrategy3d.prototype ), {
 
 	validate: function() {
 
