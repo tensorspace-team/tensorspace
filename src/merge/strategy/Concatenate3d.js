@@ -110,7 +110,7 @@ Concatenate3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), 
 
 				let layerDepth = this.mergedElements[ i ].outputShape[ 2 ];
 
-				if ( layerDepth >= fmIndex ) {
+				if ( layerDepth > fmIndex ) {
 
 					relativeLayer = this.mergedElements[ i ];
 					break;
