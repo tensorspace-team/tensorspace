@@ -59,20 +59,9 @@ Concatenate1d.prototype = Object.assign( Object.create( Strategy1d.prototype ), 
 
 				} else {
 
-					if ( relativeResult.isOpen ) {
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
 
-						for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-							straightElements.push( relativeElements[ j ] );
-						}
-
-					} else {
-
-						for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-							curveElements.push( relativeElements[ j ] );
-
-						}
+						curveElements.push( relativeElements[ j ] );
 
 					}
 
