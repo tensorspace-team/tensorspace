@@ -120,10 +120,6 @@ MergedLayer2d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		this.layerIndex = layerIndex;
 
-		// Set layer index to strategy, operationStrategy can know which layer it has been positioned.
-
-		this.operationStrategy.setLayerIndex( this.layerIndex );
-
 		// Validate whether user's input merged elements can be merged in this kind of merge operation.
 
 		if( !this.operationStrategy.validate() ) {
@@ -477,6 +473,10 @@ MergedLayer2d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 			// Get concrete strategy from factory.
 
 			this.operationStrategy = StrategyFactory.getOperationStrategy( this.operator, 2, this.mergedElements );
+
+			// set layer context for operation strategy
+
+			this.operationStrategy.setLayerContext( this );
 
 			// Set layerType based on operation type.
 

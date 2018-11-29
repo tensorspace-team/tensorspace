@@ -4,16 +4,16 @@
 
 function MergeStrategy( mergedElements ) {
 
+	this.layerContext = undefined;
 	this.mergedElements = mergedElements;
-	this.layerIndex = undefined;
 
 }
 
 MergeStrategy.prototype = {
 
-	setLayerIndex: function( layerIndex ) {
+	setLayerContext: function( layer ) {
 
-		this.layerIndex = layerIndex;
+		this.layerContext = layer;
 
 	},
 

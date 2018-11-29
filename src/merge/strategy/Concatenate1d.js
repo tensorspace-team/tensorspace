@@ -53,7 +53,7 @@ Concatenate1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototyp
 				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
 				let relativeElements = relativeResult.elementList;
 
-				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
+				if ( this.mergedElements[ i ].layerIndex === this.layerContext.layerIndex - 1 ) {
 
 					for ( let j = 0; j < relativeElements.length; j ++ ) {
 
