@@ -116,7 +116,7 @@ StableMerge3d.prototype = Object.assign( Object.create( MergeStrategy3d.prototyp
 
 				} else {
 
-					if ( relativeResult.isOpen ) {
+					if ( relativeResult.isOpen && !this.layerContext.isOpen ) {
 
 						for ( let j = 0; j < relativeElements.length; j ++ ) {
 

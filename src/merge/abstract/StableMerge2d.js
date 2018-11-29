@@ -116,7 +116,7 @@ StableMerge2d.prototype = Object.assign( Object.create( MergeStrategy2d.prototyp
 
 				} else {
 
-					if ( relativeResult.isOpen ) {
+					if ( relativeResult.isOpen && !this.layerContext.isOpen ) {
 
 						for ( let j = 0; j < relativeElements.length; j ++ ) {
 
@@ -148,7 +148,6 @@ StableMerge2d.prototype = Object.assign( Object.create( MergeStrategy2d.prototyp
 		};
 
 	}
-
 
 } );
 
