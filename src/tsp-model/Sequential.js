@@ -278,7 +278,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		// Assemble new layer.
 
-		layer.assemble( this.layers.length );
+		layer.assemble( this.layers.length, this.layers.length );
 
 	},
 

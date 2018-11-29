@@ -110,7 +110,7 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 	},
 

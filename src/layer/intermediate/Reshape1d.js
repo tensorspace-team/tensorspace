@@ -63,9 +63,10 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 

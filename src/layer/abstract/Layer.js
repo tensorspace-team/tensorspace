@@ -250,6 +250,20 @@ function Layer( config ) {
 
 	this.layerType = undefined;
 
+	/**
+	 * The place for Layer in model, measured by y-axis in 3d scene.
+	 * For Sequential model:
+	 * 		the "layerLevel" will be the same as "layerIndex".
+	 * 		the layerLevel will be unique for all layers.
+	 * For Functional model:
+	 * 		the "layerLevel" may be the same for several layers.
+	 * 		these layers has different "layerIndex".
+	 *
+	 * @type { Int }
+	 */
+
+	this.layerLevel = undefined;
+
 	// Load layer config.
 
 	this.loadBasicLayerConfig( config );
@@ -497,7 +511,7 @@ Layer.prototype = {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 	},
 

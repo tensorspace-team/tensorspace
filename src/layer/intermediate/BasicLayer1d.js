@@ -44,9 +44,10 @@ BasicLayer1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
