@@ -20,6 +20,7 @@ import { Subtract1d } from "../strategy/Subtract1d";
 import { Maximum1d } from "../strategy/Maximum1d";
 import { Average1d } from "../strategy/Average1d";
 import { Multiply1d } from "../strategy/Multiply1d";
+import { Concatenate1d } from "../strategy/Concatenate1d";
 
 let StrategyFactory = ( function() {
 
@@ -93,11 +94,11 @@ let StrategyFactory = ( function() {
 
 			if ( operator === "add" ) {
 
-				return new Add2d( mergedElements );
+				return new Add1d( mergedElements );
 
 			} else if ( operator === "concatenate" ) {
 
-
+				return new Concatenate1d( mergedElements );
 
 			} else if ( operator === "subtract" ) {
 
