@@ -15,6 +15,7 @@ import { Maximum2d } from "../strategy/Maximum2d";
 import { Average2d } from "../strategy/Average2d";
 import { Multiply2d } from "../strategy/Multiply2d";
 import { Concatenate2d } from "../strategy/Concatenate2d";
+import { Add1d } from "../strategy/Add1d";
 
 let StrategyFactory = ( function() {
 
@@ -85,6 +86,12 @@ let StrategyFactory = ( function() {
 			}
 
 		} else if ( dimension === 1 ) {
+
+			if ( operator === "add" ) {
+
+				return new Add1d( mergedElements );
+
+			}
 
 		}
 

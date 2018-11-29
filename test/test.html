@@ -56,25 +56,19 @@
 
     model.add(input);
 
-    let conv1d1 = new TSP.layers.Conv1d({
-        filters: 6,
-		kernelSize: 5,
-        strides: 1,
-        padding: "same"
+    let dense1 = new TSP.layers.Dense({
+        units: 10
     });
 
-    model.add( conv1d1 );
+    model.add( dense1 );
 
-    let conv1d2 = new TSP.layers.Conv1d({
-		filters: 6,
-		kernelSize: 5,
-		strides: 1,
-		padding: "same"
+    let dense2 = new TSP.layers.Dense({
+		units: 10
     });
 
-    model.add( conv1d2 );
+    model.add( dense2 );
 
-    let addLayer = TSP.layers.Concatenate( [ conv1d1, conv1d2 ] );
+    let addLayer = TSP.layers.Add( [ dense1, dense2 ] );
 
     model.add( addLayer );
 
