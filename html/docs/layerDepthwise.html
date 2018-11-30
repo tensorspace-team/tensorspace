@@ -324,9 +324,14 @@
         <div class="sub-title">Constructor</div>
         <div>Two methods to create a new layer. Arguments are required.</div>
         <div>〔Method 1〕Use <span class="span_bold">kernelSize</span>
-            and <span class="span_bold">strides</span></div>
+            and <span class="span_bold">strides</span> (Support two formats)</div>
+        <div> Rectangle kernel and stride(same height and width) </div>
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.DepthwiseConv2d( { kernelSize: Int, strides: Int } );</code></pre>
+        </div>
+        <div> Kernel and stride with different width(first) and height(second) </div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">TSP.layers.DepthwiseConv2d( { filters : Int, kernelSize: [Int, Int], strides: [Int, Int] } );</code></pre>
         </div>
         <img class="tag-img" src="../../assets/img/docs/DepthwiseConv2d.jpg">
         <div class="img-label">

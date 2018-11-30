@@ -323,10 +323,15 @@
         <div>Transpose convolution (also known as deconvolution) is a partial same functional with upsampling. GAN model use it to construct the generative network.</div>
 
         <div class="sub-title">Constructor</div>
-        <div>〔Method 1〕Use <span class="span_bold">filters</span>, <span class="span_bold">kernalSize</span>
-            and <span class="span_bold">strides</span></div>
+        <div>〔Method 1〕Use <span class="span_bold">filters</span>, <span class="span_bold">kernelSize</span>
+            and <span class="span_bold">strides</span> (Support two formats)</div>
+        <div> Rectangle kernel and stride(same height and width) </div>
         <div class="code-snippet">
-            <pre><code class="Javascript">TSP.layers.Conv2dTranspose( { filters : Int, kernaleSize: Int, strides: Int } );</code></pre>
+            <pre><code class="Javascript">TSP.layers.Conv2dTranspose( { filters : Int, kernelSize: Int, strides: Int } );</code></pre>
+        </div>
+        <div> Kernel and stride with different width(first) and height(second) </div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">TSP.layers.Conv2dTranspose( { filters : Int, kernelSize: [Int, Int], strides: [Int, Int] } );</code></pre>
         </div>
         <img class="tag-img" src="../../assets/img/docs/Conv2dTranspose.jpg">
         <div class="img-label">

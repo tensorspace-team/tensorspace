@@ -323,9 +323,14 @@
         <div>Conv2d卷积层多用于图像识别，使用过滤器提取图像中的特征。</div>
         <div class="sub-title">构造器</div>
         <div>两种方法构造一个新建一个层，输入参数都是必要的。</div>
-        <div>〔方法一〕使用<span class="span_bold"> filters </span>,<span class="span_bold"> kernelSize </span>和<span class="span_bold"> strides </span>参数进行构造</div>
+        <div>〔方法一〕使用<span class="span_bold"> filters </span>,<span class="span_bold"> kernelSize </span>和<span class="span_bold"> strides </span>参数进行构造（支持两种不同的核形状和步进长度）</div>
+        <div> 正方形（长宽相等） </div>
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.Conv2d( { filters : Int, kernelSize: Int, strides: Int } );</code></pre>
+        </div>
+        <div> 长宽不等的核和步进长度使用一个数组两个值来表示（第一个是宽，第二个是长） </div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">TSP.layers.Conv2d( { filters : Int, kernelSize: [Int, Int], strides: [Int, Int] } );</code></pre>
         </div>
         <div>〔方法二〕使用<span class="span_bold"> shape </span>和<span class="span_bold"> filters </span>参数进行构造</div>
         <div class="code-snippet">
