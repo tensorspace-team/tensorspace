@@ -323,7 +323,12 @@
         <div>2d Pooling。<span class="span_bold">MaxPooling2d</span>或<span class="span_bold">AveragePooling2d</span>只改变计算方法，不改变模型结构，所以都是用这个API。</div>
         <div class="sub-title">构造器</div>
         <div>两种方法构造一个新建一个层，输入参数都是必要的。</div>
-        <div>〔方法一〕使用<span class="span_bold"> poolSize </span>和<span class="span_bold"> strides </span>参数进行构造</div>
+        <div>〔方法一〕使用<span class="span_bold"> poolSize </span>和<span class="span_bold"> strides </span>参数进行构造（支持两种不同的上采样长宽和步进长度）</div>
+        <div> 正方形（长宽相等） </div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">TSP.layers.Pooling2d( { poolSize : Int , strides: Int } );</code></pre>
+        </div>
+        <div> 长宽不等的核和步进长度使用一个数组两个值来表示（第一个是宽，第二个是长） </div>
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.Pooling2d( { poolSize : [ Int, Int ], strides: [ Int, Int ] } );</code></pre>
         </div>

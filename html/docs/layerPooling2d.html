@@ -323,7 +323,12 @@
         <div>2D pooling. <span class="span_bold">MaxPooling2d</span> and <span class="span_bold">AveragePooling2d</span> only change the calculate method not the structure of the model, so they both use this API.</div>
         <div class="sub-title">Constructor</div>
         <div>Two methods to create a new layer. Arguments are required.</div>
-        <div>〔Method 1〕Use <span class="span_bold">poolSize</span> and <span class="span_bold">strides</span></div>
+        <div>〔Method 1〕Use <span class="span_bold">poolSize</span> and <span class="span_bold">strides</span> (Support two formats)</div>
+        <div> Rectangle pool size(same height and width) </div>
+        <div class="code-snippet">
+            <pre><code class="Javascript">TSP.layers.Pooling2d( { poolSize : Int , strides: Int } );</code></pre>
+        </div>
+        <div> Pool size and stride with different width(first) and height(second) </div>
         <div class="code-snippet">
             <pre><code class="Javascript">TSP.layers.Pooling2d( { poolSize : [ Int, Int ], strides: [ Int, Int ] } );</code></pre>
         </div>
