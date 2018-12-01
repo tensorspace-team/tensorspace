@@ -82,6 +82,7 @@ MergedLayer2d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 			// Open layer and init one grid line (depth === 1) without initializing close button.
 
 			this.isOpen = true;
+			this.closeable = false;
 			this.initSegregationElements( this.openCenterList );
 
 		} else {

@@ -150,6 +150,8 @@ function Input1d( config ) {
 
 	this.autoOutputDetect = false;
 
+	this.closeable = false;
+
 	this.layerDimension = 1;
 
 	this.layerType = "Input1d";

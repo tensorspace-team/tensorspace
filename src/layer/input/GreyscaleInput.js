@@ -84,6 +84,8 @@ function GreyscaleInput( config ) {
 
 	this.autoOutputDetect = false;
 
+	this.closeable = false;
+
 	this.layerDimension = 2;
 
 	this.layerType = "GreyscaleInput";

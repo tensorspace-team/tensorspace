@@ -130,6 +130,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 			// Open layer and init one feature map (depth === 1) without initializing close button.
 
 			this.isOpen = true;
+			this.closeable = false;
 			this.initSegregationElements( this.openFmCenters );
 
 		} else {

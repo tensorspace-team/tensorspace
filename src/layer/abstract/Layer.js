@@ -264,6 +264,16 @@ function Layer( config ) {
 
 	this.layerLevel = undefined;
 
+	/**
+	 * True - layer has closeLayer() method, and this method can be called.
+	 * False - layer do not has closeLayer() method, or closeLayer() can not be called.
+	 * Default to True.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.closeable = true;
+
 	// Load layer config.
 
 	this.loadBasicLayerConfig( config );
@@ -628,7 +638,7 @@ Layer.prototype = {
 	},
 
 	/**
-	 * getBoundingWidth(), abstract layer
+	 * getBoundingWidth(), abstract method
 	 *
 	 * Override this function to provide layer's bounding width based on layer's status.
 	 *
@@ -638,6 +648,17 @@ Layer.prototype = {
 	getBoundingWidth: function() {
 
 		return 100;
+
+	},
+
+	/**
+	 * reset(), abstract method
+	 *
+	 * Override this method to implement the specific layer's behavior when model's reset() called.
+	 *
+	 */
+
+	reset: function() {
 
 	}
 
