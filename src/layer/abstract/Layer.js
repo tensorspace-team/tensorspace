@@ -274,6 +274,18 @@ function Layer( config ) {
 
 	this.closeable = true;
 
+	/**
+	 * Layer's initial status, only take effect when layer is closeable.
+	 * For example, for input1d layer this attribute will not take effect.
+	 *
+	 * "open": show all feature maps, or neural lines, or grid lines.
+	 * "close": show aggregation when layer is initialized
+	 *
+	 * @type { String }
+	 */
+
+	this.initStatus = "close";
+
 	// Load layer config.
 
 	this.loadBasicLayerConfig( config );
@@ -297,10 +309,12 @@ Layer.prototype = {
 
 				if ( config.initStatus === "open" ) {
 
+					this.initStatus = "open";
 					this.isOpen = true;
 
 				} else if ( config.initStatus === "close" ) {
 
+					this.initStatus = "close";
 					this.isOpen = false;
 
 				} else {
@@ -490,6 +504,30 @@ Layer.prototype = {
 	},
 
 	/**
+	 * reset(), reset layer to init status.
+	 *
+	 * Called when model's reset() method is called.
+	 */
+
+	reset: function() {
+
+		this.clear();
+
+		if ( this.closeable && this.initStatus === "close" ) {
+
+			this.closeLayer();
+
+		}
+
+		if ( !this.isOpen && this.initStatus === "open" ) {
+
+			this.openLayer();
+
+		}
+
+	},
+
+	/**
 	 * ============
 	 *
 	 * Functions below are abstract method for Layer.
@@ -648,17 +686,6 @@ Layer.prototype = {
 	getBoundingWidth: function() {
 
 		return 100;
-
-	},
-
-	/**
-	 * reset(), abstract method
-	 *
-	 * Override this method to implement the specific layer's behavior when model's reset() called.
-	 *
-	 */
-
-	reset: function() {
 
 	}
 

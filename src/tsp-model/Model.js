@@ -129,15 +129,21 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 	 * 1. clear the layer visualization;
 	 * 2. reset TrackballControl;
 	 * 3. update camera setting in TSP.
+	 * 4. set layer to "initStatus", "close" or "open".
 	 */
 
 	// TODO: add rearrange.
 
 	reset: function() {
 
-		this.clear();
 		this.cameraControls.reset();
 		this.updateCamera();
+
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+
+			this.layers[ i ].reset();
+
+		}
 
 	},
 
