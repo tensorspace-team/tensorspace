@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "build": "rollup -c",
-    "build-publish": "rollup -c && uglifyjs build/tensorspace.js -b beautify=false,preamble='\"// https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE\"' --output build/tensorspace.min.js",
+    "build-publish": "rollup -c && uglifyjs build/tensorspace.js -b beautify=false,preamble='\"// https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE\"' --source-map \"root='tensorspace.js',url='tensorspace.min.js.map'\" --output build/tensorspace.min.js",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },

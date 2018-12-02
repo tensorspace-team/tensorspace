@@ -13,7 +13,8 @@ export default [
 
                 format: 'iife',
                 file: 'build/tensorspace.js',
-                name: "TSP"
+                name: "TSP",
+				sourcemap: true
 
             }
 
