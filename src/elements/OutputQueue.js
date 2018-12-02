@@ -1,3 +1,7 @@
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 import { OutputUnit } from "./OutputUnit";
 import { OutputNeuralPosGenerator } from "../utils/OutputNeuralPosGenerator";
 import {ColorUtils} from "../utils/ColorUtils";

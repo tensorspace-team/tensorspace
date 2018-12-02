@@ -3,8 +3,21 @@
  */
 
 import { MergeStrategy1d } from "./MergeStrategy1d";
+import { MergeValidator } from "../../utils/MergeValidator";
+
+/**
+ * StableMerge1d, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for Add1d, Subtract1d, Maximum1d, Multiply1d, Average1d.
+ * The calculated outputShape in StableMerge is the same as the outputShapes of layers in input layer list,
+ * that's why named as StableMerge, keep the outputShape stable, would not change in merge operation.
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
 
 function StableMerge1d( mergedElements ) {
+
+	// StableMerge1d inherits from abstract strategy "MergeStrategy1d".
 
 	MergeStrategy1d.call( this, mergedElements );
 
@@ -12,35 +25,54 @@ function StableMerge1d( mergedElements ) {
 
 StableMerge1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototype ), {
 
-	validate: function() {
+	/**
+	 * ============
+	 *
+	 * Functions below override base class MergeStrategy1d's abstract method
+	 *
+	 * StableMerge1d overrides MergeStrategy1d's function:
+	 * getOutputShape, validate, getRelativeElements
+	 *
+	 * ============
+	 */
 
-		let inputShape = this.mergedElements[ 0 ].outputShape;
-
-		for ( let i = 0; i < this.mergedElements.length; i ++ ) {
-
-			let outputShape = this.mergedElements[ i ].outputShape;
-
-			for ( let j = 0; j < inputShape.length; j ++ ) {
-
-				if ( outputShape[ j ] !== inputShape[ j ] ) {
-
-					return false;
-
-				}
-
-			}
-
-		}
-
-		return true;
-
-	},
+	/**
+	 * getOutputShape(), return a 1 dimension array.
+	 *
+	 * @return { [ int ] }
+	 */
 
 	getOutputShape: function() {
 
 		return this.mergedElements[ 0 ].outputShape;
 
 	},
+
+	/**
+	 * validate()
+	 * validate whether mergedElements is suitable for merge operation.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return MergeValidator.validateStableShape( this.mergedElements );
+
+	},
+
+	/**
+	 * getRelativeElements()
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
 
 	getRelativeElements: function( selectedElement ) {
 
@@ -92,6 +124,13 @@ StableMerge1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototyp
 
 	}
 
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergeStrategy1d's abstract method.
+	 *
+	 * ============
+	 */
 
 } );
 

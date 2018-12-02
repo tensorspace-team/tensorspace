@@ -4,7 +4,19 @@
 
 import { MergeStrategy } from "./MergeStrategy";
 
+/**
+ * MergeStrategy1d, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for StableMerge1d, Concatenate1d.
+ * The getOutputShape() of MergeStrategy1d will return a 1 dimension array,
+ * For example, [ 100 ]
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
 function MergeStrategy1d( mergedElements ) {
+
+	// MergeStrategy1d inherits from abstract strategy "MergeStrategy".
 
 	MergeStrategy.call( this, mergedElements );
 
@@ -12,9 +24,68 @@ function MergeStrategy1d( mergedElements ) {
 
 MergeStrategy1d.prototype = Object.assign( Object.create( MergeStrategy.prototype ), {
 
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for MergeStrategy1d.
+	 * SubClasses ( concrete MergeStrategy1d ) override these abstract methods.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 1 dimension array.
+	 * Different MergeStrategy1d subclass will have different ways to outputShape calculate.
+	 * For example, Add1d and Concatenate1d's getOutputShape() method are different.
+	 *
+	 * @return { [ int ] }
+	 */
+
 	getOutputShape: function() {
 
 		return [ 1 ];
+
+	},
+
+	/**
+	 * validate() abstract method
+	 * validate whether mergedElements is suitable for merge operation.
+	 * Different merge operation may have different validate strategy.
+	 * Such as:
+	 * - Add1d and Concatenate1d have different validate strategies.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Override this function to define relative element from previous layer.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return {
+
+			straight: [],
+			curve: []
+
+		};
 
 	}
 

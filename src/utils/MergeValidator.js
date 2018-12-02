@@ -4,7 +4,7 @@
 
 let MergeValidator = ( function() {
 
-	function validate( layerList ) {
+	function validateDimension( layerList ) {
 
 		let dimension;
 
@@ -30,9 +30,37 @@ let MergeValidator = ( function() {
 
 	}
 
+	function validateStableShape( layerList ) {
+
+		let inputShape = layerList[ 0 ].outputShape;
+
+		// make sure all input layers has the same shape (same in all dimension).
+
+		for ( let i = 0; i < layerList.length; i ++ ) {
+
+			let outputShape = layerList[ i ].outputShape;
+
+			for ( let j = 0; j < inputShape.length; j ++ ) {
+
+				if ( outputShape[ j ] !== inputShape[ j ] ) {
+
+					return false;
+
+				}
+
+			}
+
+		}
+
+		return true;
+
+	}
+
 	return {
 
-		validate: validate
+		validateDimension: validateDimension,
+
+		validateStableShape: validateStableShape
 
 	}
 

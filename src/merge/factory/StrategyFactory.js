@@ -6,7 +6,6 @@ import { Add3d } from "../strategy/Add3d";
 import { Concatenate3d } from "../strategy/Concatenate3d";
 import { Subtract3d } from "../strategy/Subtract3d";
 import { Multiply3d } from "../strategy/Multiply3d";
-import { Dot3d } from "../strategy/Dot3d";
 import { Maximum3d } from "../strategy/Maximum3d";
 import { Average3d }  from "../strategy/Average3d";
 import { Add2d } from "../strategy/Add2d";
@@ -21,6 +20,13 @@ import { Maximum1d } from "../strategy/Maximum1d";
 import { Average1d } from "../strategy/Average1d";
 import { Multiply1d } from "../strategy/Multiply1d";
 import { Concatenate1d } from "../strategy/Concatenate1d";
+
+/**
+ * "StrategyFactory" create a operation strategy for MergedLayer.
+ * This Factory method is used by "MergedLayer1d", "MergedLayer2d", "MergedLayer3d".
+ * As merge function in TensorSpace use Strategy design pattern,
+ * this Factory method handle creation of all concretion strategies.
+ */
 
 let StrategyFactory = ( function() {
 
@@ -46,7 +52,7 @@ let StrategyFactory = ( function() {
 
 			} else if ( operator === "dot" ) {
 
-				return new Dot3d( mergedElements );
+				// TODO, implement dot3d operation, different visualization effects with other 3d operation
 
 			} else if ( operator === "maximum" ) {
 
@@ -78,7 +84,7 @@ let StrategyFactory = ( function() {
 
 			} else if ( operator === "dot" ) {
 
-
+				// TODO, implement dot2d operation, different visualization effects with other 2d operation
 
 			} else if ( operator === "maximum" ) {
 
@@ -110,7 +116,7 @@ let StrategyFactory = ( function() {
 
 			} else if ( operator === "dot" ) {
 
-
+				// TODO, implement dot1d operation, different visualization effects with other 1d operation
 
 			} else if ( operator === "maximum" ) {
 

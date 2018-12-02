@@ -4,7 +4,25 @@
 
 import { MergeStrategy1d } from "../abstract/MergeStrategy1d";
 
+/**
+ * Concatenate1d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Concatenate operation to 1d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense({ ...config });
+ * let dense2 = new TSP.layers.Dense({ ...config });
+ * let concatenateLayer = TSP.layers.Concatenate([ dense1, dense2 ], { ...config });
+ * ```
+ * In this example, the merged layer "concatenateLayer" apply merge strategy "Concatenate1d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
 function Concatenate1d( mergedElements ) {
+
+	// Concatenate1d inherits from abstract strategy "MergeStrategy1d".
 
 	MergeStrategy1d.call( this, mergedElements );
 
@@ -14,15 +32,28 @@ function Concatenate1d( mergedElements ) {
 
 Concatenate1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototype ), {
 
-	validate: function() {
+	/**
+	 * ============
+	 *
+	 * Functions below override base class MergeStrategy1d's abstract method
+	 *
+	 * Concatenate1d overrides MergeStrategy1d's function:
+	 * getOutputShape, validate, getRelativeElements
+	 *
+	 * ============
+	 */
 
-		return true;
-
-	},
+	/**
+	 * getOutputShape(), return a 1 dimension array.
+	 *
+	 * @return { [ int ] }
+	 */
 
 	getOutputShape: function() {
 
 		let units = 0;
+
+		// add first dimension as output
 
 		for (let i = 0; i < this.mergedElements.length; i ++) {
 
@@ -33,6 +64,32 @@ Concatenate1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototyp
 		return [ units ];
 
 	},
+
+	/**
+	 * validate()
+	 * validate whether mergedElements is suitable for merge operation.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements()
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
 
 	getRelativeElements: function( selectedElement ) {
 
@@ -83,6 +140,14 @@ Concatenate1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototyp
 		};
 
 	}
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergeStrategy1d's abstract method.
+	 *
+	 * ============
+	 */
 
 } );
 
