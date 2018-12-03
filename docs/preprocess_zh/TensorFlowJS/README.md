@@ -262,28 +262,18 @@ const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
 通过以下方式收集中间层数据。〔源码〕 [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L23)
 
 ```html
-// Hard code the input if you are sure about the shape
-// const input = tf.input({shape: [28, 28, 1]});
-const input = ((typeof loadedModel === 'undefined') ? layers[0].input : loadedModel.input);
+const input = model.inputs;
 
 let targetLayerNameList = ["MyConv2D_1","MyMaxPooling_1","MyConv2D_2","MyMaxPooling_2","MySoftMax"];
 let outputList = [];
-let tempInput = input;
-let tempOutput = null;
 
 for (i =0; i<layers.length; i++) {
-    console.log("name: " + layers[i].name);
-    tempOutput = layers[i].apply(tempInput);
-    
-    if (targetLayerNameList.indexOf(layers[i].name) >-1) {
-        outputList.push(tempOutput);
-    }
-    tempInput = tempOutput;
+    let output = let layer = model.getLayer( targetLayerNameList[ i ] ).output;
+    outputList.push( output );
 }
 
 console.log(outputList);
 ```
-
 
 浏览器控制台有以下输出：
 
@@ -292,10 +282,6 @@ console.log(outputList);
 <br/>
 <b>图4</b> - 多中间层名称及输出
 </p>
-
-**❗ 注意**
-* 由于 tfjs 的局限性，需要为中间层逐一添加所对应的输入。
-* 在例子中，由于模型结构比较简单。只需要**逐一遍历每一层对象**，将其作为下一层的输入提供给下一层的对象。但当我们在遇到比较复杂的模型结构时，请根据实际情况调整合适的输入输出方法。
 
 之后，将提取到的层对象添加到一个新的模型即可。
 

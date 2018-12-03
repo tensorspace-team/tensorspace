@@ -242,28 +242,18 @@ const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
 #### 2.2 Collect internal outputs from intermediate layers 
 All we want from the model is to collect the internal outputs from intermediate layers. We can collect the output from each desired layer: 
 ```html
-// Hard code the input if you are sure about the shape
-// const input = tf.input({shape: [28, 28, 1]});
-const input = ((typeof loadedModel === 'undefined') ? layers[0].input : loadedModel.input);
+const input = model.inputs;
 
 let targetLayerNameList = ["MyConv2D_1","MyMaxPooling_1","MyConv2D_2","MyMaxPooling_2","MySoftMax"];
 let outputList = [];
-let tempInput = input;
-let tempOutput = null;
 
 for (i =0; i<layers.length; i++) {
-    console.log("name: " + layers[i].name);
-    tempOutput = layers[i].apply(tempInput);
-    
-    if (targetLayerNameList.indexOf(layers[i].name) >-1) {
-        outputList.push(tempOutput);
-    }
-    tempInput = tempOutput;
+    let output = let layer = model.getLayer( targetLayerNameList[ i ] ).output;
+    outputList.push( output );
 }
 
 console.log(outputList);
 ```
-
 
 The console output shall be:
 
@@ -272,10 +262,6 @@ The console output shall be:
 <br/>
 <b>Fig. 4</b> - Intermediate layer names and multiple outputs
 </p>
-
-**Note:**
-* Because of the limitations of TensorFlow.js, we have to apply each layer to its corresponding input manually. 
-* In our example, since the model structure is simple: a single workflow from start to the end, we just need to iterate every layer and set the layer output as the input for the next layer. However, if you have a complex structure, please double check the inputs the layer required.
 
 Then, we can encapsulate the desired outputs into a new model with the same input as the original model:
 ```html
