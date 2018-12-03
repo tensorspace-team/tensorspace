@@ -262,17 +262,19 @@ const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
 通过以下方式收集中间层数据。〔源码〕 [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L23)
 
 ```html
-const input = model.inputs;
+const inputs = model.inputs;
 
-let targetLayerNameList = ["MyConv2D_1","MyMaxPooling_1","MyConv2D_2","MyMaxPooling_2","MySoftMax"];
-let outputList = [];
+let targetLayerNameList = [ "MyConv2D_1", "MyMaxPooling_1", "MyConv2D_2", "MyMaxPooling_2", "MySoftMax" ];
+let outputs = [];
 
-for (i =0; i<layers.length; i++) {
-    let output = let layer = model.getLayer( targetLayerNameList[ i ] ).output;
-    outputList.push( output );
+for (i = 0; i < layers.length; i ++) {
+
+    let output = model.getLayer( targetLayerNameList[ i ] ).output;
+    outputs.push( output );
+    
 }
 
-console.log(outputList);
+console.log( outputs );
 ```
 
 浏览器控制台有以下输出：
@@ -288,13 +290,15 @@ console.log(outputList);
 〔源码〕 [loadTfjsModel.html](https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L36)
 
 ```html
-const encModel = tf.model({
-    inputs: input,
-    outputs: outputList
-});
+const encModel = tf.model( {
 
-singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
-console.log(singleOutput);
+    inputs: inputs,
+    outputs: outputs
+
+} );
+
+multiOutput = encModel.predict( tf.randomNormal( [ 1, 28, 28, 1 ] ) );
+console.log( multiOutput );
 ```
 
 <p align="center">

@@ -242,17 +242,19 @@ const loadedModel = await tf.loadModel('/PATH_TO_MODEL_JSON/model.json');
 #### 2.2 Collect internal outputs from intermediate layers 
 All we want from the model is to collect the internal outputs from intermediate layers. We can collect the output from each desired layer: 
 ```html
-const input = model.inputs;
+const inputs = model.inputs;
 
-let targetLayerNameList = ["MyConv2D_1","MyMaxPooling_1","MyConv2D_2","MyMaxPooling_2","MySoftMax"];
-let outputList = [];
+let targetLayerNameList = [ "MyConv2D_1", "MyMaxPooling_1", "MyConv2D_2", "MyMaxPooling_2", "MySoftMax" ];
+let outputs = [];
 
-for (i =0; i<layers.length; i++) {
-    let output = let layer = model.getLayer( targetLayerNameList[ i ] ).output;
-    outputList.push( output );
+for (i = 0; i < layers.length; i ++) {
+
+    let output = model.getLayer( targetLayerNameList[ i ] ).output;
+    outputs.push( output );
+    
 }
 
-console.log(outputList);
+console.log( outputs );
 ```
 
 The console output shall be:
@@ -265,13 +267,15 @@ The console output shall be:
 
 Then, we can encapsulate the desired outputs into a new model with the same input as the original model:
 ```html
-const encModel = tf.model({
-    inputs: input,
-    outputs: outputList
-});
+const encModel = tf.model( {
 
-singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
-console.log(singleOutput);
+    inputs: inputs,
+    outputs: outputs
+    
+} );
+
+multiOutput = encModel.predict( tf.randomNormal( [ 1, 28, 28, 1 ] ) );
+console.log( multiOutput );
 ```
 
 <p align="center">

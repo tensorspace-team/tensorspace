@@ -4,52 +4,54 @@
     <meta charset="UTF-8">
     <title>Convert tfjs model</title>
     <meta name="author" content="zchholmes / https://github.com/zchholmes">
+    <meta name="author" content="syt123450 / https://github.com/syt123450">
 
     <script src="libs/tf.min.js"></script>
 </head>
 
 <body>
+
 <script>
-    async function saveModel() {
-        await encModel.save("downloads://encModel");
-    }
 
-    async function loadAndPredict() {
+	async function preprocess() {
 
-        const loadedModel = await tf.loadModel('./model/tfjs_lenet_seq/mnist.json');
+		const loadedModel = await tf.loadModel('./models/tfjs_lenet_seq/mnist.json');
 
-        let layers = loadedModel.layers;
+		const inputs = loadedModel.inputs;
 
-        const input = layers[0].input;
-        let outputList = [];
-        let tempInput = input;
-        let tempOutput = null;
-        for (i =0; i<layers.length; i++) {
-            console.log("name: " + layers[i].name);
-            tempOutput = layers[i].apply(tempInput);
-            outputList.push(tempOutput);
-            tempInput = tempOutput;
-        }
+		let targetLayerNameList = [ "MyConv2D_1", "MyMaxPooling_1", "MyConv2D_2", "MyMaxPooling_2", "MySoftMax" ];
+		let outputs = [];
 
-        console.log(outputList);
+		for ( let i = 0; i < targetLayerNameList.length; i ++ ) {
 
-        const encModel = tf.model({
-            inputs: input,
-            outputs: outputList
-        });
+			let output = loadedModel.getLayer( targetLayerNameList[ i ] ).output;
+			outputs.push( output );
 
-        // singleOutput = loadedModel.predict(tf.randomNormal([1,28,28,1]));
-        // console.log(singleOutput);
+		}
 
-        singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
-        console.log(singleOutput);
+		console.log( outputs );
 
-        // saveModel();
+		const encModel = tf.model( {
 
-    }
+			inputs: inputs,
+			outputs: outputs
 
-    loadAndPredict();
+		} );
+
+		// singleOutput = loadedModel.predict( tf.randomNormal( [ 1, 28, 28, 1 ] ) );
+		// console.log( singleOutput );
+
+		let multiOutput = encModel.predict( tf.randomNormal( [ 1, 28, 28, 1 ] ) );
+		console.log( multiOutput );
+
+		await encModel.save( "downloads://encModel" );
+
+	}
+
+	preprocess();
 
 </script>
+
 </body>
+
 </html>
