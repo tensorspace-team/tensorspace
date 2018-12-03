@@ -352,6 +352,42 @@
             </tr>
             <tr>
                 <th scope="row">
+                    <p>paging</p>
+                    <p><a href="#iconStyle">🎨</a><a href="#iconSuggest">🔧</a>️</p>
+                </th>
+                <td><span class="highlight-text">Bool</span></td>
+                <td>是否使用分页，<a href="basicPaging_zh.html">paging详细解释</a></td>
+                <td>当全链接层太长时，使用分页方式来显示Dense层，<span class="span_bold">true</span> 使用分页；<span class="span_bold">false</span>[默认值] 不使用分页</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>segmentLength</p>
+                    <p><a href="#iconStyle">🎨</a><a href="#iconOptional">⚙️</a>️</p>
+                </th>
+                <td><span class="highlight-text">Int</span></td>
+                <td>每页的结点数量，只有在paging是true时生效</td>
+                <td>200[默认值] 表示每页200个节点</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>segmentIndex</p>
+                    <p><a href="#iconStyle">🎨</a><a href="#iconOptional">⚙️</a>️</p>
+                </th>
+                <td><span class="highlight-text">Int</span></td>
+                <td>分页第一次渲染显示的下标，只有在paging是true时生效</td>
+                <td>0[默认]</td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <p>overview</p>
+                    <p><a href="#iconRequired">🎨</a><a href="#iconModel">⚙️</a>️</p>
+                </th>
+                <td><span class="highlight-text">Bool</span></td>
+                <td>设置text角度<a href="basicPaging_zh.html">overview详细解释</a></td>
+                <td>false[Default]</td>
+            </tr>
+            <tr>
+                <th scope="row">
                     <p>name</p>
                     <p><a href="#iconSuggest">🔧</a></p>
                 </th>
