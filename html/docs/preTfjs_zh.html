@@ -625,26 +625,19 @@ await train();</code></pre>
         <div>通过以下方式收集中间层数据。〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L23">loadTfjsModel.html</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">// Hard code the input if you are sure about the shape
-// const input = tf.input({shape: [28, 28, 1]});
-const input = ((typeof loadedModel === 'undefined') ? layers[0].input : loadedModel.input);
+            <pre><code class="Javascript">const inputs = model.inputs;
 
-let targetLayerNameList = ["MyConv2D_1","MyMaxPooling_1","MyConv2D_2","MyMaxPooling_2","MySoftMax"];
-let outputList = [];
-let tempInput = input;
-let tempOutput = null;
+let targetLayerNameList = [ "MyConv2D_1", "MyMaxPooling_1", "MyConv2D_2", "MyMaxPooling_2", "MySoftMax" ];
+let outputs = [];
 
-for (i =0; i < layers.length; i++) {
-    console.log("name: " + layers[i].name);
-    tempOutput = layers[i].apply(tempInput);
+for ( i = 0; i < layers.length; i ++ ) {
 
-    if (targetLayerNameList.indexOf(layers[i].name) >-1) {
-        outputList.push(tempOutput);
-    }
-    tempInput = tempOutput;
+    let output = model.getLayer( targetLayerNameList[ i ] ).output;
+    outputs.push( output );
+
 }
 
-console.log(outputList);</code></pre>
+console.log( outputs );</code></pre>
         </div>
 
         <div>浏览器控制台有以下输出：</div>
@@ -653,30 +646,20 @@ console.log(outputList);</code></pre>
             <span class="img-label-number">图4</span> - 多中间层名称及输出
         </div>
 
-        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>注意：</b></div>
-
-        <div>
-            <ul class="list-content">
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    由于 tfjs 的局限性，需要为中间层逐一添加所对应的输入。
-                </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    在例子中，由于模型结构比较简单。只需要<span class="span_bold">逐一遍历每一层对象</span>，将其作为下一层的输入提供给下一层的对象。但当我们在遇到比较复杂的模型结构时，请根据实际情况调整合适的输入输出方法。                </li>
-            </ul>
-        </div>
-
         <div>之后，将提取到的层对象添加到一个新的模型即可。</div>
 
         <div>〔源码〕 <a href="https://github.com/tensorspace-team/tensorspace/blob/master/docs/preprocess/TensorFlowJS/src_html/loadTfjsModel.html#L36">loadTfjsModel.html</a></div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">const encModel = tf.model({
-    inputs: input,
-    outputs: outputList
-});
+            <pre><code class="Javascript">const encModel = tf.model( {
 
-singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
-console.log(singleOutput);</code></pre>
+    inputs: inputs,
+    outputs: outputs
+
+} );
+
+multiOutput = encModel.predict( tf.randomNormal( [ 1, 28, 28, 1 ] ) );
+console.log( multiOutput );</code></pre>
         </div>
 
         <img class="small-console" src="../../assets/img/docs/TensorFlowJS/tfjs_console_output_2.png">

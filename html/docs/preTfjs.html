@@ -602,26 +602,19 @@ await train();</code></pre>
         <div>All we want from the model is to collect the internal outputs from intermediate layers. We can collect the output from each desired layer:</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">// Hard code the input if you are sure about the shape
-// const input = tf.input({shape: [28, 28, 1]});
-const input = ((typeof loadedModel === 'undefined') ? layers[0].input : loadedModel.input);
+            <pre><code class="Javascript">const inputs = model.inputs;
 
-let targetLayerNameList = ["MyConv2D_1","MyMaxPooling_1","MyConv2D_2","MyMaxPooling_2","MySoftMax"];
-let outputList = [];
-let tempInput = input;
-let tempOutput = null;
+let targetLayerNameList = [ "MyConv2D_1", "MyMaxPooling_1", "MyConv2D_2", "MyMaxPooling_2", "MySoftMax" ];
+let outputs = [];
 
-for (i =0; i < layers.length; i++) {
-    console.log("name: " + layers[i].name);
-    tempOutput = layers[i].apply(tempInput);
+for ( i = 0; i < layers.length; i ++ ) {
 
-    if (targetLayerNameList.indexOf(layers[i].name) >-1) {
-        outputList.push(tempOutput);
-    }
-    tempInput = tempOutput;
+    let output = model.getLayer( targetLayerNameList[ i ] ).output;
+    outputs.push( output );
+
 }
 
-console.log(outputList);</code></pre>
+console.log( outputs );</code></pre>
         </div>
 
         <div>The console output shall be:</div>
@@ -630,29 +623,18 @@ console.log(outputList);</code></pre>
             <span class="img-label-number">Fig. 4</span> - Intermediate layer names and multiple outputs
         </div>
 
-        <div class="panel-heading"><i class="material-icons material-icons--outline">wb_sunny</i><b>Note:</b></div>
-
-        <div>
-            <ul class="list-content">
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    Because of the limitations of TensorFlow.js, we have to apply each layer to its corresponding input manually.
-                </li>
-                <li class="panel-heading"><i class="material-icons">filter_center_focus</i>
-                    In our example, since the model structure is simple: a single workflow from start to the end, we just need to iterate every layer and set the layer output as the input for the next layer. However, if you have a complex structure, please double check the inputs the layer required.
-                </li>
-            </ul>
-        </div>
-
         <div>Then, we can encapsulate the desired outputs into a new model with the same input as the original model:</div>
 
         <div class="code-snippet">
-            <pre><code class="Javascript">const encModel = tf.model({
-    inputs: input,
-    outputs: outputList
-});
+            <pre><code class="Javascript">const encModel = tf.model( {
 
-singleOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
-console.log(singleOutput);</code></pre>
+    inputs: inputs,
+    outputs: outputs
+
+} );
+
+multiOutput = encModel.predict(tf.randomNormal([1,28,28,1]));
+console.log(multiOutput);</code></pre>
         </div>
 
         <img class="small-console" src="../../assets/img/docs/TensorFlowJS/tfjs_console_output_2.png">
