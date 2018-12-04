@@ -176,7 +176,7 @@ model.init(function() {
 
 ## <div id="example">样例展示</div>
 
-* **LeNet**
+* **LeNet** [ TensorFlow.js 模型 ]
 
  [➡ 在线演示](https://tensorspace.org/html/playground/lenet_zh.html)
 
@@ -187,7 +187,7 @@ model.init(function() {
 <b>图5</b> - 使用 TensorSpace 构建 LeNet
 </p>
 
-* **AlexNet** 
+* **AlexNet** [ TensorFlow 模型 ]
 
 [➡ 在线演示](https://tensorspace.org/html/playground/alexnet_zh.html)
 
@@ -198,7 +198,7 @@ model.init(function() {
 <b>图6</b> - 使用 TensorSpace 构建 AlexNet
 </p>
 
-* **Yolov2-tiny** 
+* **Yolov2-tiny** [ TensorFlow 模型 ]
 
 [➡ 在线演示](https://tensorspace.org/html/playground/yolov2-tiny_zh.html)
 
@@ -209,7 +209,7 @@ model.init(function() {
 <b>图7</b> - 使用 TensorSpace 构建 YOLO-v2-tiny
 </p>
 
-* **ResNet-50**
+* **ResNet-50** [ Keras 模型 ]
 
 [➡ 在线演示](https://tensorspace.org/html/playground/resnet50_zh.html)
 
@@ -220,7 +220,7 @@ model.init(function() {
 <b>图8</b> - 使用 TensorSpace 构建 ResNet-50
 </p>
 
-* **Vgg16**
+* **Vgg16** [ Keras 模型 ]
 
 [➡ 在线演示](https://tensorspace.org/html/playground/vgg16_zh.html)
 
@@ -231,7 +231,7 @@ model.init(function() {
 <b>图9</b> - 使用 TensorSpace 构建 VGG-16
 </p>
 
-* **ACGAN**
+* **ACGAN** [ Keras 模型 ]
 
 [➡ 在线演示](https://tensorspace.org/html/playground/acgan_zh.html)
 
@@ -242,7 +242,7 @@ model.init(function() {
 <b>图10</b> - 使用 TensorSpace 构建 ACGAN 生成网络
 </p>
 
-* **MobileNetv1**
+* **MobileNetv1** [ Keras 模型 ]
 
 [➡ 在线演示](https://tensorspace.org/html/playground/mobilenetv1_zh.html)
 
@@ -250,7 +250,31 @@ model.init(function() {
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_mobilenetv1.gif">
 </p>
 <p align="center">
-<b>图11</b> - 使用 TensorSpace 构建 MobileNetv1 生成网络
+<b>图11</b> - 使用 TensorSpace 构建 MobileNetv1
+</p>
+
+* **Inceptionv3** [ Keras 模型 ]
+
+[➡ 在线演示](https://tensorspace.org/html/playground/inceptionv3_zh.html)
+
+<p align="center">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_inceptionv3.gif">
+</p>
+<p align="center">
+<b>图12</b> - 使用 TensorSpace 构建 Inceptionv3
+</p>
+
+* **LeNet训练过程3D可视化** [ TensorFlow.js 动态模型 ]
+
+使用 TensorSpace.js 和 TensorFlow.js 将 LeNet 的训练过程在浏览器端进行3D可视化展示
+
+[➡ 在线演示](https://tensorspace.org/html/playground/trainingLeNet_zh.html)
+
+<p align="center">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet_training.gif">
+</p>
+<p align="center">
+<b>图13</b> - LeNet训练过程3D可视化
 </p>
 
 ### 本地查看以上模型

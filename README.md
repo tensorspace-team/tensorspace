@@ -174,7 +174,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 
 ## Example
 
-* **LeNet** 
+* **LeNet** [ TensorFlow.js model ]
 
 [➡ Live Demo](https://tensorspace.org/html/playground/lenet.html)
 
@@ -185,7 +185,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <b>Fig. 5</b> - Interactive LeNet created by TensorSpace
 </p>
 
-* **AlexNet** 
+* **AlexNet** [ TensorFlow model ]
 
 [➡ Live Demo](https://tensorspace.org/html/playground/alexnet.html)
 
@@ -196,7 +196,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <b>Fig. 6</b> - Interactive AlexNet created by TensorSpace
 </p>
 
-* **Yolov2-tiny**
+* **Yolov2-tiny** [ TensorFlow model ]
 
 [➡ Live Demo](https://tensorspace.org/html/playground/yolov2-tiny.html)
 
@@ -207,7 +207,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <b>Fig. 7</b> - Interactive Yolov2-tiny created by TensorSpace
 </p>
 
-* **ResNet-50**
+* **ResNet-50** [ Keras model ]
 
 [➡ Live Demo](https://tensorspace.org/html/playground/resnet50.html)
 
@@ -218,7 +218,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <b>Fig. 8</b> - Interactive ResNet-50 created by TensorSpace
 </p>
 
-* **Vgg16**
+* **Vgg16** [ Keras model ]
 
 [➡ Live Demo](https://tensorspace.org/html/playground/vgg16.html)
 
@@ -229,7 +229,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <b>Fig. 9</b> - Interactive Vgg16 created by TensorSpace
 </p>
 
-* **ACGAN**
+* **ACGAN** [ Keras model ]
 
 [➡ Live Demo](https://tensorspace.org/html/playground/acgan.html)
 
@@ -240,7 +240,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <b>Fig. 10</b> - Interactive ACGAN created by TensorSpace
 </p>
 
-* **MobileNetv1**
+* **MobileNetv1** [ Keras model ]
 
 [➡ Live Demo](https://tensorspace.org/html/playground/mobilenetv1.html)
 
@@ -249,6 +249,30 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 </p>
 <p align="center">
 <b>Fig. 11</b> - Interactive MobileNetv1 created by TensorSpace
+</p>
+
+* **Inceptionv3** [ Keras model ]
+
+[➡ Live Demo](https://tensorspace.org/html/playground/inceptionv3.html)
+
+<p align="center">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_inceptionv3.gif">
+</p>
+<p align="center">
+<b>Fig. 12</b> - Interactive Inceptionv3 created by TensorSpace
+</p>
+
+* **LeNet Training Visualization** [ TensorFlow.js dynamic model ]
+
+Visualize the LeNet Training Process with TensorSpace.js and TensorFlow.js.
+
+[➡ Live Demo](https://tensorspace.org/html/playground/trainingLeNet.html)
+
+<p align="center">
+<img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet_training.gif">
+</p>
+<p align="center">
+<b>Fig. 13</b> - LeNet Training 3D Visualization
 </p>
 
 ### View models locally
