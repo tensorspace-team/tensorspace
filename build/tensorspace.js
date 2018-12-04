@@ -142,7 +142,7 @@ SceneInitializer.prototype = {
 
 	updateCamera: function() {
 
-		let modelDepth = this.layers.length;
+		let modelDepth = this.depth;
 		let controlRatio = getControlRatio( modelDepth );
 
 		this.camera.position.set(
@@ -496,7 +496,7 @@ Predictor.prototype = {
 
 			for ( let i = 0; i < this.model.inputs.length; i ++ ) {
 
-				inputShapes.push( this.model.inputs[ i ] );
+				inputShapes.push( this.model.inputs[ i ].outputShape );
 
 			}
 
@@ -551,7 +551,7 @@ Predictor.prototype = {
 	 *
 	 * @param data, input data list, for example, [[...], [...], ..., [...]]
 	 * @param inputShapes
-	 * @returns { tf.Tensor }
+	 * @returns { tf.Tensor[] }
 	 */
 
 	createInputTensorList: function( data, inputShapes ) {
@@ -636,13 +636,19 @@ TfjsPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
 	predict: function( data ) {
 
-		// Create input tensor for prediction.
+		let predictor = this;
 
-		let inputTensor = this.createInputTensor( data );
+		let predictResult = tf.tidy( () => {
 
-		// Get prediction result from loaded model.
+			// Create input tensor for prediction.
 
-		let predictResult = this.model.resource.predict( inputTensor );
+			let inputTensor = predictor.createInputTensor( data );
+
+			// Get prediction result from loaded model.
+
+			return predictor.model.resource.predict( inputTensor );
+
+		} );
 
 		return predictResult;
 
@@ -821,13 +827,19 @@ KerasPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), 
 
 	predict: function( data ) {
 
-		// Create input tensor for prediction.
+		let predictor = this;
 
-		let inputTensor = this.createInputTensor( data );
+		let predictResult = tf.tidy( () => {
 
-		// Get prediction result from loaded model.
+			// Create input tensor for prediction.
 
-		let predictResult = this.model.resource.predict( inputTensor );
+			let inputTensor = predictor.createInputTensor( data );
+
+			// Get prediction result from loaded model.
+
+			return predictor.model.resource.predict( inputTensor );
+
+		} );
 
 		return predictResult;
 
@@ -1015,25 +1027,33 @@ TfPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
 	predict: function( data ) {
 
-		// Create input tensor for prediction.
+		let predictor = this;
 
-		let inputTensor = this.createInputTensor( data );
+		let predictResult = tf.tidy( () => {
 
-		let predictResult;
+			// Create input tensor for prediction.
 
-		if ( this.outputsName !== undefined ) {
+			let inputTensor = predictor.createInputTensor( data );
 
-			// If has outputsName, use execute to get prediction result.
+			let predictResult;
 
-			predictResult = this.model.resource.execute( inputTensor, this.outputsName );
+			if ( this.outputsName !== undefined ) {
 
-		} else {
+				// If has outputsName, use execute to get prediction result.
 
-			// If outputsName is undefined, use predict to get prediction result.
+				predictResult = predictor.model.resource.execute( inputTensor, this.outputsName );
 
-			predictResult = this.model.resource.predict( inputTensor );
+			} else {
 
-		}
+				// If outputsName is undefined, use predict to get prediction result.
+
+				predictResult = predictor.model.resource.predict( inputTensor );
+
+			}
+
+			return predictResult;
+
+		} );
 
 		return predictResult;
 
@@ -1213,6 +1233,152 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		if ( loaderConfig.outputsName !== undefined ) {
 
 			this.outputsName = loaderConfig.outputsName;
+
+		}
+
+	}
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Handle prediction for live model (tfjs model, as only tfjs can train in the browser).
+ * May be there will other training library can run in the browser, so use a new Predictor.
+ *
+ * @param model, model context
+ * @param config, Predictor config
+ * @constructor
+ */
+
+function LivePredictor( model, config ) {
+
+	// "LivePredictor" inherits from abstract predictor "TfjsPredictor".
+
+	TfjsPredictor.call( this, model, config );
+
+	this.predictorType = "LivePredictor";
+
+}
+
+LivePredictor.prototype = Object.assign( Object.create( TfjsPredictor.prototype ), {
+
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Load live model for TensorSpace.
+ * As keras and tensorflow model can not run in the browser, this live loader works for tfjs model.
+ *
+ * @param model, model context
+ * @param config, user's configuration for Loader
+ * @constructor
+ */
+
+function LiveLoader( model, config ) {
+
+	// "LiveLoader" inherits from abstract Loader "Loader".
+
+	Loader.call( this, model, config );
+
+	/**
+	 * tfjs model's reference
+	 * LiveLoader will store tfjs model's reference into TensorSpace model.
+	 *
+	 * @type { reference }
+	 */
+
+	this.modelHandler = undefined;
+
+	this.loadLiveConfig( config );
+
+	this.loaderType = "liveLoader";
+
+}
+
+LiveLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below override base class Loader's abstract method
+	 *
+	 * LiveLoader overrides Loader's function:
+	 * load, setPredictor
+	 *
+	 * ============
+	 */
+
+	/**
+	 * load(), load a live tfjs model.
+	 * Its an synchronous process, to make it compatible with other loader, use async method.
+	 *
+	 * Three steps:
+	 * 1. Load tfjs model into TSP
+	 * 2. Set live predictor to TSP
+	 * 3. Fire callback function if defined.
+	 *
+	 * @returns { Promise.<void> }
+	 */
+
+	load: async function() {
+
+		this.model.resource = this.modelHandler;
+
+		this.setPredictor();
+
+		if ( this.onCompleteCallback !== undefined ) {
+
+			this.onCompleteCallback();
+
+		}
+
+	},
+
+	/**
+	 * setPredictor(), create a live predictor, config it and set the predictor for TSP model.
+	 */
+
+	setPredictor: function() {
+
+		let livePredictor = new LivePredictor( this.model, this.config );
+
+		this.model.predictor = livePredictor;
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class Predictor's abstract method.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * loadLiveConfig(), Load user's configuration into LiveLoader.
+	 * The configuration load in this function sometimes has not been loaded in "Loader"'s "loadLoaderConfig".
+	 *
+	 * @param loaderConfig
+	 */
+
+	loadLiveConfig: function( loaderConfig ) {
+
+		// "modelHandler" configuration is required.
+
+		if ( loaderConfig.modelHandler !== undefined ) {
+
+			this.modelHandler = loaderConfig.modelHandler;
+
+		} else {
+
+			console.error( "\"modelHandler\" property is required to load live model." );
 
 		}
 
@@ -1720,6 +1886,14 @@ function AbstractModel( container, config ) {
 	this.hoveredLayer = undefined;
 
 	/**
+	 * Model's depth in visualization.
+	 *
+	 * @type { Int }
+	 */
+
+	this.depth = undefined;
+
+	/**
 	 * Model configuration.
 	 * Initialized with user's model config and default model config.
 	 *
@@ -1759,6 +1933,10 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 		} else if ( config.type === "tensorflow" ) {
 
 			this.loadTfModel( config );
+
+		} else if ( config.type = "live" ) {
+
+			this.loadLiveModel( config );
 
 		} else {
 
@@ -1803,6 +1981,13 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 	loadTfModel: function( config ) {
 
 		let loader = new TfLoader( this, config );
+		loader.preLoad();
+
+	},
+
+	loadLiveModel: function( config ) {
+
+		let loader = new LiveLoader( this, config );
 		loader.preLoad();
 
 	},
@@ -2073,6 +2258,10 @@ let LayerLocator = ( function() {
 
 } )();
 
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 let ActualDepthCalculator = (function() {
 
 	function calculateDepths( layers ) {
@@ -2256,6 +2445,8 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	predict: function( input, callback ) {
 
+		this.clear();
+
 		this.inputValue = input;
 
 		if ( this.resource !== undefined ) {
@@ -2290,6 +2481,18 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	clear: function() {
 
+		if ( this.predictResult !== undefined ) {
+
+			for ( let i = 0; i < this.predictResult.length; i ++ ) {
+
+				tf.dispose( this.predictResult[ i ] );
+
+			}
+
+			this.predictResult = undefined;
+
+		}
+
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].clear();
@@ -2307,13 +2510,19 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	 * 1. clear the layer visualization;
 	 * 2. reset TrackballControl;
 	 * 3. update camera setting in TSP.
+	 * 4. set layer to "initStatus", "close" or "open".
 	 */
 
 	reset: function() {
 
-		this.clear();
 		this.cameraControls.reset();
 		this.updateCamera();
+
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+
+			this.layers[ i ].reset();
+
+		}
 
 	},
 
@@ -2415,7 +2624,9 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	initTSPModel: function() {
 
-		this.updateCamera( this.layers.length );
+		this.depth = this.layers.length;
+
+		this.updateCamera();
 		this.createModelElements();
 		this.registerModelEvent();
 		this.animate();
@@ -2471,7 +2682,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		// Assemble new layer.
 
-		layer.assemble( this.layers.length );
+		layer.assemble( this.layers.length, this.layers.length );
 
 	},
 
@@ -2954,6 +3165,8 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	predict: function( input, callback ) {
 
+		this.clear();
+
 		this.inputValue = input;
 
 		if ( this.resource !== undefined ) {
@@ -2988,6 +3201,18 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	clear: function() {
 
+		if ( this.predictResult !== undefined ) {
+
+			for ( let i = 0; i < this.predictResult.length; i ++ ) {
+
+				tf.dispose( this.predictResult[ i ] );
+
+			}
+
+			this.predictResult = undefined;
+
+		}
+
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].clear();
@@ -3005,15 +3230,21 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 	 * 1. clear the layer visualization;
 	 * 2. reset TrackballControl;
 	 * 3. update camera setting in TSP.
+	 * 4. set layer to "initStatus", "close" or "open".
 	 */
 
 	// TODO: add rearrange.
 
 	reset: function() {
 
-		this.clear();
 		this.cameraControls.reset();
 		this.updateCamera();
+
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+
+			this.layers[ i ].reset();
+
+		}
 
 	},
 
@@ -3124,7 +3355,10 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		this.createGraph();
 		this.assembleLayers();
-		this.updateCamera( this.layers.length );
+
+		this.depth = this.levelMap.length;
+
+		this.updateCamera();
 		this.createModelElements();
 		this.registerModelEvent();
 		this.animate();
@@ -3200,12 +3434,13 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 			for ( let j = 0; j < layerIndexList.length; j ++ ) {
 
 				let layerIndex = layerIndexList[ j ];
+				let layerLevel = i;
 
 				let layer = this.layers[ layerIndex ];
 
 				layer.setEnvironment( this.scene, this );
 				layer.loadModelConfig( this.configuration );
-				layer.assemble( layerIndex );
+				layer.assemble( layerIndex, layerLevel );
 
 			}
 
@@ -3238,7 +3473,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		for ( let i = 0; i < this.inputs.length; i ++ ) {
 
-			this.inputs[ i ].updateVis( this.inputValue[ i ] );
+			this.inputs[ i ].updateValue( this.inputValue[ i ] );
 
 		}
 
@@ -3250,7 +3485,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 			let layer = this.getLayerByName( this.outputsOrder[ i ] );
 
-			layer.updateVis( this.predictResult[ i ] );
+			layer.updateValue( this.predictResult[ i ].dataSync() );
 
 		}
 
@@ -4760,6 +4995,42 @@ function Layer( config ) {
 
 	this.layerType = undefined;
 
+	/**
+	 * The place for Layer in model, measured by y-axis in 3d scene.
+	 * For Sequential model:
+	 * 		the "layerLevel" will be the same as "layerIndex".
+	 * 		the layerLevel will be unique for all layers.
+	 * For Functional model:
+	 * 		the "layerLevel" may be the same for several layers.
+	 * 		these layers has different "layerIndex".
+	 *
+	 * @type { Int }
+	 */
+
+	this.layerLevel = undefined;
+
+	/**
+	 * True - layer has closeLayer() method, and this method can be called.
+	 * False - layer do not has closeLayer() method, or closeLayer() can not be called.
+	 * Default to True.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.closeable = true;
+
+	/**
+	 * Layer's initial status, only take effect when layer is closeable.
+	 * For example, for input1d layer this attribute will not take effect.
+	 *
+	 * "open": show all feature maps, or neural lines, or grid lines.
+	 * "close": show aggregation when layer is initialized
+	 *
+	 * @type { String }
+	 */
+
+	this.initStatus = "close";
+
 	// Load layer config.
 
 	this.loadBasicLayerConfig( config );
@@ -4783,10 +5054,12 @@ Layer.prototype = {
 
 				if ( config.initStatus === "open" ) {
 
+					this.initStatus = "open";
 					this.isOpen = true;
 
 				} else if ( config.initStatus === "close" ) {
 
+					this.initStatus = "close";
 					this.isOpen = false;
 
 				} else {
@@ -4976,6 +5249,30 @@ Layer.prototype = {
 	},
 
 	/**
+	 * reset(), reset layer to init status.
+	 *
+	 * Called when model's reset() method is called.
+	 */
+
+	reset: function() {
+
+		this.clear();
+
+		if ( this.closeable && this.initStatus === "close" ) {
+
+			this.closeLayer();
+
+		}
+
+		if ( !this.isOpen && this.initStatus === "open" ) {
+
+			this.openLayer();
+
+		}
+
+	},
+
+	/**
 	 * ============
 	 *
 	 * Functions below are abstract method for Layer.
@@ -5007,7 +5304,7 @@ Layer.prototype = {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 	},
 
@@ -5124,7 +5421,7 @@ Layer.prototype = {
 	},
 
 	/**
-	 * getBoundingWidth(), abstract layer
+	 * getBoundingWidth(), abstract method
 	 *
 	 * Override this function to provide layer's bounding width based on layer's status.
 	 *
@@ -5366,7 +5663,7 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 	},
 
@@ -5643,6 +5940,7 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 			// Open layer and init one grid line (depth === 1) without initializing close button.
 
 			this.isOpen = true;
+			this.closeable = false;
 			this.initSegregationElements( this.openCenterList );
 
 		} else {
@@ -6220,7 +6518,7 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 * @param { int } layerIndex, this layer's order in model.
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 	},
 
@@ -6388,9 +6686,10 @@ Conv1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -7418,6 +7717,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 			// Open layer and init one feature map (depth === 1) without initializing close button.
 
 			this.isOpen = true;
+			this.closeable = false;
 			this.initSegregationElements( this.openFmCenters );
 
 		} else {
@@ -8008,7 +8308,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 	},
 
@@ -8053,12 +8353,13 @@ function Conv2d( config ) {
 
 	/**
 	 * The dimension of the convolution window.
-	 * The 2d convolutional window is square.
+	 * The 2d convolutional window is rectangle.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
 
-	this.kernelSize = undefined;
+	this.kernelSize = [ 1, 1 ];
 
 	/**
 	 * The depth of the layer output.
@@ -8070,12 +8371,13 @@ function Conv2d( config ) {
 
 	/**
 	 * The strides of the convolution.
-	 * Strides in both dimensions are equal.
+	 * Strides in both dimensions may be different.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
 
-	this.strides = undefined;
+	this.strides = [ 1, 1 ];
 
 	/**
 	 * Padding mode.
@@ -8138,9 +8440,10 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function ( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -8154,15 +8457,15 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 				// ceil[ ( W - F + 1 ) / S ]
 
-				this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize + 1 ) / this.strides );
-				this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize + 1 ) / this.strides );
+				this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize[ 0 ] + 1 ) / this.strides[ 0 ] );
+				this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize[ 1 ] + 1 ) / this.strides[ 1 ] );
 
 			} else if ( this.padding === "same" ) {
 
 				// ceil( W / S )
 
-				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides );
-				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides );
+				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides[ 0 ] );
+				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides[ 1 ] );
 
 			}
 
@@ -8280,8 +8583,37 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			// Optional configuration.
 
-			this.kernelSize = layerConfig.kernelSize;
-			this.strides = layerConfig.strides;
+			if ( layerConfig.kernelSize !== undefined ) {
+
+				if ( layerConfig.kernelSize instanceof Array ) {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+
+				} else {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+					this.kernelSize[ 1 ] = layerConfig.kernelSize;
+
+				}
+
+			}
+
+			if ( layerConfig.strides !== undefined ) {
+
+				if ( layerConfig.strides instanceof Array ) {
+
+					this.strides[ 0 ] = layerConfig.strides[ 0 ];
+					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+				} else {
+
+					this.strides[ 0 ] = layerConfig.strides;
+					this.strides[ 1 ] = layerConfig.strides;
+
+				}
+
+			}
 
 			// "filters" configuration is required.
 
@@ -8358,12 +8690,13 @@ function Conv2dTranspose( config ) {
 
 	/**
 	 * The dimension of the convolution window.
-	 * The 2d convolutional window is square.
+	 * The 2d convolutional window is rectangle.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
 
-	this.kernelSize = undefined;
+	this.kernelSize = [ 1, 1 ];
 
 	/**
 	 * The depth of the layer output.
@@ -8375,12 +8708,13 @@ function Conv2dTranspose( config ) {
 
 	/**
 	 * The strides of the convolution.
-	 * Strides in both dimensions are equal.
+	 * Strides in both dimensions may be different.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
 
-	this.strides = undefined;
+	this.strides = [ 1, 1 ];
 
 	/**
 	 * 2d feature map shape, stored as array.
@@ -8443,9 +8777,10 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -8462,8 +8797,8 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 			// ( W - 1 ) * S + F
 
-			this.width = ( this.inputShape[ 0 ] - 1 ) * this.strides + this.kernelSize;
-			this.height = ( this.inputShape[ 1 ] - 1 ) * this.strides + this.kernelSize;
+			this.width = ( this.inputShape[ 0 ] - 1 ) * this.strides[ 0 ] + this.kernelSize[ 0 ];
+			this.height = ( this.inputShape[ 1 ] - 1 ) * this.strides[ 1 ] + this.kernelSize[ 1 ];
 
 		}
 
@@ -8594,13 +8929,33 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 			if ( layerConfig.kernelSize !== undefined ) {
 
-				this.kernelSize = layerConfig.kernelSize;
+				if ( layerConfig.kernelSize instanceof Array ) {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+
+				} else {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+
+				}
 
 			}
 
 			if ( layerConfig.strides !== undefined ) {
 
-				this.strides = layerConfig.strides;
+				if ( layerConfig.strides instanceof Array ) {
+
+					this.strides[ 0 ] = layerConfig.strides[ 0 ];
+					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+				} else {
+
+					this.strides[ 0 ] = layerConfig.strides;
+					this.strides[ 1 ] = layerConfig.strides;
+
+				}
 
 			}
 
@@ -8649,12 +9004,13 @@ function DepthwiseConv2d( config ) {
 
 	/**
 	 * The dimension of the convolution window.
-	 * The 2d convolutional window is square.
+	 * The 2d convolutional window is rectangle.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
 
-	this.kernelSize = undefined;
+	this.kernelSize = [ 1, 1 ];
 
 	/**
 	 * The number of depthwise convolution output channels for each input channel.
@@ -8667,12 +9023,13 @@ function DepthwiseConv2d( config ) {
 
 	/**
 	 * The strides of the convolution.
-	 * Strides in both dimensions are equal.
+	 * Strides in both dimensions may be different.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { int }
 	 */
 
-	this.strides = undefined;
+	this.strides = [ 1, 1 ];
 
 	/**
 	 * Padding mode.
@@ -8710,9 +9067,10 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function ( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -8722,15 +9080,15 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 			// ceil[ ( W - F + 1 ) / S ]
 
-			this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize + 1 ) / this.strides );
-			this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize + 1 ) / this.strides );
+			this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize[ 0 ] + 1 ) / this.strides[ 0 ] );
+			this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize[ 1 ] + 1 ) / this.strides[ 1 ] );
 
 		} else if ( this.padding === "same" ) {
 
 			// ceil( W / S )
 
-			this.width = Math.ceil( this.inputShape[ 0 ] / this.strides );
-			this.height = Math.ceil( this.inputShape[ 1 ] / this.strides );
+			this.width = Math.ceil( this.inputShape[ 0 ] / this.strides[ 0 ] );
+			this.height = Math.ceil( this.inputShape[ 1 ] / this.strides[ 0 ] );
 
 		}
 
@@ -8878,8 +9236,37 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 			// Optional configuration.
 
-			this.kernelSize = layerConfig.kernelSize;
-			this.strides = layerConfig.strides;
+			if ( layerConfig.kernelSize !== undefined ) {
+
+				if ( layerConfig.kernelSize instanceof Array ) {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+
+				} else {
+
+					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+					this.kernelSize[ 1 ] = layerConfig.kernelSize;
+
+				}
+
+			}
+
+			if ( layerConfig.strides !== undefined ) {
+
+				if ( layerConfig.strides instanceof Array ) {
+
+					this.strides[ 0 ] = layerConfig.strides[ 0 ];
+					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+				} else {
+
+					this.strides[ 0 ] = layerConfig.strides;
+					this.strides[ 1 ] = layerConfig.strides;
+
+				}
+
+			}
 
 			if ( layerConfig.depthMultiplier !== undefined ) {
 
@@ -8980,9 +9367,10 @@ Cropping1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), 
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -9210,9 +9598,10 @@ Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), 
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -9593,6 +9982,498 @@ NeuralQueue.prototype = {
  * @author syt123450 / https://github.com/syt123450
  */
 
+function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity, overview ) {
+
+	this.segmentLength = segmentLength;
+	this.segmentIndex = segmentIndex;
+	this.totalLength = totalLength;
+	this.unitLength = unitLength;
+	this.color = color;
+	this.minOpacity = minOpacity;
+	this.overview = overview;
+
+	this.sideOpacity = SideFaceRatio * minOpacity;
+
+	this.totalSegments = Math.ceil( this.totalLength / this.segmentLength );
+
+	this.queueLength = this.calcQueueLength();
+	this.actualWidth = this.queueLength * this.unitLength;
+
+	this.startIndex = undefined;
+	this.endIndex = undefined;
+
+	this.setRange();
+
+	this.dataArray = undefined;
+	this.backDataArray = undefined;
+	this.dataTexture = undefined;
+	this.backDataTexture = undefined;
+	this.queue = undefined;
+
+	this.queueGroup = undefined;
+
+	this.font = TextFont;
+	this.textSize = TextHelper.calcQueueTextSize( this.unitLength );
+	this.indexSize = 0.5 * this.textSize;
+
+	this.textRotation = this.overview ? - Math.PI / 2 : 0;
+
+	this.lengthText = undefined;
+	this.startText = undefined;
+	this.endText = undefined;
+
+	this.layerIndex = undefined;
+
+	this.queueLengthNeedsUpdate = false;
+	this.isLengthChanged = false;
+
+	this.init();
+
+}
+
+QueueSegment.prototype = {
+
+	init: function() {
+
+		this.queue = this.createQueueElement();
+
+		let queueGroup = new THREE.Object3D();
+		queueGroup.add( this.queue );
+		this.queueGroup = queueGroup;
+
+	},
+
+	createQueueElement: function() {
+
+		let data = new Uint8Array( this.queueLength );
+		this.dataArray = data;
+		let backData = new Uint8Array( this.queueLength );
+		this.backDataArray = backData;
+
+		for ( let i = 0; i < this.queueLength; i++ ) {
+
+			data[ i ] = 255 * this.minOpacity;
+
+		}
+
+		let dataTex = new THREE.DataTexture( data, this.queueLength, 1, THREE.LuminanceFormat, THREE.UnsignedByteType );
+		this.dataTexture = dataTex;
+
+		dataTex.magFilter = THREE.NearestFilter;
+		dataTex.needsUpdate = true;
+
+		let backDataTex = new THREE.DataTexture( backData, this.queueLength, 1, THREE.LuminanceFormat, THREE.UnsignedByteType );
+		this.backDataTexture = backDataTex;
+
+		backDataTex.magFilter = THREE.NearestFilter;
+		backDataTex.needsUpdate = true;
+
+		let boxGeometry = new THREE.BoxBufferGeometry( this.actualWidth, this.unitLength, this.unitLength );
+
+		let material = new THREE.MeshBasicMaterial( {
+
+			color: this.color,
+			alphaMap: dataTex,
+			transparent: true
+
+		} );
+
+		let backMaterial = new THREE.MeshBasicMaterial( {
+
+			color: this.color,
+			alphaMap: backDataTex,
+			transparent: true
+
+		} );
+
+		let basicMaterial = new THREE.MeshBasicMaterial( {
+
+			color: this.color,
+			transparent: true,
+			opacity: this.sideOpacity
+
+		} );
+
+		let materials = [
+
+			basicMaterial,
+			basicMaterial,
+			material,
+			material,
+			material,
+			backMaterial
+
+		];
+
+		let cube = new THREE.Mesh( boxGeometry, materials );
+
+		cube.position.set( 0, 0, 0 );
+		cube.elementType = "featureLine";
+		cube.hoverable = true;
+
+		return cube;
+
+	},
+
+	getElement: function() {
+
+		return this.queueGroup;
+
+	},
+
+	updateVis: function( colors ) {
+
+		let backColors = RenderPreprocessor.preProcessQueueBackColor( colors );
+
+		for ( let i = 0; i < colors.length; i++ ) {
+
+			this.dataArray[ i ] = 255 * colors[ i ];
+			this.backDataArray[ i ] = 255 * backColors[ i ];
+
+		}
+
+		this.dataTexture.needsUpdate = true;
+		this.backDataTexture.needsUpdate = true;
+
+	},
+
+	clear: function() {
+
+		let zeroData = new Uint8Array( this.queueLength );
+		let colors = ColorUtils.getAdjustValues( zeroData, this.minOpacity );
+
+		this.updateVis( colors );
+
+	},
+
+	setLayerIndex: function( layerIndex ) {
+
+		this.layerIndex = layerIndex;
+		this.queue.layerIndex = layerIndex;
+
+	},
+
+	showText: function() {
+
+		// create length text and add it to group
+
+		let lengthTextContent = this.totalLength.toString();
+
+		let geometry = new THREE.TextGeometry( lengthTextContent, {
+
+			font: this.font,
+			size: this.textSize,
+			height: Math.min( this.unitLength, 1 ),
+			curveSegments: 8
+
+		} );
+
+		let material = new THREE.MeshBasicMaterial( { color: this.color } );
+
+		let text = new THREE.Mesh( geometry, material );
+
+		text.rotateX( this.textRotation );
+
+		let textPos = TextHelper.calcQueueTextPos(
+
+			lengthTextContent.length,
+			this.textSize,
+			this.unitLength,
+			{
+
+				x: this.queue.position.x,
+				y: this.queue.position.y,
+				z: this.queue.position.z
+
+			}
+
+		);
+
+		text.position.set(
+
+			textPos.x,
+			textPos.y,
+			textPos.z
+
+		);
+
+		this.lengthText = text;
+
+		this.queueGroup.add( this.lengthText );
+
+		// create start index and add it to group
+
+		let startTextContent = this.startIndex.toString();
+
+		let startGeometry = new THREE.TextGeometry( startTextContent, {
+
+			font: this.font,
+			size: this.indexSize,
+			height: Math.min( this.unitLength, 1 ),
+			curveSegments: 8
+
+		} );
+
+		let startMaterial = new THREE.MeshBasicMaterial( { color: this.color } );
+
+		let startText = new THREE.Mesh( startGeometry, startMaterial );
+
+		startText.rotateX( this.textRotation );
+
+		let startTextPos = TextHelper.calcSegmentStartIndexPos(
+
+			this.actualWidth,
+			startTextContent.length,
+			this.indexSize,
+			{
+
+				x: this.queue.position.x,
+				y: this.queue.position.y,
+				z: this.queue.position.z
+
+			}
+
+		);
+
+		startText.position.set(
+
+			startTextPos.x,
+			startTextPos.y,
+			startTextPos.z
+
+		);
+
+		this.startText = startText;
+
+		this.queueGroup.add( this.startText );
+
+		// create end text and add it to group
+
+		let endTextContent = this.endIndex.toString();
+
+		let endGeometry = new THREE.TextGeometry( endTextContent, {
+
+			font: this.font,
+			size: this.indexSize,
+			height: Math.min( this.unitLength, 1 ),
+			curveSegments: 8
+
+		} );
+
+		let endMaterial = new THREE.MeshBasicMaterial( { color: this.color } );
+
+		let endText = new THREE.Mesh( endGeometry, endMaterial );
+
+		endText.rotateX( this.textRotation );
+
+		let endTextPos = TextHelper.calcSegmentEndIndexPos(
+
+			this.actualWidth,
+			endTextContent.length,
+			this.indexSize,
+			{
+
+				x: this.queue.position.x,
+				y: this.queue.position.y,
+				z: this.queue.position.z
+
+			}
+
+		);
+
+		endText.position.set(
+
+			endTextPos.x,
+			endTextPos.y,
+			endTextPos.z
+
+		);
+
+		this.endText = endText;
+
+		this.queueGroup.add( this.endText );
+
+		this.isTextShown = true;
+
+	},
+
+	hideText: function() {
+
+		this.queueGroup.remove( this.lengthText );
+		this.lengthText = undefined;
+
+		this.queueGroup.remove( this.startText );
+		this.startText = undefined;
+
+		this.queueGroup.remove( this.endText );
+		this.endText = undefined;
+
+		this.isTextShown = false;
+
+	},
+
+	updateSegmentIndex: function( segmentIndex ) {
+
+		if (
+
+			this.totalSegments * this.segmentLength !== this.totalLength &&
+			(
+
+				( this.segmentIndex !== this.totalSegments - 1 && segmentIndex === this.totalSegments - 1 ) ||
+				( this.segmentIndex === this.totalSegments - 1 && segmentIndex !== this.totalSegments - 1 )
+
+			)
+
+		) {
+
+			this.queueLengthNeedsUpdate = true;
+			this.isLengthChanged = true;
+
+		} else {
+
+			this.isLengthChanged = false;
+
+		}
+
+		this.segmentIndex = segmentIndex;
+
+		this.setRange();
+
+		if ( this.queueLengthNeedsUpdate ) {
+
+			this.updateLength();
+
+		}
+
+	},
+
+	setRange: function() {
+
+		this.startIndex = this.segmentLength * this.segmentIndex + 1;
+		this.endIndex = Math.min( this.totalLength, this.segmentLength * ( this.segmentIndex + 1 ) );
+
+	},
+
+	calcQueueLength: function() {
+
+		return Math.min( this.totalLength, this.segmentLength * ( this.segmentIndex + 1 ) ) - this.segmentLength * this.segmentIndex;
+
+	},
+
+	updateLength: function() {
+
+		this.queueLength = this.calcQueueLength();
+		this.actualWidth = this.unitLength * this.queueLength;
+
+		this.queueGroup.remove( this.queue );
+		this.queue = this.createQueueElement();
+		this.queue.layerIndex = this.layerIndex;
+		this.queueGroup.add( this.queue );
+
+		this.queueLengthNeedsUpdate = false;
+
+	}
+
+};
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+function PaginationButton( paginationType, size, unitLength, position, color, minOpacity ) {
+
+	this.paginationType = paginationType;
+	this.thickness = 2 * unitLength;
+	this.size = size;
+	this.unitLength = unitLength;
+	this.minOpacity = minOpacity;
+
+	this.position = {
+
+		x: position.x,
+		y: position.y,
+		z: position.z
+
+	};
+
+	this.color = color;
+
+	this.button = undefined;
+
+	this.init();
+
+}
+
+PaginationButton.prototype = {
+
+	init: function() {
+
+		let texture = new THREE.TextureLoader().load( TextureProvider.getTexture( this.paginationType ) );
+
+		let materialSide = new THREE.MeshBasicMaterial( {
+
+			color: this.color,
+			opacity: this.minOpacity,
+			transparent: true
+
+		} );
+
+		let materialTop = new THREE.MeshBasicMaterial( {
+
+			color: this.color,
+			alphaMap: texture,
+			transparent: true
+
+		} );
+
+		let materials = [];
+
+		materials.push( materialSide );
+		materials.push( materialTop );
+		materials.push( materialTop );
+
+		let cylinderRadius = this.size;
+
+		let geometry = new THREE.CylinderBufferGeometry( cylinderRadius, cylinderRadius, this.thickness, 32 );
+		let paginationButton = new THREE.Mesh( geometry, materials );
+
+		paginationButton.position.set( this.position.x, this.position.y, this.position.z );
+		paginationButton.clickable = true;
+		paginationButton.elementType = "paginationButton";
+		paginationButton.paginationType = this.paginationType;
+		paginationButton.rotateY(  Math.PI / 2 );
+
+		this.button = paginationButton;
+
+	},
+
+	getElement: function() {
+
+		return this.button;
+
+	},
+
+	setLayerIndex: function( layerIndex ) {
+
+		this.button.layerIndex = layerIndex;
+
+	},
+
+	updatePos: function( pos ) {
+
+		this.position.x = pos.x;
+		this.position.y = pos.y;
+		this.position.z = pos.z;
+		this.button.position.set( this.position.x, this.position.y, this.position.z );
+
+	}
+
+};
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 /**
  * Input1d, input layer, can be initialized by TensorSpace user.
  * Layer for linear input.
@@ -9624,6 +10505,71 @@ function Input1d( config ) {
 	 */
 
 	this.depth = 1;
+
+	/**
+	 * Decide how to display hint text.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.overview = false;
+
+	/**
+	 * mode for how to display queue element
+	 * If queue element is too long, use "paging" mode may have better visualization effect.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.paging = false;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Segment length for "one page".
+	 * Default to 200.
+	 *
+	 * @type { number }
+	 */
+
+	this.segmentLength = 200;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Which page NativeLayer1d displays now.
+	 * Can be update when "last" or "next" buttons are clicked, initial value can be defined by user.
+	 * Default to 0.
+	 *
+	 * @type { number }
+	 */
+
+	this.segmentIndex = 0;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * How many pages in NativeLayer1d.
+	 *
+	 * @type { number }
+	 */
+
+	this.totalSegments = undefined;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Store handler for last button.
+	 *
+	 * @type { Object }
+	 */
+
+	this.lastButtonHandler = undefined;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Store handler for next button.
+	 *
+	 * @type { Object }
+	 */
+
+	this.nextButtonHandler = undefined;
 
 	// Load user's Input1d configuration.
 
@@ -9669,6 +10615,8 @@ function Input1d( config ) {
 
 	this.autoOutputDetect = false;
 
+	this.closeable = false;
+
 	this.layerDimension = 1;
 
 	this.layerType = "Input1d";
@@ -9711,6 +10659,14 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		this.initAggregationElement();
 
+		if ( this.paging ) {
+
+			// Init pagination button when layer is in "paging mode".
+
+			this.showPaginationButton();
+
+		}
+
 		// Add the wrapper object to the actual THREE.js scene.
 
 		this.scene.add( this.neuralGroup );
@@ -9723,9 +10679,10 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 	},
 
@@ -9748,6 +10705,25 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		// aggregationHandler execute update visualization process.
 
 		this.aggregationHandler.updateVis( colors );
+
+		if ( this.paging ) {
+
+			// Get part of colors to render segment.
+
+			let segmentColors = colors.slice(
+
+				this.segmentLength * this.segmentIndex,
+				Math.min( this.segmentLength * ( this.segmentIndex + 1 ), this.width - 1 )
+
+			);
+
+			this.aggregationHandler.updateVis( segmentColors );
+
+		} else {
+
+			this.aggregationHandler.updateVis( colors );
+
+		}
 
 	},
 
@@ -9900,6 +10876,37 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 			}
 
+			if ( layerConfig.paging !== undefined ) {
+
+				this.paging = layerConfig.paging;
+
+				// If paging mode is set, load paging parameters.
+
+				if ( this.paging ) {
+
+					if ( layerConfig.segmentLength !== undefined ) {
+
+						this.segmentLength = layerConfig.segmentLength;
+						this.queueLength = this.segmentLength;
+
+					}
+
+					if ( layerConfig.initSegmentIndex !== undefined ) {
+
+						this.segmentIndex = layerConfig.initSegmentIndex;
+
+					}
+
+				}
+
+			}
+
+			if ( layerConfig.overview !== undefined ) {
+
+				this.overview = layerConfig.overview;
+
+			}
+
 		} else {
 
 			console.error( "Lack config for Input1d layer." );
@@ -9916,14 +10923,37 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		// NeuralQueue Object is a wrapper for linear input element, checkout "NeuralQueue.js" for more information.
 
-		let aggregationHandler = new NeuralQueue(
+		let aggregationHandler;
 
-			this.width,
-			this.unitLength,
-			this.color,
-			this.minOpacity
+		if ( this.paging ) {
 
-		);
+			aggregationHandler = new QueueSegment(
+
+				this.segmentLength,
+				this.segmentIndex,
+				this.width,
+				this.unitLength,
+				this.color,
+				this.minOpacity,
+				this.overview
+
+			);
+
+			this.queueLength = aggregationHandler.queueLength;
+
+		} else {
+
+			aggregationHandler = new NeuralQueue(
+
+				this.width,
+				this.unitLength,
+				this.color,
+				this.minOpacity,
+				this.overview
+
+			);
+
+		}
 
 		// Set layer index to aggregation, linear input element can know which layer it has been positioned.
 
@@ -9936,6 +10966,24 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		// Get actual THREE.js element and add it to layer wrapper Object.
 
 		this.neuralGroup.add( aggregationHandler.getElement() );
+
+	},
+
+	/**
+	 * handleClick() If clickable element in this layer is clicked, execute this handle function.
+	 *
+	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
+	 */
+
+	handleClick: function( clickedElement ) {
+
+		if ( clickedElement.elementType === "paginationButton" ) {
+
+			// If pagination button ("last" or "next") is clicked, update page visualization.
+
+			this.updatePage( clickedElement.paginationType );
+
+		}
 
 	},
 
@@ -9966,6 +11014,282 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 			this.textElementHandler.hideText();
 			this.textElementHandler = undefined;
+
+		}
+
+	},
+
+	/**
+	 * calcPaginationButtonSize() calculate button size.
+	 *
+	 * @return { number } size, pagination button size
+	 */
+
+	calcPaginationButtonPos: function( paginationType ) {
+
+		if ( paginationType === "last" ) {
+
+			// "last" button is positioned in the left of the layer.
+
+			return {
+
+				x: - this.queueLength * this.unitLength / 2 - 5 * this.unitLength,
+				y: 0,
+				z: 0
+
+			};
+
+		} else {
+
+			// "next" button is positioned in the right of the layer.
+
+			return {
+
+				x: this.queueLength * this.unitLength / 2 + 5 * this.unitLength,
+				y: 0,
+				z: 0
+
+			};
+
+		}
+
+	},
+
+	/**
+	 * calcPaginationButtonSize() calculate button size.
+	 *
+	 * @return { number } size, pagination button size
+	 */
+
+	calcPaginationButtonSize: function() {
+
+		// To make close button's size responsive, width = 50 is the boundary.
+
+		if ( this.width > 50 ) {
+
+			return 2 * this.unitLength;
+
+		} else {
+
+			return 1.1 * this.unitLength;
+
+		}
+
+	},
+
+	/**
+	 * showPaginationButton() conditional add "next" button and "last" button into layer1d.
+	 */
+
+	showPaginationButton: function() {
+
+		if ( this.segmentIndex === 0 && this.segmentIndex !== this.totalSegments - 1 ) {
+
+			// First page only show "next" button.
+
+			this.showNextButton();
+
+		} else if ( this.segmentIndex !== 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			// last page only show "last" button.
+
+			this.showLastButton();
+
+		} else if ( this.segmentIndex === 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			// If only has one page, no button.
+
+		} else {
+
+			// In other situational, show two button.
+
+			this.showNextButton();
+			this.showLastButton();
+
+		}
+
+	},
+
+	/**
+	 * showLastButton() initialize "last" button, and add it to neuralGroup.
+	 */
+
+	showLastButton: function() {
+
+		let lastButtonHandler = new PaginationButton(
+
+			"last",
+			this.calcPaginationButtonSize(),
+			this.unitLength,
+			this.calcPaginationButtonPos( "last" ),
+			this.color,
+			this.minOpacity
+
+		);
+
+		// Set layer index to "last" button, button object can know which layer it has been positioned.
+
+		lastButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.lastButtonHandler = lastButtonHandler;
+		this.neuralGroup.add( this.lastButtonHandler.getElement() );
+
+	},
+
+	/**
+	 * showNextButton() initialize "next" button, and add it to neuralGroup.
+	 */
+
+	showNextButton: function() {
+
+		let nextButtonHandler = new PaginationButton(
+
+			"next",
+			this.calcPaginationButtonSize(),
+			this.unitLength,
+			this.calcPaginationButtonPos( "next" ),
+			this.color,
+			this.minOpacity
+
+		);
+
+		// Set layer index to "next" button, button object can know which layer it has been positioned.
+
+		nextButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.nextButtonHandler = nextButtonHandler;
+		this.neuralGroup.add( this.nextButtonHandler.getElement() );
+
+	},
+
+	/**
+	 * hidePaginationButton(), hide "last" button and "next" button.
+	 */
+
+	hidePaginationButton: function() {
+
+		this.hideNextButton();
+		this.hideLastButton();
+
+	},
+
+	/**
+	 * hideNextButton(), hide "next" button.
+	 */
+
+	hideNextButton: function() {
+
+		if ( this.nextButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.nextButtonHandler.getElement() );
+			this.nextButtonHandler = undefined;
+
+		}
+
+	},
+
+	/**
+	 * hideLastButton(), hide "last" button.
+	 */
+
+	hideLastButton: function() {
+
+		if ( this.lastButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.lastButtonHandler.getElement() );
+			this.lastButtonHandler = undefined;
+
+		}
+
+	},
+
+	/**                                                                                                                                                 y        y                        /**
+	 * updatePage() execute actual page update work.
+	 *
+	 * @param { string } paginationType, "last" or "next".
+	 */
+
+	updatePage: function( paginationType ) {
+
+		if ( paginationType === "next" ) {
+
+			// "next" button is clicked.
+
+			if ( this.segmentIndex === 0 ) {
+
+				// First page now, click "next" button will show "last" button.
+
+				this.showLastButton();
+
+			}
+
+			if ( this.segmentIndex === this.totalSegments - 2 ) {
+
+				// Is going to the last page, the last page do not have "next" button.
+
+				this.hideNextButton();
+
+			}
+
+			// Update segmentIndex.
+
+			this.segmentIndex += 1;
+
+		} else {
+
+			// "last" button is clicked.
+
+			if ( this.segmentIndex === this.totalSegments - 1 ) {
+
+				// The Last page now, click "last" button will show "next" button.
+
+				this.showNextButton();
+
+			}
+
+			if ( this.segmentIndex === 1 ) {
+
+				// Is going to the first page, the first page do not have "last" button.
+
+				this.hideLastButton();
+
+			}
+
+			// Update segmentIndex.
+
+			this.segmentIndex -= 1;
+
+		}
+
+		// Modify segment element based on new segment index.
+
+		this.aggregationHandler.updateSegmentIndex( this.segmentIndex );
+
+		// Check whether queue length change, situation: the page's length may different with previous page.
+
+		if ( this.aggregationHandler.isLengthChanged ) {
+
+			this.queueLength = this.aggregationHandler.queueLength;
+
+			if ( this.nextButtonHandler !== undefined ) {
+
+				let nextButtonPos = this.calcPaginationButtonPos( "next" );
+				this.nextButtonHandler.updatePos( nextButtonPos );
+
+			}
+
+			if ( this.lastButtonHandler !== undefined ) {
+
+				let lastButtonPos = this.calcPaginationButtonPos( "last" );
+				this.lastButtonHandler.updatePos( lastButtonPos );
+
+			}
+
+		}
+
+		if ( this.neuralValue !== undefined ) {
+
+			this.updateQueueVis();
 
 		}
 
@@ -10054,6 +11378,8 @@ function GreyscaleInput( config ) {
 
 	this.autoOutputDetect = false;
 
+	this.closeable = false;
+
 	this.layerDimension = 2;
 
 	this.layerType = "GreyscaleInput";
@@ -10108,9 +11434,10 @@ GreyscaleInput.prototype = Object.assign( Object.create( NativeLayer.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 	},
 
@@ -11430,9 +12757,10 @@ RGBInput.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 	},
 
@@ -12511,6 +13839,10 @@ let OutputNeuralPosGenerator = ( function() {
 
 } )();
 
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 function OutputQueue( units, outputs, unitLength, color, minOpacity, initStatus, overview ) {
 
 	this.units = units;
@@ -12968,100 +14300,6 @@ OutputSegment.prototype = {
  * @author syt123450 / https://github.com/syt123450
  */
 
-function PaginationButton( paginationType, size, unitLength, position, color, minOpacity ) {
-
-	this.paginationType = paginationType;
-	this.thickness = 2 * unitLength;
-	this.size = size;
-	this.unitLength = unitLength;
-	this.minOpacity = minOpacity;
-
-	this.position = {
-
-		x: position.x,
-		y: position.y,
-		z: position.z
-
-	};
-
-	this.color = color;
-
-	this.button = undefined;
-
-	this.init();
-
-}
-
-PaginationButton.prototype = {
-
-	init: function() {
-
-		let texture = new THREE.TextureLoader().load( TextureProvider.getTexture( this.paginationType ) );
-
-		let materialSide = new THREE.MeshBasicMaterial( {
-
-			color: this.color,
-			opacity: this.minOpacity,
-			transparent: true
-
-		} );
-
-		let materialTop = new THREE.MeshBasicMaterial( {
-
-			color: this.color,
-			alphaMap: texture,
-			transparent: true
-
-		} );
-
-		let materials = [];
-
-		materials.push( materialSide );
-		materials.push( materialTop );
-		materials.push( materialTop );
-
-		let cylinderRadius = this.size;
-
-		let geometry = new THREE.CylinderBufferGeometry( cylinderRadius, cylinderRadius, this.thickness, 32 );
-		let paginationButton = new THREE.Mesh( geometry, materials );
-
-		paginationButton.position.set( this.position.x, this.position.y, this.position.z );
-		paginationButton.clickable = true;
-		paginationButton.elementType = "paginationButton";
-		paginationButton.paginationType = this.paginationType;
-		paginationButton.rotateY(  Math.PI / 2 );
-
-		this.button = paginationButton;
-
-	},
-
-	getElement: function() {
-
-		return this.button;
-
-	},
-
-	setLayerIndex: function( layerIndex ) {
-
-		this.button.layerIndex = layerIndex;
-
-	},
-
-	updatePos: function( pos ) {
-
-		this.position.x = pos.x;
-		this.position.y = pos.y;
-		this.position.z = pos.z;
-		this.button.position.set( this.position.x, this.position.y, this.position.z );
-
-	}
-
-};
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
 /**
  * Output1d, output layer, can be initialized by TensorSpace user.
  *
@@ -13266,9 +14504,10 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Conv2d layer's outputShape has one dimension.
 
@@ -14110,6 +15349,10 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 } );
 
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 function OutputMap3d( width, height, unitLength, actualDepth, initCenter, color, minOpacity ) {
 
 	this.width = width;
@@ -14538,9 +15781,10 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Automatically detect model's input shape as outputShape.
 
@@ -15260,16 +16504,120 @@ let YoloResultGenerator = (function() {
 
     }
 
+    // Ascend
+    function sortBy(field) {
+
+        return function(a,b) {
+
+            return b[field] - a[field];
+
+        }
+
+    }
+
     //TODO implement iou & nms
 
-	function checkRange(x, range) {
+	function transferPrediction( prediction ) {
+
+    	// prediction = {x:, y:, width:, height:, finalScore:, labelName:}
+		// return a list of [ x1, y1, x2, y2]
+
+    	let list = [];
+
+    	list.push( prediction["x"] );
+    	list.push( prediction["y"] );
+    	list.push( prediction["x"] + prediction["width"]);
+    	list.push( prediction["y"] + prediction["height"]);
+
+    	return list;
+
+	}
+
+	function iou( boxA, boxB ) {
+
+    	// boxA = boxB = [ x1, y1, x2, y2 ]
+		// (x1, y1) for left-top point
+		// (x2, y2) for right-bottom point
+
+		let xA = Math.max( boxA[0], boxB[0] );
+		let yA = Math.max( boxA[1], boxB[1] );
+		let xB = Math.min( boxA[2], boxB[2] );
+		let yB = Math.min( boxA[3], boxB[3] );
+
+		// Compute the area of intersection
+		let intersectionArea = ( xB - xA + 1) * ( yB - yA + 1 );
+
+		// Compute the area of both rectangles
+		let boxAArea = ( boxA[2] - boxA[0] + 1 ) * ( boxA[3] - boxA[1] + 1 );
+		let boxBArea = ( boxB[2] - boxB[0] + 1 ) * ( boxB[3] - boxB[1] + 1 );
+
+		// Compute the IOU
+
+		return intersectionArea / ( boxAArea + boxBArea - intersectionArea );
+
+	}
+
+	function nonMaximalSuppression( thresholdedPredictions, iouThreshold ){
+
+    	// thresholdedPredcitions: is an array with predictive results
+
+		let nmsPredictions = [];
+
+		nmsPredictions.push( thresholdedPredictions[0] );
+
+		let i = 1;
+
+		let toDelete = false;
+
+		while ( i < thresholdedPredictions.length ) {
+
+			let nBoxesToCheck = nmsPredictions.length;
+
+			toDelete = false;
+
+			let j = 0;
+
+			while ( j < nBoxesToCheck ) {
+
+				let boxA = transferPrediction( thresholdedPredictions[i] );
+
+				let boxB = transferPrediction( nmsPredictions[j] );
+
+				let curIOU = iou( boxA, boxB );
+
+				if ( curIOU > iouThreshold ) {
+
+					toDelete = true;
+
+				}
+
+                j++;
+
+			}
+
+			if ( toDelete === false )  {
+
+				nmsPredictions.push( thresholdedPredictions[i] );
+
+			}
+
+			i++;
+
+		}
+
+		return nmsPredictions;
+
+	}
+
+    function checkRange(x, range) {
 
         return x >= 0 && x <= range;
 
     }
 
     function getDetectedBox( neuralData, channelDepth, channelShape, outputShape,
-                             anchors, classLabelList, scoreThreshold = 0.5 ) {
+                             anchors, classLabelList, scoreThreshold, iouThreshold,
+							 isNMS) {
 
         // neuralData : array [71825] for coco; [21125] for VOC
         // channelShape ： array = [13, 13]
@@ -15282,11 +16630,11 @@ let YoloResultGenerator = (function() {
 
         let output = [];
 
-		for ( let row = 1; row <= widthRange; row ++ ) {
+		for ( let row = 0; row < widthRange; row ++ ) {
 
-			for ( let col = 1; col <= heightRange; col ++ ) {
+			for ( let col = 0; col < heightRange; col ++ ) {
 
-				let start = row * col - 1;
+				let start = row * widthRange + col;
 
 				let channelData = neuralData.slice( start * channelDepth, ( start + 1 ) * channelDepth );
 
@@ -15295,18 +16643,16 @@ let YoloResultGenerator = (function() {
 				for ( let box = 0; box < anchors.length / 2; box ++ ) {
 
                     let index = box * len;
-                    let bx = ( sigmoid( channelData[ index ] ) + col - 1 );
-                    let by = ( sigmoid( channelData[ index + 1 ] ) + row - 1 );
+                    let bx = ( sigmoid( channelData[ index ] ) + col );
+                    let by = ( sigmoid( channelData[ index + 1 ] ) + row );
                     let bw = anchors[ box * 2 ] * Math.exp( channelData[ index + 2 ] );
                     let bh = anchors[ box * 2 + 1 ] * Math.exp( channelData[ index + 3 ] );
 
-                    // console.log("------------------Index: " + index + " ----------------------");
-                    // console.log( "bx: " + bx + " | by: " + by );
-                    // console.log( "bw: " + bw + " | bh: " + bh );
-
                     let finalConfidence = sigmoid( channelData[ index + 4 ] );
 
-                    let classPrediction = softmax( channelData.slice( index + 5, index + 5 + len ) );
+                    let probability = channelData.slice( index + 5, index + len );
+
+                    let classPrediction = softmax( probability );
 
                     let bestClassIndex = classPrediction.indexOf( Math.max( ...classPrediction ) );
 
@@ -15316,9 +16662,6 @@ let YoloResultGenerator = (function() {
 
                     let finalScore = bestClassScore * finalConfidence;
 
-                    // console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
-                    // console.log("Final Score: " + finalScore);
-
                     let width = bw / widthRange * outputShape[ 0 ];
                     let height = bh  / heightRange * outputShape[ 1 ];
                     let x = bx / widthRange * outputShape[ 0 ] - width / 2;
@@ -15326,25 +16669,27 @@ let YoloResultGenerator = (function() {
 
                     if ( finalScore > scoreThreshold ) {
 
-                        // console.log("Add 1 detective object");
-
-                        output.push( {
-
-                            x: x,
-                            y: y,
-                            width: width,
-                            height: height,
-
-                        } );
-
                         thresholdedPredictions.push( {
-                            x: x,
-                            y: y,
-                            width: width,
-                            height: height,
-							finalScore: finalScore,
-							className: bestClassLabel
+                            "x": x,
+                            "y": y,
+                            "width": width,
+                            "height": height,
+							"finalScore": finalScore,
+							"className": bestClassLabel
                         } );
+
+                        if ( isNMS === false ) {
+
+                            output.push( {
+
+                                x: x,
+                                y: y,
+                                width: width,
+                                height: height
+
+                            });
+
+                        }
 
                     }
 
@@ -15354,14 +16699,34 @@ let YoloResultGenerator = (function() {
 
 		}
 
-		// console.log( thresholdedPredictions );
+		thresholdedPredictions.sort(sortBy("finalScore"));
+
+		let nmsPredictions = nonMaximalSuppression( thresholdedPredictions, iouThreshold );
+
+		if ( isNMS === true ) {
+
+            for ( let i = 0; i < nmsPredictions.length; i++ ) {
+
+                output.push( {
+
+                    x: nmsPredictions[i]["x"],
+                    y: nmsPredictions[i]["y"],
+                    width: nmsPredictions[i]["width"],
+                    height: nmsPredictions[i]["height"],
+
+                });
+
+            }
+
+		}
+
 
 		return output;
 
 	}
 
 	function getChannelBox( channelData, channelShape, outputShape,
-                            anchors, classLabelList, scoreThreshold, isDrawFiveBoxes,
+                            anchors, classLabelList, scoreThreshold, iouThreshold, isDrawFiveBoxes,
 							cx, cy ) {
 
         // channelData : array [425] for coco; [125] for VOC
@@ -15377,8 +16742,6 @@ let YoloResultGenerator = (function() {
 
 		let output = [];
 
-		// console.log( "cx: " + cx + "| cy: " + cy );
-
 		for ( let box = 0; box < anchors.length / 2; box ++ ) {
 
 			let index = box * len;
@@ -15387,24 +16750,15 @@ let YoloResultGenerator = (function() {
 			let bw = anchors[ box * 2 ] * Math.exp( channelData[ index + 2 ] );
 			let bh = anchors[ box * 2 + 1 ] * Math.exp( channelData[ index + 3 ] );
 
-            // console.log("------------------Index: " + index + " ----------------------");
-            // console.log( "bx: " + bx + " | by: " + by );
-            // console.log( "bw: " + bw + " | bh: " + bh );
-
 			let finalConfidence = sigmoid( channelData[ index + 4 ] );
 
-			let classPrediction = softmax( channelData.slice( index + 5, index + 5 + len ) );
+			let classPrediction = softmax( channelData.slice( index + 5, index + len ) );
 
 			let bestClassIndex = classPrediction.indexOf( Math.max( ...classPrediction ) );
-
-			let bestClassLabel = classLabelList[ bestClassIndex ];
 
 			let bestClassScore = classPrediction[ bestClassIndex ];
 
 			let finalScore = bestClassScore * finalConfidence;
-
-            // console.log("Class name: " + bestClassLabel + "| Prediction score: " + bestClassScore);
-            // console.log("Final Score: " + finalScore);
 
 			let width = bw / widthRange * outputShape[ 0 ];
 			let height = bh  / heightRange * outputShape[ 1 ];
@@ -15563,6 +16917,14 @@ function YoloGrid( config ) {
     this.isDrawFiveBoxes = false;
 
     /**
+     * The toggle to control whether to apply non-maximum suppression to the detection rectangles .
+     * [Default] true, means to apply nms.
+     * @type { bool }
+     */
+
+    this.isNMS = true;
+
+    /**
 	 * Model's input shape, the shape is the same as model's input layer.
 	 *
 	 * @type { Array }
@@ -15654,9 +17016,10 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function ( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Auto detect input shape from last layer.
 
@@ -16038,6 +17401,8 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
                     this.anchors,
                     this.classLabelList,
                     this.scoreThreshold,
+					this.iouThreshold,
+                    this.isNMS,
 				);
 
 			} else {
@@ -16051,6 +17416,7 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
                     this.anchors,
                     this.classLabelList,
                     this.scoreThreshold,
+                    this.iouThreshold,
                     this.isDrawFiveBoxes,
                     widthIndex,
                     heightIndex
@@ -16113,7 +17479,11 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
             this.scoreThreshold = layerConfig.scoreThreshold;
 
+            this.iouThreshold = layerConfig.iouThreshold;
+
             this.isDrawFiveBoxes = layerConfig.isDrawFiveBoxes;
+
+			this.isNMS = layerConfig.isNMS;
 
 		}
 
@@ -16503,404 +17873,6 @@ let QueueTransitionFactory = ( function() {
 	}
 
 } )();
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, color, minOpacity, overview ) {
-
-	this.segmentLength = segmentLength;
-	this.segmentIndex = segmentIndex;
-	this.totalLength = totalLength;
-	this.unitLength = unitLength;
-	this.color = color;
-	this.minOpacity = minOpacity;
-	this.overview = overview;
-
-	this.sideOpacity = SideFaceRatio * minOpacity;
-
-	this.totalSegments = Math.ceil( this.totalLength / this.segmentLength );
-
-	this.queueLength = this.calcQueueLength();
-	this.actualWidth = this.queueLength * this.unitLength;
-
-	this.startIndex = undefined;
-	this.endIndex = undefined;
-
-	this.setRange();
-
-	this.dataArray = undefined;
-	this.backDataArray = undefined;
-	this.dataTexture = undefined;
-	this.backDataTexture = undefined;
-	this.queue = undefined;
-
-	this.queueGroup = undefined;
-
-	this.font = TextFont;
-	this.textSize = TextHelper.calcQueueTextSize( this.unitLength );
-	this.indexSize = 0.5 * this.textSize;
-
-	this.textRotation = this.overview ? - Math.PI / 2 : 0;
-
-	this.lengthText = undefined;
-	this.startText = undefined;
-	this.endText = undefined;
-
-	this.layerIndex = undefined;
-
-	this.queueLengthNeedsUpdate = false;
-	this.isLengthChanged = false;
-
-	this.init();
-
-}
-
-QueueSegment.prototype = {
-
-	init: function() {
-
-		this.queue = this.createQueueElement();
-
-		let queueGroup = new THREE.Object3D();
-		queueGroup.add( this.queue );
-		this.queueGroup = queueGroup;
-
-	},
-
-	createQueueElement: function() {
-
-		let data = new Uint8Array( this.queueLength );
-		this.dataArray = data;
-		let backData = new Uint8Array( this.queueLength );
-		this.backDataArray = backData;
-
-		for ( let i = 0; i < this.queueLength; i++ ) {
-
-			data[ i ] = 255 * this.minOpacity;
-
-		}
-
-		let dataTex = new THREE.DataTexture( data, this.queueLength, 1, THREE.LuminanceFormat, THREE.UnsignedByteType );
-		this.dataTexture = dataTex;
-
-		dataTex.magFilter = THREE.NearestFilter;
-		dataTex.needsUpdate = true;
-
-		let backDataTex = new THREE.DataTexture( backData, this.queueLength, 1, THREE.LuminanceFormat, THREE.UnsignedByteType );
-		this.backDataTexture = backDataTex;
-
-		backDataTex.magFilter = THREE.NearestFilter;
-		backDataTex.needsUpdate = true;
-
-		let boxGeometry = new THREE.BoxBufferGeometry( this.actualWidth, this.unitLength, this.unitLength );
-
-		let material = new THREE.MeshBasicMaterial( {
-
-			color: this.color,
-			alphaMap: dataTex,
-			transparent: true
-
-		} );
-
-		let backMaterial = new THREE.MeshBasicMaterial( {
-
-			color: this.color,
-			alphaMap: backDataTex,
-			transparent: true
-
-		} );
-
-		let basicMaterial = new THREE.MeshBasicMaterial( {
-
-			color: this.color,
-			transparent: true,
-			opacity: this.sideOpacity
-
-		} );
-
-		let materials = [
-
-			basicMaterial,
-			basicMaterial,
-			material,
-			material,
-			material,
-			backMaterial
-
-		];
-
-		let cube = new THREE.Mesh( boxGeometry, materials );
-
-		cube.position.set( 0, 0, 0 );
-		cube.elementType = "featureLine";
-		cube.hoverable = true;
-
-		return cube;
-
-	},
-
-	getElement: function() {
-
-		return this.queueGroup;
-
-	},
-
-	updateVis: function( colors ) {
-
-		let backColors = RenderPreprocessor.preProcessQueueBackColor( colors );
-
-		for ( let i = 0; i < colors.length; i++ ) {
-
-			this.dataArray[ i ] = 255 * colors[ i ];
-			this.backDataArray[ i ] = 255 * backColors[ i ];
-
-		}
-
-		this.dataTexture.needsUpdate = true;
-		this.backDataTexture.needsUpdate = true;
-
-	},
-
-	clear: function() {
-
-		let zeroData = new Uint8Array( this.queueLength );
-		let colors = ColorUtils.getAdjustValues( zeroData, this.minOpacity );
-
-		this.updateVis( colors );
-
-	},
-
-	setLayerIndex: function( layerIndex ) {
-
-		this.layerIndex = layerIndex;
-		this.queue.layerIndex = layerIndex;
-
-	},
-
-	showText: function() {
-
-		// create length text and add it to group
-
-		let lengthTextContent = this.totalLength.toString();
-
-		let geometry = new THREE.TextGeometry( lengthTextContent, {
-
-			font: this.font,
-			size: this.textSize,
-			height: Math.min( this.unitLength, 1 ),
-			curveSegments: 8
-
-		} );
-
-		let material = new THREE.MeshBasicMaterial( { color: this.color } );
-
-		let text = new THREE.Mesh( geometry, material );
-
-		text.rotateX( this.textRotation );
-
-		let textPos = TextHelper.calcQueueTextPos(
-
-			lengthTextContent.length,
-			this.textSize,
-			this.unitLength,
-			{
-
-				x: this.queue.position.x,
-				y: this.queue.position.y,
-				z: this.queue.position.z
-
-			}
-
-		);
-
-		text.position.set(
-
-			textPos.x,
-			textPos.y,
-			textPos.z
-
-		);
-
-		this.lengthText = text;
-
-		this.queueGroup.add( this.lengthText );
-
-		// create start index and add it to group
-
-		let startTextContent = this.startIndex.toString();
-
-		let startGeometry = new THREE.TextGeometry( startTextContent, {
-
-			font: this.font,
-			size: this.indexSize,
-			height: Math.min( this.unitLength, 1 ),
-			curveSegments: 8
-
-		} );
-
-		let startMaterial = new THREE.MeshBasicMaterial( { color: this.color } );
-
-		let startText = new THREE.Mesh( startGeometry, startMaterial );
-
-		startText.rotateX( this.textRotation );
-
-		let startTextPos = TextHelper.calcSegmentStartIndexPos(
-
-			this.actualWidth,
-			startTextContent.length,
-			this.indexSize,
-			{
-
-				x: this.queue.position.x,
-				y: this.queue.position.y,
-				z: this.queue.position.z
-
-			}
-
-		);
-
-		startText.position.set(
-
-			startTextPos.x,
-			startTextPos.y,
-			startTextPos.z
-
-		);
-
-		this.startText = startText;
-
-		this.queueGroup.add( this.startText );
-
-		// create end text and add it to group
-
-		let endTextContent = this.endIndex.toString();
-
-		let endGeometry = new THREE.TextGeometry( endTextContent, {
-
-			font: this.font,
-			size: this.indexSize,
-			height: Math.min( this.unitLength, 1 ),
-			curveSegments: 8
-
-		} );
-
-		let endMaterial = new THREE.MeshBasicMaterial( { color: this.color } );
-
-		let endText = new THREE.Mesh( endGeometry, endMaterial );
-
-		endText.rotateX( this.textRotation );
-
-		let endTextPos = TextHelper.calcSegmentEndIndexPos(
-
-			this.actualWidth,
-			endTextContent.length,
-			this.indexSize,
-			{
-
-				x: this.queue.position.x,
-				y: this.queue.position.y,
-				z: this.queue.position.z
-
-			}
-
-		);
-
-		endText.position.set(
-
-			endTextPos.x,
-			endTextPos.y,
-			endTextPos.z
-
-		);
-
-		this.endText = endText;
-
-		this.queueGroup.add( this.endText );
-
-		this.isTextShown = true;
-
-	},
-
-	hideText: function() {
-
-		this.queueGroup.remove( this.lengthText );
-		this.lengthText = undefined;
-
-		this.queueGroup.remove( this.startText );
-		this.startText = undefined;
-
-		this.queueGroup.remove( this.endText );
-		this.endText = undefined;
-
-		this.isTextShown = false;
-
-	},
-
-	updateSegmentIndex: function( segmentIndex ) {
-
-		if (
-
-			this.totalSegments * this.segmentLength !== this.totalLength &&
-			(
-
-				( this.segmentIndex !== this.totalSegments - 1 && segmentIndex === this.totalSegments - 1 ) ||
-				( this.segmentIndex === this.totalSegments - 1 && segmentIndex !== this.totalSegments - 1 )
-
-			)
-
-		) {
-
-			this.queueLengthNeedsUpdate = true;
-			this.isLengthChanged = true;
-
-		} else {
-
-			this.isLengthChanged = false;
-
-		}
-
-		this.segmentIndex = segmentIndex;
-
-		this.setRange();
-
-		if ( this.queueLengthNeedsUpdate ) {
-
-			this.updateLength();
-
-		}
-
-	},
-
-	setRange: function() {
-
-		this.startIndex = this.segmentLength * this.segmentIndex + 1;
-		this.endIndex = Math.min( this.totalLength, this.segmentLength * ( this.segmentIndex + 1 ) );
-
-	},
-
-	calcQueueLength: function() {
-
-		return Math.min( this.totalLength, this.segmentLength * ( this.segmentIndex + 1 ) ) - this.segmentLength * this.segmentIndex;
-
-	},
-
-	updateLength: function() {
-
-		this.queueLength = this.calcQueueLength();
-		this.actualWidth = this.unitLength * this.queueLength;
-
-		this.queueGroup.remove( this.queue );
-		this.queue = this.createQueueElement();
-		this.queue.layerIndex = this.layerIndex;
-		this.queueGroup.add( this.queue );
-
-		this.queueLengthNeedsUpdate = false;
-
-	}
-
-};
 
 /**
  * @author syt123450 / https://github.com/syt123450
@@ -17951,7 +18923,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 * @param { int } layerIndex, this layer's order in model.
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 	},
 
@@ -18021,9 +18993,10 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		let units = 1;
 
@@ -18232,9 +19205,10 @@ Pooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -18477,20 +19451,22 @@ function Pooling2d( config ) {
 	/**
 	 * Factors by which to downscale in each dimension.
 	 * For example: [2, 3], 2 for width, 3 for height.
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { Array }
 	 */
 
-	this.poolSize = undefined;
+	this.poolSize = [ 1, 1 ];
 
 	/**
 	 * The size of the stride in each dimension of the pooling window.
 	 * For example: [2, 2]
+	 * Default to [ 1, 1 ].
 	 *
 	 * @type { Array }
 	 */
 
-	this.strides = undefined;
+	this.strides = [ 1, 1 ];
 
 	/**
 	 * Padding mode.
@@ -18537,9 +19513,10 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.depth = this.lastLayer.depth;
 
@@ -18706,7 +19683,17 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			if ( layerConfig.poolSize !== undefined ) {
 
-				this.poolSize = layerConfig.poolSize;
+				if ( layerConfig.poolSize instanceof Array ) {
+
+					this.poolSize[ 0 ] = layerConfig.poolSize[ 0 ];
+					this.poolSize[ 1 ] = layerConfig.poolSize[ 1 ];
+
+				} else {
+
+					this.poolSize[ 0 ] = layerConfig.poolSize;
+					this.poolSize[ 1 ] = layerConfig.poolSize;
+
+				}
 
 			} else {
 
@@ -18718,7 +19705,17 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			if ( layerConfig.strides !== undefined ) {
 
-				this.strides = layerConfig.strides;
+				if ( layerConfig.strides instanceof Array ) {
+
+					this.strides[ 0 ] = layerConfig.strides[ 0 ];
+					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+				} else {
+
+					this.strides[ 0 ] = layerConfig.strides;
+					this.strides[ 1 ] = layerConfig.strides;
+
+				}
 
 			} else {
 
@@ -18824,9 +19821,10 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -19040,9 +20038,10 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -19271,9 +20270,10 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -19551,9 +20551,10 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
@@ -19750,9 +20751,10 @@ Padding1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -19988,9 +20990,10 @@ Padding2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Calculate layer's shape from last layer and user's configuration.
 
@@ -20214,9 +21217,10 @@ UpSampling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -20453,9 +21457,10 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.depth = this.lastLayer.depth;
 
@@ -20909,9 +21914,10 @@ GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototyp
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 		this.depth = this.inputShape[ 1 ];
@@ -21159,9 +22165,10 @@ GlobalPooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.depth = this.lastLayer.depth;
 
@@ -21404,9 +22411,10 @@ BasicLayer1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
@@ -21556,9 +22564,10 @@ BasicLayer2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
@@ -21712,9 +22721,10 @@ BasicLayer3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function ( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
@@ -21885,9 +22895,10 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -22082,9 +23093,10 @@ Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -22303,9 +23315,10 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -22470,6 +23483,74 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
  * @author syt123450 / https://github.com/syt123450
  */
 
+let MergeValidator = ( function() {
+
+	function validateDimension( layerList ) {
+
+		let dimension;
+
+		if ( layerList.length > 0 ) {
+
+			dimension = layerList[ 0 ].layerDimension;
+
+		} else {
+
+			console.error( "Merge Layer missing elements." );
+
+		}
+
+		for ( let i = 0; i < layerList.length; i ++ ) {
+
+			if ( layerList[ i ].layerDimension !== dimension ) {
+
+				console.error( "Can not merge layers with different dimension." );
+
+			}
+
+		}
+
+	}
+
+	function validateStableShape( layerList ) {
+
+		let inputShape = layerList[ 0 ].outputShape;
+
+		// make sure all input layers has the same shape (same in all dimension).
+
+		for ( let i = 0; i < layerList.length; i ++ ) {
+
+			let outputShape = layerList[ i ].outputShape;
+
+			for ( let j = 0; j < inputShape.length; j ++ ) {
+
+				if ( outputShape[ j ] !== inputShape[ j ] ) {
+
+					return false;
+
+				}
+
+			}
+
+		}
+
+		return true;
+
+	}
+
+	return {
+
+		validateDimension: validateDimension,
+
+		validateStableShape: validateStableShape
+
+	}
+
+} )();
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 function MergedLineGroup(layer, scene, neuralGroup, color, minOpacity ) {
 
 	this.layer = layer;
@@ -22544,8 +23625,6 @@ MergedLineGroup.prototype = {
 
 		}
 
-		let forward = false;
-
 		for ( let i = 0; i < curveElements.length; i ++ ) {
 
 			let startPos = lineStartPos;
@@ -22581,27 +23660,19 @@ MergedLineGroup.prototype = {
 
 			let points = curve.getPoints( 50 );
 
-			if ( forward ) {
+			for ( let i = 0; i < points.length; i ++ ) {
 
-				for ( let i = 0; i < points.length; i ++ ) {
-
-					curveLineVertices.push( points[ i ] );
-					curveLineColors.push( new THREE.Color( this.color ) );
-
-				}
-
-			} else {
-
-				for ( let i = points.length - 1; i >= 0; i -- ) {
-
-					curveLineVertices.push( points[ i ] );
-					curveLineColors.push( new THREE.Color( this.color ) );
-
-				}
+				curveLineVertices.push( points[ i ] );
+				curveLineColors.push( new THREE.Color( this.color ) );
 
 			}
 
-			forward = !forward;
+			for ( let i = points.length - 1; i >= 0; i -- ) {
+
+				curveLineVertices.push( points[ i ] );
+				curveLineColors.push( new THREE.Color( this.color ) );
+
+			}
 
 		}
 
@@ -22739,6 +23810,15 @@ function MergedLayer( config ) {
 
 	this.mergedElements = [];
 
+	/**
+	 * layerType will be set based on operation strategy.
+	 * For example: Add3d, Subtract1d, Maximum2d
+	 *
+	 * @type { String }
+	 */
+
+	this.layerType = undefined;
+
 }
 
 MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
@@ -22793,7 +23873,7 @@ MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 	},
 
@@ -22967,6 +24047,3901 @@ MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 			elementList: []
 
 		};
+
+	}
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * MergeStrategy, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for MergedStrategy1d, MergedStrategy2d, MergedStrategy3d.
+ * For a specific merge operation, will return a "merge layer",
+ * each "merge layer" corresponding to a specific "merge strategy",
+ * these MergeStrategies are subClass of "MergeStrategy".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function MergeStrategy( mergedElements ) {
+
+	/**
+	 * Strategy's context, store Layer's reference in strategy.
+	 *
+	 * @type { MergedLayer }
+	 */
+
+	this.layerContext = undefined;
+
+	/**
+	 * Array of TensorSpace layers, store user's inputList for merge function.
+	 *
+	 * @type { Layer[] }
+	 */
+	this.mergedElements = mergedElements;
+
+}
+
+MergeStrategy.prototype = {
+
+	/**
+	 * setLayerContext(), Layer is Strategy's context, store Layer's reference in strategy.
+	 * This method will be called by MergedLayer, after initializing the Strategy.
+	 *
+	 * @param layer
+	 */
+
+	setLayerContext: function( layer ) {
+
+		this.layerContext = layer;
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for MergeStrategy.
+	 * SubClasses ( concrete MergeStrategy ) override these abstract methods.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape() abstract method
+	 * Different merge strategies will have their own way to calculate outputShape.
+	 * Such as:
+	 * - MergeStrategy1d has one dimension outputShape, for example, [100].
+	 * - MergeStrategy2d has two dimension outputShape, for example, [28, 28].
+	 * - MergeStrategy3d has three dimension outputShape, for example, [224, 224, 3].
+	 *
+	 * @return { undefined }
+	 */
+
+	getOutputShape: function() {
+
+		return undefined;
+
+	},
+
+	/**
+	 * validate() abstract method
+	 * validate whether mergedElements is suitable for merge operation.
+	 * Different merge operation may have different validate strategy.
+	 * Such as:
+	 * - Add3d and Add2d have different validate strategies.
+	 * - Add3d and Concatenate3d have different validate strategies.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Override this function to define relative element from previous layer.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return {
+
+			straight: [],
+			curve: []
+
+		};
+
+	}
+
+};
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * MergeStrategy3d, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for StableMerge3d, Concatenate3d.
+ * The getOutputShape() of MergeStrategy3d will return a 3 dimension array,
+ * For example, [ 224, 224, 3 ]
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function MergeStrategy3d( mergedElements ) {
+
+	// MergeStrategy3d inherits from abstract strategy "MergeStrategy".
+
+	MergeStrategy.call( this, mergedElements );
+
+}
+
+MergeStrategy3d.prototype = Object.assign( Object.create( MergeStrategy.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for MergeStrategy3d.
+	 * SubClasses ( concrete MergeStrategy3d ) override these abstract methods.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 3 dimension array.
+	 * Different MergeStrategy3d subclass will have different ways to outputShape calculate.
+	 * For example, Add3d and Concatenate3d's getOutputShape() method are different.
+	 *
+	 * @return { [ int, int, int ] }
+	 */
+	
+	getOutputShape: function() {
+
+		return [ 1, 1, 1 ];
+
+	},
+
+	/**
+	 * validate() abstract method
+	 * validate whether mergedElements is suitable for merge operation.
+	 * Different merge operation may have different validate strategy.
+	 * Such as:
+	 * - Add3d and Concatenate3d have different validate strategies.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Override this function to define relative element from previous layer.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return {
+
+			straight: [],
+			curve: []
+
+		};
+
+	}
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * StableMerge3d, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for Add3d, Subtract3d, Maximum3d, Multiply3d, Average3d.
+ * The calculated outputShape in StableMerge is the same as the outputShapes of layers in input layer list,
+ * that's why named as StableMerge, keep the outputShape stable, would not change in merge operation.
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function StableMerge3d( mergedElements ) {
+
+	// StableMerge3d inherits from abstract strategy "MergeStrategy3d".
+	
+	MergeStrategy3d.call( this, mergedElements );
+
+}
+
+StableMerge3d.prototype = Object.assign( Object.create( MergeStrategy3d.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below override base class MergeStrategy3d's abstract method
+	 *
+	 * StableMerge3d overrides MergeStrategy3d's function:
+	 * getOutputShape, validate, getRelativeElements
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 3 dimension array.
+	 *
+	 * @return { [ int, int, int ] }
+	 */
+	
+	getOutputShape: function() {
+
+		return this.mergedElements[ 0 ].outputShape;
+
+	},
+
+	/**
+	 * validate()
+	 * validate whether mergedElements is suitable for merge operation.
+	 *
+	 * @return { boolean }
+	 */
+	
+	validate: function() {
+
+		return MergeValidator.validateStableShape( this.mergedElements );
+
+	},
+
+	/**
+	 * getRelativeElements()
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+	
+	getRelativeElements: function( selectedElement ) {
+
+		let curveElements = [];
+		let straightElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					if ( relativeResult.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+						}
+
+					} else {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
+						}
+
+					}
+
+				}
+
+			}
+
+		} else if ( selectedElement.elementType === "featureMap" ) {
+
+			let fmIndex = selectedElement.fmIndex;
+
+			let request = {
+
+				index: fmIndex
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					if ( relativeResult.isOpen && !this.layerContext.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+
+						}
+
+					} else {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			straight: straightElements,
+			curve: curveElements
+
+		};
+
+	}
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergeStrategy3d's abstract method.
+	 *
+	 * ============
+	 */
+	
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Add3d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Add operation to 3d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let addLayer = TSP.layers.Add( [ conv2d1, conv2d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "addLayer" apply merge strategy "Add3d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Add3d( mergedElements ) {
+
+	// Add3d inherits from abstract strategy "StableMerge3d".
+	
+	StableMerge3d.call( this, mergedElements );
+
+	this.strategyType = "Add3d";
+
+}
+
+Add3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Concatenate3d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Concatenate operation to 3d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let concatenateLayer = TSP.layers.Concatenate( [ conv2d1, conv2d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "concatenateLayer" apply merge strategy "Concatenate3d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Concatenate3d( mergedElements ) {
+
+	// Concatenate3d inherits from abstract strategy "MergeStrategy3d".
+
+	MergeStrategy3d.call( this, mergedElements );
+
+	this.strategyType = "Concatenate3d";
+
+}
+
+Concatenate3d.prototype = Object.assign( Object.create( MergeStrategy3d.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below override base class MergeStrategy3d's abstract method
+	 *
+	 * Concatenate3d overrides MergeStrategy3d's function:
+	 * getOutputShape, validate, getRelativeElements
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 3 dimension array.
+	 *
+	 * @return { [ int, int, int ] }
+	 */
+
+	getOutputShape: function() {
+
+		let width = this.mergedElements[ 0 ].outputShape[ 0 ];
+		let height = this.mergedElements[ 0 ].outputShape[ 1 ];
+		let depth = 0;
+
+		// concatenate input layers' width, height and depth
+
+		for (let i = 0; i < this.mergedElements.length; i ++) {
+
+			depth += this.mergedElements[ i ].outputShape[ 2 ];
+
+		}
+
+		return [ width, height, depth ];
+
+	},
+
+	/**
+	 * validate()
+	 * validate whether mergedElements is suitable for merge operation.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		let inputShape = this.mergedElements[ 0 ].outputShape;
+
+		for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+			let layerShape = this.mergedElements[ i ].outputShape;
+
+			if ( layerShape[ 0 ] !== inputShape[ 0 ] || layerShape[ 1 ] !== inputShape[ 1 ] ) {
+
+				return false;
+
+			}
+
+		}
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements()
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		let curveElements = [];
+		let straightElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					if ( relativeResult.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+
+						}
+
+					} else {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
+						}
+
+					}
+
+				}
+
+			}
+
+		} else if ( selectedElement.elementType === "featureMap" ) {
+
+			let fmIndex = selectedElement.fmIndex;
+
+			let relativeLayer;
+
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+				let layerDepth = this.mergedElements[ i ].outputShape[ 2 ];
+
+				if ( layerDepth > fmIndex ) {
+
+					relativeLayer = this.mergedElements[ i ];
+					break;
+
+				} else {
+
+					fmIndex -= layerDepth;
+
+				}
+
+			}
+
+			let request = {
+
+				index: fmIndex
+
+			};
+
+			let relativeResult = relativeLayer.provideRelativeElements( request );
+			let relativeElements = relativeResult.elementList;
+
+			if ( relativeLayer.layerLevel === this.layerContext.layerLevel - 1 ) {
+
+				for ( let i = 0; i < relativeElements.length; i ++ ) {
+
+					straightElements.push( relativeElements[ i ] );
+
+				}
+
+			} else {
+
+				if ( relativeResult.isOpen ) {
+
+					for ( let i = 0; i < relativeElements.length; i ++ ) {
+
+						straightElements.push( relativeElements[ i ] );
+
+					}
+
+				} else {
+
+					for ( let i = 0; i < relativeElements.length; i ++ ) {
+
+						curveElements.push( relativeElements[ i ] );
+
+					}
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			straight: straightElements,
+			curve: curveElements
+
+		};
+
+	}
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergeStrategy1d's abstract method.
+	 *
+	 * ============
+	 */
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Subtract3d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Subtract operation to 3d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let subtractLayer = TSP.layers.Subtract( [ conv2d1, conv2d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "subtractLayer" apply merge strategy "Subtract3d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Subtract3d( mergedElements ) {
+
+	// Subtract3d inherits from abstract strategy "StableMerge3d".
+	
+	StableMerge3d.call( this, mergedElements );
+
+	this.strategyType = "Subtract3d";
+
+}
+
+Subtract3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Multiply3d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Multiply operation to 3d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let multiplyLayer = TSP.layers.Multiply( [ conv2d1, conv2d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "multiplyLayer" apply merge strategy "Multiply3d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Multiply3d( mergedElements ) {
+
+	// Multiply3d inherits from abstract strategy "StableMerge3d".
+	
+	StableMerge3d.call( this, mergedElements );
+
+	this.strategyType = "Multiply3d";
+
+}
+
+Multiply3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Maximum3d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Maximum operation to 3d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let maximumLayer = TSP.layers.Maximum( [ conv2d1, conv2d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "maximumLayer" apply merge strategy "Maximum3d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Maximum3d( mergedElements ) {
+
+	// Maximum3d inherits from abstract strategy "StableMerge3d".
+	
+	StableMerge3d.call( this, mergedElements );
+
+	this.strategyType = "Maximum3d";
+
+}
+
+Maximum3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Average3d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Average operation to 3d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let averageLayer = TSP.layers.Average( [ conv2d1, conv2d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "averageLayer" apply merge strategy "Average3d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Average3d( mergedElements ) {
+
+	// Average3d inherits from abstract strategy "StableMerge3d".
+	
+	StableMerge3d.call( this, mergedElements );
+
+	this.strategyType = "Average3d";
+
+}
+
+Average3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * MergeStrategy2d, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for StableMerge2d, Concatenate2d.
+ * The getOutputShape() of MergeStrategy2d will return a 2 dimension array,
+ * For example, [ 28, 28 ]
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function MergeStrategy2d( mergedElements ) {
+
+	// MergeStrategy2d inherits from abstract strategy "MergeStrategy".
+
+	MergeStrategy.call( this, mergedElements );
+
+}
+
+MergeStrategy2d.prototype = Object.assign( Object.create( MergeStrategy.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for MergeStrategy2d.
+	 * SubClasses ( concrete MergeStrategy2d ) override these abstract methods.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 2 dimension array.
+	 * Different MergeStrategy2d subclass will have different ways to outputShape calculate.
+	 * For example, Add2d and Concatenate2d's getOutputShape() method are different.
+	 *
+	 * @return { [ int, int ] }
+	 */
+
+	getOutputShape: function() {
+
+		return [ 1, 1 ];
+
+	},
+
+	/**
+	 * validate() abstract method
+	 * validate whether mergedElements is suitable for merge operation.
+	 * Different merge operation may have different validate strategy.
+	 * Such as:
+	 * - Add2d and Concatenate2d have different validate strategies.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Override this function to define relative element from previous layer.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return {
+
+			straight: [],
+			curve: []
+
+		};
+
+	}
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * StableMerge2d, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for Add2d, Subtract2d, Maximum2d, Multiply2d, Average2d.
+ * The calculated outputShape in StableMerge is the same as the outputShapes of layers in input layer list,
+ * that's why named as StableMerge, keep the outputShape stable, would not change in merge operation.
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function StableMerge2d( mergedElements ) {
+
+	// StableMerge2d inherits from abstract strategy "MergeStrategy2d".
+
+	MergeStrategy2d.call( this, mergedElements );
+
+}
+
+StableMerge2d.prototype = Object.assign( Object.create( MergeStrategy2d.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below override base class MergeStrategy2d's abstract method
+	 *
+	 * StableMerge2d overrides MergeStrategy2d's function:
+	 * getOutputShape, validate, getRelativeElements
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 2 dimension array.
+	 *
+	 * @return { [ int, int ] }
+	 */
+
+	getOutputShape: function() {
+
+		return this.mergedElements[ 0 ].outputShape;
+
+	},
+
+	/**
+	 * validate()
+	 * validate whether mergedElements is suitable for merge operation.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return MergeValidator.validateStableShape( this.mergedElements );
+
+	},
+
+	/**
+	 * getRelativeElements()
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		let curveElements = [];
+		let straightElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					if ( relativeResult.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+						}
+
+					} else {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
+						}
+
+					}
+
+				}
+
+			}
+
+		} else if ( selectedElement.elementType === "gridLine" ) {
+
+			let gridIndex = selectedElement.gridIndex;
+
+			let request = {
+
+				index: gridIndex
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					if ( relativeResult.isOpen && !this.layerContext.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+
+						}
+
+					} else {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			straight: straightElements,
+			curve: curveElements
+
+		};
+
+	}
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergeStrategy2d's abstract method.
+	 *
+	 * ============
+	 */
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Add2d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Add operation to 2d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let addLayer = TSP.layers.Add( [ conv1d1, conv1d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "addLayer" apply merge strategy "Add2d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Add2d( mergedElements ) {
+
+	// Add2d inherits from abstract strategy "StableMerge2d".
+	
+	StableMerge2d.call( this, mergedElements );
+
+	this.strategyType = "Add2d";
+
+}
+
+Add2d.prototype = Object.assign( Object.create( StableMerge2d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Subtract2d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Subtract operation to 2d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let subtractLayer = TSP.layers.Subtract( [ conv1d1, conv1d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "subtractLayer" apply merge strategy "Subtract2d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Subtract2d( mergedElements ) {
+
+	// Subtract2d inherits from abstract strategy "StableMerge2d".
+	
+	StableMerge2d.call( this, mergedElements );
+
+	this.strategyType = "Subtract2d";
+
+}
+
+Subtract2d.prototype = Object.assign( Object.create( StableMerge2d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Maximum2d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Maximum operation to 2d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let maximumLayer = TSP.layers.Maximum( [ conv1d1, conv1d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "maximumLayer" apply merge strategy "Maximum2d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Maximum2d( mergedElements ) {
+
+	// Maximum2d inherits from abstract strategy "StableMerge2d".
+	
+	StableMerge2d.call( this, mergedElements );
+
+	this.strategyType = "Maximum2d";
+
+}
+
+Maximum2d.prototype = Object.assign( Object.create( StableMerge2d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Average2d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Average operation to 2d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let averageLayer = TSP.layers.Average( [ conv1d1, conv1d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "averageLayer" apply merge strategy "Average2d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Average2d( mergedElements ) {
+
+	// Average2d inherits from abstract strategy "StableMerge2d".
+
+	StableMerge2d.call( this, mergedElements );
+
+	this.strategyType = "Average2d";
+
+}
+
+Average2d.prototype = Object.assign( Object.create( StableMerge2d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Multiply2d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Multiply operation to 2d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let multiplyLayer = TSP.layers.Multiply( [ conv1d1, conv1d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "multiplyLayer" apply merge strategy "Multiply2d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Multiply2d( mergedElements ) {
+
+	// Multiply2d inherits from abstract strategy "StableMerge2d".
+	
+	StableMerge2d.call( this, mergedElements );
+
+	this.strategyType = "Multiply2d";
+
+}
+
+Multiply2d.prototype = Object.assign( Object.create( StableMerge2d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Concatenate2d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Concatenate operation to 2d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let concatenateLayer = TSP.layers.Concatenate( [ conv1d1, conv1d2 ], { ...config } );
+ * ```
+ * In this example, the merged layer "concatenateLayer" apply merge strategy "Concatenate2d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Concatenate2d( mergedElements ) {
+
+	// Concatenate2d inherits from abstract strategy "MergeStrategy2d".
+
+	MergeStrategy2d.call( this, mergedElements );
+
+	this.strategyType = "Concatenate2d";
+
+}
+
+Concatenate2d.prototype = Object.assign( Object.create( MergeStrategy2d.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below override base class MergeStrategy2d's abstract method
+	 *
+	 * Concatenate2d overrides MergeStrategy2d's function:
+	 * getOutputShape, validate, getRelativeElements
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 2 dimension array.
+	 *
+	 * @return { [ int, int ] }
+	 */
+
+	getOutputShape: function() {
+
+		let width = this.mergedElements[ 0 ].outputShape[ 0 ];
+		let depth = 0;
+
+		// concatenate input layers' width and depth
+
+		for (let i = 0; i < this.mergedElements.length; i ++) {
+
+			depth += this.mergedElements[ i ].outputShape[ 1 ];
+
+		}
+
+		return [ width, depth ];
+
+	},
+
+	/**
+	 * validate()
+	 * validate whether mergedElements is suitable for merge operation.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		let inputShape = this.mergedElements[ 0 ].outputShape;
+
+		for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+			let layerShape = this.mergedElements[ i ].outputShape;
+
+			if ( layerShape[ 0 ] !== inputShape[ 0 ] ) {
+
+				return false;
+
+			}
+
+		}
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements()
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		let curveElements = [];
+		let straightElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					if ( relativeResult.isOpen ) {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							straightElements.push( relativeElements[ j ] );
+
+						}
+
+					} else {
+
+						for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+							curveElements.push( relativeElements[ j ] );
+
+						}
+
+					}
+
+				}
+
+			}
+
+		} else if ( selectedElement.elementType === "gridLine" ) {
+
+			let gridIndex = selectedElement.gridIndex;
+
+			let relativeLayer;
+
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+				let layerDepth = this.mergedElements[ i ].outputShape[ 1 ];
+
+				if ( layerDepth > gridIndex ) {
+
+					relativeLayer = this.mergedElements[ i ];
+					break;
+
+				} else {
+
+					gridIndex -= layerDepth;
+
+				}
+
+			}
+
+			let request = {
+
+				index: gridIndex
+
+			};
+
+			let relativeResult = relativeLayer.provideRelativeElements( request );
+			let relativeElements = relativeResult.elementList;
+
+			if ( relativeLayer.layerLevel === this.layerContext.layerLevel - 1 ) {
+
+				for ( let i = 0; i < relativeElements.length; i ++ ) {
+
+					straightElements.push( relativeElements[ i ] );
+
+				}
+
+			} else {
+
+				if ( relativeResult.isOpen ) {
+
+					for ( let i = 0; i < relativeElements.length; i ++ ) {
+
+						straightElements.push( relativeElements[ i ] );
+
+					}
+
+				} else {
+
+					for ( let i = 0; i < relativeElements.length; i ++ ) {
+
+						curveElements.push( relativeElements[ i ] );
+
+					}
+
+				}
+
+			}
+
+
+		}
+
+		return {
+
+			straight: straightElements,
+			curve: curveElements
+
+		};
+
+	}
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergeStrategy1d's abstract method.
+	 *
+	 * ============
+	 */
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * MergeStrategy1d, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for StableMerge1d, Concatenate1d.
+ * The getOutputShape() of MergeStrategy1d will return a 1 dimension array,
+ * For example, [ 100 ]
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function MergeStrategy1d( mergedElements ) {
+
+	// MergeStrategy1d inherits from abstract strategy "MergeStrategy".
+
+	MergeStrategy.call( this, mergedElements );
+
+}
+
+MergeStrategy1d.prototype = Object.assign( Object.create( MergeStrategy.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for MergeStrategy1d.
+	 * SubClasses ( concrete MergeStrategy1d ) override these abstract methods.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 1 dimension array.
+	 * Different MergeStrategy1d subclass will have different ways to outputShape calculate.
+	 * For example, Add1d and Concatenate1d's getOutputShape() method are different.
+	 *
+	 * @return { [ int ] }
+	 */
+
+	getOutputShape: function() {
+
+		return [ 1 ];
+
+	},
+
+	/**
+	 * validate() abstract method
+	 * validate whether mergedElements is suitable for merge operation.
+	 * Different merge operation may have different validate strategy.
+	 * Such as:
+	 * - Add1d and Concatenate1d have different validate strategies.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements() abstract method
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Override this function to define relative element from previous layer.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		return {
+
+			straight: [],
+			curve: []
+
+		};
+
+	}
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * StableMerge1d, abstract strategy, should not be initialized by StrategyFactory directly.
+ * Base class for Add1d, Subtract1d, Maximum1d, Multiply1d, Average1d.
+ * The calculated outputShape in StableMerge is the same as the outputShapes of layers in input layer list,
+ * that's why named as StableMerge, keep the outputShape stable, would not change in merge operation.
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function StableMerge1d( mergedElements ) {
+
+	// StableMerge1d inherits from abstract strategy "MergeStrategy1d".
+
+	MergeStrategy1d.call( this, mergedElements );
+
+}
+
+StableMerge1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below override base class MergeStrategy1d's abstract method
+	 *
+	 * StableMerge1d overrides MergeStrategy1d's function:
+	 * getOutputShape, validate, getRelativeElements
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 1 dimension array.
+	 *
+	 * @return { [ int ] }
+	 */
+
+	getOutputShape: function() {
+
+		return this.mergedElements[ 0 ].outputShape;
+
+	},
+
+	/**
+	 * validate()
+	 * validate whether mergedElements is suitable for merge operation.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return MergeValidator.validateStableShape( this.mergedElements );
+
+	},
+
+	/**
+	 * getRelativeElements()
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		let curveElements = [];
+		let straightElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" ||
+			selectedElement.elementType === "featureLine" ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						curveElements.push( relativeElements[ j ] );
+
+					}
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			straight: straightElements,
+			curve: curveElements
+
+		};
+
+	}
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergeStrategy1d's abstract method.
+	 *
+	 * ============
+	 */
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Add1d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Add operation to 1d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense({ ...config });
+ * let dense2 = new TSP.layers.Dense({ ...config });
+ * let addLayer = TSP.layers.Add([ dense1, dense2 ], { ...config });
+ * ```
+ * In this example, the merged layer "addLayer" apply merge strategy "Add1d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Add1d( mergedElements ) {
+
+	// Add1d inherits from abstract strategy "StableMerge1d".
+
+	StableMerge1d.call( this, mergedElements );
+
+	this.strategyType = "Add1d";
+
+}
+
+Add1d.prototype = Object.assign( Object.create( StableMerge1d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Subtract1d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Subtract operation to 1d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense({ ...config });
+ * let dense2 = new TSP.layers.Dense({ ...config });
+ * let subtractLayer = TSP.layers.Subtract([ dense1, dense2 ], { ...config });
+ * ```
+ * In this example, the merged layer "subtractLayer" apply merge strategy "Subtract1d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Subtract1d( mergedElements ) {
+
+	// Subtract1d inherits from abstract strategy "StableMerge1d".
+	
+	StableMerge1d.call( this, mergedElements );
+
+	this.strategyType = "Subtract1d";
+
+}
+
+Subtract1d.prototype = Object.assign( Object.create( StableMerge1d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Maximum1d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Maximum operation to 1d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense({ ...config });
+ * let dense2 = new TSP.layers.Dense({ ...config });
+ * let maximumLayer = TSP.layers.Maximum([ dense1, dense2 ], { ...config });
+ * ```
+ * In this example, the merged layer "maximumLayer" apply merge strategy "Maximum1d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Maximum1d( mergedElements ) {
+
+	// Maximum1d inherits from abstract strategy "StableMerge1d".
+	
+	StableMerge1d.call( this, mergedElements );
+
+	this.strategyType = "Maximum1d";
+
+}
+
+Maximum1d.prototype = Object.assign( Object.create( StableMerge1d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Average1d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Average operation to 1d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense({ ...config });
+ * let dense2 = new TSP.layers.Dense({ ...config });
+ * let averageLayer = TSP.layers.Average([ dense1, dense2 ], { ...config });
+ * ```
+ * In this example, the merged layer "averageLayer" apply merge strategy "Average1d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Average1d( mergedElements ) {
+
+	// Average1d inherits from abstract strategy "StableMerge1d".
+	
+	StableMerge1d.call( this, mergedElements );
+
+	this.strategyType = "Average1d";
+
+}
+
+Average1d.prototype = Object.assign( Object.create( StableMerge1d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Multiply1d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Multiply operation to 1d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense({ ...config });
+ * let dense2 = new TSP.layers.Dense({ ...config });
+ * let multiplyLayer = TSP.layers.Multiply([ dense1, dense2 ], { ...config });
+ * ```
+ * In this example, the merged layer "multiplyLayer" apply merge strategy "Multiply1d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Multiply1d( mergedElements ) {
+
+	// Multiply1d inherits from abstract strategy "StableMerge1d".
+	
+	StableMerge1d.call( this, mergedElements );
+
+	this.strategyType = "Multiply1d";
+
+}
+
+Multiply1d.prototype = Object.assign( Object.create( StableMerge1d.prototype ) );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Concatenate1d, can be initialized by StrategyFactory directly.
+ * MergeStrategy for MergedLayer when apply Concatenate operation to 1d TensorSpace layers.
+ *
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense({ ...config });
+ * let dense2 = new TSP.layers.Dense({ ...config });
+ * let concatenateLayer = TSP.layers.Concatenate([ dense1, dense2 ], { ...config });
+ * ```
+ * In this example, the merged layer "concatenateLayer" apply merge strategy "Concatenate1d".
+ *
+ * @param mergedElements, array of TensorSpace layers. (layerList.length > 0)
+ * @constructor
+ */
+
+function Concatenate1d( mergedElements ) {
+
+	// Concatenate1d inherits from abstract strategy "MergeStrategy1d".
+
+	MergeStrategy1d.call( this, mergedElements );
+
+	this.strategyType = "Concatenate1d";
+
+}
+
+Concatenate1d.prototype = Object.assign( Object.create( MergeStrategy1d.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below override base class MergeStrategy1d's abstract method
+	 *
+	 * Concatenate1d overrides MergeStrategy1d's function:
+	 * getOutputShape, validate, getRelativeElements
+	 *
+	 * ============
+	 */
+
+	/**
+	 * getOutputShape(), return a 1 dimension array.
+	 *
+	 * @return { [ int ] }
+	 */
+
+	getOutputShape: function() {
+
+		let units = 0;
+
+		// add first dimension as output
+
+		for (let i = 0; i < this.mergedElements.length; i ++) {
+
+			units += this.mergedElements[ i ].outputShape[ 0 ];
+
+		}
+
+		return [ units ];
+
+	},
+
+	/**
+	 * validate()
+	 * validate whether mergedElements is suitable for merge operation.
+	 *
+	 * @return { boolean }
+	 */
+
+	validate: function() {
+
+		return true;
+
+	},
+
+	/**
+	 * getRelativeElements()
+	 * Get relative element in last layer for relative lines based on given hovered element.
+	 * Straight elements is used to draw straight line, curve elements is used to draw Bezier curves.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { THREE.Object } selectedElement, hovered element detected by THREE's Raycaster
+	 * @return { { straight: Array, curve: Array } }
+	 */
+
+	getRelativeElements: function( selectedElement ) {
+
+		let curveElements = [];
+		let straightElements = [];
+
+		if ( selectedElement.elementType === "aggregationElement" ||
+			selectedElement.elementType === "featureLine" ) {
+
+			let request = {
+
+				all: true
+
+			};
+
+			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
+
+				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
+				let relativeElements = relativeResult.elementList;
+
+				if ( this.mergedElements[ i ].layerLevel === this.layerContext.layerLevel - 1 ) {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						straightElements.push( relativeElements[ j ] );
+
+					}
+
+				} else {
+
+					for ( let j = 0; j < relativeElements.length; j ++ ) {
+
+						curveElements.push( relativeElements[ j ] );
+
+					}
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			straight: straightElements,
+			curve: curveElements
+
+		};
+
+	}
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergeStrategy1d's abstract method.
+	 *
+	 * ============
+	 */
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * "StrategyFactory" create a operation strategy for MergedLayer.
+ * This Factory method is used by "MergedLayer1d", "MergedLayer2d", "MergedLayer3d".
+ * As merge function in TensorSpace use Strategy design pattern,
+ * this Factory method handle creation of all concretion strategies.
+ */
+
+let StrategyFactory = ( function() {
+
+	function getOperationStrategy( operator, dimension, mergedElements ) {
+
+		if ( dimension === 3 ) {
+
+			if ( operator === "add" ) {
+
+				return new Add3d( mergedElements );
+
+			} else if ( operator === "concatenate" ) {
+
+				return new Concatenate3d( mergedElements );
+
+			} else if ( operator === "subtract" ) {
+
+				return new Subtract3d( mergedElements );
+
+			} else if ( operator === "multiply" ) {
+
+				return new Multiply3d( mergedElements );
+
+			} else if ( operator === "dot" ) {
+
+				// TODO, implement dot3d operation, different visualization effects with other 3d operation
+
+			} else if ( operator === "maximum" ) {
+
+				return new Maximum3d( mergedElements );
+
+			} else if ( operator === "average" ) {
+
+				return new Average3d( mergedElements );
+
+			}
+
+		} else if ( dimension === 2 ) {
+
+			if ( operator === "add" ) {
+
+				return new Add2d( mergedElements );
+
+			} else if ( operator === "concatenate" ) {
+
+				return new Concatenate2d( mergedElements );
+
+			} else if ( operator === "subtract" ) {
+
+				return new Subtract2d( mergedElements );
+
+			} else if ( operator === "multiply" ) {
+
+				return new Multiply2d( mergedElements );
+
+			} else if ( operator === "dot" ) {
+
+				// TODO, implement dot2d operation, different visualization effects with other 2d operation
+
+			} else if ( operator === "maximum" ) {
+
+				return new Maximum2d( mergedElements );
+
+			} else if ( operator === "average" ) {
+
+				return new Average2d( mergedElements );
+
+			}
+
+		} else if ( dimension === 1 ) {
+
+			if ( operator === "add" ) {
+
+				return new Add1d( mergedElements );
+
+			} else if ( operator === "concatenate" ) {
+
+				return new Concatenate1d( mergedElements );
+
+			} else if ( operator === "subtract" ) {
+
+				return new Subtract1d( mergedElements );
+
+			} else if ( operator === "multiply" ) {
+
+				return new Multiply1d( mergedElements );
+
+			} else if ( operator === "dot" ) {
+
+				// TODO, implement dot1d operation, different visualization effects with other 1d operation
+
+			} else if ( operator === "maximum" ) {
+
+				return new Maximum1d( mergedElements );
+
+			} else if ( operator === "average" ) {
+
+				return new Average1d( mergedElements );
+
+			}
+
+		}
+
+	}
+
+	return {
+
+		getOperationStrategy: getOperationStrategy
+
+	}
+
+} )();
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+function MergedLayer1d( config ) {
+
+	MergedLayer.call( this, config );
+
+	/**
+	 * NativeLayer1d has one output dimensions: [ width ].
+	 *
+	 * @type { int }
+	 */
+
+	this.width = undefined;
+
+	/**
+	 * queue element's handler.
+	 * queue is an element which is displayed on the screen when layer1d is open.
+	 *
+	 * @type { Object }
+	 */
+
+	this.queueHandler = undefined;
+
+	/**
+	 * Decide how to display hint text.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.overview = false;
+
+	/**
+	 * mode for how to display queue element
+	 * If queue element is too long, use "paging" mode may have better visualization effect.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.paging = false;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Segment length for "one page".
+	 * Default to 200.
+	 *
+	 * @type { number }
+	 */
+
+	this.segmentLength = 200;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Which page NativeLayer1d displays now.
+	 * Can be update when "last" or "next" buttons are clicked, initial value can be defined by user.
+	 * Default to 0.
+	 *
+	 * @type { number }
+	 */
+
+	this.segmentIndex = 0;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * How many pages in NativeLayer1d.
+	 *
+	 * @type { number }
+	 */
+
+	this.totalSegments = undefined;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Store handler for last button.
+	 *
+	 * @type { Object }
+	 */
+
+	this.lastButtonHandler = undefined;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Store handler for next button.
+	 *
+	 * @type { Object }
+	 */
+
+	this.nextButtonHandler = undefined;
+
+	/**
+	 * Only take effect when this.paging = true.
+	 * Attribute used by tween in QueueTransitionFactory.
+	 *
+	 * @type { number }
+	 */
+
+	this.queueLength = this.segmentLength;
+
+	/**
+	 * aggregation's width and height.
+	 * aggregation is an element which is displayed on the screen when layer1d is closed.
+	 *
+	 * @type { number }
+	 */
+
+	this.aggregationWidth = undefined;
+	this.aggregationHeight = undefined;
+
+	/**
+	 * An indicator whether layer1d is in an transition status.
+	 * NativeLayer1d has a transition period between "close" and "open" when openLayer is called.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.isTransition = false;
+
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for NativeLayer1d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
+	// Load user's layer1d config into some layer1d's attribute.
+
+	this.loadMerge1dConfig( config );
+
+	this.layerDimension = 1;
+
+	this.initStrategy( config );
+
+}
+
+MergedLayer1d.prototype = Object.assign( Object.create( MergedLayer.prototype ), {
+
+	/**
+	 * ============
+	 *
+	 * Functions below override base class NativeLayer's abstract method
+	 *
+	 * NativeLayer1d overrides NativeLayer's function:
+	 * init, updateValue, clear, handleClick, handleHoverIn, handleHoverOut,
+	 * calcCloseButtonSize, calcCloseButtonPos, provideRelativeElements, getBoundingWidth
+	 *
+	 * ============
+	 */
+
+	/**
+	 * init() create actual THREE.Object in NativeLayer1d, warp them into a group, and add it to THREE.js's scene.
+	 *
+	 * Model passes two parameters, center and actualDepth, to NativeLayer1d when call init() to initialize NativeLayer1d.
+	 *
+	 * @param { JSON } center, layer's center (x, y, z) relative to model
+	 * @param { double } actualDepth, layer aggregation's depth
+	 */
+
+	init: function(center, actualDepth ) {
+
+		this.center = center;
+		this.actualDepth = actualDepth;
+
+		// Init a neuralGroup as the wrapper for all THREE.Object in NativeLayer1d.
+
+		this.neuralGroup = new THREE.Group();
+		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
+
+		if ( this.isOpen ) {
+
+			// Init queue element, when layer is open.
+
+			this.initQueueElement();
+
+			// Init close button.
+
+			this.initCloseButton();
+
+			if ( this.paging ) {
+
+				// Init pagination button when layer is in "paging mode".
+
+				this.showPaginationButton();
+
+			}
+
+		} else {
+
+			// Init aggregation when layer is closed.
+
+			this.initAggregationElement();
+
+		}
+
+		// Add the wrapper object to the actual THREE.js scene.
+
+		this.scene.add( this.neuralGroup );
+
+		// Create relative line element.
+
+		this.addLineGroup();
+
+	},
+
+	/**
+	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 *
+	 * @param { int } layerIndex, this layer's order in model
+	 */
+
+	assemble: function( layerIndex, layerLevel ) {
+
+		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
+
+		// Validate whether user's input merged elements can be merged in this kind of merge operation.
+
+		if( !this.operationStrategy.validate() ) {
+
+			console.error( "Input shape is not valid for " + this.operator + " merge function." );
+
+		}
+
+		// Get output shape after merge operation.
+
+		this.outputShape = this.operationStrategy.getOutputShape();
+
+		// The layer's shape is based on output shape.
+
+		this.width = this.outputShape[ 0 ];
+
+		// Unit length is the same as merged elements, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
+
+		this.unitLength = this.mergedElements[ 0 ].unitLength;
+		this.actualWidth = this.unitLength * this.width;
+
+		// Calculate aggregation actual size.
+
+		this.aggregationWidth = this.mergedElements[ 0 ].aggregationWidth;
+		this.aggregationHeight = this.mergedElements[ 0 ].aggregationHeight;
+
+	},
+
+	/**
+	 * updateValue() accept layer output value from model, update layer visualization if required.
+	 *
+	 * Model passes layer's output value to layer through updateValue method.
+	 *
+	 * @param { double[] } value, neural output value.
+	 */
+
+	updateValue: function( value ) {
+
+		// Store layer output value in "neuralValue" attribute, this attribute can be get by TensorSpace user.
+
+		this.neuralValue = value;
+
+		if ( this.isOpen ) {
+
+			// In layer1d, only queue element's visualization is relative to neural value.
+
+			this.updateQueueVis();
+
+		}
+
+	},
+
+	/**
+	 * clear() clear data and visualization in layer.
+	 */
+
+	clear: function() {
+
+		if ( this.neuralValue !== undefined ) {
+
+			if ( this.isOpen ) {
+
+				// Use queue's handler to clear queue element's visualization.
+
+				this.queueHandler.clear();
+
+			}
+
+			// Clear layer data.
+
+			this.neuralValue = undefined;
+
+		}
+
+	},
+
+	/**
+	 * handleClick() If clickable element in this layer is clicked, execute this handle function.
+	 *
+	 * @param { THREE.Object } clickedElement, clicked element picked by model's Raycaster.
+	 */
+
+	handleClick: function( clickedElement ) {
+
+		if ( clickedElement.elementType === "aggregationElement" ) {
+
+			// If aggregation element is clicked, open layer.
+
+			this.openLayer();
+
+		} else if ( clickedElement.elementType === "closeButton" ) {
+
+			// If close button is clicked, close layer.
+
+			this.closeLayer();
+
+		} else if ( clickedElement.elementType === "paginationButton" ) {
+
+			// If pagination button ("last" or "next") is clicked, update page visualization.
+
+			this.updatePage( clickedElement.paginationType );
+
+		}
+
+	},
+
+	/**
+	 * handleHoverIn() If hoverable element in this layer picked by Raycaster, execute this handle function.
+	 *
+	 * @param { THREE.Object } hoveredElement, hovered element picked by model's Raycaster.
+	 */
+
+	handleHoverIn: function( hoveredElement ) {
+
+		// If relationSystem is enabled, show relation lines.
+
+		if ( this.relationSystem ) {
+
+			this.lineGroupHandler.showLines( hoveredElement );
+
+		}
+
+		// If textSystem is enabled, show hint text, for example, show total neural number.
+
+		if ( this.textSystem ) {
+
+			this.showText( hoveredElement );
+
+		}
+
+	},
+
+	/**
+	 * handleHoverOut() called by model if mouse hover out of this layer.
+	 */
+
+	handleHoverOut: function() {
+
+		// If relationSystem is enabled, hide relation lines.
+
+		if ( this.relationSystem ) {
+
+			this.lineGroupHandler.hideLines();
+
+		}
+
+		// If textSystem is enabled, hide hint text, for example, hide total neural number.
+
+		if ( this.textSystem ) {
+
+			this.hideText();
+
+		}
+
+	},
+
+	loadModelConfig: function( modelConfig ) {
+
+		// Call super class "Layer"'s method to load common model configuration, check out "Layer.js" file for more information.
+
+		this.loadBasicModelConfig( modelConfig );
+
+		if ( this.layerShape === undefined ) {
+
+			this.layerShape = modelConfig.layerShape;
+
+		}
+
+		if ( this.aggregationStrategy === undefined ) {
+
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
+
+		}
+
+		if ( this.color === undefined ) {
+
+			this.color = modelConfig.color[ this.operator ];
+
+		}
+
+	},
+
+	/**
+	 * calcCloseButtonSize() get close button size.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { number } size, close button size
+	 */
+
+	calcCloseButtonSize: function() {
+
+		// To make close button's size responsive, width = 50 is the boundary.
+
+		if ( this.width > 50 ) {
+
+			return 2 * this.unitLength;
+
+		} else {
+
+			return 1.1 * this.unitLength;
+
+		}
+
+	},
+
+	/**                                                                                                                                                 y        y                        /**
+	 * calcCloseButtonPos() get close button position.
+	 * Called by initCloseButton function in abstract class "Layer",
+	 *
+	 * @return { JSON } position, close button position, relative to layer.
+	 */
+
+	calcCloseButtonPos: function() {
+
+		let xTranslate;
+
+		// Close button is positioned in the left of layer, different strategy if layer1d is in "paging mode"
+
+		if ( this.paging ) {
+
+			xTranslate = - this.queueLength * this.unitLength / 2 - 10 * this.unitLength;
+
+		} else {
+
+			xTranslate = - this.actualWidth / 2 - 10 * this.unitLength;
+
+		}
+
+		return {
+
+			x: xTranslate,
+			y: 0,
+			z: 0
+
+		};
+
+	},
+
+	getRelativeElements: function( selectedElement ) {
+
+		// As different merge functions have different relative element strategies, call concrete strategy to get relative elements.
+
+		return this.operationStrategy.getRelativeElements( selectedElement );
+
+	},
+
+	/**
+	 * provideRelativeElements() return relative elements.
+	 *
+	 * Use bridge design patten:
+	 * 1. "getRelativeElements" send request to previous layer for relative elements;
+	 * 2. Previous layer's "provideRelativeElements" receives request, return relative elements.
+	 *
+	 * @param { JSON } request, parameter configured by request layer
+	 * @return { Object } { isOpen: boolean, elementList: elements }
+	 */
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		// When layer1d is in transition, will not return any relative element.
+
+		if ( !this.isTransition ) {
+
+			if ( this.isOpen ) {
+
+				// If layer is open, queue element is the relative element.
+
+				relativeElements.push( this.queueHandler.getElement() );
+
+			} else {
+
+				// If layer is close, aggregation element is the relative element.
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	/**
+	 * getBoundingWidth(), provide bounding box's width based on layer's status.
+	 *
+	 * @return { number }
+	 */
+
+	getBoundingWidth: function() {
+
+		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
+
+			return this.actualWidth / 2 - this.calcCloseButtonPos().x + this.calcCloseButtonSize();
+
+		} else {
+
+			return this.aggregationWidth;
+
+		}
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class NativeLayer's abstract method.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * openLayer() open NativeLayer1d, switch layer status from "close" to "open".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
+	openLayer: function() {
+
+		if ( !this.isOpen ) {
+
+			// QueueTransitionFactory handles actual open animation, checkout "QueueTransitionTween.js" for more information.
+
+			QueueTransitionFactory.openLayer( this );
+
+		}
+
+	},
+
+	/**
+	 * closeLayer() close NativeLayer1d, switch layer status from "open" to "close".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
+	closeLayer: function() {
+
+		if ( this.isOpen ) {
+
+			// QueueTransitionFactory handles actual close animation, checkout "QueueTransitionTween.js" for more information.
+
+			QueueTransitionFactory.closeLayer( this );
+
+		}
+
+	},
+
+	initStrategy: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			// Get operator.
+
+			if ( layerConfig.operator !== undefined ) {
+
+				this.operator = layerConfig.operator;
+
+			}
+
+			// Get mergedElements.
+
+			if ( layerConfig.mergedElements !== undefined ) {
+
+				for ( let i = 0; i < layerConfig.mergedElements.length; i ++ ) {
+
+					this.mergedElements.push( layerConfig.mergedElements[ i ] );
+
+				}
+
+			}
+
+			// Get concrete strategy from factory.
+
+			this.operationStrategy = StrategyFactory.getOperationStrategy( this.operator, 1, this.mergedElements );
+
+			// set layer context for operation strategy
+
+			this.operationStrategy.setLayerContext( this );
+
+			// Set layerType based on operation type.
+
+			this.layerType = this.operationStrategy.strategyType;
+
+		}
+
+	},
+
+	/**
+	 * loadLayer1dConfig() Load user's common config into layer1d's attribute.
+	 * Called when "NativeLayer1d" is initializing.
+	 *
+	 * @param { JSON } layerConfig, user's layer configuration.
+	 */
+
+	loadMerge1dConfig: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			if ( layerConfig.paging !== undefined ) {
+
+				this.paging = layerConfig.paging;
+
+				// If paging mode is set, load paging parameters.
+
+				if ( this.paging ) {
+
+					if ( layerConfig.segmentLength !== undefined ) {
+
+						this.segmentLength = layerConfig.segmentLength;
+						this.queueLength = this.segmentLength;
+
+					}
+
+					if ( layerConfig.initSegmentIndex !== undefined ) {
+
+						this.segmentIndex = layerConfig.initSegmentIndex;
+
+					}
+
+				}
+
+			}
+
+			if ( layerConfig.overview !== undefined ) {
+
+				this.overview = layerConfig.overview;
+
+			}
+
+		}
+
+	},
+
+	/**
+	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in NativeLayer1d.
+	 */
+
+	initAggregationElement: function() {
+
+		// QueueAggregation Object is a wrapper for aggregation element, checkout "QueueAggregation.js" for more information.
+
+		let aggregationHandler = new QueueAggregation(
+
+			this.aggregationWidth,
+			this.aggregationHeight,
+			this.unitLength,
+			this.color,
+			this.minOpacity
+
+		);
+
+		// Set layer index to aggregation, aggregation object can know which layer it has been positioned.
+
+		aggregationHandler.setLayerIndex( this.layerIndex );
+
+		// Store handler for aggregation for latter use.
+
+		this.aggregationHandler = aggregationHandler;
+
+		// Get actual THREE.js element and add it to layer wrapper Object.
+
+		this.neuralGroup.add( this.aggregationHandler.getElement() );
+
+	},
+
+	/**
+	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in NativeLayer1d.
+	 */
+
+	disposeAggregationElement: function() {
+
+		this.neuralGroup.remove( this.aggregationHandler.getElement() );
+		this.aggregationHandler = undefined;
+
+	},
+
+	/**
+	 * initQueueElement() create queue element's THREE.js Object, configure it, and add it to neuralGroup in NativeLayer1d.
+	 */
+
+	initQueueElement: function() {
+
+		let queueHandler;
+
+		// Create different elements in different mode.
+
+		if ( this.paging ) {
+
+			queueHandler = new QueueSegment(
+
+				this.segmentLength,
+				this.segmentIndex,
+				this.width,
+				this.unitLength,
+				this.color,
+				this.minOpacity,
+				this.overview
+
+			);
+
+			this.queueLength = queueHandler.queueLength;
+
+		} else {
+
+			queueHandler = new NeuralQueue(
+
+				this.width,
+				this.unitLength,
+				this.color,
+				this.minOpacity,
+				this.overview
+
+			);
+
+		}
+
+		// Set layer index to queue element, queue element object can know which layer it has been positioned.
+
+		queueHandler.setLayerIndex( this.layerIndex );
+
+		// Store handler for queue element for latter use.
+
+		this.queueHandler = queueHandler;
+
+		// Get actual THREE.js element and add it to layer wrapper Object.
+
+		this.neuralGroup.add( queueHandler.getElement() );
+
+		// Update queue element' visualization if layer's value has already been set.
+
+		if ( this.neuralValue !== undefined ) {
+
+			this.updateQueueVis();
+
+		}
+
+	},
+
+	/**
+	 * disposeQueueElement() remove queue element from neuralGroup, clear their handlers, and dispose their THREE.js Object in NativeLayer1d.
+	 */
+
+	disposeQueueElement: function() {
+
+		this.neuralGroup.remove( this.queueHandler.getElement() );
+		this.queueHandler = undefined;
+
+	},
+
+	/**
+	 * updateQueueVis() update queue element's visualization.
+	 */
+
+	updateQueueVis: function() {
+
+		// Get colors to render the surface of queue element.
+
+		let colors = ColorUtils.getAdjustValues( this.neuralValue, this.minOpacity );
+
+		if ( this.paging ) {
+
+			// Get part of colors to render segment.
+
+			let segmentColors = colors.slice(
+
+				this.segmentLength * this.segmentIndex,
+				Math.min( this.segmentLength * ( this.segmentIndex + 1 ), this.width - 1 )
+
+			);
+
+			this.queueHandler.updateVis( segmentColors );
+
+		} else {
+
+			this.queueHandler.updateVis( colors );
+
+		}
+
+	},
+
+	/**
+	 * showText() show hint text relative to given element.
+	 *
+	 * @param { THREE.Object } element
+	 */
+
+	showText: function( element ) {
+
+		if ( element.elementType === "featureLine" ) {
+
+			this.queueHandler.showText();
+			this.textElementHandler = this.queueHandler;
+
+		}
+
+	},
+
+	/**
+	 * hideText() hide hint text.
+	 */
+
+	hideText: function() {
+
+		if ( this.textElementHandler !== undefined ) {
+
+			this.textElementHandler.hideText();
+			this.textElementHandler = undefined;
+
+		}
+
+	},
+
+	/**
+	 * showPaginationButton() conditional add "next" button and "last" button into layer1d.
+	 */
+
+	showPaginationButton: function() {
+
+		if ( this.segmentIndex === 0 && this.segmentIndex !== this.totalSegments - 1 ) {
+
+			// First page only show "next" button.
+
+			this.showNextButton();
+
+		} else if ( this.segmentIndex !== 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			// last page only show "last" button.
+
+			this.showLastButton();
+
+		} else if ( this.segmentIndex === 0 && this.segmentIndex === this.totalSegments - 1 ) {
+
+			// If only has one page, no button.
+
+		} else {
+
+			// In other situational, show two button.
+
+			this.showNextButton();
+			this.showLastButton();
+
+		}
+
+	},
+
+	/**
+	 * showLastButton() initialize "last" button, and add it to neuralGroup.
+	 */
+
+	showLastButton: function() {
+
+		let lastButtonHandler = new PaginationButton(
+
+			"last",
+			this.calcPaginationButtonSize(),
+			this.unitLength,
+			this.calcPaginationButtonPos( "last" ),
+			this.color,
+			this.minOpacity
+
+		);
+
+		// Set layer index to "last" button, button object can know which layer it has been positioned.
+
+		lastButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.lastButtonHandler = lastButtonHandler;
+		this.neuralGroup.add( this.lastButtonHandler.getElement() );
+
+	},
+
+	/**
+	 * showNextButton() initialize "next" button, and add it to neuralGroup.
+	 */
+
+	showNextButton: function() {
+
+		let nextButtonHandler = new PaginationButton(
+
+			"next",
+			this.calcPaginationButtonSize(),
+			this.unitLength,
+			this.calcPaginationButtonPos( "next" ),
+			this.color,
+			this.minOpacity
+
+		);
+
+		// Set layer index to "next" button, button object can know which layer it has been positioned.
+
+		nextButtonHandler.setLayerIndex( this.layerIndex );
+
+		this.nextButtonHandler = nextButtonHandler;
+		this.neuralGroup.add( this.nextButtonHandler.getElement() );
+
+	},
+
+	/**
+	 * hidePaginationButton(), hide "last" button and "next" button.
+	 */
+
+	hidePaginationButton: function() {
+
+		this.hideNextButton();
+		this.hideLastButton();
+
+	},
+
+	/**
+	 * hideNextButton(), hide "next" button.
+	 */
+
+	hideNextButton: function() {
+
+		if ( this.nextButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.nextButtonHandler.getElement() );
+			this.nextButtonHandler = undefined;
+
+		}
+
+	},
+
+	/**
+	 * hideLastButton(), hide "last" button.
+	 */
+
+	hideLastButton: function() {
+
+		if ( this.lastButtonHandler !== undefined ) {
+
+			this.neuralGroup.remove( this.lastButtonHandler.getElement() );
+			this.lastButtonHandler = undefined;
+
+		}
+
+	},
+
+	/**                                                                                                                                                 y        y                        /**
+	 * updatePage() execute actual page update work.
+	 *
+	 * @param { string } paginationType, "last" or "next".
+	 */
+
+	updatePage: function( paginationType ) {
+
+		if ( paginationType === "next" ) {
+
+			// "next" button is clicked.
+
+			if ( this.segmentIndex === 0 ) {
+
+				// First page now, click "next" button will show "last" button.
+
+				this.showLastButton();
+
+			}
+
+			if ( this.segmentIndex === this.totalSegments - 2 ) {
+
+				// Is going to the last page, the last page do not have "next" button.
+
+				this.hideNextButton();
+
+			}
+
+			// Update segmentIndex.
+
+			this.segmentIndex += 1;
+
+		} else {
+
+			// "last" button is clicked.
+
+			if ( this.segmentIndex === this.totalSegments - 1 ) {
+
+				// The Last page now, click "last" button will show "next" button.
+
+				this.showNextButton();
+
+			}
+
+			if ( this.segmentIndex === 1 ) {
+
+				// Is going to the first page, the first page do not have "last" button.
+
+				this.hideLastButton();
+
+			}
+
+			// Update segmentIndex.
+
+			this.segmentIndex -= 1;
+
+		}
+
+		// Modify segment element based on new segment index.
+
+		this.queueHandler.updateSegmentIndex( this.segmentIndex );
+
+		// Check whether queue length change, situation: the page's length may different with previous page.
+
+		if ( this.queueHandler.isLengthChanged ) {
+
+			this.queueLength = this.queueHandler.queueLength;
+
+			if ( this.nextButtonHandler !== undefined ) {
+
+				let nextButtonPos = this.calcPaginationButtonPos( "next" );
+				this.nextButtonHandler.updatePos( nextButtonPos );
+
+			}
+
+			if ( this.lastButtonHandler !== undefined ) {
+
+				let lastButtonPos = this.calcPaginationButtonPos( "last" );
+				this.lastButtonHandler.updatePos( lastButtonPos );
+
+			}
+
+			let closeButtonPos = this.calcCloseButtonPos();
+			this.closeButtonHandler.updatePos( closeButtonPos );
+
+		}
+
+		if ( this.neuralValue !== undefined ) {
+
+			this.updateQueueVis();
+
+		}
+
+	}
+
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+function MergedLayer2d( config ) {
+
+	MergedLayer.call( this, config );
+
+	/**
+	 * NativeLayer2d has one output dimensions: [ width, depth ].
+	 *
+	 * @type { int }
+	 */
+
+	this.width = undefined;
+	this.depth = undefined;
+
+	/**
+	 * grid lines' handlers list
+	 *
+	 * @type { Array }
+	 */
+
+	this.queueHandlers = [];
+
+	/**
+	 * grid lines' centers when layer is closed.
+	 *
+	 * @type { Array }
+	 */
+
+	this.closeCenterList = [];
+
+	/**
+	 * grid lines' centers when layer is totally open.
+	 *
+	 * @type { Array }
+	 */
+
+	this.openCenterList = [];
+
+	/**
+	 * Label to define whether layer need an "output value" from backend model (tfjs, keras, or tf).
+	 * False means that user need to add value for NativeLayer2d when they are preprocessing multi-output for the model.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.autoOutputDetect = false;
+
+	this.layerDimension = 2;
+
+	this.initStrategy( config );
+
+}
+
+MergedLayer2d.prototype = Object.assign( Object.create( MergedLayer.prototype ), {
+
+	init: function( center, actualDepth ) {
+
+		this.center = center;
+		this.actualDepth = actualDepth;
+
+		// Init a neuralGroup as the wrapper for all THREE.Object in NativeLayer2d.
+
+		this.neuralGroup = new THREE.Group();
+		this.neuralGroup.position.set( this.center.x, this.center.y, this.center.z );
+
+		// depth === 1 means that there is only one grid line in NativeLayer2d, no need for aggregation, open layer, or close layer.
+
+		if ( this.depth === 1 ) {
+
+			// Open layer and init one grid line (depth === 1) without initializing close button.
+
+			this.isOpen = true;
+			this.closeable = false;
+			this.initSegregationElements( this.openCenterList );
+
+		} else {
+
+			if ( this.isOpen ) {
+
+				// Init all grid lines and display them to totally opened positions.
+
+				this.initSegregationElements( this.openCenterList );
+
+				// Init close button.
+
+				this.initCloseButton();
+
+			} else {
+
+				// Init aggregation when layer is closed.
+
+				this.initAggregationElement();
+
+			}
+
+		}
+
+		// Add the wrapper object to the actual THREE.js scene.
+
+		this.scene.add( this.neuralGroup );
+
+		// Create relative line element.
+
+		this.addLineGroup();
+
+	},
+
+	assemble: function( layerIndex, layerLevel ) {
+
+		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
+
+		// Validate whether user's input merged elements can be merged in this kind of merge operation.
+
+		if( !this.operationStrategy.validate() ) {
+
+			console.error( "Input shape is not valid for " + this.operator + " merge function." );
+
+		}
+
+		// Get output shape after merge operation.
+
+		this.outputShape = this.operationStrategy.getOutputShape();
+
+		this.inputShape = this.outputShape;
+
+		// The layer's shape is based on output shape.
+
+		this.width = this.outputShape[ 0 ];
+		this.depth = this.outputShape[ 1 ];
+
+		// Unit length is the same as merged elements, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
+
+		this.unitLength = this.mergedElements[ 0 ].unitLength;
+		this.actualWidth = this.unitLength * this.width;
+
+		// Init close grid line centers.
+
+		for ( let i = 0; i < this.depth; i ++ ) {
+
+			let center = {
+
+				x: 0,
+				y: 0,
+				z: 0
+
+			};
+
+			this.closeCenterList.push( center );
+
+		}
+
+		this.openCenterList = QueueCenterGenerator.getCenterList( this.actualWidth, this.depth );
+
+	},
+
+	updateValue: function ( value ) {
+
+		// Store layer output value in "neuralValue" attribute, this attribute can be get by TensorSpace user.
+
+		this.neuralValue = value;
+
+		if ( this.isOpen ) {
+
+			// If layer is open, update queues' visualization.
+
+			this.updateSegregationVis();
+
+		} else {
+
+			// If layer is closed, update aggregation's visualization.
+
+			this.updateAggregationVis();
+
+		}
+
+	},
+
+	clear: function() {
+
+		if ( this.neuralValue !== undefined ) {
+
+			// Use handlers to clear visualization.
+
+			if ( this.isOpen ) {
+
+				for ( let i = 0; i < this.queueHandlers.length; i ++ ) {
+
+					this.queueHandlers[ i ].clear();
+
+				}
+
+			} else {
+
+				this.aggregationHandler.clear();
+
+			}
+
+			// Clear layer data.
+
+			this.neuralValue = undefined;
+
+		}
+
+	},
+
+	handleClick: function( clickedElement ) {
+
+		if ( clickedElement.elementType === "aggregationElement" ) {
+
+			// If aggregation element is clicked, open layer.
+
+			this.openLayer();
+
+		} else if ( clickedElement.elementType === "closeButton" ) {
+
+			// If close button is clicked, close layer.
+
+			this.closeLayer();
+
+		}
+
+	},
+
+	handleHoverIn: function( hoveredElement ) {
+
+		// If relationSystem is enabled, show relation lines.
+
+		if ( this.relationSystem ) {
+
+			this.lineGroupHandler.showLines( hoveredElement );
+
+		}
+
+		// If textSystem is enabled, show hint text, for example, show grid line length.
+
+		if ( this.textSystem ) {
+
+			this.showText( hoveredElement );
+
+		}
+
+	},
+
+	handleHoverOut: function() {
+
+		// If relationSystem is enabled, hide relation lines.
+
+		if ( this.relationSystem ) {
+
+			this.lineGroupHandler.hideLines();
+
+		}
+
+		// If textSystem is enabled, hide hint text, for example, hide grid line length.
+
+		if ( this.textSystem ) {
+
+			this.hideText();
+
+		}
+
+	},
+
+	loadModelConfig: function( modelConfig ) {
+
+		// Call super class "Layer"'s method to load common model configuration, check out "Layer.js" file for more information.
+
+		this.loadBasicModelConfig( modelConfig );
+
+		if ( this.layerShape === undefined ) {
+
+			this.layerShape = modelConfig.layerShape;
+
+		}
+
+		if ( this.aggregationStrategy === undefined ) {
+
+			this.aggregationStrategy = modelConfig.aggregationStrategy;
+
+		}
+
+		if ( this.color === undefined ) {
+
+			this.color = modelConfig.color[ this.operator ];
+
+		}
+
+	},
+
+	calcCloseButtonSize: function() {
+
+		return 1.1 * this.unitLength;
+
+	},
+
+	calcCloseButtonPos: function() {
+
+		return {
+
+			x: - this.actualWidth / 2 - 30,
+			y: 0,
+			z: 0
+
+		};
+
+	},
+
+	getRelativeElements: function( selectedElement ) {
+
+		// As different merge functions have different relative element strategies, call concrete strategy to get relative elements.
+
+		return this.operationStrategy.getRelativeElements( selectedElement );
+
+	},
+
+	provideRelativeElements: function( request ) {
+
+		let relativeElements = [];
+
+		if ( request.all !== undefined && request.all ) {
+
+			// When "all" attribute in request is true, return all elements displayed in this layer.
+
+			if ( this.isOpen ) {
+
+				for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+
+					relativeElements.push( this.segregationHandlers[ i ].getElement() );
+
+				}
+
+			} else {
+
+				relativeElements.push( this.aggregationHandler.getElement() );
+
+			}
+
+		} else {
+
+			if ( request.index !== undefined ) {
+
+				if ( this.isOpen ) {
+
+					// If index attribute is set in request, and layer is open, return feature map element which has the same index.
+
+					relativeElements.push( this.segregationHandlers[ request.index ].getElement() );
+
+				} else {
+
+					// If layer is closed, return aggregation element.
+
+					relativeElements.push( this.aggregationHandler.getElement() );
+
+				}
+
+			}
+
+		}
+
+		return {
+
+			isOpen: this.isOpen,
+			elementList: relativeElements
+
+		};
+
+	},
+
+	getBoundingWidth: function() {
+
+		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
+
+			return this.actualWidth / 2 - this.calcCloseButtonPos().x + this.calcCloseButtonSize();
+
+		} else {
+
+			return this.actualWidth;
+
+		}
+
+	},
+
+	/**
+	 * ============
+	 *
+	 * Functions above override base class MergedLayer's abstract method.
+	 *
+	 * ============
+	 */
+
+	/**
+	 * openLayer() open NativeLayer2d, switch layer status from "close" to "open".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
+	openLayer: function() {
+
+		if ( !this.isOpen ) {
+
+			// QueueGroupTweenFactory handles actual open animation, checkout "QueueGroupTransitionTween.js" for more information.
+
+			QueueGroupTweenFactory.openLayer( this );
+
+			this.isOpen = true;
+
+		}
+
+	},
+
+	/**
+	 * closeLayer() close NativeLayer2d, switch layer status from "open" to "close".
+	 *
+	 * This API is exposed to TensorSpace user.
+	 */
+
+	closeLayer: function() {
+
+		if ( this.isOpen ) {
+
+			// QueueGroupTweenFactory handles actual close animation, checkout "QueueGroupTransitionTween.js" for more information.
+
+			QueueGroupTweenFactory.closeLayer( this );
+
+			this.isOpen = false;
+
+		}
+
+	},
+
+	/**
+	 * loadLayerConfig() init concrete strategy for MergedLayer3d.
+	 * Create Strategy object and set it to MergedLayer3d based on layerConfig.
+	 *
+	 * @param { JSON } layerConfig, user's configuration and merge function's configuration for MergedLayer3d.
+	 */
+
+	initStrategy: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			// Get operator.
+
+			if ( layerConfig.operator !== undefined ) {
+
+				this.operator = layerConfig.operator;
+
+			}
+
+			// Get mergedElements.
+
+			if ( layerConfig.mergedElements !== undefined ) {
+
+				for ( let i = 0; i < layerConfig.mergedElements.length; i ++ ) {
+
+					this.mergedElements.push( layerConfig.mergedElements[ i ] );
+
+				}
+
+			}
+
+			// Get concrete strategy from factory.
+
+			this.operationStrategy = StrategyFactory.getOperationStrategy( this.operator, 2, this.mergedElements );
+
+			// set layer context for operation strategy
+
+			this.operationStrategy.setLayerContext( this );
+
+			// Set layerType based on operation type.
+
+			this.layerType = this.operationStrategy.strategyType;
+
+		}
+
+	},
+
+	/**
+	 * initSegregationElements() create grid lines's THREE.js Object, configure them, and add them to neuralGroup in NativeLayer2d.
+	 *
+	 * @param { JSON[] } centers, list of grid lines' center (x, y, z), relative to layer
+	 */
+
+	initSegregationElements: function( centers ) {
+
+		this.queueHandlers = [];
+
+		for ( let i = 0; i < this.depth; i ++ ) {
+
+			// GridLine Object is a wrapper for grid line elements, checkout "GridLine.js" for more information.
+
+			let queueHandler = new GridLine(
+
+				this.width,
+				this.unitLength,
+				centers[ i ],
+				this.color,
+				this.minOpacity
+
+			);
+
+			// Set layer index to feature map, feature map object can know which layer it has been positioned.
+
+			queueHandler.setLayerIndex( this.layerIndex );
+
+			// Set queue index.
+
+			queueHandler.setGridIndex( i );
+
+			// Store handler for queue for latter use.
+
+			this.queueHandlers.push( queueHandler );
+
+			// Get actual THREE.js element and add it to layer wrapper Object.
+
+			this.neuralGroup.add( queueHandler.getElement() );
+
+		}
+
+		// Update all queues' visualization if layer's value has already been set.
+
+		if ( this.neuralValue !== undefined ) {
+
+			this.updateSegregationVis();
+
+		}
+
+	},
+
+	/**
+	 * disposeSegregationElements() remove grid lines from neuralGroup, clear their handlers, and dispose their THREE.js Object in NativeLayer2d.
+	 */
+
+	disposeSegregationElements: function() {
+
+		for ( let i = 0; i < this.depth; i ++ ) {
+
+			// Remove queues' THREE.js object from neuralGroup.
+
+			this.neuralGroup.remove( this.queueHandlers[ i ].getElement() );
+
+		}
+
+		// Clear handlers, actual objects will automatically be GC.
+
+		this.queueHandlers = [];
+
+	},
+
+	/**
+	 * initAggregationElement() create layer aggregation's THREE.js Object, configure it, and add it to neuralGroup in NativeLayer2d.
+	 */
+
+	initAggregationElement: function() {
+
+		// GridAggregation Object is a wrapper for queues' aggregation, checkout "GridAggregation.js" for more information.
+
+		let aggregationHandler = new GridAggregation(
+
+			this.width,
+			this.unitLength,
+			this.color,
+			this.minOpacity
+
+		);
+
+		// Set layer index to aggregation, aggregation object can know which layer it has been positioned.
+
+		aggregationHandler.setLayerIndex( this.layerIndex );
+
+		// Store handler for aggregation for latter use.
+
+		this.aggregationHandler = aggregationHandler;
+
+		// Get actual THREE.js element and add it to layer wrapper Object.
+
+		this.neuralGroup.add( this.aggregationHandler.getElement() );
+
+		// Update aggregation's visualization if layer's value has already been set.
+
+		if ( this.neuralValue !== undefined ) {
+
+			this.updateAggregationVis();
+
+		}
+
+	},
+
+	/**
+	 * disposeAggregationElement() remove aggregation from neuralGroup, clear its handler, and dispose its THREE.js Object in NativeLayer2d.
+	 */
+
+	disposeAggregationElement: function() {
+
+		this.neuralGroup.remove( this.aggregationHandler.getElement() );
+		this.aggregationHandler = undefined;
+
+	},
+
+	/**
+	 * updateAggregationVis() update feature maps' aggregation's visualization.
+	 */
+
+	updateAggregationVis: function() {
+
+		// Generate aggregation data from layer's raw output data. Checkout "ChannelDataGenerator.js" for more information.
+
+		let aggregationUpdateValue = ChannelDataGenerator.generateAggregationData(
+
+			this.neuralValue,
+			this.depth,
+			this.aggregationStrategy
+
+		);
+
+		// Get colors to render the surface of aggregation.
+
+		let colors = ColorUtils.getAdjustValues( aggregationUpdateValue, this.minOpacity );
+
+		// aggregationHandler execute update visualization process.
+
+		this.aggregationHandler.updateVis( colors );
+
+	},
+
+	/**
+	 * updateSegregationVis() grid lines' visualization.
+	 */
+
+	updateSegregationVis: function() {
+
+		// Generate grid line data from layer's raw output data. Checkout "ChannelDataGenerator.js" for more information.
+
+		let layerOutputValues = ChannelDataGenerator.generateChannelData( this.neuralValue, this.depth );
+
+		let gridLineLength = this.width;
+
+		// Each grid line handler execute its own update function.
+
+		for ( let i = 0; i < this.depth; i ++ ) {
+
+			// Get colors to render the surface of grid lines.
+
+			let colors = ColorUtils.getAdjustValues(
+
+				layerOutputValues.slice( i * gridLineLength, ( i + 1 ) * gridLineLength ),
+				this.minOpacity
+
+			);
+
+			this.queueHandlers[ i ].updateVis( colors );
+
+		}
+
+	},
+
+	/**
+	 * showText() show hint text relative to given element.
+	 *
+	 * @param { THREE.Object } element
+	 */
+
+	showText: function( element ) {
+
+		if ( element.elementType === "gridLine" ) {
+
+			let gridIndex = element.gridIndex;
+
+			this.queueHandlers[ gridIndex ].showText();
+			this.textElementHandler = this.queueHandlers[ gridIndex ];
+
+		}
+
+	},
+
+	/**
+	 * hideText() hide hint text.
+	 */
+
+	hideText: function() {
+
+		if ( this.textElementHandler !== undefined ) {
+
+			this.textElementHandler.hideText();
+			this.textElementHandler = undefined;
+
+		}
 
 	}
 
@@ -23419,536 +28394,6 @@ MergedFeatureMap.prototype = {
  * @author syt123450 / https://github.com/syt123450
  */
 
-function Strategy3d( mergedElements ) {
-
-	this.mergedElements = mergedElements;
-	this.layerIndex = undefined;
-
-}
-
-Strategy3d.prototype = {
-
-	setLayerIndex: function( layerIndex ) {
-
-		this.layerIndex = layerIndex;
-
-	},
-
-	validate: function() {
-
-		return true;
-
-	},
-
-	getOutputShape: function() {
-
-		return [ 1, 1, 1 ];
-
-	},
-
-	getRelativeElements: function( selectedElement ) {
-
-		return {
-
-			straight: [],
-			curve: []
-
-		};
-
-	}
-
-};
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function StableMerge3d( mergedElements ) {
-
-	Strategy3d.call( this, mergedElements );
-
-}
-
-StableMerge3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), {
-
-	validate: function() {
-
-		let inputShape = this.mergedElements[ 0 ].outputShape;
-
-		for ( let i = 0; i < this.mergedElements.length; i ++ ) {
-
-			let outputShape = this.mergedElements[ i ].outputShape;
-
-			for ( let j = 0; j < inputShape.length; j ++ ) {
-
-				if ( outputShape[ j ] !== inputShape[ j ] ) {
-
-					return false;
-
-				}
-
-			}
-
-		}
-
-		return true;
-
-	},
-
-	getOutputShape: function() {
-
-		return this.mergedElements[ 0 ].outputShape;
-
-	},
-
-	getRelativeElements: function( selectedElement ) {
-
-		let curveElements = [];
-		let straightElements = [];
-
-		if ( selectedElement.elementType === "aggregationElement" ) {
-
-			let request = {
-
-				all: true
-
-			};
-
-			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
-
-				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
-				let relativeElements = relativeResult.elementList;
-
-				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
-
-					for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-						straightElements.push( relativeElements[ j ] );
-
-					}
-
-				} else {
-
-					if ( relativeResult.isOpen ) {
-
-						for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-							straightElements.push( relativeElements[ j ] );
-						}
-
-					} else {
-
-						for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-							curveElements.push( relativeElements[ j ] );
-
-						}
-
-					}
-
-				}
-
-			}
-
-		} else if ( selectedElement.elementType === "featureMap" ) {
-
-			let fmIndex = selectedElement.fmIndex;
-
-			let request = {
-
-				index: fmIndex
-
-			};
-
-			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
-
-				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
-				let relativeElements = relativeResult.elementList;
-
-				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
-
-					for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-						straightElements.push( relativeElements[ j ] );
-
-					}
-
-				} else {
-
-					if ( relativeResult.isOpen ) {
-
-						for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-							straightElements.push( relativeElements[ j ] );
-
-						}
-
-					} else {
-
-						for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-							curveElements.push( relativeElements[ j ] );
-
-						}
-
-					}
-
-				}
-
-			}
-
-		}
-
-		return {
-
-			straight: straightElements,
-			curve: curveElements
-
-		};
-
-	}
-
-
-} );
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function Add3d( mergedElements ) {
-
-	StableMerge3d.call( this, mergedElements );
-
-	this.strategyType = "add3d";
-
-}
-
-Add3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function Concatenate3d( mergedElements ) {
-
-	Strategy3d.call( this, mergedElements );
-
-	this.strategyType = "concatenate3d";
-
-}
-
-Concatenate3d.prototype = Object.assign( Object.create( Strategy3d.prototype ), {
-
-	validate: function() {
-
-		let inputShape = this.mergedElements[ 0 ].outputShape;
-
-		for ( let i = 0; i < this.mergedElements.length; i ++ ) {
-
-			let layerShape = this.mergedElements[ i ].outputShape;
-
-			if ( layerShape[ 0 ] !== inputShape[ 0 ] || layerShape[ 1 ] !== inputShape[ 1 ] ) {
-
-				return false;
-
-			}
-
-		}
-
-		return true;
-
-	},
-
-	getOutputShape: function() {
-
-		let width = this.mergedElements[ 0 ].outputShape[ 0 ];
-		let height = this.mergedElements[ 0 ].outputShape[ 1 ];
-		let depth = 0;
-
-		for (let i = 0; i < this.mergedElements.length; i ++) {
-
-			depth += this.mergedElements[ i ].outputShape[ 2 ];
-
-		}
-
-		return [ width, height, depth ];
-
-	},
-
-	getRelativeElements: function( selectedElement ) {
-
-		let curveElements = [];
-		let straightElements = [];
-
-		if ( selectedElement.elementType === "aggregationElement" ) {
-
-			let request = {
-
-				all: true
-
-			};
-
-			for ( let i = 0; i < this.mergedElements.length; i++ ) {
-
-				let relativeResult = this.mergedElements[ i ].provideRelativeElements( request );
-				let relativeElements = relativeResult.elementList;
-
-				if ( this.mergedElements[ i ].layerIndex === this.layerIndex - 1 ) {
-
-					for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-						straightElements.push( relativeElements[ j ] );
-
-					}
-
-				} else {
-
-					if ( relativeResult.isOpen ) {
-
-						for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-							straightElements.push( relativeElements[ j ] );
-
-						}
-
-					} else {
-
-						for ( let j = 0; j < relativeElements.length; j ++ ) {
-
-							curveElements.push( relativeElements[ j ] );
-
-						}
-
-					}
-
-				}
-
-			}
-
-		} else if ( selectedElement.elementType === "featureMap" ) {
-
-			let fmIndex = selectedElement.fmIndex;
-
-			let relativeLayer;
-
-			for ( let i = 0; i < this.mergedElements.length; i ++ ) {
-
-				let layerDepth = this.mergedElements[ i ].outputShape[ 2 ];
-
-				if ( layerDepth >= fmIndex ) {
-
-					relativeLayer = this.mergedElements[ i ];
-					break;
-
-				} else {
-
-					fmIndex -= layerDepth;
-
-				}
-
-			}
-
-			let request = {
-
-				index: fmIndex
-
-			};
-
-			let relativeResult = relativeLayer.provideRelativeElements( request );
-			let relativeElements = relativeResult.elementList;
-
-			if ( relativeLayer.layerIndex === this.layerIndex - 1 ) {
-
-				for ( let i = 0; i < relativeElements.length; i ++ ) {
-
-					straightElements.push( relativeElements[ i ] );
-
-				}
-
-			} else {
-
-				if ( relativeResult.isOpen ) {
-
-					for ( let i = 0; i < relativeElements.length; i ++ ) {
-
-						straightElements.push( relativeElements[ i ] );
-
-					}
-
-				} else {
-
-					for ( let i = 0; i < relativeElements.length; i ++ ) {
-
-						curveElements.push( relativeElements[ i ] );
-
-					}
-
-				}
-
-			}
-
-		}
-
-		return {
-
-			straight: straightElements,
-			curve: curveElements
-
-		};
-
-	}
-
-} );
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function Subtract3d( mergedElements ) {
-
-	StableMerge3d.call( this, mergedElements );
-
-	this.strategyType = "subtract3d";
-
-}
-
-Subtract3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function Multiply3d( mergedElements ) {
-
-	StableMerge3d.call( this, mergedElements );
-
-	this.strategyType = "multiply3d";
-
-}
-
-Multiply3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function Dot3d( mergedElements ) {
-
-	this.mergedElements = mergedElements;
-	this.layerIndex = undefined;
-
-}
-
-Dot3d.prototype = {
-
-	setLayerIndex: function( layerIndex ) {
-
-		this.layerIndex = layerIndex;
-
-	},
-
-	validate: function() {
-
-	},
-
-	getShape: function() {
-
-	},
-
-	getRelativeElements: function() {
-
-	}
-
-};
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function Maximum3d( mergedElements ) {
-
-	StableMerge3d.call( this, mergedElements );
-
-	this.strategyType = "maximum3d";
-
-}
-
-Maximum3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function Average3d( mergedElements ) {
-
-	StableMerge3d.call( this, mergedElements );
-
-	this.strategyType = "average3d";
-
-}
-
-Average3d.prototype = Object.assign( Object.create( StableMerge3d.prototype ) );
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-let StrategyFactory = ( function() {
-
-	function getOperationStrategy( operator, dimension, mergedElements ) {
-
-		if ( dimension === 3 ) {
-
-			if ( operator === "add" ) {
-
-				return new Add3d( mergedElements );
-
-			} else if ( operator === "concatenate" ) {
-
-				return new Concatenate3d( mergedElements );
-
-			} else if ( operator === "subtract" ) {
-
-				return new Subtract3d( mergedElements );
-
-			} else if ( operator === "multiply" ) {
-
-				return new Multiply3d( mergedElements );
-
-			} else if ( operator === "dot" ) {
-
-				return new Dot3d( mergedElements );
-
-			} else if ( operator === "maximum" ) {
-
-				return new Maximum3d( mergedElements );
-
-			} else if ( operator === "average" ) {
-
-				return new Average3d( mergedElements );
-
-			}
-
-		} else if ( dimension === 2 ) {
-
-		} else if ( dimension === 1 ) {
-
-		}
-
-	}
-
-	return {
-
-		getOperationStrategy: getOperationStrategy
-
-	}
-
-} )();
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
 /**
  * MergedLayer3d, can not be initialized by TensorSpace user, initialized by merge function.
  * MergedLayer3d is actually a context in strategy design pattern.
@@ -24005,7 +28450,7 @@ function MergedLayer3d( config ) {
 	 * Initialized in MergedLayer3d's initStrategy period.
 	 * Applicable strategy: Add3d, Average3d, Concatenate3d, Dot3d, Maximum3d, Multiply3d, Subtract3d.
 	 *
-	 * @type { Object }, Strategy3d
+	 * @type { Object }, MergeStrategy3d
 	 */
 
 	this.operationStrategy = undefined;
@@ -24024,8 +28469,6 @@ function MergedLayer3d( config ) {
 	this.initStrategy( config );
 
 	this.layerDimension = 3;
-
-	this.layerType = "MergedLayer3d";
 
 }
 
@@ -24069,6 +28512,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 			// Open layer and init one feature map (depth === 1) without initializing close button.
 
 			this.isOpen = true;
+			this.closeable = false;
 			this.initSegregationElements( this.openFmCenters );
 
 		} else {
@@ -24109,13 +28553,10 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex ) {
+	assemble: function( layerIndex, layerLevel ) {
 
 		this.layerIndex = layerIndex;
-
-		// Set layer index to strategy, operationStrategy can know which layer it has been positioned.
-
-		this.operationStrategy.setLayerIndex( this.layerIndex );
+		this.layerLevel = layerLevel;
 
 		// Validate whether user's input merged elements can be merged in this kind of merge operation.
 
@@ -24572,6 +29013,14 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 			this.operationStrategy = StrategyFactory.getOperationStrategy( this.operator, 3, this.mergedElements );
 
+			// set layer context for operation strategy
+
+			this.operationStrategy.setLayerContext( this );
+
+			// Set layerType based on operation type.
+
+			this.layerType = this.operationStrategy.strategyType;
+
 		}
 
 	},
@@ -24799,9 +29248,111 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
  */
 
 /**
- * Performs element-wise addition on layers.
+ * "MergedLayerFactory" create a merged Layer based on input layer list and config for merge operation.
+ * Only support layer dimension which is 1, 2 or 3 dimension.
+ * Based on input layers' dimension, "Factory" will create different kinds of "MergedLayer".
+ * If layers in layerList are 3 dimension layer,
+ * return "MergedLayer3d";
+ * If layers in layerList are 2 dimension layer,
+ * return "MergedLayer2d";
+ * If layers in layerList are 1 dimension layer,
+ * return "MergedLayer1d".
+ */
+
+let MergedLayerFactory = ( function() {
+
+	function createMergedLayer( operatorType, layerList, userConfig ) {
+
+		if ( layerList[ 0 ].layerDimension === 1 ) {
+
+			return new MergedLayer1d( {
+
+				operator: operatorType,
+				mergedElements: layerList,
+				userConfig: userConfig
+
+			} );
+
+		} else if ( layerList[ 0 ].layerDimension === 2 ) {
+
+			return new MergedLayer2d( {
+
+				operator: operatorType,
+				mergedElements: layerList,
+				userConfig: userConfig
+
+			} );
+
+		} else if ( layerList[ 0 ].layerDimension === 3 ) {
+
+			return new MergedLayer3d( {
+
+				operator: operatorType,
+				mergedElements: layerList,
+				userConfig: userConfig
+
+			} );
+
+		} else {
+
+			console.error( "Do not support layer " + operatorType + " operation more than 4 dimension." );
+
+		}
+
+	}
+
+	return {
+
+		createMergedLayer: createMergedLayer
+
+	}
+
+} )();
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Exported as a Factory method for TensorSpace user to use.
+ * Performs element-wise addition on an array of layers, return an "addLayer" which is a TensorSpace layer object.
+ * The "addLayer" will have the same "outputShape" as layers in "layerList".
+ * All layers in "layerList" must have the same layer dimension.
  *
- * @param layerList, input a list of layers.
+ * This method can be used to perform averaging operation on 3d layers.
+ * In this case, the returned "addLayer" is a 3 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let addLayer = TSP.layers.Add( [ conv2d1, conv2d2 ], { ...config } );
+ * // print "3" in console
+ * console.log( addLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform averaging operation on 2d layers.
+ * In this case, the returned "addLayer" is a 2 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let addLayer = TSP.layers.Add( [ conv1d1, conv1d2 ], { ...config } );
+ * // print "2" in console
+ * console.log( addLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform averaging operation on 1d layers.
+ * In this case, the returned "addLayer" is an 1 dimension Layer.
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense( { ...config } );
+ * let dense2 = new TSP.layers.Dense( { ...config } );
+ * let addLayer = TSP.layers.Add( [ dense1, dense2 ], { ...config } );
+ * // print "1" in console
+ * console.log( addLayer.outputShape.length );
+ * ```
+ *
+ * @param layerList, array of TensorSpace layers. (layerList.length > 0)
  * @param config, user's config for add function
  * @constructor
  */
@@ -24810,315 +29361,271 @@ function Add( layerList, config ) {
 
 	let operatorType = "add";
 
-	validate( layerList );
+	// make sure the input elements have the same dimension.
 
-	return createMergedLayer( layerList, config );
+	MergeValidator.validateDimension( layerList );
 
-	function validate( layerList ) {
+	// MergedLayerFactory create a merged Layer based on input layer list and config for add operation.
 
-		let depth;
+	let addLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
 
-		if ( layerList.length > 0 ) {
-
-			depth = layerList[ 0 ].layerDimension;
-
-		} else {
-
-			console.error( "Merge Layer missing elements." );
-
-		}
-
-		for ( let i = 0; i < layerList.length; i ++ ) {
-
-			if ( layerList[ i ].layerDimension !== depth ) {
-
-				console.error( "Can not add layer with different depth." );
-
-			}
-
-		}
-
-	}
-
-	function createMergedLayer( layerList, userConfig ) {
-
-		if ( layerList[ 0 ].layerDimension === 1 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 2 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 3 ) {
-
-			return new MergedLayer3d( {
-
-				operator: operatorType,
-				mergedElements: layerList,
-				userConfig: userConfig
-
-			} );
-
-		} else {
-
-			console.error( "Do not support layer add operation more than 4 dimension." );
-
-		}
-
-	}
+	return addLayer;
 
 }
 
 /**
  * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Exported as a Factory method for TensorSpace user to use.
+ * Performs element-wise concatenate on an array of layers, return an "concatenateLayer" which is a TensorSpace layer object.
+ * The "concatenateLayer" will have the same "outputShape" as layers in "layerList".
+ * All layers in "layerList" must have the same layer dimension.
+ *
+ * This method can be used to perform concatenate operation on 3d layers.
+ * In this case, the returned "concatenateLayer" is a 3 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let concatenateLayer = TSP.layers.Concatenate( [ conv2d1, conv2d2 ], { ...config } );
+ * // print "3" in console
+ * console.log( concatenateLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform concatenate operation on 2d layers.
+ * In this case, the returned "concatenateLayer" is a 2 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let concatenateLayer = TSP.layers.Concatenate( [ conv1d1, conv1d2 ], { ...config } );
+ * // print "2" in console
+ * console.log( concatenateLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform concatenate operation on 1d layers.
+ * In this case, the returned "concatenateLayer" is an 1 dimension Layer.
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense( { ...config } );
+ * let dense2 = new TSP.layers.Dense( { ...config } );
+ * let concatenateLayer = TSP.layers.Concatenate( [ dense1, dense2 ], { ...config } );
+ * // print "1" in console
+ * console.log( concatenateLayer.outputShape.length );
+ * ```
+ *
+ * @param layerList, array of TensorSpace layers. (layerList.length > 0)
+ * @param config, user's config for concatenate function
+ * @constructor
  */
 
 function Concatenate( layerList, config ) {
 
 	let operatorType = "concatenate";
 
-	validate( layerList );
+	// make sure the input elements have the same dimension.
 
-	return createMergedLayer( layerList, config );
+	MergeValidator.validateDimension( layerList );
 
-	function validate( layerList ) {
+	// MergedLayerFactory create a merged Layer based on input layer list and config for concatenate operation.
 
-		let depth;
+	let concatenateLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
 
-		if ( layerList.length > 0 ) {
-
-			depth = layerList[ 0 ].layerDimension;
-
-		} else {
-
-			console.error( "Merge Layer missing elements." );
-
-		}
-
-		for ( let i = 0; i < layerList.length; i ++ ) {
-
-			if ( layerList[ i ].layerDimension !== depth ) {
-
-				console.error( "Can not add layer with different depth." );
-
-			}
-
-		}
-
-	}
-
-	function createMergedLayer( layerList, userConfig ) {
-
-		if ( layerList[ 0 ].layerDimension === 1 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 2 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 3 ) {
-
-			return new MergedLayer3d( {
-
-				operator: operatorType,
-				mergedElements: layerList,
-				userConfig: userConfig
-
-			} );
-
-		} else {
-
-			console.error( "Do not support layer concatenate operation more than 4 dimension." );
-
-		}
-
-	}
+	return concatenateLayer;
 
 }
 
 /**
  * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Exported as a Factory method for TensorSpace user to use.
+ * Performs element-wise subtract on an array of layers, return an "subtractLayer" which is a TensorSpace layer object.
+ * The "subtractLayer" will have the same "outputShape" as layers in "layerList".
+ * All layers in "layerList" must have the same layer dimension.
+ *
+ * This method can be used to perform subtract operation on 3d layers.
+ * In this case, the returned "subtractLayer" is a 3 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let subtractLayer = TSP.layers.Subtract( [ conv2d1, conv2d2 ], { ...config } );
+ * // print "3" in console
+ * console.log( subtractLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform subtract operation on 2d layers.
+ * In this case, the returned "subtractLayer" is a 2 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let subtractLayer = TSP.layers.Subtract( [ conv1d1, conv1d2 ], { ...config } );
+ * // print "2" in console
+ * console.log( subtractLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform subtract operation on 1d layers.
+ * In this case, the returned "subtractLayer" is an 1 dimension Layer.
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense( { ...config } );
+ * let dense2 = new TSP.layers.Dense( { ...config } );
+ * let subtractLayer = TSP.layers.Subtract( [ dense1, dense2 ], { ...config } );
+ * // print "1" in console
+ * console.log( subtractLayer.outputShape.length );
+ * ```
+ *
+ * @param layerList, array of TensorSpace layers. (layerList.length > 0)
+ * @param config, user's config for subtract function
+ * @constructor
  */
 
 function Subtract( layerList, config ) {
 
 	let operatorType = "subtract";
 
-	validate( layerList );
+	// make sure the input elements have the same dimension.
 
-	return createMergedLayer( layerList, config );
+	MergeValidator.validateDimension( layerList );
 
-	function validate( layerList ) {
+	// MergedLayerFactory create a merged Layer based on input layer list and config for subtract operation.
 
-		let depth;
+	let subtractLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
 
-		if ( layerList.length > 0 ) {
-
-			depth = layerList[ 0 ].layerDimension;
-
-		} else {
-
-			console.error( "Merge Layer missing elements." );
-
-		}
-
-		for ( let i = 0; i < layerList.length; i ++ ) {
-
-			if ( layerList[ i ].layerDimension !== depth ) {
-
-				console.error( "Can not add layer with different depth." );
-
-			}
-
-		}
-
-	}
-
-	function createMergedLayer( layerList, userConfig ) {
-
-		if ( layerList[ 0 ].layerDimension === 1 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 2 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 3 ) {
-
-			return new MergedLayer3d( {
-
-				operator: operatorType,
-				mergedElements: layerList,
-				userConfig: userConfig
-
-			} );
-
-		} else {
-
-			console.error( "Do not support layer add operation more than 4 dimension." );
-
-		}
-
-	}
+	return subtractLayer;
 
 }
 
 /**
  * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Exported as a Factory method for TensorSpace user to use.
+ * Performs element-wise maximum on an array of layers, return an "maximumLayer" which is a TensorSpace layer object.
+ * The "maximumLayer" will have the same "outputShape" as layers in "layerList".
+ * All layers in "layerList" must have the same layer dimension.
+ *
+ * This method can be used to perform maximum operation on 3d layers.
+ * In this case, the returned "maximumLayer" is a 3 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let maximumLayer = TSP.layers.Maximum( [ conv2d1, conv2d2 ], { ...config } );
+ * // print "3" in console
+ * console.log( maximumLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform maximum operation on 2d layers.
+ * In this case, the returned "maximumLayer" is a 2 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let maximumLayer = TSP.layers.Maximum( [ conv1d1, conv1d2 ], { ...config } );
+ * // print "2" in console
+ * console.log( maximumLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform maximum operation on 1d layers.
+ * In this case, the returned "maximumLayer" is an 1 dimension Layer.
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense( { ...config } );
+ * let dense2 = new TSP.layers.Dense( { ...config } );
+ * let maximumLayer = TSP.layers.Maximum( [ dense1, dense2 ], { ...config } );
+ * // print "1" in console
+ * console.log( maximumLayer.outputShape.length );
+ * ```
+ *
+ * @param layerList, array of TensorSpace layers. (layerList.length > 0)
+ * @param config, user's config for maximum function
+ * @constructor
  */
 
 function Maximum( layerList, config ) {
 
 	let operatorType = "maximum";
 
-	validate( layerList );
+	// make sure the input elements have the same dimension.
 
-	return createMergedLayer( layerList, config );
+	MergeValidator.validateDimension( layerList );
 
-	function validate( layerList ) {
+	// MergedLayerFactory create a merged Layer based on input layer list and config for maximum operation.
 
-		let depth;
+	let maximumLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
 
-		if ( layerList.length > 0 ) {
-
-			depth = layerList[ 0 ].layerDimension;
-
-		} else {
-
-			console.error( "Merge Layer missing elements." );
-
-		}
-
-		for ( let i = 0; i < layerList.length; i ++ ) {
-
-			if ( layerList[ i ].layerDimension !== depth ) {
-
-				console.error( "Can not add layer with different depth." );
-
-			}
-
-		}
-
-	}
-
-	function createMergedLayer( layerList, userConfig ) {
-
-		if ( layerList[ 0 ].layerDimension === 1 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 2 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 3 ) {
-
-			return new MergedLayer3d( {
-
-				operator: operatorType,
-				mergedElements: layerList,
-				userConfig: userConfig
-
-			} );
-
-		} else {
-
-			console.error( "Do not support layer add operation more than 4 dimension." );
-
-		}
-
-	}
+	return maximumLayer;
 
 }
 
 /**
  * @author syt123450 / https://github.com/syt123450
+ */
+
+/**
+ * Exported as a Factory method for TensorSpace user to use.
+ * Performs element-wise averaging on an array of layers, return an "averageLayer" which is a TensorSpace layer object.
+ * The "averageLayer" will have the same "outputShape" as layers in "layerList".
+ * All layers in "layerList" must have the same layer dimension.
+ *
+ * This method can be used to perform averaging operation on 3d layers.
+ * In this case, the returned "averageLayer" is a 3 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let averageLayer = TSP.layers.Average( [ conv2d1, conv2d2 ], { ...config } );
+ * // print "3" in console
+ * console.log( averageLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform averaging operation on 2d layers.
+ * In this case, the returned "averageLayer" is a 2 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let averageLayer = TSP.layers.Average( [ conv1d1, conv1d2 ], { ...config } );
+ * // print "2" in console
+ * console.log( averageLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform averaging operation on 1d layers.
+ * In this case, the returned "averageLayer" is an 1 dimension Layer.
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense( { ...config } );
+ * let dense2 = new TSP.layers.Dense( { ...config } );
+ * let averageLayer = TSP.layers.Average( [ dense1, dense2 ], { ...config } );
+ * // print "1" in console
+ * console.log( averageLayer.outputShape.length );
+ * ```
+ *
+ * @param layerList, array of TensorSpace layers. (layerList.length > 0)
+ * @param config, user's config for average function
+ * @constructor
  */
 
 function Average( layerList, config ) {
 
 	let operatorType = "average";
 
-	validate( layerList );
+	// make sure the input elements have the same dimension.
 
-	return createMergedLayer( layerList, config );
+	MergeValidator.validateDimension( layerList );
 
-	function validate( layerList ) {
+	// MergedLayerFactory create a merged Layer based on input layer list and config for averaging operation.
 
-		let depth;
+	let averageLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
 
-		if ( layerList.length > 0 ) {
-
-			depth = layerList[0].layerDimension;
-
-		} else {
-
-			console.error( "Merge Layer missing elements." );
-
-		}
-
-		for ( let i = 0; i < layerList.length; i ++ ) {
-
-			if ( layerList[ i ].layerDimension !== depth ) {
-
-				console.error( "Can not add layer with different depth." );
-
-			}
-
-		}
-
-	}
-
-	function createMergedLayer( layerList, userConfig ) {
-
-		if ( layerList[ 0 ].layerDimension === 1 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 2 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 3 ) {
-
-			return new MergedLayer3d( {
-
-				operator: operatorType,
-				mergedElements: layerList,
-				userConfig: userConfig
-
-			} );
-
-		} else {
-
-			console.error( "Do not support layer add operation more than 4 dimension." );
-
-		}
-
-	}
+	return averageLayer;
 
 }
 
@@ -25126,63 +29633,63 @@ function Average( layerList, config ) {
  * @author syt123450 / https://github.com/syt123450
  */
 
+/**
+ * Exported as a Factory method for TensorSpace user to use.
+ * Performs element-wise multiply on an array of layers, return an "multiplyLayer" which is a TensorSpace layer object.
+ * The "multiplyLayer" will have the same "outputShape" as layers in "layerList".
+ * All layers in "layerList" must have the same layer dimension.
+ *
+ * This method can be used to perform multiply operation on 3d layers.
+ * In this case, the returned "multiplyLayer" is a 3 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv2d1 = new TSP.layers.Conv2d( { ...config } );
+ * let conv2d2 = new TSP.layers.Conv2d( { ...config } );
+ * let multiplyLayer = TSP.layers.Multiply( [ conv2d1, conv2d2 ], { ...config } );
+ * // print "3" in console
+ * console.log( multiplyLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform multiply operation on 2d layers.
+ * In this case, the returned "multiplyLayer" is a 2 dimension Layer.
+ * For example:
+ * ```javascript
+ * let conv1d1 = new TSP.layers.Conv1d( { ...config } );
+ * let conv1d2 = new TSP.layers.Conv1d( { ...config } );
+ * let multiplyLayer = TSP.layers.Multiply( [ conv1d1, conv1d2 ], { ...config } );
+ * // print "2" in console
+ * console.log( multiplyLayer.outputShape.length );
+ * ```
+ *
+ * This method can be used to perform multiply operation on 1d layers.
+ * In this case, the returned "multiplyLayer" is an 1 dimension Layer.
+ * For example:
+ * ```javascript
+ * let dense1 = new TSP.layers.Dense( { ...config } );
+ * let dense2 = new TSP.layers.Dense( { ...config } );
+ * let multiplyLayer = TSP.layers.Multiply( [ dense1, dense2 ], { ...config } );
+ * // print "1" in console
+ * console.log( multiplyLayer.outputShape.length );
+ * ```
+ *
+ * @param layerList, array of TensorSpace layers. (layerList.length > 0)
+ * @param config, user's config for multiply function
+ * @constructor
+ */
+
 function Multiply( layerList, config ) {
 
 	let operatorType = "multiply";
 
-	validate( layerList );
+	// make sure the input elements have the same dimension.
 
-	return createMergedLayer( layerList, config );
+	MergeValidator.validateDimension( layerList );
 
-	function validate( layerList ) {
+	// MergedLayerFactory create a merged Layer based on input layer list and config for multiply operation.
 
-		let depth;
+	let multiplyLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
 
-		if ( layerList.length > 0 ) {
-
-			depth = layerList[ 0 ].layerDimension;
-
-		} else {
-
-			console.error( "Merge Layer missing elements." );
-
-		}
-
-		for ( let i = 0; i < layerList.length; i ++ ) {
-
-			if ( layerList[ i ].layerDimension !== depth ) {
-
-				console.error( "Can not add layer with different depth." );
-
-			}
-
-		}
-
-	}
-
-	function createMergedLayer( layerList, userConfig ) {
-
-		if ( layerList[ 0 ].layerDimension === 1 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 2 ) {
-
-		} else if ( layerList[ 0 ].layerDimension === 3 ) {
-
-			return new MergedLayer3d( {
-
-				operator: operatorType,
-				mergedElements: layerList,
-				userConfig: userConfig
-
-			} );
-
-		} else {
-
-			console.error( "Do not support layer add operation more than 4 dimension." );
-
-		}
-
-	}
+	return multiplyLayer;
 
 }
 
@@ -25246,3 +29753,4 @@ exports.layers = layers;
 return exports;
 
 }({}));
+//# sourceMappingURL=tensorspace.js.map
