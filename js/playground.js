@@ -29,6 +29,11 @@ $(function() {
 		moveOutHiddenContent();
 	});
 
+	$("#resetTrigger").click(function() {
+		console.log(222);
+		model.reset();
+	});
+
 });
 
 function moveInHiddenContent() {

@@ -15,24 +15,16 @@
     border-radius: 3px;
 }
 
-#clear {
-    margin-top: 10px;
-    width: 224px;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 38px;
-    font-size: 25px;
-    color: #D7FDFF;
-    background-color: rgba(84, 140, 169, 0.4);
-    border: 1px solid #4C9BBB;
-    box-sizing: border-box;
-    text-align: center;
-    cursor: pointer;
-    text-transform: none;
+.controlButton {
+    width: 102px;
 }
 
-#clear:hover {
-    background-color: #548CA9;
+#clear {
+    margin-left: 38px;
+}
+
+#resetTrigger {
+    margin-left: 20px;
 }
 
 #hint {

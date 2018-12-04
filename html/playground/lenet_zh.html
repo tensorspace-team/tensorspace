@@ -123,8 +123,12 @@
             <canvas id="signature-pad" class="signature-pad" width=224 height=224></canvas>
         </div>
 
-        <button id="clear" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-            清空手写数据
+        <button id="clear" class="controlButton mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            <i class="material-icons">clear</i>清空数据
+        </button>
+
+        <button id="resetTrigger" class="controlButton mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            <i class="material-icons">replay</i>重置模型
         </button>
 
         <p id="hint">LeNet认为你刚才写了一个</p>

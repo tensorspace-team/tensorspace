@@ -187,3 +187,28 @@ main {
     position: absolute;
     right: 5px;
 }
+
+.controlButton {
+
+    width: 110px;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 20px;
+    text-align: center;
+    color: #D7FDFF;
+    background-color: rgba(84, 140, 169, 0.4);
+    border: 1px solid #4C9BBB;
+    cursor: pointer;
+    text-transform: none;
+    padding: 0;
+
+}
+
+.controlButton:hover {
+    background-color: #548CA9;
+}
+
+.controlButton > i {
+    height: 25px;
+    margin-right: 5px;
+}

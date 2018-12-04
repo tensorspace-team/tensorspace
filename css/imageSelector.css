@@ -1,21 +1,9 @@
 #selectorTrigger {
-
-    width: 60%;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 20%;
-    margin-top: 20px;
-    text-align: center;
-    color: #D7FDFF;
-    background-color: rgba(84, 140, 169, 0.4);
-    border: 1px solid #4C9BBB;
-    cursor: pointer;
-    text-transform: none;
-
+    margin-left: 30px;
 }
 
-#selectorTrigger:hover {
-    background-color: #548CA9;
+#resetTrigger {
+    margin-left: 20px;
 }
 
 #selector {
