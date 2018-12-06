@@ -224,11 +224,18 @@ function createModel() {
 			"diningtable", "dog", "horse", "motorbike", "person",
 			"pottedplant", "sheep", "sofa", "train", "tvmonitor" ],
 
-		// defualt is 0.5
-		scoreThreshold: 0.1,
+        // default is 0.5
+		// 0.18 is ... a result after trying hundreds of seconds...
+        scoreThreshold: 0.18,
 
-		// default is true
-		isDrawFiveBoxes: true,
+        // default is 0.3
+        iouThreshold: 0.3,
+
+        // default is true
+        isDrawFiveBoxes: true,
+
+        // default is true
+        isNMS: true,
 
 		onCeilClicked: onYoloCeilClicked
 
