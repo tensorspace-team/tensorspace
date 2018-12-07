@@ -13,6 +13,13 @@ $(function() {
 
 	});
 
+	$("#resetTrigger").click(function() {
+
+		signaturePad.clear();
+		clearResult();
+
+	});
+
 	signaturePad = new SignaturePad( document.getElementById( 'signature-pad' ), {
 
 		minWidth: 10,
