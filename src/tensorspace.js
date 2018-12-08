@@ -92,4 +92,6 @@ let models = {
 
 };
 
-export { models, layers };
+let version = "0.2.0";
+
+export { models, layers, version };
