@@ -192,7 +192,7 @@ main {
 
 main > header {
     width: 100%;
-    max-width: 1000px;
+    /*max-width: 1000px;*/
     height: 30px;
     line-height: 30px;
     margin-top: 25px;
@@ -212,7 +212,7 @@ main p {
 
 main > div {
     margin-top: 3px;
-    max-width: 1000px;
+    /*max-width: 1000px;*/
     text-align: justify;
 }
 
@@ -298,14 +298,14 @@ td, th {
 .code-snippet {
 
     margin-top: 10px;
-    max-width: 900px;
+    /*max-width: 900px;*/
     margin-bottom: 17px;
 
 }
 
 .tag-img {
     width:100%;
-    max-width: 950px;
+    /*max-width: 950px;*/
     margin-top: 10px;
     margin-bottom: 10px;
 }
