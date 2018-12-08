@@ -118,7 +118,9 @@
     <div id="loadingPad" style="background-color: #1874D2">
         <img id="loading" src="../../assets/img/loading/dolphinLoading.gif">
         <div class="loading-label">
-            正在下载VGG16预训练模型...<br>527MB <span class="span-estimate">- 估计5min到15min</span>
+            <div id="downloadNotice">正在下载 VGG16 预训练模型 <span id="downloadProgress">0%</span></div>
+            <div id="creationNotice">模型下载完成! 正在创建 TensorSpace VGG16 模型...</div>
+            <div>527MB <span class="span-estimate">- 估计5min到15min</span></div>
         </div>
     </div>
     <div id="modelArea"></div>

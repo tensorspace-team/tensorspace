@@ -212,3 +212,7 @@ main {
     height: 25px;
     margin-right: 5px;
 }
+
+#creationNotice {
+    display: none;
+}

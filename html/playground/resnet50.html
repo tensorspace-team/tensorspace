@@ -117,7 +117,9 @@
     <div id="loadingPad" style="background-color: #120A1C">
         <img id="loading" src="../../assets/img/loading/ringLoading.gif">
         <div class="loading-label">
-            Downloading ResNet50 pre-trained model...<br>98MB <span class="span-estimate">- Estimate 50s to 3min</span>
+            <div id="downloadNotice">Downloading ResNet50 pre-trained model <span id="downloadProgress">0%</span></div>
+            <div id="creationNotice">Download completed! Creating TensorSpace ResNet50 Model...</div>
+            <div>98MB <span class="span-estimate">- Estimate 50s to 3min</span></div>
         </div>
     </div>
     <div id="modelArea"></div>

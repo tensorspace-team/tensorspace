@@ -117,7 +117,9 @@
     <div id="loadingPad" style="background-color: #fff">
         <img id="loading" src="../../assets/img/loading/cakeLoading.gif">
         <div class="loading-label" style="color: #0340D8">
-            正在下载InceptionV3预训练模型...<br>96MB <span class="span-estimate">- 估计1min到5min</span>
+            <div id="downloadNotice">正在下载 InceptionV3 预训练模型 <span id="downloadProgress">0%</span></div>
+            <div id="creationNotice">模型下载完成! 正在创建 TensorSpace InceptionV3 模型...</div>
+            <div>96MB <span class="span-estimate">- 估计2min到8min</span></div>
         </div>
     </div>
     <div id="modelArea"></div>

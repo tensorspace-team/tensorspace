@@ -118,7 +118,9 @@
     <div id="loadingPad" style="background-color: #1874D2">
         <img id="loading" src="../../assets/img/loading/dolphinLoading.gif">
         <div class="loading-label">
-            Downloading VGG16 pre-trained model...<br>527MB <span class="span-estimate">- Estimate 5min to 15min</span>
+            <div id="downloadNotice">Downloading VGG16 pre-trained model <span id="downloadProgress">0%</span></div>
+            <div id="creationNotice">Download completed! Creating TensorSpace VGG16 Model...</div>
+            <div>527MB <span class="span-estimate">- Estimate 5min to 15min</span></div>
         </div>
     </div>
     <div id="modelArea"></div>

@@ -117,7 +117,9 @@
     <div id="loadingPad" style="background-color: #120A1C">
         <img id="loading" src="../../assets/img/loading/ringLoading.gif">
         <div class="loading-label">
-            正在下载ResNet50预训练模型...<br>98MB <span class="span-estimate">- 估计50s到3min</span>
+            <div id="downloadNotice">正在下载 ResNet50 预训练模型 <span id="downloadProgress">0%</span></div>
+            <div id="creationNotice">模型下载完成! 正在创建 TensorSpace ResNet50 模型...</div>
+            <div>98MB <span class="span-estimate">- 估计50s到3min</span></div>
         </div>
     </div>
     <div id="modelArea"></div>

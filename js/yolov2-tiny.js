@@ -41,6 +41,17 @@ let dataLookup = {
 
 $(function() {
 
+	registerProgress( 16, ( percent ) => {
+
+		$("#downloadProgress").html( ( 100 * percent ).toFixed( 2 ) + "%" );
+
+	}, () => {
+
+		$("#downloadNotice").hide();
+		$("#creationNotice").show();
+
+	} );
+
 	createModel();
 
 	$("#selector > main > div > img").click(function() {

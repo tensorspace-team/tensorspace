@@ -117,7 +117,9 @@
     <div id="loadingPad">
         <img id="loading" src="../../assets/img/loading/loading.gif">
         <div class="loading-label">
-            正在下载Yolov2-tiny预训练模型...<br>60MB <span class="span-estimate">- 估计1min到5min</span>
+            <div id="downloadNotice">正在下载 Yolov2-tiny 预训练模型 <span id="downloadProgress">0%</span></div>
+            <div id="creationNotice">模型下载完成! 正在创建 TensorSpace Yolov2-tiny 模型...</div>
+            <div>60MB <span class="span-estimate">- 估计1min到5min</span></div>
         </div>
     </div>
     <div id="modelArea"></div>

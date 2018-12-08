@@ -117,7 +117,9 @@
     <div id="loadingPad" style="background-color: #fff">
         <img id="loading" src="../../assets/img/loading/cakeLoading.gif">
         <div class="loading-label" style="color: #0340D8">
-            Downloading InceptionV3 pre-trained model...<br>96MB <span class="span-estimate">- Estimate 1min to 5min</span>
+            <div id="downloadNotice">Downloading InceptionV3 pre-trained model <span id="downloadProgress">0%</span></div>
+            <div id="creationNotice">Download completed! Creating TensorSpace InceptionV3 Model...</div>
+            <div>96MB <span class="span-estimate">- Estimate 2min to 8min</span></div>
         </div>
     </div>
     <div id="modelArea"></div>

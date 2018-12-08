@@ -117,7 +117,9 @@
     <div id="loadingPad">
         <img id="loading" src="../../assets/img/loading/mouseLoading.gif">
         <div class="loading-label">
-            正在下载AlexNet预训练模型...<br>237MB <span class="span-estimate">- 估计3min到10min</span>
+            <div id="downloadNotice">正在下载 AlexNet 预训练模型 <span id="downloadProgress">0%</span></div>
+            <div id="creationNotice">模型下载完成! 正在创建 TensorSpace AlexNet 模型...</div>
+            <div>237MB <span class="span-estimate">- 估计3min到10min</span></div>
         </div>
     </div>
     <div id="modelArea"></div>
