@@ -524,7 +524,7 @@ MergedLayer1d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
 
-			return this.actualWidth / 2 - this.calcCloseButtonPos().x + this.calcCloseButtonSize();
+			return this.actualWidth / 2 - this.calcCloseButtonPos().x + 8 * this.calcCloseButtonSize();
 
 		} else {
 
