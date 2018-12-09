@@ -307,7 +307,9 @@ npm run build
 
 ## <div id="changelog">更新日志</div>
 
-[Releases](https://github.com/tensorspace-team/tensorspace/releases)
+TensorSpace 的所有更新日志都可以在这个文件中查看。
+
+[CHANGELOG.md](https://github.com/tensorspace-team/tensorspace/blob/master/CHANGELOG.md)
 
 ## <div id="contributors">开发人员</div>
 

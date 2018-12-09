@@ -307,7 +307,9 @@ Open "html" file in examples folder in local web server.
 
 ## Changelog
 
-[Releases](https://github.com/tensorspace-team/tensorspace/releases)
+All notable changes to TensorSpace will be documented in this file.
+
+[CHANGELOG.md](https://github.com/tensorspace-team/tensorspace/blob/master/CHANGELOG.md)
 
 ## Contributors
 
