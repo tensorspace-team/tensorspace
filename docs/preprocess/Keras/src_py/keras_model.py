@@ -1,13 +1,10 @@
 import tensorflow as tf
 import numpy as np
-from keras.models import Sequential, Model
+from keras.models import Sequential, Model, load_model
 from keras.layers import Dense, Input, InputLayer, Conv2D, MaxPooling2D, Reshape, Flatten
-from keras.models import load_model
 
 mnist = tf.keras.datasets.mnist
 
-(x_train, y_train),(x_test, y_test) = mnist.load_data()
-x_train, x_test = x_train / 255.0, x_test / 255.0
 
 def create_sequential_model():
     single_output_model = Sequential([
@@ -23,6 +20,7 @@ def create_sequential_model():
         Dense(10, activation="softmax", name="Softmax")
     ])
     return single_output_model
+
 
 def create_model():
     input_tensor = Input(shape=(28, 28))
@@ -45,6 +43,7 @@ def create_model():
     )
     return classic_model
 
+
 def train_model():
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
     x_train, x_test = x_train / 255.0, x_test / 255.0
@@ -64,6 +63,7 @@ def train_model():
 def save_model(model, name_path):
     model.save(name_path)
 
+
 def load_from_model(name_path):
     model = load_model(name_path)
     # Load model from json+weights
@@ -78,6 +78,7 @@ def load_from_model(name_path):
     # model.load_weights(weight_path)
     return model
 
+
 def generate_encapsulate_model_with_output_layer_names(model, output_layer_names):
     enc_model = Model(
         inputs=model.input,
@@ -85,6 +86,7 @@ def generate_encapsulate_model_with_output_layer_names(model, output_layer_names
     )
     return enc_model
 
+s
 def generate_encapsulate_model(model):
     enc_model = Model(
         inputs=model.input,
