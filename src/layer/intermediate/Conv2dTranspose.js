@@ -47,15 +47,6 @@ function Conv2dTranspose( config ) {
 	this.strides = [ 1, 1 ];
 
 	/**
-	 * 2d feature map shape, stored as array.
-	 * For example, [20, 20]
-	 *
-	 * @type { Array }
-	 */
-
-	this.fmShape = undefined;
-
-	/**
 	 * Padding mode.
 	 * "valid" or "same", default to "valid".
 	 *

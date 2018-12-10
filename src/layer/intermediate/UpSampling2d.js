@@ -251,7 +251,6 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 			if ( layerConfig.shape !== undefined ) {
 
 				this.isShapePredefined = true;
-				this.fmShape = layerConfig.shape;
 				this.width = layerConfig.shape[ 0 ];
 				this.height = layerConfig.shape[ 1 ];
 
