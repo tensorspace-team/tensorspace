@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>TensorSpace - Yolo_v3_tiny_coco Demo</title>
+        <meta name="author" content="Charlesliuyx / https://github.com/Charlesliuyx">
+        <style>
+
+            html, body {
+                 margin: 0;
+                 padding: 0;
+                 width: 100%;
+                 height: 100%;
+             }
+
+            #container {
+                width: 100%;
+                height: 100%;
+            }
+
+            #loadingPad {
+                position: fixed;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                background-color: #031D32;
+                z-index: 2;
+            }
+
+            #loading {
+                position: fixed;
+                width: 30%;
+                top: 150px;
+                margin-left: 35%;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div id="container"></div>
+        <div id="loadingPad">
+            <img id="loading" src="./assets/loading.gif">
+        </div>
+
+        <script src="../lib/jquery.min.js"></script>
+        <script src="../lib/three.min.js"></script>
+        <script src="../lib/stats.min.js"></script>
+        <script src="../lib/tween.min.js"></script>
+        <script src="../lib/TrackballControls.js"></script>
+        <script src="../lib/tf.min.js"></script>
+        <script src="../../build/tensorspace.js"></script>
+
+        <script>
+
+            let modelContainer = document.getElementById( "container" );
+
+            let model = new TSP.models.Model( modelContainer, {
+
+				stats: true,
+                animationTimeRatio: 0.1,
+
+			}  );
+
+            let input = new TSP.layers.RGBInput( { shape: [ 416, 416, 3 ],  name: "Input" });
+
+            let conv2d_1 = new TSP.layers.Conv2d( { kernelSize: 3, filters: 16, strides: 1, padding: "same" } );
+
+            conv2d_1.apply( input );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 32,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 64,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 128,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 256,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 2, 2 ]
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Pooling2d( {
+
+                poolSize: [ 2, 2 ],
+                strides: [ 1, 1 ],
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 1024,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 3,
+                filters: 512,
+                strides: 1,
+                padding: "same"
+
+            } ) );
+
+            model.add( new TSP.layers.Conv2d( {
+
+                kernelSize: 1,
+                filters: 125,
+                strides: 1
+
+            } ) );
+
+            let yoloGrid = new TSP.layers.YoloGrid( {
+
+                anchors: [ 10,14,  23,27,  37,58,  81,82,  135,169,  344,319 ],
+
+                //coco class label name list
+                classLabelList: [ 'person',
+                    'bicycle',
+                    'car',
+                    'motorbike',
+                    'aeroplane',
+                    'bus',
+                    'train',
+                    'truck',
+                    'boat',
+                    'traffic light',
+                    'fire hydrant',
+                    'stop sign',
+                    'parking meter',
+                    'bench',
+                    'bird',
+                    'cat',
+                    'dog',
+                    'horse',
+                    'sheep',
+                    'cow',
+                    'elephant',
+                    'bear',
+                    'zebra',
+                    'giraffe',
+                    'backpack',
+                    'umbrella',
+                    'handbag',
+                    'tie',
+                    'suitcase',
+                    'frisbee',
+                    'skis',
+                    'snowboard',
+                    'sports ball',
+                    'kite',
+                    'baseball bat',
+                    'baseball glove',
+                    'skateboard',
+                    'surfboard',
+                    'tennis racket',
+                    'bottle',
+                    'wine glass',
+                    'cup',
+                    'fork',
+                    'knife',
+                    'spoon',
+                    'bowl',
+                    'banana',
+                    'apple',
+                    'sandwich',
+                    'orange',
+                    'broccoli',
+                    'carrot',
+                    'hot dog',
+                    'pizza',
+                    'donut',
+                    'cake',
+                    'chair',
+                    'sofa',
+                    'pottedplant',
+                    'bed',
+                    'diningtable',
+                    'toilet',
+                    'tvmonitor',
+                    'laptop',
+                    'mouse',
+                    'remote',
+                    'keyboard',
+                    'cell phone',
+                    'microwave',
+                    'oven',
+                    'toaster',
+                    'sink',
+                    'refrigerator',
+                    'book',
+                    'clock',
+                    'vase',
+                    'scissors',
+                    'teddy bear',
+                    'hair drier',
+                    'toothbrush', ],
+
+                // default is 0.5
+                scoreThreshold: 0.3,
+
+                // default is 0.3
+                iouThreshold: 0.3,
+
+                // default is true
+                isDrawFiveBoxes: true,
+
+                // default is true
+                isNMS: true,
+
+                onCeilClicked: onYoloCeilClicked
+
+            } );
+
+            model.add( yoloGrid );
+
+            let outputDetectionLayer = new TSP.layers.OutputDetection();
+
+            model.add( outputDetectionLayer );
+
+            model.load( {
+
+                type: "keras",
+                url: './yolov3-tiny-coco/model.json'
+                outputsName: [ "conv2d_1", "max_pooling2d_1", "conv2d_2", "max_pooling2d_2",
+                    "conv2d_3", "max_pooling2d_3", "conv2d_4", "max_pooling2d_4", "conv2d_5", "max_pooling2d_5",
+                    "conv2d_6", "max_pooling2d_6", "conv2d_7", "conv2d_8", "conv2d_9", "conv2d_10", "conv2d_11",
+                    "up_sampling2d_1", "conv2d_12", "conv2d_13" ],
+            } );
+
+            model.init( function() {
+
+				$.ajax( {
+
+					url: "./data/person.json",
+					type: 'GET',
+					async: true,
+					dataType: 'json',
+					success: function ( data ) {
+
+						model.predict( data );
+						$( "#loadingPad" ).hide();
+
+					}
+
+				} );
+
+            } );
+
+            function onYoloCeilClicked( ceilData, rectList ) {
+
+                outputDetectionLayer.addRectangleList( rectList );
+
+                if ( !outputDetectionLayer.isOpen ) {
+
+                    outputDetectionLayer.openLayer();
+
+                }
+
+            }
+
+        </script>
+    </body>
+</html>
