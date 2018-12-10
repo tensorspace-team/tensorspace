@@ -192,7 +192,6 @@ main {
 
 main > header {
     width: 100%;
-    /*max-width: 1000px;*/
     height: 30px;
     line-height: 30px;
     margin-top: 25px;
@@ -212,7 +211,6 @@ main p {
 
 main > div {
     margin-top: 3px;
-    /*max-width: 1000px;*/
     text-align: justify;
 }
 
@@ -298,14 +296,12 @@ td, th {
 .code-snippet {
 
     margin-top: 10px;
-    /*max-width: 900px;*/
     margin-bottom: 17px;
 
 }
 
 .tag-img {
     width:100%;
-    /*max-width: 950px;*/
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -348,7 +344,6 @@ td, th {
     margin-top: 10px;
     margin-bottom: 10px;
     width: 90%;
-    /*margin-left: 5%;*/
     border-radius: 10px;
     padding: 10px 30px 10px 30px;
 }
@@ -772,4 +767,13 @@ footer {
     .codepen-wrapper {
         display: none;
     }
+}
+
+@media (min-width: 1400px) {
+
+    main {
+        padding-left: calc( 50% - 650px );
+        padding-right: calc( 50% - 650px );
+    }
+
 }
