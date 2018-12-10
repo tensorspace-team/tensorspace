@@ -297,16 +297,6 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		}
 
-		if ( config.outputsOrder !== undefined ) {
-
-			this.outputsOrder = config.outputsOrder;
-
-		} else {
-
-			console.error( "\"outputsOrder\" is required for Model." );
-
-		}
-
 	},
 
 	createGraph: function() {

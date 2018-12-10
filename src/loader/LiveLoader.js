@@ -64,6 +64,12 @@ LiveLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		this.model.resource = this.modelHandler;
 
+		if ( this.model.modelType === "Model" ) {
+
+			this.model.outputsOrder = this.model.outputNames;
+
+		}
+
 		this.setPredictor();
 
 		if ( this.onCompleteCallback !== undefined ) {

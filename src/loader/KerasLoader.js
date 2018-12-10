@@ -66,6 +66,12 @@ KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		this.model.resource = loadedModel;
 
+		if ( this.model.modelType === "Model" ) {
+
+			this.model.outputsOrder = loadedModel.outputNames;
+
+		}
+
 		this.setPredictor();
 
 		if ( this.onCompleteCallback !== undefined ) {
