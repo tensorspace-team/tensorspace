@@ -37,8 +37,6 @@ let YoloResultGenerator = (function() {
 
     }
 
-    //TODO implement iou & nms
-
 	function transferPrediction( prediction ) {
 
     	// prediction = {x:, y:, width:, height:, finalScore:, labelName:}
@@ -145,18 +143,19 @@ let YoloResultGenerator = (function() {
         // channelShape ： array = [13, 13]
         // outputShape : array = [416, 416] output image pixel
 
-        let widthRange = channelShape[ 0 ];
-        let heightRange = channelShape[ 1 ];
+
+		let gridWidth = channelShape[ 0 ];
+        let gridHeight = channelShape[ 1 ];
 
         let thresholdedPredictions = [];
 
         let output = [];
 
-		for ( let row = 0; row < widthRange; row ++ ) {
+		for ( let row = 0; row < gridHeight; row ++ ) {
 
-			for ( let col = 0; col < heightRange; col ++ ) {
+			for ( let col = 0; col < gridWidth; col ++ ) {
 
-				let start = row * widthRange + col;
+				let start = row * gridWidth + col;
 
 				let channelData = neuralData.slice( start * channelDepth, ( start + 1 ) * channelDepth );
 
@@ -184,10 +183,10 @@ let YoloResultGenerator = (function() {
 
                     let finalScore = bestClassScore * finalConfidence;
 
-                    let width = bw / widthRange * outputShape[ 0 ];
-                    let height = bh  / heightRange * outputShape[ 1 ];
-                    let x = bx / widthRange * outputShape[ 0 ] - width / 2;
-                    let y = by / heightRange * outputShape[ 1 ] - height / 2;
+                    let width = bw / gridWidth * outputShape[ 0 ];
+                    let height = bh  / gridHeight * outputShape[ 1 ];
+                    let x = bx / gridWidth * outputShape[ 0 ] - width / 2;
+                    let y = by / gridHeight * outputShape[ 1 ] - height / 2;
 
                     if ( finalScore > scoreThreshold ) {
 
@@ -235,6 +234,8 @@ let YoloResultGenerator = (function() {
                     y: nmsPredictions[i]["y"],
                     width: nmsPredictions[i]["width"],
                     height: nmsPredictions[i]["height"],
+					finalScore: nmsPredictions[i]["finalScore"],
+					className: nmsPredictions[i]["className"],
 
                 });
 
@@ -242,6 +243,7 @@ let YoloResultGenerator = (function() {
 
 		}
 
+		console.log( output );
 
 		return output;
 
