@@ -1518,7 +1518,8 @@ function createModel() {
 			// block 11
 			"conv2d_90", "conv2d_91", "conv2d_92", "conv2d_93", "concatenate_2", "conv2d_87", "conv2d_88", "conv2d_89", "mixed9_1", "average_pooling2d_9", "conv2d_94", "conv2d_86", "mixed10",
 			// prediction
-			"avg_pool", "predictions"]
+			"avg_pool", "predictions"],
+		stats: true
 
 	} );
 
