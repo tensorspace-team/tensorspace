@@ -1442,32 +1442,7 @@
 	let model = new TSP.models.Model( modelContainer, {
 
 		inputs: [ input ],
-		outputs: [ predictions ],
-        outputsOrder: ["conv2d_1", "conv2d_2", "conv2d_3", "max_pooling2d_1", "conv2d_4", "conv2d_5", "max_pooling2d_2",
-            // block 1
-            "conv2d_9", "conv2d_10", "conv2d_11", "conv2d_7", "conv2d_8", "average_pooling2d_1", "conv2d_12", "conv2d_6", "mixed0",
-            // block 2
-			"conv2d_16", "conv2d_17", "conv2d_18", "conv2d_14", "conv2d_15", "average_pooling2d_2", "conv2d_19", "conv2d_13", "mixed1",
-            // block 3
-			"conv2d_23", "conv2d_24", "conv2d_25", "conv2d_21", "conv2d_22", "average_pooling2d_3", "conv2d_26", "conv2d_20", "mixed2",
-            // block 4
-			"conv2d_28", "conv2d_29", "conv2d_30", "conv2d_27", "max_pooling2d_3", "mixed3",
-            // block 5
-			"conv2d_35", "conv2d_36", "conv2d_37", "conv2d_38", "conv2d_39", "conv2d_32", "conv2d_33", "conv2d_34", "average_pooling2d_4", "conv2d_40", "conv2d_31", "mixed4",
-			// block 6
-            "conv2d_45", "conv2d_46", "conv2d_47", "conv2d_48", "conv2d_49", "conv2d_42", "conv2d_43", "conv2d_44", "average_pooling2d_5", "conv2d_50", "conv2d_41", "mixed5",
-            // block 7
-            "conv2d_55", "conv2d_56", "conv2d_57", "conv2d_58", "conv2d_59", "conv2d_52", "conv2d_53", "conv2d_54", "average_pooling2d_6", "conv2d_60", "conv2d_51", "mixed6",
-            // block 8
-            "conv2d_65", "conv2d_66", "conv2d_67", "conv2d_68", "conv2d_69", "conv2d_62", "conv2d_63", "conv2d_64", "average_pooling2d_7", "conv2d_70", "conv2d_61", "mixed7",
-			// block 9
-            "conv2d_73", "conv2d_74", "conv2d_75", "conv2d_76", "conv2d_71", "conv2d_72", "max_pooling2d_4", "mixed8",
-            // block 10
-			"conv2d_81", "conv2d_82", "conv2d_83", "conv2d_84", "concatenate_1", "conv2d_78", "conv2d_79", "conv2d_80", "mixed9_0", "average_pooling2d_8", "conv2d_85", "conv2d_77", "mixed9",
-            // block 11
-			"conv2d_90", "conv2d_91", "conv2d_92", "conv2d_93", "concatenate_2", "conv2d_87", "conv2d_88", "conv2d_89", "mixed9_1", "average_pooling2d_9", "conv2d_94", "conv2d_86", "mixed10",
-			// prediction
-            "avg_pool", "predictions"]
+		outputs: [ predictions ]
 
 	} );
 
