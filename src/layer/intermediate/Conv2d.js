@@ -248,78 +248,83 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// Optional configuration.
-
-			if ( layerConfig.kernelSize !== undefined ) {
-
-				if ( layerConfig.kernelSize instanceof Array ) {
-
-					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
-					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
-
-				} else {
-
-					this.kernelSize[ 0 ] = layerConfig.kernelSize;
-					this.kernelSize[ 1 ] = layerConfig.kernelSize;
-
-				}
-
-			}
-
-			if ( layerConfig.strides !== undefined ) {
-
-				if ( layerConfig.strides instanceof Array ) {
-
-					this.strides[ 0 ] = layerConfig.strides[ 0 ];
-					this.strides[ 1 ] = layerConfig.strides[ 1 ];
-
-				} else {
-
-					this.strides[ 0 ] = layerConfig.strides;
-					this.strides[ 1 ] = layerConfig.strides;
-
-				}
-
-			}
-
-			// "filters" configuration is required.
-
-			if ( layerConfig.filters !== undefined ) {
-
-				this.filters = layerConfig.filters;
-				this.depth = layerConfig.filters;
-
-			} else {
-
-				console.error( "\"filters\" property is required for Conv2d layer." );
-
-			}
-
-			// Load user's predefined 2d shape.
-
 			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined 2d shape.
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
 				this.height = layerConfig.shape[ 1 ];
 
-			}
+				this.filters = layerConfig.shape[ 2 ];
+				this.depth = layerConfig.shape[ 2 ];
 
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+			} else {
 
-			if ( layerConfig.padding !== undefined ) {
+				// "filters" configuration is required.
 
-				if ( layerConfig.padding.toLowerCase() === "valid" ) {
+				if ( layerConfig.filters !== undefined ) {
 
-					this.padding = "valid";
-
-				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
-
-					this.padding = "same";
+					this.filters = layerConfig.filters;
+					this.depth = layerConfig.filters;
 
 				} else {
 
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+					console.error( "\"filters\" property is required for Conv2d layer." );
+
+				}
+
+				// Optional configuration.
+
+				if ( layerConfig.kernelSize !== undefined ) {
+
+					if ( layerConfig.kernelSize instanceof Array ) {
+
+						this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+						this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+
+					} else {
+
+						this.kernelSize[ 0 ] = layerConfig.kernelSize;
+						this.kernelSize[ 1 ] = layerConfig.kernelSize;
+
+					}
+
+				}
+
+				if ( layerConfig.strides !== undefined ) {
+
+					if ( layerConfig.strides instanceof Array ) {
+
+						this.strides[ 0 ] = layerConfig.strides[ 0 ];
+						this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+					} else {
+
+						this.strides[ 0 ] = layerConfig.strides;
+						this.strides[ 1 ] = layerConfig.strides;
+
+					}
+
+				}
+
+				if ( layerConfig.padding !== undefined ) {
+
+					// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+
+					if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
 
 				}
 

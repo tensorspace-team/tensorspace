@@ -87,13 +87,13 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		this.depth = this.lastLayer.depth;
-
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
 		if ( !this.isShapePredefined ) {
+
+			this.depth = this.lastLayer.depth;
 
 			if ( this.padding === "valid" ) {
 
@@ -248,50 +248,6 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "poolSize" configuration is required.
-
-			if ( layerConfig.poolSize !== undefined ) {
-
-				if ( layerConfig.poolSize instanceof Array ) {
-
-					this.poolSize[ 0 ] = layerConfig.poolSize[ 0 ];
-					this.poolSize[ 1 ] = layerConfig.poolSize[ 1 ];
-
-				} else {
-
-					this.poolSize[ 0 ] = layerConfig.poolSize;
-					this.poolSize[ 1 ] = layerConfig.poolSize;
-
-				}
-
-			} else {
-
-				console.error( "\"poolSize\" is required for Pooling2d layer" );
-
-			}
-
-			// "strides" configuration is required.
-
-			if ( layerConfig.strides !== undefined ) {
-
-				if ( layerConfig.strides instanceof Array ) {
-
-					this.strides[ 0 ] = layerConfig.strides[ 0 ];
-					this.strides[ 1 ] = layerConfig.strides[ 1 ];
-
-				} else {
-
-					this.strides[ 0 ] = layerConfig.strides;
-					this.strides[ 1 ] = layerConfig.strides;
-
-				}
-
-			} else {
-
-				console.error( "\"strides\" is required for Pooling2d layer" );
-
-			}
-
 			// Load user's predefined 2d shape.
 
 			if ( layerConfig.shape !== undefined ) {
@@ -299,28 +255,79 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
 				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
-			}
+			} else {
 
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+				// "poolSize" configuration is required.
 
-			if ( layerConfig.padding !== undefined ) {
+				if ( layerConfig.poolSize !== undefined ) {
 
-				if ( layerConfig.padding.toLowerCase() === "valid" ) {
+					if ( layerConfig.poolSize instanceof Array ) {
 
-					this.padding = "valid";
+						this.poolSize[ 0 ] = layerConfig.poolSize[ 0 ];
+						this.poolSize[ 1 ] = layerConfig.poolSize[ 1 ];
 
-				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+					} else {
 
-					this.padding = "same";
+						this.poolSize[ 0 ] = layerConfig.poolSize;
+						this.poolSize[ 1 ] = layerConfig.poolSize;
+
+					}
 
 				} else {
 
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+					console.error( "\"poolSize\" is required for Pooling2d layer" );
+
+				}
+
+				// "strides" configuration is required.
+
+				if ( layerConfig.strides !== undefined ) {
+
+					if ( layerConfig.strides instanceof Array ) {
+
+						this.strides[ 0 ] = layerConfig.strides[ 0 ];
+						this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+					} else {
+
+						this.strides[ 0 ] = layerConfig.strides;
+						this.strides[ 1 ] = layerConfig.strides;
+
+					}
+
+				} else {
+
+					console.error( "\"strides\" is required for Pooling2d layer" );
+
+				}
+
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
 
 				}
 
 			}
+
+		} else {
+
+			console.log( "Lack config for Pooling2d." );
 
 		}
 
