@@ -86,25 +86,35 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Two padding mode is the same as TensorFlow
+		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
-		if ( this.padding === "valid" ) {
+		if ( !this.isShapePredefined ) {
 
-			// ceil[ ( W - F + 1 ) / S ]
+			// Two padding mode is the same as TensorFlow
 
-			this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize[ 0 ] + 1 ) / this.strides[ 0 ] );
-			this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize[ 1 ] + 1 ) / this.strides[ 1 ] );
+			if ( this.padding === "valid" ) {
 
-		} else if ( this.padding === "same" ) {
+				// ceil[ ( W - F + 1 ) / S ]
 
-			// ceil( W / S )
+				this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize[ 0 ] + 1 ) / this.strides[ 0 ] );
+				this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize[ 1 ] + 1 ) / this.strides[ 1 ] );
 
-			this.width = Math.ceil( this.inputShape[ 0 ] / this.strides[ 0 ] );
-			this.height = Math.ceil( this.inputShape[ 1 ] / this.strides[ 0 ] );
+			} else if ( this.padding === "same" ) {
+
+				// ceil( W / S )
+
+				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides[ 0 ] );
+				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides[ 0 ] );
+
+			}
+
+			this.depth = this.inputShape[ 2 ] * this.depthMultiplier;
+
+		} else {
+
+			this.depthMultiplier = this.depth / this.inputShape[ 2 ];
 
 		}
-
-		this.depth = this.inputShape[ 2 ] * this.depthMultiplier;
 
 		// DepthwiseConv2d layer's outputShape has three dimension, that's why DepthwiseConv2d layer inherits from abstract layer "NativeLayer3d".
 
@@ -246,61 +256,74 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		if ( layerConfig !== undefined ) {
 
-			// Optional configuration.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.kernelSize !== undefined ) {
+				// Load user's predefined 2d layer shape.
 
-				if ( layerConfig.kernelSize instanceof Array ) {
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[0];
+				this.height = layerConfig.shape[1];
+				this.depth = layerConfig.shape[2];
 
-					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
-					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+			} else {
 
-				} else {
+				// Optional configuration.
 
-					this.kernelSize[ 0 ] = layerConfig.kernelSize;
-					this.kernelSize[ 1 ] = layerConfig.kernelSize;
+				if ( layerConfig.kernelSize !== undefined ) {
 
-				}
+					if ( layerConfig.kernelSize instanceof Array ) {
 
-			}
+						this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+						this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
 
-			if ( layerConfig.strides !== undefined ) {
+					} else {
 
-				if ( layerConfig.strides instanceof Array ) {
+						this.kernelSize[ 0 ] = layerConfig.kernelSize;
+						this.kernelSize[ 1 ] = layerConfig.kernelSize;
 
-					this.strides[ 0 ] = layerConfig.strides[ 0 ];
-					this.strides[ 1 ] = layerConfig.strides[ 1 ];
-
-				} else {
-
-					this.strides[ 0 ] = layerConfig.strides;
-					this.strides[ 1 ] = layerConfig.strides;
+					}
 
 				}
 
-			}
+				if ( layerConfig.strides !== undefined ) {
 
-			if ( layerConfig.depthMultiplier !== undefined ) {
+					if ( layerConfig.strides instanceof Array ) {
 
-				this.depthMultiplier = layerConfig.depthMultiplier;
+						this.strides[ 0 ] = layerConfig.strides[ 0 ];
+						this.strides[ 1 ] = layerConfig.strides[ 1 ];
 
-			}
+					} else {
 
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+						this.strides[ 0 ] = layerConfig.strides;
+						this.strides[ 1 ] = layerConfig.strides;
 
-			if ( layerConfig.padding !== undefined ) {
+					}
 
-				if ( layerConfig.padding.toLowerCase() === "valid" ) {
+				}
 
-					this.padding = "valid";
+				if ( layerConfig.depthMultiplier !== undefined ) {
 
-				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+					this.depthMultiplier = layerConfig.depthMultiplier;
 
-					this.padding = "same";
+				}
 
-				} else {
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
 
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
 
 				}
 

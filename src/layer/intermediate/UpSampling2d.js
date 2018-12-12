@@ -37,15 +37,6 @@ function UpSampling2d( config ) {
 	this.widthSize = undefined;
 	this.heightSize = undefined;
 
-	/**
-	 * Whether user directly define the layer shape.
-	 * Set "true" if UpSampling2d's shape is predefined by user.
-	 *
-	 * @type { boolean }
-	 */
-
-	this.isShapePredefined = false;
-
 	// Load user's UpSampling2d configuration.
 
 	this.loadLayerConfig( config );
@@ -78,8 +69,6 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		this.depth = this.lastLayer.depth;
-
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
@@ -88,6 +77,7 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 			this.width = this.lastLayer.width * this.widthSize;
 			this.height = this.lastLayer.height * this.heightSize;
+			this.depth = this.lastLayer.depth;
 
 		}
 
@@ -232,27 +222,30 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "size" configuration is required.
-
-			if ( layerConfig.size !== undefined ) {
-
-				this.size = layerConfig.size;
-				this.widthSize = layerConfig.size[ 0 ];
-				this.heightSize = layerConfig.size[ 1 ];
-
-			} else {
-
-				console.error( "\"size\" property is required for UpSampling layer" );
-
-			}
-
-			// Load user's predefined 2d shape.
-
 			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined 2d layer shape.
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
 				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
+
+			} else {
+
+				// "size" configuration is required.
+
+				if ( layerConfig.size !== undefined ) {
+
+					this.size = layerConfig.size;
+					this.widthSize = layerConfig.size[ 0 ];
+					this.heightSize = layerConfig.size[ 1 ];
+
+				} else {
+
+					console.error( "\"size\" property is required for UpSampling layer" );
+
+				}
 
 			}
 

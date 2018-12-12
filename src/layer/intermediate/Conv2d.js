@@ -55,15 +55,6 @@ function Conv2d( config ) {
 
 	this.padding = "valid";
 
-	/**
-	 * Whether user directly define the layer shape.
-	 * Set "true" if Conv2d's shape is predefined by user.
-	 *
-	 * @type { boolean }
-	 */
-
-	this.isShapePredefined = false;
-
 	// Load user's Conv2d configuration.
 
 	this.loadLayerConfig( config );
@@ -250,7 +241,7 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			if ( layerConfig.shape !== undefined ) {
 
-				// Load user's predefined 2d shape.
+				// Load user's predefined layer shape.
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];

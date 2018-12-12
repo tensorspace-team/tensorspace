@@ -105,21 +105,25 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// infer layer output shape from input shape and config.
+		if ( !this.isShapePredefined ) {
 
-		if ( this.padding === "same" ) {
+			// infer layer output shape from input shape and config.
 
-			// W * S
+			if ( this.padding === "same" ) {
 
-			this.width = this.inputShape[ 0 ] * this.strides[ 0 ];
-			this.height = this.inputShape[ 1 ] * this.strides[ 1 ];
+				// W * S
 
-		} else if ( this.padding === "valid" ) {
+				this.width = this.inputShape[ 0 ] * this.strides[ 0 ];
+				this.height = this.inputShape[ 1 ] * this.strides[ 1 ];
 
-			// ( W - 1 ) * S + F
+			} else if ( this.padding === "valid" ) {
 
-			this.width = ( this.inputShape[ 0 ] - 1 ) * this.strides[ 0 ] + this.kernelSize[ 0 ];
-			this.height = ( this.inputShape[ 1 ] - 1 ) * this.strides[ 1 ] + this.kernelSize[ 1 ];
+				// ( W - 1 ) * S + F
+
+				this.width = ( this.inputShape[ 0 ] - 1 ) * this.strides[ 0 ] + this.kernelSize[ 0 ];
+				this.height = ( this.inputShape[ 1 ] - 1 ) * this.strides[ 1 ] + this.kernelSize[ 1 ];
+
+			}
 
 		}
 
@@ -233,68 +237,83 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		if ( layerConfig !== undefined ) {
 
-			// "filters" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.filters !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.filters = layerConfig.filters;
-				this.depth = layerConfig.filters;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+
+				this.filters = layerConfig.shape[ 2 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 			} else {
 
-				console.error( "\"filters\" property is required for Conv2dTranspose layer." );
+				// "filters" configuration is required.
 
-			}
+				if ( layerConfig.filters !== undefined ) {
 
-			// Optional configuration.
-
-			if ( layerConfig.kernelSize !== undefined ) {
-
-				if ( layerConfig.kernelSize instanceof Array ) {
-
-					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
-					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+					this.filters = layerConfig.filters;
+					this.depth = layerConfig.filters;
 
 				} else {
 
-					this.kernelSize[ 0 ] = layerConfig.kernelSize;
-					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+					console.error( "\"filters\" property is required for Conv2dTranspose layer." );
 
 				}
 
-			}
+				// Optional configuration.
 
-			if ( layerConfig.strides !== undefined ) {
+				if ( layerConfig.kernelSize !== undefined ) {
 
-				if ( layerConfig.strides instanceof Array ) {
+					if ( layerConfig.kernelSize instanceof Array ) {
 
-					this.strides[ 0 ] = layerConfig.strides[ 0 ];
-					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+						this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+						this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
 
-				} else {
+					} else {
 
-					this.strides[ 0 ] = layerConfig.strides;
-					this.strides[ 1 ] = layerConfig.strides;
+						this.kernelSize[ 0 ] = layerConfig.kernelSize;
+						this.kernelSize[ 0 ] = layerConfig.kernelSize;
+
+					}
 
 				}
 
-			}
+				if ( layerConfig.strides !== undefined ) {
 
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+					if ( layerConfig.strides instanceof Array ) {
 
-			if ( layerConfig.padding !== undefined ) {
+						this.strides[ 0 ] = layerConfig.strides[ 0 ];
+						this.strides[ 1 ] = layerConfig.strides[ 1 ];
 
-				if ( layerConfig.padding.toLowerCase() === "same" ) {
+					} else {
 
-					this.padding = "same";
+						this.strides[ 0 ] = layerConfig.strides;
+						this.strides[ 1 ] = layerConfig.strides;
 
-				} else if ( layerConfig.padding.toLowerCase() === "valid" ) {
+					}
 
-					this.padding = "valid";
+				}
 
-				} else {
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
 
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
 
 				}
 

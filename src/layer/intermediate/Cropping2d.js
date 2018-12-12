@@ -69,12 +69,17 @@ Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), 
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer and user's configuration.
+		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
-		this.width = this.inputShape[ 0 ] - this.croppingWidth;
-		this.height = this.inputShape[ 1 ] - this.croppingHeight;
+		if ( !this.isShapePredefined ) {
 
-		this.depth = this.inputShape[ 2 ];
+			// Calculate layer's shape from last layer and user's configuration.
+
+			this.width = this.inputShape[ 0 ] - this.croppingWidth;
+			this.height = this.inputShape[ 1 ] - this.croppingHeight;
+			this.depth = this.inputShape[ 2 ];
+
+		}
 
 		// Cropping2d layer's outputShape has three dimension, that's why Cropping2d layer inherits from abstract layer "NativeLayer3d".
 
@@ -211,17 +216,30 @@ Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), 
 
 		if ( layerConfig !== undefined ) {
 
-			// "cropping" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.cropping !== undefined ) {
+				// Load user's predefined 2d layer shape.
 
-				this.cropping = layerConfig.cropping;
-				this.croppingWidth = layerConfig.cropping[ 0 ][ 0 ] + layerConfig.cropping[ 0 ][ 1 ];
-				this.croppingHeight = layerConfig.cropping[ 1 ][ 0 ] + layerConfig.cropping[ 1 ][ 1 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[0];
+				this.height = layerConfig.shape[1];
+				this.depth = layerConfig.shape[2];
 
 			} else {
 
-				console.error( "\"cropping\" property is required for cropping2d layer." );
+				// "cropping" configuration is required.
+
+				if ( layerConfig.cropping !== undefined ) {
+
+					this.cropping = layerConfig.cropping;
+					this.croppingWidth = layerConfig.cropping[ 0 ][ 0 ] + layerConfig.cropping[ 0 ][ 1 ];
+					this.croppingHeight = layerConfig.cropping[ 1 ][ 0 ] + layerConfig.cropping[ 1 ][ 1 ];
+
+				} else {
+
+					console.error( "\"cropping\" property is required for cropping2d layer." );
+
+				}
 
 			}
 

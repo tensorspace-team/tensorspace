@@ -71,13 +71,19 @@ Padding2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		// Calculate layer's shape from last layer and user's configuration.
+		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
-		this.contentWidth = this.lastLayer.width;
-		this.contentHeight = this.lastLayer.height;
-		this.depth = this.lastLayer.depth;
-		this.width = this.contentWidth + this.paddingWidth;
-		this.height = this.contentHeight + this.paddingHeight;
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer and user's configuration.
+
+			this.contentWidth = this.lastLayer.width;
+			this.contentHeight = this.lastLayer.height;
+			this.depth = this.lastLayer.depth;
+			this.width = this.contentWidth + this.paddingWidth;
+			this.height = this.contentHeight + this.paddingHeight;
+
+		}
 
 		// Padding2d layer's outputShape has three dimension, that's why Padding2d layer inherits from abstract layer "NativeLayer3d".
 
@@ -214,23 +220,36 @@ Padding2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "padding" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.padding !== undefined ) {
+				// Load user's predefined 2d layer shape.
 
-				// Calculate padding parameters from user's padding config.
-
-				this.paddingTop = layerConfig.padding[ 0 ];
-				this.paddingBottom = layerConfig.padding[ 0 ];
-				this.paddingLeft = layerConfig.padding[ 1 ];
-				this.paddingRight = layerConfig.padding[ 1 ];
-
-				this.paddingHeight = this.paddingTop + this.paddingBottom;
-				this.paddingWidth = this.paddingLeft + this.paddingRight;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[0];
+				this.height = layerConfig.shape[1];
+				this.depth = layerConfig.shape[2];
 
 			} else {
 
-				console.error( "\"padding\" property is required for padding layer" );
+				// "padding" configuration is required.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					// Calculate padding parameters from user's padding config.
+
+					this.paddingTop = layerConfig.padding[ 0 ];
+					this.paddingBottom = layerConfig.padding[ 0 ];
+					this.paddingLeft = layerConfig.padding[ 1 ];
+					this.paddingRight = layerConfig.padding[ 1 ];
+
+					this.paddingHeight = this.paddingTop + this.paddingBottom;
+					this.paddingWidth = this.paddingLeft + this.paddingRight;
+
+				} else {
+
+					console.error( "\"padding\" property is required for padding layer" );
+
+				}
 
 			}
 

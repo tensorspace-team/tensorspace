@@ -286,6 +286,15 @@ function Layer( config ) {
 
 	this.initStatus = "close";
 
+	/**
+	 * Whether user directly define the layer shape.
+	 * Set "true" if Layer's shape is predefined by user.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.isShapePredefined = false;
+
 	// Load layer config.
 
 	this.loadBasicLayerConfig( config );

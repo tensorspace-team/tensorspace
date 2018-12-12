@@ -46,15 +46,6 @@ function Pooling2d( config ) {
 
 	this.padding = "valid";
 
-	/**
-	 * Whether user directly define the layer shape.
-	 * Set "true" if Pooling2d's shape is predefined by user.
-	 *
-	 * @type { boolean }
-	 */
-
-	this.isShapePredefined = false;
-
 	// Load user's Pooling2d configuration.
 
 	this.loadLayerConfig( config );
@@ -248,7 +239,7 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// Load user's predefined 2d shape.
+			// Load user's predefined layer shape.
 
 			if ( layerConfig.shape !== undefined ) {
 

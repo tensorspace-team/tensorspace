@@ -59,11 +59,15 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer.
+		if ( !this.isShapePredefined ) {
 
-		this.width = this.inputShape[ 0 ];
-		this.height = this.inputShape[ 1 ];
-		this.depth = this.inputShape[ 2 ];
+			// Calculate layer's shape from last layer.
+
+			this.width = this.inputShape[ 0 ];
+			this.height = this.inputShape[ 1 ];
+			this.depth = this.inputShape[ 2 ];
+
+		}
 
 		// Activation3d layer's outputShape has three dimension, that's why Activation3d layer inherits from abstract layer "NativeLayer3d".
 
@@ -194,15 +198,28 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "activation" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.activation !== undefined ) {
+				// Load user's predefined 2d layer shape.
 
-				this.activation = layerConfig.activation;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 			} else {
 
-				console.error( "\"activation\" property is required for activation3d layer." );
+				// "activation" configuration is required.
+
+				if ( layerConfig.activation !== undefined ) {
+
+					this.activation = layerConfig.activation;
+
+				} else {
+
+					console.error( "\"activation\" property is required for activation3d layer." );
+
+				}
 
 			}
 
