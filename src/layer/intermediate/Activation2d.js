@@ -167,15 +167,15 @@ Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
-		} else if ( selectedElement.elementType === "featureMap" ) {
+		} else if ( selectedElement.elementType === "gridLine" ) {
 
 			// Get element which has the same index.
 
-			let fmIndex = selectedElement.fmIndex;
+			let gridIndex = selectedElement.gridIndex;
 
 			let request = {
 
-				index: fmIndex
+				index: gridIndex
 
 			};
 
