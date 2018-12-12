@@ -49,17 +49,23 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		let units = 1;
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		// Calculate output length.
+		if ( !this.isShapePredefined ) {
 
-		for ( let i = 0; i < this.lastLayer.outputShape.length; i++ ) {
+			let units = 1;
 
-			units *= this.lastLayer.outputShape[ i ];
+			// Calculate output length.
+
+			for ( let i = 0; i < this.lastLayer.outputShape.length; i++ ) {
+
+				units *= this.lastLayer.outputShape[ i ];
+
+			}
+
+			this.width = units;
 
 		}
-
-		this.width = units;
 
 		if ( this.paging ) {
 
@@ -173,6 +179,15 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	loadLayerConfig: function( layerConfig ) {
+
+		if ( layerConfig.shape !== undefined ) {
+
+			// Load user's predefined shape.
+
+			this.isShapePredefined = true;
+			this.width = layerConfig.shape[ 0 ];
+
+		}
 
 	}
 

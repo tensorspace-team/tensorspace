@@ -560,13 +560,23 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			if ( layerConfig.units !== undefined ) {
+			if ( layerConfig.shape !== undefined ) {
 
-				this.width = layerConfig.units;
+				// Load user's predefined layer shape.
+
+				this.width = layerConfig.shape[ 0 ];
 
 			} else {
 
-				console.error( "\"units\" property is required for Ouput1d layer." );
+				if ( layerConfig.units !== undefined ) {
+
+					this.width = layerConfig.units;
+
+				} else {
+
+					console.error( "\"units\" property is required for Ouput1d layer." );
+
+				}
 
 			}
 

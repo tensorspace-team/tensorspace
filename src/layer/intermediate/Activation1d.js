@@ -59,7 +59,13 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		this.width = this.inputShape[ 0 ];
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
+
+		if ( !this.isShapePredefined ) {
+
+			this.width = this.inputShape[ 0 ];
+
+		}
 
 		if ( this.paging ) {
 
@@ -176,15 +182,26 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "activation" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.activation !== undefined ) {
+				// Load user's predefined shape.
 
-				this.activation = layerConfig.activation;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
 
 			} else {
 
-				console.error( "\"activation\" property is required for activation1d layer." );
+				// "activation" configuration is required.
+
+				if ( layerConfig.activation !== undefined ) {
+
+					this.activation = layerConfig.activation;
+
+				} else {
+
+					console.error( "\"activation\" property is required for activation1d layer." );
+
+				}
 
 			}
 

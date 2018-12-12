@@ -204,13 +204,13 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "targetShape" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.targetShape !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.targetShape = layerConfig.targetShape;
-				this.width = layerConfig.targetShape[ 0 ];
-				this.depth = layerConfig.targetShape[ 1 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
 
 				// Reshape2d layer's outputShape has two dimension, that's why Reshape2d layer inherits from abstract layer "NativeLayer2d".
 
@@ -218,7 +218,23 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 			} else {
 
-				console.error( "\"targetShape\" property is required for reshape layer" );
+				// "targetShape" configuration is required.
+
+				if ( layerConfig.targetShape !== undefined ) {
+
+					this.targetShape = layerConfig.targetShape;
+					this.width = layerConfig.targetShape[ 0 ];
+					this.depth = layerConfig.targetShape[ 1 ];
+
+					// Reshape2d layer's outputShape has two dimension, that's why Reshape2d layer inherits from abstract layer "NativeLayer2d".
+
+					this.outputShape = [ this.width, this.depth ];
+
+				} else {
+
+					console.error( "\"targetShape\" property is required for reshape layer" );
+
+				}
 
 			}
 

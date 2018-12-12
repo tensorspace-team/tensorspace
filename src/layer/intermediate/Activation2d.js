@@ -59,10 +59,16 @@ Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer.
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		this.width = this.inputShape[ 0 ];
-		this.depth = this.inputShape[ 1 ];
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer.
+
+			this.width = this.inputShape[ 0 ];
+			this.depth = this.inputShape[ 1 ];
+
+		}
 
 		// Activation2d layer's outputShape has two dimension, that's why Activation2d layer inherits from abstract layer "NativeLayer2d".
 
@@ -200,15 +206,27 @@ Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "activation" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.activation !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.activation = layerConfig.activation;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
 
 			} else {
 
-				console.error( "\"activation\" property is required for activation1d layer." );
+				// "activation" configuration is required.
+
+				if ( layerConfig.activation !== undefined ) {
+
+					this.activation = layerConfig.activation;
+
+				} else {
+
+					console.error( "\"activation\" property is required for activation1d layer." );
+
+				}
 
 			}
 

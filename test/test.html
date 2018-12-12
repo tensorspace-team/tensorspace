@@ -49,23 +49,21 @@
 
     });
 
-    model.add( new TSP.layers.GreyscaleInput({
-        shape: [ 28, 28 ]
+    model.add( new TSP.layers.Input1d({
+        shape: [ 28 ]
     }) );
 
-    model.add( new TSP.layers.Conv2d( {
+    model.add( new TSP.layers.Activation1d( {
 
-		shape: [ 28, 28, 3 ]
+		shape: [ 28 ]
 
     } ) );
 
-    model.add( new TSP.layers.Pooling2d( {
-        shape: [ 14, 14, 3 ]
-    } ) );
+	model.add( new TSP.layers.Reshape( {
 
-    model.add( new TSP.layers.DepthwiseConv2d( {
-        shape: [ 14, 14, 6 ]
-    } ) );
+		shape: [ 2, 2, 7 ]
+
+	} ) );
 
     model.init();
 

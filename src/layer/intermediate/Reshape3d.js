@@ -212,14 +212,14 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "targetShape" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.targetShape !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.targetShape = layerConfig.targetShape;
-				this.width = layerConfig.targetShape[ 0 ];
-				this.height = layerConfig.targetShape[ 1 ];
-				this.depth = layerConfig.targetShape[ 2 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 				// Reshape3d layer's outputShape has three dimension, that's why Reshape3d layer inherits from abstract layer "NativeLayer3d".
 
@@ -227,7 +227,24 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			} else {
 
-				console.error( "\"targetShape\" property is required for reshape layer" );
+				// "targetShape" configuration is required.
+
+				if ( layerConfig.targetShape !== undefined ) {
+
+					this.targetShape = layerConfig.targetShape;
+					this.width = layerConfig.targetShape[ 0 ];
+					this.height = layerConfig.targetShape[ 1 ];
+					this.depth = layerConfig.targetShape[ 2 ];
+
+					// Reshape3d layer's outputShape has three dimension, that's why Reshape3d layer inherits from abstract layer "NativeLayer3d".
+
+					this.outputShape = [ this.width, this.height, this.depth ];
+
+				} else {
+
+					console.error( "\"targetShape\" property is required for reshape layer" );
+
+				}
 
 			}
 

@@ -26,29 +26,61 @@ Reshape.prototype = {
 
 		// Check and create Reshape layer.
 
-		if ( config !== undefined && config.targetShape !== undefined ) {
+		if ( config !== undefined && ( config.targetShape !== undefined || config.shape !== undefined ) ) {
 
-			if ( config.targetShape.length === 1 ) {
+			if ( config.targetShape !== undefined ) {
 
-				// If targetShape dimension is 1, create Reshape1d.
+				if ( config.targetShape.length === 1 ) {
 
-				return new Reshape1d( config );
+					// If targetShape dimension is 1, create Reshape1d.
 
-			} else if ( config.targetShape.length === 2 ) {
+					return new Reshape1d( config );
 
-				// If targetShape dimension is 2, create Reshape2d.
+				} else if ( config.targetShape.length === 2 ) {
 
-				return new Reshape2d( config );
+					// If targetShape dimension is 2, create Reshape2d.
 
-			} else if ( config.targetShape.length === 3 ) {
+					return new Reshape2d( config );
 
-				// If targetShape dimension is 3, create Reshape3d.
+				} else if ( config.targetShape.length === 3 ) {
 
-				return new Reshape3d( config );
+					// If targetShape dimension is 3, create Reshape3d.
 
-			} else {
+					return new Reshape3d( config );
 
-				console.error( "Can not reshape with target shape dimension " + config.targetShape.length );
+				} else {
+
+					console.error( "Can not reshape with target shape dimension " + config.targetShape.length );
+
+				}
+
+			}
+
+			if ( config.shape !== undefined ) {
+
+				if ( config.shape.length === 1 ) {
+
+					// If targetShape dimension is 1, create Reshape1d.
+
+					return new Reshape1d( config );
+
+				} else if ( config.shape.length === 2 ) {
+
+					// If targetShape dimension is 2, create Reshape2d.
+
+					return new Reshape2d( config );
+
+				} else if ( config.shape.length === 3 ) {
+
+					// If targetShape dimension is 3, create Reshape3d.
+
+					return new Reshape3d( config );
+
+				} else {
+
+					console.error( "Can not reshape with target shape dimension " + config.shape.length );
+
+				}
 
 			}
 

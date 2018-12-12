@@ -59,6 +59,8 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
+
 		if ( !this.isShapePredefined ) {
 
 			// Calculate layer's shape from last layer.
@@ -200,7 +202,7 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 			if ( layerConfig.shape !== undefined ) {
 
-				// Load user's predefined 2d layer shape.
+				// Load user's predefined layer shape.
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];

@@ -60,10 +60,16 @@ UpSampling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer and user's configuration.
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		this.width = this.inputShape[ 0 ] * this.size;
-		this.depth = this.inputShape[ 1 ];
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer and user's configuration.
+
+			this.width = this.inputShape[ 0 ] * this.size;
+			this.depth = this.inputShape[ 1 ];
+
+		}
 
 		// UpSampling1d layer's outputShape has two dimension, that's why UpSampling1d layer inherits from abstract layer "NativeLayer2d".
 
@@ -199,15 +205,27 @@ UpSampling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "size" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.size !== undefined ) {
+				// Load user's predefined shape.
 
-				this.size = layerConfig.size;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
 
 			} else {
 
-				console.error( "\"size\" property is required for UpSampling1d layer." );
+				// "size" configuration is required.
+
+				if ( layerConfig.size !== undefined ) {
+
+					this.size = layerConfig.size;
+
+				} else {
+
+					console.error( "\"size\" property is required for UpSampling1d layer." );
+
+				}
 
 			}
 

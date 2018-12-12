@@ -218,12 +218,12 @@ Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), 
 
 			if ( layerConfig.shape !== undefined ) {
 
-				// Load user's predefined 2d layer shape.
+				// Load user's predefined layer shape.
 
 				this.isShapePredefined = true;
-				this.width = layerConfig.shape[0];
-				this.height = layerConfig.shape[1];
-				this.depth = layerConfig.shape[2];
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 			} else {
 

@@ -191,12 +191,12 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "targetShape" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.targetShape !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.targetShape = layerConfig.targetShape;
-				this.width = layerConfig.targetShape[ 0 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
 
 				// Reshape1d layer's outputShape has one dimension, that's why Reshape1d layer inherits from abstract layer "NativeLayer1d".
 
@@ -204,7 +204,22 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 			} else {
 
-				console.error( "\"targetShape\" property is required for reshape layer" );
+				// "targetShape" configuration is required.
+
+				if ( layerConfig.targetShape !== undefined ) {
+
+					this.targetShape = layerConfig.targetShape;
+					this.width = layerConfig.targetShape[ 0 ];
+
+					// Reshape1d layer's outputShape has one dimension, that's why Reshape1d layer inherits from abstract layer "NativeLayer1d".
+
+					this.outputShape = [ this.width ];
+
+				} else {
+
+					console.error( "\"targetShape\" property is required for reshape layer" );
+
+				}
 
 			}
 

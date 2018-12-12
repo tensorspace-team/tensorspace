@@ -228,59 +228,63 @@ Conv1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "filters" configuration is required.
-
-			if ( layerConfig.filters !== undefined ) {
-
-				this.filters = layerConfig.filters;
-				this.depth = layerConfig.filters;
-
-			} else {
-
-				console.error( "\"filters\" property is required for conv1d layer." );
-
-			}
-
-			// Optional configuration.
-
-			if ( layerConfig.strides !== undefined ) {
-
-				this.strides = layerConfig.strides;
-
-			}
-
-			if ( layerConfig.kernelSize !== undefined ) {
-
-				this.kernelSize = layerConfig.kernelSize;
-
-			}
-
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
-
-			if ( layerConfig.padding !== undefined ) {
-
-				if ( layerConfig.padding.toLowerCase() === "valid" ) {
-
-					this.padding = "valid";
-
-				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
-
-					this.padding = "same";
-
-				} else {
-
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
-
-				}
-
-			}
-
-			// Load user's predefined shape.
-
 			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined shape.
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
+				this.filters = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 1 ];
+
+			} else {
+
+				// "filters" configuration is required.
+
+				if ( layerConfig.filters !== undefined ) {
+
+					this.filters = layerConfig.filters;
+					this.depth = layerConfig.filters;
+
+				} else {
+
+					console.error( "\"filters\" property is required for conv1d layer." );
+
+				}
+
+				// Optional configuration.
+
+				if ( layerConfig.strides !== undefined ) {
+
+					this.strides = layerConfig.strides;
+
+				}
+
+				if ( layerConfig.kernelSize !== undefined ) {
+
+					this.kernelSize = layerConfig.kernelSize;
+
+				}
+
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
+
+				}
 
 			}
 

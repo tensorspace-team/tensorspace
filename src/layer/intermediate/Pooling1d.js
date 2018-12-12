@@ -241,56 +241,59 @@ Pooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "poolSize" configuration is required.
-
-			if ( layerConfig.poolSize !== undefined ) {
-
-				this.poolSize = layerConfig.poolSize;
-
-			} else {
-
-				console.error( "\"poolSize\" property is required for pooling1d layer." );
-
-			}
-
-			// "strides" configuration is required.
-
-			if ( layerConfig.strides !== undefined ) {
-
-				this.strides = layerConfig.strides;
-
-			} else {
-
-				console.error( "\"strides\" property is required for pooling1d layer." );
-
-			}
-
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
-
-			if ( layerConfig.padding !== undefined ) {
-
-				if ( layerConfig.padding === "valid" ) {
-
-					this.padding = "valid";
-
-				} else if ( layerConfig.padding === "same" ) {
-
-					this.padding = "same";
-
-				} else {
-
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
-
-				}
-
-			}
-
-			// Load user's predefined 2d shape.
-
 			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined shape.
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
+
+			} else {
+
+				// "poolSize" configuration is required.
+
+				if ( layerConfig.poolSize !== undefined ) {
+
+					this.poolSize = layerConfig.poolSize;
+
+				} else {
+
+					console.error( "\"poolSize\" property is required for pooling1d layer." );
+
+				}
+
+				// "strides" configuration is required.
+
+				if ( layerConfig.strides !== undefined ) {
+
+					this.strides = layerConfig.strides;
+
+				} else {
+
+					console.error( "\"strides\" property is required for pooling1d layer." );
+
+				}
+
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
+
+				}
 
 			}
 
