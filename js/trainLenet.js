@@ -474,6 +474,14 @@ function stopPressEffect(id) {
 	}
 }
 
+function resetPressEffect(id) {
+	var startButton = document.getElementById("startTrain");
+	var stopButton = document.getElementById("stopTrain");
+	nonPressedEff(startButton);
+	nonPressedEff(stopButton);
+	nonPressedEff(id);
+}
+
 function pressedEff(id) {
 	id.style.backgroundColor = "rgb(71, 126, 153)";
 	id.style.boxShadow = "inset 0px 0px 12px black"
