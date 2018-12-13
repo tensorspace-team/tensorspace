@@ -49,3 +49,10 @@
     box-sizing: border-box;
     position: relative;
 }
+
+#startTrain, #stopTrain{
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    border: none;
+}

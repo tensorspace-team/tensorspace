@@ -443,3 +443,52 @@ function getInference( result ) {
 	return index;
 
 }
+
+
+// button pressed effect start here
+function startPressEffect(id) {
+	function hoverEffect(obj) {
+		obj.style.backgroundColor = "#244E5F";
+	}
+	var stopButton = document.getElementById("stopTrain");
+	if (id.style.backgroundColor === "rgb(71, 126, 153)") {
+		nonPressedEff(id);
+		pressedEff(stopButton);
+	} else {
+		pressedEff(id);
+		nonPressedEff(stopButton);
+	}
+}
+
+function stopPressEffect(id) {
+	function hoverEffect(obj) {
+		obj.style.backgroundColor = "#244E5F";
+	}
+	var startButton = document.getElementById("startTrain");
+	if (id.style.backgroundColor === "rgb(71, 126, 153)") {
+		nonPressedEff(id);
+		pressedEff(startButton);
+	} else {
+		pressedEff(id);
+		nonPressedEff(startButton);
+	}
+}
+
+function pressedEff(id) {
+	id.style.backgroundColor = "rgb(71, 126, 153)";
+	id.style.boxShadow = "inset 0px 0px 12px black"
+}
+
+function nonPressedEff(id) {
+	id.style.backgroundColor = "#244E5F";
+	id.style.boxShadow = "inset 0px 0px 0px transparent"
+}
+
+function hoverEffect(obj) {
+	obj.style.backgroundColor = "#548CA9";
+}
+
+function normalEffect(obj) {
+	obj.style.backgroundColor = "#244E5F";
+}
+
