@@ -54,8 +54,14 @@ GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototyp
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		this.inputShape = this.lastLayer.outputShape;
-		this.depth = this.inputShape[ 1 ];
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
+
+		if ( !this.isShapePredefined ) {
+
+			this.inputShape = this.lastLayer.outputShape;
+			this.depth = this.inputShape[ 1 ];
+
+		}
 
 		this.outputShape = [ this.depth ];
 
@@ -242,6 +248,30 @@ GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototyp
 			let fmIndex = element.fmIndex;
 			this.queueHandlers[ fmIndex ].showText();
 			this.textElementHandler = this.queueHandlers[ fmIndex ];
+
+		}
+
+	},
+
+	/**
+	 * loadLayerConfig() Load user's configuration into GlobalPooling1d.
+	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
+	 *
+	 * @param { JSON } layerConfig, user's configuration for GlobalPooling1d.
+	 */
+
+	loadLayerConfig: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined shape.
+
+				this.isShapePredefined = true;
+				this.depth = layerConfig.shape[ 0 ];
+
+			}
 
 		}
 
