@@ -57,9 +57,7 @@ GlobalPooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		this.depth = this.lastLayer.depth;
 
-		// GlobalPooling2d layer's outputShape has three dimension, that's why GlobalPooling2d layer inherits from abstract layer "NativeLayer3d".
-
-		this.outputShape = [ 1, 1, this.depth ];
+		this.outputShape = [ this.depth ];
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
