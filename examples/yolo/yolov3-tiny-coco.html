@@ -170,13 +170,13 @@
 
             up_sampling2d_1.apply( conv2d_11 );
 
-            let merge_0 = new TSP.layers.Concatenate( [ conv2d_5, up_sampling2d_1 ], { name: "merge_0"} );
+            let concatenate_1 = new TSP.layers.Concatenate( [ conv2d_5, up_sampling2d_1 ], { name: "concatenate_1"} );
 
             let conv2d_12 = new TSP.layers.Conv2d( {
                 kernelSize: 3, filters: 256, strides: 1, padding: "same", name: "conv2d_12"
             } );
 
-            conv2d_12.apply( merge_0 );
+            conv2d_12.apply( concatenate_1 );
 
             let conv2d_13 = new TSP.layers.Conv2d( {
                 kernelSize: 1, filters: 256, strides: 1, padding: "same", name: "conv2d_13"
