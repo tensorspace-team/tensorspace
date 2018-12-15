@@ -1442,7 +1442,8 @@
 	let model = new TSP.models.Model( modelContainer, {
 
 		inputs: [ input ],
-		outputs: [ predictions ]
+		outputs: [ predictions ],
+        predictDataShapes: [ [ 299, 299, 3 ] ]
 
 	} );
 

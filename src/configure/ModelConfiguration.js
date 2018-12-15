@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-function ModelConfiguration(config ) {
+function ModelConfiguration( config ) {
 
 	this.layerInitStatus = false;
 	this.layerShape = "rect";
@@ -12,6 +12,7 @@ function ModelConfiguration(config ) {
 	this.stats = false;
 	this.animationTimeRatio = 1;
 	this.minOpacity = 0.4;
+	this.predictDataShapes = undefined;
 	this.color = {
 
 		background: 0x000000,
@@ -155,6 +156,12 @@ function ModelConfiguration(config ) {
 		if ( config.stats !== undefined ) {
 
 			this.stats = config.stats;
+
+		}
+
+		if ( config.predictDataShapes !== undefined ) {
+
+			this.predictDataShapes = config.predictDataShapes;
 
 		}
 

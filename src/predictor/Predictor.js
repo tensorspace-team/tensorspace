@@ -57,21 +57,35 @@ Predictor.prototype = {
 
 		let inputShapes = [];
 
-		let loadedModel = this.model.resource;
+		if ( this.model.configuration.predictDataShapes !== undefined ) {
 
-		let inputs = loadedModel.inputs;
+			let shapes = this.model.configuration.predictDataShapes;
 
-		this.inputNum = inputs.length;
+			for ( let i = 0; i < shapes.length; i ++ ) {
 
-		for ( let i = 0; i < inputs.length; i ++ ) {
+				inputShapes.push( [ 1 ].concat( shapes[ i ] ) );
 
-			let inputShape = inputs[ i ].shape;
+			}
 
-			// Support predict one input data at a time, set batch size to be 1.
+		} else {
 
-			inputShape[ 0 ] = 1;
+			let loadedModel = this.model.resource;
 
-			inputShapes.push( inputShape );
+			let inputs = loadedModel.inputs;
+
+			this.inputNum = inputs.length;
+
+			for ( let i = 0; i < inputs.length; i ++ ) {
+
+				let inputShape = inputs[ i ].shape;
+
+				// Support predict one input data at a time, set batch size to be 1.
+
+				inputShape[ 0 ] = 1;
+
+				inputShapes.push( inputShape );
+
+			}
 
 		}
 
