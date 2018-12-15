@@ -58,132 +58,131 @@
 
             let modelContainer = document.getElementById( "container" );
 
-            let model = new TSP.models.Model( modelContainer, {
+            let input = new TSP.layers.RGBInput( {
+                shape: [ 416, 416, 3 ],  name: "Input"
+            });
 
-				stats: true,
-                animationTimeRatio: 0.1,
-
-			}  );
-
-            let input = new TSP.layers.RGBInput( { shape: [ 416, 416, 3 ],  name: "Input" });
-
-            let conv2d_1 = new TSP.layers.Conv2d( { kernelSize: 3, filters: 16, strides: 1, padding: "same" } );
+            let conv2d_1 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 16, strides: 1, padding: "same", name: "conv2d_1"
+            } );
 
             conv2d_1.apply( input );
 
-            model.add( new TSP.layers.Pooling2d( {
+            let max_pooling2d_1 = new TSP.layers.Pooling2d( {
+                poolSize: [2, 2],  strides: [2, 2],  padding: "same", name: "max_pooling2d_1"
+            } );
 
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
+            max_pooling2d_1.apply( conv2d_1 );
 
-            } ) );
+            let conv2d_2 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 32, strides: 1, padding: "same", name: "conv2d_2"
+            } );
 
-            model.add( new TSP.layers.Conv2d( {
+            conv2d_2.apply( max_pooling2d_1 );
 
-                kernelSize: 3,
-                filters: 32,
-                strides: 1,
-                padding: "same"
+            let max_pooling2d_2 = new TSP.layers.Pooling2d( {
+                poolSize: [2, 2],  strides: [2, 2],  padding: "same", name: "max_pooling2d_2"
+            } );
 
-            } ) );
+            max_pooling2d_2.apply( conv2d_2 );
 
-            model.add( new TSP.layers.Pooling2d( {
+            let conv2d_3 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 64, strides: 1, padding: "same", name: "conv2d_3"
+            } );
 
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
+            conv2d_3.apply( max_pooling2d_2 );
 
-            } ) );
+            let max_pooling2d_3 = new TSP.layers.Pooling2d( {
+                poolSize: [2, 2],  strides: [2, 2],  padding: "same", name: "max_pooling2d_3"
+            } );
 
-            model.add( new TSP.layers.Conv2d( {
+            max_pooling2d_3.apply( conv2d_3 );
 
-                kernelSize: 3,
-                filters: 64,
-                strides: 1,
-                padding: "same"
+            let conv2d_4 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 128, strides: 1, padding: "same", name: "conv2d_4"
+            } );
 
-            } ) );
+            conv2d_4.apply( max_pooling2d_3 );
 
-            model.add( new TSP.layers.Pooling2d( {
+            let max_pooling2d_4 = new TSP.layers.Pooling2d( {
+                poolSize: [2, 2],  strides: [2, 2],  padding: "same", name: "max_pooling2d_4"
+            } );
 
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
+            max_pooling2d_4.apply( conv2d_4 );
 
-            } ) );
+            let conv2d_5 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 256, strides: 1, padding: "same", name: "conv2d_5"
+            } );
 
-            model.add( new TSP.layers.Conv2d( {
+            conv2d_5.apply( max_pooling2d_4 );
 
-                kernelSize: 3,
-                filters: 128,
-                strides: 1,
-                padding: "same"
+            let max_pooling2d_5 = new TSP.layers.Pooling2d( {
+                poolSize: [2, 2],  strides: [2, 2],  padding: "same", name: "max_pooling2d_5"
+            } );
 
-            } ) );
+            max_pooling2d_5.apply( conv2d_5 );
 
-            model.add( new TSP.layers.Pooling2d( {
+            let conv2d_6 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 512, strides: 1, padding: "same", name: "conv2d_6"
+            } );
 
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
+            conv2d_6.apply( max_pooling2d_5 );
 
-            } ) );
+            let max_pooling2d_6 = new TSP.layers.Pooling2d( {
+                poolSize: [2, 2],  strides: [1, 1],  padding: "same", name: "max_pooling2d_6"
+            } );
 
-            model.add( new TSP.layers.Conv2d( {
+            max_pooling2d_6.apply( conv2d_6 );
 
-                kernelSize: 3,
-                filters: 256,
-                strides: 1,
-                padding: "same"
+            let conv2d_7 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 1024, strides: 1, padding: "same", name: "conv2d_7"
+            } );
 
-            } ) );
+            conv2d_7.apply( max_pooling2d_6 );
 
-            model.add( new TSP.layers.Pooling2d( {
+            let conv2d_8 = new TSP.layers.Conv2d( {
+                kernelSize: 1, filters: 256, strides: 1, padding: "same", name: "conv2d_8"
+            } );
 
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
+            conv2d_8.apply( conv2d_7 );
 
-            } ) );
+            let conv2d_9 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 512, strides: 1, padding: "same", name: "conv2d_9"
+            } );
 
-            model.add( new TSP.layers.Conv2d( {
+            conv2d_9.apply( conv2d_8 );
 
-                kernelSize: 3,
-                filters: 512,
-                strides: 1,
-                padding: "same"
+            let conv2d_10 = new TSP.layers.Conv2d( {
+                kernelSize: 1, filters: 255, strides: 1, padding: "same", name: "conv2d_10_output13by13"
+            } );
 
-            } ) );
+            conv2d_10.apply( conv2d_9 );
 
-            model.add( new TSP.layers.Pooling2d( {
+            let conv2d_11 = new TSP.layers.Conv2d( {
+                kernelSize: 1, filters: 128, strides: 1, padding: "same", name: "conv2d_11"
+            } );
 
-                poolSize: [ 2, 2 ],
-                strides: [ 1, 1 ],
-                padding: "same"
+            conv2d_11.apply( conv2d_8 );
 
-            } ) );
+            let up_sampling2d_1 = new TSP.layers.UpSampling2d( {
+                size: [ 2, 2 ], name: "up_sampling_2d_1"
+            } );
 
-            model.add( new TSP.layers.Conv2d( {
+            up_sampling2d_1.apply( conv2d_11 );
 
-                kernelSize: 3,
-                filters: 1024,
-                strides: 1,
-                padding: "same"
+            let merge_0 = new TSP.layers.Concatenate( [ conv2d_5, up_sampling2d_1 ], { name: "merge_0"} );
 
-            } ) );
+            let conv2d_12 = new TSP.layers.Conv2d( {
+                kernelSize: 3, filters: 256, strides: 1, padding: "same", name: "conv2d_12"
+            } );
 
-            model.add( new TSP.layers.Conv2d( {
+            conv2d_12.apply( merge_0 );
 
-                kernelSize: 3,
-                filters: 512,
-                strides: 1,
-                padding: "same"
+            let conv2d_13 = new TSP.layers.Conv2d( {
+                kernelSize: 1, filters: 256, strides: 1, padding: "same", name: "conv2d_13_output26by26"
+            } );
 
-            } ) );
-
-            model.add( new TSP.layers.Conv2d( {
-
-                kernelSize: 1,
-                filters: 125,
-                strides: 1
-
-            } ) );
+            conv2d_13.apply( conv2d_12 );
 
             let yoloGrid = new TSP.layers.YoloGrid( {
 
@@ -287,11 +286,14 @@
 
             } );
 
-            model.add( yoloGrid );
+            let model = new TSP.models.Model( modelContainer, {
 
-            let outputDetectionLayer = new TSP.layers.OutputDetection();
+                stats: true,
+                animationTimeRatio: 0.1,
+                inputs: [ input ],
+                outputs: [ conv2d_10, conv2d_13 ]
 
-            model.add( outputDetectionLayer );
+            } );
 
             model.load( {
 
