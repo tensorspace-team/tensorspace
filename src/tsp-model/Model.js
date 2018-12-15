@@ -130,9 +130,8 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 	 * 2. reset TrackballControl;
 	 * 3. update camera setting in TSP.
 	 * 4. set layer to "initStatus", "close" or "open".
+	 * 5. rearrange layers in the same level
 	 */
-
-	// TODO: add rearrange.
 
 	reset: function() {
 
@@ -142,6 +141,11 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].reset();
+
+			let translateTime = this.layers[ i ].openTime;
+			let level = this.layerLookupMap[ this.layers[ i ].layerIndex ];
+
+			this.rearrangeLayerInLevel( level, translateTime );
 
 		}
 
