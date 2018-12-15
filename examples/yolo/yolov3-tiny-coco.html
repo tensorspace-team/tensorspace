@@ -153,7 +153,7 @@
             conv2d_9.apply( conv2d_8 );
 
             let conv2d_10 = new TSP.layers.Conv2d( {
-                kernelSize: 1, filters: 255, strides: 1, padding: "same", name: "conv2d_10_output13by13"
+                kernelSize: 1, filters: 255, strides: 1, padding: "same", name: "conv2d_10"
             } );
 
             conv2d_10.apply( conv2d_9 );
@@ -165,7 +165,7 @@
             conv2d_11.apply( conv2d_8 );
 
             let up_sampling2d_1 = new TSP.layers.UpSampling2d( {
-                size: [ 2, 2 ], name: "up_sampling_2d_1"
+                size: [ 2, 2 ], name: "up_sampling2d_1"
             } );
 
             up_sampling2d_1.apply( conv2d_11 );
@@ -179,7 +179,7 @@
             conv2d_12.apply( merge_0 );
 
             let conv2d_13 = new TSP.layers.Conv2d( {
-                kernelSize: 1, filters: 256, strides: 1, padding: "same", name: "conv2d_13_output26by26"
+                kernelSize: 1, filters: 256, strides: 1, padding: "same", name: "conv2d_13"
             } );
 
             conv2d_13.apply( conv2d_12 );
@@ -298,11 +298,8 @@
             model.load( {
 
                 type: "keras",
-                url: './yolov3-tiny-coco/model.json',
-                outputsName: [ "conv2d_1", "max_pooling2d_1", "conv2d_2", "max_pooling2d_2",
-                    "conv2d_3", "max_pooling2d_3", "conv2d_4", "max_pooling2d_4", "conv2d_5", "max_pooling2d_5",
-                    "conv2d_6", "max_pooling2d_6", "conv2d_7", "conv2d_8", "conv2d_9", "conv2d_10", "conv2d_11",
-                    "up_sampling2d_1", "conv2d_12", "conv2d_13" ],
+                url: './yolov3-tiny-coco/model.json'
+
             } );
 
             model.init( function() {
@@ -315,7 +312,7 @@
 					dataType: 'json',
 					success: function ( data ) {
 
-						model.predict( data );
+						model.predict( [ data ] );
 						$( "#loadingPad" ).hide();
 
 					}
