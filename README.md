@@ -31,9 +31,10 @@ TensorSpace is a neural network 3D visualization framework built by TensorFlow.j
 
 * [Motivation](#motivation)
 * [Getting Start](#getting-start)
+* [Awesome TensorSpace](https://github.com/tensorspace-team/tensorspace/blob/master/awesome-tensorspace.md)
 * [Example](#example)
 * [Documentation](#documentation)
-* [Changelog](#changelog)
+* [Changelog](https://github.com/tensorspace-team/tensorspace/blob/master/CHANGELOG.md)
 * [Contributors](#contributors)
 * [Contact](#contact)
 * [License](#license)
@@ -304,12 +305,6 @@ Open "html" file in examples folder in local web server.
 * To process a deep learning model, checkout [Model Preprocessing](https://tensorspace.org/html/docs/preIntro.html)
 * To learn core components: [Models](https://tensorspace.org/html/docs/modelIntro.html), [Layers](https://tensorspace.org/html/docs/layerIntro.html) and [Merge Function](https://tensorspace.org/html/docs/mergeIntro.html)
 * Checkout the official website [TensorSpace.org](https://tensorspace.org) for more about TensorSpace.
-
-## Changelog
-
-All notable changes to TensorSpace will be documented in this file.
-
-[CHANGELOG.md](https://github.com/tensorspace-team/tensorspace/blob/master/CHANGELOG.md)
 
 ## Contributors
 

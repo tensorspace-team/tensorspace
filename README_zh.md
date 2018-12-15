@@ -1,5 +1,5 @@
 <p align="center">
-<img width=150 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/logo.png">
+<img width=150 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/logo_christmas.png">
 </p>
 <h1 align="center">TensorSpace.js</h1>
 <p align="center"><b>Present Tensor in Space</b></p>
@@ -34,9 +34,10 @@ TensorSpace 支持3D可视化经过适当预处理之后的 TensorFlow、Keras�
 
 * [TensorSpace 使用场景](#motivation)
 * [开始使用](#getting-start)
+* [Awesome TensorSpace](https://github.com/tensorspace-team/tensorspace/blob/master/awesome-tensorspace.md)
 * [使用样例](#example)
 * [文档](#documentation)
-* [更新日志](#changelog)
+* [更新日志](https://github.com/tensorspace-team/tensorspace/blob/master/CHANGELOG.md)
 * [开发人员](#contributors)
 * [联系方式](#contact)
 * [许可证](#license)
