@@ -364,9 +364,22 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	updateInputVis: function() {
 
-		for ( let i = 0; i < this.inputs.length; i ++ ) {
+		if ( this.configuration.feedInputs !== undefined ) {
 
-			this.inputs[ i ].updateValue( this.inputValue[ i ] );
+			for ( let i = 0; i < this.inputs.length; i ++ ) {
+
+				let feedIndex = this.configuration.feedInputs[ i ];
+				this.inputs[ i ].updateValue( this.inputValue[ feedIndex ] );
+
+			}
+
+		} else {
+
+			for ( let i = 0; i < this.inputs.length; i ++ ) {
+
+				this.inputs[ i ].updateValue( this.inputValue[ i ] );
+
+			}
 
 		}
 

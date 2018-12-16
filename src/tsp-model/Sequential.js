@@ -332,9 +332,10 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	updateInputVis: function() {
 
-		if ( this.predictor.multiInputs ) {
+		if ( this.configuration.feedInputs !== undefined ) {
 
-			this.layers[ 0 ].updateValue( this.inputValue[ 0 ] );
+			let feedIndex = this.configuration.feedInputs[ 0 ];
+			this.layers[ 0 ].updateValue( this.inputValue[ feedIndex ] );
 
 		} else {
 

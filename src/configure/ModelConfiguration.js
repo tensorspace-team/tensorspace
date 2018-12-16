@@ -13,6 +13,7 @@ function ModelConfiguration( config ) {
 	this.animationTimeRatio = 1;
 	this.minOpacity = 0.4;
 	this.predictDataShapes = undefined;
+	this.feedInputs = undefined;
 	this.color = {
 
 		background: 0x000000,
@@ -162,6 +163,12 @@ function ModelConfiguration( config ) {
 		if ( config.predictDataShapes !== undefined ) {
 
 			this.predictDataShapes = config.predictDataShapes;
+
+		}
+
+		if ( config.feedInputs !== undefined ) {
+
+			this.feedInputs = config.feedInputs;
 
 		}
 
