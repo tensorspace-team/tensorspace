@@ -5,6 +5,7 @@ A curated list of awesome things related to TensorSpace.
 ### Applications
 
 * [TensorSpace Playground](https://tensorspace.org/html/playground/index.html) - Online Deep Learning models built with TensorSpace by [tensorspace-team](https://github.com/tensorspace-team)
+* [TensorSpace Hello World](https://codepen.io/syt123450/pen/YRwZGg) - CodePen TensorSpace MNIST-handwritten example by [syt123450](https://github.com/syt123450)
 
 ### Tutorials
 
