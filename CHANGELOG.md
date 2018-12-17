@@ -2,6 +2,49 @@
 
 All notable changes to TensorSpace will be documented in this file.
 
+## v0.3.0 - Merry Christmas TensorSpace v0.3
+
+> 2018-12-17 ( 0.2.0 ==> 0.3.0 )
+
+In general, this version simplify TensorSpace Functional model configuration, add new way to construct TensorSpace layer, fix bug, improve TensorSpace playground UX and optimize docs.
+
+### Feature
+
+* Add Chirstmas logo [ecb7947](https://github.com/tensorspace-team/tensorspace/commit/ecb79477bd27b0ae3e97c179976f64ff43907aa7)
+* Add and export version attribute [#135](https://github.com/tensorspace-team/tensorspace/issues/135)
+* Add auto outputsOrder detect [#154](https://github.com/tensorspace-team/tensorspace/issues/154)
+* Add Shape constructor for layers [#152](https://github.com/tensorspace-team/tensorspace/issues/152)
+* Add auto pre-trained model input shape detection [#165](https://github.com/tensorspace-team/tensorspace/issues/165)
+* Add predictDataShapes for dynamically input shapes model [#170](https://github.com/tensorspace-team/tensorspace/issues/170)
+* Add feedInputs configuration for TensorSpace models [#172](https://github.com/tensorspace-team/tensorspace/issues/172)
+* Change shape constructor definition for Conv2d and Pooling2d [#155](https://github.com/tensorspace-team/tensorspace/issues/155)
+* Change GlobalPooling output shape dimension [#159](https://github.com/tensorspace-team/tensorspace/issues/159)
+* Improve keras preprocess doc [3a3cadb](https://github.com/tensorspace-team/tensorspace/commit/3a3cadb2400b0a75fbe6d52a5770b750886f43f6)
+* Improve Functional model’s reset function to re-align layers in the same level [#158](https://github.com/tensorspace-team/tensorspace/issues/158)
+* Deprecate multiInputs and inputShapes attribute in Loader in functional model [#168](https://github.com/tensorspace-team/tensorspace/issues/168)
+* Deprecate outputsOrder configuration for functional model [#154](https://github.com/tensorspace-team/tensorspace/issues/154)
+
+### Bug Fixed
+
+* Fix dense layer overlay [#150](https://github.com/tensorspace-team/tensorspace/issues/150)
+* Fix missing relation line in Activation2d [#157](https://github.com/tensorspace-team/tensorspace/issues/157)
+
+### Repo
+
+* Add CHANGELOG.md [306da0b](https://github.com/tensorspace-team/tensorspace/commit/306da0b3716f659d41e31e4700126f61f16bbf69)
+* Add awesome-tensorspace.md [5ee9216](https://github.com/tensorspace-team/tensorspace/commit/5ee9216b0307add6b1b17e6256faf8563dffc7ba)
+
+### Website
+
+* Add missing reset() doc for model [badcd32](https://github.com/tensorspace-team/tensorspace/commit/badcd32bef3fd9ffe17f6764fe956f7ff81388e9) [8d6b9d5](https://github.com/tensorspace-team/tensorspace/commit/8d6b9d5929d44c8dcf8a01c451457874bc226d01)
+* Add progress percentage for playground demos [#149](https://github.com/tensorspace-team/tensorspace/issues/149)
+* Add shape constructor doc for layers [#160](https://github.com/tensorspace-team/tensorspace/issues/160)
+* Change Yolo playground configuration [9e5afc3](https://github.com/tensorspace-team/tensorspace/commit/9e5afc378f9a5687159fcd24afd3e180324b161a)
+* Change layerType for merge layer [#145](https://github.com/tensorspace-team/tensorspace/issues/145)
+* Improve reset for lenet demo in playground [dbc9a58](https://github.com/tensorspace-team/tensorspace/commit/dbc9a586dfde817c5adb9e8e7f6cf05410c957fb)
+* Improve doc view for large device [30ad994](https://github.com/tensorspace-team/tensorspace/commit/30ad994783c935573b5d918d8a7712031c217ea2)
+* Improve playground button for lenet training example [6027684](https://github.com/tensorspace-team/tensorspace/commit/6027684d7e7c58e571eac278f4572324096ed69a)
+
 ## v0.2.0 - Hello TensorSpace v0.2
 
 > 2018-12-4 ( 0.1.0 ==> 0.2.0 )
