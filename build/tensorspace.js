@@ -430,7 +430,7 @@ function Predictor( model, config ) {
 	 * @type { boolean }
 	 */
 
-	this.multiInputs = false;
+	this.inputNum = undefined;
 
 	/**
 	 * Input shapes if model has multiple inputs.
@@ -439,14 +439,6 @@ function Predictor( model, config ) {
 	 */
 
 	this.inputShapes = undefined;
-
-	/**
-	 * Input shape if model has only one input.
-	 *
-	 * @type { Array }
-	 */
-
-	this.inputShape = undefined;
 
 	// Load Predictor's basic configuration.
 
@@ -464,45 +456,41 @@ Predictor.prototype = {
 
 	loadPredictorConfig: function( config ) {
 
-		// Add inputShape or inputShapes from config.
+		let inputShapes = [];
 
-		if ( this.model.modelType === "Sequential" ) {
+		if ( this.model.configuration.predictDataShapes !== undefined ) {
 
-			// In Sequential, has two input type.
+			let shapes = this.model.configuration.predictDataShapes;
 
-			if ( config.multiInputs !== undefined && config.multiInputs === true ) {
+			for ( let i = 0; i < shapes.length; i ++ ) {
 
-				// Multiple inputs
-
-				this.multiInputs = true;
-
-				this.inputShapes = config.inputShapes;
-
-			} else {
-
-				// Single input.
-
-				this.inputShape = this.model.layers[ 0 ].outputShape;
+				inputShapes.push( [ 1 ].concat( shapes[ i ] ) );
 
 			}
 
 		} else {
 
-			// In Model, multiple inputs.
+			let loadedModel = this.model.resource;
 
-			this.multiInputs = true;
+			let inputs = loadedModel.inputs;
 
-			let inputShapes = [];
+			this.inputNum = inputs.length;
 
-			for ( let i = 0; i < this.model.inputs.length; i ++ ) {
+			for ( let i = 0; i < inputs.length; i ++ ) {
 
-				inputShapes.push( this.model.inputs[ i ].outputShape );
+				let inputShape = inputs[ i ].shape;
+
+				// Support predict one input data at a time, set batch size to be 1.
+
+				inputShape[ 0 ] = 1;
+
+				inputShapes.push( inputShape );
 
 			}
 
-			this.inputShapes = inputShapes;
-
 		}
+
+		this.inputShapes = inputShapes;
 
 	},
 
@@ -515,34 +503,19 @@ Predictor.prototype = {
 
 	createInputTensor: function( data ) {
 
-		if ( this.multiInputs ) {
+		let inputData;
 
-			return this.createInputTensorList( data, this.inputShapes );
+		if ( this.model.modelType === "Sequential" && this.inputNum == 1 ) {
+
+			inputData = [ data ];
 
 		} else {
 
-			return this.createOneInputTensor( data, this.inputShape );
+			inputData = data;
 
 		}
 
-	},
-
-	/**
-	 * createOneInputTensor(), transfer an data array into a Tensor based on tensor shape.
-	 *
-	 * @param data, a list of input data, for example, [ 0.1, 0.15 ......, 0.2 ]
-	 * @param inputShape
-	 * @returns { tf.Tensor }
-	 */
-
-	createOneInputTensor: function( data, inputShape ) {
-
-		// Support predict one input data at a time, set batch size to be 1.
-
-		let batchSize = [ 1 ];
-		let predictTensorShape = batchSize.concat( inputShape );
-
-		return tf.tensor( data, predictTensorShape );
+		return this.createInputTensorList( inputData, this.inputShapes );
 
 	},
 
@@ -560,7 +533,7 @@ Predictor.prototype = {
 
 		for ( let i = 0; i < inputShapes.length; i ++ ) {
 
-			tensorList.push( this.createOneInputTensor( data[ i ], inputShapes[ i ] ) );
+			tensorList.push( tf.tensor( data[ i ], inputShapes[ i ] ));
 
 		}
 
@@ -728,6 +701,12 @@ TfjsLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		const loadedModel = await tf.loadModel( this.url );
 
 		this.model.resource = loadedModel;
+
+		if ( this.model.modelType === "Model" ) {
+
+			this.model.outputsOrder = loadedModel.outputNames;
+
+		}
 
 		this.setPredictor();
 
@@ -919,6 +898,12 @@ KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		const loadedModel = await tf.loadModel( this.url );
 
 		this.model.resource = loadedModel;
+
+		if ( this.model.modelType === "Model" ) {
+
+			this.model.outputsOrder = loadedModel.outputNames;
+
+		}
 
 		this.setPredictor();
 
@@ -1164,6 +1149,12 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		this.model.resource = loadedModel;
 
+		if ( this.model.modelType === "Model" ) {
+
+			this.model.outputsOrder = loadedModel.outputNames;
+
+		}
+
 		this.setPredictor();
 
 		if ( this.onCompleteCallback !== undefined ) {
@@ -1331,6 +1322,12 @@ LiveLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		this.model.resource = this.modelHandler;
 
+		if ( this.model.modelType === "Model" ) {
+
+			this.model.outputsOrder = this.model.outputNames;
+
+		}
+
 		this.setPredictor();
 
 		if ( this.onCompleteCallback !== undefined ) {
@@ -1390,7 +1387,7 @@ LiveLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
  * @author syt123450 / https://github.com/syt123450
  */
 
-function ModelConfiguration(config ) {
+function ModelConfiguration( config ) {
 
 	this.layerInitStatus = false;
 	this.layerShape = "rect";
@@ -1400,6 +1397,8 @@ function ModelConfiguration(config ) {
 	this.stats = false;
 	this.animationTimeRatio = 1;
 	this.minOpacity = 0.4;
+	this.predictDataShapes = undefined;
+	this.feedInputs = undefined;
 	this.color = {
 
 		background: 0x000000,
@@ -1543,6 +1542,18 @@ function ModelConfiguration(config ) {
 		if ( config.stats !== undefined ) {
 
 			this.stats = config.stats;
+
+		}
+
+		if ( config.predictDataShapes !== undefined ) {
+
+			this.predictDataShapes = config.predictDataShapes;
+
+		}
+
+		if ( config.feedInputs !== undefined ) {
+
+			this.feedInputs = config.feedInputs;
 
 		}
 
@@ -2730,9 +2741,10 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 	updateInputVis: function() {
 
-		if ( this.predictor.multiInputs ) {
+		if ( this.configuration.feedInputs !== undefined ) {
 
-			this.layers[ 0 ].updateValue( this.inputValue[ 0 ] );
+			let feedIndex = this.configuration.feedInputs[ 0 ];
+			this.layers[ 0 ].updateValue( this.inputValue[ feedIndex ] );
 
 		} else {
 
@@ -3231,9 +3243,8 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 	 * 2. reset TrackballControl;
 	 * 3. update camera setting in TSP.
 	 * 4. set layer to "initStatus", "close" or "open".
+	 * 5. rearrange layers in the same level
 	 */
-
-	// TODO: add rearrange.
 
 	reset: function() {
 
@@ -3243,6 +3254,11 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 
 			this.layers[ i ].reset();
+
+			let translateTime = this.layers[ i ].openTime;
+			let level = this.layerLookupMap[ this.layers[ i ].layerIndex ];
+
+			this.rearrangeLayerInLevel( level, translateTime );
 
 		}
 
@@ -3398,16 +3414,6 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 		}
 
-		if ( config.outputsOrder !== undefined ) {
-
-			this.outputsOrder = config.outputsOrder;
-
-		} else {
-
-			console.error( "\"outputsOrder\" is required for Model." );
-
-		}
-
 	},
 
 	createGraph: function() {
@@ -3471,9 +3477,22 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 	updateInputVis: function() {
 
-		for ( let i = 0; i < this.inputs.length; i ++ ) {
+		if ( this.configuration.feedInputs !== undefined ) {
 
-			this.inputs[ i ].updateValue( this.inputValue[ i ] );
+			for ( let i = 0; i < this.inputs.length; i ++ ) {
+
+				let feedIndex = this.configuration.feedInputs[ i ];
+				this.inputs[ i ].updateValue( this.inputValue[ feedIndex ] );
+
+			}
+
+		} else {
+
+			for ( let i = 0; i < this.inputs.length; i ++ ) {
+
+				this.inputs[ i ].updateValue( this.inputValue[ i ] );
+
+			}
 
 		}
 
@@ -5030,6 +5049,15 @@ function Layer( config ) {
 	 */
 
 	this.initStatus = "close";
+
+	/**
+	 * Whether user directly define the layer shape.
+	 * Set "true" if Layer's shape is predefined by user.
+	 *
+	 * @type { boolean }
+	 */
+
+	this.isShapePredefined = false;
 
 	// Load layer config.
 
@@ -6811,59 +6839,63 @@ Conv1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "filters" configuration is required.
-
-			if ( layerConfig.filters !== undefined ) {
-
-				this.filters = layerConfig.filters;
-				this.depth = layerConfig.filters;
-
-			} else {
-
-				console.error( "\"filters\" property is required for conv1d layer." );
-
-			}
-
-			// Optional configuration.
-
-			if ( layerConfig.strides !== undefined ) {
-
-				this.strides = layerConfig.strides;
-
-			}
-
-			if ( layerConfig.kernelSize !== undefined ) {
-
-				this.kernelSize = layerConfig.kernelSize;
-
-			}
-
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
-
-			if ( layerConfig.padding !== undefined ) {
-
-				if ( layerConfig.padding.toLowerCase() === "valid" ) {
-
-					this.padding = "valid";
-
-				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
-
-					this.padding = "same";
-
-				} else {
-
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
-
-				}
-
-			}
-
-			// Load user's predefined shape.
-
 			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined shape.
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
+				this.filters = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 1 ];
+
+			} else {
+
+				// "filters" configuration is required.
+
+				if ( layerConfig.filters !== undefined ) {
+
+					this.filters = layerConfig.filters;
+					this.depth = layerConfig.filters;
+
+				} else {
+
+					console.error( "\"filters\" property is required for conv1d layer." );
+
+				}
+
+				// Optional configuration.
+
+				if ( layerConfig.strides !== undefined ) {
+
+					this.strides = layerConfig.strides;
+
+				}
+
+				if ( layerConfig.kernelSize !== undefined ) {
+
+					this.kernelSize = layerConfig.kernelSize;
+
+				}
+
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
+
+				}
 
 			}
 
@@ -8388,15 +8420,6 @@ function Conv2d( config ) {
 
 	this.padding = "valid";
 
-	/**
-	 * Whether user directly define the layer shape.
-	 * Set "true" if Conv2d's shape is predefined by user.
-	 *
-	 * @type { boolean }
-	 */
-
-	this.isShapePredefined = false;
-
 	// Load user's Conv2d configuration.
 
 	this.loadLayerConfig( config );
@@ -8581,79 +8604,83 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// Optional configuration.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.kernelSize !== undefined ) {
+				// Load user's predefined layer shape.
 
-				if ( layerConfig.kernelSize instanceof Array ) {
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
 
-					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
-					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
-
-				} else {
-
-					this.kernelSize[ 0 ] = layerConfig.kernelSize;
-					this.kernelSize[ 1 ] = layerConfig.kernelSize;
-
-				}
-
-			}
-
-			if ( layerConfig.strides !== undefined ) {
-
-				if ( layerConfig.strides instanceof Array ) {
-
-					this.strides[ 0 ] = layerConfig.strides[ 0 ];
-					this.strides[ 1 ] = layerConfig.strides[ 1 ];
-
-				} else {
-
-					this.strides[ 0 ] = layerConfig.strides;
-					this.strides[ 1 ] = layerConfig.strides;
-
-				}
-
-			}
-
-			// "filters" configuration is required.
-
-			if ( layerConfig.filters !== undefined ) {
-
-				this.filters = layerConfig.filters;
-				this.depth = layerConfig.filters;
+				this.filters = layerConfig.shape[ 2 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 			} else {
 
-				console.error( "\"filters\" property is required for Conv2d layer." );
+				// "filters" configuration is required.
 
-			}
+				if ( layerConfig.filters !== undefined ) {
 
-			// Load user's predefined 2d shape.
-
-			if ( layerConfig.shape !== undefined ) {
-
-				this.isShapePredefined = true;
-				this.fmShape = layerConfig.shape;
-				this.width = this.fmShape[ 0 ];
-				this.height = this.fmShape[ 1 ];
-
-			}
-
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
-
-			if ( layerConfig.padding !== undefined ) {
-
-				if ( layerConfig.padding.toLowerCase() === "valid" ) {
-
-					this.padding = "valid";
-
-				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
-
-					this.padding = "same";
+					this.filters = layerConfig.filters;
+					this.depth = layerConfig.filters;
 
 				} else {
 
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+					console.error( "\"filters\" property is required for Conv2d layer." );
+
+				}
+
+				// Optional configuration.
+
+				if ( layerConfig.kernelSize !== undefined ) {
+
+					if ( layerConfig.kernelSize instanceof Array ) {
+
+						this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+						this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+
+					} else {
+
+						this.kernelSize[ 0 ] = layerConfig.kernelSize;
+						this.kernelSize[ 1 ] = layerConfig.kernelSize;
+
+					}
+
+				}
+
+				if ( layerConfig.strides !== undefined ) {
+
+					if ( layerConfig.strides instanceof Array ) {
+
+						this.strides[ 0 ] = layerConfig.strides[ 0 ];
+						this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+					} else {
+
+						this.strides[ 0 ] = layerConfig.strides;
+						this.strides[ 1 ] = layerConfig.strides;
+
+					}
+
+				}
+
+				if ( layerConfig.padding !== undefined ) {
+
+					// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+
+					if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
 
 				}
 
@@ -8717,15 +8744,6 @@ function Conv2dTranspose( config ) {
 	this.strides = [ 1, 1 ];
 
 	/**
-	 * 2d feature map shape, stored as array.
-	 * For example, [20, 20]
-	 *
-	 * @type { Array }
-	 */
-
-	this.fmShape = undefined;
-
-	/**
 	 * Padding mode.
 	 * "valid" or "same", default to "valid".
 	 *
@@ -8784,21 +8802,25 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// infer layer output shape from input shape and config.
+		if ( !this.isShapePredefined ) {
 
-		if ( this.padding === "same" ) {
+			// infer layer output shape from input shape and config.
 
-			// W * S
+			if ( this.padding === "same" ) {
 
-			this.width = this.inputShape[ 0 ] * this.strides[ 0 ];
-			this.height = this.inputShape[ 1 ] * this.strides[ 1 ];
+				// W * S
 
-		} else if ( this.padding === "valid" ) {
+				this.width = this.inputShape[ 0 ] * this.strides[ 0 ];
+				this.height = this.inputShape[ 1 ] * this.strides[ 1 ];
 
-			// ( W - 1 ) * S + F
+			} else if ( this.padding === "valid" ) {
 
-			this.width = ( this.inputShape[ 0 ] - 1 ) * this.strides[ 0 ] + this.kernelSize[ 0 ];
-			this.height = ( this.inputShape[ 1 ] - 1 ) * this.strides[ 1 ] + this.kernelSize[ 1 ];
+				// ( W - 1 ) * S + F
+
+				this.width = ( this.inputShape[ 0 ] - 1 ) * this.strides[ 0 ] + this.kernelSize[ 0 ];
+				this.height = ( this.inputShape[ 1 ] - 1 ) * this.strides[ 1 ] + this.kernelSize[ 1 ];
+
+			}
 
 		}
 
@@ -8912,68 +8934,83 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		if ( layerConfig !== undefined ) {
 
-			// "filters" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.filters !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.filters = layerConfig.filters;
-				this.depth = layerConfig.filters;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+
+				this.filters = layerConfig.shape[ 2 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 			} else {
 
-				console.error( "\"filters\" property is required for Conv2dTranspose layer." );
+				// "filters" configuration is required.
 
-			}
+				if ( layerConfig.filters !== undefined ) {
 
-			// Optional configuration.
-
-			if ( layerConfig.kernelSize !== undefined ) {
-
-				if ( layerConfig.kernelSize instanceof Array ) {
-
-					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
-					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+					this.filters = layerConfig.filters;
+					this.depth = layerConfig.filters;
 
 				} else {
 
-					this.kernelSize[ 0 ] = layerConfig.kernelSize;
-					this.kernelSize[ 0 ] = layerConfig.kernelSize;
+					console.error( "\"filters\" property is required for Conv2dTranspose layer." );
 
 				}
 
-			}
+				// Optional configuration.
 
-			if ( layerConfig.strides !== undefined ) {
+				if ( layerConfig.kernelSize !== undefined ) {
 
-				if ( layerConfig.strides instanceof Array ) {
+					if ( layerConfig.kernelSize instanceof Array ) {
 
-					this.strides[ 0 ] = layerConfig.strides[ 0 ];
-					this.strides[ 1 ] = layerConfig.strides[ 1 ];
+						this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+						this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
 
-				} else {
+					} else {
 
-					this.strides[ 0 ] = layerConfig.strides;
-					this.strides[ 1 ] = layerConfig.strides;
+						this.kernelSize[ 0 ] = layerConfig.kernelSize;
+						this.kernelSize[ 0 ] = layerConfig.kernelSize;
+
+					}
 
 				}
 
-			}
+				if ( layerConfig.strides !== undefined ) {
 
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+					if ( layerConfig.strides instanceof Array ) {
 
-			if ( layerConfig.padding !== undefined ) {
+						this.strides[ 0 ] = layerConfig.strides[ 0 ];
+						this.strides[ 1 ] = layerConfig.strides[ 1 ];
 
-				if ( layerConfig.padding.toLowerCase() === "same" ) {
+					} else {
 
-					this.padding = "same";
+						this.strides[ 0 ] = layerConfig.strides;
+						this.strides[ 1 ] = layerConfig.strides;
 
-				} else if ( layerConfig.padding.toLowerCase() === "valid" ) {
+					}
 
-					this.padding = "valid";
+				}
 
-				} else {
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
 
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
 
 				}
 
@@ -9074,25 +9111,35 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Two padding mode is the same as TensorFlow
+		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
-		if ( this.padding === "valid" ) {
+		if ( !this.isShapePredefined ) {
 
-			// ceil[ ( W - F + 1 ) / S ]
+			// Two padding mode is the same as TensorFlow
 
-			this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize[ 0 ] + 1 ) / this.strides[ 0 ] );
-			this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize[ 1 ] + 1 ) / this.strides[ 1 ] );
+			if ( this.padding === "valid" ) {
 
-		} else if ( this.padding === "same" ) {
+				// ceil[ ( W - F + 1 ) / S ]
 
-			// ceil( W / S )
+				this.width = Math.ceil( ( this.inputShape[ 0 ] - this.kernelSize[ 0 ] + 1 ) / this.strides[ 0 ] );
+				this.height = Math.ceil( ( this.inputShape[ 1 ] - this.kernelSize[ 1 ] + 1 ) / this.strides[ 1 ] );
 
-			this.width = Math.ceil( this.inputShape[ 0 ] / this.strides[ 0 ] );
-			this.height = Math.ceil( this.inputShape[ 1 ] / this.strides[ 0 ] );
+			} else if ( this.padding === "same" ) {
+
+				// ceil( W / S )
+
+				this.width = Math.ceil( this.inputShape[ 0 ] / this.strides[ 0 ] );
+				this.height = Math.ceil( this.inputShape[ 1 ] / this.strides[ 0 ] );
+
+			}
+
+			this.depth = this.inputShape[ 2 ] * this.depthMultiplier;
+
+		} else {
+
+			this.depthMultiplier = this.depth / this.inputShape[ 2 ];
 
 		}
-
-		this.depth = this.inputShape[ 2 ] * this.depthMultiplier;
 
 		// DepthwiseConv2d layer's outputShape has three dimension, that's why DepthwiseConv2d layer inherits from abstract layer "NativeLayer3d".
 
@@ -9234,61 +9281,74 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 
 		if ( layerConfig !== undefined ) {
 
-			// Optional configuration.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.kernelSize !== undefined ) {
+				// Load user's predefined layer shape.
 
-				if ( layerConfig.kernelSize instanceof Array ) {
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[0];
+				this.height = layerConfig.shape[1];
+				this.depth = layerConfig.shape[2];
 
-					this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
-					this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
+			} else {
 
-				} else {
+				// Optional configuration.
 
-					this.kernelSize[ 0 ] = layerConfig.kernelSize;
-					this.kernelSize[ 1 ] = layerConfig.kernelSize;
+				if ( layerConfig.kernelSize !== undefined ) {
 
-				}
+					if ( layerConfig.kernelSize instanceof Array ) {
 
-			}
+						this.kernelSize[ 0 ] = layerConfig.kernelSize[ 0 ];
+						this.kernelSize[ 1 ] = layerConfig.kernelSize[ 1 ];
 
-			if ( layerConfig.strides !== undefined ) {
+					} else {
 
-				if ( layerConfig.strides instanceof Array ) {
+						this.kernelSize[ 0 ] = layerConfig.kernelSize;
+						this.kernelSize[ 1 ] = layerConfig.kernelSize;
 
-					this.strides[ 0 ] = layerConfig.strides[ 0 ];
-					this.strides[ 1 ] = layerConfig.strides[ 1 ];
-
-				} else {
-
-					this.strides[ 0 ] = layerConfig.strides;
-					this.strides[ 1 ] = layerConfig.strides;
+					}
 
 				}
 
-			}
+				if ( layerConfig.strides !== undefined ) {
 
-			if ( layerConfig.depthMultiplier !== undefined ) {
+					if ( layerConfig.strides instanceof Array ) {
 
-				this.depthMultiplier = layerConfig.depthMultiplier;
+						this.strides[ 0 ] = layerConfig.strides[ 0 ];
+						this.strides[ 1 ] = layerConfig.strides[ 1 ];
 
-			}
+					} else {
 
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+						this.strides[ 0 ] = layerConfig.strides;
+						this.strides[ 1 ] = layerConfig.strides;
 
-			if ( layerConfig.padding !== undefined ) {
+					}
 
-				if ( layerConfig.padding.toLowerCase() === "valid" ) {
+				}
 
-					this.padding = "valid";
+				if ( layerConfig.depthMultiplier !== undefined ) {
 
-				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+					this.depthMultiplier = layerConfig.depthMultiplier;
 
-					this.padding = "same";
+				}
 
-				} else {
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
 
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
 
 				}
 
@@ -9374,10 +9434,16 @@ Cropping1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), 
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer and user's configuration.
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		this.width = this.inputShape[ 0 ] - this.croppingWidth;
-		this.depth = this.inputShape[ 1 ];
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer and user's configuration.
+
+			this.width = this.inputShape[ 0 ] - this.croppingWidth;
+			this.depth = this.inputShape[ 1 ];
+
+		}
 
 		// Cropping1d layer's outputShape has two dimension, that's why Cropping1d layer inherits from abstract layer "NativeLayer2d".
 
@@ -9513,16 +9579,28 @@ Cropping1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), 
 
 		if ( layerConfig !== undefined ) {
 
-			// "cropping" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig !== undefined ) {
+				// Load user's predefined shape.
 
-				this.cropping = layerConfig.cropping;
-				this.croppingWidth = layerConfig.cropping[ 0 ] + layerConfig.cropping[ 1 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
 
 			} else {
 
-				console.error( "\"cropping\" property is required for cropping1d layer." );
+				// "cropping" configuration is required.
+
+				if ( layerConfig !== undefined ) {
+
+					this.cropping = layerConfig.cropping;
+					this.croppingWidth = layerConfig.cropping[ 0 ] + layerConfig.cropping[ 1 ];
+
+				} else {
+
+					console.error( "\"cropping\" property is required for cropping1d layer." );
+
+				}
 
 			}
 
@@ -9605,12 +9683,17 @@ Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), 
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer and user's configuration.
+		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
-		this.width = this.inputShape[ 0 ] - this.croppingWidth;
-		this.height = this.inputShape[ 1 ] - this.croppingHeight;
+		if ( !this.isShapePredefined ) {
 
-		this.depth = this.inputShape[ 2 ];
+			// Calculate layer's shape from last layer and user's configuration.
+
+			this.width = this.inputShape[ 0 ] - this.croppingWidth;
+			this.height = this.inputShape[ 1 ] - this.croppingHeight;
+			this.depth = this.inputShape[ 2 ];
+
+		}
 
 		// Cropping2d layer's outputShape has three dimension, that's why Cropping2d layer inherits from abstract layer "NativeLayer3d".
 
@@ -9747,17 +9830,30 @@ Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), 
 
 		if ( layerConfig !== undefined ) {
 
-			// "cropping" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.cropping !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.cropping = layerConfig.cropping;
-				this.croppingWidth = layerConfig.cropping[ 0 ][ 0 ] + layerConfig.cropping[ 0 ][ 1 ];
-				this.croppingHeight = layerConfig.cropping[ 1 ][ 0 ] + layerConfig.cropping[ 1 ][ 1 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 			} else {
 
-				console.error( "\"cropping\" property is required for cropping2d layer." );
+				// "cropping" configuration is required.
+
+				if ( layerConfig.cropping !== undefined ) {
+
+					this.cropping = layerConfig.cropping;
+					this.croppingWidth = layerConfig.cropping[ 0 ][ 0 ] + layerConfig.cropping[ 0 ][ 1 ];
+					this.croppingHeight = layerConfig.cropping[ 1 ][ 0 ] + layerConfig.cropping[ 1 ][ 1 ];
+
+				} else {
+
+					console.error( "\"cropping\" property is required for cropping2d layer." );
+
+				}
 
 			}
 
@@ -14849,13 +14945,23 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			if ( layerConfig.units !== undefined ) {
+			if ( layerConfig.shape !== undefined ) {
 
-				this.width = layerConfig.units;
+				// Load user's predefined layer shape.
+
+				this.width = layerConfig.shape[ 0 ];
 
 			} else {
 
-				console.error( "\"units\" property is required for Ouput1d layer." );
+				if ( layerConfig.units !== undefined ) {
+
+					this.width = layerConfig.units;
+
+				} else {
+
+					console.error( "\"units\" property is required for Ouput1d layer." );
+
+				}
 
 			}
 
@@ -16515,8 +16621,6 @@ let YoloResultGenerator = (function() {
 
     }
 
-    //TODO implement iou & nms
-
 	function transferPrediction( prediction ) {
 
     	// prediction = {x:, y:, width:, height:, finalScore:, labelName:}
@@ -16623,18 +16727,19 @@ let YoloResultGenerator = (function() {
         // channelShape ： array = [13, 13]
         // outputShape : array = [416, 416] output image pixel
 
-        let widthRange = channelShape[ 0 ];
-        let heightRange = channelShape[ 1 ];
+
+		let gridWidth = channelShape[ 0 ];
+        let gridHeight = channelShape[ 1 ];
 
         let thresholdedPredictions = [];
 
         let output = [];
 
-		for ( let row = 0; row < widthRange; row ++ ) {
+		for ( let row = 0; row < gridHeight; row ++ ) {
 
-			for ( let col = 0; col < heightRange; col ++ ) {
+			for ( let col = 0; col < gridWidth; col ++ ) {
 
-				let start = row * widthRange + col;
+				let start = row * gridWidth + col;
 
 				let channelData = neuralData.slice( start * channelDepth, ( start + 1 ) * channelDepth );
 
@@ -16662,10 +16767,10 @@ let YoloResultGenerator = (function() {
 
                     let finalScore = bestClassScore * finalConfidence;
 
-                    let width = bw / widthRange * outputShape[ 0 ];
-                    let height = bh  / heightRange * outputShape[ 1 ];
-                    let x = bx / widthRange * outputShape[ 0 ] - width / 2;
-                    let y = by / heightRange * outputShape[ 1 ] - height / 2;
+                    let width = bw / gridWidth * outputShape[ 0 ];
+                    let height = bh  / gridHeight * outputShape[ 1 ];
+                    let x = bx / gridWidth * outputShape[ 0 ] - width / 2;
+                    let y = by / gridHeight * outputShape[ 1 ] - height / 2;
 
                     if ( finalScore > scoreThreshold ) {
 
@@ -16713,6 +16818,8 @@ let YoloResultGenerator = (function() {
                     y: nmsPredictions[i]["y"],
                     width: nmsPredictions[i]["width"],
                     height: nmsPredictions[i]["height"],
+					finalScore: nmsPredictions[i]["finalScore"],
+					className: nmsPredictions[i]["className"],
 
                 });
 
@@ -16720,6 +16827,7 @@ let YoloResultGenerator = (function() {
 
 		}
 
+		console.log( output );
 
 		return output;
 
@@ -18327,7 +18435,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
 
-			return this.actualWidth / 2 - this.calcCloseButtonPos().x + this.calcCloseButtonSize();
+			return this.actualWidth / 2 - this.calcCloseButtonPos().x + 8 * this.calcCloseButtonSize();
 
 		} else {
 
@@ -18998,17 +19106,23 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		let units = 1;
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		// Calculate output length.
+		if ( !this.isShapePredefined ) {
 
-		for ( let i = 0; i < this.lastLayer.outputShape.length; i++ ) {
+			let units = 1;
 
-			units *= this.lastLayer.outputShape[ i ];
+			// Calculate output length.
+
+			for ( let i = 0; i < this.lastLayer.outputShape.length; i++ ) {
+
+				units *= this.lastLayer.outputShape[ i ];
+
+			}
+
+			this.width = units;
 
 		}
-
-		this.width = units;
 
 		if ( this.paging ) {
 
@@ -19122,6 +19236,15 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	loadLayerConfig: function( layerConfig ) {
+
+		if ( layerConfig.shape !== undefined ) {
+
+			// Load user's predefined shape.
+
+			this.isShapePredefined = true;
+			this.width = layerConfig.shape[ 0 ];
+
+		}
 
 	}
 
@@ -19368,56 +19491,59 @@ Pooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "poolSize" configuration is required.
-
-			if ( layerConfig.poolSize !== undefined ) {
-
-				this.poolSize = layerConfig.poolSize;
-
-			} else {
-
-				console.error( "\"poolSize\" property is required for pooling1d layer." );
-
-			}
-
-			// "strides" configuration is required.
-
-			if ( layerConfig.strides !== undefined ) {
-
-				this.strides = layerConfig.strides;
-
-			} else {
-
-				console.error( "\"strides\" property is required for pooling1d layer." );
-
-			}
-
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
-
-			if ( layerConfig.padding !== undefined ) {
-
-				if ( layerConfig.padding === "valid" ) {
-
-					this.padding = "valid";
-
-				} else if ( layerConfig.padding === "same" ) {
-
-					this.padding = "same";
-
-				} else {
-
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
-
-				}
-
-			}
-
-			// Load user's predefined 2d shape.
-
 			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined shape.
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
+
+			} else {
+
+				// "poolSize" configuration is required.
+
+				if ( layerConfig.poolSize !== undefined ) {
+
+					this.poolSize = layerConfig.poolSize;
+
+				} else {
+
+					console.error( "\"poolSize\" property is required for pooling1d layer." );
+
+				}
+
+				// "strides" configuration is required.
+
+				if ( layerConfig.strides !== undefined ) {
+
+					this.strides = layerConfig.strides;
+
+				} else {
+
+					console.error( "\"strides\" property is required for pooling1d layer." );
+
+				}
+
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
+
+				}
 
 			}
 
@@ -19477,15 +19603,6 @@ function Pooling2d( config ) {
 
 	this.padding = "valid";
 
-	/**
-	 * Whether user directly define the layer shape.
-	 * Set "true" if Pooling2d's shape is predefined by user.
-	 *
-	 * @type { boolean }
-	 */
-
-	this.isShapePredefined = false;
-
 	// Load user's Pooling2d configuration.
 
 	this.loadLayerConfig( config );
@@ -19518,13 +19635,13 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		this.depth = this.lastLayer.depth;
-
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
 		if ( !this.isShapePredefined ) {
+
+			this.depth = this.lastLayer.depth;
 
 			if ( this.padding === "valid" ) {
 
@@ -19679,79 +19796,86 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "poolSize" configuration is required.
-
-			if ( layerConfig.poolSize !== undefined ) {
-
-				if ( layerConfig.poolSize instanceof Array ) {
-
-					this.poolSize[ 0 ] = layerConfig.poolSize[ 0 ];
-					this.poolSize[ 1 ] = layerConfig.poolSize[ 1 ];
-
-				} else {
-
-					this.poolSize[ 0 ] = layerConfig.poolSize;
-					this.poolSize[ 1 ] = layerConfig.poolSize;
-
-				}
-
-			} else {
-
-				console.error( "\"poolSize\" is required for Pooling2d layer" );
-
-			}
-
-			// "strides" configuration is required.
-
-			if ( layerConfig.strides !== undefined ) {
-
-				if ( layerConfig.strides instanceof Array ) {
-
-					this.strides[ 0 ] = layerConfig.strides[ 0 ];
-					this.strides[ 1 ] = layerConfig.strides[ 1 ];
-
-				} else {
-
-					this.strides[ 0 ] = layerConfig.strides;
-					this.strides[ 1 ] = layerConfig.strides;
-
-				}
-
-			} else {
-
-				console.error( "\"strides\" is required for Pooling2d layer" );
-
-			}
-
-			// Load user's predefined 2d shape.
+			// Load user's predefined layer shape.
 
 			if ( layerConfig.shape !== undefined ) {
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
 				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
-			}
+			} else {
 
-			// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+				// "poolSize" configuration is required.
 
-			if ( layerConfig.padding !== undefined ) {
+				if ( layerConfig.poolSize !== undefined ) {
 
-				if ( layerConfig.padding.toLowerCase() === "valid" ) {
+					if ( layerConfig.poolSize instanceof Array ) {
 
-					this.padding = "valid";
+						this.poolSize[ 0 ] = layerConfig.poolSize[ 0 ];
+						this.poolSize[ 1 ] = layerConfig.poolSize[ 1 ];
 
-				} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+					} else {
 
-					this.padding = "same";
+						this.poolSize[ 0 ] = layerConfig.poolSize;
+						this.poolSize[ 1 ] = layerConfig.poolSize;
+
+					}
 
 				} else {
 
-					console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+					console.error( "\"poolSize\" is required for Pooling2d layer" );
+
+				}
+
+				// "strides" configuration is required.
+
+				if ( layerConfig.strides !== undefined ) {
+
+					if ( layerConfig.strides instanceof Array ) {
+
+						this.strides[ 0 ] = layerConfig.strides[ 0 ];
+						this.strides[ 1 ] = layerConfig.strides[ 1 ];
+
+					} else {
+
+						this.strides[ 0 ] = layerConfig.strides;
+						this.strides[ 1 ] = layerConfig.strides;
+
+					}
+
+				} else {
+
+					console.error( "\"strides\" is required for Pooling2d layer" );
+
+				}
+
+				// Load padding mode, accept two mode: "valid" and "same", support both uppercase and lowercase.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					if ( layerConfig.padding.toLowerCase() === "valid" ) {
+
+						this.padding = "valid";
+
+					} else if ( layerConfig.padding.toLowerCase() === "same" ) {
+
+						this.padding = "same";
+
+					} else {
+
+						console.error( "\"padding\" property do not support for " + layerConfig.padding + ", use \"valid\" or \"same\" instead." );
+
+					}
 
 				}
 
 			}
+
+		} else {
+
+			console.log( "Lack config for Pooling2d." );
 
 		}
 
@@ -19949,12 +20073,12 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "targetShape" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.targetShape !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.targetShape = layerConfig.targetShape;
-				this.width = layerConfig.targetShape[ 0 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
 
 				// Reshape1d layer's outputShape has one dimension, that's why Reshape1d layer inherits from abstract layer "NativeLayer1d".
 
@@ -19962,7 +20086,22 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 			} else {
 
-				console.error( "\"targetShape\" property is required for reshape layer" );
+				// "targetShape" configuration is required.
+
+				if ( layerConfig.targetShape !== undefined ) {
+
+					this.targetShape = layerConfig.targetShape;
+					this.width = layerConfig.targetShape[ 0 ];
+
+					// Reshape1d layer's outputShape has one dimension, that's why Reshape1d layer inherits from abstract layer "NativeLayer1d".
+
+					this.outputShape = [ this.width ];
+
+				} else {
+
+					console.error( "\"targetShape\" property is required for reshape layer" );
+
+				}
 
 			}
 
@@ -20179,13 +20318,13 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "targetShape" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.targetShape !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.targetShape = layerConfig.targetShape;
-				this.width = layerConfig.targetShape[ 0 ];
-				this.depth = layerConfig.targetShape[ 1 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
 
 				// Reshape2d layer's outputShape has two dimension, that's why Reshape2d layer inherits from abstract layer "NativeLayer2d".
 
@@ -20193,7 +20332,23 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 			} else {
 
-				console.error( "\"targetShape\" property is required for reshape layer" );
+				// "targetShape" configuration is required.
+
+				if ( layerConfig.targetShape !== undefined ) {
+
+					this.targetShape = layerConfig.targetShape;
+					this.width = layerConfig.targetShape[ 0 ];
+					this.depth = layerConfig.targetShape[ 1 ];
+
+					// Reshape2d layer's outputShape has two dimension, that's why Reshape2d layer inherits from abstract layer "NativeLayer2d".
+
+					this.outputShape = [ this.width, this.depth ];
+
+				} else {
+
+					console.error( "\"targetShape\" property is required for reshape layer" );
+
+				}
 
 			}
 
@@ -20418,14 +20573,14 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "targetShape" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.targetShape !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.targetShape = layerConfig.targetShape;
-				this.width = layerConfig.targetShape[ 0 ];
-				this.height = layerConfig.targetShape[ 1 ];
-				this.depth = layerConfig.targetShape[ 2 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 				// Reshape3d layer's outputShape has three dimension, that's why Reshape3d layer inherits from abstract layer "NativeLayer3d".
 
@@ -20433,7 +20588,24 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 			} else {
 
-				console.error( "\"targetShape\" property is required for reshape layer" );
+				// "targetShape" configuration is required.
+
+				if ( layerConfig.targetShape !== undefined ) {
+
+					this.targetShape = layerConfig.targetShape;
+					this.width = layerConfig.targetShape[ 0 ];
+					this.height = layerConfig.targetShape[ 1 ];
+					this.depth = layerConfig.targetShape[ 2 ];
+
+					// Reshape3d layer's outputShape has three dimension, that's why Reshape3d layer inherits from abstract layer "NativeLayer3d".
+
+					this.outputShape = [ this.width, this.height, this.depth ];
+
+				} else {
+
+					console.error( "\"targetShape\" property is required for reshape layer" );
+
+				}
 
 			}
 
@@ -20471,29 +20643,61 @@ Reshape.prototype = {
 
 		// Check and create Reshape layer.
 
-		if ( config !== undefined && config.targetShape !== undefined ) {
+		if ( config !== undefined && ( config.targetShape !== undefined || config.shape !== undefined ) ) {
 
-			if ( config.targetShape.length === 1 ) {
+			if ( config.targetShape !== undefined ) {
 
-				// If targetShape dimension is 1, create Reshape1d.
+				if ( config.targetShape.length === 1 ) {
 
-				return new Reshape1d( config );
+					// If targetShape dimension is 1, create Reshape1d.
 
-			} else if ( config.targetShape.length === 2 ) {
+					return new Reshape1d( config );
 
-				// If targetShape dimension is 2, create Reshape2d.
+				} else if ( config.targetShape.length === 2 ) {
 
-				return new Reshape2d( config );
+					// If targetShape dimension is 2, create Reshape2d.
 
-			} else if ( config.targetShape.length === 3 ) {
+					return new Reshape2d( config );
 
-				// If targetShape dimension is 3, create Reshape3d.
+				} else if ( config.targetShape.length === 3 ) {
 
-				return new Reshape3d( config );
+					// If targetShape dimension is 3, create Reshape3d.
 
-			} else {
+					return new Reshape3d( config );
 
-				console.error( "Can not reshape with target shape dimension " + config.targetShape.length );
+				} else {
+
+					console.error( "Can not reshape with target shape dimension " + config.targetShape.length );
+
+				}
+
+			}
+
+			if ( config.shape !== undefined ) {
+
+				if ( config.shape.length === 1 ) {
+
+					// If targetShape dimension is 1, create Reshape1d.
+
+					return new Reshape1d( config );
+
+				} else if ( config.shape.length === 2 ) {
+
+					// If targetShape dimension is 2, create Reshape2d.
+
+					return new Reshape2d( config );
+
+				} else if ( config.shape.length === 3 ) {
+
+					// If targetShape dimension is 3, create Reshape3d.
+
+					return new Reshape3d( config );
+
+				} else {
+
+					console.error( "Can not reshape with target shape dimension " + config.shape.length );
+
+				}
 
 			}
 
@@ -20661,25 +20865,36 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "units" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.units !== undefined ) {
+				// Load user's predefined shape.
 
-				this.width = layerConfig.units;
-
-				// Dense layer's outputShape has one dimension, that's why Dense layer inherits from abstract layer "NativeLayer1d".
-
-				this.outputShape = [ layerConfig.units ];
-
-				if ( this.paging ) {
-
-					this.totalSegments = Math.ceil( this.width / this.segmentLength );
-
-				}
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
 
 			} else {
 
-				console.error( "The \"unit\" property is required for dense layer." );
+				// "units" configuration is required.
+
+				if ( layerConfig.units !== undefined ) {
+
+					this.width = layerConfig.units;
+
+					// Dense layer's outputShape has one dimension, that's why Dense layer inherits from abstract layer "NativeLayer1d".
+
+					this.outputShape = [ layerConfig.units ];
+
+					if ( this.paging ) {
+
+						this.totalSegments = Math.ceil( this.width / this.segmentLength );
+
+					}
+
+				} else {
+
+					console.error( "The \"unit\" property is required for dense layer." );
+
+				}
 
 			}
 
@@ -20758,11 +20973,17 @@ Padding1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer and user's configuration.
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		this.contentWidth = this.inputShape[ 0 ];
-		this.width = this.contentWidth + this.paddingWidth;
-		this.depth = this.inputShape[ 1 ];
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer and user's configuration.
+
+			this.contentWidth = this.inputShape[ 0 ];
+			this.width = this.contentWidth + this.paddingWidth;
+			this.depth = this.inputShape[ 1 ];
+
+		}
 
 		// Padding1d layer's outputShape has two dimension, that's why Padding1d layer inherits from abstract layer "NativeLayer2d".
 
@@ -20898,19 +21119,31 @@ Padding1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "padding" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.padding !== undefined ) {
+				// Load user's predefined shape.
 
-				// Calculate padding parameters from user's padding config.
-
-				this.paddingLeft = layerConfig.padding;
-				this.paddingRight = layerConfig.padding;
-				this.paddingWidth = this.paddingLeft + this.paddingRight;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
 
 			} else {
 
-				console.error( "\"padding\" property is required for padding layer." );
+				// "padding" configuration is required.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					// Calculate padding parameters from user's padding config.
+
+					this.paddingLeft = layerConfig.padding;
+					this.paddingRight = layerConfig.padding;
+					this.paddingWidth = this.paddingLeft + this.paddingRight;
+
+				} else {
+
+					console.error( "\"padding\" property is required for padding layer." );
+
+				}
 
 			}
 
@@ -20995,13 +21228,19 @@ Padding2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		// Calculate layer's shape from last layer and user's configuration.
+		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
-		this.contentWidth = this.lastLayer.width;
-		this.contentHeight = this.lastLayer.height;
-		this.depth = this.lastLayer.depth;
-		this.width = this.contentWidth + this.paddingWidth;
-		this.height = this.contentHeight + this.paddingHeight;
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer and user's configuration.
+
+			this.contentWidth = this.lastLayer.width;
+			this.contentHeight = this.lastLayer.height;
+			this.depth = this.lastLayer.depth;
+			this.width = this.contentWidth + this.paddingWidth;
+			this.height = this.contentHeight + this.paddingHeight;
+
+		}
 
 		// Padding2d layer's outputShape has three dimension, that's why Padding2d layer inherits from abstract layer "NativeLayer3d".
 
@@ -21138,23 +21377,36 @@ Padding2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 
 		if ( layerConfig !== undefined ) {
 
-			// "padding" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.padding !== undefined ) {
+				// Load user's predefined layer shape.
 
-				// Calculate padding parameters from user's padding config.
-
-				this.paddingTop = layerConfig.padding[ 0 ];
-				this.paddingBottom = layerConfig.padding[ 0 ];
-				this.paddingLeft = layerConfig.padding[ 1 ];
-				this.paddingRight = layerConfig.padding[ 1 ];
-
-				this.paddingHeight = this.paddingTop + this.paddingBottom;
-				this.paddingWidth = this.paddingLeft + this.paddingRight;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[0];
+				this.height = layerConfig.shape[1];
+				this.depth = layerConfig.shape[2];
 
 			} else {
 
-				console.error( "\"padding\" property is required for padding layer" );
+				// "padding" configuration is required.
+
+				if ( layerConfig.padding !== undefined ) {
+
+					// Calculate padding parameters from user's padding config.
+
+					this.paddingTop = layerConfig.padding[ 0 ];
+					this.paddingBottom = layerConfig.padding[ 0 ];
+					this.paddingLeft = layerConfig.padding[ 1 ];
+					this.paddingRight = layerConfig.padding[ 1 ];
+
+					this.paddingHeight = this.paddingTop + this.paddingBottom;
+					this.paddingWidth = this.paddingLeft + this.paddingRight;
+
+				} else {
+
+					console.error( "\"padding\" property is required for padding layer" );
+
+				}
 
 			}
 
@@ -21224,10 +21476,16 @@ UpSampling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer and user's configuration.
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		this.width = this.inputShape[ 0 ] * this.size;
-		this.depth = this.inputShape[ 1 ];
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer and user's configuration.
+
+			this.width = this.inputShape[ 0 ] * this.size;
+			this.depth = this.inputShape[ 1 ];
+
+		}
 
 		// UpSampling1d layer's outputShape has two dimension, that's why UpSampling1d layer inherits from abstract layer "NativeLayer2d".
 
@@ -21363,15 +21621,27 @@ UpSampling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "size" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.size !== undefined ) {
+				// Load user's predefined shape.
 
-				this.size = layerConfig.size;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
 
 			} else {
 
-				console.error( "\"size\" property is required for UpSampling1d layer." );
+				// "size" configuration is required.
+
+				if ( layerConfig.size !== undefined ) {
+
+					this.size = layerConfig.size;
+
+				} else {
+
+					console.error( "\"size\" property is required for UpSampling1d layer." );
+
+				}
 
 			}
 
@@ -21421,15 +21691,6 @@ function UpSampling2d( config ) {
 	this.widthSize = undefined;
 	this.heightSize = undefined;
 
-	/**
-	 * Whether user directly define the layer shape.
-	 * Set "true" if UpSampling2d's shape is predefined by user.
-	 *
-	 * @type { boolean }
-	 */
-
-	this.isShapePredefined = false;
-
 	// Load user's UpSampling2d configuration.
 
 	this.loadLayerConfig( config );
@@ -21462,8 +21723,6 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		this.depth = this.lastLayer.depth;
-
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
@@ -21472,6 +21731,7 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 			this.width = this.lastLayer.width * this.widthSize;
 			this.height = this.lastLayer.height * this.heightSize;
+			this.depth = this.lastLayer.depth;
 
 		}
 
@@ -21616,28 +21876,30 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "size" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.size !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.size = layerConfig.size;
-				this.widthSize = layerConfig.size[ 0 ];
-				this.heightSize = layerConfig.size[ 1 ];
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 			} else {
 
-				console.error( "\"size\" property is required for UpSampling layer" );
+				// "size" configuration is required.
 
-			}
+				if ( layerConfig.size !== undefined ) {
 
-			// Load user's predefined 2d shape.
+					this.size = layerConfig.size;
+					this.widthSize = layerConfig.size[ 0 ];
+					this.heightSize = layerConfig.size[ 1 ];
 
-			if ( layerConfig.shape !== undefined ) {
+				} else {
 
-				this.isShapePredefined = true;
-				this.fmShape = layerConfig.shape;
-				this.width = layerConfig.shape[ 0 ];
-				this.height = layerConfig.shape[ 1 ];
+					console.error( "\"size\" property is required for UpSampling layer" );
+
+				}
 
 			}
 
@@ -21919,12 +22181,16 @@ GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototyp
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		this.inputShape = this.lastLayer.outputShape;
-		this.depth = this.inputShape[ 1 ];
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		// GlobalPooling1d layer's outputShape has two dimension, that's why GlobalPooling1d layer inherits from abstract layer "NativeLayer2d".
+		if ( !this.isShapePredefined ) {
 
-		this.outputShape = [ 1, this.depth ];
+			this.inputShape = this.lastLayer.outputShape;
+			this.depth = this.inputShape[ 1 ];
+
+		}
+
+		this.outputShape = [ this.depth ];
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
@@ -22112,6 +22378,30 @@ GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototyp
 
 		}
 
+	},
+
+	/**
+	 * loadLayerConfig() Load user's configuration into GlobalPooling1d.
+	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
+	 *
+	 * @param { JSON } layerConfig, user's configuration for GlobalPooling1d.
+	 */
+
+	loadLayerConfig: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined shape.
+
+				this.isShapePredefined = true;
+				this.depth = layerConfig.shape[ 0 ];
+
+			}
+
+		}
+
 	}
 
 } );
@@ -22170,11 +22460,15 @@ GlobalPooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
 
-		this.depth = this.lastLayer.depth;
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		// GlobalPooling2d layer's outputShape has three dimension, that's why GlobalPooling2d layer inherits from abstract layer "NativeLayer3d".
+		if ( !this.isShapePredefined ) {
 
-		this.outputShape = [ 1, 1, this.depth ];
+			this.depth = this.lastLayer.depth;
+
+		}
+
+		this.outputShape = [ this.depth ];
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
@@ -22364,6 +22658,30 @@ GlobalPooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 		}
 
 	},
+
+	/**
+	 * loadLayerConfig() Load user's configuration into GlobalPooling2d.
+	 * The configuration load in this function sometimes has not been loaded in loadBasicLayerConfig.
+	 *
+	 * @param { JSON } layerConfig, user's configuration for GlobalPooling2d.
+	 */
+
+	loadLayerConfig: function( layerConfig ) {
+
+		if ( layerConfig !== undefined ) {
+
+			if ( layerConfig.shape !== undefined ) {
+
+				// Load user's predefined shape.
+
+				this.isShapePredefined = true;
+				this.depth = layerConfig.shape[ 0 ];
+
+			}
+
+		}
+
+	}
 
 } );
 
@@ -22902,7 +23220,13 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		this.width = this.inputShape[ 0 ];
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
+
+		if ( !this.isShapePredefined ) {
+
+			this.width = this.inputShape[ 0 ];
+
+		}
 
 		if ( this.paging ) {
 
@@ -23019,15 +23343,26 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "activation" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.activation !== undefined ) {
+				// Load user's predefined shape.
 
-				this.activation = layerConfig.activation;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
 
 			} else {
 
-				console.error( "\"activation\" property is required for activation1d layer." );
+				// "activation" configuration is required.
+
+				if ( layerConfig.activation !== undefined ) {
+
+					this.activation = layerConfig.activation;
+
+				} else {
+
+					console.error( "\"activation\" property is required for activation1d layer." );
+
+				}
 
 			}
 
@@ -23100,10 +23435,16 @@ Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer.
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		this.width = this.inputShape[ 0 ];
-		this.depth = this.inputShape[ 1 ];
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer.
+
+			this.width = this.inputShape[ 0 ];
+			this.depth = this.inputShape[ 1 ];
+
+		}
 
 		// Activation2d layer's outputShape has two dimension, that's why Activation2d layer inherits from abstract layer "NativeLayer2d".
 
@@ -23202,15 +23543,15 @@ Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 			relativeElements = this.lastLayer.provideRelativeElements( request ).elementList;
 
-		} else if ( selectedElement.elementType === "featureMap" ) {
+		} else if ( selectedElement.elementType === "gridLine" ) {
 
 			// Get element which has the same index.
 
-			let fmIndex = selectedElement.fmIndex;
+			let gridIndex = selectedElement.gridIndex;
 
 			let request = {
 
-				index: fmIndex
+				index: gridIndex
 
 			};
 
@@ -23241,15 +23582,27 @@ Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "activation" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.activation !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.activation = layerConfig.activation;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.depth = layerConfig.shape[ 1 ];
 
 			} else {
 
-				console.error( "\"activation\" property is required for activation1d layer." );
+				// "activation" configuration is required.
+
+				if ( layerConfig.activation !== undefined ) {
+
+					this.activation = layerConfig.activation;
+
+				} else {
+
+					console.error( "\"activation\" property is required for activation1d layer." );
+
+				}
 
 			}
 
@@ -23322,11 +23675,17 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 		this.inputShape = this.lastLayer.outputShape;
 
-		// Calculate layer's shape from last layer.
+		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
-		this.width = this.inputShape[ 0 ];
-		this.height = this.inputShape[ 1 ];
-		this.depth = this.inputShape[ 2 ];
+		if ( !this.isShapePredefined ) {
+
+			// Calculate layer's shape from last layer.
+
+			this.width = this.inputShape[ 0 ];
+			this.height = this.inputShape[ 1 ];
+			this.depth = this.inputShape[ 2 ];
+
+		}
 
 		// Activation3d layer's outputShape has three dimension, that's why Activation3d layer inherits from abstract layer "NativeLayer3d".
 
@@ -23457,15 +23816,28 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 		if ( layerConfig !== undefined ) {
 
-			// "activation" configuration is required.
+			if ( layerConfig.shape !== undefined ) {
 
-			if ( layerConfig.activation !== undefined ) {
+				// Load user's predefined layer shape.
 
-				this.activation = layerConfig.activation;
+				this.isShapePredefined = true;
+				this.width = layerConfig.shape[ 0 ];
+				this.height = layerConfig.shape[ 1 ];
+				this.depth = layerConfig.shape[ 2 ];
 
 			} else {
 
-				console.error( "\"activation\" property is required for activation3d layer." );
+				// "activation" configuration is required.
+
+				if ( layerConfig.activation !== undefined ) {
+
+					this.activation = layerConfig.activation;
+
+				} else {
+
+					console.error( "\"activation\" property is required for activation3d layer." );
+
+				}
 
 			}
 
@@ -26709,7 +27081,7 @@ MergedLayer1d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		if ( ( this.isOpen && !this.isWaitClose ) || this.isWaitOpen ) {
 
-			return this.actualWidth / 2 - this.calcCloseButtonPos().x + this.calcCloseButtonSize();
+			return this.actualWidth / 2 - this.calcCloseButtonPos().x + 8 * this.calcCloseButtonSize();
 
 		} else {
 
@@ -29747,8 +30119,11 @@ let models = {
 
 };
 
+let version = "0.3.0";
+
 exports.models = models;
 exports.layers = layers;
+exports.version = version;
 
 return exports;
 
