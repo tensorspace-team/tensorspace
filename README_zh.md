@@ -69,7 +69,7 @@ TensorSpace 降低了前端开发者进行深度学习相关应用开发的门�
 
 * **第一步: 下载 TensorSpace.js**
 
-我们提供了三种下载 TensorSpace.js 的方法，它们分别是 npm、yarn 以及 来自官方网站。
+我们提供了四种下载 TensorSpace.js 的方法，它们分别是 npm、yarn 以及 来自官方网站。
 
 途径 1: NPM
 ```bash
@@ -80,8 +80,12 @@ npm install tensorspace
 ```bash
 yarn add tensorspace
 ```
+途径 3：CDN
+```html
+<script src="https://cdn.jsdelivr.net/npm/tensorspace@0.3.0/build/tensorspace.min.js"></script>
+```
 
-途径 3: [官方网站下载](https://tensorspace.org/index_zh.html#download)
+途径 4: [官方网站下载](https://tensorspace.org/index_zh.html#download)
 
 * **第二步: 安装依赖库**
 

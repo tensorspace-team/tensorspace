@@ -63,7 +63,7 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
 
 * **Step 1: Download TensorSpace.js**
 
-There are three ways to download TensorSpace.js: npm, yarn, or official website
+There are four ways to download TensorSpace.js: npm, yarn, CDN, or official website
 
 Option 1: NPM
 ```bash
@@ -75,7 +75,13 @@ Option 2: Yarn
 yarn add tensorspace
 ```
 
-Option 3: [Website download page](https://tensorspace.org/index.html#download)
+Option 3: CDN
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/tensorspace@0.3.0/build/tensorspace.min.js"></script>
+```
+
+Option 4: [Website download page](https://tensorspace.org/index.html#download)
 
 * **Step 2: Install Dependency**
 
