@@ -54,6 +54,15 @@
         "code",
         "design"
       ]
+    },
+    {
+      "login": "dylans",
+      "name": "Dylan Schiemann",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/97291?s=400&v=4",
+      "profile": "https://github.com/dylans",
+      "contributions": [
+        "blog"
+      ]
     }
   ]
 }
