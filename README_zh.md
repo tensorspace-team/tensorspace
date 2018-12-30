@@ -1,5 +1,5 @@
 <p align="center">
-<img width=150 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/logo_christmas.png">
+<img width=150 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/logo.png">
 </p>
 <h1 align="center">TensorSpace.js</h1>
 <p align="center"><b>Present Tensor in Space</b></p>
