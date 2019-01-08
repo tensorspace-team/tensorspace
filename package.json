@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "build": "rollup -c",
-    "build-publish": "rollup -c && uglifyjs build/tensorspace.js -b beautify=false,preamble='\"// https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE\"' --source-map \"root='tensorspace.js',url='tensorspace.min.js.map'\" --output build/tensorspace.min.js",
+    "build-prod": "rollup --config rollup.config.prod.js",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },
@@ -23,6 +23,8 @@
     "@tweenjs/tween.js": "^17.2.0",
     "install": "^0.12.1",
     "npm": "^6.4.1",
+    "rollup-plugin-terser": "^4.0.1",
+    "terser": "^3.14.1",
     "three": "^0.98.0"
   },
   "devDependencies": {
