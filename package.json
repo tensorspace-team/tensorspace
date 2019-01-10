@@ -5,8 +5,8 @@
   "main": "build/tensorspace.module.js",
   "scripts": {
     "test": "mocha",
-    "build": "rollup -c",
-    "build-prod": "rollup --config rollup.config.prod.js",
+    "build": "rollup --config rollup.config.js",
+    "build-npm": "rollup --config rollup.config.npm.js",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },

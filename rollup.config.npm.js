@@ -11,6 +11,18 @@ let terserOptions = {
 }
 
 export default [
+    // Build regular version for distribution
+    {
+        input: 'src/tensorspace.js',
+        output: [
+            {
+                format: 'iife',
+                file: 'dist/tensorspace.js',
+                name: "TSP",
+                sourcemap: true,
+            }
+        ],
+    },
     // Build minified version for distribution
     {
         input: 'src/tensorspace.js',
@@ -18,7 +30,7 @@ export default [
         output: [
             {
                 format: 'iife',
-                file: 'build/tensorspace.min.js',
+                file: 'dist/tensorspace.min.js',
                 name: "TSP",
                 sourcemap: true,
             }
