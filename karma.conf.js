@@ -35,7 +35,7 @@ module.exports = function(config) {
       // {pattern: 'build/tensorspace.min.js.map', included: true},
       {pattern: 'test/testcase.html', included: true},
       {pattern: 'test/template.html', included: true},
-      {pattern: 'test/e2e-tests.js', included: true, watch: true},
+      {pattern: 'test/e2e/*', included: true, watch: true},
     ],
     preprocessors: {
       'test/*.html': ['html2js']
