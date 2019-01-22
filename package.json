@@ -4,7 +4,8 @@
   "description": "Neural network 3D visualization framework",
   "main": "build/tensorspace.module.js",
   "scripts": {
-    "test": "mocha",
+    "test": "npm run test-unit && npm run test-e2e",
+    "test-unit": "mocha",
     "test-e2e": "./scripts/test-e2e.sh",
     "build": "rollup --config rollup.config.js",
     "build-npm": "rollup --config rollup.config.npm.js",
