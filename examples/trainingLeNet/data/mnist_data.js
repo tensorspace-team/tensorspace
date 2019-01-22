@@ -1,8 +1,3 @@
-/**
- * The data and data script is modified from TensorFlow.js's official repo.
- * Checkout TensorFlow.js's official tutorial for more information: https://js.tensorflow.org/tutorials/mnist.html
- */
-
 const IMAGE_SIZE = 784;
 const NUM_CLASSES = 10;
 const NUM_DATASET_ELEMENTS = 65000;
@@ -71,9 +66,7 @@ class MnistData {
 
 				}
 
-				this.datasetImages = new Float32Array( datasetBytesBuffer );
-
-				resolve();
+				resolve(datasetBytesBuffer);
 
 			};
 
@@ -85,73 +78,36 @@ class MnistData {
 		const [ imgResponse, labelsResponse ] =
 			await Promise.all( [ imgRequest, labelsRequest ] );
 
-		this.datasetLabels = new Uint8Array( await labelsResponse.arrayBuffer() );
+		const datasetImages = new Float32Array( imgResponse );
+		const datasetLabels = new Uint8Array( await labelsResponse.arrayBuffer() );
 
-		this.trainIndices = tf.util.createShuffledIndices( NUM_TRAIN_ELEMENTS );
-		this.testIndices = tf.util.createShuffledIndices( NUM_TEST_ELEMENTS );
-
-		this.trainImages =
-			this.datasetImages.slice( 0, IMAGE_SIZE * NUM_TRAIN_ELEMENTS );
-		this.testImages = this.datasetImages.slice( IMAGE_SIZE * NUM_TRAIN_ELEMENTS );
-		this.trainLabels =
-			this.datasetLabels.slice( 0, NUM_CLASSES * NUM_TRAIN_ELEMENTS );
-		this.testLabels =
-			this.datasetLabels.slice( NUM_CLASSES * NUM_TRAIN_ELEMENTS );
+		this.createDataset(datasetImages, datasetLabels);
 
 	}
 
-	nextTrainBatch( batchSize ) {
+	createDataset(datasetImages, datasetLabels) {
 
-		return this.nextBatch(
+		let imageIndex = 0;
+		let labelIndex = 0;
 
-			batchSize, [ this.trainImages, this.trainLabels ], () => {
+		let dataItems = [];
 
-				this.shuffledTrainIndex =
-					( this.shuffledTrainIndex + 1 ) % this.trainIndices.length;
-				return this.trainIndices[ this.shuffledTrainIndex ];
+		for (let i = 0; i < NUM_DATASET_ELEMENTS; i ++) {
+			const imageArray = datasetImages.slice(imageIndex, imageIndex + IMAGE_SIZE);
+			const labelArray = datasetLabels.slice(labelIndex, labelIndex + NUM_CLASSES);
 
-			}
+			imageIndex += IMAGE_SIZE;
+			labelIndex += NUM_CLASSES;
 
-		);
-
-	}
-
-	nextTestBatch( batchSize ) {
-
-		return this.nextBatch( batchSize, [ this.testImages, this.testLabels ], () => {
-
-			this.shuffledTestIndex =
-				( this.shuffledTestIndex + 1 ) % this.testIndices.length;
-
-			return this.testIndices[ this.shuffledTestIndex ];
-
-		} );
-
-	}
-
-	nextBatch( batchSize, data, index ) {
-
-		const batchImagesArray = new Float32Array( batchSize * IMAGE_SIZE );
-		const batchLabelsArray = new Uint8Array( batchSize * NUM_CLASSES );
-
-		for ( let i = 0; i < batchSize; i ++ ) {
-
-			const idx = index();
-
-			const image =
-				data[ 0 ].slice( idx * IMAGE_SIZE, idx * IMAGE_SIZE + IMAGE_SIZE );
-			batchImagesArray.set( image, i * IMAGE_SIZE );
-
-			const label =
-				data[ 1 ].slice( idx * NUM_CLASSES, idx * NUM_CLASSES + NUM_CLASSES );
-			batchLabelsArray.set( label, i * NUM_CLASSES );
-
+			dataItems.push([imageArray, labelArray]);
 		}
 
-		const xs = tf.tensor2d( batchImagesArray, [ batchSize, IMAGE_SIZE ] );
-		const labels = tf.tensor2d( batchLabelsArray, [ batchSize, NUM_CLASSES ] );
+		let dataset = tf.data.array(dataItems).map(([arrayImage, label])=> {
+			return [tf.tensor(arrayImage, [28, 28, 1]), tf.tensor(label)];
+		}).shuffle(10);
 
-		return { xs, labels };
+		this.trainDataset = dataset.take(NUM_TRAIN_ELEMENTS);
+		this.testDataset = dataset.skip(NUM_TRAIN_ELEMENTS).take(NUM_TEST_ELEMENTS);
 
 	}
 

@@ -297,52 +297,21 @@
 
 	async function train() {
 
-		const BATCH_SIZE = 10;
-		const TRAIN_BATCHES = 1000;
+		const TRAIN_BATCH_SIZE = 10;
+		const BATCH_PER_EPOCH = 10;
+		const TRAIN_EPOCHS = 100;
 
-		const TEST_BATCH_SIZE = 1000;
-		const TEST_ITERATION_FREQUENCY = 2;
-
-		for ( let i = 0; i < TRAIN_BATCHES; i ++ ) {
-
-			const batch = data.nextTrainBatch( BATCH_SIZE );
-
-			let testBatch;
-			let validationData;
-
-			if ( i % TEST_ITERATION_FREQUENCY === 0 ) {
-
-				testBatch = data.nextTestBatch( TEST_BATCH_SIZE );
-				validationData = [
-
-					testBatch.xs.reshape( [ TEST_BATCH_SIZE, 28, 28, 1 ] ), testBatch.labels
-
-				];
-
+		await tfjsTrainingModel.fitDataset(data.trainDataset.batch(TRAIN_BATCH_SIZE), {
+			batchesPerEpoch: BATCH_PER_EPOCH,
+			epochs: TRAIN_EPOCHS,
+			callbacks: {
+                onEpochEnd: async (epoch, logs) => {
+					const accuracy = logs[ 'acc' ];
+					console.log( accuracy );
+					tspModel.predict( data5 );
+                }
 			}
-
-			const history = await tfjsTrainingModel.fit(
-
-				batch.xs.reshape( [ BATCH_SIZE, 28, 28, 1 ] ),
-				batch.labels,
-				{
-
-					batchSize: BATCH_SIZE,
-					validationData,
-					epochs: 1
-
-				}
-			);
-
-			if ( i % TEST_ITERATION_FREQUENCY === 0 ) {
-
-				const accuracy = history.history.acc[ 0 ];
-				console.log( accuracy );
-				tspModel.predict( data5 );
-
-			}
-
-		}
+		});
 
 	}
 
