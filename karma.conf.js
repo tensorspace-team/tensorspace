@@ -1,5 +1,9 @@
+/**
+ * @author botime / https://github.com/botime
+ */
+
 // puppeteer will download Chromium during
-process.env.CHROME_BIN = require('puppeteer').executablePath()
+process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 let isCI = typeof process.env.CI !== 'undefined' &&
     (process.env.CI.toLowerCase() == 'true');
@@ -41,4 +45,4 @@ module.exports = function(config) {
     // Close browser after testing in Travis
     singleRun: isCI
   })
-}
+};

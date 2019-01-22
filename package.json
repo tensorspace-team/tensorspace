@@ -24,8 +24,6 @@
     "@tweenjs/tween.js": "^17.2.0",
     "install": "^0.12.1",
     "npm": "^6.4.1",
-    "rollup-plugin-terser": "^4.0.1",
-    "terser": "^3.14.1",
     "three": "^0.98.0"
   },
   "devDependencies": {
@@ -44,7 +42,9 @@
     "mocha": "^4.1.0",
     "puppeteer": "^1.11.0",
     "rollup": "^0.66.0",
-    "uglify-es": "^3.3.10"
+    "rollup-plugin-terser": "^4.0.1",
+    "uglify-es": "^3.3.10",
+    "terser": "^3.14.1"
   },
   "repository": {
     "type": "git",
