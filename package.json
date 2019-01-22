@@ -17,7 +17,8 @@
     "docs": "document for users and contributors",
     "examples": "tensorspace.js show cases",
     "test": "test scripts",
-    "build": "released files, build code for different environment",
+    "dist": "released files, build code for different environment",
+    "build": "build files folder for local development",
     "src": "source code"
   },
   "dependencies": {
