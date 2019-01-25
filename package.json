@@ -55,6 +55,9 @@
   "homepage": "https://github.com/tensorspace-team/tensorspace#readme",
   "author": "tensorspace-team",
   "license": "Apache-2.0",
+  "keywords": [
+    "tensor", "tensorflow", "space", "three", "tween", "visual", "machine", "learning", "graphics", "visual", "diagram", "interface"
+  ],
   "contributors": [
     {
       "name": "syt123450",
@@ -75,6 +78,10 @@
       "name": "lq3297401",
       "email": "noraliu3648@gmail.com",
       "url": "https://github.com/lq3297401"
+    },
+    {
+      "name": "Truemedia",
+      "url": "https://github.com/Truemedia"
     }
   ]
 }
