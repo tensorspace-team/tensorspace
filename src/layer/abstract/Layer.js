@@ -18,12 +18,12 @@ import { LayerTranslateFactory } from "../../animation/LayerTranslateTween";
 function Layer( config ) {
 
 	/**
-	 * scene object of THREE.js.
+	 * model object of THREE.js.
 	 *
-	 * @type { THREE.Scene }
+	 * @type { THREE.Object }
 	 */
 
-	this.scene = undefined;
+	this.context = undefined;
 
 	/**
 	 * Order index number of the layer in model.
@@ -437,13 +437,13 @@ Layer.prototype = {
 	/**
 	 * setEnvironment(), hold ref of THREE.js scene and model
 	 *
-	 * @param { THREE.Object } scene, THREE.js scene.
+	 * @param { THREE.Object } context, THREE.js object.
 	 * @param { Model } model, the model object current layer be added.
 	 */
 
-	setEnvironment: function( scene, model ) {
+	setEnvironment: function( context, model ) {
 
-		this.scene = scene;
+		this.context = context;
 		this.model = model;
 
 	},
@@ -547,7 +547,7 @@ Layer.prototype = {
 
 	/**
 	 * init() abstract method
-	 * Initialize THREE.Object in Layer, warp them into a group, and add to THREE.js scene.
+	 * Initialize THREE.Object in Layer, warp them into a group, and add to Model context.
 	 *
 	 * Model passes two parameters, center and actualDepth.
 	 *

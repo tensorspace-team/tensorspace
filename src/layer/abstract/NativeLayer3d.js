@@ -114,7 +114,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 	 */
 
 	/**
-	 * init() creates actual THREE.Object in NativeLayer3d, warp them into a group, and add it to THREE.js's scene.
+	 * init() creates actual THREE.Object in NativeLayer3d, warp them into a group, and add it to Model context.
 	 *
 	 * Model passes two parameters, center and actualDepth, to NativeLayer3d when call init() to initialize NativeLayer3d.
 	 *
@@ -164,9 +164,9 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 		}
 
-		// Add wrapper object to THREE.js scene.
+		// Add wrapper object to THREE.js object.
 
-		this.scene.add( this.neuralGroup );
+		this.context.add( this.neuralGroup );
 
 		// Create relative line element.
 

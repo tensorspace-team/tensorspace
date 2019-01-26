@@ -275,7 +275,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 		// Config environment for new layer.
 
-		layer.setEnvironment( this.scene, this );
+		layer.setEnvironment( this.modelContext, this );
 		layer.loadModelConfig( this.configuration );
 
 		// Add layer on top of layer stack.

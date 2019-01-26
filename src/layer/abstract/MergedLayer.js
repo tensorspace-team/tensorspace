@@ -76,7 +76,7 @@ MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.lineGroupHandler = new MergedLineGroup(
 
 			this,
-			this.scene,
+			this.context,
 			this.neuralGroup,
 			this.color,
 			this.minOpacity

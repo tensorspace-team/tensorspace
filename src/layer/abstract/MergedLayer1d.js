@@ -159,7 +159,7 @@ MergedLayer1d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	 */
 
 	/**
-	 * init() create actual THREE.Object in NativeLayer1d, warp them into a group, and add it to THREE.js's scene.
+	 * init() create actual THREE.Object in NativeLayer1d, warp them into a group, and add it to Model context.
 	 *
 	 * Model passes two parameters, center and actualDepth, to NativeLayer1d when call init() to initialize NativeLayer1d.
 	 *
@@ -203,9 +203,9 @@ MergedLayer1d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 		}
 
-		// Add the wrapper object to the actual THREE.js scene.
+		// Add the wrapper object to the actual THREE.js object.
 
-		this.scene.add( this.neuralGroup );
+		this.context.add( this.neuralGroup );
 
 		// Create relative line element.
 

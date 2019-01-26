@@ -121,6 +121,14 @@ function AbstractModel( container, config ) {
 	this.depth = undefined;
 
 	/**
+	 * Model's context, containing all THREE.Object for a TSP model.
+	 *
+	 * @type { THREE.Object }
+	 */
+
+	this.modelContext = undefined;
+
+	/**
 	 * Model configuration.
 	 * Initialized with user's model config and default model config.
 	 *
@@ -136,6 +144,10 @@ function AbstractModel( container, config ) {
 	// Create actual three.js scene.
 
 	this.createScene();
+
+	this.modelContext = new THREE.Object3D();
+
+	this.scene.add( this.modelContext );
 
 }
 

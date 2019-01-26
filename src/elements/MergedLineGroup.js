@@ -2,10 +2,10 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-function MergedLineGroup(layer, scene, neuralGroup, color, minOpacity ) {
+function MergedLineGroup( layer, context, neuralGroup, color, minOpacity ) {
 
 	this.layer = layer;
-	this.scene = scene;
+	this.context = context;
 	this.neuralGroup = neuralGroup;
 	this.color = color;
 	this.minOpacity = minOpacity;
@@ -41,7 +41,7 @@ MergedLineGroup.prototype = {
 
 	getLineGroupParameters: function( selectedElement ) {
 
-		this.scene.updateMatrixWorld();
+		this.context.updateMatrixWorld();
 
 		let straightLineColors = [];
 		let straightLineVertices = [];

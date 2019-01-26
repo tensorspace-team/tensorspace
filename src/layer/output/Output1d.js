@@ -199,9 +199,9 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		}
 
-		// Add the wrapper object to the actual THREE.js scene.
+		// Add the wrapper object to the actual THREE.js object.
 
-		this.scene.add( this.neuralGroup );
+		this.context.add( this.neuralGroup );
 
 		// Create relative line element.
 

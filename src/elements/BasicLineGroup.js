@@ -9,10 +9,10 @@
  * @returns BasicLineGroup object
  */
 
-function BasicLineGroup( layer, scene, neuralGroup, color, minOpacity ) {
+function BasicLineGroup( layer, context, neuralGroup, color, minOpacity ) {
 
 	this.layer = layer;
-	this.scene = scene;
+	this.context = context;
 	this.neuralGroup = neuralGroup;
 	this.color = color;
 	this.minOpacity = minOpacity;
@@ -45,7 +45,7 @@ BasicLineGroup.prototype = {
 
 	getLineGroupParameters: function( selectedElement ) {
 
-		this.scene.updateMatrixWorld();
+		this.context.updateMatrixWorld();
 
 		let lineColors = [];
 		let lineVertices = [];

@@ -331,7 +331,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 				let layer = this.layers[ layerIndex ];
 
-				layer.setEnvironment( this.scene, this );
+				layer.setEnvironment( this.modelContext, this );
 				layer.loadModelConfig( this.configuration );
 				layer.assemble( layerIndex, layerLevel );
 

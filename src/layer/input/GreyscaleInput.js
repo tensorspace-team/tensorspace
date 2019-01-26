@@ -128,9 +128,9 @@ GreyscaleInput.prototype = Object.assign( Object.create( NativeLayer.prototype )
 
 		this.initAggregationElement();
 
-		// Add the wrapper object to the actual THREE.js scene.
+		// Add the wrapper object to the actual THREE.js object.
 
-		this.scene.add( this.neuralGroup );
+		this.context.add( this.neuralGroup );
 
 	},
 

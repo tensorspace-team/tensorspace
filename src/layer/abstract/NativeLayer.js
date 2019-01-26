@@ -56,7 +56,7 @@ NativeLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 		this.lineGroupHandler = new BasicLineGroup(
 
 			this,
-			this.scene,
+			this.context,
 			this.neuralGroup,
 			this.color,
 			this.minOpacity
