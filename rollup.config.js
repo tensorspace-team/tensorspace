@@ -33,6 +33,21 @@ export default [
 
     },
 
+    // Build regular version for development
+    {
+
+        input: 'src/tensorspace.js',
+        output: [ {
+
+            format: 'esm',
+            file: 'build/tensorspace.esm.js',
+            name: "TSP",
+            sourcemap: true
+
+        } ]
+
+    },
+
     // Build minified version for development
     {
 
