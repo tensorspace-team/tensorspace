@@ -9,7 +9,7 @@ describe( 'Test TensorSpace container initialization:', () => {
 
 	beforeAll( () => {
 
-		document.body.innerHTML = __html__[ 'test/template.html' ];
+		document.body.innerHTML = __html__[ 'test/e2e/template.html' ];
 		container = document.getElementById( "container" );
 
 	} );

@@ -11,7 +11,7 @@ describe( 'Test Layer GreyscaleInput:', () => {
 	beforeAll( () => {
 
 		// Load template.html as testing context
-		document.body.innerHTML = __html__[ 'test/template.html' ];
+		document.body.innerHTML = __html__[ 'test/e2e/template.html' ];
 		container = document.getElementById( "container" );
 
 	} );
