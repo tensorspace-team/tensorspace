@@ -36,11 +36,11 @@ export default [
     // Build regular version for development
     {
 
-        input: 'src/tensorspace.js',
+        input: 'src/tensorspace.dev.js',
         output: [ {
 
             format: 'esm',
-            file: 'build/tensorspace.esm.js',
+            file: 'build/tensorspace.dev.esm.js',
             name: "TSP",
             sourcemap: true
 
