@@ -10,7 +10,8 @@
     "build": "rollup --config rollup.config.js",
     "build-npm": "rollup --config rollup.config.npm.js",
     "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate"
+    "contributors:generate": "all-contributors generate",
+    "publish-local": "yalc publish"
   },
   "directories": {
     "assets": "static resource for github repo",
@@ -45,8 +46,9 @@
     "puppeteer": "^1.11.0",
     "rollup": "^0.66.0",
     "rollup-plugin-terser": "^4.0.1",
+    "terser": "^3.14.1",
     "uglify-es": "^3.3.10",
-    "terser": "^3.14.1"
+    "yalc": "^1.0.0-pre.27"
   },
   "repository": {
     "type": "git",
@@ -56,7 +58,18 @@
   "author": "tensorspace-team",
   "license": "Apache-2.0",
   "keywords": [
-    "tensor", "tensorflow", "space", "three", "tween", "visual", "machine", "learning", "graphics", "visual", "diagram", "interface"
+    "tensor",
+    "tensorflow",
+    "space",
+    "three",
+    "tween",
+    "visual",
+    "machine",
+    "learning",
+    "graphics",
+    "visual",
+    "diagram",
+    "interface"
   ],
   "contributors": [
     {
