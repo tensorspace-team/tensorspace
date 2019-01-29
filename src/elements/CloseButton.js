@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as THREE from "three";
 import { TextureProvider } from "../utils/TextureProvider";
 
 function CloseButton( size, unitLength, position, color, minOpacity ) {

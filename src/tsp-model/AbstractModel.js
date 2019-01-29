@@ -3,6 +3,7 @@
  * @author zchholmes / https://github.com/zchholmes
  */
 
+import * as THREE from "three";
 import { SceneInitializer } from '../scene/SceneInitializer';
 import { TfjsLoader } from '../loader/TfjsLoader';
 import { KerasLoader } from "../loader/KerasLoader";

@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as THREE from "three";
 import { QueueGroupTweenFactory } from "../../animation/QueueGroupTransitionTween";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { ColorUtils } from "../../utils/ColorUtils";

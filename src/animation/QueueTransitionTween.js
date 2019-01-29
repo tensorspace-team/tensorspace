@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as TWEEN from '@tweenjs/tween.js';
 import { VariableLengthObject } from "../elements/VariableLengthObject";
 
 let QueueTransitionFactory = ( function() {

@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as tf from "@tensorflow/tfjs";
 import { Loader } from './Loader';
 import { TfjsPredictor } from "../predictor/TfjsPredictor";
 
