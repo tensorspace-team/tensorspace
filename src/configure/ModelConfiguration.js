@@ -10,7 +10,7 @@ function ModelConfiguration( config ) {
 	this.relationSystem = true;
 	this.textSystem = true;
 	this.stats = false;
-	this.animationTimeRatio = 1;
+	this.animeTime = 2000;
 	this.minOpacity = 0.4;
 	this.predictDataShapes = undefined;
 	this.feedInputs = undefined;
@@ -134,11 +134,11 @@ function ModelConfiguration( config ) {
 
 		}
 
-		if ( config.animationTimeRatio !== undefined ) {
+		if ( config.animeTime !== undefined ) {
 
-			if ( config.animationTimeRatio > 0 ) {
+			if ( config.animeTime > 0 ) {
 
-				this.animationTimeRatio = config.animationTimeRatio;
+				this.animeTime = config.animeTime;
 
 			}
 

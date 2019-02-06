@@ -36,8 +36,3 @@ export let segmentsIntervalRatio = 0.2;
 
 // interval ratio for grid group
 export let GridIntervalRatio = 0.3;
-
-// open layer animation time
-export let OpenTime = 2000;
-// separate layer animation time
-export let SeparateTime = 1000;

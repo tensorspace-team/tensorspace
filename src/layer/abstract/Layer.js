@@ -4,7 +4,6 @@
  */
 
 import { CloseButton } from "../../elements/CloseButton";
-import { OpenTime, SeparateTime } from "../../utils/Constant";
 import { LayerTranslateFactory } from "../../animation/LayerTranslateTween";
 
 /**
@@ -210,10 +209,9 @@ function Layer( config ) {
 	 *
 	 * @type { number }
 	 */
-
-	this.animationTimeRatio = 1;
-	this.openTime = OpenTime;
-	this.separateTime = SeparateTime;
+	
+	this.openTime = undefined;
+	this.separateTime = undefined;
 
 	/**
      * Whether the layer is a group or not.
@@ -362,16 +360,15 @@ Layer.prototype = {
 
 			}
 
-			if ( config.animationTimeRatio !== undefined ) {
+			if ( config.animeTime !== undefined ) {
 
-				if ( config.animationTimeRatio > 0 ) {
+				if ( config.animeTime > 0 ) {
 
-					this.animationTimeRatio = config.animationTimeRatio;
+					this.animeTime = config.animeTime;
+                    this.openTime *= this.animeTime;
+                    this.separateTime *= this.animeTime / 2;
 
 				}
-
-				this.openTime *= this.animationTimeRatio;
-				this.separateTime *= this.animationTimeRatio;
 
 			}
 
@@ -416,9 +413,13 @@ Layer.prototype = {
 			this.minOpacity = modelConfig.minOpacity;
 
 		}
-
-		this.openTime *= modelConfig.animationTimeRatio;
-		this.separateTime *= modelConfig.animationTimeRatio;
+		
+		if ( this.openTime === undefined ) {
+            
+            this.openTime = modelConfig.animeTime;
+            this.separateTime = modelConfig.animeTime / 2;
+			
+		}
 
 	},
 
