@@ -51,26 +51,25 @@ BasicLineGroup.prototype = {
 		let lineVertices = [];
 
 		let relatedElements = this.layer.getRelativeElements( selectedElement );
-
-		let neuralGroupPos = new THREE.Vector3();
-
-		this.neuralGroup.getWorldPosition( neuralGroupPos );
-
-		let globalStartPos = new THREE.Vector3();
-
-		selectedElement.getWorldPosition( globalStartPos );
-
-		let lineStartPos = globalStartPos.sub( neuralGroupPos );
+		
+		selectedElement.parent.updateMatrixWorld();
+		
+		let lineStartPos = new THREE.Vector3();
+        selectedElement.getWorldPosition( lineStartPos );
+        this.neuralGroup.worldToLocal( lineStartPos );
 
 		for ( let i = 0; i < relatedElements.length; i ++ ) {
 
 			lineColors.push( new THREE.Color( this.color ) );
 			lineColors.push( new THREE.Color( this.color ) );
-
-			let globalRelativePos = new THREE.Vector3();
-			relatedElements[ i ].getWorldPosition( globalRelativePos );
-
-			lineVertices.push( globalRelativePos.sub( neuralGroupPos  ) );
+            
+            relatedElements[ i ].parent.updateMatrixWorld();
+			
+			let relativePos = new THREE.Vector3();
+			relatedElements[ i ].getWorldPosition( relativePos );
+            this.neuralGroup.worldToLocal( relativePos );
+			
+            lineVertices.push( relativePos );
 			lineVertices.push( lineStartPos );
 
 		}
