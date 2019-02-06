@@ -4,8 +4,8 @@
 
 import * as THREE from "three";
 import * as TWEEN from "@tweenjs/tween.js";
-import Stats from "stats.js/src/Stats";
-import TrackballControls from "three-trackballcontrols";
+import * as Stats from "stats-js";
+import * as TrackballControls from "three-trackballcontrols";
 import { DefaultCameraPos, DefaultLayerDepth } from "../utils/Constant";
 
 function SceneInitializer( container ) {
