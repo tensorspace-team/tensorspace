@@ -115,8 +115,7 @@ let OutputTransitionFactory = ( function() {
 			}
 
 		} ).onComplete( function() {
-
-			console.log( "end close output layer" );
+			
 			layer.disposeOutputElement();
 			layer.initAggregationElement();
 
