@@ -100,6 +100,7 @@ FeatureMap.prototype = {
 		let cube = new THREE.Mesh( boxGeometry, materials );
 		cube.elementType = "featureMap";
 		cube.hoverable = true;
+		cube.draggable = true;
 
 		this.featureMap = cube;
 

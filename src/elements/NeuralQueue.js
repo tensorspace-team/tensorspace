@@ -106,6 +106,7 @@ NeuralQueue.prototype = {
 		cube.position.set( 0, 0, 0 );
 		cube.elementType = "featureLine";
 		cube.hoverable = true;
+		cube.draggable = true;
 
 		this.queue = cube;
 

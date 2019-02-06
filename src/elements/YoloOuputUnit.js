@@ -45,6 +45,7 @@ YoloOutputUnit.prototype = {
 		cube.elementType = "outputNeural";
 		cube.clickable = true;
 		cube.hoverable = true;
+		cube.draggable = true;
 
 		cube.position.set(
 

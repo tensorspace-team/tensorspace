@@ -63,6 +63,7 @@ CloseButton.prototype = {
 		cylinderButton.position.set( this.position.x, this.position.y, this.position.z );
 		cylinderButton.clickable = true;
 		cylinderButton.hoverable = true;
+        cylinderButton.draggable = true;
 		cylinderButton.elementType = "closeButton";
 		cylinderButton.rotateY( - Math.PI / 2 );
 

@@ -105,6 +105,7 @@ MergedAggregation.prototype = {
 		cube.elementType = "aggregationElement";
 		cube.clickable = true;
 		cube.hoverable = true;
+		cube.draggable = true;
 
 		this.cube = cube;
 

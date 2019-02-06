@@ -96,6 +96,7 @@ OutputMap3d.prototype = {
 		cube.elementType = "outputMap3d";
 		cube.clickable = true;
 		cube.hoverable = true;
+		cube.draggable = true;
 
 		this.outputMap = cube;
 

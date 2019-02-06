@@ -66,6 +66,7 @@ OutputUnit.prototype = {
 		cube.elementType = "outputNeural";
 		cube.hoverable = true;
 		cube.clickable = true;
+		cube.draggable = true;
 
 		this.outputNeural = cube;
 

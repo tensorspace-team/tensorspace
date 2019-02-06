@@ -105,6 +105,7 @@ GridLine.prototype = {
 		cube.position.set( 0, 0, 0 );
 		cube.elementType = "gridLine";
 		cube.hoverable = true;
+		cube.draggable = true;
 
 		this.gridEntity = cube;
 

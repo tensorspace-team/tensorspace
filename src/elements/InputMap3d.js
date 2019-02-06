@@ -93,6 +93,7 @@ InputMap3d.prototype = {
 		cube.elementType = "RGBInputElement";
 		cube.clickable = true;
 		cube.hoverable = true;
+		cube.draggable = true;
 
 		this.colorMap = cube;
 

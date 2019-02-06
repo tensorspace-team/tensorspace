@@ -129,8 +129,9 @@ ChannelMap.prototype = {
 		];
 
 		let cube = new THREE.Mesh( boxGeometry, materials );
-
+		
 		cube.hoverable = true;
+		cube.draggable = true;
 		cube.elementType = "channelMap";
 
 		this.channelMap = cube;

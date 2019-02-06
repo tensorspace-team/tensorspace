@@ -63,6 +63,7 @@ PaginationButton.prototype = {
 
 		paginationButton.position.set( this.position.x, this.position.y, this.position.z );
 		paginationButton.clickable = true;
+		paginationButton.draggable = true;
 		paginationButton.elementType = "paginationButton";
 		paginationButton.paginationType = this.paginationType;
 		paginationButton.rotateY(  Math.PI / 2 );
