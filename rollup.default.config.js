@@ -38,7 +38,7 @@ const defaultConfig = ( outputDir, createSourceMap = true ) => {
 			input: input,
 			plugins: [ terser( terserOptions ) ],
 			output: [ {
-				// Build for browser
+				// Build for browser, minified version
 				globals: globals,
 				format: 'iife',
 				file: `${outputDir}/tensorspace.min.js`,
@@ -54,13 +54,20 @@ const defaultConfig = ( outputDir, createSourceMap = true ) => {
 			external: external,
 			input: input,
 			output: [ {
+				// Build for browser
+				globals: globals,
+				format: 'iife',
+				file: `${outputDir}/tensorspace.js`,
+				name: moduleName,
+				sourcemap: false
+
+			}, {
 				// Build for node.js
 				format: 'cjs',
 				file: `${outputDir}/tensorspace.cjs.js`,
 				name: moduleName
 
 			}, {
-
 				// Build for dev
 				format: 'esm',
 				file: `${outputDir}/tensorspace.esm.js`,

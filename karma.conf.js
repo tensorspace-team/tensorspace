@@ -49,6 +49,8 @@ module.exports = function(config) {
 
       { pattern: 'build/tensorspace.min.js', included: true },
 
+			{ pattern: 'build/tensorspace.min.js.map', included: false, served: true },
+
       { pattern: 'test/e2e/template.html', included: true },
 
       { pattern: 'test/e2e/*', included: true, watch: true },
