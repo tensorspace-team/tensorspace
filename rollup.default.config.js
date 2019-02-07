@@ -59,7 +59,7 @@ const defaultConfig = ( outputDir, createSourceMap = true ) => {
 				format: 'iife',
 				file: `${outputDir}/tensorspace.js`,
 				name: moduleName,
-				sourcemap: false
+				sourcemap: createSourceMap
 
 			}, {
 				// Build for node.js
