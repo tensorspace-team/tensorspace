@@ -2,6 +2,8 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as tf from "@tensorflow/tfjs";
+
 /**
  * Abstract Class, can not be initialized by TensorSpace user.
  * Handle predict for model.

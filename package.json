@@ -2,7 +2,7 @@
   "name": "tensorspace",
   "version": "0.3.0",
   "description": "Neural network 3D visualization framework",
-  "main": "build/tensorspace.module.js",
+  "main": "dist/tensorspace.cjs.js",
   "scripts": {
     "test": "npm run test-unit && npm run test-e2e",
     "test-unit": "mocha",
@@ -27,7 +27,9 @@
     "@tweenjs/tween.js": "^17.2.0",
     "install": "^0.12.1",
     "npm": "^6.4.1",
-    "three": "^0.98.0"
+    "stats-js": "^1.0.0",
+    "three": "^0.98.0",
+    "three-trackballcontrols": "^0.0.7"
   },
   "devDependencies": {
     "all-contributors-cli": "^5.3.0",
@@ -35,6 +37,8 @@
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "chai": "^4.2.0",
+    "eslint": "^5.13.0",
+    "eslint-config-mdcs": "^4.2.3",
     "jasmine-core": "^3.3.0",
     "karma": "^3.1.4",
     "karma-chrome-launcher": "^2.2.0",
@@ -47,7 +51,6 @@
     "rollup": "^0.66.0",
     "rollup-plugin-terser": "^4.0.1",
     "terser": "^3.14.1",
-    "uglify-es": "^3.3.10",
     "yalc": "^1.0.0-pre.27"
   },
   "repository": {

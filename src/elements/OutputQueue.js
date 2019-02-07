@@ -2,9 +2,10 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as THREE from "three";
 import { OutputUnit } from "./OutputUnit";
 import { OutputNeuralPosGenerator } from "../utils/OutputNeuralPosGenerator";
-import {ColorUtils} from "../utils/ColorUtils";
+import { ColorUtils } from "../utils/ColorUtils";
 
 function OutputQueue( units, outputs, unitLength, color, minOpacity, initStatus, overview ) {
 

@@ -47,11 +47,13 @@ module.exports = function(config) {
 
       { pattern: 'test/lib/tf.min.js', included: true },
 
-      { pattern: 'build/tensorspace.js', included: true },
+      { pattern: 'build/tensorspace.min.js', included: true },
 
-      {pattern: 'test/e2e/template.html', included: true},
+			{ pattern: 'build/tensorspace.min.js.map', included: false, served: true },
 
-      {pattern: 'test/e2e/*', included: true, watch: true},
+      { pattern: 'test/e2e/template.html', included: true },
+
+      { pattern: 'test/e2e/*', included: true, watch: true },
 
     ],
     preprocessors: {

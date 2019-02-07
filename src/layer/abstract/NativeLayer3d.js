@@ -3,6 +3,7 @@
  * @author zchholmes / https://github.com/zchholmes
  */
 
+import * as THREE from "three";
 import { ChannelDataGenerator } from "../../utils/ChannelDataGenerator";
 import { ColorUtils } from "../../utils/ColorUtils";
 import { MapTransitionFactory } from "../../animation/MapTransitionTween";

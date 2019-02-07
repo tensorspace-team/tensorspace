@@ -2,6 +2,8 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as TWEEN from '@tweenjs/tween.js';
+
 let RGBTweenFactory = ( function() {
 
 	function separate( layer ) {

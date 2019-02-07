@@ -2,6 +2,8 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as TWEEN from '@tweenjs/tween.js';
+
 let LayerTranslateFactory = ( function() {
 
 	function translate( layer, targetCenter, translateTime ) {

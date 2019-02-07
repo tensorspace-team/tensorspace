@@ -2,6 +2,8 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as THREE from "three";
+
 /**
  * BasicLineGroupController, abstract layer, can not be initialized by TensorSpace user.
  * Line group component for abstract layer "Layer"

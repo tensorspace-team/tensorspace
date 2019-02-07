@@ -3,6 +3,7 @@
  * @author zchholmes / https://github.com/zchholmes
  */
 
+import * as tf from "@tensorflow/tfjs";
 import { Predictor } from "./Predictor";
 
 /**

@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as THREE from "three";
 import { SideFaceRatio } from "../utils/Constant";
 
 function VariableLengthObject( width, height, depth, color, minOpacity ) {

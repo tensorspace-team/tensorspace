@@ -2,6 +2,10 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as THREE from "three";
+import * as TWEEN from "@tweenjs/tween.js";
+import * as Stats from "stats-js";
+import * as TrackballControls from "three-trackballcontrols";
 import { DefaultCameraPos, DefaultLayerDepth } from "../utils/Constant";
 
 function SceneInitializer( container ) {
@@ -87,7 +91,16 @@ SceneInitializer.prototype = {
 
 		}
 
-		this.cameraControls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
+		if (THREE.TrackballControls !== undefined) {
+
+			this.cameraControls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
+
+		} else {
+
+			this.cameraControls = new TrackballControls( this.camera, this.renderer.domElement );
+
+		}
+
 		this.cameraControls.target.set( 0, 0, 0 );
 
 		this.raycaster = new THREE.Raycaster();

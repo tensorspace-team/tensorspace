@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as THREE from "three";
 import { NativeLayer } from '../abstract/NativeLayer';
 import { FeatureMap } from "../../elements/FeatureMap";
 import { ColorUtils } from "../../utils/ColorUtils";
