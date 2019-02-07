@@ -291,15 +291,10 @@ model.init(function() {
 ```bash
 git clone https://github.com/tensorspace-team/tensorspace.git
 ```
-- 第二步： 在TensorSpace的根目录下，编译最新的TensorSpace.js
-```bash
-cd tensorspace
-npm run build
-```
 
-- 第三步：本地使用 `WebStorm` 打开项目
-- 第四步：打开 `/examples` 文件夹，点选任意模型的 `.html` 文件（比如`/exampes/resnet50/resnet50.html`）
-- 第五步：点击**右上角**的Chrome图表在本地运行`.html` 文件（`js` 和 `css` ）直接可以在本地浏览器内查看对应模型
+- 第二步：本地使用 `WebStorm` 打开项目
+- 第三步：打开 `/examples` 文件夹，点选任意模型的 `.html` 文件（比如`/exampes/resnet50/resnet50.html`）
+- 第四步：点击**右上角**的Chrome图表在本地运行`.html` 文件（`js` 和 `css` ）直接可以在本地浏览器内查看对应模型
 
 ## <div id="documentation">文档</div>
 

@@ -292,14 +292,7 @@ As some models above are extremely large, view them locally may be a good choice
 git clone https://github.com/tensorspace-team/tensorspace.git
 ```
 
-- Step 2: `build` latest TensorSpace.js
-
-```bash
-cd tensorspace
-npm run build
-```
-
-- Step 3:  
+- Step 2:  
 
 Open "html" file in examples folder in local web server.
 
