@@ -28,7 +28,7 @@
     "install": "^0.12.1",
     "npm": "^6.4.1",
     "stats-js": "^1.0.0",
-    "three": "^0.98.0",
+    "three": "^0.101.0",
     "three-trackballcontrols": "^0.0.7"
   },
   "devDependencies": {
