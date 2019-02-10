@@ -32,9 +32,12 @@ function ChannelMap( width, height, unitLength, actualDepth, center, color, type
 	this.type = type;
 
 	this.dataArray = undefined;
+	this.dataArrayCache = undefined;
 	this.dataTexture = undefined;
 	this.channelMap = undefined;
 	this.channelGroup = undefined;
+	
+	this.basicMaterial = undefined;
 
 	this.font = TextFont;
 	this.textSize = TextHelper.calcFmTextSize( this.actualWidth );
@@ -54,7 +57,7 @@ ChannelMap.prototype = {
 		let data = new Uint8Array( amount );
 		this.dataArray = data;
 
-		for ( let i = 0; i < amount; i++ ) {
+		for ( let i = 0; i < amount; i ++ ) {
 
 			switch ( this.type ) {
 
@@ -117,6 +120,8 @@ ChannelMap.prototype = {
 			opacity: this.sideOpacity
 
 		} );
+		
+		this.basicMaterial = basicMaterial;
 
 		let materials = [
 
@@ -133,7 +138,9 @@ ChannelMap.prototype = {
 		
 		cube.hoverable = true;
 		cube.draggable = true;
+		cube.emissiveable = true;
 		cube.elementType = "channelMap";
+		cube.context = this;
 
 		this.channelMap = cube;
 
@@ -149,7 +156,7 @@ ChannelMap.prototype = {
 
 		let renderColor = RenderPreprocessor.preProcessChannelColor( colors, this.width, this.height );
 
-		for ( let i = 0; i < renderColor.length; i++ ) {
+		for ( let i = 0; i < renderColor.length; i ++ ) {
 
 			switch ( this.type ) {
 
@@ -188,7 +195,7 @@ ChannelMap.prototype = {
 
 	clear: function() {
 
-		for ( let i = 0; i < this.dataArray.length; i++ ) {
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
 
 			switch ( this.type ) {
 
@@ -352,8 +359,50 @@ ChannelMap.prototype = {
 
 		this.isTextShown = false;
 
+	},
+	
+	emissive: function() {
+		
+		let cacheData = new Uint8Array( this.dataArray.length );
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			cacheData[ i ] = this.dataArray[ i ];
+			
+		}
+		
+		this.dataArrayCache = cacheData;
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+			
+		}
+		
+		this.basicMaterial.opacity += 0.2;
+		
+		this.dataTexture.needsUpdate = true;
+		this.basicMaterial.needsUpdate = true;
+		
+	},
+	
+	darken: function() {
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			this.dataArray[ i ] = this.dataArrayCache[ i ];
+			
+		}
+		
+		this.dataArrayCache = undefined;
+		
+		this.basicMaterial.opacity -= 0.2;
+		
+		this.dataTexture.needsUpdate = true;
+		this.basicMaterial.needsUpdate = true;
+		
 	}
-
+	
 };
 
 export { ChannelMap };

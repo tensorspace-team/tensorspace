@@ -34,6 +34,7 @@ function MergedFeatureMap( operator, width, height, unitLength, initCenter, colo
 	};
 
 	this.dataArray = undefined;
+	this.dataArrayCache = undefined;
 	this.dataTexture = undefined;
 	this.featureMap = undefined;
 	this.featureGroup = undefined;
@@ -83,6 +84,8 @@ MergedFeatureMap.prototype = {
 			opacity: this.sideOpacity
 
 		} );
+		
+		this.basicMaterial = basicMaterial;
 
 		let materials = [
 
@@ -285,6 +288,48 @@ MergedFeatureMap.prototype = {
 
 		this.isTextShown = false;
 
+	},
+	
+	emissive: function() {
+		
+		let cacheData = new Uint8Array( this.dataArray.length );
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			cacheData[ i ] = this.dataArray[ i ];
+			
+		}
+		
+		this.dataArrayCache = cacheData;
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+			
+		}
+		
+		this.basicMaterial.opacity += 0.2;
+		
+		this.dataTexture.needsUpdate = true;
+		this.basicMaterial.needsUpdate = true;
+		
+	},
+	
+	darken: function() {
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			this.dataArray[ i ] = this.dataArrayCache[ i ];
+			
+		}
+		
+		this.dataArrayCache = undefined;
+		
+		this.basicMaterial.opacity -= 0.2;
+		
+		this.dataTexture.needsUpdate = true;
+		this.basicMaterial.needsUpdate = true;
+		
 	}
 
 };

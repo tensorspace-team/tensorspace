@@ -30,6 +30,8 @@ function GlobalPoolingElement( actualLength, initCenter, color, minOpacity ) {
 	this.globalPoint = undefined;
 	this.group = undefined;
 
+	this.material = undefined;
+	
 	this.textSize = TextHelper.calcGlobalPoolingSize( this.unitLength );
 
 	this.widthText = undefined;
@@ -54,13 +56,18 @@ GlobalPoolingElement.prototype = {
 			transparent: true
 
 		} );
-
+		
+		this.material = material;
+		
 		let cube = new THREE.Mesh( geometry, material );
 
 		cube.position.set( 0, 0, 0 );
 		cube.elementType = "globalPoolingElement";
 		cube.hoverable = true;
 		cube.draggable = true;
+		cube.emissiveable = true;
+		
+		cube.context = this;
 
 		this.globalPoint = cube;
 
@@ -219,6 +226,20 @@ GlobalPoolingElement.prototype = {
 
 		this.isTextShown = false;
 
+	},
+	
+	emissive: function() {
+		
+		this.material.opacity += 0.2;
+		this.material.needsUpdate = true;
+		
+	},
+	
+	darken: function() {
+		
+		this.material.opacity -= 0.2;
+		this.material.needsUpdate = true;
+		
 	}
 
 };

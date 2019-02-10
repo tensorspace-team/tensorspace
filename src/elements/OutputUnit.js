@@ -38,11 +38,13 @@ function OutputUnit( unitLength, output, initPositions, color, minOpacity, overv
 	this.isTextShown = false;
 
 	this.font = TextFont;
-
+	
+	this.material = undefined;
+	
 	this.outputText = undefined;
 	this.outputNeural = undefined;
 	this.outputGroup = undefined;
-
+	
 	this.init();
 
 }
@@ -62,12 +64,17 @@ OutputUnit.prototype = {
 			transparent: true
 
 		} );
+		
+		this.material = material;
 
 		let cube = new THREE.Mesh( boxGeometry, material );
 		cube.elementType = "outputNeural";
 		cube.hoverable = true;
 		cube.clickable = true;
 		cube.draggable = true;
+		cube.emissiveable = true;
+		
+		cube.context = this;
 
 		this.outputNeural = cube;
 
@@ -191,6 +198,20 @@ OutputUnit.prototype = {
 		this.position.z = pos.z;
 		this.outputGroup.position.set( pos.x, pos.y, pos.z );
 
+	},
+	
+	emissive: function() {
+		
+		this.material.opacity += 0.2;
+		this.basicMaterial.needsUpdate = true;
+		
+	},
+	
+	darken: function() {
+		
+		this.material.opacity -= 0.2;
+		this.material.needsUpdate = true;
+		
 	}
 
 };

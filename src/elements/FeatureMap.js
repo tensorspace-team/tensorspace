@@ -38,6 +38,8 @@ function FeatureMap( width, height, unitLength, initCenter, color, minOpacity ) 
 	this.dataTexture = undefined;
 	this.featureMap = undefined;
 	this.featureGroup = undefined;
+	
+	this.basicMaterial = undefined;
 
 	this.font = TextFont;
 
@@ -87,6 +89,8 @@ FeatureMap.prototype = {
 			opacity: this.sideOpacity
 
 		} );
+		
+		this.basicMaterial = basicMaterial;
 
 		let materials = [
 
@@ -284,7 +288,10 @@ FeatureMap.prototype = {
 			
 		}
 		
+		this.basicMaterial.opacity += 0.2;
+		
 		this.dataTexture.needsUpdate = true;
+		this.basicMaterial.needsUpdate = true;
 		
 	},
 	
@@ -296,9 +303,12 @@ FeatureMap.prototype = {
 			
 		}
 		
-		this.dataArrayCache = [];
+		this.dataArrayCache = undefined;
+		
+		this.basicMaterial.opacity -= 0.2;
 		
 		this.dataTexture.needsUpdate = true;
+		this.basicMaterial.needsUpdate = true;
 		
 	}
 
