@@ -32,12 +32,16 @@ function QueueSegment( segmentLength, segmentIndex, totalLength, unitLength, col
 	this.setRange();
 
 	this.dataArray = undefined;
+	this.dataArrayCache = undefined;
 	this.backDataArray = undefined;
+	this.backDataArrayCache = undefined;
 	this.dataTexture = undefined;
 	this.backDataTexture = undefined;
 	this.queue = undefined;
 
 	this.queueGroup = undefined;
+	
+	this.basicMaterial = undefined;
 
 	this.font = TextFont;
 	this.textSize = TextHelper.calcQueueTextSize( this.unitLength );
@@ -120,6 +124,8 @@ QueueSegment.prototype = {
 			opacity: this.sideOpacity
 
 		} );
+		
+		this.basicMaterial = basicMaterial;
 
 		let materials = [
 
@@ -138,6 +144,9 @@ QueueSegment.prototype = {
 		cube.elementType = "featureLine";
 		cube.hoverable = true;
 		cube.draggable = true;
+		cube.emissiveable = true;
+		
+		cube.context = this;
 
 		return cube;
 
@@ -400,6 +409,74 @@ QueueSegment.prototype = {
 
 		this.queueLengthNeedsUpdate = false;
 
+	},
+	
+	emissive: function() {
+		
+		let cacheData = new Uint8Array( this.dataArray.length );
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			cacheData[ i ] = this.dataArray[ i ];
+			
+		}
+		
+		this.dataArrayCache = cacheData;
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+			
+		}
+		
+		let cacheBackData = new Uint8Array( this.backDataArray.length );
+		
+		for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+			
+			cacheBackData[ i ] = this.backDataArray[ i ];
+			
+		}
+		
+		this.backDataArrayCache = cacheBackData;
+		
+		for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+			
+			this.backDataArray[ i ] = Math.min( this.backDataArray[ i ] + 30, 255 );
+			
+		}
+		
+		this.basicMaterial.opacity += 0.2;
+		
+		this.dataTexture.needsUpdate = true;
+		this.backDataTexture.needsUpdate = true;
+		this.basicMaterial.needsUpdate = true;
+		
+	},
+	
+	darken: function() {
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			this.dataArray[ i ] = this.dataArrayCache[ i ];
+			
+		}
+		
+		this.dataArrayCache = undefined;
+		
+		for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+			
+			this.backDataArray[ i ] = this.backDataArrayCache[ i ];
+			
+		}
+		
+		this.backDataArrayCache = undefined;
+		
+		this.basicMaterial.opacity -= 0.2;
+		
+		this.dataTexture.needsUpdate = true;
+		this.backDataTexture.needsUpdate = true;
+		this.basicMaterial.needsUpdate = true;
+		
 	}
 
 };

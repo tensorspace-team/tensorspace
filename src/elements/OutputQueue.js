@@ -172,6 +172,26 @@ OutputQueue.prototype = {
 
 		}
 
+	},
+	
+	emissive: function() {
+		
+		for ( let i = 0; i < this.outputUnitList.length; i ++ ) {
+			
+			this.outputUnitList[ i ].emissive();
+			
+		}
+		
+	},
+	
+	darken: function() {
+		
+		for ( let i = 0; i < this.outputUnitList.length; i ++ ) {
+			
+			this.outputUnitList[ i ].darken();
+			
+		}
+		
 	}
 
 };

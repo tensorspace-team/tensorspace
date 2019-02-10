@@ -505,6 +505,46 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		}
 
 	},
+	
+	emissive: function() {
+	
+		if ( !this.isEmissive ) {
+			
+			if ( this.isOpen ) {
+				
+				this.outputHandler.emissive();
+				
+			} else {
+				
+				this.aggregationHandler.emissive();
+				
+			}
+			
+			this.isEmissive = true;
+			
+		}
+		
+	},
+	
+	darken: function() {
+		
+		if ( this.isEmissive ) {
+			
+			if ( this.isOpen ) {
+				
+				this.outputHandler.darken();
+				
+			} else {
+				
+				this.aggregationHandler.darken();
+				
+			}
+			
+			this.isEmissive = false;
+			
+		}
+		
+	},
 
 	/**
 	 * ============

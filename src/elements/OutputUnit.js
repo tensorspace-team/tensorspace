@@ -203,7 +203,7 @@ OutputUnit.prototype = {
 	emissive: function() {
 		
 		this.material.opacity += 0.2;
-		this.basicMaterial.needsUpdate = true;
+		this.material.needsUpdate = true;
 		
 	},
 	
