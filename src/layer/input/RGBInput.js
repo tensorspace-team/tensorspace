@@ -452,6 +452,54 @@ RGBInput.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		}
 
 	},
+	
+	emissive: function() {
+		
+		if ( !this.isEmissive ) {
+			
+			if ( this.isOpen ) {
+				
+				for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+					
+					this.segregationHandlers[ i ].emissive();
+					
+				}
+				
+			} else {
+				
+				this.aggregationHandler.emissive();
+				
+			}
+			
+			this.isEmissive = true;
+			
+		}
+		
+	},
+	
+	darken: function() {
+		
+		if ( this.isEmissive ) {
+			
+			if ( this.isOpen ) {
+				
+				for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+					
+					this.segregationHandlers[ i ].darken();
+					
+				}
+				
+			} else {
+				
+				this.aggregationHandler.darken();
+				
+			}
+			
+			this.isEmissive = false;
+			
+		}
+		
+	},
 
 	/**
 	 * ============

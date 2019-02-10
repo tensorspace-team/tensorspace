@@ -292,6 +292,8 @@ function Layer( config ) {
 	 */
 
 	this.isShapePredefined = false;
+	
+	this.isEmissive = false;
 
 	// Load layer config.
 
@@ -697,6 +699,14 @@ Layer.prototype = {
 
 		return 100;
 
+	},
+	
+	emissive: function() {
+	
+	},
+	
+	darken: function() {
+	
 	}
 
 };

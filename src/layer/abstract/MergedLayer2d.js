@@ -393,6 +393,54 @@ MergedLayer2d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 		}
 
 	},
+	
+	emissive: function() {
+		
+		if ( !this.isEmissive ) {
+			
+			if ( this.isOpen ) {
+				
+				for ( let i = 0; i < this.queueHandlers.length; i ++ ) {
+					
+					this.queueHandlers[ i ].emissive();
+					
+				}
+				
+			} else {
+				
+				this.aggregationHandler.emissive();
+				
+			}
+			
+			this.isEmissive = true;
+			
+		}
+		
+	},
+	
+	darken: function() {
+		
+		if ( this.isEmissive ) {
+			
+			if ( this.isOpen ) {
+				
+				for ( let i = 0; i < this.queueHandlers.length; i ++ ) {
+					
+					this.queueHandlers[ i ].darken();
+					
+				}
+				
+			} else {
+				
+				this.aggregationHandler.darken();
+				
+			}
+			
+			this.isEmissive = false;
+			
+		}
+		
+	},
 
 	/**
 	 * ============

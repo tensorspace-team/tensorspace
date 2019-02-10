@@ -286,6 +286,28 @@ GreyscaleInput.prototype = Object.assign( Object.create( NativeLayer.prototype )
 		return this.actualWidth;
 
 	},
+	
+	emissive: function() {
+		
+		if ( !this.isEmissive ) {
+			
+			this.aggregationHandler.emissive();
+			this.isEmissive = true;
+			
+		}
+		
+	},
+	
+	darken: function() {
+		
+		if ( this.isEmissive ) {
+			
+			this.aggregationHandler.darken();
+			this.isEmissive = false;
+			
+		}
+		
+	},
 
 	/**
 	 * ============
