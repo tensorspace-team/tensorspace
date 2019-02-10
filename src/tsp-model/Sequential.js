@@ -188,6 +188,13 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 			model.hoveredLayer = undefined;
 
 		}
+		
+		if ( model.hoveredEmissive !== undefined ) {
+			
+			model.hoveredEmissive.context.darken();
+			model.hoveredEmissive = undefined;
+			
+		}
 
 		// Use Raycaster to capture hovered element.
 
@@ -202,6 +209,13 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 				if ( selectedElement.hoverable === true ) {
 
+					if ( selectedElement.emissiveable ) {
+						
+						model.hoveredEmissive = selectedElement;
+						selectedElement.context.emissive();
+						
+					}
+					
 					let selectedLayer = this.layers[ selectedElement.layerIndex - 1 ];
 
 					// Let the layer to handle actual hover event.

@@ -218,6 +218,13 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 			model.hoveredLayer = undefined;
 
 		}
+		
+		if ( model.hoveredEmissive !== undefined ) {
+			
+			model.hoveredEmissive.context.darken();
+			model.hoveredEmissive = undefined;
+			
+		}
 
 		// Use Raycaster to capture hovered element.
 
@@ -231,7 +238,14 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 				let selectedElement = intersects[ i ].object;
 
 				if ( selectedElement.hoverable === true ) {
-
+					
+					if ( selectedElement.emissiveable ) {
+						
+						model.hoveredEmissive = selectedElement;
+						selectedElement.context.emissive();
+						
+					}
+					
 					let selectedLayer = this.layers[ selectedElement.layerIndex ];
 
 					// Let the layer to handle actual hover event.

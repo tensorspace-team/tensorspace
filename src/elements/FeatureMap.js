@@ -103,6 +103,9 @@ FeatureMap.prototype = {
 		cube.elementType = "featureMap";
 		cube.hoverable = true;
 		cube.draggable = true;
+		cube.emissiveable = true;
+		
+		cube.context = this;
 
 		this.featureMap = cube;
 

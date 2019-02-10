@@ -137,6 +137,8 @@ function AbstractModel( container, config ) {
 	 */
 
 	this.configuration = new ModelConfiguration( config );
+	
+	this.hoveredEmissive = undefined;
 
 	// Pass configuration to three.js scene.
 
