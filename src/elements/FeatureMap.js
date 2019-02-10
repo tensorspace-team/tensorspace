@@ -32,8 +32,9 @@ function FeatureMap( width, height, unitLength, initCenter, color, minOpacity ) 
 		z: initCenter.z
 
 	};
-
+	
 	this.dataArray = undefined;
+	this.dataArrayCache = undefined;
 	this.dataTexture = undefined;
 	this.featureMap = undefined;
 	this.featureGroup = undefined;
@@ -109,7 +110,7 @@ FeatureMap.prototype = {
 		featureGroup.position.set( this.fmCenter.x, this.fmCenter.y, this.fmCenter.z );
 		featureGroup.add( cube );
 		this.featureGroup = featureGroup;
-
+		
 	},
 
 	getElement: function() {
@@ -260,6 +261,42 @@ FeatureMap.prototype = {
 
 		this.isTextShown = false;
 
+	},
+	
+	emissive: function() {
+		
+		let cacheData = new Uint8Array( this.dataArray.length );
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			cacheData[ i ] = this.dataArray[ i ];
+			
+		}
+		
+		this.dataArrayCache = cacheData;
+		
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+			
+		}
+		
+		this.dataTexture.needsUpdate = true;
+		
+	},
+	
+	darken: function() {
+	
+		for ( let i = 0; i < this.dataArray.length; i ++ ) {
+			
+			this.dataArray[ i ] = this.dataArrayCache[ i ];
+			
+		}
+		
+		this.dataArrayCache = [];
+		
+		this.dataTexture.needsUpdate = true;
+		
 	}
 
 };
