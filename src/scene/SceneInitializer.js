@@ -4,7 +4,7 @@
 
 import * as THREE from "three";
 import * as TWEEN from "@tweenjs/tween.js";
-import * as Stats from "stats-js";
+// import * as Stats from "stats-js";
 import * as TrackballControls from "three-trackballcontrols";
 import { DefaultCameraPos, DefaultLayerDepth } from "../utils/Constant";
 
@@ -82,12 +82,37 @@ SceneInitializer.prototype = {
 		this.scene.background = new THREE.Color( this.backgroundColor );
 
 		if ( this.hasStats ) {
+			import('stats-js')
+				.then((module) => {
 
-			this.stats = new Stats();
-			this.stats.dom.style.position = "absolute";
-			this.stats.dom.style.zIndex = "1";
-			this.stats.showPanel( 0 );
-			this.container.appendChild( this.stats.dom );
+					this.stats = new module();
+					this.stats.dom.style.position = "absolute";
+					this.stats.dom.style.zIndex = "1";
+					this.stats.showPanel( 0 );
+					this.container.appendChild( this.stats.dom );
+
+				})
+				.catch(() => {
+
+					if ( typeof Stats !== 'undefined' ) {
+
+						this.stats = new Stats();
+						this.stats.dom.style.position = "absolute";
+						this.stats.dom.style.zIndex = "1";
+						this.stats.showPanel( 0 );
+						this.container.appendChild( this.stats.dom );
+
+					} else if ( typeof window === 'undefined' ) {
+
+						console.error('Please import stats-js');
+
+					} else  {
+
+						console.error('Please include  <script> tag');
+
+					}
+
+				});
 
 		}
 

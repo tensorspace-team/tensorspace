@@ -30,7 +30,7 @@ module.exports = function(config) {
 
         runInParent: false,
 
-        captureConsole: false
+        captureConsole: true
       },
 
     reporters: [ 'spec' ],
@@ -39,7 +39,7 @@ module.exports = function(config) {
 
       { pattern: 'test/lib/three.min.js', included: true },
 
-      { pattern: 'test/lib/stats.min.js', included: true },
+      { pattern: 'test/lib/stats.min.js', included: false, served: false },
 
       { pattern: 'test/lib/tween.min.js', included: true },
 
