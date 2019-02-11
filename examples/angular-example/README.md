@@ -1,32 +1,41 @@
 # Hello Angular Example
 This is a minimum Tensorspace example in AngularJS. Code scaffold is create with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.3.
 
-### Quick Start (Beta - for review)
 
-1. (Optional) If tensorspace v0.4.0 is not published yet. Publish local tensorspace module with `yalc`.
+- Source code related to Tensorspace is added at:
 
-	```shell
-	# Create ~/.yalc/tensorspace folder to simulate npm publish
-	cd {TENSORSPACE_REPO}
-	npm run publish-local
+  `/src/app`
 
-	# Does two things:
-	# 1. copy tensorspace from ~/.yalc/packages/tensorspace to
-	# 	./examples/angular-examle/.yalc/tensorspace
-	# 	
-	# 2. create a new entry in package.json file
-	# 	"tensorspace": "file:.yalc/tensorspace",
-	cd examples/angular-example
-	npm run add-tsp
-	```
+- Tensoflow model and input data files are at:
 
-2. Install dependencies
+ `/src/assets`
+
+- To keep this example lean and changes more visible, the following (maybe more) unnecessary files and some comments created by angular cli are removed:
+
+  - `.editorconfig`
+  - `e2e/`
+  - `src/app.e2e-spec.ts`
+  - `src/app.po.ts`
+  - `src/app/app.component.spec.ts`
+  - `src/assets/.gitkeep`
+  - `src/browserslist`
+  - `src/karma.conf.js`
+  - `src/test.ts`
+  - `src/tslint.json`
+
+
+
+
+
+### Quick Start
+
+1. Install dependencies
 
 	```shell
 	npm install
 	```
 
-3. Start app
+2. Start app
 
 	```shell
 	npm run start

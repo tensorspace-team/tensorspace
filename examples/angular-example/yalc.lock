@@ -1,9 +1,0 @@
-{
-  "version": "v1",
-  "packages": {
-    "tensorspace": {
-      "signature": "7a3dc48dc7cc83365d3c7700bb205e00",
-      "file": true
-    }
-  }
-}
