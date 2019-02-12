@@ -1,4 +1,4 @@
-var TSP = (function (exports) {
+var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 	'use strict';
 
 	/**
@@ -26,11 +26,6 @@ var TSP = (function (exports) {
 
 	// interval ratio for grid group
 	let GridIntervalRatio = 0.3;
-
-	// open layer animation time
-	let OpenTime = 2000;
-	// separate layer animation time
-	let SeparateTime = 1000;
 
 	/**
 	 * @author syt123450 / https://github.com/syt123450
@@ -110,16 +105,50 @@ var TSP = (function (exports) {
 			this.scene.background = new THREE.Color( this.backgroundColor );
 
 			if ( this.hasStats ) {
+				import('stats-js')
+					.then((module) => {
 
-				this.stats = new Stats();
-				this.stats.dom.style.position = "absolute";
-				this.stats.dom.style.zIndex = "1";
-				this.stats.showPanel( 0 );
-				this.container.appendChild( this.stats.dom );
+						this.stats = new module();
+						this.stats.dom.style.position = "absolute";
+						this.stats.dom.style.zIndex = "1";
+						this.stats.showPanel( 0 );
+						this.container.appendChild( this.stats.dom );
+
+					})
+					.catch(() => {
+
+						if ( typeof Stats !== 'undefined' ) {
+
+							this.stats = new Stats();
+							this.stats.dom.style.position = "absolute";
+							this.stats.dom.style.zIndex = "1";
+							this.stats.showPanel( 0 );
+							this.container.appendChild( this.stats.dom );
+
+						} else if ( typeof window === 'undefined' ) {
+
+							console.error('Please import stats-js');
+
+						} else  {
+
+							console.error('Please include  <script> tag');
+
+						}
+
+					});
 
 			}
 
-			this.cameraControls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
+			if (THREE.TrackballControls !== undefined) {
+
+				this.cameraControls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
+
+			} else {
+
+				this.cameraControls = new TrackballControls( this.camera, this.renderer.domElement );
+
+			}
+
 			this.cameraControls.target.set( 0, 0, 0 );
 
 			this.raycaster = new THREE.Raycaster();
@@ -520,7 +549,7 @@ var TSP = (function (exports) {
 
 			for ( let i = 0; i < inputShapes.length; i ++ ) {
 
-				tensorList.push( tf.tensor( data[ i ], inputShapes[ i ] ));
+				tensorList.push( tf$1.tensor( data[ i ], inputShapes[ i ] ));
 
 			}
 
@@ -598,7 +627,7 @@ var TSP = (function (exports) {
 
 			let predictor = this;
 
-			let predictResult = tf.tidy( () => {
+			let predictResult = tf$1.tidy( () => {
 
 				// Create input tensor for prediction.
 
@@ -685,7 +714,7 @@ var TSP = (function (exports) {
 
 		load: async function() {
 
-			const loadedModel = await tf.loadModel( this.url );
+			const loadedModel = await tf$1.loadModel( this.url );
 
 			this.model.resource = loadedModel;
 
@@ -795,7 +824,7 @@ var TSP = (function (exports) {
 
 			let predictor = this;
 
-			let predictResult = tf.tidy( () => {
+			let predictResult = tf$1.tidy( () => {
 
 				// Create input tensor for prediction.
 
@@ -882,7 +911,7 @@ var TSP = (function (exports) {
 
 		load: async function() {
 
-			const loadedModel = await tf.loadModel( this.url );
+			const loadedModel = await tf$1.loadModel( this.url );
 
 			this.model.resource = loadedModel;
 
@@ -1001,7 +1030,7 @@ var TSP = (function (exports) {
 
 			let predictor = this;
 
-			let predictResult = tf.tidy( () => {
+			let predictResult = tf$1.tidy( () => {
 
 				// Create input tensor for prediction.
 
@@ -1132,7 +1161,7 @@ var TSP = (function (exports) {
 
 		load: async function() {
 
-			const loadedModel = await tf.loadFrozenModel( this.modelUrl, this.weightUrl );
+			const loadedModel = await tf$1.loadFrozenModel( this.modelUrl, this.weightUrl );
 
 			this.model.resource = loadedModel;
 
@@ -1382,7 +1411,7 @@ var TSP = (function (exports) {
 		this.relationSystem = true;
 		this.textSystem = true;
 		this.stats = false;
-		this.animationTimeRatio = 1;
+		this.animeTime = 2000;
 		this.minOpacity = 0.4;
 		this.predictDataShapes = undefined;
 		this.feedInputs = undefined;
@@ -1506,11 +1535,11 @@ var TSP = (function (exports) {
 
 			}
 
-			if ( config.animationTimeRatio !== undefined ) {
+			if ( config.animeTime !== undefined ) {
 
-				if ( config.animationTimeRatio > 0 ) {
+				if ( config.animeTime > 0 ) {
 
-					this.animationTimeRatio = config.animationTimeRatio;
+					this.animeTime = config.animeTime;
 
 				}
 
@@ -1892,6 +1921,14 @@ var TSP = (function (exports) {
 		this.depth = undefined;
 
 		/**
+		 * Model's context, containing all THREE.Object for a TSP model.
+		 *
+		 * @type { THREE.Object }
+		 */
+
+		this.modelContext = undefined;
+
+		/**
 		 * Model configuration.
 		 * Initialized with user's model config and default model config.
 		 *
@@ -1899,6 +1936,8 @@ var TSP = (function (exports) {
 		 */
 
 		this.configuration = new ModelConfiguration( config );
+		
+		this.hoveredEmissive = undefined;
 
 		// Pass configuration to three.js scene.
 
@@ -1907,6 +1946,10 @@ var TSP = (function (exports) {
 		// Create actual three.js scene.
 
 		this.createScene();
+
+		this.modelContext = new THREE.Object3D();
+
+		this.scene.add( this.modelContext );
 
 	}
 
@@ -2584,6 +2627,13 @@ var TSP = (function (exports) {
 				model.hoveredLayer = undefined;
 
 			}
+			
+			if ( model.hoveredEmissive !== undefined ) {
+				
+				model.hoveredEmissive.context.darken();
+				model.hoveredEmissive = undefined;
+				
+			}
 
 			// Use Raycaster to capture hovered element.
 
@@ -2598,6 +2648,13 @@ var TSP = (function (exports) {
 
 					if ( selectedElement.hoverable === true ) {
 
+						if ( selectedElement.emissiveable ) {
+							
+							model.hoveredEmissive = selectedElement;
+							selectedElement.context.emissive();
+							
+						}
+						
 						let selectedLayer = this.layers[ selectedElement.layerIndex - 1 ];
 
 						// Let the layer to handle actual hover event.
@@ -2671,7 +2728,7 @@ var TSP = (function (exports) {
 
 			// Config environment for new layer.
 
-			layer.setEnvironment( this.scene, this );
+			layer.setEnvironment( this.modelContext, this );
 			layer.loadModelConfig( this.configuration );
 
 			// Add layer on top of layer stack.
@@ -3318,6 +3375,13 @@ var TSP = (function (exports) {
 				model.hoveredLayer = undefined;
 
 			}
+			
+			if ( model.hoveredEmissive !== undefined ) {
+				
+				model.hoveredEmissive.context.darken();
+				model.hoveredEmissive = undefined;
+				
+			}
 
 			// Use Raycaster to capture hovered element.
 
@@ -3331,7 +3395,14 @@ var TSP = (function (exports) {
 					let selectedElement = intersects[ i ].object;
 
 					if ( selectedElement.hoverable === true ) {
-
+						
+						if ( selectedElement.emissiveable ) {
+							
+							model.hoveredEmissive = selectedElement;
+							selectedElement.context.emissive();
+							
+						}
+						
 						let selectedLayer = this.layers[ selectedElement.layerIndex ];
 
 						// Let the layer to handle actual hover event.
@@ -3431,7 +3502,7 @@ var TSP = (function (exports) {
 
 					let layer = this.layers[ layerIndex ];
 
-					layer.setEnvironment( this.scene, this );
+					layer.setEnvironment( this.modelContext, this );
 					layer.loadModelConfig( this.configuration );
 					layer.assemble( layerIndex, layerLevel );
 
@@ -3952,6 +4023,7 @@ var TSP = (function (exports) {
 			cube.elementType = "aggregationElement";
 			cube.clickable = true;
 			cube.hoverable = true;
+			cube.draggable = true;
 
 			this.aggregationEntity = cube;
 
@@ -4311,6 +4383,7 @@ var TSP = (function (exports) {
 			cube.position.set( 0, 0, 0 );
 			cube.elementType = "gridLine";
 			cube.hoverable = true;
+			cube.draggable = true;
 
 			this.gridEntity = cube;
 
@@ -4655,6 +4728,7 @@ var TSP = (function (exports) {
 			cylinderButton.position.set( this.position.x, this.position.y, this.position.z );
 			cylinderButton.clickable = true;
 			cylinderButton.hoverable = true;
+	        cylinderButton.draggable = true;
 			cylinderButton.elementType = "closeButton";
 			cylinderButton.rotateY( - Math.PI / 2 );
 
@@ -4769,12 +4843,12 @@ var TSP = (function (exports) {
 	function Layer( config ) {
 
 		/**
-		 * scene object of THREE.js.
+		 * model object of THREE.js.
 		 *
-		 * @type { THREE.Scene }
+		 * @type { THREE.Object }
 		 */
 
-		this.scene = undefined;
+		this.context = undefined;
 
 		/**
 		 * Order index number of the layer in model.
@@ -4961,10 +5035,9 @@ var TSP = (function (exports) {
 		 *
 		 * @type { number }
 		 */
-
-		this.animationTimeRatio = 1;
-		this.openTime = OpenTime;
-		this.separateTime = SeparateTime;
+		
+		this.openTime = undefined;
+		this.separateTime = undefined;
 
 		/**
 	     * Whether the layer is a group or not.
@@ -5045,6 +5118,8 @@ var TSP = (function (exports) {
 		 */
 
 		this.isShapePredefined = false;
+		
+		this.isEmissive = false;
 
 		// Load layer config.
 
@@ -5113,16 +5188,15 @@ var TSP = (function (exports) {
 
 				}
 
-				if ( config.animationTimeRatio !== undefined ) {
+				if ( config.animeTime !== undefined ) {
 
-					if ( config.animationTimeRatio > 0 ) {
+					if ( config.animeTime > 0 ) {
 
-						this.animationTimeRatio = config.animationTimeRatio;
+						this.animeTime = config.animeTime;
+	                    this.openTime *= this.animeTime;
+	                    this.separateTime *= this.animeTime / 2;
 
 					}
-
-					this.openTime *= this.animationTimeRatio;
-					this.separateTime *= this.animationTimeRatio;
 
 				}
 
@@ -5167,9 +5241,13 @@ var TSP = (function (exports) {
 				this.minOpacity = modelConfig.minOpacity;
 
 			}
-
-			this.openTime *= modelConfig.animationTimeRatio;
-			this.separateTime *= modelConfig.animationTimeRatio;
+			
+			if ( this.openTime === undefined ) {
+	            
+	            this.openTime = modelConfig.animeTime;
+	            this.separateTime = modelConfig.animeTime / 2;
+				
+			}
 
 		},
 
@@ -5188,13 +5266,13 @@ var TSP = (function (exports) {
 		/**
 		 * setEnvironment(), hold ref of THREE.js scene and model
 		 *
-		 * @param { THREE.Object } scene, THREE.js scene.
+		 * @param { THREE.Object } context, THREE.js object.
 		 * @param { Model } model, the model object current layer be added.
 		 */
 
-		setEnvironment: function( scene, model ) {
+		setEnvironment: function( context, model ) {
 
-			this.scene = scene;
+			this.context = context;
 			this.model = model;
 
 		},
@@ -5298,7 +5376,7 @@ var TSP = (function (exports) {
 
 		/**
 		 * init() abstract method
-		 * Initialize THREE.Object in Layer, warp them into a group, and add to THREE.js scene.
+		 * Initialize THREE.Object in Layer, warp them into a group, and add to Model context.
 		 *
 		 * Model passes two parameters, center and actualDepth.
 		 *
@@ -5447,6 +5525,14 @@ var TSP = (function (exports) {
 
 			return 100;
 
+		},
+		
+		emissive: function() {
+		
+		},
+		
+		darken: function() {
+		
 		}
 
 	};
@@ -5462,10 +5548,10 @@ var TSP = (function (exports) {
 	 * @returns BasicLineGroup object
 	 */
 
-	function BasicLineGroup( layer, scene, neuralGroup, color, minOpacity ) {
+	function BasicLineGroup( layer, context, neuralGroup, color, minOpacity ) {
 
 		this.layer = layer;
-		this.scene = scene;
+		this.context = context;
 		this.neuralGroup = neuralGroup;
 		this.color = color;
 		this.minOpacity = minOpacity;
@@ -5498,32 +5584,31 @@ var TSP = (function (exports) {
 
 		getLineGroupParameters: function( selectedElement ) {
 
-			this.scene.updateMatrixWorld();
+			this.context.updateMatrixWorld();
 
 			let lineColors = [];
 			let lineVertices = [];
 
 			let relatedElements = this.layer.getRelativeElements( selectedElement );
-
-			let neuralGroupPos = new THREE.Vector3();
-
-			this.neuralGroup.getWorldPosition( neuralGroupPos );
-
-			let globalStartPos = new THREE.Vector3();
-
-			selectedElement.getWorldPosition( globalStartPos );
-
-			let lineStartPos = globalStartPos.sub( neuralGroupPos );
+			
+			selectedElement.parent.updateMatrixWorld();
+			
+			let lineStartPos = new THREE.Vector3();
+	        selectedElement.getWorldPosition( lineStartPos );
+	        this.neuralGroup.worldToLocal( lineStartPos );
 
 			for ( let i = 0; i < relatedElements.length; i ++ ) {
 
 				lineColors.push( new THREE.Color( this.color ) );
 				lineColors.push( new THREE.Color( this.color ) );
-
-				let globalRelativePos = new THREE.Vector3();
-				relatedElements[ i ].getWorldPosition( globalRelativePos );
-
-				lineVertices.push( globalRelativePos.sub( neuralGroupPos  ) );
+	            
+	            relatedElements[ i ].parent.updateMatrixWorld();
+				
+				let relativePos = new THREE.Vector3();
+				relatedElements[ i ].getWorldPosition( relativePos );
+	            this.neuralGroup.worldToLocal( relativePos );
+				
+	            lineVertices.push( relativePos );
 				lineVertices.push( lineStartPos );
 
 			}
@@ -5624,7 +5709,7 @@ var TSP = (function (exports) {
 			this.lineGroupHandler = new BasicLineGroup(
 
 				this,
-				this.scene,
+				this.context,
 				this.neuralGroup,
 				this.color,
 				this.minOpacity
@@ -5930,7 +6015,7 @@ var TSP = (function (exports) {
 		 */
 
 		/**
-		 * init() create actual THREE.Object in NativeLayer2d, warp them into a group, and add it to THREE.js's scene.
+		 * init() create actual THREE.Object in NativeLayer2d, warp them into a group, and add it to Model context.
 		 *
 		 * Model passes two parameters, center and actualDepth, to NativeLayer2d when call init() to initialize NativeLayer2d.
 		 *
@@ -5980,9 +6065,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -6500,6 +6585,54 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.queueHandlers.length; i ++ ) {
+						
+						this.queueHandlers[ i ].emissive();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.emissive();
+					
+				}
+				
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.queueHandlers.length; i ++ ) {
+						
+						this.queueHandlers[ i ].darken();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.darken();
+					
+				}
+				
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -7241,11 +7374,14 @@ var TSP = (function (exports) {
 			z: initCenter.z
 
 		};
-
+		
 		this.dataArray = undefined;
+		this.dataArrayCache = undefined;
 		this.dataTexture = undefined;
 		this.featureMap = undefined;
 		this.featureGroup = undefined;
+		
+		this.basicMaterial = undefined;
 
 		this.font = TextFont;
 
@@ -7295,6 +7431,8 @@ var TSP = (function (exports) {
 				opacity: this.sideOpacity
 
 			} );
+			
+			this.basicMaterial = basicMaterial;
 
 			let materials = [
 
@@ -7310,6 +7448,10 @@ var TSP = (function (exports) {
 			let cube = new THREE.Mesh( boxGeometry, materials );
 			cube.elementType = "featureMap";
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
+			
+			cube.context = this;
 
 			this.featureMap = cube;
 
@@ -7317,7 +7459,7 @@ var TSP = (function (exports) {
 			featureGroup.position.set( this.fmCenter.x, this.fmCenter.y, this.fmCenter.z );
 			featureGroup.add( cube );
 			this.featureGroup = featureGroup;
-
+			
 		},
 
 		getElement: function() {
@@ -7468,6 +7610,48 @@ var TSP = (function (exports) {
 
 			this.isTextShown = false;
 
+		},
+		
+		emissive: function() {
+			
+			let cacheData = new Uint8Array( this.dataArray.length );
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				cacheData[ i ] = this.dataArray[ i ];
+				
+			}
+			
+			this.dataArrayCache = cacheData;
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+				
+			}
+			
+			this.basicMaterial.opacity += 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+		
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = this.dataArrayCache[ i ];
+				
+			}
+			
+			this.dataArrayCache = undefined;
+			
+			this.basicMaterial.opacity -= 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
 		}
 
 	};
@@ -7491,7 +7675,10 @@ var TSP = (function (exports) {
 		this.aggregationElement = undefined;
 
 		this.dataArray = undefined;
+		this.dataArrayCache = undefined;
 		this.dataTexture = undefined;
+		
+		this.basicMaterial = undefined;
 
 		this.init();
 
@@ -7527,6 +7714,8 @@ var TSP = (function (exports) {
 				transparent: true
 
 			} );
+			
+			this.basicMaterial = basicMaterial;
 
 			let materials = [
 
@@ -7545,6 +7734,10 @@ var TSP = (function (exports) {
 			cube.elementType = "aggregationElement";
 			cube.clickable = true;
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
+			
+			cube.context = this;
 
 			this.cube = cube;
 
@@ -7599,6 +7792,48 @@ var TSP = (function (exports) {
 
 			this.dataTexture.needsUpdate = true;
 
+		},
+		
+		emissive: function() {
+			
+			let cacheData = new Uint8Array( this.dataArray.length );
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				cacheData[ i ] = this.dataArray[ i ];
+				
+			}
+			
+			this.dataArrayCache = cacheData;
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+				
+			}
+			
+			this.basicMaterial.opacity += 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = this.dataArrayCache[ i ];
+				
+			}
+			
+			this.dataArrayCache = undefined;
+			
+			this.basicMaterial.opacity -= 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
 		}
 
 	};
@@ -7711,7 +7946,7 @@ var TSP = (function (exports) {
 		 */
 
 		/**
-		 * init() creates actual THREE.Object in NativeLayer3d, warp them into a group, and add it to THREE.js's scene.
+		 * init() creates actual THREE.Object in NativeLayer3d, warp them into a group, and add it to Model context.
 		 *
 		 * Model passes two parameters, center and actualDepth, to NativeLayer3d when call init() to initialize NativeLayer3d.
 		 *
@@ -7761,9 +7996,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add wrapper object to THREE.js scene.
+			// Add wrapper object to THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -8294,6 +8529,54 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+						
+						this.segregationHandlers[ i ].emissive();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.emissive();
+					
+				}
+				
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+						
+						this.segregationHandlers[ i ].darken();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.darken();
+					
+				}
+				
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -9870,10 +10153,14 @@ var TSP = (function (exports) {
 		this.sideOpacity = SideFaceRatio * this.minOpacity;
 
 		this.dataArray = undefined;
+		this.dataArrayCache = undefined;
 		this.backDataArray = undefined;
+		this.backDataArrayCache = undefined;
 		this.dataTexture = undefined;
 		this.backDataTexture = undefined;
 		this.queue = undefined;
+		
+		this.basicMaterial = undefined;
 
 		this.queueGroup = undefined;
 
@@ -9939,6 +10226,8 @@ var TSP = (function (exports) {
 				opacity: this.sideOpacity
 
 			} );
+			
+			this.basicMaterial = basicMaterial;
 
 			let materials = [
 
@@ -9956,7 +10245,11 @@ var TSP = (function (exports) {
 			cube.position.set( 0, 0, 0 );
 			cube.elementType = "featureLine";
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
 
+			cube.context = this;
+			
 			this.queue = cube;
 
 			let queueGroup = new THREE.Object3D();
@@ -10057,6 +10350,74 @@ var TSP = (function (exports) {
 			this.lengthText = undefined;
 			this.isTextShown = false;
 
+		},
+		
+		emissive: function() {
+			
+			let cacheData = new Uint8Array( this.dataArray.length );
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				cacheData[ i ] = this.dataArray[ i ];
+				
+			}
+			
+			this.dataArrayCache = cacheData;
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+				
+			}
+			
+			let cacheBackData = new Uint8Array( this.backDataArray.length );
+			
+			for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+				
+				cacheBackData[ i ] = this.backDataArray[ i ];
+				
+			}
+			
+			this.backDataArrayCache = cacheBackData;
+			
+			for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+				
+				this.backDataArray[ i ] = Math.min( this.backDataArray[ i ] + 30, 255 );
+				
+			}
+			
+			this.basicMaterial.opacity += 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.backDataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = this.dataArrayCache[ i ];
+				
+			}
+			
+			this.dataArrayCache = undefined;
+			
+			for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+				
+				this.backDataArray[ i ] = this.backDataArrayCache[ i ];
+				
+			}
+			
+			this.backDataArrayCache = undefined;
+			
+			this.basicMaterial.opacity -= 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.backDataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
 		}
 
 	};
@@ -10088,12 +10449,16 @@ var TSP = (function (exports) {
 		this.setRange();
 
 		this.dataArray = undefined;
+		this.dataArrayCache = undefined;
 		this.backDataArray = undefined;
+		this.backDataArrayCache = undefined;
 		this.dataTexture = undefined;
 		this.backDataTexture = undefined;
 		this.queue = undefined;
 
 		this.queueGroup = undefined;
+		
+		this.basicMaterial = undefined;
 
 		this.font = TextFont;
 		this.textSize = TextHelper.calcQueueTextSize( this.unitLength );
@@ -10176,6 +10541,8 @@ var TSP = (function (exports) {
 				opacity: this.sideOpacity
 
 			} );
+			
+			this.basicMaterial = basicMaterial;
 
 			let materials = [
 
@@ -10193,6 +10560,10 @@ var TSP = (function (exports) {
 			cube.position.set( 0, 0, 0 );
 			cube.elementType = "featureLine";
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
+			
+			cube.context = this;
 
 			return cube;
 
@@ -10455,6 +10826,74 @@ var TSP = (function (exports) {
 
 			this.queueLengthNeedsUpdate = false;
 
+		},
+		
+		emissive: function() {
+			
+			let cacheData = new Uint8Array( this.dataArray.length );
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				cacheData[ i ] = this.dataArray[ i ];
+				
+			}
+			
+			this.dataArrayCache = cacheData;
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+				
+			}
+			
+			let cacheBackData = new Uint8Array( this.backDataArray.length );
+			
+			for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+				
+				cacheBackData[ i ] = this.backDataArray[ i ];
+				
+			}
+			
+			this.backDataArrayCache = cacheBackData;
+			
+			for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+				
+				this.backDataArray[ i ] = Math.min( this.backDataArray[ i ] + 30, 255 );
+				
+			}
+			
+			this.basicMaterial.opacity += 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.backDataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = this.dataArrayCache[ i ];
+				
+			}
+			
+			this.dataArrayCache = undefined;
+			
+			for ( let i = 0; i < this.backDataArray.length; i ++ ) {
+				
+				this.backDataArray[ i ] = this.backDataArrayCache[ i ];
+				
+			}
+			
+			this.backDataArrayCache = undefined;
+			
+			this.basicMaterial.opacity -= 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.backDataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
 		}
 
 	};
@@ -10522,6 +10961,7 @@ var TSP = (function (exports) {
 
 			paginationButton.position.set( this.position.x, this.position.y, this.position.z );
 			paginationButton.clickable = true;
+			paginationButton.draggable = true;
 			paginationButton.elementType = "paginationButton";
 			paginationButton.paginationType = this.paginationType;
 			paginationButton.rotateY(  Math.PI / 2 );
@@ -10750,9 +11190,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 		},
 
@@ -10925,6 +11365,28 @@ var TSP = (function (exports) {
 
 			return this.actualWidth;
 
+		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				this.aggregationHandler.emissive();
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				this.aggregationHandler.darken();
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -11501,9 +11963,9 @@ var TSP = (function (exports) {
 
 			this.initAggregationElement();
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 		},
 
@@ -11658,6 +12120,28 @@ var TSP = (function (exports) {
 			return this.actualWidth;
 
 		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				this.aggregationHandler.emissive();
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				this.aggregationHandler.darken();
+				this.isEmissive = false;
+				
+			}
+			
+		},
 
 		/**
 		 * ============
@@ -11803,7 +12287,10 @@ var TSP = (function (exports) {
 		this.neuralLength = 3 * width * height;
 
 		this.dataArray = undefined;
+		this.dataArrayCache = undefined;
 		this.dataTexture = undefined;
+		
+		this.basicMaterial = undefined;
 
 		this.colorMap = undefined;
 		this.colorGroup = undefined;
@@ -11847,6 +12334,8 @@ var TSP = (function (exports) {
 				opacity: this.sideOpacity
 
 			} );
+			
+			this.basicMaterial = basicMaterial;
 
 			let materials = [
 
@@ -11863,6 +12352,10 @@ var TSP = (function (exports) {
 			cube.elementType = "RGBInputElement";
 			cube.clickable = true;
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
+			
+			cube.context = this;
 
 			this.colorMap = cube;
 
@@ -12009,6 +12502,48 @@ var TSP = (function (exports) {
 
 			this.isTextShown = false;
 
+		},
+		
+		emissive: function() {
+			
+			let cacheData = new Uint8Array( this.dataArray.length );
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				cacheData[ i ] = this.dataArray[ i ];
+				
+			}
+			
+			this.dataArrayCache = cacheData;
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+				
+			}
+			
+			this.basicMaterial.opacity += 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = this.dataArrayCache[ i ];
+				
+			}
+			
+			this.dataArrayCache = undefined;
+			
+			this.basicMaterial.opacity -= 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
 		}
 
 	};
@@ -12041,9 +12576,12 @@ var TSP = (function (exports) {
 		this.type = type;
 
 		this.dataArray = undefined;
+		this.dataArrayCache = undefined;
 		this.dataTexture = undefined;
 		this.channelMap = undefined;
 		this.channelGroup = undefined;
+		
+		this.basicMaterial = undefined;
 
 		this.font = TextFont;
 		this.textSize = TextHelper.calcFmTextSize( this.actualWidth );
@@ -12063,7 +12601,7 @@ var TSP = (function (exports) {
 			let data = new Uint8Array( amount );
 			this.dataArray = data;
 
-			for ( let i = 0; i < amount; i++ ) {
+			for ( let i = 0; i < amount; i ++ ) {
 
 				switch ( this.type ) {
 
@@ -12126,6 +12664,8 @@ var TSP = (function (exports) {
 				opacity: this.sideOpacity
 
 			} );
+			
+			this.basicMaterial = basicMaterial;
 
 			let materials = [
 
@@ -12139,9 +12679,12 @@ var TSP = (function (exports) {
 			];
 
 			let cube = new THREE.Mesh( boxGeometry, materials );
-
+			
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
 			cube.elementType = "channelMap";
+			cube.context = this;
 
 			this.channelMap = cube;
 
@@ -12157,7 +12700,7 @@ var TSP = (function (exports) {
 
 			let renderColor = RenderPreprocessor.preProcessChannelColor( colors, this.width, this.height );
 
-			for ( let i = 0; i < renderColor.length; i++ ) {
+			for ( let i = 0; i < renderColor.length; i ++ ) {
 
 				switch ( this.type ) {
 
@@ -12196,7 +12739,7 @@ var TSP = (function (exports) {
 
 		clear: function() {
 
-			for ( let i = 0; i < this.dataArray.length; i++ ) {
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
 
 				switch ( this.type ) {
 
@@ -12360,8 +12903,50 @@ var TSP = (function (exports) {
 
 			this.isTextShown = false;
 
+		},
+		
+		emissive: function() {
+			
+			let cacheData = new Uint8Array( this.dataArray.length );
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				cacheData[ i ] = this.dataArray[ i ];
+				
+			}
+			
+			this.dataArrayCache = cacheData;
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+				
+			}
+			
+			this.basicMaterial.opacity += 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = this.dataArrayCache[ i ];
+				
+			}
+			
+			this.dataArrayCache = undefined;
+			
+			this.basicMaterial.opacity -= 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
 		}
-
+		
 	};
 
 	/**
@@ -12824,9 +13409,9 @@ var TSP = (function (exports) {
 
 			this.initAggregationElement();
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 		},
 
@@ -13108,6 +13693,54 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+						
+						this.segregationHandlers[ i ].emissive();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.emissive();
+					
+				}
+				
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+						
+						this.segregationHandlers[ i ].darken();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.darken();
+					
+				}
+				
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -13447,6 +14080,8 @@ var TSP = (function (exports) {
 
 		this.cube = undefined;
 		this.aggregationElement = undefined;
+		
+		this.material = undefined;
 
 		this.init();
 
@@ -13465,14 +14100,20 @@ var TSP = (function (exports) {
 				transparent: true
 
 			} );
+			
+			this.material = material;
 
 			let cube = new THREE.Mesh( geometry, material );
 
 			cube.position.set( 0, 0, 0 );
 			cube.clickable = true;
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
 			cube.elementType = "aggregationElement";
 
+			cube.context = this;
+			
 			this.cube = cube;
 
 			let edgesGeometry = new THREE.EdgesGeometry( geometry );
@@ -13508,6 +14149,20 @@ var TSP = (function (exports) {
 
 			this.cube.positionedLayer = layerType;
 
+		},
+		
+		emissive: function() {
+			
+			this.material.opacity += 0.2;
+			this.material.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			this.material.opacity -= 0.2;
+			this.material.needsUpdate = true;
+			
 		}
 
 	};
@@ -13629,8 +14284,7 @@ var TSP = (function (exports) {
 				}
 
 			} ).onComplete( function() {
-
-				console.log( "end close output layer" );
+				
 				layer.disposeOutputElement();
 				layer.initAggregationElement();
 
@@ -13724,11 +14378,13 @@ var TSP = (function (exports) {
 		this.isTextShown = false;
 
 		this.font = TextFont;
-
+		
+		this.material = undefined;
+		
 		this.outputText = undefined;
 		this.outputNeural = undefined;
 		this.outputGroup = undefined;
-
+		
 		this.init();
 
 	}
@@ -13748,11 +14404,17 @@ var TSP = (function (exports) {
 				transparent: true
 
 			} );
+			
+			this.material = material;
 
 			let cube = new THREE.Mesh( boxGeometry, material );
 			cube.elementType = "outputNeural";
 			cube.hoverable = true;
 			cube.clickable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
+			
+			cube.context = this;
 
 			this.outputNeural = cube;
 
@@ -13876,6 +14538,20 @@ var TSP = (function (exports) {
 			this.position.z = pos.z;
 			this.outputGroup.position.set( pos.x, pos.y, pos.z );
 
+		},
+		
+		emissive: function() {
+			
+			this.material.opacity += 0.2;
+			this.material.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			this.material.opacity -= 0.2;
+			this.material.needsUpdate = true;
+			
 		}
 
 	};
@@ -14087,6 +14763,26 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+			
+			for ( let i = 0; i < this.outputUnitList.length; i ++ ) {
+				
+				this.outputUnitList[ i ].emissive();
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			for ( let i = 0; i < this.outputUnitList.length; i ++ ) {
+				
+				this.outputUnitList[ i ].darken();
+				
+			}
+			
 		}
 
 	};
@@ -14567,9 +15263,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -14871,6 +15567,46 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+		
+			if ( !this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					this.outputHandler.emissive();
+					
+				} else {
+					
+					this.aggregationHandler.emissive();
+					
+				}
+				
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					this.outputHandler.darken();
+					
+				} else {
+					
+					this.aggregationHandler.darken();
+					
+				}
+				
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -15527,6 +16263,7 @@ var TSP = (function (exports) {
 			cube.elementType = "outputMap3d";
 			cube.clickable = true;
 			cube.hoverable = true;
+			cube.draggable = true;
 
 			this.outputMap = cube;
 
@@ -15850,9 +16587,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -16389,6 +17126,7 @@ var TSP = (function (exports) {
 			cube.elementType = "outputNeural";
 			cube.clickable = true;
 			cube.hoverable = true;
+			cube.draggable = true;
 
 			cube.position.set(
 
@@ -17087,9 +17825,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -18122,7 +18860,7 @@ var TSP = (function (exports) {
 		 */
 
 		/**
-		 * init() create actual THREE.Object in NativeLayer1d, warp them into a group, and add it to THREE.js's scene.
+		 * init() create actual THREE.Object in NativeLayer1d, warp them into a group, and add it to Model context.
 		 *
 		 * Model passes two parameters, center and actualDepth, to NativeLayer1d when call init() to initialize NativeLayer1d.
 		 *
@@ -18166,9 +18904,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -18422,6 +19160,46 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					this.queueHandler.emissive();
+					
+				} else {
+					
+					this.aggregationHandler.emissive();
+					
+				}
+				
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					this.queueHandler.darken();
+					
+				} else {
+					
+					this.aggregationHandler.darken();
+					
+				}
+			
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -21903,6 +22681,8 @@ var TSP = (function (exports) {
 		this.globalPoint = undefined;
 		this.group = undefined;
 
+		this.material = undefined;
+		
 		this.textSize = TextHelper.calcGlobalPoolingSize( this.unitLength );
 
 		this.widthText = undefined;
@@ -21927,12 +22707,18 @@ var TSP = (function (exports) {
 				transparent: true
 
 			} );
-
+			
+			this.material = material;
+			
 			let cube = new THREE.Mesh( geometry, material );
 
 			cube.position.set( 0, 0, 0 );
 			cube.elementType = "globalPoolingElement";
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
+			
+			cube.context = this;
 
 			this.globalPoint = cube;
 
@@ -22091,6 +22877,20 @@ var TSP = (function (exports) {
 
 			this.isTextShown = false;
 
+		},
+		
+		emissive: function() {
+			
+			this.material.opacity += 0.2;
+			this.material.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			this.material.opacity -= 0.2;
+			this.material.needsUpdate = true;
+			
 		}
 
 	};
@@ -23890,10 +24690,10 @@ var TSP = (function (exports) {
 	 * @author syt123450 / https://github.com/syt123450
 	 */
 
-	function MergedLineGroup(layer, scene, neuralGroup, color, minOpacity ) {
+	function MergedLineGroup( layer, context, neuralGroup, color, minOpacity ) {
 
 		this.layer = layer;
-		this.scene = scene;
+		this.context = context;
 		this.neuralGroup = neuralGroup;
 		this.color = color;
 		this.minOpacity = minOpacity;
@@ -23929,7 +24729,7 @@ var TSP = (function (exports) {
 
 		getLineGroupParameters: function( selectedElement ) {
 
-			this.scene.updateMatrixWorld();
+			this.context.updateMatrixWorld();
 
 			let straightLineColors = [];
 			let straightLineVertices = [];
@@ -23941,25 +24741,25 @@ var TSP = (function (exports) {
 
 			let straightElements = relatedElements.straight;
 			let curveElements = relatedElements.curve;
-
-			let neuralGroupPos = new THREE.Vector3();
-			this.neuralGroup.getWorldPosition( neuralGroupPos );
-
-			let globalStartPos = new THREE.Vector3();
-
-			selectedElement.getWorldPosition( globalStartPos );
-
-			let lineStartPos = globalStartPos.sub( neuralGroupPos );
+	        
+	        selectedElement.parent.updateMatrixWorld();
+			
+	        let lineStartPos = new THREE.Vector3();
+	        selectedElement.getWorldPosition( lineStartPos );
+	        this.neuralGroup.worldToLocal( lineStartPos );
 
 			for ( let i = 0; i < straightElements.length; i ++ ) {
 
 				straightLineColors.push( new THREE.Color( this.color ) );
 				straightLineColors.push( new THREE.Color( this.color ) );
+	            
+	            straightElements[ i ].parent.updateMatrixWorld();
+	            
+	            let relativePos = new THREE.Vector3();
+	            straightElements[ i ].getWorldPosition( relativePos );
+	            this.neuralGroup.worldToLocal( relativePos );
 
-				let globalRelativePos = new THREE.Vector3();
-				straightElements[ i ].getWorldPosition( globalRelativePos );
-
-				straightLineVertices.push( globalRelativePos.sub( neuralGroupPos  ) );
+				straightLineVertices.push( relativePos );
 				straightLineVertices.push( lineStartPos );
 
 			}
@@ -23967,11 +24767,13 @@ var TSP = (function (exports) {
 			for ( let i = 0; i < curveElements.length; i ++ ) {
 
 				let startPos = lineStartPos;
-
-				let endGlobalPos = new THREE.Vector3();
-				curveElements[ i ].getWorldPosition( endGlobalPos );
-
-				let endPos = endGlobalPos.sub( neuralGroupPos );
+	            
+	            curveElements[ i ].parent.updateMatrixWorld();
+				
+				let endPos = new THREE.Vector3();
+				curveElements[ i ].getWorldPosition( endPos );
+	            this.neuralGroup.worldToLocal( endPos );
+				
 				let startEndDistance = startPos.y - endPos.y;
 				let controlTranslateXVector;
 
@@ -24171,7 +24973,7 @@ var TSP = (function (exports) {
 			this.lineGroupHandler = new MergedLineGroup(
 
 				this,
-				this.scene,
+				this.context,
 				this.neuralGroup,
 				this.color,
 				this.minOpacity
@@ -26671,7 +27473,7 @@ var TSP = (function (exports) {
 		 */
 
 		/**
-		 * init() create actual THREE.Object in NativeLayer1d, warp them into a group, and add it to THREE.js's scene.
+		 * init() create actual THREE.Object in NativeLayer1d, warp them into a group, and add it to Model context.
 		 *
 		 * Model passes two parameters, center and actualDepth, to NativeLayer1d when call init() to initialize NativeLayer1d.
 		 *
@@ -26715,9 +27517,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -27044,6 +27846,46 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					this.queueHandler.emissive();
+					
+				} else {
+					
+					this.aggregationHandler.emissive();
+					
+				}
+				
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					this.queueHandler.darken();
+					
+				} else {
+					
+					this.aggregationHandler.darken();
+					
+				}
+				
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -27674,9 +28516,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -27958,6 +28800,54 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.queueHandlers.length; i ++ ) {
+						
+						this.queueHandlers[ i ].emissive();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.emissive();
+					
+				}
+				
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.queueHandlers.length; i ++ ) {
+						
+						this.queueHandlers[ i ].darken();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.darken();
+					
+				}
+				
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -28290,10 +29180,12 @@ var TSP = (function (exports) {
 		this.aggregationElement = undefined;
 
 		this.dataArray = undefined;
+		this.dataArrayCache = undefined;
 		this.dataTexture = undefined;
 
 		this.dataMaterial = undefined;
 		this.clearMaterial = undefined;
+		this.basicMaterial = undefined;
 
 		this.init();
 
@@ -28329,6 +29221,8 @@ var TSP = (function (exports) {
 				transparent: true
 
 			} );
+			
+			this.basicMaterial = basicMaterial;
 
 			let materials = [
 
@@ -28372,6 +29266,10 @@ var TSP = (function (exports) {
 			cube.elementType = "aggregationElement";
 			cube.clickable = true;
 			cube.hoverable = true;
+			cube.draggable = true;
+			cube.emissiveable = true;
+			
+			cube.context = this;
 
 			this.cube = cube;
 
@@ -28427,6 +29325,48 @@ var TSP = (function (exports) {
 			this.dataTexture.needsUpdate = true;
 			this.cube.material = this.dataMaterial;
 
+		},
+		
+		emissive: function() {
+			
+			let cacheData = new Uint8Array( this.dataArray.length );
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				cacheData[ i ] = this.dataArray[ i ];
+				
+			}
+			
+			this.dataArrayCache = cacheData;
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+				
+			}
+			
+			this.basicMaterial.opacity += 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = this.dataArrayCache[ i ];
+				
+			}
+			
+			this.dataArrayCache = undefined;
+			
+			this.basicMaterial.opacity -= 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
 		}
 
 	};
@@ -28459,6 +29399,7 @@ var TSP = (function (exports) {
 		};
 
 		this.dataArray = undefined;
+		this.dataArrayCache = undefined;
 		this.dataTexture = undefined;
 		this.featureMap = undefined;
 		this.featureGroup = undefined;
@@ -28508,6 +29449,8 @@ var TSP = (function (exports) {
 				opacity: this.sideOpacity
 
 			} );
+			
+			this.basicMaterial = basicMaterial;
 
 			let materials = [
 
@@ -28548,6 +29491,7 @@ var TSP = (function (exports) {
 			let cube = new THREE.Mesh( boxGeometry, materials );
 			cube.elementType = "featureMap";
 			cube.hoverable = true;
+			cube.draggable = true;
 
 			this.featureMap = cube;
 
@@ -28709,6 +29653,48 @@ var TSP = (function (exports) {
 
 			this.isTextShown = false;
 
+		},
+		
+		emissive: function() {
+			
+			let cacheData = new Uint8Array( this.dataArray.length );
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				cacheData[ i ] = this.dataArray[ i ];
+				
+			}
+			
+			this.dataArrayCache = cacheData;
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = Math.min( this.dataArray[ i ] + 30, 255 );
+				
+			}
+			
+			this.basicMaterial.opacity += 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
+		},
+		
+		darken: function() {
+			
+			for ( let i = 0; i < this.dataArray.length; i ++ ) {
+				
+				this.dataArray[ i ] = this.dataArrayCache[ i ];
+				
+			}
+			
+			this.dataArrayCache = undefined;
+			
+			this.basicMaterial.opacity -= 0.2;
+			
+			this.dataTexture.needsUpdate = true;
+			this.basicMaterial.needsUpdate = true;
+			
 		}
 
 	};
@@ -28810,7 +29796,7 @@ var TSP = (function (exports) {
 		 */
 
 		/**
-		 * init() create actual THREE.Object in MergedLayer3d, warp them into a group, and add it to THREE.js's scene.
+		 * init() create actual THREE.Object in MergedLayer3d, warp them into a group, and add it to Model context.
 		 *
 		 * Model passes two parameters, center and actualDepth, to MergedLayer3d when call init() to initialize MergedLayer3d.
 		 *
@@ -28860,9 +29846,9 @@ var TSP = (function (exports) {
 
 			}
 
-			// Add the wrapper object to the actual THREE.js scene.
+			// Add the wrapper object to the actual THREE.js object.
 
-			this.scene.add( this.neuralGroup );
+			this.context.add( this.neuralGroup );
 
 			// Create relative line element.
 
@@ -29255,6 +30241,54 @@ var TSP = (function (exports) {
 
 			}
 
+		},
+		
+		emissive: function() {
+			
+			if ( !this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+						
+						this.segregationHandlers[ i ].emissive();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.emissive();
+					
+				}
+				
+				this.isEmissive = true;
+				
+			}
+			
+		},
+		
+		darken: function() {
+			
+			if ( this.isEmissive ) {
+				
+				if ( this.isOpen ) {
+					
+					for ( let i = 0; i < this.segregationHandlers.length; i ++ ) {
+						
+						this.segregationHandlers[ i ].darken();
+						
+					}
+					
+				} else {
+					
+					this.aggregationHandler.darken();
+					
+				}
+				
+				this.isEmissive = false;
+				
+			}
+			
 		},
 
 		/**
@@ -30077,5 +31111,4 @@ var TSP = (function (exports) {
 
 	return exports;
 
-}({}));
-//# sourceMappingURL=tensorspace.js.map
+}({},THREE,TWEEN,THREE.TrackballControls,tf));
