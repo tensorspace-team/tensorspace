@@ -422,6 +422,12 @@ Layer.prototype = {
             this.separateTime = modelConfig.animeTime / 2;
 			
 		}
+		
+		if ( modelConfig.hasCloseButton !== undefined ) {
+			
+			this.hasCloseButton = modelConfig.hasCloseButton;
+			
+		}
 
 	},
 

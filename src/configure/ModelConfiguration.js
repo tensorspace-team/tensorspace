@@ -14,6 +14,7 @@ function ModelConfiguration( config ) {
 	this.minOpacity = 0.4;
 	this.predictDataShapes = undefined;
 	this.feedInputs = undefined;
+	this.hasCloseButton = true;
 	this.color = {
 
 		background: 0x000000,
@@ -170,6 +171,12 @@ function ModelConfiguration( config ) {
 
 			this.feedInputs = config.feedInputs;
 
+		}
+		
+		if ( config.hasCloseButton !== undefined ) {
+			
+			this.hasCloseButton = config.hasCloseButton;
+			
 		}
 
 		if ( config.color !== undefined ) {
