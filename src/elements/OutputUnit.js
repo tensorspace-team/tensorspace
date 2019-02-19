@@ -45,6 +45,8 @@ function OutputUnit( unitLength, output, initPositions, color, minOpacity, overv
 	this.outputNeural = undefined;
 	this.outputGroup = undefined;
 	
+	this.value = undefined;
+	
 	this.init();
 
 }
@@ -64,6 +66,8 @@ OutputUnit.prototype = {
 			transparent: true
 
 		} );
+		
+		this.value = this.minOpacity;
 		
 		this.material = material;
 
@@ -98,8 +102,10 @@ OutputUnit.prototype = {
 	},
 
 	updateVis: function( color ) {
-
-		this.outputNeural.material.opacity = color;
+		
+		this.value = color;
+		
+		this.outputNeural.material.opacity = this.value;
 		this.outputNeural.material.needsUpdate = true;
 
 	},
@@ -163,7 +169,7 @@ OutputUnit.prototype = {
 
 		let colors = ColorUtils.getAdjustValues( [ 0 ], this.minOpacity );
 
-		this.updateVis( colors );
+		this.updateVis( colors[ 0 ] );
 
 		if ( this.outputText !== undefined ) {
 
@@ -202,15 +208,17 @@ OutputUnit.prototype = {
 	
 	emissive: function() {
 		
-		this.material.opacity += 0.2;
-		this.material.needsUpdate = true;
+		let color = this.value + 0.2;
+		
+		this.updateVis( color );
 		
 	},
 	
 	darken: function() {
 		
-		this.material.opacity -= 0.2;
-		this.material.needsUpdate = true;
+		let color = this.value - 0.2;
+		
+		this.updateVis( color );
 		
 	}
 

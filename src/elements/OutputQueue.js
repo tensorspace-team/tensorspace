@@ -99,7 +99,7 @@ OutputQueue.prototype = {
 
 		for ( let i = 0; i < colors.length; i ++ ) {
 
-			this.outputUnitList[ i ].updateVis( [ colors[ i ] ] );
+			this.outputUnitList[ i ].updateVis( colors[ i ] );
 
 		}
 

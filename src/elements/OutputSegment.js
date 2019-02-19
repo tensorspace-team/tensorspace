@@ -130,7 +130,7 @@ OutputSegment.prototype = {
 
 		for ( let i = 0; i < colors.length; i ++ ) {
 
-			this.unitList[ i ].updateVis( [ colors[ i ] ] );
+			this.unitList[ i ].updateVis( colors[ i ] );
 
 		}
 
