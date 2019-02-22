@@ -53,7 +53,11 @@ let OutputTransitionFactory = ( function() {
 
 		} ).onComplete( function() {
 
-			layer.initCloseButton();
+			if ( layer.hasCloseButton ) {
+				
+				layer.initCloseButton();
+				
+			}
 
 			if ( layer.paging ) {
 
@@ -86,7 +90,11 @@ let OutputTransitionFactory = ( function() {
 		let closeTween = new TWEEN.Tween( init )
 			.to( end, layer.openTime );
 
-		layer.disposeCloseButton();
+		if ( layer.hasCloseButton ) {
+			
+			layer.disposeCloseButton();
+			
+		}
 
 		closeTween.onUpdate( function() {
 

@@ -49,8 +49,12 @@ let YoloTweenFactory = ( function() {
 
 		} ).onComplete( function() {
 
-			layer.initCloseButton();
-
+			if ( layer.hasCloseButton ) {
+				
+				layer.initCloseButton();
+				
+			}
+			
 		} );
 
 		yoloOutputTween.start();
@@ -93,8 +97,12 @@ let YoloTweenFactory = ( function() {
 
 		} ).onStart( function() {
 
-			layer.disposeCloseButton();
-
+			if ( layer.hasCloseButton ) {
+				
+				layer.disposeCloseButton();
+				
+			}
+			
 		} ).onComplete( function() {
 
 			layer.disposeSegregationElements();

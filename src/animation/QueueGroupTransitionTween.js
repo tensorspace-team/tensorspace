@@ -48,7 +48,11 @@ let QueueGroupTweenFactory = ( function() {
 
 		} ).onComplete( function() {
 
-			layer.initCloseButton();
+			if ( layer.hasCloseButton ) {
+				
+				layer.initCloseButton();
+				
+			}
 
 		} );
 
@@ -92,7 +96,11 @@ let QueueGroupTweenFactory = ( function() {
 
 		} ).onStart( function() {
 
-			layer.disposeCloseButton();
+			if ( layer.hasCloseButton ) {
+				
+				layer.disposeCloseButton();
+				
+			}
 
 		} ).onComplete( function() {
 

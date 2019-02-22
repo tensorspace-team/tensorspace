@@ -60,7 +60,12 @@ let QueueTransitionFactory = ( function() {
 
 			layer.neuralGroup.remove( variableLengthObject );
 			layer.initQueueElement();
-			layer.initCloseButton();
+			
+			if ( layer.hasCloseButton ) {
+				
+				layer.initCloseButton();
+				
+			}
 
 			if ( layer.paging ) {
 
@@ -139,8 +144,13 @@ let QueueTransitionFactory = ( function() {
 
 			layer.disposeQueueElement();
 			layer.neuralGroup.add( variableLengthObject );
-			layer.disposeCloseButton();
 
+			if ( layer.hasCloseButton ) {
+				
+				layer.disposeCloseButton();
+				
+			}
+			
 			if ( layer.paging ) {
 
 				layer.hidePaginationButton();

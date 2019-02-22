@@ -48,7 +48,11 @@ let MapTransitionFactory = ( function() {
 
 		} ).onComplete( function() {
 
-			layer.initCloseButton();
+			if ( layer.hasCloseButton ) {
+				
+				layer.initCloseButton();
+				
+			}
 
 		} );
 
@@ -92,8 +96,12 @@ let MapTransitionFactory = ( function() {
 
 		} ).onStart( function() {
 
-			layer.disposeCloseButton();
-
+			if ( layer.hasCloseButton ) {
+				
+				layer.disposeCloseButton();
+				
+			}
+			
 		} ).onComplete( function() {
 
 			layer.disposeSegregationElements();
