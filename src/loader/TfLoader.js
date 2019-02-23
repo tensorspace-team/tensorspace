@@ -30,15 +30,6 @@ function TfLoader( model, config ) {
 	this.modelUrl = undefined;
 
 	/**
-	 * tensorflow weight's url (.json file's url).
-	 * Important parameter for TfLoader to get tensorflow model.
-	 *
-	 * @type { url }
-	 */
-
-	this.weightUrl = undefined;
-
-	/**
 	 * User's predefined outputsName list.
 	 * If set, TfLoader will set this name list to TfPredictor.
 	 *
@@ -81,7 +72,7 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	load: async function() {
 
-		const loadedModel = await tf.loadFrozenModel( this.modelUrl, this.weightUrl );
+		const loadedModel = await tf.loadGraphModel( this.modelUrl );
 
 		this.model.resource = loadedModel;
 
@@ -140,18 +131,6 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		} else {
 
 			console.error( "\"modelUrl\" property is required to load tensorflow model." );
-
-		}
-
-		// "weightUrl" configuration is required.
-
-		if ( loaderConfig.weightUrl !== undefined ) {
-
-			this.weightUrl = loaderConfig.weightUrl;
-
-		} else {
-
-			console.error( "\"weightUrl\" property is required to load tensorflow model." );
 
 		}
 
