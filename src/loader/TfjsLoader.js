@@ -63,7 +63,7 @@ TfjsLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	load: async function() {
 
-		const loadedModel = await tf.loadLayersModel( this.url );
+		const loadedModel = await tf.loadLayersModel( this.url, this.tfjsLoadOption );
 
 		this.model.resource = loadedModel;
 

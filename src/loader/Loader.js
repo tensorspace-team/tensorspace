@@ -38,6 +38,22 @@ function Loader( model, config ) {
 	 */
 
 	this.onCompleteCallback = undefined;
+	
+	/**
+	 * Store callback function fired periodically before load process is completed.
+	 *
+	 * @type { function }
+	 */
+	
+	this.onProgressCallBack = undefined;
+	
+	/**
+	 * Tfjs LoadOption object.
+	 *
+	 * @type { Object }
+	 */
+	
+	this.tfjsLoadOption = {};
 
 	// Load loader's basic configuration.
 
@@ -56,7 +72,16 @@ Loader.prototype = {
 	loadLoaderConfig: function( config ) {
 
 		if ( this.config !== undefined )  {
-
+			
+			// If onProgress is defined by user, store it.
+			
+			if ( config.onProgress !== undefined ) {
+				
+				this.onProgressCallBack = config.onProgress;
+				this.tfjsLoadOption.onProgress = config.onProgress;
+				
+			}
+			
 			// If onComplete callback is defined by user, store it.
 
 			if ( config.onComplete !== undefined ) {
