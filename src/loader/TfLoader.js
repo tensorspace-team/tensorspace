@@ -27,7 +27,7 @@ function TfLoader( model, config ) {
 	 * @type { url }
 	 */
 
-	this.modelUrl = undefined;
+	this.url = undefined;
 
 	/**
 	 * User's predefined outputsName list.
@@ -72,7 +72,7 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	load: async function() {
 
-		const loadedModel = await tf.loadGraphModel( this.modelUrl, this.tfjsLoadOption );
+		const loadedModel = await tf.loadGraphModel( this.url, this.tfjsLoadOption );
 
 		this.model.resource = loadedModel;
 
@@ -122,15 +122,15 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	loadTfConfig: function( loaderConfig ) {
 
-		// "modelUrl" configuration is required.
+		// "url" configuration is required.
 
-		if ( loaderConfig.modelUrl !== undefined ) {
+		if ( loaderConfig.url !== undefined ) {
 
-			this.modelUrl = loaderConfig.modelUrl;
+			this.url = loaderConfig.url;
 
 		} else {
 
-			console.error( "\"modelUrl\" property is required to load tensorflow model." );
+			console.error( "\"url\" property is required to load tensorflow model." );
 
 		}
 
