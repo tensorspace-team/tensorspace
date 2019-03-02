@@ -429,7 +429,12 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 			this.disposeAggregationElement();
 			this.initOutput();
 			this.updateOutputVis();
-			this.initCloseButton();
+			
+			if ( this.hasCloseButton ) {
+				
+				this.initCloseButton();
+				
+			}
 
 		}
 
@@ -448,7 +453,13 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 			this.isOpen = false;
 
 			this.disposeOutput();
-			this.disposeCloseButton();
+			
+			if ( this.hasCloseButton ) {
+				
+				this.disposeCloseButton();
+				
+			}
+			
 			this.initAggregationElement();
 
 		}
