@@ -105,37 +105,50 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 			this.scene.background = new THREE.Color( this.backgroundColor );
 
 			if ( this.hasStats ) {
-				import('stats-js')
+				
+				if ( typeof Stats !== 'undefined' ) {
+					
+					this.stats = new Stats();
+					this.stats.dom.style.position = "absolute";
+					this.stats.dom.style.zIndex = "1";
+					this.stats.showPanel( 0 );
+					this.container.appendChild( this.stats.dom );
+					
+				} else {
+					
+					import('stats-js')
 					.then((module) => {
-
+						
 						this.stats = new module();
 						this.stats.dom.style.position = "absolute";
 						this.stats.dom.style.zIndex = "1";
 						this.stats.showPanel( 0 );
 						this.container.appendChild( this.stats.dom );
-
+						
 					})
 					.catch(() => {
-
+						
 						if ( typeof Stats !== 'undefined' ) {
-
+							
 							this.stats = new Stats();
 							this.stats.dom.style.position = "absolute";
 							this.stats.dom.style.zIndex = "1";
 							this.stats.showPanel( 0 );
 							this.container.appendChild( this.stats.dom );
-
+							
 						} else if ( typeof window === 'undefined' ) {
-
+							
 							console.error('Please import stats-js');
-
+							
 						} else  {
-
+							
 							console.error('Please include  <script> tag');
-
+							
 						}
-
+						
 					});
+					
+				}
 
 			}
 
@@ -320,6 +333,22 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		 */
 
 		this.onCompleteCallback = undefined;
+		
+		/**
+		 * Store callback function fired periodically before load process is completed.
+		 *
+		 * @type { function }
+		 */
+		
+		this.onProgressCallBack = undefined;
+		
+		/**
+		 * Tfjs LoadOption object.
+		 *
+		 * @type { Object }
+		 */
+		
+		this.tfjsLoadOption = {};
 
 		// Load loader's basic configuration.
 
@@ -338,7 +367,16 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		loadLoaderConfig: function( config ) {
 
 			if ( this.config !== undefined )  {
-
+				
+				// If onProgress is defined by user, store it.
+				
+				if ( config.onProgress !== undefined ) {
+					
+					this.onProgressCallBack = config.onProgress;
+					this.tfjsLoadOption.onProgress = config.onProgress;
+					
+				}
+				
 				// If onComplete callback is defined by user, store it.
 
 				if ( config.onComplete !== undefined ) {
@@ -714,7 +752,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 		load: async function() {
 
-			const loadedModel = await tf$1.loadModel( this.url );
+			const loadedModel = await tf$1.loadLayersModel( this.url, this.tfjsLoadOption );
 
 			this.model.resource = loadedModel;
 
@@ -910,8 +948,8 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		 */
 
 		load: async function() {
-
-			const loadedModel = await tf$1.loadModel( this.url );
+			
+			const loadedModel = await tf$1.loadLayersModel( this.url, this.tfjsLoadOption );
 
 			this.model.resource = loadedModel;
 
@@ -1107,16 +1145,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		 * @type { url }
 		 */
 
-		this.modelUrl = undefined;
-
-		/**
-		 * tensorflow weight's url (.json file's url).
-		 * Important parameter for TfLoader to get tensorflow model.
-		 *
-		 * @type { url }
-		 */
-
-		this.weightUrl = undefined;
+		this.url = undefined;
 
 		/**
 		 * User's predefined outputsName list.
@@ -1161,7 +1190,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 		load: async function() {
 
-			const loadedModel = await tf$1.loadFrozenModel( this.modelUrl, this.weightUrl );
+			const loadedModel = await tf$1.loadGraphModel( this.url, this.tfjsLoadOption );
 
 			this.model.resource = loadedModel;
 
@@ -1211,27 +1240,15 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 		loadTfConfig: function( loaderConfig ) {
 
-			// "modelUrl" configuration is required.
+			// "url" configuration is required.
 
-			if ( loaderConfig.modelUrl !== undefined ) {
+			if ( loaderConfig.url !== undefined ) {
 
-				this.modelUrl = loaderConfig.modelUrl;
-
-			} else {
-
-				console.error( "\"modelUrl\" property is required to load tensorflow model." );
-
-			}
-
-			// "weightUrl" configuration is required.
-
-			if ( loaderConfig.weightUrl !== undefined ) {
-
-				this.weightUrl = loaderConfig.weightUrl;
+				this.url = loaderConfig.url;
 
 			} else {
 
-				console.error( "\"weightUrl\" property is required to load tensorflow model." );
+				console.error( "\"url\" property is required to load tensorflow model." );
 
 			}
 
@@ -1415,6 +1432,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		this.minOpacity = 0.4;
 		this.predictDataShapes = undefined;
 		this.feedInputs = undefined;
+		this.hasCloseButton = true;
 		this.color = {
 
 			background: 0x000000,
@@ -1571,6 +1589,12 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 				this.feedInputs = config.feedInputs;
 
+			}
+			
+			if ( config.hasCloseButton !== undefined ) {
+				
+				this.hasCloseButton = config.hasCloseButton;
+				
 			}
 
 			if ( config.color !== undefined ) {
@@ -3694,7 +3718,11 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onComplete( function() {
 
-				layer.initCloseButton();
+				if ( layer.hasCloseButton ) {
+					
+					layer.initCloseButton();
+					
+				}
 
 			} );
 
@@ -3738,7 +3766,11 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onStart( function() {
 
-				layer.disposeCloseButton();
+				if ( layer.hasCloseButton ) {
+					
+					layer.disposeCloseButton();
+					
+				}
 
 			} ).onComplete( function() {
 
@@ -5246,6 +5278,12 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 	            
 	            this.openTime = modelConfig.animeTime;
 	            this.separateTime = modelConfig.animeTime / 2;
+				
+			}
+			
+			if ( modelConfig.hasCloseButton !== undefined ) {
+				
+				this.hasCloseButton = modelConfig.hasCloseButton;
 				
 			}
 
@@ -7276,7 +7314,11 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onComplete( function() {
 
-				layer.initCloseButton();
+				if ( layer.hasCloseButton ) {
+					
+					layer.initCloseButton();
+					
+				}
 
 			} );
 
@@ -7320,8 +7362,12 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onStart( function() {
 
-				layer.disposeCloseButton();
-
+				if ( layer.hasCloseButton ) {
+					
+					layer.disposeCloseButton();
+					
+				}
+				
 			} ).onComplete( function() {
 
 				layer.disposeSegregationElements();
@@ -13086,7 +13132,11 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onComplete( function() {
 
-				layer.initCloseButton();
+				if ( layer.hasCloseButton ) {
+					
+					layer.initCloseButton();
+					
+				}
 
 			} );
 
@@ -13158,7 +13208,11 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onStart(function() {
 
-				layer.disposeCloseButton();
+				if ( layer.hasCloseButton ) {
+					
+					layer.disposeCloseButton();
+					
+				}
 
 			} ).onComplete( function() {
 
@@ -14220,7 +14274,11 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onComplete( function() {
 
-				layer.initCloseButton();
+				if ( layer.hasCloseButton ) {
+					
+					layer.initCloseButton();
+					
+				}
 
 				if ( layer.paging ) {
 
@@ -14253,7 +14311,11 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 			let closeTween = new TWEEN.Tween( init )
 				.to( end, layer.openTime );
 
-			layer.disposeCloseButton();
+			if ( layer.hasCloseButton ) {
+				
+				layer.disposeCloseButton();
+				
+			}
 
 			closeTween.onUpdate( function() {
 
@@ -14385,6 +14447,8 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		this.outputNeural = undefined;
 		this.outputGroup = undefined;
 		
+		this.value = undefined;
+		
 		this.init();
 
 	}
@@ -14404,6 +14468,8 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 				transparent: true
 
 			} );
+			
+			this.value = this.minOpacity;
 			
 			this.material = material;
 
@@ -14438,8 +14504,10 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		},
 
 		updateVis: function( color ) {
-
-			this.outputNeural.material.opacity = color;
+			
+			this.value = color;
+			
+			this.outputNeural.material.opacity = this.value;
 			this.outputNeural.material.needsUpdate = true;
 
 		},
@@ -14503,7 +14571,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			let colors = ColorUtils.getAdjustValues( [ 0 ], this.minOpacity );
 
-			this.updateVis( colors );
+			this.updateVis( colors[ 0 ] );
 
 			if ( this.outputText !== undefined ) {
 
@@ -14542,15 +14610,17 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		
 		emissive: function() {
 			
-			this.material.opacity += 0.2;
-			this.material.needsUpdate = true;
+			let color = this.value + 0.2;
+			
+			this.updateVis( color );
 			
 		},
 		
 		darken: function() {
 			
-			this.material.opacity -= 0.2;
-			this.material.needsUpdate = true;
+			let color = this.value - 0.2;
+			
+			this.updateVis( color );
 			
 		}
 
@@ -14690,7 +14760,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			for ( let i = 0; i < colors.length; i ++ ) {
 
-				this.outputUnitList[ i ].updateVis( [ colors[ i ] ] );
+				this.outputUnitList[ i ].updateVis( colors[ i ] );
 
 			}
 
@@ -14914,7 +14984,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			for ( let i = 0; i < colors.length; i ++ ) {
 
-				this.unitList[ i ].updateVis( [ colors[ i ] ] );
+				this.unitList[ i ].updateVis( colors[ i ] );
 
 			}
 
@@ -16891,7 +16961,12 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 				this.disposeAggregationElement();
 				this.initOutput();
 				this.updateOutputVis();
-				this.initCloseButton();
+				
+				if ( this.hasCloseButton ) {
+					
+					this.initCloseButton();
+					
+				}
 
 			}
 
@@ -16910,7 +16985,13 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 				this.isOpen = false;
 
 				this.disposeOutput();
-				this.disposeCloseButton();
+				
+				if ( this.hasCloseButton ) {
+					
+					this.disposeCloseButton();
+					
+				}
+				
 				this.initAggregationElement();
 
 			}
@@ -17227,8 +17308,12 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onComplete( function() {
 
-				layer.initCloseButton();
-
+				if ( layer.hasCloseButton ) {
+					
+					layer.initCloseButton();
+					
+				}
+				
 			} );
 
 			yoloOutputTween.start();
@@ -17271,8 +17356,12 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			} ).onStart( function() {
 
-				layer.disposeCloseButton();
-
+				if ( layer.hasCloseButton ) {
+					
+					layer.disposeCloseButton();
+					
+				}
+				
 			} ).onComplete( function() {
 
 				layer.disposeSegregationElements();
@@ -18583,7 +18672,12 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 				layer.neuralGroup.remove( variableLengthObject );
 				layer.initQueueElement();
-				layer.initCloseButton();
+				
+				if ( layer.hasCloseButton ) {
+					
+					layer.initCloseButton();
+					
+				}
 
 				if ( layer.paging ) {
 
@@ -18662,8 +18756,13 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 				layer.disposeQueueElement();
 				layer.neuralGroup.add( variableLengthObject );
-				layer.disposeCloseButton();
 
+				if ( layer.hasCloseButton ) {
+					
+					layer.disposeCloseButton();
+					
+				}
+				
 				if ( layer.paging ) {
 
 					layer.hidePaginationButton();
