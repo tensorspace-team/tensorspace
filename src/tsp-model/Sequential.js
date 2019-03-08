@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as tf from "@tensorflow/tfjs";
 import { AbstractModel } from './AbstractModel';
 import { LayerLocator } from "../utils/LayerLocator";
 import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";

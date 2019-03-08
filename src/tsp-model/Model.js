@@ -2,6 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
+import * as tf from "@tensorflow/tfjs";
 import { AbstractModel } from "./AbstractModel";
 import { LayerStackGenerator } from "../utils/LayerStackGenerator";
 import { LevelStackGenerator } from "../utils/LevelStackGenerator";
