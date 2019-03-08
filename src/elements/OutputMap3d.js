@@ -262,7 +262,8 @@ OutputMap3d.prototype = {
 	},
 
 	drawRect: function( x, y, width, height ) {
-
+		
+		this.ctx.beginPath();
 		this.ctx.rect( x, y, width, height );
 		this.ctx.stroke();
 
