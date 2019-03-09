@@ -1,6 +1,6 @@
 import THREE__default, { Group, Object3D, BoxBufferGeometry, MeshBasicMaterial, Mesh, EdgesGeometry, LineSegments, LineBasicMaterial, TextGeometry, DataTexture, LuminanceFormat, UnsignedByteType, NearestFilter, TextureLoader, CylinderBufferGeometry, RGBFormat, Texture, Clock, WebGLRenderer, PerspectiveCamera, Scene, Color, TrackballControls, Raycaster, Vector2, VertexColors, Geometry, Line, Vector3, Font, CubicBezierCurve3 } from 'three';
 import { Tween, update } from '@tweenjs/tween.js';
-import { loadLayersModel, loadGraphModel, tidy, tensor } from '@tensorflow/tfjs';
+import { dispose, loadLayersModel, loadGraphModel, tidy, tensor } from '@tensorflow/tfjs';
 
 /**
  * @author Eberhard Graether / http://egraether.com/
@@ -3211,7 +3211,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 
 			for ( let i = 0; i < this.predictResult.length; i ++ ) {
 
-				tf.dispose( this.predictResult[ i ] );
+				dispose( this.predictResult[ i ] );
 
 			}
 
@@ -3946,7 +3946,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 
 			for ( let i = 0; i < this.predictResult.length; i ++ ) {
 
-				tf.dispose( this.predictResult[ i ] );
+				dispose( this.predictResult[ i ] );
 
 			}
 
@@ -17159,7 +17159,8 @@ OutputMap3d.prototype = {
 	},
 
 	drawRect: function( x, y, width, height ) {
-
+		
+		this.ctx.beginPath();
 		this.ctx.rect( x, y, width, height );
 		this.ctx.stroke();
 

@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var THREE = require('three');
 var TWEEN = require('@tweenjs/tween.js');
 var TrackballControls = require('three-trackballcontrols');
-var tf$1 = require('@tensorflow/tfjs');
+var tf = require('@tensorflow/tfjs');
 
 /**
  * @author syt123450 / https://github.com/syt123450
@@ -593,7 +593,7 @@ Predictor.prototype = {
 
 		for ( let i = 0; i < inputShapes.length; i ++ ) {
 
-			tensorList.push( tf$1.tensor( data[ i ], inputShapes[ i ] ));
+			tensorList.push( tf.tensor( data[ i ], inputShapes[ i ] ));
 
 		}
 
@@ -671,7 +671,7 @@ TfjsPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
 		let predictor = this;
 
-		let predictResult = tf$1.tidy( () => {
+		let predictResult = tf.tidy( () => {
 
 			// Create input tensor for prediction.
 
@@ -758,7 +758,7 @@ TfjsLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	load: async function() {
 
-		const loadedModel = await tf$1.loadLayersModel( this.url, this.tfjsLoadOption );
+		const loadedModel = await tf.loadLayersModel( this.url, this.tfjsLoadOption );
 
 		this.model.resource = loadedModel;
 
@@ -868,7 +868,7 @@ KerasPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), 
 
 		let predictor = this;
 
-		let predictResult = tf$1.tidy( () => {
+		let predictResult = tf.tidy( () => {
 
 			// Create input tensor for prediction.
 
@@ -955,7 +955,7 @@ KerasLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	load: async function() {
 		
-		const loadedModel = await tf$1.loadLayersModel( this.url, this.tfjsLoadOption );
+		const loadedModel = await tf.loadLayersModel( this.url, this.tfjsLoadOption );
 
 		this.model.resource = loadedModel;
 
@@ -1074,7 +1074,7 @@ TfPredictor.prototype = Object.assign( Object.create( Predictor.prototype ), {
 
 		let predictor = this;
 
-		let predictResult = tf$1.tidy( () => {
+		let predictResult = tf.tidy( () => {
 
 			// Create input tensor for prediction.
 
@@ -1196,7 +1196,7 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	load: async function() {
 
-		const loadedModel = await tf$1.loadGraphModel( this.url, this.tfjsLoadOption );
+		const loadedModel = await tf.loadGraphModel( this.url, this.tfjsLoadOption );
 
 		this.model.resource = loadedModel;
 
@@ -16504,7 +16504,8 @@ OutputMap3d.prototype = {
 	},
 
 	drawRect: function( x, y, width, height ) {
-
+		
+		this.ctx.beginPath();
 		this.ctx.rect( x, y, width, height );
 		this.ctx.stroke();
 

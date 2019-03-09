@@ -1,4 +1,4 @@
-var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
+var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf) {
 	'use strict';
 
 	/**
@@ -587,7 +587,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			for ( let i = 0; i < inputShapes.length; i ++ ) {
 
-				tensorList.push( tf$1.tensor( data[ i ], inputShapes[ i ] ));
+				tensorList.push( tf.tensor( data[ i ], inputShapes[ i ] ));
 
 			}
 
@@ -665,7 +665,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			let predictor = this;
 
-			let predictResult = tf$1.tidy( () => {
+			let predictResult = tf.tidy( () => {
 
 				// Create input tensor for prediction.
 
@@ -752,7 +752,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 		load: async function() {
 
-			const loadedModel = await tf$1.loadLayersModel( this.url, this.tfjsLoadOption );
+			const loadedModel = await tf.loadLayersModel( this.url, this.tfjsLoadOption );
 
 			this.model.resource = loadedModel;
 
@@ -862,7 +862,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			let predictor = this;
 
-			let predictResult = tf$1.tidy( () => {
+			let predictResult = tf.tidy( () => {
 
 				// Create input tensor for prediction.
 
@@ -949,7 +949,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 		load: async function() {
 			
-			const loadedModel = await tf$1.loadLayersModel( this.url, this.tfjsLoadOption );
+			const loadedModel = await tf.loadLayersModel( this.url, this.tfjsLoadOption );
 
 			this.model.resource = loadedModel;
 
@@ -1068,7 +1068,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 			let predictor = this;
 
-			let predictResult = tf$1.tidy( () => {
+			let predictResult = tf.tidy( () => {
 
 				// Create input tensor for prediction.
 
@@ -1190,7 +1190,7 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 
 		load: async function() {
 
-			const loadedModel = await tf$1.loadGraphModel( this.url, this.tfjsLoadOption );
+			const loadedModel = await tf.loadGraphModel( this.url, this.tfjsLoadOption );
 
 			this.model.resource = loadedModel;
 
@@ -16498,7 +16498,8 @@ var TSP = (function (exports,THREE,TWEEN,TrackballControls,tf$1) {
 		},
 
 		drawRect: function( x, y, width, height ) {
-
+			
+			this.ctx.beginPath();
 			this.ctx.rect( x, y, width, height );
 			this.ctx.stroke();
 
