@@ -1,5 +1,5 @@
-# Hello Angular Example
-This is a minimum Tensorspace example in AngularJS. Code scaffold is create with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.3.
+# Hello World Example - Angular Version
+This is a minimum TensorSpace example in AngularJS. Code scaffold is create with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.3.
 
 
 - Source code related to Tensorspace is added at:
