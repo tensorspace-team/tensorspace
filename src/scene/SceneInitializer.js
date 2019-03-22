@@ -27,6 +27,15 @@ function SceneInitializer( container ) {
 	this.backgroundColor = undefined;
 
 	this.sceneArea = undefined;
+	
+	this.domParams = {
+		
+		left: undefined,
+		top: undefined,
+		width: undefined,
+		height: undefined
+		
+	};
 
 }
 
@@ -192,6 +201,14 @@ SceneInitializer.prototype = {
 			this.stats.update();
 
 		}
+		
+		let tempDomParams = this.getDomParams();
+		
+		if ( !this.isDomParamsChange( tempDomParams ) ) {
+			
+			this.cameraControls.handleResize();
+			
+		}
 
 		TWEEN.update();
 
@@ -232,7 +249,42 @@ SceneInitializer.prototype = {
 		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
+		this.cameraControls.handleResize();
 
+	},
+	
+	cacheDomParams: function( domParams ) {
+		
+		this.domParams.left = domParams.left;
+		this.domParams.top = domParams.top;
+		this.domParams.width = domParams.width;
+		this.domParams.height = domParams.height;
+		
+	},
+	
+	getDomParams: function() {
+		
+		let box = this.renderer.domElement.getBoundingClientRect();
+		let d = this.renderer.domElement.ownerDocument.documentElement;
+		
+		const domParams = {};
+		
+		domParams.left = box.left + window.pageXOffset - d.clientLeft;
+		domParams.top = box.top + window.pageYOffset - d.clientTop;
+		domParams.width = box.width;
+		domParams.height = box.height;
+		
+		return domParams;
+		
+	},
+	
+	isDomParamsChange: function( domParams ) {
+		
+		return this.domParams.left === domParams.left &&
+			this.domParams.top === domParams.top &&
+			this.domParams.width === domParams.width &&
+			this.domParams.height === domParams.height;
+		
 	},
 
 	/**
