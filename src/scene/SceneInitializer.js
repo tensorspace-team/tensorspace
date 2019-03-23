@@ -54,16 +54,8 @@ SceneInitializer.prototype = {
 
 		this.sceneArea = sceneArea;
 
-		let cs = getComputedStyle( this.container );
-
-		let paddingX = parseFloat( cs.paddingLeft ) + parseFloat( cs.paddingRight );
-		let paddingY = parseFloat( cs.paddingTop ) + parseFloat( cs.paddingBottom );
-
-		let borderX = parseFloat( cs.borderLeftWidth ) + parseFloat( cs.borderRightWidth );
-		let borderY = parseFloat( cs.borderTopWidth ) + parseFloat( cs.borderBottomWidth );
-
-		sceneArea.width = this.container.clientWidth - paddingX - borderX;
-		sceneArea.height = this.container.clientHeight - paddingY - borderY;
+		this.setSceneSize();
+		
 		sceneArea.style.backgroundColor = this.backgroundColor;
 
 		this.clock = new THREE.Clock();
@@ -152,6 +144,8 @@ SceneInitializer.prototype = {
 
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
+		
+		this.cacheDomParams( this.getDomParams() );
 
 	},
 
@@ -202,11 +196,21 @@ SceneInitializer.prototype = {
 
 		}
 		
-		let tempDomParams = this.getDomParams();
+		const tempDomParams = this.getDomParams();
 		
-		if ( !this.isDomParamsChange( tempDomParams ) ) {
+		const isDomPosChange = this.isDomPosChange( tempDomParams );
+		const isDomSizeChange = this.isDomSizeChange( tempDomParams );
+		
+		if ( isDomSizeChange ) {
+			
+			this.onResize();
+			
+		}
+		
+		if ( isDomPosChange || isDomSizeChange ) {
 			
 			this.cameraControls.handleResize();
+			this.cacheDomParams( tempDomParams );
 			
 		}
 
@@ -253,6 +257,21 @@ SceneInitializer.prototype = {
 
 	},
 	
+	setSceneSize: function() {
+		
+		let cs = getComputedStyle( this.container );
+		
+		let paddingX = parseFloat( cs.paddingLeft ) + parseFloat( cs.paddingRight );
+		let paddingY = parseFloat( cs.paddingTop ) + parseFloat( cs.paddingBottom );
+		
+		let borderX = parseFloat( cs.borderLeftWidth ) + parseFloat( cs.borderRightWidth );
+		let borderY = parseFloat( cs.borderTopWidth ) + parseFloat( cs.borderBottomWidth );
+		
+		this.sceneArea.width = this.container.clientWidth - paddingX - borderX;
+		this.sceneArea.height = this.container.clientHeight - paddingY - borderY;
+		
+	},
+	
 	cacheDomParams: function( domParams ) {
 		
 		this.domParams.left = domParams.left;
@@ -264,8 +283,8 @@ SceneInitializer.prototype = {
 	
 	getDomParams: function() {
 		
-		let box = this.renderer.domElement.getBoundingClientRect();
-		let d = this.renderer.domElement.ownerDocument.documentElement;
+		let box = this.container.getBoundingClientRect();
+		let d = this.container.ownerDocument.documentElement;
 		
 		const domParams = {};
 		
@@ -278,15 +297,20 @@ SceneInitializer.prototype = {
 		
 	},
 	
-	isDomParamsChange: function( domParams ) {
+	isDomPosChange: function( domParams ) {
 		
-		return this.domParams.left === domParams.left &&
-			this.domParams.top === domParams.top &&
-			this.domParams.width === domParams.width &&
-			this.domParams.height === domParams.height;
+		return this.domParams.left !== domParams.left ||
+			this.domParams.top !== domParams.top;
 		
 	},
-
+	
+	isDomSizeChange: function( domParams ) {
+		
+		return this.domParams.width !== domParams.width ||
+			this.domParams.height !== domParams.height;
+		
+	},
+	
 	/**
 	 * ============
 	 *
