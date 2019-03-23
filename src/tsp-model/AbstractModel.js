@@ -278,6 +278,18 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 		return this.layers;
 
 	},
+	
+	/**
+	 * return Actual prediction model,
+	 * Developer can directly manipulate the model,
+	 * for example, get model summary, make predictions.
+	 */
+	
+	getPredictionModel: function() {
+		
+		return this.resource;
+		
+	},
 
 	/**
 	 * init(), Init model,
