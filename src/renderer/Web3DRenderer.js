@@ -7,11 +7,15 @@ import * as TWEEN from "@tweenjs/tween.js";
 // import * as Stats from "stats-js";
 import * as TrackballControls from "three-trackballcontrols";
 import { DefaultCameraPos, DefaultLayerDepth } from "../utils/Constant";
+import { MouseCaptureHelper } from '../utils/MouseCapturer';
+import { ModelRenderer } from './ModelRenderer';
 
-function SceneInitializer( container ) {
-
-	this.container = container;
-
+function Web3DRenderer( tspModel, handlers ) {
+	
+	ModelRenderer.call( this, tspModel, handlers );
+	
+	this.container = tspModel.container;
+	
 	this.scene = undefined;
 	this.camera = undefined;
 	this.stats = undefined;
@@ -20,12 +24,12 @@ function SceneInitializer( container ) {
 	this.cameraControls = undefined;
 	this.raycaster = undefined;
 	this.mouse = undefined;
-
+	
 	// control whether to show Stats panel, configured by Model Configuration
 	this.hasStats = undefined;
-
+	
 	this.backgroundColor = undefined;
-
+	
 	this.sceneArea = undefined;
 	
 	this.domParams = {
@@ -36,52 +40,71 @@ function SceneInitializer( container ) {
 		height: undefined
 		
 	};
-
+	
+	this.loadSceneConfig( tspModel.configuration );
+	
 }
 
-SceneInitializer.prototype = {
-
+Web3DRenderer.prototype = Object.assign( Object.create( ModelRenderer.prototype ), {
+	
+	init: function() {
+		
+		this.createScene();
+		this.registerEvent();
+		this.animate();
+		
+	},
+	
+	reset: function() {
+		
+		this.cameraControls.reset();
+		this.updateCamera();
+		
+	},
+	
 	loadSceneConfig: function( config ) {
-
+		
 		this.hasStats = config.stats;
 		this.backgroundColor = config.color.background;
-
+		
 	},
-
+	
 	createScene: function() {
-
+		
 		let sceneArea = document.createElement( "canvas" );
-
+		
 		this.sceneArea = sceneArea;
-
+		
 		this.setSceneSize();
 		
 		sceneArea.style.backgroundColor = this.backgroundColor;
-
+		
 		this.clock = new THREE.Clock();
-
+		
 		this.renderer = new THREE.WebGLRenderer( {
-
+			
 			canvas: sceneArea,
 			antialias: true
-
+			
 		} );
-
+		
 		this.renderer.setSize( sceneArea.width, sceneArea.height );
 		this.container.appendChild( this.renderer.domElement );
-
+		
 		this.camera = new THREE.PerspectiveCamera();
 		this.camera.fov = 45;
 		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
 		this.camera.near = 0.1;
 		this.camera.far = 10000;
-
+		
 		this.camera.updateProjectionMatrix();
 		this.camera.name = 'defaultCamera';
-
+		
 		this.scene = new THREE.Scene();
 		this.scene.background = new THREE.Color( this.backgroundColor );
-
+		
+		this.scene.add( this.tspModel.modelContext );
+		
 		if ( this.hasStats ) {
 			
 			if ( typeof Stats !== 'undefined' ) {
@@ -127,73 +150,75 @@ SceneInitializer.prototype = {
 				});
 				
 			}
-
+			
 		}
-
+		
 		if (THREE.TrackballControls !== undefined) {
-
+			
 			this.cameraControls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
-
+			
 		} else {
-
+			
 			this.cameraControls = new TrackballControls( this.camera, this.renderer.domElement );
-
+			
 		}
-
+		
 		this.cameraControls.target.set( 0, 0, 0 );
-
+		
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
 		
 		this.cacheDomParams( this.getDomParams() );
-
+		
+		this.updateCamera();
+		
 	},
-
+	
 	updateCamera: function() {
-
-		let modelDepth = this.depth;
+		
+		let modelDepth = this.tspModel.depth;
 		let controlRatio = getControlRatio( modelDepth );
-
+		
 		this.camera.position.set(
-
+			
 			0,
 			0,
 			controlRatio * DefaultCameraPos * modelDepth / DefaultLayerDepth
-
+		
 		);
-
+		
 		// as strategy can not directly be applied to model when layer depth is too small, add a control ratio to move camera farther
 		function getControlRatio( depth ) {
-
+			
 			if ( depth > 5 ) {
-
+				
 				return 1;
-
+				
 			} else if ( depth >= 3 && depth < 5 ) {
-
+				
 				return 1.5;
-
+				
 			} else {
-
+				
 				return 2;
-
+				
 			}
-
+			
 		}
-
+		
 	},
-
+	
 	// use animate scene
 	animate: function() {
-
+		
 		let delta = this.clock.getDelta();
-
+		
 		this.cameraControls.update( delta );
-
+		
 		if ( this.hasStats ) {
-
+			
 			this.stats.update();
-
+			
 		}
 		
 		const tempDomParams = this.getDomParams();
@@ -213,48 +238,48 @@ SceneInitializer.prototype = {
 			this.cacheDomParams( tempDomParams );
 			
 		}
-
+		
 		TWEEN.update();
-
+		
 		this.renderer.render( this.scene, this.camera );
-
+		
 		requestAnimationFrame( function() {
-
+			
 			this.animate();
-
+			
 		}.bind( this ) );
-
+		
 	},
-
-	registerModelEvent: function() {
-
+	
+	registerEvent: function() {
+		
 		window.addEventListener( 'resize', function() {
-
+			
 			this.onResize();
-
+			
 		}.bind( this ), false );
-
+		
 		this.sceneArea.addEventListener( 'mousemove', function( event ) {
-
+			
 			this.onMouseMove( event );
-
+			
 		}.bind( this ), true );
-
+		
 		this.sceneArea.addEventListener( 'click', function( event ) {
-
+			
 			this.onClick( event );
-
+			
 		}.bind( this ), true );
-
+		
 	},
-
+	
 	onResize: function() {
-
+		
 		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
 		this.cameraControls.handleResize();
-
+		
 	},
 	
 	setSceneSize: function() {
@@ -312,38 +337,62 @@ SceneInitializer.prototype = {
 	},
 	
 	/**
-	 * ============
-	 *
-	 * Functions below are abstract method for Layer.
-	 * SubClasses ( specific Model ) override these abstract methods.
-	 *
-	 * ============
-	 */
-
-	/**
-	 * onClick(), abstract method.
-	 *
-	 * Override this function to add handler for click event.
-	 *
-	 * @param event
-	 */
-
-	onClick: function( event ) {
-
-	},
-
-	/**
 	 * onMouseMove(), abstract method.
 	 *
 	 * Override this function to add handler for mouse move event.
 	 *
 	 * @param event
 	 */
-
+	
 	onMouseMove: function( event ) {
-
+		
+		// calculate mouse position.
+		
+		this.mouse.x = ( ( event.clientX - MouseCaptureHelper.getElementViewLeft( this.sceneArea ) ) / this.sceneArea.clientWidth ) * 2 - 1;
+		this.mouse.y = - ( ( event.clientY - MouseCaptureHelper.getElementViewTop( this.sceneArea ) )  / this.sceneArea.clientHeight ) * 2 + 1;
+		
+		// Use Raycaster to capture hovered element.
+		
+		this.raycaster.setFromCamera( this.mouse, this.camera );
+		let intersects = this.raycaster.intersectObjects( this.scene.children, true );
+		
+		this.handlers.handleHover( intersects );
+		
+	},
+	
+	/**
+	 * onClick(), Handler for move click event.
+	 *
+	 * @param event
+	 */
+	
+	onClick: function ( event ) {
+		
+		// Use Raycaster to capture clicked element.
+		
+		this.raycaster.setFromCamera( this.mouse, this.camera );
+		let intersects = this.raycaster.intersectObjects( this.scene.children, true );
+		
+		for ( let i = 0; i < intersects.length; i ++ ) {
+			
+			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
+				
+				let selectedElement = intersects[ i ].object;
+				
+				if ( selectedElement.clickable === true ) {
+					
+					this.handlers.handleClick( selectedElement );
+					
+					break;
+					
+				}
+				
+			}
+			
+		}
+		
 	}
+	
+} );
 
-};
-
-export { SceneInitializer };
+export { Web3DRenderer };
