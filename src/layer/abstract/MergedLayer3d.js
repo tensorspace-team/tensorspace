@@ -167,15 +167,10 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	},
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Validate whether user's input merged elements can be merged in this kind of merge operation.
 

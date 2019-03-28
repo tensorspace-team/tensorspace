@@ -135,6 +135,12 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 		
 		this.depth = this.layers.length;
 		
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+			
+			this.layers[ i ].assemble();
+			
+		}
+		
 		this.createModelElements();
 		
 		this.modelRenderer = RendererFactory.getRenderer( this );
@@ -189,9 +195,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 		
 		this.layers.push( layer ) ;
 		
-		// Assemble new layer.
-		
-		layer.assemble( this.layers.length, this.layers.length );
+		layer.setPositionMetrics(  this.layers.length, this.layers.length  );
 		
 	},
 	

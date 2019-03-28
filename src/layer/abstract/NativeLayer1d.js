@@ -1089,7 +1089,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	/**
 	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * Override this function to get information from previous layer.
 	 *

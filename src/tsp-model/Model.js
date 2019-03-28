@@ -232,7 +232,10 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 				
 				layer.setEnvironment( this.modelContext, this );
 				layer.loadModelConfig( this.configuration );
-				layer.assemble( layerIndex, layerLevel );
+				
+				layer.setPositionMetrics(  layerIndex, layerLevel  );
+				
+				layer.assemble();
 				
 			}
 			
