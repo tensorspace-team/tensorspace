@@ -47,15 +47,12 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
 	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 

@@ -118,11 +118,8 @@ MergedLayer2d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 	},
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
-
+	assemble: function() {
+		
 		// Validate whether user's input merged elements can be merged in this kind of merge operation.
 
 		if( !this.operationStrategy.validate() ) {

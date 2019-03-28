@@ -136,19 +136,6 @@ GreyscaleInput.prototype = Object.assign( Object.create( NativeLayer.prototype )
 	},
 
 	/**
-	 * assemble() configure layer's index in model.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
-	 */
-
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
-
-	},
-
-	/**
 	 * updateValue() accept layer output value from model, update layer visualization if required.
 	 *
 	 * Model passes layer's output value to layer through updateValue method.

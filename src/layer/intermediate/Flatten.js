@@ -39,15 +39,10 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 

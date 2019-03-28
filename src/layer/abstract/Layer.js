@@ -544,6 +544,13 @@ Layer.prototype = {
 		}
 
 	},
+	
+	setPositionMetrics: function( layerIndex, layerLevel ) {
+		
+		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
+		
+	},
 
 	/**
 	 * ============
@@ -570,14 +577,12 @@ Layer.prototype = {
 
 	/**
 	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * Override this function to get information from previous layer
-	 *
-	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
+	assemble: function() {
 
 	},
 
