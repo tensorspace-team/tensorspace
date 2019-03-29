@@ -46,10 +46,6 @@ function Pooling2d( config ) {
 
 	this.padding = "valid";
 
-	// Load user's Pooling2d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Pooling2d";
 
 }
@@ -72,7 +68,11 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Pooling2d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.

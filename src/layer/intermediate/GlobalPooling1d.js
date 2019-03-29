@@ -48,7 +48,11 @@ GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototyp
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's GlobalPooling1d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
 		if ( !this.isShapePredefined ) {

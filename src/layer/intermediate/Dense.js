@@ -17,10 +17,6 @@ function Dense( config ) {
 
 	NativeLayer1d.call( this, config );
 
-	// Load user's Dense configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Dense";
 
 }
@@ -43,7 +39,11 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Dense configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
 		this.unitLength = this.lastLayer.unitLength;

@@ -148,10 +148,6 @@ function YoloGrid( config ) {
 
 	this.autoOutputDetect = true;
 
-	// Load user's YoloGrid configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "YoloGrid";
 
 }
@@ -222,7 +218,11 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's YoloGrid configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// Auto detect input shape from last layer.
 
 		this.inputShape = this.lastLayer.outputShape;

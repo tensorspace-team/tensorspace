@@ -51,10 +51,6 @@ function Pooling1d( config ) {
 
 	this.isShapePredefined = false;
 
-	// Load user's Pooling1d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Pooling1d";
 
 }
@@ -77,7 +73,11 @@ Pooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Pooling1d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		//  If user's do not define a specific shape for layer, infer layer output shape from input shape and config.

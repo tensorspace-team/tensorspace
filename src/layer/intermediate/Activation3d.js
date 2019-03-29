@@ -25,10 +25,6 @@ function Activation3d( config ) {
 
 	this.activation = undefined;
 
-	// Load user's Activation3d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Activation3d";
 
 }
@@ -48,12 +44,14 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 
 	/**
 	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
+	assemble: function() {
+		
+		// Load user's Activation3d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.

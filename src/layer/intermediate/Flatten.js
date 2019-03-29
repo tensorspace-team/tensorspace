@@ -17,10 +17,6 @@ function Flatten( config ) {
 
 	NativeLayer1d.call( this, config );
 
-	// Load user's Flatten configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Flatten";
 
 }
@@ -43,7 +39,11 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Flatten configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
 		if ( !this.isShapePredefined ) {

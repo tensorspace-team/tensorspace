@@ -55,26 +55,6 @@ function Conv2dTranspose( config ) {
 
 	this.padding = "valid";
 
-	// Load user's Conv2dTranspose configuration.
-
-	this.loadLayerConfig( config );
-
-	// Init feature maps close feature centers.
-
-	for ( let i = 0; i < this.depth; i ++ ) {
-
-		let center = {
-
-			x: 0,
-			y: 0,
-			z: 0
-
-		};
-
-		this.closeFmCenters.push( center );
-
-	}
-
 	this.layerType = "Conv2dTranspose";
 
 }
@@ -97,7 +77,27 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Conv2dTranspose configuration.
+		
+		this.loadLayerConfig( this.config );
+		
+		// Init feature maps close feature centers.
+		
+		for ( let i = 0; i < this.depth; i ++ ) {
+			
+			let center = {
+				
+				x: 0,
+				y: 0,
+				z: 0
+				
+			};
+			
+			this.closeFmCenters.push( center );
+			
+		}
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		if ( !this.isShapePredefined ) {

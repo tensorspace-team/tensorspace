@@ -60,26 +60,6 @@ function Conv1d( config ) {
 
 	this.isShapePredefined = false;
 
-	// Load user's Conv1d configuration.
-
-	this.loadLayerConfig( config );
-
-	// Init close grid line centers.
-
-	for ( let i = 0; i < this.depth; i ++ ) {
-
-		let center = {
-
-			x: 0,
-			y: 0,
-			z: 0
-
-		};
-
-		this.closeCenterList.push( center );
-
-	}
-
 	this.layerType = "Conv1d";
 
 }
@@ -102,7 +82,27 @@ Conv1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Conv1d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
+		// Init close grid line centers.
+		
+		for ( let i = 0; i < this.depth; i ++ ) {
+			
+			let center = {
+				
+				x: 0,
+				y: 0,
+				z: 0
+				
+			};
+			
+			this.closeCenterList.push( center );
+			
+		}
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.

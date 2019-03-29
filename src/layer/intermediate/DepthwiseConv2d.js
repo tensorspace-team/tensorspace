@@ -52,10 +52,6 @@ function DepthwiseConv2d( config ) {
 
 	this.padding = "valid";
 
-	// Load user's DepthwiseConv2d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "DepthwiseConv2d";
 
 }
@@ -78,7 +74,11 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's DepthwiseConv2d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
