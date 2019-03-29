@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TensorSpace - Hello World</title>
+    <meta name="author" content="syt123450 / https://github.com/syt123450">
+
+    <script src="../lib/three.min.js"></script>
+    <script src="../lib/tween.min.js"></script>
+     <script src="../lib/stats.min.js"></script>
+    <script src="../lib/tf.min.js"></script>
+    <script src="../lib/TrackballControls.js"></script>
+    <script src="../lib/jquery.min.js"></script>
+    <script src="../lib/tfjs-vis.umd.min.js"></script>
+    <script src="../lib/chart.min.js"></script>
+
+    <script src="../../dist/tensorspace.min.js"></script>
+
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .tf-draw-area {
+            height: calc(100% - 50px);
+            position: relative;
+        }
+
+        .tf-surface {
+            max-width: none;
+            max-height: none;
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+
+	const surface = tfvis.visor().surface(
+		{
+			name: 'LeNet',
+			tab: 'TensorSpace Model',
+			styles: {
+				height: 500,
+				width: "95%"
+			}
+		});
+
+	let chartSurface = tfvis.visor().surface({name: 'Digit Prediction Confidence', tab: 'Confidence'});
+
+	const data = [
+		{ index: 0, value: 50 },
+		{ index: 1, value: 100 },
+		{ index: 2, value: 150 },
+		{ index: 3, value: 50 },
+		{ index: 4, value: 100 },
+		{ index: 5, value: 150 },
+		{ index: 6, value: 50 },
+		{ index: 7, value: 100 },
+		{ index: 8, value: 150 },
+		{ index: 9, value: 50 }
+	];
+
+	let summarySurface = tfvis.visor().surface({name: 'Model Summary', tab: 'Model Inspection'});
+
+	tfvis.visor().setActiveTab("TensorSpace Model");
+
+	var canvas = document.createElement('canvas');
+
+	chartSurface.drawArea.appendChild( canvas );
+
+	var myBarChart = new Chart(canvas.getContext('2d'), {
+		type: 'bar',
+		data: {
+			labels: ['0', '1', '2', '3', '4', '5'],
+			datasets: [{
+				label: '# of Confidence',
+				data: [12, 19, 3, 5, 2, 3],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 206, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+					'rgba(153, 102, 255, 0.2)',
+					'rgba(255, 159, 64, 0.2)'
+				],
+				borderColor: [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 206, 86, 1)',
+					'rgba(75, 192, 192, 1)',
+					'rgba(153, 102, 255, 1)',
+					'rgba(255, 159, 64, 1)'
+				],
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			},
+			responsive: true
+		}
+	});
+
+	$(function() {
+
+		let modelContainer = surface.drawArea;
+		model = new TSP.models.Sequential( modelContainer, {
+			stats: true
+        } );
+
+		model.add( new TSP.layers.GreyscaleInput({ shape: [28, 28, 1] }) );
+		model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
+		model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
+		model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
+		model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 16, strides: 1 }) );
+		model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
+		model.add( new TSP.layers.Dense({ units: 120 }) );
+		model.add( new TSP.layers.Dense({ units: 84 }) );
+		model.add( new TSP.layers.Output1d({
+			units: 10,
+			outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+		}) );
+
+		model.load({
+			type: "tfjs",
+			url: './model/mnist.json',
+			onComplete: function() {
+				console.log( "\"Hello World!\" from TensorSpace Loader." );
+
+				tfvis.show.modelSummary(summarySurface, model.resource);
+
+			}
+		});
+		model.init( function() {
+
+			$.ajax({
+				url: "./data/5.json",
+				type: 'GET',
+				async: true,
+				dataType: 'json',
+				success: function (data) {
+
+					model.predict( data );
+
+				}
+			});
+
+
+		} );
+
+	});
+
+	setTimeout(function() {
+		myBarChart.data.datasets[0].data = [5, 5, 5, 5, 5, 5];
+		myBarChart.update();
+    }, 5000);
+
+
+</script>
+
+</body>
+</html>
