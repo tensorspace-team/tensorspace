@@ -39,10 +39,6 @@ function GreyscaleInput( config ) {
 	 */
 	this.depth = 1;
 
-	// Load user's GreyscaleInput configuration.
-
-	this.loadLayerConfig( config );
-
 	/**
 	 * As GreyscaleInput is the first layer model, actualWidth is defined as a const.
 	 * Use actualWidth to calculate actualHeight.
@@ -50,8 +46,8 @@ function GreyscaleInput( config ) {
 	 * @type { double }
 	 */
 
-	this.actualWidth = ModelInitWidth;
-	this.actualHeight = ModelInitWidth / this.width * this.height;
+	this.actualWidth = undefined;
+	this.actualHeight = undefined;
 
 	/**
 	 * Calculate unitLength for latter layers.
@@ -59,7 +55,7 @@ function GreyscaleInput( config ) {
 	 * @type { double }
 	 */
 
-	this.unitLength = this.actualWidth / this.width;
+	this.unitLength = undefined;
 
 	/**
 	 * Set this attribute for latter layer,
@@ -133,6 +129,32 @@ GreyscaleInput.prototype = Object.assign( Object.create( NativeLayer.prototype )
 
 		this.context.add( this.neuralGroup );
 
+	},
+	
+	assemble: function() {
+		
+		// Load user's GreyscaleInput configuration.
+		
+		this.loadLayerConfig( this.config );
+		
+		/**
+		 * As GreyscaleInput is the first layer model, actualWidth is defined as a const.
+		 * Use actualWidth to calculate actualHeight.
+		 *
+		 * @type { double }
+		 */
+		
+		this.actualWidth = ModelInitWidth;
+		this.actualHeight = ModelInitWidth / this.width * this.height;
+		
+		/**
+		 * Calculate unitLength for latter layers.
+		 *
+		 * @type { double }
+		 */
+		
+		this.unitLength = this.actualWidth / this.width;
+		
 	},
 
 	/**

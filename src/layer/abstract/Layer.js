@@ -556,6 +556,12 @@ Layer.prototype = {
 	
 	setShape: function( shape ) {
 	
+		if ( this.config === undefined ) {
+			
+			this.config = {};
+			
+		}
+		
 		this.config.shape = shape;
 		
 	},

@@ -10,6 +10,7 @@ import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
 import { LayerLocator } from "../utils/LayerLocator";
 import { InLevelAligner } from "../utils/InLevelAligner";
 import { RendererFactory } from '../renderer/RendererFactory';
+import { LayerShapeGenerator } from '../utils/LayerShapeGenerator';
 
 /**
  * A Model is a directed, acyclic graph.
@@ -50,7 +51,7 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 	 *
 	 * Functions below override base class AbstractModel's abstract method
 	 *
-	 * Sequential overrides AbstractModel's function:
+	 * Functional Model overrides AbstractModel's function:
 	 * predict, clear, reset, initTSPModel
 	 *
 	 * ============
@@ -157,6 +158,14 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 	initTSPModel: function() {
 		
 		this.createGraph();
+		
+		if ( this.hasLoader ) {
+			
+			const shapeGroup = LayerShapeGenerator.getShapes( this );
+			this.configureLayerShape( shapeGroup );
+			
+		}
+		
 		this.assembleLayers();
 		
 		this.depth = this.levelMap.length;
@@ -370,6 +379,41 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		for ( let i = 0; i < levelLayers.length; i ++ ) {
 			
 			levelLayers[ i ].translateLayer( layerCenters[ i ], translateTime );
+			
+		}
+		
+	},
+	
+	configureLayerShape: function( shapeGroup ) {
+		
+		const inputShapes = shapeGroup.inputShapes;
+		
+		if ( this.configuration.feedInputs !== undefined ) {
+			
+			for ( let i = 0; i < this.inputs.length; i ++ ) {
+				
+				let feedIndex = this.configuration.feedInputs[ i ];
+				this.inputs[ i ].setShape( inputShapes[ feedIndex ] );
+				
+			}
+			
+		} else {
+			
+			for ( let i = 0; i < this.inputs.length; i ++ ) {
+				
+				this.inputs[ i ].setShape( inputShapes[ i ] );
+				
+			}
+			
+		}
+		
+		const outputShapes = shapeGroup.outputShapes;
+		
+		for ( let i = 0; i < outputShapes.length; i ++ ) {
+			
+			let layer = this.getLayerByName( this.outputsOrder[ i ] );
+			
+			layer.setShape( outputShapes[ i ] );
 			
 		}
 		

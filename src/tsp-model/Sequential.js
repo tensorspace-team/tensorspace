@@ -7,6 +7,7 @@ import { AbstractModel } from './AbstractModel';
 import { LayerLocator } from "../utils/LayerLocator";
 import { ActualDepthCalculator } from "../utils/ActualDepthCalculator";
 import { RendererFactory } from '../renderer/RendererFactory';
+import { LayerShapeGenerator } from '../utils/LayerShapeGenerator';
 
 /**
  * A model with linear stack of layers.
@@ -134,6 +135,13 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	initTSPModel: function() {
 		
 		this.depth = this.layers.length;
+		
+		if ( this.hasLoader ) {
+
+			const shapeGroup = LayerShapeGenerator.getShapes( this );
+			this.configureLayerShape( shapeGroup );
+
+		}
 		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 			
@@ -286,6 +294,31 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 			
 		}
 		
+	},
+	
+	configureLayerShape: function( shapeGroup ) {
+		
+		const inputShapes = shapeGroup.inputShapes;
+		
+		if ( this.configuration.feedInputs !== undefined ) {
+			
+			let feedIndex = this.configuration.feedInputs[ 0 ];
+			this.layers[ 0 ].setShape( inputShapes[ feedIndex ] );
+			
+		} else {
+			
+			this.layers[ 0 ].setShape( inputShapes[ 0 ] );
+			
+		}
+		
+		const outputShapes = shapeGroup.outputShapes;
+		
+		for ( let i = 0; i < outputShapes.length; i ++ ) {
+			
+			this.layers[ i + 1 ].setShape( outputShapes[ i ] );
+			
+		}
+	
 	}
 	
 } );

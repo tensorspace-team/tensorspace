@@ -107,10 +107,6 @@ function Input1d( config ) {
 
 	this.nextButtonHandler = undefined;
 
-	// Load user's Input1d configuration.
-
-	this.loadLayerConfig( config );
-
 	/**
 	 * As Input1d is the first layer model, actualWidth is defined as a const.
 	 *
@@ -125,7 +121,7 @@ function Input1d( config ) {
 	 * @type { double }
 	 */
 
-	this.unitLength = this.actualWidth / this.width;
+	this.unitLength = undefined;
 
 	/**
 	 * Set this attribute for latter layer,
@@ -207,6 +203,13 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 
 		this.context.add( this.neuralGroup );
 
+	},
+	
+	assemble: function() {
+		
+		this.loadLayerConfig( this.config );
+		this.unitLength = this.actualWidth / this.width;
+		
 	},
 
 	/**
