@@ -155,19 +155,20 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
+				this.outputShape = [ this.width ];
 
 			} else {
 
 				// "units" configuration is required.
 
 				if ( layerConfig.units !== undefined ) {
-
+					
 					this.width = layerConfig.units;
 
 					// Dense layer's outputShape has one dimension, that's why Dense layer inherits from abstract layer "NativeLayer1d".
 
 					this.outputShape = [ layerConfig.units ];
-
+					
 					if ( this.paging ) {
 
 						this.totalSegments = Math.ceil( this.width / this.segmentLength );

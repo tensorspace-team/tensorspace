@@ -73,7 +73,7 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 			this.totalSize *= this.inputShape[ i ];
 
 		}
-
+		
 		// Check whether the input shape can be reshape into target shape.
 
 		if  ( this.totalSize !== this.width * this.height * this.depth ) {
