@@ -66,44 +66,48 @@ TensorSpace 降低了前端开发者进行深度学习相关应用开发的门�
 </p>
 
 ### 安装
+**适用开发环境: 类似jQuery的库/框架**
+- 途径一. 通过 CDN
 
-* **第一步: 下载 TensorSpace.js**
+  例如如果在CodePen网站上创建一个可分享的应用样例
+  ```html
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
+  <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tensorspace@0.3.0/build/tensorspace.min.js"></script>
+  <!-- 将”0.3.0”替换成你需要的版本 -->
 
-我们提供了四种下载 TensorSpace.js 的方法，它们分别是 npm、yarn 以及 来自官方网站。
+  ```
 
-途径 1: NPM
-```bash
-npm install tensorspace
-```
+- 途径二. 通过TensorSpace官网
+  - 第一步: 从该链接 [https://tensorspace.org/assets/zip/TensorSpace.zip](https://tensorspace.org/assets/zip/TensorSpace.zip)下载`TensorSpace.zip`。
+  - 第二步: 解压 `TensorSpace.zip` 后将 `TensorSpace.min.js` 以及所有的`*.js`文件从 `\dependencies`文件夹复制到本地工程文件夹下。
+  - 第三步: 通过`<script>`标签引入TensorSpace相关文件。
+  ```html
+  <script src="three.min.js"></script>
+  <script src="tween.min.js"></script>
+  <script src="tf.min.js"></script>
+  <script src="TrackballControls"></script>
+  <script src="tensorspace.min.js"></script>
+  ```
 
-途径 2: Yarn
-```bash
-yarn add tensorspace
-```
-途径 3：CDN
-```html
-<script src="https://cdn.jsdelivr.net/npm/tensorspace@0.3.0/build/tensorspace.min.js"></script>
-```
+**适用开发环境: 类似Angular 2.0的框架**
+  - 第一步： 安装TensorSpace
+    - 途径一: NPM
+    ```bash
+    npm install tensorspace
+    ```
 
-途径 4: [官方网站下载](https://tensorspace.org/index_zh.html#download)
-
-* **第二步: 安装依赖库**
-
-请在使用 TensorSapce.js 之前，引入[TensorFlow.js](https://github.com/tensorflow/tfjs)、 [Three.js](https://github.com/mrdoob/three.js)、 [Tween.js](https://github.com/tweenjs/tween.js) 和 [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) 至所需要的 html 文件中，并置于 TensorSpace.js 的引用之前。
-
-```html
-<script src="tf.min.js"></script>
-<script src="three.min.js"></script>
-<script src="tween.min.js"></script>
-<script src="TrackballControls.js"></script>
-```
-
-* **第三步: 安装 TensorSpace.js**
-
-将 TensorSpace.js 引入 html 文件中：
-```html
-<script src="tensorspace.min.js"></script>
-```
+    - 途径二: Yarn
+    ```bash
+    yarm add tensorspace
+    ```
+  - 第二步： 引入TensorSpace
+  ```javascript
+  import * as TSP from 'tensorspace';
+  ```
+  [Angular 2.0样例（及源代码）](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular)
 
 ### 模型预处理
 
