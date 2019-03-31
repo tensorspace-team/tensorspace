@@ -14,13 +14,6 @@ const MNIST_LABELS_PATH =
 
 class MnistData {
 
-	constructor() {
-
-		this.shuffledTrainIndex = 0;
-		this.shuffledTestIndex = 0;
-
-	}
-
 	async load() {
 
 		const img = new Image();
@@ -103,7 +96,10 @@ class MnistData {
 		}
 
 		let dataset = tf.data.array(dataItems).map(([arrayImage, label])=> {
-			return [tf.tensor(arrayImage, [28, 28, 1]), tf.tensor(label)];
+			return {
+				xs: tf.tensor(arrayImage, [28, 28, 1]),
+				ys: tf.tensor(label)
+			};
 		}).shuffle(10);
 
 		this.trainDataset = dataset.take(NUM_TRAIN_ELEMENTS);
