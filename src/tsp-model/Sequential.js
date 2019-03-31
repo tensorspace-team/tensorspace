@@ -130,18 +130,55 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	
 	/**
 	 * initTSPModel(), call all functions required in model initialization process.
+	 *
+	 * Seven Steps:
+	 * 1. Calculate Sequential depth.
+	 * 2. If already load a model, get layer shapes and set them to layers.
+	 * 3. Set previous layer for the new TSP layer (only for native layers).
+	 * 4. Set layer metrics.
+	 * 5. Assemble layers.
+	 * 6. Init layers.
+	 * 7. Create Renderer and render tsp model.
 	 */
 	
 	initTSPModel: function() {
 		
+		// Calculate Sequential depth.
+		
 		this.depth = this.layers.length;
 		
+		// If already load a model, get layer shapes and set them to layers.
+		
 		if ( this.hasLoader ) {
-
+			
 			const shapeGroup = LayerShapeGenerator.getShapes( this );
 			this.configureLayerShape( shapeGroup );
-
+			
 		}
+		
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+			
+			// Set previous layer for the new TSP layer (only for native layers).
+			
+			if ( this.layers.length !== 0 ) {
+				
+				if ( !this.layers[ i ].isMerged ) {
+					
+					this.layers[ i ].setLastLayer( this.layers[ i - 1 ] );
+					
+				}
+				
+			}
+			
+			// Set layer metrics.
+			
+			this.layers[ i ].setEnvironment( this.modelContext, this );
+			this.layers[ i ].loadModelConfig( this.configuration );
+			this.layers[ i ].setPositionMetrics( i + 1, i + 1 );
+			
+		}
+		
+		// Assemble layers.
 		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
 			
@@ -149,7 +186,11 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 			
 		}
 		
+		// Init layers.
+		
 		this.createModelElements();
+		
+		// Create Renderer and render tsp model.
 		
 		this.modelRenderer = RendererFactory.getRenderer( this );
 		this.modelRenderer.init();
@@ -168,42 +209,16 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	 */
 	
 	/**
-	 * add(), add a new TSP layer to sequential model
-	 *
-	 * Four main task in adding process:
-	 * 1. Set previous layer for the new TSP layer.
-	 * 2. Config environment for new TSP layer.
-	 * 3. Add a TSP layer instance on top of the layer stack.
-	 * 4. Assemble new layer, which mean that calculate the layer's shape.
+	 * add(), add a new TSP layer to sequential model.
 	 *
 	 * @param layer, new TSP layer
 	 */
 	
 	add: function( layer ) {
 		
-		// Set last layer for native layer.
-		
-		if ( this.layers.length !== 0 ) {
-			
-			if ( !layer.isMerged ) {
-				
-				let tailLayer = this.layers[ this.layers.length - 1 ];
-				layer.setLastLayer( tailLayer );
-				
-			}
-			
-		}
-		
-		// Config environment for new layer.
-		
-		layer.setEnvironment( this.modelContext, this );
-		layer.loadModelConfig( this.configuration );
-		
 		// Add layer on top of layer stack.
 		
-		this.layers.push( layer ) ;
-		
-		layer.setPositionMetrics(  this.layers.length, this.layers.length  );
+		this.layers.push( layer );
 		
 	},
 	
