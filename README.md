@@ -59,62 +59,65 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
 <b>Fig. 2</b> - TensorSpace Workflow
 </p>
 
-### Install
+### 1. Install TensorSpace Library
 
-* **Step 1: Download TensorSpace.js**
+**If you use jQuery or similar libraries for development**
+- Option 1: From CDN
 
-There are four ways to download TensorSpace.js: npm, yarn, CDN, or official website
+  For example if you want to create an example in CodePen
+  ```html
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
+  <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tensorspace@0.3.0/build/tensorspace.min.js"></script>
 
-Option 1: NPM
-```bash
-npm install tensorspace
-```
+  <!-- Replace "0.3.0"  with the version you want to use. -->
+  ```
 
-Option 2: Yarn
-```bash
-yarn add tensorspace
-```
+- Option 2: From TensorSpace official website
+  - Step 1: Download `TensorSpace.zip` from [https://tensorspace.org/assets/zip/TensorSpace.zip](https://tensorspace.org/assets/zip/TensorSpace.zip)
+  - Step 2: Unzip `TensorSpace.zip` and copy `TensorSpace.min.js` and all `.js` files under `\dependencies` folder to your local project
+  - Step 3: Install with script tag
+  ```html
+  <script src="three.min.js"></script>
+  <script src="tween.min.js"></script>
+  <script src="tf.min.js"></script>
+  <script src="TrackballControls"></script>
+  <script src="tensorspace.min.js"></script>
+  ```
 
-Option 3: CDN
+**If you use Angular 2.0 or similar framework for development**
+  - Step 1: Install TensorSpace
+    - Option 1: NPM
+    ```bash
+    npm install tensorspace
+    ```
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/tensorspace@0.3.0/build/tensorspace.min.js"></script>
-```
+    - Option 2: Yarn
+    ```bash
+    yarm add tensorspace
+    ```
+  - Step 2: Use TensorSpace
+  ```javascript
+  import * as TSP from 'tensorspace';
+  ```
+  [Example in Angular 2.0 (source code)](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular)
 
-Option 4: [Website download page](https://tensorspace.org/index.html#download)
-
-* **Step 2: Install Dependency**
-
-Include [TensorFlow.js](https://github.com/tensorflow/tfjs), [Three.js](https://github.com/mrdoob/three.js), [Tween.js](https://github.com/tweenjs/tween.js), [TrackballControl.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js) in html file before include TensorSpace.js
-
-```html
-<script src="tf.min.js"></script>
-<script src="three.min.js"></script>
-<script src="tween.min.js"></script>
-<script src="TrackballControls.js"></script>
-```
-
-* **Step 3: Install TensorSpace.js**
-
-Include TensorSpace.js into html file:
-```html
-<script src="tensorspace.min.js"></script>
-```
-
-### Preprocessing
+### 2. Preprocess Pre-trained Model
 
 For presenting multiple intermediate outputs, we need to [preprocess](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess) the pre-trained model.
 
 Based on different training libraries, we provide different tutorials: [TensorFlow model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlow), [Keras model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/Keras) and [TensorFlow.js model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlowJS).
 
 
-### Usage
+### 3. Create 3D TensorSpoace Model
 
-If installed TensorSpace and preprocessed the pre-trained deep learning model successfully, let's create an interactive 3D TensorSpace model.
+If TensorSpace is installed successfully and the pre-trained deep learning model is preprocessed, let's create an interactive 3D TensorSpace model.
 
-For the convenience, feel free to use the resources from our [HelloWorld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld) directory.
+For convenience, feel free to use the resources from our [HelloWorld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld) directory.
 
-We will use the [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model) and [sample input data ("5")](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json). All source code can be found from [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html).
+We will use the [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model) and [sample input data ("5")](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json) as an example to illustrate this step. All source code can be found in [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html).
 
 First, we need to new a TensorSpace model instance:
 ```JavaScript
