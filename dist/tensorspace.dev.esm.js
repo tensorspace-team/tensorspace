@@ -31911,7 +31911,7 @@ let utils = {
 	YoloResultGenerator: YoloResultGenerator
 };
 
-let version = "0.3.0";
+let version = "0.5.0";
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
