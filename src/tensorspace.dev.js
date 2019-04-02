@@ -160,6 +160,6 @@ let utils = {
 	YoloResultGenerator: YoloResultGenerator
 };
 
-let version = "0.3.0";
+let version = "0.5.0";
 
 export { models, layers, loaders, predictors, utils, version, ModelConfiguration };

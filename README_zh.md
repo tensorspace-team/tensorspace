@@ -66,40 +66,41 @@ TensorSpace 降低了前端开发者进行深度学习相关应用开发的门�
 </p>
 
 ### 安装
-**适用开发环境: 类似jQuery的库/框架**
+**基本使用场景**
 - 途径一. 通过 CDN
 
-  例如如果在CodePen网站上创建一个可分享的应用样例
   ```html
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
   <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tensorspace@0.3.0/build/tensorspace.min.js"></script>
-  <!-- 将”0.3.0”替换成你需要的版本 -->
-
+  <!-- 将”VERSION”替换成需要的版本 -->
+  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/build/tensorspace.min.js"></script>
+  
   ```
 
-- 途径二. 通过TensorSpace官网
-  - 第一步: 从该链接 [https://tensorspace.org/assets/zip/TensorSpace.zip](https://tensorspace.org/assets/zip/TensorSpace.zip)下载`TensorSpace.zip`。
-  - 第二步: 解压 `TensorSpace.zip` 后将 `TensorSpace.min.js` 以及所有的`*.js`文件从 `\dependencies`文件夹复制到本地工程文件夹下。
-  - 第三步: 通过`<script>`标签引入TensorSpace相关文件。
+- 途径二. 下载 `tensorspace.min.js` 并在页面中引入
+  
+  可以通过 [Github](https://github.com/tensorspace-team/tensorspace/tree/master/dist), [NPM](https://www.npmjs.com/package/tensorspace) 或者 [TensorSpace 网站](https://tensorspace.org/#download) 这些途径下载 `tensorspace.min.js`。
+  
   ```html
   <script src="three.min.js"></script>
   <script src="tween.min.js"></script>
   <script src="tf.min.js"></script>
-  <script src="TrackballControls"></script>
+  <script src="TrackballControls.js"></script>
   <script src="tensorspace.min.js"></script>
   ```
 
-**适用开发环境: 类似Angular 2.0的框架**
+**在渐进式框架中使用 TensorSpace**
   - 第一步： 安装TensorSpace
     - 途径一: NPM
+    
     ```bash
     npm install tensorspace
     ```
 
     - 途径二: Yarn
+    
     ```bash
     yarm add tensorspace
     ```
@@ -107,7 +108,7 @@ TensorSpace 降低了前端开发者进行深度学习相关应用开发的门�
   ```javascript
   import * as TSP from 'tensorspace';
   ```
-  [Angular 2.0样例（及源代码）](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular)
+  这个 [Angular 样例](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular) 具体展示了如何使用。
 
 ### 模型预处理
 

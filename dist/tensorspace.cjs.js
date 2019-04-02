@@ -2,302 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var tf = require('@tensorflow/tfjs');
 var THREE = require('three');
 var TWEEN = require('@tweenjs/tween.js');
 var TrackballControls = require('three-trackballcontrols');
-var tf = require('@tensorflow/tfjs');
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-let SideFaceRatio = 0.6;
-
-let ModelInitWidth = 100;
-let ModelLayerInterval = 50;
-let FeatureMapIntervalRatio = 0.5;
-let CloseButtonRatio = 0.03;
-let MaxDepthInLayer = 30;
-// compare with lenet to update camera pos to have a responsive view
-let DefaultCameraPos = 600;
-let DefaultLayerDepth = 8;
-// neural interval is exact the same as neural length now
-let OutputNeuralInterval = 1;
-
-let FeatureMapTextRatio = 0.1;
-
-let FeatureQueueTextRatio = 1.5;
-
-let FrameColor = 0xA5A5A5;
-
-// interval ratio for grid group
-let GridIntervalRatio = 0.3;
-
-/**
- * @author syt123450 / https://github.com/syt123450
- */
-
-function SceneInitializer( container ) {
-
-	this.container = container;
-
-	this.scene = undefined;
-	this.camera = undefined;
-	this.stats = undefined;
-	this.renderer = undefined;
-	this.clock = undefined;
-	this.cameraControls = undefined;
-	this.raycaster = undefined;
-	this.mouse = undefined;
-
-	// control whether to show Stats panel, configured by Model Configuration
-	this.hasStats = undefined;
-
-	this.backgroundColor = undefined;
-
-	this.sceneArea = undefined;
-
-}
-
-SceneInitializer.prototype = {
-
-	loadSceneConfig: function( config ) {
-
-		this.hasStats = config.stats;
-		this.backgroundColor = config.color.background;
-
-	},
-
-	createScene: function() {
-
-		let sceneArea = document.createElement( "canvas" );
-
-		this.sceneArea = sceneArea;
-
-		let cs = getComputedStyle( this.container );
-
-		let paddingX = parseFloat( cs.paddingLeft ) + parseFloat( cs.paddingRight );
-		let paddingY = parseFloat( cs.paddingTop ) + parseFloat( cs.paddingBottom );
-
-		let borderX = parseFloat( cs.borderLeftWidth ) + parseFloat( cs.borderRightWidth );
-		let borderY = parseFloat( cs.borderTopWidth ) + parseFloat( cs.borderBottomWidth );
-
-		sceneArea.width = this.container.clientWidth - paddingX - borderX;
-		sceneArea.height = this.container.clientHeight - paddingY - borderY;
-		sceneArea.style.backgroundColor = this.backgroundColor;
-
-		this.clock = new THREE.Clock();
-
-		this.renderer = new THREE.WebGLRenderer( {
-
-			canvas: sceneArea,
-			antialias: true
-
-		} );
-
-		this.renderer.setSize( sceneArea.width, sceneArea.height );
-		this.container.appendChild( this.renderer.domElement );
-
-		this.camera = new THREE.PerspectiveCamera();
-		this.camera.fov = 45;
-		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
-		this.camera.near = 0.1;
-		this.camera.far = 10000;
-
-		this.camera.updateProjectionMatrix();
-		this.camera.name = 'defaultCamera';
-
-		this.scene = new THREE.Scene();
-		this.scene.background = new THREE.Color( this.backgroundColor );
-
-		if ( this.hasStats ) {
-			
-			if ( typeof Stats !== 'undefined' ) {
-				
-				this.stats = new Stats();
-				this.stats.dom.style.position = "absolute";
-				this.stats.dom.style.zIndex = "1";
-				this.stats.showPanel( 0 );
-				this.container.appendChild( this.stats.dom );
-				
-			} else {
-				
-				Promise.resolve(require('stats-js'))
-				.then((module) => {
-					
-					this.stats = new module();
-					this.stats.dom.style.position = "absolute";
-					this.stats.dom.style.zIndex = "1";
-					this.stats.showPanel( 0 );
-					this.container.appendChild( this.stats.dom );
-					
-				})
-				.catch(() => {
-					
-					if ( typeof Stats !== 'undefined' ) {
-						
-						this.stats = new Stats();
-						this.stats.dom.style.position = "absolute";
-						this.stats.dom.style.zIndex = "1";
-						this.stats.showPanel( 0 );
-						this.container.appendChild( this.stats.dom );
-						
-					} else if ( typeof window === 'undefined' ) {
-						
-						console.error('Please import stats-js');
-						
-					} else  {
-						
-						console.error('Please include  <script> tag');
-						
-					}
-					
-				});
-				
-			}
-
-		}
-
-		if (THREE.TrackballControls !== undefined) {
-
-			this.cameraControls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
-
-		} else {
-
-			this.cameraControls = new TrackballControls( this.camera, this.renderer.domElement );
-
-		}
-
-		this.cameraControls.target.set( 0, 0, 0 );
-
-		this.raycaster = new THREE.Raycaster();
-		this.mouse = new THREE.Vector2();
-
-	},
-
-	updateCamera: function() {
-
-		let modelDepth = this.depth;
-		let controlRatio = getControlRatio( modelDepth );
-
-		this.camera.position.set(
-
-			0,
-			0,
-			controlRatio * DefaultCameraPos * modelDepth / DefaultLayerDepth
-
-		);
-
-		// as strategy can not directly be applied to model when layer depth is too small, add a control ratio to move camera farther
-		function getControlRatio( depth ) {
-
-			if ( depth > 5 ) {
-
-				return 1;
-
-			} else if ( depth >= 3 && depth < 5 ) {
-
-				return 1.5;
-
-			} else {
-
-				return 2;
-
-			}
-
-		}
-
-	},
-
-	// use animate scene
-	animate: function() {
-
-		let delta = this.clock.getDelta();
-
-		this.cameraControls.update( delta );
-
-		if ( this.hasStats ) {
-
-			this.stats.update();
-
-		}
-
-		TWEEN.update();
-
-		this.renderer.render( this.scene, this.camera );
-
-		requestAnimationFrame( function() {
-
-			this.animate();
-
-		}.bind( this ) );
-
-	},
-
-	registerModelEvent: function() {
-
-		window.addEventListener( 'resize', function() {
-
-			this.onResize();
-
-		}.bind( this ), false );
-
-		this.sceneArea.addEventListener( 'mousemove', function( event ) {
-
-			this.onMouseMove( event );
-
-		}.bind( this ), true );
-
-		this.sceneArea.addEventListener( 'click', function( event ) {
-
-			this.onClick( event );
-
-		}.bind( this ), true );
-
-	},
-
-	onResize: function() {
-
-		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
-		this.camera.updateProjectionMatrix();
-		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
-
-	},
-
-	/**
-	 * ============
-	 *
-	 * Functions below are abstract method for Layer.
-	 * SubClasses ( specific Model ) override these abstract methods.
-	 *
-	 * ============
-	 */
-
-	/**
-	 * onClick(), abstract method.
-	 *
-	 * Override this function to add handler for click event.
-	 *
-	 * @param event
-	 */
-
-	onClick: function( event ) {
-
-	},
-
-	/**
-	 * onMouseMove(), abstract method.
-	 *
-	 * Override this function to add handler for mouse move event.
-	 *
-	 * @param event
-	 */
-
-	onMouseMove: function( event ) {
-
-	}
-
-};
 
 /**
  * @author syt123450 / https://github.com/syt123450
@@ -1196,7 +904,17 @@ TfLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	load: async function() {
 
-		const loadedModel = await tf.loadGraphModel( this.url, this.tfjsLoadOption );
+		let loadedModel;
+		
+		if ( this.outputsName !== undefined ) {
+			
+			loadedModel = await tf.loadGraphModel( this.url, this.tfjsLoadOption );
+			
+		} else {
+			
+			loadedModel = await tf.loadLayersModel( this.url, this.tfjsLoadOption );
+			
+		}
 
 		this.model.resource = loadedModel;
 
@@ -1837,6 +1555,35 @@ function ModelConfiguration( config ) {
 
 /**
  * @author syt123450 / https://github.com/syt123450
+ */
+
+const HTMLUtils = ( function() {
+	
+	function isElement( o ){
+		
+		return (
+			
+			typeof HTMLElement === "object" ? o instanceof HTMLElement :
+				o &&
+				typeof o === "object" &&
+				o !== null &&
+				o.nodeType === 1 &&
+				typeof o.nodeName==="string"
+		
+		);
+		
+	}
+	
+	return {
+		
+		isElement: isElement
+		
+	}
+	
+} )();
+
+/**
+ * @author syt123450 / https://github.com/syt123450
  * @author zchholmes / https://github.com/zchholmes
  */
 
@@ -1845,25 +1592,29 @@ function ModelConfiguration( config ) {
  * Base class for Sequential, Model
  *
  * @param container, a DOM element where TSP model will be rendered to.
- * @param config, user's config for Sequential model.
+ * @param config, user's config for model.
  * @constructor
  */
 
 function AbstractModel( container, config ) {
-
-	// AbstractModel mixin "SceneInitializer".
-
-	SceneInitializer.call( this, container );
-
+	
 	/**
-	 *	Store loader.
-	 *	Three kinds of loader: TfLoader, TfjsLoader, KerasLoader.
+	 * TensorSpace Model will be rendered in this HTML Dom element.
+	 *
+	 * @type { HTMLElement }
+	 */
+	
+	this.container = undefined;
+	
+	/**
+	 * Store loader.
+	 * Four kinds of loader: TfLoader, TfjsLoader, KerasLoader, LiveLoader.
 	 *
 	 * @type { Loader }
 	 */
-
+	
 	this.loader = undefined;
-
+	
 	/**
 	 * Sign showing whether model has a preload loader.
 	 * true -- has a preload loader
@@ -1871,9 +1622,9 @@ function AbstractModel( container, config ) {
 	 *
 	 * @type { boolean }
 	 */
-
+	
 	this.hasLoader = false;
-
+	
 	/**
 	 * Whether model has loaded a prediction model.
 	 * true -- A loader has already load a prediction to TSP model
@@ -1881,233 +1632,240 @@ function AbstractModel( container, config ) {
 	 *
 	 * @type { boolean }
 	 */
-
+	
 	this.isInitialized = false;
-
+	
 	/**
 	 * Actual prediction model.
 	 * undefined means no prediction model.
 	 *
 	 * @type { model }
 	 */
-
+	
 	this.resource = undefined;
-
+	
 	/**
 	 * Store user's input value for prediction.
 	 *
 	 * @type { Array }
 	 */
-
+	
 	this.inputValue = undefined;
-
+	
 	/**
 	 * Store prediction result from prediction model.
 	 *
 	 * @type { undefined }
 	 */
-
+	
 	this.predictResult = undefined;
-
+	
 	/**
 	 * Used to trigger model prediction and get predict result
 	 *
 	 * @type { Predictor }
 	 */
-
+	
 	this.predictor = undefined;
-
+	
 	/**
 	 * Prediction model type.
-	 * Three types now: "Model", "Sequential"
+	 * Two types now: "Model", "Sequential"
 	 *
 	 * @type { string }
 	 */
-
+	
 	this.modelType = undefined;
-
+	
 	/**
 	 * Store all layers in Model.
 	 *
 	 * @type { Layer[] }
 	 */
-
+	
 	this.layers = [];
-
-	/**
-	 * Record layer hovered by mouse now.
-	 *
-	 * @type { Layer }
-	 */
-
-	this.hoveredLayer = undefined;
-
+	
 	/**
 	 * Model's depth in visualization.
 	 *
 	 * @type { Int }
 	 */
-
+	
 	this.depth = undefined;
-
-	/**
-	 * Model's context, containing all THREE.Object for a TSP model.
-	 *
-	 * @type { THREE.Object }
-	 */
-
-	this.modelContext = undefined;
-
+	
 	/**
 	 * Model configuration.
 	 * Initialized with user's model config and default model config.
 	 *
 	 * @type { ModelConfiguration }
 	 */
-
-	this.configuration = new ModelConfiguration( config );
 	
-	this.hoveredEmissive = undefined;
-
-	// Pass configuration to three.js scene.
-
-	this.loadSceneConfig( this.configuration );
-
-	// Create actual three.js scene.
-
-	this.createScene();
-
+	this.configuration = undefined;
+	
+	/**
+	 * Model's context, containing all THREE.Object for a TSP model.
+	 *
+	 * @type { THREE.Object }
+	 */
+	
 	this.modelContext = new THREE.Object3D();
-
-	this.scene.add( this.modelContext );
-
+	
+	this.loadConfiguration( container, config );
+	
 }
 
-AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototype ), {
-
+AbstractModel.prototype = {
+	
+	loadConfiguration: function( args1, args2 ) {
+		
+		if ( HTMLUtils.isElement( args1 ) ) {
+			
+			this.container = args1;
+			this.configuration = new ModelConfiguration( args2 );
+			
+		} else {
+			
+			this.configuration = new ModelConfiguration( args1 );
+			
+		}
+		
+	},
+	
 	/**
 	 * load(), load prediction model based on "type" attribute in user's configuration.
 	 *
 	 * @param config
 	 */
-
+	
 	load: function( config ) {
-
+		
 		if ( config.type === "tfjs" ) {
-
+			
 			this.loadTfjsModel( config );
-
+			
 		} else if ( config.type === "keras" ) {
-
+			
 			this.loadKerasModel( config );
-
+			
 		} else if ( config.type === "tensorflow" ) {
-
+			
 			this.loadTfModel( config );
-
+			
 		} else if ( config.type = "live" ) {
-
+			
 			this.loadLiveModel( config );
-
+			
 		} else {
-
+			
 			console.error( "Do not support to load model type " + config.type );
-
+			
 		}
-
+		
 	},
-
+	
 	/**
 	 * loadTfjsModel(), create TFJSLoader and execute preLoad.
 	 *
 	 * @param config, user's config for TfjsLoader.
 	 */
-
+	
 	loadTfjsModel: function( config ) {
-
+		
 		let loader = new TfjsLoader( this, config );
 		loader.preLoad();
-
+		
 	},
-
+	
 	/**
 	 * loadKerasModel(), create KerasLoader and execute preLoad.
 	 *
 	 * @param config, user's config for KerasLoader.
 	 */
-
+	
 	loadKerasModel: function( config ) {
-
+		
 		let loader = new KerasLoader( this, config );
 		loader.preLoad();
-
+		
 	},
-
+	
 	/**
 	 * loadTfModel(), create TfLoader and execute preLoad.
 	 *
 	 * @param config, user's config for TfLoader.
 	 */
-
+	
 	loadTfModel: function( config ) {
-
+		
 		let loader = new TfLoader( this, config );
 		loader.preLoad();
-
+		
 	},
-
+	
 	loadLiveModel: function( config ) {
-
+		
 		let loader = new LiveLoader( this, config );
 		loader.preLoad();
-
+		
 	},
-
+	
 	/**
 	 * Store loader.
 	 *
 	 * @param loader
 	 */
-
+	
 	setLoader: function( loader ) {
-
+		
 		this.loader = loader;
-
+		
 	},
-
+	
 	/**
 	 * Get TSP layer stored in model by name.
 	 *
 	 * @param name
 	 * @return { Layer }, layer with given name.
 	 */
-
+	
 	getLayerByName: function( name ) {
-
+		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
-
+			
 			if ( this.layers[ i ].name === name ) {
-
+				
 				return this.layers[ i ];
-
+				
 			}
-
+			
 		}
-
+		
 	},
-
+	
 	/**
 	 * Get all TSP layer stored in model.
 	 *
 	 * @return { Layer[] }, layer list.
 	 */
-
+	
 	getAllLayers: function() {
-
+		
 		return this.layers;
-
+		
 	},
-
+	
+	/**
+	 * return Actual prediction model,
+	 * Developer can directly manipulate the model,
+	 * for example, get model summary, make predictions.
+	 */
+	
+	getPredictionModel: function() {
+		
+		return this.resource;
+		
+	},
+	
 	/**
 	 * init(), Init model,
 	 * As TSP is applying lazy initialization strategy, time-consuming work will be done in this process.
@@ -2115,48 +1873,48 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 	 *
 	 * @param callback, user's predefined callback function, fired when init process completed.
 	 */
-
+	
 	init: function( callback ) {
-
+		
 		if ( this.hasLoader ) {
-
+			
 			// If has a predefined loader, load model before init sequential elements.
-
+			
 			let self = this;
 			this.loader.load().then( function() {
-
+				
 				// Init sequential elements.
-
+				
 				self.initTSPModel();
-
+				
 				// Execute callback at the end if callback function is predefined.
-
+				
 				if ( callback !== undefined ) {
-
+					
 					callback();
-
+					
 				}
-
+				
 			} );
-
+			
 		} else {
-
+			
 			// Init sequential elements.
-
+			
 			this.initTSPModel();
-
+			
 			// Execute callback at the end if callback function is predefined.
-
+			
 			if ( callback !== undefined ) {
-
+				
 				callback();
-
+				
 			}
-
+			
 		}
-
+		
 	},
-
+	
 	/**
 	 * ============
 	 *
@@ -2165,7 +1923,7 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 	 *
 	 * ============
 	 */
-
+	
 	/**
 	 * predict(), abstract method
 	 *
@@ -2174,67 +1932,69 @@ AbstractModel.prototype = Object.assign( Object.create( SceneInitializer.prototy
 	 * @param input, user's input data
 	 * @param callback, user' predefined callback function, execute after prediction.
 	 */
-
+	
 	predict: function( input, callback ) {
-
-
+	
+	
 	},
-
+	
 	/**
 	 * clear(), abstract method
 	 *
 	 * Override to clear all layers' visualization and model's input data.
 	 */
-
+	
 	clear: function() {
-
+	
 	},
-
+	
 	/**
 	 * reset(), abstract method
 	 *
 	 * Override to add reset model.
 	 */
-
+	
 	reset: function() {
-
+	
 	},
-
-	/**
-	 * onClick(), abstract method.
-	 *
-	 * override this function to add handler for click event.
-	 *
-	 * @param event
-	 */
-
-	onClick: function( event ) {
-
-	},
-
-	/**
-	 * onMouseMove(), abstract method.
-	 *
-	 * Override this function to add handler for mouse move event.
-	 *
-	 * @param event
-	 */
-
-	onMouseMove: function( event ) {
-
-	},
-
+	
 	/**
 	 * initTSPModel(), abstract method
 	 *
 	 * Override to handle actual element creation.
 	 */
-
+	
 	initTSPModel: function() {
-
+	
 	}
+	
+};
 
-} );
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+let SideFaceRatio = 0.6;
+
+let ModelInitWidth = 100;
+let ModelLayerInterval = 50;
+let FeatureMapIntervalRatio = 0.5;
+let CloseButtonRatio = 0.03;
+let MaxDepthInLayer = 30;
+// compare with lenet to update camera pos to have a responsive view
+let DefaultCameraPos = 600;
+let DefaultLayerDepth = 8;
+// neural interval is exact the same as neural length now
+let OutputNeuralInterval = 1;
+
+let FeatureMapTextRatio = 0.1;
+
+let FeatureQueueTextRatio = 1.5;
+
+let FrameColor = 0xA5A5A5;
+
+// interval ratio for grid group
+let GridIntervalRatio = 0.3;
 
 let LayerLocator = ( function() {
 
@@ -2388,6 +2148,225 @@ let ActualDepthCalculator = (function() {
  * @author syt123450 / https://github.com/syt123450
  */
 
+function Handler3D( tspModel ) {
+
+	this.tspModel = tspModel;
+	
+	/**
+	 * Record layer hovered by mouse now.
+	 *
+	 * @type { Layer }
+	 */
+	
+	this.hoveredLayer = undefined;
+	
+	/**
+	 * Record Emissive element.
+	 *
+	 * @type { THREE.Object }
+	 */
+	
+	this.hoveredEmissive = undefined;
+	
+}
+
+Handler3D.prototype = {
+
+	handleClick: function() {
+	
+	},
+	
+	handleHover: function( intersects ) {
+		
+	}
+	
+};
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+function SequentialHandler3D( tspModel ) {
+	
+	Handler3D.call( this, tspModel );
+	
+}
+
+SequentialHandler3D.prototype = Object.assign( Object.create( Handler3D.prototype ), {
+	
+	handleClick: function( selectedElement ) {
+		
+		// Let the layer to handle actual click event.
+		
+		let selectedLayer = this.tspModel.layers[ selectedElement.layerIndex - 1 ];
+		
+		selectedLayer.handleClick( selectedElement );
+		
+	},
+	
+	handleHover: function( intersects ) {
+		
+		if ( this.hoveredLayer !== undefined ) {
+			
+			this.hoveredLayer.handleHoverOut();
+			this.hoveredLayer = undefined;
+			
+		}
+		
+		if ( this.hoveredEmissive !== undefined ) {
+			
+			this.hoveredEmissive.context.darken();
+			this.hoveredEmissive = undefined;
+			
+		}
+		
+		for ( let i = 0; i < intersects.length; i ++ ) {
+			
+			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
+				
+				let selectedElement = intersects[ i ].object;
+				
+				if ( selectedElement.hoverable === true ) {
+					
+					if ( selectedElement.emissiveable ) {
+						
+						this.hoveredEmissive = selectedElement;
+						selectedElement.context.emissive();
+						
+					}
+					
+					let selectedLayer = this.tspModel.layers[ selectedElement.layerIndex - 1 ];
+					
+					// Let the layer to handle actual hover event.
+					
+					selectedLayer.handleHoverIn( selectedElement );
+					
+					this.hoveredLayer = selectedLayer;
+					
+					break;
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+function ModelHandler3D( tspModel ) {
+
+	Handler3D.call( this, tspModel );
+	
+}
+
+ModelHandler3D.prototype = Object.assign( Object.create( Handler3D.prototype ), {
+	
+	handleClick: function( selectedElement ) {
+		
+		// Let the layer to handle actual click event.
+		
+		let selectedLayer = this.tspModel.layers[ selectedElement.layerIndex ];
+		
+		selectedLayer.handleClick( selectedElement );
+		
+		// Rearrange layer
+		
+		let translateTime = selectedLayer.openTime;
+		let level = this.tspModel.layerLookupMap[ selectedElement.layerIndex ];
+		
+		this.tspModel.rearrangeLayerInLevel( level, translateTime );
+		
+	},
+	
+	handleHover: function( intersects ) {
+		
+		if ( this.hoveredLayer !== undefined ) {
+			
+			this.hoveredLayer.handleHoverOut();
+			this.hoveredLayer = undefined;
+			
+		}
+		
+		if ( this.hoveredEmissive !== undefined ) {
+			
+			this.hoveredEmissive.context.darken();
+			this.hoveredEmissive = undefined;
+			
+		}
+		
+		for ( let i = 0; i < intersects.length; i ++ ) {
+			
+			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
+				
+				let selectedElement = intersects[ i ].object;
+				
+				if ( selectedElement.hoverable === true ) {
+					
+					if ( selectedElement.emissiveable ) {
+						
+						this.hoveredEmissive = selectedElement;
+						selectedElement.context.emissive();
+						
+					}
+					
+					let selectedLayer = this.tspModel.layers[ selectedElement.layerIndex ];
+					
+					// Let the layer to handle actual hover event.
+					
+					selectedLayer.handleHoverIn( selectedElement );
+					
+					this.hoveredLayer = selectedLayer;
+					
+					break;
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+let HandlerFactory = ( function() {
+	
+	function getEventHandler( tspModel ) {
+		
+		if ( tspModel.modelType === "Sequential" ) {
+			
+			return new SequentialHandler3D( tspModel );
+			
+		} else if ( tspModel.modelType === "Model" ) {
+			
+			return new ModelHandler3D( tspModel );
+			
+		}
+		
+	}
+	
+	return {
+		
+		getEventHandler: getEventHandler
+		
+	}
+	
+} )();
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 let MouseCaptureHelper = ( function() {
 
 	function getElementViewTop( element ){
@@ -2476,6 +2455,440 @@ let MouseCaptureHelper = ( function() {
  * @author syt123450 / https://github.com/syt123450
  */
 
+function ModelRenderer( tspModel, handlers ) {
+	
+	this.tspModel = tspModel;
+	this.handlers = handlers;
+	
+}
+
+ModelRenderer.prototype = {
+	
+	init: function() {
+	
+	},
+	
+	reset: function() {
+	
+	}
+	
+};
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+function Web3DRenderer( tspModel, handlers ) {
+	
+	ModelRenderer.call( this, tspModel, handlers );
+	
+	this.container = tspModel.container;
+	
+	this.scene = undefined;
+	this.camera = undefined;
+	this.stats = undefined;
+	this.renderer = undefined;
+	this.clock = undefined;
+	this.cameraControls = undefined;
+	this.raycaster = undefined;
+	this.mouse = undefined;
+	
+	// control whether to show Stats panel, configured by Model Configuration
+	this.hasStats = undefined;
+	
+	this.backgroundColor = undefined;
+	
+	this.sceneArea = undefined;
+	
+	this.domParams = {
+		
+		left: undefined,
+		top: undefined,
+		width: undefined,
+		height: undefined
+		
+	};
+	
+	this.loadSceneConfig( tspModel.configuration );
+	
+}
+
+Web3DRenderer.prototype = Object.assign( Object.create( ModelRenderer.prototype ), {
+	
+	init: function() {
+		
+		this.createScene();
+		this.registerEvent();
+		this.animate();
+		
+	},
+	
+	reset: function() {
+		
+		this.cameraControls.reset();
+		this.updateCamera();
+		
+	},
+	
+	loadSceneConfig: function( config ) {
+		
+		this.hasStats = config.stats;
+		this.backgroundColor = config.color.background;
+		
+	},
+	
+	createScene: function() {
+		
+		let sceneArea = document.createElement( "canvas" );
+		
+		this.sceneArea = sceneArea;
+		
+		this.setSceneSize();
+		
+		sceneArea.style.backgroundColor = this.backgroundColor;
+		
+		this.clock = new THREE.Clock();
+		
+		this.renderer = new THREE.WebGLRenderer( {
+			
+			canvas: sceneArea,
+			antialias: true
+			
+		} );
+		
+		this.renderer.setSize( sceneArea.width, sceneArea.height );
+		this.container.appendChild( this.renderer.domElement );
+		
+		this.camera = new THREE.PerspectiveCamera();
+		this.camera.fov = 45;
+		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
+		this.camera.near = 0.1;
+		this.camera.far = 10000;
+		
+		this.camera.updateProjectionMatrix();
+		this.camera.name = 'defaultCamera';
+		
+		this.scene = new THREE.Scene();
+		this.scene.background = new THREE.Color( this.backgroundColor );
+		
+		this.scene.add( this.tspModel.modelContext );
+		
+		if ( this.hasStats ) {
+			
+			if ( typeof Stats !== 'undefined' ) {
+				
+				this.stats = new Stats();
+				this.stats.dom.style.position = "absolute";
+				this.stats.dom.style.zIndex = "1";
+				this.stats.showPanel( 0 );
+				this.container.appendChild( this.stats.dom );
+				
+			} else {
+				
+				Promise.resolve(require('stats-js'))
+				.then((module) => {
+					
+					this.stats = new module();
+					this.stats.dom.style.position = "absolute";
+					this.stats.dom.style.zIndex = "1";
+					this.stats.showPanel( 0 );
+					this.container.appendChild( this.stats.dom );
+					
+				})
+				.catch(() => {
+					
+					if ( typeof Stats !== 'undefined' ) {
+						
+						this.stats = new Stats();
+						this.stats.dom.style.position = "absolute";
+						this.stats.dom.style.zIndex = "1";
+						this.stats.showPanel( 0 );
+						this.container.appendChild( this.stats.dom );
+						
+					} else if ( typeof window === 'undefined' ) {
+						
+						console.error('Please import stats-js');
+						
+					} else  {
+						
+						console.error('Please include  <script> tag');
+						
+					}
+					
+				});
+				
+			}
+			
+		}
+		
+		if (THREE.TrackballControls !== undefined) {
+			
+			this.cameraControls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
+			
+		} else {
+			
+			this.cameraControls = new TrackballControls( this.camera, this.renderer.domElement );
+			
+		}
+		
+		this.cameraControls.target.set( 0, 0, 0 );
+		
+		this.raycaster = new THREE.Raycaster();
+		this.mouse = new THREE.Vector2();
+		
+		this.cacheDomParams( this.getDomParams() );
+		
+		this.updateCamera();
+		
+	},
+	
+	updateCamera: function() {
+		
+		let modelDepth = this.tspModel.depth;
+		let controlRatio = getControlRatio( modelDepth );
+		
+		this.camera.position.set(
+			
+			0,
+			0,
+			controlRatio * DefaultCameraPos * modelDepth / DefaultLayerDepth
+		
+		);
+		
+		// as strategy can not directly be applied to model when layer depth is too small, add a control ratio to move camera farther
+		function getControlRatio( depth ) {
+			
+			if ( depth > 5 ) {
+				
+				return 1;
+				
+			} else if ( depth >= 3 && depth < 5 ) {
+				
+				return 1.5;
+				
+			} else {
+				
+				return 2;
+				
+			}
+			
+		}
+		
+	},
+	
+	// use animate scene
+	animate: function() {
+		
+		let delta = this.clock.getDelta();
+		
+		this.cameraControls.update( delta );
+		
+		if ( this.hasStats ) {
+			
+			this.stats.update();
+			
+		}
+		
+		const tempDomParams = this.getDomParams();
+		
+		const isDomPosChange = this.isDomPosChange( tempDomParams );
+		const isDomSizeChange = this.isDomSizeChange( tempDomParams );
+		
+		if ( isDomSizeChange ) {
+			
+			this.onResize();
+			
+		}
+		
+		if ( isDomPosChange || isDomSizeChange ) {
+			
+			this.cameraControls.handleResize();
+			this.cacheDomParams( tempDomParams );
+			
+		}
+		
+		TWEEN.update();
+		
+		this.renderer.render( this.scene, this.camera );
+		
+		requestAnimationFrame( function() {
+			
+			this.animate();
+			
+		}.bind( this ) );
+		
+	},
+	
+	registerEvent: function() {
+		
+		window.addEventListener( 'resize', function() {
+			
+			this.onResize();
+			
+		}.bind( this ), false );
+		
+		this.sceneArea.addEventListener( 'mousemove', function( event ) {
+			
+			this.onMouseMove( event );
+			
+		}.bind( this ), true );
+		
+		this.sceneArea.addEventListener( 'click', function( event ) {
+			
+			this.onClick( event );
+			
+		}.bind( this ), true );
+		
+	},
+	
+	onResize: function() {
+		
+		this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
+		this.camera.updateProjectionMatrix();
+		this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
+		this.cameraControls.handleResize();
+		
+	},
+	
+	setSceneSize: function() {
+		
+		let cs = getComputedStyle( this.container );
+		
+		let paddingX = parseFloat( cs.paddingLeft ) + parseFloat( cs.paddingRight );
+		let paddingY = parseFloat( cs.paddingTop ) + parseFloat( cs.paddingBottom );
+		
+		let borderX = parseFloat( cs.borderLeftWidth ) + parseFloat( cs.borderRightWidth );
+		let borderY = parseFloat( cs.borderTopWidth ) + parseFloat( cs.borderBottomWidth );
+		
+		this.sceneArea.width = this.container.clientWidth - paddingX - borderX;
+		this.sceneArea.height = this.container.clientHeight - paddingY - borderY;
+		
+	},
+	
+	cacheDomParams: function( domParams ) {
+		
+		this.domParams.left = domParams.left;
+		this.domParams.top = domParams.top;
+		this.domParams.width = domParams.width;
+		this.domParams.height = domParams.height;
+		
+	},
+	
+	getDomParams: function() {
+		
+		let box = this.container.getBoundingClientRect();
+		let d = this.container.ownerDocument.documentElement;
+		
+		const domParams = {};
+		
+		domParams.left = box.left + window.pageXOffset - d.clientLeft;
+		domParams.top = box.top + window.pageYOffset - d.clientTop;
+		domParams.width = box.width;
+		domParams.height = box.height;
+		
+		return domParams;
+		
+	},
+	
+	isDomPosChange: function( domParams ) {
+		
+		return this.domParams.left !== domParams.left ||
+			this.domParams.top !== domParams.top;
+		
+	},
+	
+	isDomSizeChange: function( domParams ) {
+		
+		return this.domParams.width !== domParams.width ||
+			this.domParams.height !== domParams.height;
+		
+	},
+	
+	/**
+	 * onMouseMove(), abstract method.
+	 *
+	 * Override this function to add handler for mouse move event.
+	 *
+	 * @param event
+	 */
+	
+	onMouseMove: function( event ) {
+		
+		// calculate mouse position.
+		
+		this.mouse.x = ( ( event.clientX - MouseCaptureHelper.getElementViewLeft( this.sceneArea ) ) / this.sceneArea.clientWidth ) * 2 - 1;
+		this.mouse.y = - ( ( event.clientY - MouseCaptureHelper.getElementViewTop( this.sceneArea ) )  / this.sceneArea.clientHeight ) * 2 + 1;
+		
+		// Use Raycaster to capture hovered element.
+		
+		this.raycaster.setFromCamera( this.mouse, this.camera );
+		let intersects = this.raycaster.intersectObjects( this.scene.children, true );
+		
+		this.handlers.handleHover( intersects );
+		
+	},
+	
+	/**
+	 * onClick(), Handler for move click event.
+	 *
+	 * @param event
+	 */
+	
+	onClick: function ( event ) {
+		
+		// Use Raycaster to capture clicked element.
+		
+		this.raycaster.setFromCamera( this.mouse, this.camera );
+		let intersects = this.raycaster.intersectObjects( this.scene.children, true );
+		
+		for ( let i = 0; i < intersects.length; i ++ ) {
+			
+			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
+				
+				let selectedElement = intersects[ i ].object;
+				
+				if ( selectedElement.clickable === true ) {
+					
+					this.handlers.handleClick( selectedElement );
+					
+					break;
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+} );
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
+let RendererFactory = ( function() {
+	
+	function getRenderer( tspModel ) {
+		
+		let eventHandler = HandlerFactory.getEventHandler( tspModel );
+		
+		return new Web3DRenderer( tspModel, eventHandler );
+		
+	}
+	
+	return {
+		
+		getRenderer: getRenderer
+		
+	}
+	
+} )();
+
+/**
+ * @author syt123450 / https://github.com/syt123450
+ */
+
 /**
  * A model with linear stack of layers.
  *
@@ -2485,241 +2898,139 @@ let MouseCaptureHelper = ( function() {
  */
 
 function Sequential( container, config ) {
-
+	
 	// "Sequential" inherits from abstract Model "AbstractModel".
-
+	
 	AbstractModel.call( this, container, config );
-
+	
 	this.modelType = "Sequential";
-
+	
 }
 
 Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
-
+	
 	/**
 	 * ============
 	 *
 	 * Functions below override base class AbstractModel's abstract method
 	 *
 	 * Sequential overrides AbstractModel's function:
-	 * predict, clear, reset, onClick, onMouseMove, initTSPModel
+	 * predict, clear, reset, initTSPModel
 	 *
 	 * ============
 	 */
-
+	
 	/**
 	 * predict(), Generates output predictions for the input sample.
 	 *
 	 * @param input
 	 * @param callback
 	 */
-
+	
 	predict: function( input, callback ) {
-
+		
 		this.clear();
-
+		
 		this.inputValue = input;
-
+		
 		if ( this.resource !== undefined ) {
-
+			
 			// If a prediction model has already been loaded into TSP, use predictor to get the prediction result.
-
+			
 			this.predictResult = this.predictor.predict( input );
-
+			
 			// Update all layer's visualization.
-
+			
 			this.updateVis();
-
+			
 		} else {
-
+			
 			// If no prediction model be loaded into TSP, just update the input layer.
-
+			
 			this.updateInputVis();
-
+			
 		}
-
+		
 		if ( callback !== undefined ) {
-
+			
 			callback( this.predictResult[ this.predictResult.length - 1 ].dataSync() );
-
+			
 		}
-
+		
 	},
-
+	
 	/**
 	 * clear(), clear all layers' visualization and model's input data.
 	 */
-
+	
 	clear: function() {
-
+		
 		if ( this.predictResult !== undefined ) {
-
+			
 			for ( let i = 0; i < this.predictResult.length; i ++ ) {
-
+				
 				tf.dispose( this.predictResult[ i ] );
-
+				
 			}
-
+			
 			this.predictResult = undefined;
-
+			
 		}
-
+		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
-
+			
 			this.layers[ i ].clear();
-
+			
 		}
-
+		
 		this.inputValue = undefined;
-
+		
 	},
-
+	
 	/**
 	 * reset(), reset the model.
 	 *
 	 * Three steps:
-	 * 1. clear the layer visualization;
-	 * 2. reset TrackballControl;
-	 * 3. update camera setting in TSP.
-	 * 4. set layer to "initStatus", "close" or "open".
+	 * 1. reset renderer assets;
+	 * 2. clear the layer visualization;
+	 * 3. set layer to "initStatus", "close" or "open".
 	 */
-
+	
 	reset: function() {
-
-		this.cameraControls.reset();
-		this.updateCamera();
-
+		
+		this.modelRenderer.reset();
+		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
-
+			
 			this.layers[ i ].reset();
-
-		}
-
-	},
-
-	/**
-	 * onClick(), Handler for move click event.
-	 *
-	 * @param event
-	 */
-
-	onClick: function ( event ) {
-
-		let model = this;
-
-		// Use Raycaster to capture clicked element.
-
-		model.raycaster.setFromCamera( model.mouse, model.camera );
-		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
-
-		for ( let i = 0; i < intersects.length; i ++ ) {
-
-			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
-
-				let selectedElement = intersects[ i ].object;
-
-				if ( selectedElement.clickable === true ) {
-
-					// Let the layer to handle actual click event.
-
-					let selectedLayer = this.layers[ selectedElement.layerIndex - 1 ];
-
-					selectedLayer.handleClick( selectedElement );
-
-					break;
-
-				}
-
-			}
-
-		}
-
-	},
-
-	/**
-	 * onMouseMove(), Handler for mouse move event.
-	 *
-	 * @param event
-	 */
-
-	onMouseMove: function( event ) {
-
-		// calculate mouse position.
-
-		this.mouse.x = ( ( event.clientX - MouseCaptureHelper.getElementViewLeft( this.sceneArea ) ) / this.sceneArea.clientWidth ) * 2 - 1;
-		this.mouse.y = - ( ( event.clientY - MouseCaptureHelper.getElementViewTop( this.sceneArea ) )  / this.sceneArea.clientHeight ) * 2 + 1;
-
-		let model = this;
-
-		if ( model.hoveredLayer !== undefined ) {
-
-			model.hoveredLayer.handleHoverOut();
-			model.hoveredLayer = undefined;
-
+			
 		}
 		
-		if ( model.hoveredEmissive !== undefined ) {
-			
-			model.hoveredEmissive.context.darken();
-			model.hoveredEmissive = undefined;
-			
-		}
-
-		// Use Raycaster to capture hovered element.
-
-		model.raycaster.setFromCamera( model.mouse, model.camera );
-		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
-
-		for ( let i = 0; i < intersects.length; i ++ ) {
-
-			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
-
-				let selectedElement = intersects[ i ].object;
-
-				if ( selectedElement.hoverable === true ) {
-
-					if ( selectedElement.emissiveable ) {
-						
-						model.hoveredEmissive = selectedElement;
-						selectedElement.context.emissive();
-						
-					}
-					
-					let selectedLayer = this.layers[ selectedElement.layerIndex - 1 ];
-
-					// Let the layer to handle actual hover event.
-
-					selectedLayer.handleHoverIn( selectedElement );
-
-					this.hoveredLayer = selectedLayer;
-
-					break;
-
-				}
-
-			}
-
-		}
-
 	},
-
+	
 	/**
 	 * initTSPModel(), call all functions required in model initialization process.
 	 */
-
+	
 	initTSPModel: function() {
-
+		
 		this.depth = this.layers.length;
-
-		this.updateCamera();
+		
+		for ( let i = 0; i < this.layers.length; i ++ ) {
+			
+			this.layers[ i ].assemble();
+			
+		}
+		
 		this.createModelElements();
-		this.registerModelEvent();
-		this.animate();
-
+		
+		this.modelRenderer = RendererFactory.getRenderer( this );
+		this.modelRenderer.init();
+		
 		this.isInitialized = true;
-
+		
 	},
-
+	
 	/**
 	 * ============
 	 *
@@ -2728,7 +3039,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	 *
 	 * ============
 	 */
-
+	
 	/**
 	 * add(), add a new TSP layer to sequential model
 	 *
@@ -2740,37 +3051,35 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	 *
 	 * @param layer, new TSP layer
 	 */
-
+	
 	add: function( layer ) {
-
+		
 		// Set last layer for native layer.
-
+		
 		if ( this.layers.length !== 0 ) {
-
+			
 			if ( !layer.isMerged ) {
-
+				
 				let tailLayer = this.layers[ this.layers.length - 1 ];
 				layer.setLastLayer( tailLayer );
-
+				
 			}
-
+			
 		}
-
+		
 		// Config environment for new layer.
-
+		
 		layer.setEnvironment( this.modelContext, this );
 		layer.loadModelConfig( this.configuration );
-
+		
 		// Add layer on top of layer stack.
-
+		
 		this.layers.push( layer ) ;
-
-		// Assemble new layer.
-
-		layer.assemble( this.layers.length, this.layers.length );
-
+		
+		layer.setPositionMetrics(  this.layers.length, this.layers.length  );
+		
 	},
-
+	
 	/**
 	 * createModelElements(), get layer configure and init layer elements.
 	 *
@@ -2779,87 +3088,87 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 	 * 2. Calculate layer aggregation's depth based on its depth
 	 * 3. Call all layers' init
 	 */
-
+	
 	createModelElements: function() {
-
+		
 		let layersPos = LayerLocator.calculateLayersPos( this.layers );
 		let layerActualDepth = ActualDepthCalculator.calculateDepths( this.layers );
-
+		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
-
+			
 			this.layers[ i ].init( layersPos[ i ], layerActualDepth[ i ] );
-
+			
 		}
-
+		
 	},
-
+	
 	/**
 	 * updateVis(), update input layer and other layer separately based on input and prediction result.
 	 */
-
+	
 	updateVis: function() {
-
+		
 		// Update input layer's visualization.
-
+		
 		this.updateInputVis();
-
+		
 		// Update other layer's visualization.
-
+		
 		this.updateLayerPredictVis();
-
+		
 	},
-
+	
 	/**
 	 * updateInputVis(), update input layer's visualizatiion.
 	 */
-
+	
 	updateInputVis: function() {
-
+		
 		if ( this.configuration.feedInputs !== undefined ) {
-
+			
 			let feedIndex = this.configuration.feedInputs[ 0 ];
 			this.layers[ 0 ].updateValue( this.inputValue[ feedIndex ] );
-
+			
 		} else {
-
+			
 			this.layers[ 0 ].updateValue( this.inputValue );
-
+			
 		}
-
+		
 	},
-
+	
 	/**
 	 * updateLayerPredictVis(), update layer's visualization except input layer.
 	 */
-
+	
 	updateLayerPredictVis: function() {
-
+		
 		let outputCount = 0;
-
+		
 		for ( let i = 1; i < this.layers.length; i ++ ) {
-
+			
 			if ( !this.layers[ i ].autoOutputDetect ) {
-
+				
 				// Pass the prediction result to layers which need a output value from model.
-
+				
 				let predictValue = this.predictResult[ outputCount ].dataSync();
-
+				
 				this.layers[ i ].updateValue( predictValue );
-
+				
 				outputCount ++;
-
+				
 			} else {
-
+				
 				// Directly call updateValue function without pass a value for autoOutputDetect layer.
-
+				
 				this.layers[ i ].updateValue();
-
+				
 			}
-
+			
 		}
-
+		
 	}
-
+	
 } );
 
 /**
@@ -3201,276 +3510,160 @@ let InLevelAligner = ( function() {
  * A Model is a directed, acyclic graph.
  *
  * @param container, a DOM element where TSP model will be rendered to.
- * @param config, user's config for Model.
+ * @param config, user's config for Functional Model.
  * @constructor
  */
 
 function Model( container, config ) {
-
+	
 	// "Model" inherits from abstract Model "AbstractModel".
-
+	
 	AbstractModel.call( this, container, config );
-
+	
 	this.inputs = undefined;
 	this.outputs = undefined;
-
+	
 	this.outputsOrder = undefined;
-
+	
 	this.levelMap = undefined;
 	this.layerLookupMap = undefined;
-
+	
 	this.modelDepth = undefined;
-
+	
 	this.levelCenters = undefined;
-
+	
 	this.modelType = "Model";
-
+	
 	this.loadModelConfig( config );
-
+	
 }
 
 Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
-
+	
 	/**
 	 * ============
 	 *
 	 * Functions below override base class AbstractModel's abstract method
 	 *
 	 * Sequential overrides AbstractModel's function:
-	 * predict, clear, reset, onClick, onMouseMove, initTSPModel
+	 * predict, clear, reset, initTSPModel
 	 *
 	 * ============
 	 */
-
+	
 	/**
 	 * predict(), Generates output predictions for the input sample.
 	 *
 	 * @param input
 	 * @param callback
 	 */
-
+	
 	predict: function( input, callback ) {
-
+		
 		this.clear();
-
+		
 		this.inputValue = input;
-
+		
 		if ( this.resource !== undefined ) {
-
+			
 			// If a prediction model has already been loaded into TSP, use predictor to get the prediction result.
-
+			
 			this.predictResult = this.predictor.predict( input );
-
+			
 			// Update all layer's visualization.
-
+			
 			this.updateVis();
-
+			
 		} else {
-
+			
 			// If no prediction model be loaded into TSP, just update the input layer.
-
+			
 			this.updateInputVis();
-
+			
 		}
-
+		
 		if ( callback !== undefined ) {
-
+			
 			callback( this.predictResult[ this.predictResult.length - 1 ].dataSync() );
-
+			
 		}
-
+		
 	},
-
+	
 	/**
 	 * clear(), clear all layers' visualization and model's input data.
 	 */
-
+	
 	clear: function() {
-
+		
 		if ( this.predictResult !== undefined ) {
-
+			
 			for ( let i = 0; i < this.predictResult.length; i ++ ) {
-
+				
 				tf.dispose( this.predictResult[ i ] );
-
+				
 			}
-
+			
 			this.predictResult = undefined;
-
+			
 		}
-
+		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
-
+			
 			this.layers[ i ].clear();
-
+			
 		}
-
+		
 		this.inputValue = undefined;
-
+		
 	},
-
+	
 	/**
 	 * reset(), reset the model.
 	 *
-	 * Three steps:
-	 * 1. clear the layer visualization;
-	 * 2. reset TrackballControl;
-	 * 3. update camera setting in TSP.
-	 * 4. set layer to "initStatus", "close" or "open".
-	 * 5. rearrange layers in the same level
+	 * Four steps:
+	 * 1. reset renderer assets.
+	 * 2. clear the layer visualization;
+	 * 3. set layer to "initStatus", "close" or "open".
+	 * 4. rearrange layers in the same level
 	 */
-
+	
 	reset: function() {
-
-		this.cameraControls.reset();
-		this.updateCamera();
-
+		
+		this.modelRenderer.reset();
+		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
-
+			
 			this.layers[ i ].reset();
-
+			
 			let translateTime = this.layers[ i ].openTime;
 			let level = this.layerLookupMap[ this.layers[ i ].layerIndex ];
-
+			
 			this.rearrangeLayerInLevel( level, translateTime );
-
-		}
-
-	},
-
-	/**
-	 * onClick(), Handler for move click event.
-	 *
-	 * @param event
-	 */
-
-	onClick: function( event ) {
-
-		let model = this;
-
-		// Use Raycaster to capture clicked element.
-
-		model.raycaster.setFromCamera( model.mouse, model.camera );
-		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
-
-		for ( let i = 0; i < intersects.length; i ++ ) {
-
-			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
-
-				let selectedElement = intersects[ i ].object;
-
-				if ( selectedElement.clickable === true ) {
-
-					// Let the layer to handle actual click event.
-
-					let selectedLayer = this.layers[ selectedElement.layerIndex ];
-
-					selectedLayer.handleClick( selectedElement );
-
-					// Rearrange layer
-
-					let translateTime = selectedLayer.openTime;
-					let level = this.layerLookupMap[ selectedElement.layerIndex ];
-
-					model.rearrangeLayerInLevel( level, translateTime );
-
-					break;
-
-				}
-
-			}
-
-		}
-
-	},
-
-	/**
-	 * onMouseMove(), Handler for mouse move event.
-	 *
-	 * @param event
-	 */
-
-	onMouseMove: function( event ) {
-
-		// calculate mouse position.
-
-		this.mouse.x = ( ( event.clientX - MouseCaptureHelper.getElementViewLeft( this.sceneArea ) ) / this.sceneArea.clientWidth ) * 2 - 1;
-		this.mouse.y = - ( ( event.clientY - MouseCaptureHelper.getElementViewTop( this.sceneArea ) )  / this.sceneArea.clientHeight ) * 2 + 1;
-
-		let model = this;
-
-		if ( model.hoveredLayer !== undefined ) {
-
-			model.hoveredLayer.handleHoverOut();
-			model.hoveredLayer = undefined;
-
+			
 		}
 		
-		if ( model.hoveredEmissive !== undefined ) {
-			
-			model.hoveredEmissive.context.darken();
-			model.hoveredEmissive = undefined;
-			
-		}
-
-		// Use Raycaster to capture hovered element.
-
-		model.raycaster.setFromCamera( model.mouse, model.camera );
-		let intersects = model.raycaster.intersectObjects( model.scene.children, true );
-
-		for ( let i = 0; i < intersects.length; i ++ ) {
-
-			if ( intersects !== null && intersects.length > 0 && intersects[ i ].object.type === "Mesh" ) {
-
-				let selectedElement = intersects[ i ].object;
-
-				if ( selectedElement.hoverable === true ) {
-					
-					if ( selectedElement.emissiveable ) {
-						
-						model.hoveredEmissive = selectedElement;
-						selectedElement.context.emissive();
-						
-					}
-					
-					let selectedLayer = this.layers[ selectedElement.layerIndex ];
-
-					// Let the layer to handle actual hover event.
-
-					selectedLayer.handleHoverIn( selectedElement );
-
-					this.hoveredLayer = selectedLayer;
-
-					break;
-
-				}
-
-			}
-
-		}
-
 	},
-
+	
 	/**
 	 * initTSPModel(), call all functions required in model initialization process.
 	 */
-
+	
 	initTSPModel: function() {
-
+		
 		this.createGraph();
 		this.assembleLayers();
-
+		
 		this.depth = this.levelMap.length;
-
-		this.updateCamera();
+		
 		this.createModelElements();
-		this.registerModelEvent();
-		this.animate();
-
+		this.modelRenderer = RendererFactory.getRenderer( this );
+		this.modelRenderer.init();
+		
 		this.isInitialized = true;
-
+		
 	},
-
+	
 	/**
 	 * ============
 	 *
@@ -3479,201 +3672,204 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 	 *
 	 * ============
 	 */
-
+	
 	loadModelConfig: function( config ) {
-
+		
 		if ( config.inputs !== undefined ) {
-
+			
 			this.inputs = config.inputs;
-
+			
 		} else {
-
+			
 			console.error( "\"inputs\" is required for Model." );
-
+			
 		}
-
+		
 		if ( config.outputs !== undefined ) {
-
+			
 			this.outputs = config.outputs;
-
+			
 		} else {
-
+			
 			console.error( "\"outputs\" is required for Model." );
-
+			
 		}
-
+		
 	},
-
+	
 	createGraph: function() {
-
+		
 		this.layers = LayerStackGenerator.createStack( this.outputs );
-
+		
 		let levelMetric = LevelStackGenerator.createStack( this.layers, this.inputs, this.outputs );
-
+		
 		this.levelMap = levelMetric.levelMap;
 		this.layerLookupMap = levelMetric.layerLookupMap;
-
+		
 		this.modelDepth = this.levelMap.length;
-
+		
 		this.levelCenters = LayerLocator.calculateLevelCenters( this.modelDepth );
-
+		
 	},
-
+	
 	assembleLayers: function() {
-
+		
 		for ( let i = 0; i < this.levelMap.length; i ++ ) {
-
+			
 			let layerIndexList = this.levelMap[ i ];
-
+			
 			for ( let j = 0; j < layerIndexList.length; j ++ ) {
-
+				
 				let layerIndex = layerIndexList[ j ];
 				let layerLevel = i;
-
+				
 				let layer = this.layers[ layerIndex ];
-
+				
 				layer.setEnvironment( this.modelContext, this );
 				layer.loadModelConfig( this.configuration );
-				layer.assemble( layerIndex, layerLevel );
-
+				
+				layer.setPositionMetrics(  layerIndex, layerLevel  );
+				
+				layer.assemble();
+				
 			}
-
+			
 		}
-
+		
 	},
-
+	
 	createModelElements: function() {
-
+		
 		let centers = this.createLayerCenters();
-
+		
 		let depths = ActualDepthCalculator.calculateDepths( this.layers );
-
+		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
-
+			
 			this.layers[ i ].init( centers[ i ], depths[ i ] );
-
+			
 		}
-
+		
 	},
-
+	
 	updateVis: function() {
-
+		
 		this.updateInputVis();
 		this.updateLayerVis();
-
+		
 	},
-
+	
 	updateInputVis: function() {
-
+		
 		if ( this.configuration.feedInputs !== undefined ) {
-
+			
 			for ( let i = 0; i < this.inputs.length; i ++ ) {
-
+				
 				let feedIndex = this.configuration.feedInputs[ i ];
 				this.inputs[ i ].updateValue( this.inputValue[ feedIndex ] );
-
+				
 			}
-
+			
 		} else {
-
+			
 			for ( let i = 0; i < this.inputs.length; i ++ ) {
-
+				
 				this.inputs[ i ].updateValue( this.inputValue[ i ] );
-
+				
 			}
-
+			
 		}
-
+		
 	},
-
+	
 	updateLayerVis: function() {
-
+		
 		for ( let i = 0; i < this.predictResult.length; i ++ ) {
-
+			
 			let layer = this.getLayerByName( this.outputsOrder[ i ] );
-
+			
 			layer.updateValue( this.predictResult[ i ].dataSync() );
-
+			
 		}
-
+		
 	},
-
+	
 	createLayerCenters: function() {
-
+		
 		let layerCenters = [];
-
+		
 		for ( let i = 0; i < this.layers.length; i ++ ) {
-
+			
 			layerCenters.push( {  } );
-
+			
 		}
-
+		
 		for ( let i = 0; i < this.levelMap.length; i ++ ) {
-
+			
 			let levelLayers = [];
-
+			
 			for ( let j = 0; j < this.levelMap[ i ].length; j ++ ) {
-
+				
 				levelLayers.push( this.layers[ this.levelMap[ i ][ j ] ] );
-
+				
 			}
-
+			
 			let xTranslateList = InLevelAligner.getXTranslate( levelLayers );
-
+			
 			for ( let j = 0; j < this.levelMap[ i ].length; j ++ ) {
-
+				
 				layerCenters[ this.levelMap[ i ][ j ] ] = {
-
+					
 					x: this.levelCenters[i].x + xTranslateList[ j ],
 					y: this.levelCenters[i].y,
 					z: this.levelCenters[i].z
-
+					
 				};
-
+				
 			}
-
+			
 		}
-
+		
 		return layerCenters;
-
+		
 	},
-
+	
 	rearrangeLayerInLevel: function( level, translateTime ) {
-
+		
 		let layerIndexList = this.levelMap[ level ];
-
+		
 		let levelLayers = [];
-
+		
 		for ( let i = 0; i < layerIndexList.length; i ++ ) {
-
+			
 			levelLayers.push( this.layers[ layerIndexList[ i ] ] );
-
+			
 		}
-
+		
 		let xTranslateList = InLevelAligner.getXTranslate( levelLayers );
-
+		
 		let layerCenters = [];
-
+		
 		for ( let i = 0; i < this.levelMap[ level ].length; i ++ ) {
-
+			
 			layerCenters.push( {
-
+				
 				x: this.levelCenters[ level ].x + xTranslateList[ i ],
 				y: this.levelCenters[ level ].y,
 				z: this.levelCenters[ level ].z
-
+				
 			} );
-
+			
 		}
-
+		
 		for ( let i = 0; i < levelLayers.length; i ++ ) {
-
+			
 			levelLayers[ i ].translateLayer( layerCenters[ i ], translateTime );
-
+			
 		}
-
+		
 	}
-
+	
 } );
 
 /**
@@ -5408,6 +5604,13 @@ Layer.prototype = {
 		}
 
 	},
+	
+	setPositionMetrics: function( layerIndex, layerLevel ) {
+		
+		this.layerIndex = layerIndex;
+		this.layerLevel = layerLevel;
+		
+	},
 
 	/**
 	 * ============
@@ -5434,14 +5637,12 @@ Layer.prototype = {
 
 	/**
 	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * Override this function to get information from previous layer
-	 *
-	 * @param { int } layerIndex, this layer's order in model
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
+	assemble: function() {
 
 	},
 
@@ -6703,7 +6904,7 @@ NativeLayer2d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	/**
 	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * Override this function to get information from previous layer.
 	 *
@@ -6873,15 +7074,10 @@ Conv1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -8655,7 +8851,7 @@ NativeLayer3d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	/**
 	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * Override this function to get information from previous layer
 	 *
@@ -8780,15 +8976,10 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -9112,15 +9303,10 @@ Conv2dTranspose.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -9421,15 +9607,10 @@ DepthwiseConv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -9744,15 +9925,10 @@ Cropping1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), 
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -9993,15 +10169,10 @@ Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), 
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -11249,19 +11420,6 @@ Input1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * assemble() configure layer's index in model.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
-	 */
-
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
-
-	},
-
-	/**
 	 * updateValue() accept layer output value from model, update layer visualization if required.
 	 *
 	 * Model passes layer's output value to layer through updateValue method.
@@ -12018,19 +12176,6 @@ GreyscaleInput.prototype = Object.assign( Object.create( NativeLayer.prototype )
 		// Add the wrapper object to the actual THREE.js object.
 
 		this.context.add( this.neuralGroup );
-
-	},
-
-	/**
-	 * assemble() configure layer's index in model.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
-	 */
-
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
 
 	},
 
@@ -13472,19 +13617,6 @@ RGBInput.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 		// Add the wrapper object to the actual THREE.js object.
 
 		this.context.add( this.neuralGroup );
-
-	},
-
-	/**
-	 * assemble() configure layer's index in model.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
-	 */
-
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
 
 	},
 
@@ -15350,15 +15482,10 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Conv2d layer's outputShape has one dimension.
 
@@ -16675,15 +16802,10 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 	},
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Automatically detect model's input shape as outputShape.
 
@@ -17932,15 +18054,10 @@ YoloGrid.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	},
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Auto detect input shape from last layer.
 
@@ -19883,7 +20000,7 @@ NativeLayer1d.prototype = Object.assign( Object.create( NativeLayer.prototype ),
 
 	/**
 	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * Override this function to get information from previous layer.
 	 *
@@ -19955,15 +20072,10 @@ Flatten.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
@@ -20182,15 +20294,10 @@ Pooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -20484,15 +20591,10 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -20799,15 +20901,10 @@ Reshape1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -21031,15 +21128,10 @@ Reshape2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -21275,15 +21367,10 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -21601,15 +21688,10 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
@@ -21812,15 +21894,10 @@ Padding1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -22069,15 +22146,10 @@ Padding2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
@@ -22315,15 +22387,10 @@ UpSampling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -22564,15 +22631,10 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -23044,15 +23106,10 @@ GlobalPooling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototyp
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
@@ -23323,15 +23380,10 @@ GlobalPooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototyp
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
@@ -23597,15 +23649,10 @@ BasicLayer1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
@@ -23750,15 +23797,10 @@ BasicLayer2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
@@ -23907,15 +23949,10 @@ BasicLayer3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
@@ -24081,15 +24118,10 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -24296,15 +24328,10 @@ Activation2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -24536,15 +24563,12 @@ Activation3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 	 */
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * @param { int } layerIndex, this layer's order in model
 	 */
 
 	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
 
 		this.inputShape = this.lastLayer.outputShape;
 
@@ -25113,7 +25137,7 @@ MergedLayer.prototype = Object.assign( Object.create( Layer.prototype ), {
 
 	/**
 	 * assemble() abstract method
-	 * Configure layer's index in model, calculate the shape and parameters based on previous layer.
+	 * calculate the shape and parameters based on previous layer or pre-defined shape.
 	 *
 	 * Override this function to get information from previous layer
 	 *
@@ -27634,15 +27658,10 @@ MergedLayer1d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	},
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Validate whether user's input merged elements can be merged in this kind of merge operation.
 
@@ -28632,11 +28651,8 @@ MergedLayer2d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 
 	},
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
-
+	assemble: function() {
+		
 		// Validate whether user's input merged elements can be merged in this kind of merge operation.
 
 		if( !this.operationStrategy.validate() ) {
@@ -29963,15 +29979,10 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	},
 
 	/**
-	 * assemble() configure layer's index in model, calculate the shape and parameters based on previous layer.
-	 *
-	 * @param { int } layerIndex, this layer's order in model
+	 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
 	 */
 
-	assemble: function( layerIndex, layerLevel ) {
-
-		this.layerIndex = layerIndex;
-		this.layerLevel = layerLevel;
+	assemble: function() {
 
 		// Validate whether user's input merged elements can be merged in this kind of merge operation.
 
@@ -31209,7 +31220,7 @@ let models = {
 
 };
 
-let version = "0.3.0";
+let version = "0.5.0";
 
 exports.models = models;
 exports.layers = layers;

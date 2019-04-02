@@ -61,40 +61,40 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
 
 ### 1. Install TensorSpace Library
 
-**If you use jQuery or similar libraries for development**
+**Basic Case**
 - Option 1: From CDN
 
-  For example if you want to create an example in CodePen
   ```html
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
   <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tensorspace@0.3.0/build/tensorspace.min.js"></script>
+  <!-- Replace "VERSION"  with the version you want to use. -->
+  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/build/tensorspace.min.js"></script>
 
-  <!-- Replace "0.3.0"  with the version you want to use. -->
   ```
 
-- Option 2: From TensorSpace official website
-  - Step 1: Download `TensorSpace.zip` from [https://tensorspace.org/assets/zip/TensorSpace.zip](https://tensorspace.org/assets/zip/TensorSpace.zip)
-  - Step 2: Unzip `TensorSpace.zip` and copy `TensorSpace.min.js` and all `.js` files under `\dependencies` folder to your local project
-  - Step 3: Install with script tag
+- Option 2: Download and include `tensorspace.min.js` in web page.
+
+  Get `tensorspace.min.js` from [Github](https://github.com/tensorspace-team/tensorspace/tree/master/dist), [NPM](https://www.npmjs.com/package/tensorspace) or [TensorSpace official website](https://tensorspace.org/#download)
   ```html
   <script src="three.min.js"></script>
   <script src="tween.min.js"></script>
   <script src="tf.min.js"></script>
-  <script src="TrackballControls"></script>
+  <script src="TrackballControls.js"></script>
   <script src="tensorspace.min.js"></script>
   ```
 
-**If you use Angular 2.0 or similar framework for development**
+**Using TensorSpace in Progressive Framework**
   - Step 1: Install TensorSpace
     - Option 1: NPM
+    
     ```bash
     npm install tensorspace
     ```
 
     - Option 2: Yarn
+    
     ```bash
     yarm add tensorspace
     ```
@@ -102,7 +102,7 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
   ```javascript
   import * as TSP from 'tensorspace';
   ```
-  [Example in Angular 2.0 (source code)](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular)
+  Checkout this [Angular example](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular) for more information.
 
 ### 2. Preprocess Pre-trained Model
 
