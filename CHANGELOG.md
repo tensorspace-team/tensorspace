@@ -2,6 +2,42 @@
 
 All notable changes to TensorSpace will be documented in this file.
 
+## v0.5.0 - 💎
+
+> 2019-4-1 ( 0.3.0 ==> 0.5.0 )
+
+### Feature
+
+* Make TensorSpace compatible with progressive framework [Example](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular)
+* Make TensorSpace compatible with TensorFlow.js 1.0 [Dependency](https://github.com/tensorspace-team/tensorspace/blob/master/package.json#L26)
+* Add end-to-end test for development [test cases](https://github.com/tensorspace-team/tensorspace/tree/master/test/e2e)
+* Add `onProgress` to monitor model loading [#180](https://github.com/tensorspace-team/tensorspace/issues/180)
+* Add `emissive` feature, hover on feature map, it will become brighter [#205](https://github.com/tensorspace-team/tensorspace/issues/205)
+* Add `emissive()` and `darken()` API for layers [#207](https://github.com/tensorspace-team/tensorspace/issues/207)
+* Change `animationTimeRatio` configuration to `animeTime` [#183](https://github.com/tensorspace-team/tensorspace/issues/183)
+* Change TensorFlow Loader configuration [#216](https://github.com/tensorspace-team/tensorspace/issues/216)
+* Change TensorFlow Loader to support tf.keras [67340c](https://github.com/tensorspace-team/tensorspace/commit/67340c86c72830210f1d6a86eb5a04cbd7469053)
+* Make TensorSpace model responsive to container change [9e86fb](https://github.com/tensorspace-team/tensorspace/commit/9e86fb344b09542c4a1d03a7a7cc1085b38d60e8)
+* Make TensorSpace model compatible with movable container [#222](https://github.com/tensorspace-team/tensorspace/issues/222)
+* Make `hasCloseButton` configurable in model [1c5f69](https://github.com/tensorspace-team/tensorspace/commit/1c5f69500e3dbc748482030f9982ef0004d5fde9)
+* Make outputDetection layer's `addRectangleList` reusable [33e83c](https://github.com/tensorspace-team/tensorspace/commit/33e83c5d59859da77219c2514b74ea66fad60fe0)
+* Add API to get prediction model [18d04b](https://github.com/tensorspace-team/tensorspace/commit/18d04b62462982bf0be48748c9863c89f4c437ac)
+* Add publish local for local development [d4bbb3](https://github.com/tensorspace-team/tensorspace/commit/d4bbb37e874adb9694432083a7281f624e4e7573)
+
+### Bug Fixed
+
+* Fix aggressively dispose closeButton [#211](https://github.com/tensorspace-team/tensorspace/issues/211)
+
+### Example
+
+* Add TensorSpace Usage example in Angular 2.0 [#194](https://github.com/tensorspace-team/tensorspace/issues/194)
+* Add TensorSpace Usage example in tfjs-vis [#224](https://github.com/tensorspace-team/tensorspace/issues/224)
+* Add tf.data for training visualization examples [#181](https://github.com/tensorspace-team/tensorspace/issues/181)
+
+<p align="center">
+<img width="100%" src="./assets/vis-demo.gif">
+</p>
+
 ## v0.3.0 - Merry Christmas TensorSpace v0.3
 
 > 2018-12-17 ( 0.2.0 ==> 0.3.0 )
