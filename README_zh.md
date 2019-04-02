@@ -50,7 +50,7 @@ TensorSpace 基于 TensorFlow.js、Three.js 和 Tween.js 开发，用于对神�
 TensorSpace 降低了前端开发者进行深度学习相关应用开发的门槛。
 我们期待看到更多基于 TensorSpace 开发的3D可视化应用。
 
-* **交互** -- 使用类 Keras 的API，在浏览器中构建可交互的3D可视化模型。
+* **交互** -- 使用 Layer API，在浏览器中构建可交互的3D可视化模型。
 
 * **直观** -- 观察并展示模型中间层预测数据，直观演示模型推测过程。
 
@@ -132,16 +132,15 @@ let model = new TSP.models.Sequential( container );
 
 然后，基于 LeNet 网络的结构：输入层 + 2 X (Conv2D层 & Maxpooling层) + 3 X (Dense层)，我们可以搭建其模型结构：
 ```JavaScript
-model.add( new TSP.layers.GreyscaleInput({ shape: [28, 28, 1] }) );
-model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
-model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
-model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
-model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 16, strides: 1 }) );
-model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
-model.add( new TSP.layers.Dense({ units: 120 }) );
-model.add( new TSP.layers.Dense({ units: 84 }) );
+model.add( new TSP.layers.GreyscaleInput() );
+model.add( new TSP.layers.Padding2d() );
+model.add( new TSP.layers.Conv2d() );
+model.add( new TSP.layers.Pooling2d() );
+model.add( new TSP.layers.Conv2d() );
+model.add( new TSP.layers.Pooling2d() );
+model.add( new TSP.layers.Dense() );
+model.add( new TSP.layers.Dense() );
 model.add( new TSP.layers.Output1d({
-    units: 10,
     outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 }) );
 ```

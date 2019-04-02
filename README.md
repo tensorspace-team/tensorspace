@@ -45,7 +45,7 @@ TensorSpace is a neural network 3D visualization framework designed for not only
 
 By applying TensorSpace API, it is more intuitive to visualize and understand any pre-trained models built by TensorFlow, Keras, TensorFlow.js, etc. TensorSpace introduces a way for front end developers to be involved in the deep learning ecosystem. As an open source library, TensorSpace team welcomes any further development on visualization applications.
 
-* **Interactive** -- Use Keras-like API to build interactive model in browsers.
+* **Interactive** -- Use Layer API to build interactive model in browsers.
 * **Intuitive** -- Visualize the information from intermediate inferences.
 * **Integrative** -- Support pre-trained models from TensorFlow, Keras, TensorFlow.js.
 
@@ -127,16 +127,15 @@ let model = new TSP.models.Sequential( container );
 
 Next, based on the LeNet structure: Input + 2 X (Conv2D & Maxpooling) + 3 X (Dense), we build the structure of the model:
 ```JavaScript
-model.add( new TSP.layers.GreyscaleInput({ shape: [28, 28, 1] }) );
-model.add( new TSP.layers.Padding2d({ padding: [2, 2] }) );
-model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 6, strides: 1 }) );
-model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
-model.add( new TSP.layers.Conv2d({ kernelSize: 5, filters: 16, strides: 1 }) );
-model.add( new TSP.layers.Pooling2d({ poolSize: [2, 2], strides: [2, 2] }) );
-model.add( new TSP.layers.Dense({ units: 120 }) );
-model.add( new TSP.layers.Dense({ units: 84 }) );
+model.add( new TSP.layers.GreyscaleInput() );
+model.add( new TSP.layers.Padding2d() );
+model.add( new TSP.layers.Conv2d() );
+model.add( new TSP.layers.Pooling2d() );
+model.add( new TSP.layers.Conv2d() );
+model.add( new TSP.layers.Pooling2d() );
+model.add( new TSP.layers.Dense() );
+model.add( new TSP.layers.Dense() );
 model.add( new TSP.layers.Output1d({
-    units: 10,
     outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 }) );
 ```
