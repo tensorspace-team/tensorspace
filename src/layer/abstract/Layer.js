@@ -563,6 +563,7 @@ Layer.prototype = {
 		}
 		
 		this.config.shape = shape;
+		this.outputShape = shape;
 		
 	},
 

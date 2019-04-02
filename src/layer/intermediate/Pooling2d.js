@@ -110,7 +110,7 @@ Pooling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 		this.actualHeight = this.height * this.unitLength;
 
 		// Calculate the feature map centers for close status and open status.
-
+		
 		for ( let i = 0; i < this.depth; i ++ ) {
 
 			let center = {

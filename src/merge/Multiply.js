@@ -2,8 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MergeValidator } from "../utils/MergeValidator";
-import { MergedLayerFactory } from "./factory/MergedLayerFactory";
+import { MergeProxy } from './proxy/MergeProxy';
 
 /**
  * Exported as a Factory method for TensorSpace user to use.
@@ -52,14 +51,10 @@ import { MergedLayerFactory } from "./factory/MergedLayerFactory";
 function Multiply( layerList, config ) {
 
 	let operatorType = "multiply";
+	
+	// Create a merged Layer proxy, the actual layer in proxy based on input layer list and config for multiply operation.
 
-	// make sure the input elements have the same dimension.
-
-	MergeValidator.validateDimension( layerList );
-
-	// MergedLayerFactory create a merged Layer based on input layer list and config for multiply operation.
-
-	let multiplyLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
+	let multiplyLayer = new MergeProxy( operatorType, layerList, config );
 
 	return multiplyLayer;
 

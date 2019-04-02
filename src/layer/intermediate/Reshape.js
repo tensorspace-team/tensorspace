@@ -29,7 +29,7 @@ function Reshape( config ) {
 	this.reshapeType = undefined;
 	
 	/**
-	 * Reshape layer is a proxy, store reference for actual layer.
+	 * Reshape layer is a proxy, store reference of actual layer.
 	 * Three types of actual layers: Reshape1d, Reshape2d, Reshape3d.
 	 *
 	 * @type { Layer }
@@ -39,8 +39,6 @@ function Reshape( config ) {
 	/**
 	 * Attributes below are important layer metrics for a TensorSpace Layers,
 	 * These metrics will be injected or updated by calling updateLayerMetric()
-	 *
-	 * @type {undefined}
 	 */
 	
 	this.name = undefined;
@@ -53,6 +51,9 @@ function Reshape( config ) {
 	this.actualWidth = undefined;
 	this.actualHeight = undefined;
 	this.actualDepth = undefined;
+	
+	this.layerDimension = undefined;
+	this.openFmCenters = undefined;
 	
 }
 
@@ -104,6 +105,10 @@ Reshape.prototype = {
 		this.actualWidth = this.actualLayer.actualWidth;
 		this.actualHeight = this.actualLayer.actualHeight;
 		this.actualDepth = this.actualLayer.actualDepth;
+		
+		this.layerDimension = this.actualLayer.layerDimension;
+		
+		this.openFmCenters = this.actualLayer.openFmCenters;
 		
 	},
 	

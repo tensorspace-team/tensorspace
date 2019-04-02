@@ -5,7 +5,7 @@
 let MergeValidator = ( function() {
 
 	function validateDimension( layerList ) {
-
+		
 		let dimension;
 
 		if ( layerList.length > 0 ) {

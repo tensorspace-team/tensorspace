@@ -2,8 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { MergeValidator } from "../utils/MergeValidator";
-import { MergedLayerFactory } from "./factory/MergedLayerFactory";
+import { MergeProxy } from './proxy/MergeProxy';
 
 /**
  * Exported as a Factory method for TensorSpace user to use.
@@ -52,14 +51,10 @@ import { MergedLayerFactory } from "./factory/MergedLayerFactory";
 function Average( layerList, config ) {
 
 	let operatorType = "average";
+	
+	// Create a merged Layer proxy, the actual layer in proxy based on input layer list and config for averaging operation.
 
-	// make sure the input elements have the same dimension.
-
-	MergeValidator.validateDimension( layerList );
-
-	// MergedLayerFactory create a merged Layer based on input layer list and config for averaging operation.
-
-	let averageLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
+	let averageLayer = new MergeProxy( operatorType, layerList, config );
 
 	return averageLayer;
 
