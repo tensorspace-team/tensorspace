@@ -70,12 +70,12 @@ TensorSpace 降低了前端开发者进行深度学习相关应用开发的门�
 - 途径一. 通过 CDN
 
   ```html
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/1.0.0/tf.min.js"></script>
   <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
   <!-- 将”VERSION”替换成需要的版本 -->
-  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/build/tensorspace.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/dist/tensorspace.min.js"></script>
   
   ```
 
@@ -102,7 +102,7 @@ TensorSpace 降低了前端开发者进行深度学习相关应用开发的门�
     - 途径二: Yarn
     
     ```bash
-    yarm add tensorspace
+    yarn add tensorspace
     ```
   - 第二步： 引入TensorSpace
   ```javascript

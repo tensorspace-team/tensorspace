@@ -65,12 +65,12 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
 - Option 1: From CDN
 
   ```html
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/1.0.0/tf.min.js"></script>
   <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
   <!-- Replace "VERSION"  with the version you want to use. -->
-  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/build/tensorspace.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/dist/tensorspace.min.js"></script>
 
   ```
 
@@ -96,7 +96,7 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
     - Option 2: Yarn
     
     ```bash
-    yarm add tensorspace
+    yarn add tensorspace
     ```
   - Step 2: Use TensorSpace
   ```javascript
