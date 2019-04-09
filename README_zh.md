@@ -66,49 +66,55 @@ TensorSpace 降低了前端开发者进行深度学习相关应用开发的门�
 </p>
 
 ### 安装
+
 **基本使用场景**
-- 途径一. 通过 CDN
 
-  ```html
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
-  <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
-  <!-- 将”VERSION”替换成需要的版本 -->
-  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/build/tensorspace.min.js"></script>
-  
-  ```
+- 第一步：下载依赖库
 
-- 途径二. 下载 `tensorspace.min.js` 并在页面中引入
-  
-  可以通过 [Github](https://github.com/tensorspace-team/tensorspace/tree/master/dist), [NPM](https://www.npmjs.com/package/tensorspace) 或者 [TensorSpace 网站](https://tensorspace.org/#download) 这些途径下载 `tensorspace.min.js`。
-  
-  ```html
-  <script src="three.min.js"></script>
-  <script src="tween.min.js"></script>
-  <script src="tf.min.js"></script>
-  <script src="TrackballControls.js"></script>
-  <script src="tensorspace.min.js"></script>
-  ```
+下载依赖库文件 TensorFlow.js ([tf.min.js](https://cdnjs.com/libraries/tensorflow))，Three.js ([three.min.js](https://cdnjs.com/libraries/three.js))，Tween.js ([tween.min.js](https://cdnjs.com/libraries/tween.js))，TrackballControls ([TrackballControls.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js))。
+
+- 第二步：下载 TensorSpace
+
+可以通过这些途径下载 `tensorspace.min.js`： [Github](https://github.com/tensorspace-team/tensorspace/tree/master/dist), [NPM](https://www.npmjs.com/package/tensorspace)， [TensorSpace 网站](https://tensorspace.org/#download)，或者 CDN：
+
+```html
+<!-- 将”VERSION”替换成需要的版本 -->
+<script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/dist/tensorspace.min.js"></script>
+```
+
+- 第三步：在页面中引入库文件
+
+```html
+<script src="tf.min.js"></script>
+<script src="three.min.js"></script>
+<script src="tween.min.js"></script>
+<script src="TrackballControls.js"></script>
+<script src="tensorspace.min.js"></script>
+```
 
 **在渐进式框架中使用 TensorSpace**
-  - 第一步： 安装TensorSpace
-    - 途径一: NPM
-    
-    ```bash
-    npm install tensorspace
-    ```
 
-    - 途径二: Yarn
+- 第一步： 安装 TensorSpace
+  
+  - 途径一: NPM
     
-    ```bash
-    yarm add tensorspace
-    ```
-  - 第二步： 引入TensorSpace
-  ```javascript
-  import * as TSP from 'tensorspace';
+  ```bash
+  npm install tensorspace
   ```
-  这个 [Angular 样例](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular) 具体展示了如何使用。
+
+  - 途径二: Yarn
+    
+  ```bash
+  yarn add tensorspace
+  ```
+
+- 第二步： 引入 TensorSpace
+
+```javascript
+import * as TSP from 'tensorspace';
+```
+
+这个 [Angular 样例](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular) 具体展示了如何使用。
 
 ### 模型预处理
 

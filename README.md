@@ -62,47 +62,55 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
 ### 1. Install TensorSpace Library
 
 **Basic Case**
-- Option 1: From CDN
 
-  ```html
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
-  <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
-  <!-- Replace "VERSION"  with the version you want to use. -->
-  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/build/tensorspace.min.js"></script>
+- Step 1: Download Dependencies
 
-  ```
+Download dependencies build files TensorFlow.js ([tf.min.js](https://cdnjs.com/libraries/tensorflow)), Three.js ([three.min.js](https://cdnjs.com/libraries/three.js)), Tween.js ([tween.min.js](https://cdnjs.com/libraries/tween.js)), TrackballControls ([TrackballControls.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js)).
 
-- Option 2: Download and include `tensorspace.min.js` in web page.
+- Step 2: Download TensorSpace
 
-  Get `tensorspace.min.js` from [Github](https://github.com/tensorspace-team/tensorspace/tree/master/dist), [NPM](https://www.npmjs.com/package/tensorspace) or [TensorSpace official website](https://tensorspace.org/#download)
-  ```html
-  <script src="three.min.js"></script>
-  <script src="tween.min.js"></script>
-  <script src="tf.min.js"></script>
-  <script src="TrackballControls.js"></script>
-  <script src="tensorspace.min.js"></script>
-  ```
+Download TensorSpace build file `tensorspace.min.js` from [Github](https://github.com/tensorspace-team/tensorspace/tree/master/dist), [NPM](https://www.npmjs.com/package/tensorspace), [TensorSpace official website](https://tensorspace.org/#download) or CDN:
+
+```html
+<!-- Replace "VERSION" with the version you want to use. -->
+<script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/dist/tensorspace.min.js"></script>
+```
+
+- Step 3: Include Build Files
+
+Include all build files in web page.
+
+```html
+<script src="tf.min.js"></script>
+<script src="three.min.js"></script>
+<script src="tween.min.js"></script>
+<script src="TrackballControls.js"></script>
+<script src="tensorspace.min.js"></script>
+```
 
 **Using TensorSpace in Progressive Framework**
-  - Step 1: Install TensorSpace
-    - Option 1: NPM
-    
-    ```bash
-    npm install tensorspace
-    ```
 
-    - Option 2: Yarn
+- Step 1: Install TensorSpace
+  
+  - Option 1: NPM
     
-    ```bash
-    yarm add tensorspace
-    ```
-  - Step 2: Use TensorSpace
-  ```javascript
-  import * as TSP from 'tensorspace';
+  ```bash
+  npm install tensorspace
   ```
-  Checkout this [Angular example](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular) for more information.
+
+  - Option 2: Yarn
+    
+  ```bash
+  yarn add tensorspace
+  ```
+
+- Step 2: Use TensorSpace
+
+```javascript
+import * as TSP from 'tensorspace';
+```
+
+Checkout this [Angular example](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular) for more information.
 
 ### 2. Preprocess Pre-trained Model
 
