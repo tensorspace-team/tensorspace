@@ -7,10 +7,9 @@
 
     <script src="../lib/three.min.js"></script>
     <script src="../lib/tween.min.js"></script>
-		<!-- <script src="../lib/stats.min.js"></script> -->
     <script src="../lib/tf.min.js"></script>
     <script src="../lib/TrackballControls.js"></script>
-    <script src="../../dist/tensorspace.js"></script>
+    <script src="../../dist/tensorspace.min.js"></script>
 
     <script src="../lib/jquery.min.js"></script>
 
@@ -27,6 +26,7 @@
             width: 100%;
             height: 100%;
         }
+
     </style>
 
 </head>
@@ -54,11 +54,8 @@
 		}) );
 
 		model.load({
-			type: "tfjs",
-			url: './model/mnist.json',
-			onComplete: function() {
-				console.log( "\"Hello World!\" from TensorSpace Loader." );
-			}
+			type: "tensorflow",
+			url: './convertedModel/model.json'
 		});
 		model.init( function() {
 

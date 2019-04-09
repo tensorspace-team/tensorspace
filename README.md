@@ -59,65 +59,83 @@ By applying TensorSpace API, it is more intuitive to visualize and understand an
 <b>Fig. 2</b> - TensorSpace Workflow
 </p>
 
-### 1. Install TensorSpace Library
+### 1. Install TensorSpace
 
-**Basic Case**
-- Option 1: From CDN
+#### Install in the Basic Case
 
-  ```html
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.13.4/tf.min.js"></script>
-  <script src="https://tensorspace.org/assets/jslib/TrackballControls.js"></script>
-  <!-- Replace "VERSION"  with the version you want to use. -->
-  <script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/build/tensorspace.min.js"></script>
+- Step 1: Download Dependencies
 
-  ```
+Download dependencies build files TensorFlow.js ([tf.min.js](https://cdnjs.com/libraries/tensorflow)), Three.js ([three.min.js](https://cdnjs.com/libraries/three.js)), Tween.js ([tween.min.js](https://cdnjs.com/libraries/tween.js)), TrackballControls ([TrackballControls.js](https://github.com/mrdoob/three.js/blob/master/examples/js/controls/TrackballControls.js)).
 
-- Option 2: Download and include `tensorspace.min.js` in web page.
+- Step 2: Download TensorSpace
 
-  Get `tensorspace.min.js` from [Github](https://github.com/tensorspace-team/tensorspace/tree/master/dist), [NPM](https://www.npmjs.com/package/tensorspace) or [TensorSpace official website](https://tensorspace.org/#download)
-  ```html
-  <script src="three.min.js"></script>
-  <script src="tween.min.js"></script>
-  <script src="tf.min.js"></script>
-  <script src="TrackballControls.js"></script>
-  <script src="tensorspace.min.js"></script>
-  ```
+Download TensorSpace build file `tensorspace.min.js` from [Github](https://github.com/tensorspace-team/tensorspace/tree/master/dist), [NPM](https://www.npmjs.com/package/tensorspace), [TensorSpace official website](https://tensorspace.org/#download) or CDN:
 
-**Using TensorSpace in Progressive Framework**
-  - Step 1: Install TensorSpace
-    - Option 1: NPM
+```html
+<!-- Replace "VERSION" with the version you want to use. -->
+<script src="https://cdn.jsdelivr.net/npm/tensorspace@VERSION/dist/tensorspace.min.js"></script>
+```
+
+- Step 3: Include Build Files
+
+Include all build files in web page.
+
+```html
+<script src="tf.min.js"></script>
+<script src="three.min.js"></script>
+<script src="tween.min.js"></script>
+<script src="TrackballControls.js"></script>
+<script src="tensorspace.min.js"></script>
+```
+
+#### Install in the Progressive Framework
+
+- Step 1: Install TensorSpace
+  
+  - Option 1: NPM
     
-    ```bash
-    npm install tensorspace
-    ```
-
-    - Option 2: Yarn
-    
-    ```bash
-    yarm add tensorspace
-    ```
-  - Step 2: Use TensorSpace
-  ```javascript
-  import * as TSP from 'tensorspace';
+  ```bash
+  npm install tensorspace
   ```
-  Checkout this [Angular example](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular) for more information.
 
-### 2. Preprocess Pre-trained Model
+  - Option 2: Yarn
+    
+  ```bash
+  yarn add tensorspace
+  ```
 
-For presenting multiple intermediate outputs, we need to [preprocess](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess) the pre-trained model.
+- Step 2: Use TensorSpace
 
-Based on different training libraries, we provide different tutorials: [TensorFlow model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlow), [Keras model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/Keras) and [TensorFlow.js model preprocessing](https://github.com/tensorspace-team/tensorspace/tree/master/docs/preprocess/TensorFlowJS).
+```javascript
+import * as TSP from 'tensorspace';
+```
 
+Checkout this [Angular example](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld-angular) for more information.
 
-### 3. Create 3D TensorSpoace Model
+### 2. Preprocess the Pre-trained Model
+
+Before applying TensorSpace to visualize the pre-trained model, there is an important pipeline - TensorSpace model preprocessing ( Checkout [this article](https://tensorspace.org/html/docs/preIntro.html) for more information about TensorSpace preprocessing ). We can use [TensorSpace Converter](https://github.com/tensorspace-team/tensorspace-converter) to quickly complete the TensorSpace Preprocessing.
+
+For example, if we have a [tf.keras model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/rawModel) in hand, we can use the following TensorSpace-Converter conversion script to convert a tf.keras model to the TensorSpace compatible format:
+```shell
+$ tensorspacejs_converter \
+    --input_model_from="tensorflow" \
+    --input_model_format="tf_keras" \
+    --output_layer_names="padding_1,conv_1,maxpool_1,conv_2,maxpool_2,dense_1,dense_2,softmax" \
+    ./PATH/TO/MODEL/tf_keras_model.h5 \
+    ./PATH/TO/SAVE/DIR
+```
+
+**Note:**
+
+* Make sure to install `tensorspacejs` pip package, and setup a TensorSpace-Converter runtime environment before using TensorSpace-Converter to preprocess the pre-trained model.
+* Checkout [TensorSpace-Converter Repo](https://github.com/tensorspace-team/tensorspace-converter) for more information about TensorSpace-Converter.
+
+### 3. Using TensorSpace to Visualize the Model
 
 If TensorSpace is installed successfully and the pre-trained deep learning model is preprocessed, let's create an interactive 3D TensorSpace model.
 
-For convenience, feel free to use the resources from our [HelloWorld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld) directory.
-
-We will use the [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model) and [sample input data ("5")](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json) as an example to illustrate this step. All source code can be found in [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html).
+For convenience, we will use the the resources from this repository's [HelloWorld](https://github.com/tensorspace-team/tensorspace/tree/master/examples/helloworld) directory, which includes [preprocessed TensorSpace compatible LeNet model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/convertedModel) and [sample input data ("5")](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/data/5.json) as an example to illustrate this step. All source code can be found in [helloworld.html](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/helloworld.html).
 
 First, we need to new a TensorSpace model instance:
 ```JavaScript
@@ -125,7 +143,7 @@ let container = document.getElementById( "container" );
 let model = new TSP.models.Sequential( container );
 ```
 
-Next, based on the LeNet structure: Input + 2 X (Conv2D & Maxpooling) + 3 X (Dense), we build the structure of the model:
+Next, based on the LeNet structure: Input + Padding2D + 2 X (Conv2D & Maxpooling) + 3 X (Dense), build the Topology of the TensorSpace model:
 ```JavaScript
 model.add( new TSP.layers.GreyscaleInput() );
 model.add( new TSP.layers.Padding2d() );
@@ -140,18 +158,18 @@ model.add( new TSP.layers.Output1d({
 }) );
 ```
 
-Last, we should load our [preprocessed TensorSpace compatible model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/model/mnist.json) and use `init()` method to create the TensorSpace model:
+Last, we should load our [preprocessed TensorSpace compatible model](https://github.com/tensorspace-team/tensorspace/blob/master/examples/helloworld/convertedModel) and use `init()` method to create the TensorSpace model:
 ```JavaScript
 model.load({
-    type: "tfjs",
-    url: './lenetModel/mnist.json'
+    type: "tensorflow",
+    url: './PATH/TO/MODEL/model.json'
 });
 model.init(function(){
     console.log("Hello World from TensorSpace!");
 });
 ```
 
-We can get the following Fig. 2 model in the browser if everything looks good.
+We can get the following Fig. 3 model in the browser if everything looks good.
 
 <p align="center">
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_empty_lenet.jpg">
