@@ -129,6 +129,7 @@ $ tensorspacejs_converter \
 **Note:**
 
 * Make sure to install `tensorspacejs` pip package, and setup a TensorSpace-Converter runtime environment before using TensorSpace-Converter to preprocess the pre-trained model.
+* Based on different training libraries, we provide different preprocessing tutorials: [TensorFlow Tutorial](https://tensorspace.org/html/docs/preTf.html), [Keras Tutorial](https://tensorspace.org/html/docs/preKeras.html), [TensorFlow.js Tutorial](https://tensorspace.org/html/docs/preTfjs.html).
 * Checkout [TensorSpace-Converter Repo](https://github.com/tensorspace-team/tensorspace-converter) for more information about TensorSpace-Converter.
 
 ### 3. Using TensorSpace to Visualize the Model

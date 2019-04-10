@@ -133,6 +133,7 @@ $ tensorspacejs_converter \
 **注意：**
 
 * 在使用 TensorSpace-Converter 对预训练的模型进行预处理之前，需要下载 `tensorspacejs` 的 pip 包，并且配置 TensorSpace-Converter 的运行环境。
+* 基于不同的机器学习库，我们提供了 [TensorFlow 模型预处理教程](https://tensorspace.org/html/docs/preTf_zh.html)，[Keras 模型预处理教程](https://tensorspace.org/html/docs/preKeras_zh.html)，[TensorFlow.js 模型预处理教程](https://tensorspace.org/html/docs/preTfjs_zh.html)。
 * 查看 [TensorSpace-Converter 仓库](https://github.com/tensorspace-team/tensorspace-converter) 了解更多有关 TensorSpace-Converter 的使用细节。
 
 ### 3. 使用 TensorSpace 可视化模型
