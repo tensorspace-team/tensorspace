@@ -132,6 +132,13 @@ $ tensorspacejs_converter \
 * Based on different training libraries, we provide different preprocessing tutorials: [TensorFlow Tutorial](https://tensorspace.org/html/docs/preTf.html), [Keras Tutorial](https://tensorspace.org/html/docs/preKeras.html), [TensorFlow.js Tutorial](https://tensorspace.org/html/docs/preTfjs.html).
 * Checkout [TensorSpace-Converter Repo](https://github.com/tensorspace-team/tensorspace-converter) for more information about TensorSpace-Converter.
 
+<p align="center">
+<img width="80%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/hello_converter.gif">
+</p>
+<p align="center">
+<b>Fig. 3</b> - TensorSpace-Converter Usage
+</p>
+
 ### 3. Using TensorSpace to Visualize the Model
 
 If TensorSpace is installed successfully and the pre-trained deep learning model is preprocessed, let's create an interactive 3D TensorSpace model.
@@ -176,7 +183,7 @@ We can get the following Fig. 3 model in the browser if everything looks good.
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_empty_lenet.jpg">
 </p>
 <p align="center">
-<b>Fig. 3</b> - LeNet model without any input data
+<b>Fig. 4</b> - LeNet model without any input data
 </p>
 
 
@@ -197,7 +204,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/HelloWorld_5.jpg">
 </p>
 <p align="center">
-<b>Fig. 4</b> - LeNet model with input data "5"
+<b>Fig. 5</b> - LeNet model with input data "5"
 </p>
 
 ## Example
@@ -210,7 +217,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
 </p>
 <p align="center">
-<b>Fig. 5</b> - Interactive LeNet created by TensorSpace
+<b>Fig. 6</b> - Interactive LeNet created by TensorSpace
 </p>
 
 * **AlexNet** [ TensorFlow model ]
@@ -221,7 +228,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_alexnet.gif">
 </p>
 <p align="center">
-<b>Fig. 6</b> - Interactive AlexNet created by TensorSpace
+<b>Fig. 7</b> - Interactive AlexNet created by TensorSpace
 </p>
 
 * **Yolov2-tiny** [ TensorFlow model ]
@@ -232,7 +239,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_yolov2.gif">
 </p>
 <p align="center">
-<b>Fig. 7</b> - Interactive Yolov2-tiny created by TensorSpace
+<b>Fig. 8</b> - Interactive Yolov2-tiny created by TensorSpace
 </p>
 
 * **ResNet-50** [ Keras model ]
@@ -243,7 +250,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_resnet50.gif">
 </p>
 <p align="center">
-<b>Fig. 8</b> - Interactive ResNet-50 created by TensorSpace
+<b>Fig. 9</b> - Interactive ResNet-50 created by TensorSpace
 </p>
 
 * **Vgg16** [ Keras model ]
@@ -254,7 +261,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_vgg.gif">
 </p>
 <p align="center">
-<b>Fig. 9</b> - Interactive Vgg16 created by TensorSpace
+<b>Fig. 10</b> - Interactive Vgg16 created by TensorSpace
 </p>
 
 * **ACGAN** [ Keras model ]
@@ -265,7 +272,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_acgan.gif">
 </p>
 <p align="center">
-<b>Fig. 10</b> - Interactive ACGAN created by TensorSpace
+<b>Fig. 11</b> - Interactive ACGAN created by TensorSpace
 </p>
 
 * **MobileNetv1** [ Keras model ]
@@ -276,7 +283,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_mobilenetv1.gif">
 </p>
 <p align="center">
-<b>Fig. 11</b> - Interactive MobileNetv1 created by TensorSpace
+<b>Fig. 12</b> - Interactive MobileNetv1 created by TensorSpace
 </p>
 
 * **Inceptionv3** [ Keras model ]
@@ -287,7 +294,7 @@ Click the CodePen logo to try it in CodePen: &nbsp;&nbsp;<a target="_blank" href
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_inceptionv3.gif">
 </p>
 <p align="center">
-<b>Fig. 12</b> - Interactive Inceptionv3 created by TensorSpace
+<b>Fig. 13</b> - Interactive Inceptionv3 created by TensorSpace
 </p>
 
 * **LeNet Training Visualization** [ TensorFlow.js dynamic model ]
@@ -300,7 +307,7 @@ Visualize the LeNet Training Process with TensorSpace.js and TensorFlow.js.
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet_training.gif">
 </p>
 <p align="center">
-<b>Fig. 13</b> - LeNet Training 3D Visualization
+<b>Fig. 14</b> - LeNet Training 3D Visualization
 </p>
 
 ### View models locally
@@ -320,9 +327,8 @@ Open "html" file in examples folder in local web server.
 ## Documentation
 
 * For a quick start, checkout [Getting Start](https://tensorspace.org/html/docs/startHello.html)
-* To download/install, see [Download](https://tensorspace.org/index.html#download)
 * To learn more about the [Basic Concepts](https://tensorspace.org/html/docs/basicIntro.html)
-* To process a deep learning model, checkout [Model Preprocessing](https://tensorspace.org/html/docs/preIntro.html)
+* To process a deep learning model, checkout [Model Preprocessing](https://tensorspace.org/html/docs/preIntro.html), [TensorSpace-Converter](https://github.com/tensorspace-team/tensorspace-converter)
 * To learn core components: [Models](https://tensorspace.org/html/docs/modelIntro.html), [Layers](https://tensorspace.org/html/docs/layerIntro.html) and [Merge Function](https://tensorspace.org/html/docs/mergeIntro.html)
 * Checkout the official website [TensorSpace.org](https://tensorspace.org) for more about TensorSpace.
 
