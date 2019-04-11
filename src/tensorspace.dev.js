@@ -75,6 +75,8 @@ import { TextHelper } from "./utils/TextHelper";
 import { TextureProvider } from "./utils/TextureProvider";
 import { YoloResultGenerator } from "./utils/YoloResultGenerator";
 
+import { version } from './version';
+
 let layers = {
 
 	Input1d: Input1d,
@@ -159,7 +161,5 @@ let utils = {
 	TextureProvider: TextureProvider,
 	YoloResultGenerator: YoloResultGenerator
 };
-
-let version = "0.5.0";
 
 export { models, layers, loaders, predictors, utils, version, ModelConfiguration };

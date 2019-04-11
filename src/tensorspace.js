@@ -43,6 +43,8 @@ import { Average } from "./merge/Average";
 // import { Dot } from "./merge/Dot";
 import { Multiply } from "./merge/Multiply";
 
+import { version } from './version';
+
 let layers = {
 
 	Input1d: Input1d,
@@ -91,7 +93,5 @@ let models = {
 	Model: Model
 
 };
-
-let version = "0.5.0";
 
 export { models, layers, version };
