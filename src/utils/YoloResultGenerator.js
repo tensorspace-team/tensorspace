@@ -243,7 +243,7 @@ let YoloResultGenerator = (function() {
 
 		}
 
-		console.log( output );
+		// console.log( output );
 
 		return output;
 
