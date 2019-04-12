@@ -13,7 +13,15 @@ function MergeProxy( operatorType, layerList, config ) {
 	
 	this.mergedElements = layerList;
 	
-	this.name = this.config.name;
+	if ( this.config !== undefined ) {
+		
+		this.name = this.config.name;
+		
+	} else {
+		
+		this.name = undefined;
+		
+	}
 	
 	/**
 	 * Reshape layer is a proxy, store reference of actual layer.

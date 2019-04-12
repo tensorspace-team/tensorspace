@@ -18,7 +18,15 @@ function Reshape( config ) {
 	
 	this.config = config;
 	
-	this.name = this.config.name;
+	if ( this.config !== undefined ) {
+		
+		this.name = this.config.name;
+		
+	} else {
+		
+		this.name = undefined;
+		
+	}
 	
 	/**
 	 * Use State Pattern to handle reshape cases.
