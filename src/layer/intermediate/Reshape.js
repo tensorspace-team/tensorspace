@@ -18,6 +18,8 @@ function Reshape( config ) {
 	
 	this.config = config;
 	
+	this.name = this.config.name;
+	
 	/**
 	 * Use State Pattern to handle reshape cases.
 	 * Three States: Reshape1d, Reshape2d and Reshape3d
@@ -41,7 +43,6 @@ function Reshape( config ) {
 	 * These metrics will be injected or updated by calling updateLayerMetric()
 	 */
 	
-	this.name = undefined;
 	this.neuralValue = undefined;
 	this.inputShape = undefined;
 	this.outputShape = undefined;
@@ -96,7 +97,6 @@ Reshape.prototype = {
 	
 	updateLayerMetric: function() {
 		
-		this.name = this.actualLayer.name;
 		this.neuralValue = this.actualLayer.neuralValue;
 		this.inputShape = this.actualLayer.inputShape;
 		this.outputShape = this.actualLayer.outputShape;
@@ -147,6 +147,12 @@ Reshape.prototype = {
 	setLastLayer: function( lastLayer ) {
 		
 		this.actualLayer.setLastLayer( lastLayer );
+		
+	},
+	
+	getBoundingWidth: function() {
+		
+		return this.actualLayer.getBoundingWidth();
 		
 	},
 	

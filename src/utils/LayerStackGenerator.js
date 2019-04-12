@@ -21,12 +21,16 @@ let LayerStackGenerator = ( function() {
 	function getRelativeLayers( layers, layer ) {
 
 		storeLayer( layers, layer );
-
+		
 		if ( layer.isMerged ) {
-
+			
 			for ( let i = 0; i < layer.mergedElements.length; i ++ ) {
 
-				getRelativeLayers( layers, layer.mergedElements[ i ] );
+				if ( !layers.includes( layer.mergedElements[ i ] ) ) {
+					
+					getRelativeLayers( layers, layer.mergedElements[ i ] );
+					
+				}
 
 			}
 

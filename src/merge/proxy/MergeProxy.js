@@ -11,6 +11,10 @@ function MergeProxy( operatorType, layerList, config ) {
 	this.layerList = layerList;
 	this.config = config;
 	
+	this.mergedElements = layerList;
+	
+	this.name = this.config.name;
+	
 	/**
 	 * Reshape layer is a proxy, store reference of actual layer.
 	 *
@@ -23,7 +27,6 @@ function MergeProxy( operatorType, layerList, config ) {
 	 * These metrics will be injected or updated by calling updateLayerMetric()
 	 */
 	
-	this.name = undefined;
 	this.neuralValue = undefined;
 	this.inputShape = undefined;
 	this.outputShape = undefined;
@@ -69,7 +72,6 @@ MergeProxy.prototype = {
 	
 	updateLayerMetric: function() {
 		
-		this.name = this.actualLayer.name;
 		this.neuralValue = this.actualLayer.neuralValue;
 		this.inputShape = this.actualLayer.inputShape;
 		this.outputShape = this.actualLayer.outputShape;
@@ -82,6 +84,7 @@ MergeProxy.prototype = {
 		this.layerDimension = this.actualLayer.layerDimension;
 		
 		this.openFmCenters = this.actualLayer.openFmCenters;
+		this.mergedElements = this.actualLayer.mergedElements;
 		
 	},
 	
@@ -168,6 +171,12 @@ MergeProxy.prototype = {
 	provideRelativeElements: function( request ) {
 		
 		return this.actualLayer.provideRelativeElements( request );
+		
+	},
+	
+	getBoundingWidth: function() {
+	
+		return this.actualLayer.getBoundingWidth();
 		
 	},
 	

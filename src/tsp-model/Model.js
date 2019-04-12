@@ -160,20 +160,20 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		this.createGraph();
 		
 		if ( this.hasLoader ) {
-			
+
 			const shapeGroup = LayerShapeGenerator.getShapes( this );
 			this.configureLayerShape( shapeGroup );
-			
+
 		}
-		
+
 		this.assembleLayers();
-		
+
 		this.depth = this.levelMap.length;
-		
+
 		this.createModelElements();
 		this.modelRenderer = RendererFactory.getRenderer( this );
 		this.modelRenderer.init();
-		
+
 		this.isInitialized = true;
 		
 	},
@@ -216,12 +216,12 @@ Model.prototype = Object.assign( Object.create( AbstractModel.prototype ), {
 		this.layers = LayerStackGenerator.createStack( this.outputs );
 		
 		let levelMetric = LevelStackGenerator.createStack( this.layers, this.inputs, this.outputs );
-		
+
 		this.levelMap = levelMetric.levelMap;
 		this.layerLookupMap = levelMetric.layerLookupMap;
-		
+
 		this.modelDepth = this.levelMap.length;
-		
+
 		this.levelCenters = LayerLocator.calculateLevelCenters( this.modelDepth );
 		
 	},
