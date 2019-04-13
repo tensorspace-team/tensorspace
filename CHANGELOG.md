@@ -2,6 +2,132 @@
 
 All notable changes to TensorSpace will be documented in this file.
 
+## v0.6.0 - TensorSpace-Converter & Metric Auto-Injector
+
+> 2019-4-15 ( 0.5.0 ==> 0.6.0 )
+
+In general, this version released [TensorSpace-Converter](#converter) and [Layer metric auto-injector](#injector) to optimize the TensorSpace pipeline. TensorSpace-Converter simplifies pre-trained model preprocessing. Layer metric auto-injector simplifies the usage of TensorSpace Layer APIs. Based on new pipeline, released [brand new preprocessing tutorials](#new-tutorials).
+ 
+Here is a graph to show how these feature work in TensorSpace pipeline:
+
+<p align="center">
+<img width=100% src="https://user-images.githubusercontent.com/7977100/56079514-a5438580-5daa-11e9-955a-f5c1ad9d8614.png">
+</p>
+<p align="center">
+<b>Fig. 1</b> - TensorSpace Pipeline Optimization
+</p>
+
+* [TensorSpace-Converter](#converter)
+* [Layer Metric Auto-Injector](#injector)
+* [New Preprocessing Tutorials](#new-tutorials)
+
+### <div id="converter">TensorSpace-Converter</div>
+
+<p align="center">
+<img width=150 src="./assets/logo_tsConverter.png">
+</p>
+
+TensorSpace-Converter is TensorSpace standard preprocess tool for pre-trained models from TensorFlow, Keras, TensorFlow.js. This tool simplify preprocessing pre-trained model for TensorSpace.
+
+* [TensorSpace-Converter Repository](https://github.com/tensorspace-team/tensorspace-converter) - TensorSpace-Converter is a pip package and host in a separate GitHub repository.
+* [Introduction](https://tensorspace.org/converter/index.html) - Basic Introduction to how TensorSpace-Converter work.
+* [Install](https://tensorspace.org/converter/install.html) - Introduce to how to install TensorSpace-Converter and setup a development environment.
+* [Running with Docker](https://tensorspace.org/converter/docker.html) - How to run TensorSpace-Converter in Docker.
+* [Converter API](https://tensorspace.org/converter/api.html) - TensorSpace-Converter conversion APIs introduction.
+* [Converter Usage](https://tensorspace.org/converter/usage.html) - Practical usage examples of TensorSpace-Converter for pre-trained models from TensorFlow, Keras, TensorFlow.js.
+
+<p align="center">
+<img width="80%" src="./assets/hello_converter.gif">
+</p>
+<p align="center">
+<b>Fig. 2</b> - TensorSpace-Converter Usage
+</p>
+
+### <div id="injector">Layer Metric Auto-Injector</div>
+
+Auto-injector feature simplify the usage of TensorSpace Layer API. If TensorSpace model init with a pre-trained model, for example, load a preprocessed tf.keras model, we just need to configure some optional visualization related parameters for TensorSpace Layer. There is no need to configure network related parameters. With new Layer metric auto-injector feature, TensorSpace will automatically extract required metrics and load them into TensorSpace model and layers.
+
+Let's have a quick look at this feature and make a comparison:
+
+TensorSpace usage with pre-trained model ( version >=0.6 )
+```javascript
+let model = new TSP.models.Sequential( container );
+model.add( new TSP.layers.GreyscaleInput() );
+model.add( new TSP.layers.Padding2d() );
+model.add( new TSP.layers.Conv2d({
+  initStatus: "open"
+}) );
+model.add( new TSP.layers.Pooling2d() );
+model.add( new TSP.layers.Conv2d() );
+model.add( new TSP.layers.Pooling2d() );
+model.add( new TSP.layers.Dense() );
+model.add( new TSP.layers.Dense() );
+model.add( new TSP.layers.Output1d({
+  outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+}) );
+model.load({
+  type: "tensorflow",
+  url: "model.json"
+});
+model.init();
+```
+
+TensorSpace usage with pre-trained model ( version <= 0.5 )
+```javascript
+let model = new TSP.models.Sequential( container );
+model.add( new TSP.layers.GreyscaleInput({
+  shape: [28, 28, 1] 
+}) );
+model.add( new TSP.layers.Padding2d({
+  padding: [2, 2]
+}) );
+model.add( new TSP.layers.Conv2d({
+  kernelSize: 5,
+  filters: 6,
+  strides: 1,
+  initStatus: "open"
+}) );
+model.add( new TSP.layers.Pooling2d({
+  poolSize: [2, 2],
+  strides: [2, 2]
+}) );
+model.add( new TSP.layers.Conv2d({
+  kernelSize: 5,
+  filters: 16,
+  strides: 1
+}) );
+model.add( new TSP.layers.Pooling2d({
+  poolSize: [2, 2],
+  strides: [2, 2]
+}) );
+model.add( new TSP.layers.Dense({
+  units: 120
+}) );
+model.add( new TSP.layers.Dense({
+  units: 84
+}) );
+model.add( new TSP.layers.Output1d({
+  units: 10,
+  outputs: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+}) );
+model.load({
+  type: "tensorflow",
+  url: "model.json"
+});
+model.init();
+```
+
+* Issue [#226](https://github.com/tensorspace-team/tensorspace/issues/226) has detailed description about this feature.
+* Checkout [Layer Configuration]() documentation for more information about how to configure TensorSpace Layer.
+
+### <div id="new-tutorials">New Preprocessing Tutorials</div>
+
+While TensorSpace-Converter and Auto-Injector simplify TensorSpace pipeline, the preprocessing in TensorSpace becomes totally different. We sent previous preprocessing tutorials to [the Hall of Fame](https://github.com/tensorspace-team/tensorspace-converter/tree/master/deprecated) and released new preprocessing tutorials for pre-trained models from TensorFlow, Keras, and TensorFlow.js as fulll dust refund:
+
+* [New TensorFlow Preprocessing Tutorial](https://tensorspace.org/html/docs/preTf.html)
+* [New Keras Preprocessing Tutorial](https://tensorspace.org/html/docs/preKeras.html)
+* [New TensorFlow.js Preprocessing Tutorial](https://tensorspace.org/html/docs/preTfjs.html)
+
 ## v0.5.0 - 💎
 
 > 2019-4-1 ( 0.3.0 ==> 0.5.0 )
