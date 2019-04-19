@@ -1,6 +1,6 @@
 {
   "name": "tensorspace",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Neural network 3D visualization framework",
   "main": "dist/tensorspace.cjs.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "src": "source code"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "1.0.0",
+    "@tensorflow/tfjs": "^1.0.0",
     "@tweenjs/tween.js": "^17.2.0",
     "install": "^0.12.1",
     "npm": "^6.4.1",

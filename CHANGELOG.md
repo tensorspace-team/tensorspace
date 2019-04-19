@@ -122,7 +122,7 @@ model.init();
 
 ### <div id="new-tutorials">New Preprocessing Tutorials</div>
 
-While TensorSpace-Converter and Auto-Injector simplify TensorSpace pipeline, the preprocessing in TensorSpace becomes totally different. We sent previous preprocessing tutorials to [the Hall of Fame](https://github.com/tensorspace-team/tensorspace-converter/tree/master/deprecated) and released new preprocessing tutorials for pre-trained models from TensorFlow, Keras, and TensorFlow.js as fulll dust refund:
+While TensorSpace-Converter and Auto-Injector simplify TensorSpace pipeline, the preprocessing in TensorSpace becomes totally different. We sent previous preprocessing tutorials to [the Hall of Fame](https://github.com/tensorspace-team/tensorspace-converter/tree/master/deprecated) and released new preprocessing tutorials for pre-trained models from TensorFlow, Keras, and TensorFlow.js as full dust refund:
 
 * [New TensorFlow Preprocessing Tutorial](https://tensorspace.org/html/docs/preTf.html)
 * [New Keras Preprocessing Tutorial](https://tensorspace.org/html/docs/preKeras.html)

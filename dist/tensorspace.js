@@ -2883,6 +2883,140 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 	 * @author syt123450 / https://github.com/syt123450
 	 */
 
+	const LayerShapeGenerator = ( function() {
+		
+		function getShapes( tspModel ) {
+			
+			const loadedModel = tspModel.resource;
+			
+			const inputs = loadedModel.inputs;
+			let inputShapes;
+			
+			const isDynamicalShape = checkInputShapes( inputs );
+			
+			if ( !isDynamicalShape ) {
+				
+				inputShapes = [];
+				
+				for ( let i = 0; i < inputs.length; i ++ ) {
+					
+					inputShapes.push( inputs[ i ].shape.slice( 1 ) );
+					
+				}
+				
+			} else {
+			
+				if ( tspModel.modelType === "Sequential" ) {
+					
+					inputShapes = tspModel.layers[ 0 ].config.shape;
+					
+				} else {
+					
+					inputShapes = [];
+					
+					const inputTspLayers = tspModel.inputs;
+					
+					for ( let i = 0; i < inputTspLayers.length; i ++ ) {
+						
+						inputShapes.push( inputTspLayers[ i ].config.shape );
+						
+					}
+				
+				}
+			
+			}
+			
+			const outputShapes = [];
+			
+			let predictInput;
+			
+			if ( inputShapes.length === 1 && tspModel.modelType === "Sequential" ) {
+				
+				const shape = inputShapes[ 0 ];
+				const flattenLength = getShapeFlattenLength( shape );
+				
+				predictInput = new Float32Array( flattenLength );
+				
+			} else {
+				
+				predictInput = [];
+				
+				for ( let i = 0; i < inputShapes.length; i ++ ) {
+					
+					const shape = inputShapes[ i ];
+					const flattenLength = getShapeFlattenLength( shape );
+					
+					predictInput.push( new Float32Array( flattenLength ) );
+					
+				}
+				
+			}
+			
+			const predictResult = tspModel.predictor.predict( predictInput );
+			
+			for ( let i = 0; i < predictResult.length; i ++ ) {
+				
+				outputShapes.push( predictResult[ i ].shape.slice( 1 ) );
+				
+			}
+			
+			return {
+				
+				inputShapes: inputShapes,
+				outputShapes: outputShapes
+				
+			}
+			
+		}
+		
+		function getShapeFlattenLength( shape ) {
+			
+			let length = 1;
+			
+			for ( let i = 0; i < shape.length; i ++ ) {
+				
+				length *= shape[ i ];
+				
+			}
+			
+			return length;
+	 	
+		}
+		
+		function checkInputShapes( inputs ) {
+			
+			for ( let i = 0; i < inputs.length; i ++ ) {
+				
+				const inputShape = inputs[ i ].shape;
+				
+				for ( let j = 1; j < inputShape.length; j ++ ) {
+				
+					if ( inputShape[ j ] === null ) {
+						
+						return true;
+						
+					}
+				
+				}
+				
+			}
+			
+			return false;
+			
+		}
+		
+		return {
+			
+			getShapes: getShapes
+			
+		}
+		
+	} )();
+
+	/**
+	 * @author syt123450 / https://github.com/syt123450
+	 */
+
 	/**
 	 * A model with linear stack of layers.
 	 *
@@ -3004,11 +3138,55 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		
 		/**
 		 * initTSPModel(), call all functions required in model initialization process.
+		 *
+		 * Seven Steps:
+		 * 1. Calculate Sequential depth.
+		 * 2. If already load a model, get layer shapes and set them to layers.
+		 * 3. Set previous layer for the new TSP layer (only for native layers).
+		 * 4. Set layer metrics.
+		 * 5. Assemble layers.
+		 * 6. Init layers.
+		 * 7. Create Renderer and render tsp model.
 		 */
 		
 		initTSPModel: function() {
 			
+			// Calculate Sequential depth.
+			
 			this.depth = this.layers.length;
+			
+			// If already load a model, get layer shapes and set them to layers.
+			
+			if ( this.hasLoader ) {
+				
+				const shapeGroup = LayerShapeGenerator.getShapes( this );
+				this.configureLayerShape( shapeGroup );
+				
+			}
+			
+			for ( let i = 0; i < this.layers.length; i ++ ) {
+				
+				// Set previous layer for the new TSP layer (only for native layers).
+				
+				if ( this.layers.length !== 0 ) {
+					
+					if ( !this.layers[ i ].isMerged ) {
+						
+						this.layers[ i ].setLastLayer( this.layers[ i - 1 ] );
+						
+					}
+					
+				}
+				
+				// Set layer metrics.
+				
+				this.layers[ i ].setEnvironment( this.modelContext, this );
+				this.layers[ i ].loadModelConfig( this.configuration );
+				this.layers[ i ].setPositionMetrics( i + 1, i + 1 );
+				
+			}
+			
+			// Assemble layers.
 			
 			for ( let i = 0; i < this.layers.length; i ++ ) {
 				
@@ -3016,7 +3194,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 				
 			}
 			
+			// Init layers.
+			
 			this.createModelElements();
+			
+			// Create Renderer and render tsp model.
 			
 			this.modelRenderer = RendererFactory.getRenderer( this );
 			this.modelRenderer.init();
@@ -3035,42 +3217,16 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 		
 		/**
-		 * add(), add a new TSP layer to sequential model
-		 *
-		 * Four main task in adding process:
-		 * 1. Set previous layer for the new TSP layer.
-		 * 2. Config environment for new TSP layer.
-		 * 3. Add a TSP layer instance on top of the layer stack.
-		 * 4. Assemble new layer, which mean that calculate the layer's shape.
+		 * add(), add a new TSP layer to sequential model.
 		 *
 		 * @param layer, new TSP layer
 		 */
 		
 		add: function( layer ) {
 			
-			// Set last layer for native layer.
-			
-			if ( this.layers.length !== 0 ) {
-				
-				if ( !layer.isMerged ) {
-					
-					let tailLayer = this.layers[ this.layers.length - 1 ];
-					layer.setLastLayer( tailLayer );
-					
-				}
-				
-			}
-			
-			// Config environment for new layer.
-			
-			layer.setEnvironment( this.modelContext, this );
-			layer.loadModelConfig( this.configuration );
-			
 			// Add layer on top of layer stack.
 			
-			this.layers.push( layer ) ;
-			
-			layer.setPositionMetrics(  this.layers.length, this.layers.length  );
+			this.layers.push( layer );
 			
 		},
 		
@@ -3161,6 +3317,31 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 				
 			}
 			
+		},
+		
+		configureLayerShape: function( shapeGroup ) {
+			
+			const inputShapes = shapeGroup.inputShapes;
+			
+			if ( this.configuration.feedInputs !== undefined ) {
+				
+				let feedIndex = this.configuration.feedInputs[ 0 ];
+				this.layers[ 0 ].setShape( inputShapes[ feedIndex ] );
+				
+			} else {
+				
+				this.layers[ 0 ].setShape( inputShapes[ 0 ] );
+				
+			}
+			
+			const outputShapes = shapeGroup.outputShapes;
+			
+			for ( let i = 0; i < outputShapes.length; i ++ ) {
+				
+				this.layers[ i + 1 ].setShape( outputShapes[ i ] );
+				
+			}
+		
 		}
 		
 	} );
@@ -3188,12 +3369,16 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		function getRelativeLayers( layers, layer ) {
 
 			storeLayer( layers, layer );
-
+			
 			if ( layer.isMerged ) {
-
+				
 				for ( let i = 0; i < layer.mergedElements.length; i ++ ) {
 
-					getRelativeLayers( layers, layer.mergedElements[ i ] );
+					if ( !layers.includes( layer.mergedElements[ i ] ) ) {
+						
+						getRelativeLayers( layers, layer.mergedElements[ i ] );
+						
+					}
 
 				}
 
@@ -3539,7 +3724,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 *
 		 * Functions below override base class AbstractModel's abstract method
 		 *
-		 * Sequential overrides AbstractModel's function:
+		 * Functional Model overrides AbstractModel's function:
 		 * predict, clear, reset, initTSPModel
 		 *
 		 * ============
@@ -3646,14 +3831,22 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		initTSPModel: function() {
 			
 			this.createGraph();
+			
+			if ( this.hasLoader ) {
+
+				const shapeGroup = LayerShapeGenerator.getShapes( this );
+				this.configureLayerShape( shapeGroup );
+
+			}
+
 			this.assembleLayers();
-			
+
 			this.depth = this.levelMap.length;
-			
+
 			this.createModelElements();
 			this.modelRenderer = RendererFactory.getRenderer( this );
 			this.modelRenderer.init();
-			
+
 			this.isInitialized = true;
 			
 		},
@@ -3696,12 +3889,12 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			this.layers = LayerStackGenerator.createStack( this.outputs );
 			
 			let levelMetric = LevelStackGenerator.createStack( this.layers, this.inputs, this.outputs );
-			
+
 			this.levelMap = levelMetric.levelMap;
 			this.layerLookupMap = levelMetric.layerLookupMap;
-			
+
 			this.modelDepth = this.levelMap.length;
-			
+
 			this.levelCenters = LayerLocator.calculateLevelCenters( this.modelDepth );
 			
 		},
@@ -3859,6 +4052,41 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			for ( let i = 0; i < levelLayers.length; i ++ ) {
 				
 				levelLayers[ i ].translateLayer( layerCenters[ i ], translateTime );
+				
+			}
+			
+		},
+		
+		configureLayerShape: function( shapeGroup ) {
+			
+			const inputShapes = shapeGroup.inputShapes;
+			
+			if ( this.configuration.feedInputs !== undefined ) {
+				
+				for ( let i = 0; i < this.inputs.length; i ++ ) {
+					
+					let feedIndex = this.configuration.feedInputs[ i ];
+					this.inputs[ i ].setShape( inputShapes[ feedIndex ] );
+					
+				}
+				
+			} else {
+				
+				for ( let i = 0; i < this.inputs.length; i ++ ) {
+					
+					this.inputs[ i ].setShape( inputShapes[ i ] );
+					
+				}
+				
+			}
+			
+			const outputShapes = shapeGroup.outputShapes;
+			
+			for ( let i = 0; i < outputShapes.length; i ++ ) {
+				
+				let layer = this.getLayerByName( this.outputsOrder[ i ] );
+				
+				layer.setShape( outputShapes[ i ] );
 				
 			}
 			
@@ -5347,6 +5575,8 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.isShapePredefined = false;
 		
+		this.config = config;
+		
 		this.isEmissive = false;
 
 		// Load layer config.
@@ -5603,6 +5833,19 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			
 			this.layerIndex = layerIndex;
 			this.layerLevel = layerLevel;
+			
+		},
+		
+		setShape: function( shape ) {
+		
+			if ( this.config === undefined ) {
+				
+				this.config = {};
+				
+			}
+			
+			this.config.shape = shape;
+			this.outputShape = shape;
 			
 		},
 
@@ -7030,26 +7273,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.isShapePredefined = false;
 
-		// Load user's Conv1d configuration.
-
-		this.loadLayerConfig( config );
-
-		// Init close grid line centers.
-
-		for ( let i = 0; i < this.depth; i ++ ) {
-
-			let center = {
-
-				x: 0,
-				y: 0,
-				z: 0
-
-			};
-
-			this.closeCenterList.push( center );
-
-		}
-
 		this.layerType = "Conv1d";
 
 	}
@@ -7072,7 +7295,27 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Conv1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
+			// Init close grid line centers.
+			
+			for ( let i = 0; i < this.depth; i ++ ) {
+				
+				let center = {
+					
+					x: 0,
+					y: 0,
+					z: 0
+					
+				};
+				
+				this.closeCenterList.push( center );
+				
+			}
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
@@ -8932,26 +9175,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.padding = "valid";
 
-		// Load user's Conv2d configuration.
-
-		this.loadLayerConfig( config );
-
-		// Init close feature map centers.
-
-		for ( let i = 0; i < this.depth; i ++ ) {
-
-			let center = {
-
-				x: 0,
-				y: 0,
-				z: 0
-
-			};
-
-			this.closeFmCenters.push( center );
-
-		}
-
 		this.layerType = "Conv2d";
 
 	}
@@ -8974,7 +9197,27 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Conv2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
+			// Init close feature map centers.
+			
+			for ( let i = 0; i < this.depth; i ++ ) {
+				
+				let center = {
+					
+					x: 0,
+					y: 0,
+					z: 0
+					
+				};
+				
+				this.closeFmCenters.push( center );
+				
+			}
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
@@ -9259,26 +9502,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.padding = "valid";
 
-		// Load user's Conv2dTranspose configuration.
-
-		this.loadLayerConfig( config );
-
-		// Init feature maps close feature centers.
-
-		for ( let i = 0; i < this.depth; i ++ ) {
-
-			let center = {
-
-				x: 0,
-				y: 0,
-				z: 0
-
-			};
-
-			this.closeFmCenters.push( center );
-
-		}
-
 		this.layerType = "Conv2dTranspose";
 
 	}
@@ -9301,7 +9524,27 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Conv2dTranspose configuration.
+			
+			this.loadLayerConfig( this.config );
+			
+			// Init feature maps close feature centers.
+			
+			for ( let i = 0; i < this.depth; i ++ ) {
+				
+				let center = {
+					
+					x: 0,
+					y: 0,
+					z: 0
+					
+				};
+				
+				this.closeFmCenters.push( center );
+				
+			}
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			if ( !this.isShapePredefined ) {
@@ -9579,10 +9822,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.padding = "valid";
 
-		// Load user's DepthwiseConv2d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "DepthwiseConv2d";
 
 	}
@@ -9605,7 +9844,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's DepthwiseConv2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
@@ -9897,10 +10140,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.croppingWidth = undefined;
 
-		// Load user's Cropping1d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Cropping1d";
 
 	}
@@ -9923,7 +10162,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Cropping1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
@@ -10141,10 +10384,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		this.croppingWidth = undefined;
 		this.croppingHeight = undefined;
 
-		// Load user's Cropping2d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Cropping2d";
 
 	}
@@ -10167,7 +10406,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Cropping2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
@@ -11311,10 +11554,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.nextButtonHandler = undefined;
 
-		// Load user's Input1d configuration.
-
-		this.loadLayerConfig( config );
-
 		/**
 		 * As Input1d is the first layer model, actualWidth is defined as a const.
 		 *
@@ -11329,7 +11568,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 * @type { double }
 		 */
 
-		this.unitLength = this.actualWidth / this.width;
+		this.unitLength = undefined;
 
 		/**
 		 * Set this attribute for latter layer,
@@ -11411,6 +11650,13 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 			this.context.add( this.neuralGroup );
 
+		},
+		
+		assemble: function() {
+			
+			this.loadLayerConfig( this.config );
+			this.unitLength = this.actualWidth / this.width;
+			
 		},
 
 		/**
@@ -12077,10 +12323,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 		this.depth = 1;
 
-		// Load user's GreyscaleInput configuration.
-
-		this.loadLayerConfig( config );
-
 		/**
 		 * As GreyscaleInput is the first layer model, actualWidth is defined as a const.
 		 * Use actualWidth to calculate actualHeight.
@@ -12088,8 +12330,8 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 * @type { double }
 		 */
 
-		this.actualWidth = ModelInitWidth;
-		this.actualHeight = ModelInitWidth / this.width * this.height;
+		this.actualWidth = undefined;
+		this.actualHeight = undefined;
 
 		/**
 		 * Calculate unitLength for latter layers.
@@ -12097,7 +12339,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 * @type { double }
 		 */
 
-		this.unitLength = this.actualWidth / this.width;
+		this.unitLength = undefined;
 
 		/**
 		 * Set this attribute for latter layer,
@@ -12171,6 +12413,32 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 			this.context.add( this.neuralGroup );
 
+		},
+		
+		assemble: function() {
+			
+			// Load user's GreyscaleInput configuration.
+			
+			this.loadLayerConfig( this.config );
+			
+			/**
+			 * As GreyscaleInput is the first layer model, actualWidth is defined as a const.
+			 * Use actualWidth to calculate actualHeight.
+			 *
+			 * @type { double }
+			 */
+			
+			this.actualWidth = ModelInitWidth;
+			this.actualHeight = ModelInitWidth / this.width * this.height;
+			
+			/**
+			 * Calculate unitLength for latter layers.
+			 *
+			 * @type { double }
+			 */
+			
+			this.unitLength = this.actualWidth / this.width;
+			
 		},
 
 		/**
@@ -13480,10 +13748,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		this.height = undefined;
 		this.depth = 3;
 
-		// Load user's RGBInput configuration.
-
-		this.loadLayerConfig( config );
-
 		/**
 		 * As RGBInput is the first layer model, actualWidth is defined as a const.
 		 * Use actualWidth to calculate actualHeight.
@@ -13492,7 +13756,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		this.actualWidth = ModelInitWidth;
-		this.actualHeight = this.actualWidth / this.width * this.height;
+		this.actualHeight = undefined;
 
 		/**
 		 * Calculate unitLength for latter layers.
@@ -13500,7 +13764,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 * @type { double }
 		 */
 
-		this.unitLength =  this.actualWidth / this.width;
+		this.unitLength =  undefined;
 
 
 		/**
@@ -13612,6 +13876,18 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 			this.context.add( this.neuralGroup );
 
+		},
+		
+		assemble: function() {
+			
+			// Load user's RGBInput configuration.
+			
+			this.loadLayerConfig( this.config );
+			
+			this.actualHeight = this.actualWidth / this.width * this.height;
+			this.unitLength =  this.actualWidth / this.width;
+			this.openFmCenters = FmCenterGenerator.getFmCenters( "line", 3, this.actualWidth, this.actualHeight );
+			
 		},
 
 		/**
@@ -15398,10 +15674,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.autoOutputDetect = false;
 
-		// Load user's Output1d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Output1d";
 
 	}
@@ -15480,7 +15752,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Output1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// Conv2d layer's outputShape has one dimension.
 
 			this.outputShape = [ this.width ];
@@ -16481,7 +16757,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		},
 
 		clear: function() {
-
+			
 			let zeroData = new Int8Array( 3 * this.width * this.height );
 			let zeroColors = ColorUtils.getAdjustValues( zeroData, this.minOpacity );
 
@@ -16597,7 +16873,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		},
 
 		updateVis: function( imageData, rectList ) {
-
+			
 			this.drawImage( imageData );
 			this.drawRectangles( rectList );
 
@@ -16606,18 +16882,18 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		},
 
 		drawRectangles: function( rectList ) {
-
+			
 			for ( let i = 0; i < rectList.length; i ++ ) {
-
+				
 				let rectParameter = rectList[ i ];
-
+				
 				this.drawRect(
-
+					
 					rectParameter.x,
-					rectParameter.y,
+					this.height - rectParameter.y - rectParameter.height,
 					rectParameter.width,
 					rectParameter.height
-
+				
 				);
 
 			}
@@ -16637,22 +16913,22 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			let imageData = this.ctx.getImageData( 0, 0, this.width, this.height );
 
 			let imageDataValue = imageData.data;
-
+			
 			let count = 0;
-
-			for ( let i = 0; i < imageDataValue.length; i ++ ) {
-
-				if ( i % 4 !== 3 ) {
-
-					imageDataValue[ i ] = 255 * data[ count ];
-					count++;
-
-				} else {
-
-					imageDataValue[ i ]  = 255;
-
+		
+			for ( let i = this.height - 1; i >= 0; i -- ) {
+				
+				for ( let j = 0; j < this.width; j ++ ) {
+					
+					imageDataValue[ 4 * ( this.width * i + j ) ] = 255 * data[ count ];
+					imageDataValue[ 4 * ( this.width * i + j ) + 1 ] = 255 * data[ count + 1 ];
+					imageDataValue[ 4 * ( this.width * i + j ) + 2 ] = 255 * data[ count + 2 ];
+					imageDataValue[ 4 * ( this.width * i + j ) + 3 ] = 255;
+					
+					count += 3;
+					
 				}
-
+				
 			}
 
 			this.ctx.putImageData( imageData, 0, 0 );
@@ -16726,10 +17002,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.autoOutputDetect = true;
 
-		// Load user's OutputDetection configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "OutputDetection";
 
 	}
@@ -16800,7 +17072,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's OutputDetection configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// Automatically detect model's input shape as outputShape.
 
 			let modelInputShape = this.model.layers[ 0 ].outputShape;
@@ -17756,7 +18032,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 			}
 
-			console.log( output );
+			// console.log( output );
 
 			return output;
 
@@ -17978,10 +18254,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.autoOutputDetect = true;
 
-		// Load user's YoloGrid configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "YoloGrid";
 
 	}
@@ -18052,7 +18324,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's YoloGrid configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// Auto detect input shape from last layer.
 
 			this.inputShape = this.lastLayer.outputShape;
@@ -20044,10 +20320,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		NativeLayer1d.call( this, config );
 
-		// Load user's Flatten configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Flatten";
 
 	}
@@ -20070,7 +20342,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Flatten configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
 			if ( !this.isShapePredefined ) {
@@ -20266,10 +20542,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.isShapePredefined = false;
 
-		// Load user's Pooling1d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Pooling1d";
 
 	}
@@ -20292,7 +20564,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Pooling1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			//  If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
@@ -20563,10 +20839,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.padding = "valid";
 
-		// Load user's Pooling2d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Pooling2d";
 
 	}
@@ -20589,7 +20861,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Pooling2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
@@ -20627,7 +20903,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			this.actualHeight = this.height * this.unitLength;
 
 			// Calculate the feature map centers for close status and open status.
-
+			
 			for ( let i = 0; i < this.depth; i ++ ) {
 
 				let center = {
@@ -20873,10 +21149,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.totalSize = 1;
 
-		// Load user's Reshape configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Reshape1d";
 
 	}
@@ -20899,7 +21171,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Reshape configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// Calculate layer's shape from last layer and user's configuration.
@@ -21100,10 +21376,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.totalSize = 1;
 
-		// Load user's Reshape configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Reshape2d";
 
 	}
@@ -21126,7 +21398,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Reshape configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// Calculate layer's shape from last layer and user's configuration.
@@ -21339,10 +21615,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.totalSize = 1;
 
-		// Load user's Reshape configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Reshape3d";
 
 	}
@@ -21365,7 +21637,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Reshape configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// Calculate layer's shape from last layer and user's configuration.
@@ -21375,7 +21651,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 				this.totalSize *= this.inputShape[ i ];
 
 			}
-
+			
 			// Check whether the input shape can be reshape into target shape.
 
 			if  ( this.totalSize !== this.width * this.height * this.depth ) {
@@ -21556,89 +21832,310 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 	 */
 
 	/**
-	 * Create actual reshape layer based on user's targetShape dimension.
+	 * Reshape layer, a proxy for actual layers.
 	 *
 	 * @param config, user's configuration for Reshape layer
-	 * @returns { Layer }, actual Reshape Layer, Reshape1d or Reshape2d
+	 * @returns { Layer }, Reshape layer, a proxy for actual layer, Reshape1d, Reshape2d, or Reshape3d
 	 * @constructor
 	 */
 
 	function Reshape( config ) {
-
-		return this.proxy( config );
-
+		
+		this.config = config;
+		
+		if ( this.config !== undefined ) {
+			
+			this.name = this.config.name;
+			
+		} else {
+			
+			this.name = undefined;
+			
+		}
+		
+		/**
+		 * Use State Pattern to handle reshape cases.
+		 * Three States: Reshape1d, Reshape2d and Reshape3d
+		 * Based on different states, create different `actualLayer`.
+		 *
+		 * @type { String }
+		 */
+		
+		this.reshapeType = undefined;
+		
+		/**
+		 * Reshape layer is a proxy, store reference of actual layer.
+		 * Three types of actual layers: Reshape1d, Reshape2d, Reshape3d.
+		 *
+		 * @type { Layer }
+		 */
+		this.actualLayer = undefined;
+		
+		/**
+		 * Attributes below are important layer metrics for a TensorSpace Layers,
+		 * These metrics will be injected or updated by calling updateLayerMetric()
+		 */
+		
+		this.neuralValue = undefined;
+		this.inputShape = undefined;
+		this.outputShape = undefined;
+		
+		this.autoOutputDetect = false;
+		
+		this.actualWidth = undefined;
+		this.actualHeight = undefined;
+		this.actualDepth = undefined;
+		
+		this.layerDimension = undefined;
+		this.openFmCenters = undefined;
+		
 	}
 
 	Reshape.prototype = {
-
-		proxy: function( config ) {
-
-			// Check and create Reshape layer.
-
-			if ( config !== undefined && ( config.targetShape !== undefined || config.shape !== undefined ) ) {
-
-				if ( config.targetShape !== undefined ) {
-
-					if ( config.targetShape.length === 1 ) {
-
-						// If targetShape dimension is 1, create Reshape1d.
-
-						return new Reshape1d( config );
-
-					} else if ( config.targetShape.length === 2 ) {
-
-						// If targetShape dimension is 2, create Reshape2d.
-
-						return new Reshape2d( config );
-
-					} else if ( config.targetShape.length === 3 ) {
-
-						// If targetShape dimension is 3, create Reshape3d.
-
-						return new Reshape3d( config );
-
-					} else {
-
-						console.error( "Can not reshape with target shape dimension " + config.targetShape.length );
-
-					}
-
-				}
-
-				if ( config.shape !== undefined ) {
-
-					if ( config.shape.length === 1 ) {
-
-						// If targetShape dimension is 1, create Reshape1d.
-
-						return new Reshape1d( config );
-
-					} else if ( config.shape.length === 2 ) {
-
-						// If targetShape dimension is 2, create Reshape2d.
-
-						return new Reshape2d( config );
-
-					} else if ( config.shape.length === 3 ) {
-
-						// If targetShape dimension is 3, create Reshape3d.
-
-						return new Reshape3d( config );
-
-					} else {
-
-						console.error( "Can not reshape with target shape dimension " + config.shape.length );
-
-					}
-
-				}
-
+		
+		/**
+		 * createActualLayer(), create actual reshape layer based on 'reshapeType'.
+		 */
+		
+		createActualLayer: function() {
+			
+			if ( this.reshapeType === "Reshape1d" ) {
+				
+				this.actualLayer = new Reshape1d( this.config );
+				
+			} else if ( this.reshapeType === "Reshape2d" ) {
+				
+				this.actualLayer = new Reshape2d( this.config );
+				
+			} else if ( this.reshapeType === "Reshape3d" ) {
+				
+				this.actualLayer = new Reshape3d( this.config );
+				
 			} else {
-
-				console.error( "\"targetShape\" property is required for Reshape layer." );
-
+				
+				console.error( "Unsupported reshape type " + this.reshapeType );
+				
 			}
-
+			
+			this.updateLayerMetric();
+			
+		},
+		
+		/**
+		 * updateLayerMetric()
+		 *
+		 * Get layer metric from actual layer.
+		 * Set them to proxy layer's attribute.
+		 */
+		
+		updateLayerMetric: function() {
+			
+			this.neuralValue = this.actualLayer.neuralValue;
+			this.inputShape = this.actualLayer.inputShape;
+			this.outputShape = this.actualLayer.outputShape;
+			
+			this.unitLength = this.actualLayer.unitLength;
+			this.actualWidth = this.actualLayer.actualWidth;
+			this.actualHeight = this.actualLayer.actualHeight;
+			this.actualDepth = this.actualLayer.actualDepth;
+			
+			this.layerDimension = this.actualLayer.layerDimension;
+			
+			this.openFmCenters = this.actualLayer.openFmCenters;
+			
+		},
+		
+		/**
+		 * ============
+		 *
+		 * Functions below are proxy functions.
+		 *
+		 * ============
+		 */
+		
+		init: function( center, actualDepth ) {
+			
+			this.actualLayer.init( center, actualDepth );
+			
+		},
+		
+		clear: function() {
+			
+			this.actualLayer.clear();
+			
+		},
+		
+		reset: function() {
+		
+			this.actualLayer.reset();
+			
+		},
+		
+		updateValue: function( value ) {
+			
+			this.actualLayer.updateValue( value );
+			
+		},
+		
+		setLastLayer: function( lastLayer ) {
+			
+			this.actualLayer.setLastLayer( lastLayer );
+			
+		},
+		
+		getBoundingWidth: function() {
+			
+			return this.actualLayer.getBoundingWidth();
+			
+		},
+		
+		setEnvironment: function( context, model ) {
+			
+			this.actualLayer.setEnvironment( context, model );
+			
+		},
+		
+		loadModelConfig: function( modelConfig ) {
+			
+			this.actualLayer.loadModelConfig( modelConfig );
+			
+		},
+		
+		setPositionMetrics: function( layerIndex, layerLevel ) {
+			
+			this.actualLayer.setPositionMetrics( layerIndex, layerLevel );
+			
+		},
+		
+		handleHoverIn: function( hoveredElement ) {
+			
+			this.actualLayer.handleHoverIn( hoveredElement );
+			
+		},
+		
+		handleHoverOut: function() {
+			
+			this.actualLayer.handleHoverOut();
+			
+		},
+		
+		handleClick: function( clickedElement ) {
+			
+			this.actualLayer.handleClick( clickedElement );
+			
+		},
+		
+		getRelativeElements: function( selectedElement ) {
+		
+			return this.actualLayer.getRelativeElements( selectedElement );
+			
+		},
+		
+		provideRelativeElements: function( request ) {
+			
+			return this.actualLayer.provideRelativeElements( request );
+			
+		},
+		
+		setShape: function( shape ) {
+			
+			// Based on shape dimension, update proxy states.
+			
+			if ( shape.length === 1 ) {
+				
+				this.reshapeType = "Reshape1d";
+				
+			} else if ( shape.length === 2 ) {
+				
+				this.reshapeType = "Reshape2d";
+				
+			} else if ( shape.length === 3 ) {
+				
+				this.reshapeType = "Reshape3d";
+				
+			} else {
+				
+				console.log( "Can not reshape with target shape dimension " + shape.length );
+				
+			}
+			
+			// Create actual reshape layer.
+			
+			this.createActualLayer();
+			
+			// Add shape attribute to actual reshape layer.
+			
+			this.actualLayer.setShape( shape );
+			
+		},
+		
+		assemble: function() {
+			
+			// If "setShape" has been called before, there is no need to check "shape" attribute or "targetShape" attribute in config.
+			
+			if ( this.reshapeType === undefined ) {
+				
+				// Check, update states, create actual layers.
+				
+				if ( this.config !== undefined && ( this.config.targetShape !== undefined || this.config.shape !== undefined ) ) {
+					
+					if ( this.config.targetShape !== undefined ) {
+						
+						if ( this.config.targetShape.length === 1 ) {
+							
+							this.reshapeType = "Reshape1d";
+							
+						} else if ( this.config.targetShape.length === 2 ) {
+							
+							this.reshapeType = "Reshape2d";
+							
+						} else if ( this.config.targetShape.length === 3 ) {
+							
+							this.reshapeType = "Reshape3d";
+							
+						} else {
+							
+							console.error( "Can not reshape with target shape dimension " + this.config.targetShape.length );
+							
+						}
+						
+					}
+					
+					if ( this.config.shape !== undefined ) {
+						
+						if ( this.config.shape.length === 1 ) {
+							
+							this.reshapeType = "Reshape1d";
+							
+						} else if ( this.config.shape.length === 2 ) {
+							
+							this.reshapeType = "Reshape2d";
+							
+						} else if ( this.config.shape.length === 3 ) {
+							
+							this.reshapeType = "Reshape3d";
+							
+						} else {
+							
+							console.error( "Can not reshape with target shape dimension " + this.config.shape.length );
+							
+						}
+						
+					}
+					
+					this.createActualLayer();
+					
+				} else {
+					
+					console.error( "\"targetShape\" property is required for Reshape layer." );
+					
+				}
+				
+			}
+			
+			this.actualLayer.assemble();
+			this.updateLayerMetric();
+			
 		}
 
 	};
@@ -21659,10 +22156,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		// "Dense" inherits from abstract layer "NativeLayer1d".
 
 		NativeLayer1d.call( this, config );
-
-		// Load user's Dense configuration.
-
-		this.loadLayerConfig( config );
 
 		this.layerType = "Dense";
 
@@ -21686,7 +22179,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Dense configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
 			this.unitLength = this.lastLayer.unitLength;
@@ -21798,19 +22295,20 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 					this.isShapePredefined = true;
 					this.width = layerConfig.shape[ 0 ];
+					this.outputShape = [ this.width ];
 
 				} else {
 
 					// "units" configuration is required.
 
 					if ( layerConfig.units !== undefined ) {
-
+						
 						this.width = layerConfig.units;
 
 						// Dense layer's outputShape has one dimension, that's why Dense layer inherits from abstract layer "NativeLayer1d".
 
 						this.outputShape = [ layerConfig.units ];
-
+						
 						if ( this.paging ) {
 
 							this.totalSegments = Math.ceil( this.width / this.segmentLength );
@@ -21866,10 +22364,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.contentWidth = undefined;
 
-		// Load user's Padding1d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Padding1d";
 
 	}
@@ -21892,7 +22386,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Padding1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
@@ -22118,10 +22616,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		this.contentWidth = undefined;
 		this.contentHeight = undefined;
 
-		// Load user's Padding2d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Padding2d";
 
 	}
@@ -22144,7 +22638,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Padding2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
 			if ( !this.isShapePredefined ) {
@@ -22359,10 +22857,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.size = undefined;
 
-		// Load user's UpSampling1d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "UpSampling1d";
 
 	}
@@ -22385,7 +22879,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's UpSampling1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
@@ -22603,10 +23101,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		this.widthSize = undefined;
 		this.heightSize = undefined;
 
-		// Load user's UpSampling2d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "UpSampling2d";
 
 	}
@@ -22629,7 +23123,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's UpSampling2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
@@ -23104,7 +23602,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's GlobalPooling1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
 			if ( !this.isShapePredefined ) {
@@ -23378,7 +23880,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's GlobalPooling2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
 
 			if ( !this.isShapePredefined ) {
@@ -23621,10 +24127,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		NativeLayer1d.call( this, config );
 
-		// Load user's BasicLayer1d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "BasicLayer1d";
 
 	}
@@ -23647,7 +24149,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's BasicLayer1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
 			this.unitLength = this.lastLayer.unitLength;
@@ -23769,10 +24275,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		NativeLayer2d.call( this, config );
 
-		// Load user's BasicLayer2d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "BasicLayer2d";
 
 	}
@@ -23795,7 +24297,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's BasicLayer2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
 			this.unitLength = this.lastLayer.unitLength;
@@ -23921,10 +24427,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		NativeLayer3d.call( this, config );
 
-		// Load user's BasicLayer3d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "BasicLayer3d";
 
 	}
@@ -23947,7 +24449,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's BasicLayer3d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
 			this.unitLength = this.lastLayer.unitLength;
@@ -24090,10 +24596,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.activation = undefined;
 
-		// Load user's Activation1d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Activation1d";
 
 	}
@@ -24116,7 +24618,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Activation1d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
@@ -24300,10 +24806,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.activation = undefined;
 
-		// Load user's Activation2d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Activation2d";
 
 	}
@@ -24326,7 +24828,11 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
+			// Load user's Activation2d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
@@ -24535,10 +25041,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		this.activation = undefined;
 
-		// Load user's Activation3d configuration.
-
-		this.loadLayerConfig( config );
-
 		this.layerType = "Activation3d";
 
 	}
@@ -24558,12 +25060,14 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		/**
 		 * assemble() calculate the shape and parameters based on previous layer or pre-defined shape.
-		 *
-		 * @param { int } layerIndex, this layer's order in model
 		 */
 
-		assemble: function( layerIndex, layerLevel ) {
-
+		assemble: function() {
+			
+			// Load user's Activation3d configuration.
+			
+			this.loadLayerConfig( this.config );
+			
 			this.inputShape = this.lastLayer.outputShape;
 
 			// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.
@@ -24741,74 +25245,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		}
 
 	} );
-
-	/**
-	 * @author syt123450 / https://github.com/syt123450
-	 */
-
-	let MergeValidator = ( function() {
-
-		function validateDimension( layerList ) {
-
-			let dimension;
-
-			if ( layerList.length > 0 ) {
-
-				dimension = layerList[ 0 ].layerDimension;
-
-			} else {
-
-				console.error( "Merge Layer missing elements." );
-
-			}
-
-			for ( let i = 0; i < layerList.length; i ++ ) {
-
-				if ( layerList[ i ].layerDimension !== dimension ) {
-
-					console.error( "Can not merge layers with different dimension." );
-
-				}
-
-			}
-
-		}
-
-		function validateStableShape( layerList ) {
-
-			let inputShape = layerList[ 0 ].outputShape;
-
-			// make sure all input layers has the same shape (same in all dimension).
-
-			for ( let i = 0; i < layerList.length; i ++ ) {
-
-				let outputShape = layerList[ i ].outputShape;
-
-				for ( let j = 0; j < inputShape.length; j ++ ) {
-
-					if ( outputShape[ j ] !== inputShape[ j ] ) {
-
-						return false;
-
-					}
-
-				}
-
-			}
-
-			return true;
-
-		}
-
-		return {
-
-			validateDimension: validateDimension,
-
-			validateStableShape: validateStableShape
-
-		}
-
-	} )();
 
 	/**
 	 * @author syt123450 / https://github.com/syt123450
@@ -25527,6 +25963,74 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		}
 
 	} );
+
+	/**
+	 * @author syt123450 / https://github.com/syt123450
+	 */
+
+	let MergeValidator = ( function() {
+
+		function validateDimension( layerList ) {
+			
+			let dimension;
+
+			if ( layerList.length > 0 ) {
+
+				dimension = layerList[ 0 ].layerDimension;
+
+			} else {
+
+				console.error( "Merge Layer missing elements." );
+
+			}
+
+			for ( let i = 0; i < layerList.length; i ++ ) {
+
+				if ( layerList[ i ].layerDimension !== dimension ) {
+
+					console.error( "Can not merge layers with different dimension." );
+
+				}
+
+			}
+
+		}
+
+		function validateStableShape( layerList ) {
+
+			let inputShape = layerList[ 0 ].outputShape;
+
+			// make sure all input layers has the same shape (same in all dimension).
+
+			for ( let i = 0; i < layerList.length; i ++ ) {
+
+				let outputShape = layerList[ i ].outputShape;
+
+				for ( let j = 0; j < inputShape.length; j ++ ) {
+
+					if ( outputShape[ j ] !== inputShape[ j ] ) {
+
+						return false;
+
+					}
+
+				}
+
+			}
+
+			return true;
+
+		}
+
+		return {
+
+			validateDimension: validateDimension,
+
+			validateStableShape: validateStableShape
+
+		}
+
+	} )();
 
 	/**
 	 * @author syt123450 / https://github.com/syt123450
@@ -29977,7 +30481,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		 */
 
 		assemble: function() {
-
+			
 			// Validate whether user's input merged elements can be merged in this kind of merge operation.
 
 			if( !this.operationStrategy.validate() ) {
@@ -29985,11 +30489,9 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 				console.error( "Input shape is not valid for " + this.operator + " merge function." );
 
 			}
-
-			// Get output shape after merge operation.
-
+			
 			this.outputShape = this.operationStrategy.getOutputShape();
-
+			
 			this.inputShape = this.outputShape;
 
 			// The layer's shape is based on output shape.
@@ -30021,7 +30523,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			}
 
 			// Calculate the feature map centers for open status.
-
+			
 			this.openFmCenters = FmCenterGenerator.getFmCenters(
 
 				this.layerShape,
@@ -30781,6 +31283,224 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 	 * @author syt123450 / https://github.com/syt123450
 	 */
 
+	function MergeProxy( operatorType, layerList, config ) {
+		
+		this.operatorType = operatorType;
+		this.layerList = layerList;
+		this.config = config;
+		
+		this.mergedElements = layerList;
+		
+		if ( this.config !== undefined ) {
+			
+			this.name = this.config.name;
+			
+		} else {
+			
+			this.name = undefined;
+			
+		}
+		
+		/**
+		 * Reshape layer is a proxy, store reference of actual layer.
+		 *
+		 * @type { Layer }
+		 */
+		this.actualLayer = undefined;
+		
+		/**
+		 * Attributes below are important layer metrics for a TensorSpace Layers,
+		 * These metrics will be injected or updated by calling updateLayerMetric()
+		 */
+		
+		this.neuralValue = undefined;
+		this.inputShape = undefined;
+		this.outputShape = undefined;
+		
+		this.autoOutputDetect = false;
+		
+		this.actualWidth = undefined;
+		this.actualHeight = undefined;
+		this.actualDepth = undefined;
+		
+		this.layerDimension = undefined;
+		
+		this.openFmCenters = undefined;
+		
+		this.isMerged = true;
+		
+	}
+
+	MergeProxy.prototype = {
+		
+		/**
+		 * createActualLayer(), create actual merged layer through MergedLayerFactory.
+		 */
+		
+		createActualLayer: function() {
+			
+			this.actualLayer = MergedLayerFactory.createMergedLayer(
+				
+				this.operatorType,
+				this.layerList,
+				this.config
+				
+			);
+			
+		},
+		
+		/**
+		 * updateLayerMetric()
+		 *
+		 * Get layer metric from actual layer.
+		 * Set them to proxy layer's attribute.
+		 */
+		
+		updateLayerMetric: function() {
+			
+			this.neuralValue = this.actualLayer.neuralValue;
+			this.inputShape = this.actualLayer.inputShape;
+			this.outputShape = this.actualLayer.outputShape;
+			
+			this.unitLength = this.actualLayer.unitLength;
+			this.actualWidth = this.actualLayer.actualWidth;
+			this.actualHeight = this.actualLayer.actualHeight;
+			this.actualDepth = this.actualLayer.actualDepth;
+			
+			this.layerDimension = this.actualLayer.layerDimension;
+			
+			this.openFmCenters = this.actualLayer.openFmCenters;
+			this.mergedElements = this.actualLayer.mergedElements;
+			
+		},
+		
+		/**
+		 * ============
+		 *
+		 * Functions below are proxy functions.
+		 *
+		 * ============
+		 */
+		
+		init: function( center, actualDepth ) {
+			
+			this.actualLayer.init( center, actualDepth );
+			
+		},
+		
+		clear: function() {
+			
+			this.actualLayer.clear();
+			
+		},
+		
+		reset: function() {
+			
+			this.actualLayer.reset();
+			
+		},
+		
+		updateValue: function( value ) {
+			
+			this.actualLayer.updateValue( value );
+			
+		},
+		
+		setLastLayer: function( lastLayer ) {
+			
+			this.actualLayer.setLastLayer( lastLayer );
+			
+		},
+		
+		setEnvironment: function( context, model ) {
+			
+			this.actualLayer.setEnvironment( context, model );
+			
+		},
+		
+		loadModelConfig: function( modelConfig ) {
+			
+			this.actualLayer.loadModelConfig( modelConfig );
+			
+		},
+		
+		setPositionMetrics: function( layerIndex, layerLevel ) {
+			
+			this.actualLayer.setPositionMetrics( layerIndex, layerLevel );
+			
+		},
+		
+		handleHoverIn: function( hoveredElement ) {
+			
+			this.actualLayer.handleHoverIn( hoveredElement );
+			
+		},
+		
+		handleHoverOut: function() {
+			
+			this.actualLayer.handleHoverOut();
+			
+		},
+		
+		handleClick: function( clickedElement ) {
+			
+			this.actualLayer.handleClick( clickedElement );
+			
+		},
+		
+		getRelativeElements: function( selectedElement ) {
+			
+			return this.actualLayer.getRelativeElements( selectedElement );
+			
+		},
+		
+		provideRelativeElements: function( request ) {
+			
+			return this.actualLayer.provideRelativeElements( request );
+			
+		},
+		
+		getBoundingWidth: function() {
+		
+			return this.actualLayer.getBoundingWidth();
+			
+		},
+		
+		setShape: function( shape ) {
+			
+			// make sure the input elements have the same dimension.
+			
+			MergeValidator.validateDimension( this.layerList );
+			this.createActualLayer();
+			this.updateLayerMetric();
+			
+			this.actualLayer.setShape( shape );
+			
+		},
+		
+		assemble: function() {
+			
+			if ( this.actualLayer === undefined ) {
+				
+				// make sure the input elements have the same dimension.
+				
+				MergeValidator.validateDimension( this.layerList );
+				this.createActualLayer();
+				this.updateLayerMetric();
+				
+			}
+			
+			this.actualLayer.assemble();
+			this.updateLayerMetric();
+			
+		}
+		
+	};
+
+	/**
+	 * @author syt123450 / https://github.com/syt123450
+	 */
+
 	/**
 	 * Exported as a Factory method for TensorSpace user to use.
 	 * Performs element-wise addition on an array of layers, return an "addLayer" which is a TensorSpace layer object.
@@ -30829,13 +31549,9 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 		let operatorType = "add";
 
-		// make sure the input elements have the same dimension.
-
-		MergeValidator.validateDimension( layerList );
-
-		// MergedLayerFactory create a merged Layer based on input layer list and config for add operation.
-
-		let addLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
+		// Create a merged Layer proxy, the actual layer in proxy based on input layer list and config for add operation.
+		
+		let addLayer = new MergeProxy( operatorType, layerList, config );
 
 		return addLayer;
 
@@ -30892,14 +31608,10 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 	function Concatenate( layerList, config ) {
 
 		let operatorType = "concatenate";
+		
+		// Create a merged Layer proxy, the actual layer in proxy based on input layer list and config for concatenate operation.
 
-		// make sure the input elements have the same dimension.
-
-		MergeValidator.validateDimension( layerList );
-
-		// MergedLayerFactory create a merged Layer based on input layer list and config for concatenate operation.
-
-		let concatenateLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
+		let concatenateLayer = new MergeProxy( operatorType, layerList, config );
 
 		return concatenateLayer;
 
@@ -30956,14 +31668,10 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 	function Subtract( layerList, config ) {
 
 		let operatorType = "subtract";
+		
+		// Create a merged Layer proxy, the actual layer in proxy based on input layer list and config for subtract operation.
 
-		// make sure the input elements have the same dimension.
-
-		MergeValidator.validateDimension( layerList );
-
-		// MergedLayerFactory create a merged Layer based on input layer list and config for subtract operation.
-
-		let subtractLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
+		let subtractLayer = new MergeProxy( operatorType, layerList, config );
 
 		return subtractLayer;
 
@@ -31020,14 +31728,10 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 	function Maximum( layerList, config ) {
 
 		let operatorType = "maximum";
+		
+		// Create a merged Layer proxy, the actual layer in proxy based on input layer list and config for maximum operation.
 
-		// make sure the input elements have the same dimension.
-
-		MergeValidator.validateDimension( layerList );
-
-		// MergedLayerFactory create a merged Layer based on input layer list and config for maximum operation.
-
-		let maximumLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
+		let maximumLayer = new MergeProxy( operatorType, layerList, config );
 
 		return maximumLayer;
 
@@ -31084,14 +31788,10 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 	function Average( layerList, config ) {
 
 		let operatorType = "average";
+		
+		// Create a merged Layer proxy, the actual layer in proxy based on input layer list and config for averaging operation.
 
-		// make sure the input elements have the same dimension.
-
-		MergeValidator.validateDimension( layerList );
-
-		// MergedLayerFactory create a merged Layer based on input layer list and config for averaging operation.
-
-		let averageLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
+		let averageLayer = new MergeProxy( operatorType, layerList, config );
 
 		return averageLayer;
 
@@ -31148,18 +31848,16 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 	function Multiply( layerList, config ) {
 
 		let operatorType = "multiply";
+		
+		// Create a merged Layer proxy, the actual layer in proxy based on input layer list and config for multiply operation.
 
-		// make sure the input elements have the same dimension.
-
-		MergeValidator.validateDimension( layerList );
-
-		// MergedLayerFactory create a merged Layer based on input layer list and config for multiply operation.
-
-		let multiplyLayer = MergedLayerFactory.createMergedLayer( operatorType, layerList, config );
+		let multiplyLayer = new MergeProxy( operatorType, layerList, config );
 
 		return multiplyLayer;
 
 	}
+
+	let version = "0.6.0";
 
 	/**
 	 * @author syt123450 / https://github.com/syt123450
@@ -31213,8 +31911,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		Model: Model
 
 	};
-
-	let version = "0.5.0";
 
 	exports.models = models;
 	exports.layers = layers;
