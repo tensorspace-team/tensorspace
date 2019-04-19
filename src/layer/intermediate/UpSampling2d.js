@@ -37,10 +37,6 @@ function UpSampling2d( config ) {
 	this.widthSize = undefined;
 	this.heightSize = undefined;
 
-	// Load user's UpSampling2d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "UpSampling2d";
 
 }
@@ -63,7 +59,11 @@ UpSampling2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype )
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's UpSampling2d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.

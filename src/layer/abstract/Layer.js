@@ -293,6 +293,8 @@ function Layer( config ) {
 
 	this.isShapePredefined = false;
 	
+	this.config = config;
+	
 	this.isEmissive = false;
 
 	// Load layer config.
@@ -549,6 +551,19 @@ Layer.prototype = {
 		
 		this.layerIndex = layerIndex;
 		this.layerLevel = layerLevel;
+		
+	},
+	
+	setShape: function( shape ) {
+	
+		if ( this.config === undefined ) {
+			
+			this.config = {};
+			
+		}
+		
+		this.config.shape = shape;
+		this.outputShape = shape;
 		
 	},
 

@@ -39,10 +39,6 @@ function Padding2d( config ) {
 	this.contentWidth = undefined;
 	this.contentHeight = undefined;
 
-	// Load user's Padding2d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Padding2d";
 
 }
@@ -65,7 +61,11 @@ Padding2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Padding2d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
 
 		if ( !this.isShapePredefined ) {

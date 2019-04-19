@@ -133,10 +133,6 @@ function Output1d( config ) {
 
 	this.autoOutputDetect = false;
 
-	// Load user's Output1d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Output1d";
 
 }
@@ -215,7 +211,11 @@ Output1d.prototype = Object.assign( Object.create( NativeLayer.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Output1d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// Conv2d layer's outputShape has one dimension.
 
 		this.outputShape = [ this.width ];

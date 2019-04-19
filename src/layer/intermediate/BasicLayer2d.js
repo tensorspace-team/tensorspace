@@ -18,10 +18,6 @@ function BasicLayer2d( config ) {
 
 	NativeLayer2d.call( this, config );
 
-	// Load user's BasicLayer2d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "BasicLayer2d";
 
 }
@@ -44,7 +40,11 @@ BasicLayer2d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's BasicLayer2d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// Unit length is the same as last layer, use unit length to calculate actualWidth and actualHeight which are used to create three.js object.
 
 		this.unitLength = this.lastLayer.unitLength;

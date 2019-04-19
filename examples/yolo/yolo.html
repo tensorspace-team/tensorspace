@@ -65,134 +65,37 @@
 
 			}  );
 
-            model.add( new TSP.layers.RGBInput( {
+            model.add( new TSP.layers.RGBInput() );
 
-                shape: [ 416, 416, 3 ]
+            model.add( new TSP.layers.Conv2d() );
 
-            } ) );
+            model.add( new TSP.layers.Pooling2d() );
 
-            model.add( new TSP.layers.Conv2d( {
+            model.add( new TSP.layers.Conv2d() );
 
-                kernelSize: 3,
-                filters: 16,
-                strides: 1,
-                padding: "same"
+            model.add( new TSP.layers.Pooling2d() );
 
-            } ) );
+            model.add( new TSP.layers.Conv2d() );
 
-            model.add( new TSP.layers.Pooling2d( {
+            model.add( new TSP.layers.Pooling2d() );
 
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
+            model.add( new TSP.layers.Conv2d() );
 
-            } ) );
+            model.add( new TSP.layers.Pooling2d() );
 
-            model.add( new TSP.layers.Conv2d( {
+            model.add( new TSP.layers.Conv2d() );
 
-                kernelSize: 3,
-                filters: 32,
-                strides: 1,
-                padding: "same"
+            model.add( new TSP.layers.Pooling2d() );
 
-            } ) );
+            model.add( new TSP.layers.Conv2d() );
 
-            model.add( new TSP.layers.Pooling2d( {
+            model.add( new TSP.layers.Pooling2d() );
 
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
+            model.add( new TSP.layers.Conv2d() );
 
-            } ) );
+            model.add( new TSP.layers.Conv2d() );
 
-            model.add( new TSP.layers.Conv2d( {
-
-                kernelSize: 3,
-                filters: 64,
-                strides: 1,
-                padding: "same"
-
-            } ) );
-
-            model.add( new TSP.layers.Pooling2d( {
-
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
-
-            } ) );
-
-            model.add( new TSP.layers.Conv2d( {
-
-                kernelSize: 3,
-                filters: 128,
-                strides: 1,
-                padding: "same"
-
-            } ) );
-
-            model.add( new TSP.layers.Pooling2d( {
-
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
-
-            } ) );
-
-            model.add( new TSP.layers.Conv2d( {
-
-                kernelSize: 3,
-                filters: 256,
-                strides: 1,
-                padding: "same"
-
-            } ) );
-
-            model.add( new TSP.layers.Pooling2d( {
-
-                poolSize: [ 2, 2 ],
-                strides: [ 2, 2 ]
-
-            } ) );
-
-            model.add( new TSP.layers.Conv2d( {
-
-                kernelSize: 3,
-                filters: 512,
-                strides: 1,
-                padding: "same"
-
-            } ) );
-
-            model.add( new TSP.layers.Pooling2d( {
-
-                poolSize: [ 2, 2 ],
-                strides: [ 1, 1 ],
-                padding: "same"
-
-            } ) );
-
-            model.add( new TSP.layers.Conv2d( {
-
-                kernelSize: 3,
-                filters: 1024,
-                strides: 1,
-                padding: "same"
-
-            } ) );
-
-            model.add( new TSP.layers.Conv2d( {
-
-                kernelSize: 3,
-                filters: 512,
-                strides: 1,
-                padding: "same"
-
-            } ) );
-
-            model.add( new TSP.layers.Conv2d( {
-
-                kernelSize: 1,
-                filters: 125,
-                strides: 1
-
-            } ) );
+            model.add( new TSP.layers.Conv2d() );
 
             let yoloGrid = new TSP.layers.YoloGrid( {
 

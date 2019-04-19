@@ -171,7 +171,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 	 */
 
 	assemble: function() {
-
+		
 		// Validate whether user's input merged elements can be merged in this kind of merge operation.
 
 		if( !this.operationStrategy.validate() ) {
@@ -179,11 +179,9 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 			console.error( "Input shape is not valid for " + this.operator + " merge function." );
 
 		}
-
-		// Get output shape after merge operation.
-
+		
 		this.outputShape = this.operationStrategy.getOutputShape();
-
+		
 		this.inputShape = this.outputShape;
 
 		// The layer's shape is based on output shape.
@@ -215,7 +213,7 @@ MergedLayer3d.prototype = Object.assign( Object.create( MergedLayer.prototype ),
 		}
 
 		// Calculate the feature map centers for open status.
-
+		
 		this.openFmCenters = FmCenterGenerator.getFmCenters(
 
 			this.layerShape,

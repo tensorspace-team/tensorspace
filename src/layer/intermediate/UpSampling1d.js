@@ -26,10 +26,6 @@ function UpSampling1d( config ) {
 
 	this.size = undefined;
 
-	// Load user's UpSampling1d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "UpSampling1d";
 
 }
@@ -52,7 +48,11 @@ UpSampling1d.prototype = Object.assign( Object.create( NativeLayer2d.prototype )
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's UpSampling1d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.

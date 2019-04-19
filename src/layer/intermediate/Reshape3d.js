@@ -37,10 +37,6 @@ function Reshape3d( config ) {
 
 	this.totalSize = 1;
 
-	// Load user's Reshape configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Reshape3d";
 
 }
@@ -63,7 +59,11 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Reshape configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// Calculate layer's shape from last layer and user's configuration.
@@ -73,7 +73,7 @@ Reshape3d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 			this.totalSize *= this.inputShape[ i ];
 
 		}
-
+		
 		// Check whether the input shape can be reshape into target shape.
 
 		if  ( this.totalSize !== this.width * this.height * this.depth ) {

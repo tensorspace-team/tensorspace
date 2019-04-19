@@ -17,10 +17,6 @@ function Dense( config ) {
 
 	NativeLayer1d.call( this, config );
 
-	// Load user's Dense configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Dense";
 
 }
@@ -43,7 +39,11 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Dense configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// Unit length is the same as last layer, use unit length to calculate actualWidth which is used to create three.js object.
 
 		this.unitLength = this.lastLayer.unitLength;
@@ -155,19 +155,20 @@ Dense.prototype = Object.assign( Object.create( NativeLayer1d.prototype ), {
 
 				this.isShapePredefined = true;
 				this.width = layerConfig.shape[ 0 ];
+				this.outputShape = [ this.width ];
 
 			} else {
 
 				// "units" configuration is required.
 
 				if ( layerConfig.units !== undefined ) {
-
+					
 					this.width = layerConfig.units;
 
 					// Dense layer's outputShape has one dimension, that's why Dense layer inherits from abstract layer "NativeLayer1d".
 
 					this.outputShape = [ layerConfig.units ];
-
+					
 					if ( this.paging ) {
 
 						this.totalSegments = Math.ceil( this.width / this.segmentLength );

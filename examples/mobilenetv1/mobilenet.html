@@ -64,247 +64,70 @@
 
 	}  );
 
-	model.add( new TSP.layers.RGBInput( {
+	model.add( new TSP.layers.RGBInput() );
 
-		shape: [ 224, 224, 3 ]
+	model.add( new TSP.layers.Conv2d({
+        initStatus: "open"
+    }) );
 
-	} ) );
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-	model.add( new TSP.layers.Conv2d( {
+	model.add( new TSP.layers.Conv2d() );
 
-		kernelSize: 3,
-		filters: 32,
-		strides: 2,
-		padding: "same"
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-    } ) );
+	model.add( new TSP.layers.Conv2d() );
 
-	model.add( new TSP.layers.DepthwiseConv2d( {
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
+	model.add( new TSP.layers.Conv2d() );
 
-    } ) );
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-	model.add( new TSP.layers.Conv2d( {
+	model.add( new TSP.layers.Conv2d() );
 
-		kernelSize: 1,
-		filters: 64,
-		strides: 1,
-		padding: "same"
+	model.add( new TSP.layers.DepthwiseConv2d({
+        initStatus: "open"
+    }) );
 
-    } ) );
+	model.add( new TSP.layers.Conv2d() );
 
-	model.add( new TSP.layers.DepthwiseConv2d( {
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-		kernelSize: 3,
-		strides: 2,
-		padding: "same"
+	model.add( new TSP.layers.Conv2d() );
 
-    } ) );
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-	model.add( new TSP.layers.Conv2d( {
+	model.add( new TSP.layers.Conv2d() );
 
-		kernelSize: 1,
-		filters: 128,
-		strides: 1,
-		padding: "same"
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-	} ) );
+	model.add( new TSP.layers.Conv2d() );
 
-	model.add( new TSP.layers.DepthwiseConv2d( {
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
+	model.add( new TSP.layers.Conv2d() );
 
-	} ) );
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-	model.add( new TSP.layers.Conv2d( {
+	model.add( new TSP.layers.Conv2d() );
 
-		kernelSize: 1,
-		filters: 128,
-		strides: 1,
-		padding: "same"
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-	} ) );
+	model.add( new TSP.layers.Conv2d() );
 
-	model.add( new TSP.layers.DepthwiseConv2d( {
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-		kernelSize: 3,
-		strides: 2,
-		padding: "same"
+	model.add( new TSP.layers.Conv2d() );
 
-	} ) );
+	model.add( new TSP.layers.DepthwiseConv2d() );
 
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 256,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 256,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 2,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 512,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 512,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 512,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 512,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 512,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 512,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 2,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 1024,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.DepthwiseConv2d( {
-
-		kernelSize: 3,
-		strides: 1,
-		padding: "same"
-
-	} ) );
-
-	model.add( new TSP.layers.Conv2d( {
-
-		kernelSize: 1,
-		filters: 1024,
-		strides: 1,
-		padding: "same"
-
-	} ) );
+	model.add( new TSP.layers.Conv2d() );
 
 	model.add( new TSP.layers.GlobalPooling2d() );
 
 	model.add( new TSP.layers.Output1d( {
 
-		units: 1000,
 		paging: true,
 		segmentLength: 200,
 		outputs: result

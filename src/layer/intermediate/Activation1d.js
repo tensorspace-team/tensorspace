@@ -25,10 +25,6 @@ function Activation1d( config ) {
 
 	this.activation = undefined;
 
-	// Load user's Activation1d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Activation1d";
 
 }
@@ -51,7 +47,11 @@ Activation1d.prototype = Object.assign( Object.create( NativeLayer1d.prototype )
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Activation1d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific shape for layer, infer layer output shape from input shape and config.

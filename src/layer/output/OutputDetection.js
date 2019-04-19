@@ -66,10 +66,6 @@ function OutputDetection( config ) {
 
 	this.autoOutputDetect = true;
 
-	// Load user's OutputDetection configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "OutputDetection";
 
 }
@@ -140,7 +136,11 @@ OutputDetection.prototype = Object.assign( Object.create( NativeLayer.prototype 
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's OutputDetection configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		// Automatically detect model's input shape as outputShape.
 
 		let modelInputShape = this.model.layers[ 0 ].outputShape;

@@ -35,10 +35,6 @@ function Cropping2d( config ) {
 	this.croppingWidth = undefined;
 	this.croppingHeight = undefined;
 
-	// Load user's Cropping2d configuration.
-
-	this.loadLayerConfig( config );
-
 	this.layerType = "Cropping2d";
 
 }
@@ -61,7 +57,11 @@ Cropping2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), 
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Cropping2d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.

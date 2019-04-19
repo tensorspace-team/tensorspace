@@ -55,26 +55,6 @@ function Conv2d( config ) {
 
 	this.padding = "valid";
 
-	// Load user's Conv2d configuration.
-
-	this.loadLayerConfig( config );
-
-	// Init close feature map centers.
-
-	for ( let i = 0; i < this.depth; i ++ ) {
-
-		let center = {
-
-			x: 0,
-			y: 0,
-			z: 0
-
-		};
-
-		this.closeFmCenters.push( center );
-
-	}
-
 	this.layerType = "Conv2d";
 
 }
@@ -97,7 +77,27 @@ Conv2d.prototype = Object.assign( Object.create( NativeLayer3d.prototype ), {
 	 */
 
 	assemble: function() {
-
+		
+		// Load user's Conv2d configuration.
+		
+		this.loadLayerConfig( this.config );
+		
+		// Init close feature map centers.
+		
+		for ( let i = 0; i < this.depth; i ++ ) {
+			
+			let center = {
+				
+				x: 0,
+				y: 0,
+				z: 0
+				
+			};
+			
+			this.closeFmCenters.push( center );
+			
+		}
+		
 		this.inputShape = this.lastLayer.outputShape;
 
 		// If user's do not define a specific 2d shape for feature map, infer layer output shape from input shape and config.
