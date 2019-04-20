@@ -118,7 +118,7 @@ model.init();
 ```
 
 * Issue [#226](https://github.com/tensorspace-team/tensorspace/issues/226) has detailed description about this feature.
-* Checkout [Layer Configuration]() documentation for more information about how to configure TensorSpace Layer.
+* Checkout [Layer Configuration](https://tensorspace.org/html/docs/basicLayerConfig.html) documentation for more information about how to configure TensorSpace Layer.
 
 ### <div id="new-tutorials">New Preprocessing Tutorials</div>
 
