@@ -45,6 +45,8 @@ function MergeProxy( operatorType, layerList, config ) {
 	this.actualHeight = undefined;
 	this.actualDepth = undefined;
 	
+	this.depth = undefined;
+	
 	this.layerDimension = undefined;
 	
 	this.openFmCenters = undefined;
@@ -88,6 +90,8 @@ MergeProxy.prototype = {
 		this.actualWidth = this.actualLayer.actualWidth;
 		this.actualHeight = this.actualLayer.actualHeight;
 		this.actualDepth = this.actualLayer.actualDepth;
+		
+		this.depth = this.actualLayer.depth;
 		
 		this.layerDimension = this.actualLayer.layerDimension;
 		
@@ -135,6 +139,14 @@ MergeProxy.prototype = {
 	},
 	
 	setEnvironment: function( context, model ) {
+		
+		if ( this.actualLayer === undefined ) {
+			
+			MergeValidator.validateDimension( this.layerList );
+			this.createActualLayer();
+			this.updateLayerMetric();
+			
+		}
 		
 		this.actualLayer.setEnvironment( context, model );
 		
@@ -185,6 +197,12 @@ MergeProxy.prototype = {
 	getBoundingWidth: function() {
 	
 		return this.actualLayer.getBoundingWidth();
+		
+	},
+	
+	translateLayer: function( targetCenter, translateTime ) {
+		
+		this.actualLayer.translateLayer( targetCenter, translateTime );
 		
 	},
 	
