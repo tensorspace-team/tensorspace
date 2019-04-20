@@ -21886,8 +21886,21 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		this.actualHeight = undefined;
 		this.actualDepth = undefined;
 		
+		this.depth = undefined;
+		
 		this.layerDimension = undefined;
 		this.openFmCenters = undefined;
+		
+		this.lastLayer = undefined;
+		
+		if ( config !== undefined &&
+			( config.targetShape !== undefined || config.shape !== undefined ) ) {
+			
+			this.setReshapeType();
+			this.createActualLayer();
+			this.updateLayerMetric();
+		
+		}
 		
 	}
 
@@ -21939,9 +21952,13 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			this.actualHeight = this.actualLayer.actualHeight;
 			this.actualDepth = this.actualLayer.actualDepth;
 			
+			this.depth = this.actualLayer.depth;
+			
 			this.layerDimension = this.actualLayer.layerDimension;
 			
 			this.openFmCenters = this.actualLayer.openFmCenters;
+			
+			this.lastLayer = this.actualLayer.lastLayer;
 			
 		},
 		
@@ -21991,6 +22008,13 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		
 		setEnvironment: function( context, model ) {
 			
+			if ( this.actualLayer === undefined ) {
+				
+				this.createActualLayer();
+				this.updateLayerMetric();
+				
+			}
+			
 			this.actualLayer.setEnvironment( context, model );
 			
 		},
@@ -22037,6 +22061,20 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			
 		},
 		
+		translateLayer: function( targetCenter, translateTime ) {
+			
+			this.actualLayer.translateLayer( targetCenter, translateTime );
+			
+		},
+		
+		apply: function( lastLayer ) {
+			
+			this.actualLayer.apply( lastLayer );
+			
+			this.updateLayerMetric();
+			
+		},
+		
 		setShape: function( shape ) {
 			
 			// Based on shape dimension, update proxy states.
@@ -22070,6 +22108,15 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		},
 		
 		assemble: function() {
+			
+			this.setReshapeType();
+			
+			this.actualLayer.assemble();
+			this.updateLayerMetric();
+			
+		},
+		
+		setReshapeType: function() {
 			
 			// If "setShape" has been called before, there is no need to check "shape" attribute or "targetShape" attribute in config.
 			
@@ -22132,9 +22179,6 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 				}
 				
 			}
-			
-			this.actualLayer.assemble();
-			this.updateLayerMetric();
 			
 		}
 
@@ -31323,6 +31367,8 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		this.actualHeight = undefined;
 		this.actualDepth = undefined;
 		
+		this.depth = undefined;
+		
 		this.layerDimension = undefined;
 		
 		this.openFmCenters = undefined;
@@ -31366,6 +31412,8 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 			this.actualWidth = this.actualLayer.actualWidth;
 			this.actualHeight = this.actualLayer.actualHeight;
 			this.actualDepth = this.actualLayer.actualDepth;
+			
+			this.depth = this.actualLayer.depth;
 			
 			this.layerDimension = this.actualLayer.layerDimension;
 			
@@ -31413,6 +31461,14 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		},
 		
 		setEnvironment: function( context, model ) {
+			
+			if ( this.actualLayer === undefined ) {
+				
+				MergeValidator.validateDimension( this.layerList );
+				this.createActualLayer();
+				this.updateLayerMetric();
+				
+			}
 			
 			this.actualLayer.setEnvironment( context, model );
 			
@@ -31463,6 +31519,12 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 		getBoundingWidth: function() {
 		
 			return this.actualLayer.getBoundingWidth();
+			
+		},
+		
+		translateLayer: function( targetCenter, translateTime ) {
+			
+			this.actualLayer.translateLayer( targetCenter, translateTime );
 			
 		},
 		
@@ -31857,7 +31919,7 @@ var TSP = (function (exports,tf,THREE,TWEEN,TrackballControls) {
 
 	}
 
-	let version = "0.6.0";
+	let version = "0.6.1";
 
 	/**
 	 * @author syt123450 / https://github.com/syt123450

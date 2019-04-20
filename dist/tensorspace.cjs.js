@@ -21892,8 +21892,21 @@ function Reshape( config ) {
 	this.actualHeight = undefined;
 	this.actualDepth = undefined;
 	
+	this.depth = undefined;
+	
 	this.layerDimension = undefined;
 	this.openFmCenters = undefined;
+	
+	this.lastLayer = undefined;
+	
+	if ( config !== undefined &&
+		( config.targetShape !== undefined || config.shape !== undefined ) ) {
+		
+		this.setReshapeType();
+		this.createActualLayer();
+		this.updateLayerMetric();
+	
+	}
 	
 }
 
@@ -21945,9 +21958,13 @@ Reshape.prototype = {
 		this.actualHeight = this.actualLayer.actualHeight;
 		this.actualDepth = this.actualLayer.actualDepth;
 		
+		this.depth = this.actualLayer.depth;
+		
 		this.layerDimension = this.actualLayer.layerDimension;
 		
 		this.openFmCenters = this.actualLayer.openFmCenters;
+		
+		this.lastLayer = this.actualLayer.lastLayer;
 		
 	},
 	
@@ -21997,6 +22014,13 @@ Reshape.prototype = {
 	
 	setEnvironment: function( context, model ) {
 		
+		if ( this.actualLayer === undefined ) {
+			
+			this.createActualLayer();
+			this.updateLayerMetric();
+			
+		}
+		
 		this.actualLayer.setEnvironment( context, model );
 		
 	},
@@ -22043,6 +22067,20 @@ Reshape.prototype = {
 		
 	},
 	
+	translateLayer: function( targetCenter, translateTime ) {
+		
+		this.actualLayer.translateLayer( targetCenter, translateTime );
+		
+	},
+	
+	apply: function( lastLayer ) {
+		
+		this.actualLayer.apply( lastLayer );
+		
+		this.updateLayerMetric();
+		
+	},
+	
 	setShape: function( shape ) {
 		
 		// Based on shape dimension, update proxy states.
@@ -22076,6 +22114,15 @@ Reshape.prototype = {
 	},
 	
 	assemble: function() {
+		
+		this.setReshapeType();
+		
+		this.actualLayer.assemble();
+		this.updateLayerMetric();
+		
+	},
+	
+	setReshapeType: function() {
 		
 		// If "setShape" has been called before, there is no need to check "shape" attribute or "targetShape" attribute in config.
 		
@@ -22138,9 +22185,6 @@ Reshape.prototype = {
 			}
 			
 		}
-		
-		this.actualLayer.assemble();
-		this.updateLayerMetric();
 		
 	}
 
@@ -31329,6 +31373,8 @@ function MergeProxy( operatorType, layerList, config ) {
 	this.actualHeight = undefined;
 	this.actualDepth = undefined;
 	
+	this.depth = undefined;
+	
 	this.layerDimension = undefined;
 	
 	this.openFmCenters = undefined;
@@ -31372,6 +31418,8 @@ MergeProxy.prototype = {
 		this.actualWidth = this.actualLayer.actualWidth;
 		this.actualHeight = this.actualLayer.actualHeight;
 		this.actualDepth = this.actualLayer.actualDepth;
+		
+		this.depth = this.actualLayer.depth;
 		
 		this.layerDimension = this.actualLayer.layerDimension;
 		
@@ -31419,6 +31467,14 @@ MergeProxy.prototype = {
 	},
 	
 	setEnvironment: function( context, model ) {
+		
+		if ( this.actualLayer === undefined ) {
+			
+			MergeValidator.validateDimension( this.layerList );
+			this.createActualLayer();
+			this.updateLayerMetric();
+			
+		}
 		
 		this.actualLayer.setEnvironment( context, model );
 		
@@ -31469,6 +31525,12 @@ MergeProxy.prototype = {
 	getBoundingWidth: function() {
 	
 		return this.actualLayer.getBoundingWidth();
+		
+	},
+	
+	translateLayer: function( targetCenter, translateTime ) {
+		
+		this.actualLayer.translateLayer( targetCenter, translateTime );
 		
 	},
 	
@@ -31863,7 +31925,7 @@ function Multiply( layerList, config ) {
 
 }
 
-let version = "0.6.0";
+let version = "0.6.1";
 
 /**
  * @author syt123450 / https://github.com/syt123450

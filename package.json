@@ -1,6 +1,6 @@
 {
   "name": "tensorspace",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Neural network 3D visualization framework",
   "main": "dist/tensorspace.cjs.js",
   "scripts": {
