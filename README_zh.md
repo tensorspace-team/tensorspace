@@ -41,6 +41,7 @@ TensorSpace 支持3D可视化经过适当预处理之后的 TensorFlow、Keras�
 * [开发人员](#contributors)
 * [联系方式](#contact)
 * [许可证](#license)
+* [下集预告](#next)
 
 ## <div id="motivation">TensorSpace 使用场景</div>
 
@@ -358,3 +359,19 @@ TensorSpace 的所有更新日志都可以在这个文件中查看。
 ## <div id="license">许可证</div>
 
 [Apache License 2.0](https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE)
+
+## <div id="next">下集预告</div>
+
+<p align="center">
+<img width=300 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_vr_logo.png">
+</p>
+
+<h3 align="center">TensorSpace-VR</h1>
+<p align="center"><b>Present Neural Network in VR</b></p>
+
+<p align="center">
+<img width=80% src="./assets/next_episode.gif">
+</p>
+<p align="center">
+<b>图15</b> - TensorSpace VR Demo
+</p>

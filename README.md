@@ -38,6 +38,7 @@ TensorSpace is a neural network 3D visualization framework built using TensorFlo
 * [Contributors](#contributors)
 * [Contact](#contact)
 * [License](#license)
+* [Next Episode](#next)
 
 ## Motivation
 
@@ -353,3 +354,20 @@ If you have any issue or doubt, feel free to contact us by:
 ## License
 
 [Apache License 2.0](https://github.com/tensorspace-team/tensorspace/blob/master/LICENSE)
+
+## <div id="next">Next Episode</div>
+
+<p align="center">
+<img width=300 src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_vr_logo.png">
+</p>
+
+<h3 align="center">TensorSpace-VR</h1>
+<p align="center"><b>Present Neural Network in VR</b></p>
+
+<p align="center">
+<img width=80% src="./assets/next_episode.gif">
+</p>
+<p align="center">
+<b>Fig. 15</b> - TensorSpace VR Demo
+</p>
+
