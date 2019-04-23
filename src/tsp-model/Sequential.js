@@ -174,7 +174,7 @@ Sequential.prototype = Object.assign( Object.create( AbstractModel.prototype ), 
 			
 			this.layers[ i ].setEnvironment( this.modelContext, this );
 			this.layers[ i ].loadModelConfig( this.configuration );
-			this.layers[ i ].setPositionMetrics( i + 1, i + 1 );
+			this.layers[ i ].setPositionMetrics( i, i );
 			
 		}
 		
