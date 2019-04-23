@@ -4,12 +4,22 @@
 
 import { EventHandler } from './EventHandler';
 
+/**
+ * Handler3D, abstract handler, should not be initialized by HandlerFactory.
+ * Base class for SequentialHandlerVR, ModelHandlerVR.
+ *
+ * @param tspModel, TensorSpace Model reference
+ * @constructor
+ */
+
 function HandlerVR( tspModel ) {
+	
+	// HandlerVR inherits from abstract handler "EventHandler".
 	
 	EventHandler.call( this, tspModel );
 	
 	/**
-	 * Record layer hovered by mouse now.
+	 * Record TensorSpace Layer hovered by ray now.
 	 *
 	 * @type { Layer }
 	 */
@@ -28,19 +38,19 @@ function HandlerVR( tspModel ) {
 
 HandlerVR.prototype = Object.assign( Object.create( EventHandler.prototype ), {
 	
-	handleClick: function( clickedElement ) {
-	
-	},
-	
 	/**
 	 * handleHoverIn(), Handler for hover element event.
 	 *
-	 * @param hoveredElement
+	 * @param hoveredElement, THREE.Object, TensorSpace hoverable object, caught by ray
 	 */
 	
 	handleHoverIn: function( hoveredElement ) {
 		
-		let selectedLayer = this.tspModel.layers[ hoveredElement.layerIndex ];
+		const eventHandler = this;
+		
+		// Let the layer to handle actual hover event.
+		
+		const selectedLayer = this.tspModel.layers[ hoveredElement.layerIndex ];
 		
 		if ( this.hoveredLayer === undefined ) {
 			
@@ -57,7 +67,11 @@ HandlerVR.prototype = Object.assign( Object.create( EventHandler.prototype ), {
 			
 		}
 		
+		// Record hovered Layer for the latter usage of clearing hover effect.
+		
 		this.hoveredLayer = selectedLayer;
+		
+		// If hovered element is emissiveable, emissive it, and record this element.
 		
 		if ( hoveredElement.emissiveable ) {
 			
@@ -65,14 +79,14 @@ HandlerVR.prototype = Object.assign( Object.create( EventHandler.prototype ), {
 				
 				if ( this.hoveredEmissive !== hoveredElement ) {
 					
-					this.handleDarken();
-					this.handleEmissive( hoveredElement );
+					handleDarken();
+					handleEmissive( hoveredElement );
 					
 				}
 				
 			} else {
 				
-				this.handleEmissive( hoveredElement );
+				handleEmissive( hoveredElement );
 				
 			}
 			
@@ -80,16 +94,30 @@ HandlerVR.prototype = Object.assign( Object.create( EventHandler.prototype ), {
 			
 			if ( this.hoveredEmissive !== undefined ) {
 				
-				this.handleDarken();
+				handleDarken();
 				
 			}
+			
+		}
+		
+		function handleEmissive( element ) {
+			
+			element.context.emissive();
+			eventHandler.hoveredEmissive = element;
+			
+		}
+		
+		function handleDarken() {
+			
+			eventHandler.hoveredEmissive.context.darken();
+			eventHandler.hoveredEmissive = undefined;
 			
 		}
 		
 	},
 	
 	/**
-	 * handleHoverOut(), remove hover effect from a previously hovered element.
+	 * handleHoverOut(), Remove hover effect from the previous hovered element.
 	 */
 	
 	handleHoverOut: function() {
@@ -103,18 +131,23 @@ HandlerVR.prototype = Object.assign( Object.create( EventHandler.prototype ), {
 		
 	},
 	
-	handleEmissive: function( element ) {
-		
-		element.context.emissive();
-		this.hoveredEmissive = element;
-		
-	},
+	/**
+	 * ============
+	 *
+	 * Functions below are abstract method for HandlerVR.
+	 * SubClasses ( specific HandlerVR ) override these abstract methods.
+	 *
+	 * ============
+	 */
 	
-	handleDarken: function() {
-		
-		this.hoveredEmissive.context.darken();
-		this.hoveredEmissive = undefined;
-		
+	/**
+	 * handleClick(), Handle ray click event when ray click on a TensorSpace clickable object.
+	 *
+	 * @param clickedElement, THREE.Object, TensorSpace clickable object, clicked by ray
+	 */
+	
+	handleClick: function( clickedElement ) {
+	
 	}
 	
 } );

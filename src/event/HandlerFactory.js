@@ -7,6 +7,21 @@ import { ModelHandler3D } from './impl/ModelHandler3D';
 import { SequentialHandlerVR } from './impl/SequentialHandlerVR';
 import { ModelHandlerVR } from './impl/ModelHandlerVR';
 
+/**
+ * "HandlerFactory" create the EventHandler for ModelRenderer.
+ * Based on TensorSpace's modelType and renderer configuration,
+ * "Factory" will create different kinds of "EventHandler".
+ *
+ * If the TensorSpace model is a Sequential Model renderer in "Web3DRenderer",
+ * return "SequentialHandler3D";
+ * If the TensorSpace model is a Functional Model renderer in "Web3DRenderer",
+ * return "ModelHandler3D";
+ * If the TensorSpace model is a Sequential Model renderer in "WebVRRenderer",
+ * return "SequentialHandlerVR";
+ * If the TensorSpace model is a Functional Model renderer in "WebVRRenderer",
+ * return "ModelHandlerVR".
+ */
+
 let HandlerFactory = ( function() {
 	
 	function getEventHandler( tspModel ) {
