@@ -4,6 +4,7 @@
 
 import { HandlerFactory } from '../event/HandlerFactory';
 import { Web3DRenderer } from './Web3DRenderer';
+import { WebVRRenderer } from './WebVRRenderer';
 
 let RendererFactory = ( function() {
 	
@@ -11,7 +12,19 @@ let RendererFactory = ( function() {
 		
 		let eventHandler = HandlerFactory.getEventHandler( tspModel );
 		
-		return new Web3DRenderer( tspModel, eventHandler );
+		let renderer;
+		
+		if ( tspModel.configuration.renderer === "Web3D" ) {
+			
+			renderer = new Web3DRenderer( tspModel, eventHandler );
+			
+		} else if ( tspModel.configuration.renderer === "WebVR" ) {
+			
+			renderer = new WebVRRenderer( tspModel, eventHandler );
+			
+		}
+		
+		return renderer;
 		
 	}
 	

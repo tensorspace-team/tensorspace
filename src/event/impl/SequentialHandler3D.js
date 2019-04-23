@@ -2,7 +2,7 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { Handler3D } from './Handler3D';
+import { Handler3D } from '../abstract/Handler3D';
 
 function SequentialHandler3D( tspModel ) {
 	

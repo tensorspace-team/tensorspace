@@ -2,20 +2,38 @@
  * @author syt123450 / https://github.com/syt123450
  */
 
-import { SequentialHandler3D } from './SequentialHandler3D';
-import { ModelHandler3D } from './ModelHandler3D';
+import { SequentialHandler3D } from './impl/SequentialHandler3D';
+import { ModelHandler3D } from './impl/ModelHandler3D';
+import { SequentialHandlerVR } from './impl/SequentialHandlerVR';
+import { ModelHandlerVR } from './impl/ModelHandlerVR';
 
 let HandlerFactory = ( function() {
 	
 	function getEventHandler( tspModel ) {
 		
-		if ( tspModel.modelType === "Sequential" ) {
+		if ( tspModel.configuration.renderer === "Web3D" ) {
 			
-			return new SequentialHandler3D( tspModel );
+			if ( tspModel.modelType === "Sequential" ) {
+				
+				return new SequentialHandler3D( tspModel );
+				
+			} else if ( tspModel.modelType === "Model" ) {
+				
+				return new ModelHandler3D( tspModel );
+				
+			}
 			
-		} else if ( tspModel.modelType === "Model" ) {
+		} else if ( tspModel.configuration.renderer === "WebVR" ) {
 			
-			return new ModelHandler3D( tspModel );
+			if ( tspModel.modelType === "Sequential" ) {
+				
+				return new SequentialHandlerVR( tspModel );
+				
+			} else if ( tspModel.modelType === "Model" ) {
+				
+				return new ModelHandlerVR( tspModel );
+				
+			}
 			
 		}
 		

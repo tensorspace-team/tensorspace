@@ -15,6 +15,7 @@ function ModelConfiguration( config ) {
 	this.predictDataShapes = undefined;
 	this.feedInputs = undefined;
 	this.hasCloseButton = true;
+	this.renderer = "Web3D";
 	this.color = {
 
 		background: 0x000000,
@@ -176,6 +177,24 @@ function ModelConfiguration( config ) {
 		if ( config.hasCloseButton !== undefined ) {
 			
 			this.hasCloseButton = config.hasCloseButton;
+			
+		}
+		
+		if ( config.renderer !== undefined ) {
+			
+			if ( config.renderer === "Web3D" ) {
+				
+				this.renderer = "Web3D";
+				
+			} else if ( config.renderer === "WebVR" ) {
+				
+				this.renderer = "WebVR";
+				
+			} else {
+				
+				console.error( "Unsupported renderer configuration: " + config.renderer );
+				
+			}
 			
 		}
 
