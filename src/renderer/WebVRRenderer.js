@@ -35,9 +35,6 @@ function WebVRRenderer( tspModel, handlers ) {
 		
 	};
 	
-	this.previousClicked = undefined;
-	this.clickTime = undefined;
-	
 }
 
 WebVRRenderer.prototype = Object.assign( Object.create( ModelRenderer.prototype ), {
@@ -132,6 +129,7 @@ WebVRRenderer.prototype = Object.assign( Object.create( ModelRenderer.prototype 
 		this.tempMatrix = new THREE.Matrix4();
 		this.clickTime = Date.now();
 		
+		// TODO: Make distance responsible to model size
 		this.tspModel.modelContext.position.set(0, 0, - 500);
 		
 		this.scene.add( this.tspModel.modelContext );
@@ -223,7 +221,7 @@ WebVRRenderer.prototype = Object.assign( Object.create( ModelRenderer.prototype 
 			
 		}
 		
-		this.handleDoubleClick( clickedElement );
+		this.handlers.handleDoubleClick( clickedElement );
 		
 		this.controllerAngle.x = controller.rotation._x;
 		this.controllerAngle.y = controller.rotation._y;
@@ -343,42 +341,6 @@ WebVRRenderer.prototype = Object.assign( Object.create( ModelRenderer.prototype 
 		this.controllerAngle.x = controller.rotation._x;
 		this.controllerAngle.y = controller.rotation._y;
 		this.controllerAngle.z = controller.rotation._z;
-		
-	},
-	
-	handleDoubleClick: function( clickedElement ) {
-		
-		let clickTimeNow = Date.now();
-		
-		if ( this.previousClicked === undefined ) {
-			
-			if ( clickedElement === undefined ) {
-				
-				if ( clickTimeNow - this.clickTime < 1000 ) {
-					
-					this.tspModel.modelContext.position.z -= 100;
-					
-				}
-				
-			}
-			
-		} else {
-			
-			if ( clickedElement !== undefined &&
-				this.previousClicked === clickedElement ) {
-				
-				if ( clickTimeNow - this.clickTime < 1000 ) {
-					
-					this.tspModel.modelContext.position.z += 100;
-					
-				}
-				
-			}
-			
-		}
-		
-		this.previousClicked = clickedElement;
-		this.clickTime = clickTimeNow;
 		
 	}
 	
