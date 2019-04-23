@@ -9,16 +9,16 @@ import { TfjsPredictor } from "../predictor/TfjsPredictor";
 /**
  * Load tfjs model for TensorSpace.
  *
- * @param model, model context
+ * @param tspModel, TensorSpace Model
  * @param config, user's configuration for Loader
  * @constructor
  */
 
-function TfjsLoader( model, config ) {
+function TfjsLoader( tspModel, config ) {
 
 	// "TfjsLoader" inherits from abstract Loader "Loader".
 
-	Loader.call( this, model, config );
+	Loader.call( this, tspModel, config );
 
 	/**
 	 * tfjs model's url (.json file's url).

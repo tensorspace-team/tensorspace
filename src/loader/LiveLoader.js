@@ -9,16 +9,16 @@ import { LivePredictor } from "../predictor/LivePredictor";
  * Load live model for TensorSpace.
  * As keras and tensorflow model can not run in the browser, this live loader works for tfjs model.
  *
- * @param model, model context
+ * @param tspModel, TensorSpace Model
  * @param config, user's configuration for Loader
  * @constructor
  */
 
-function LiveLoader( model, config ) {
+function LiveLoader( tspModel, config ) {
 
 	// "LiveLoader" inherits from abstract Loader "Loader".
 
-	Loader.call( this, model, config );
+	Loader.call( this, tspModel, config );
 
 	/**
 	 * tfjs model's reference

@@ -4,12 +4,9 @@
  */
 
 import * as THREE from "three";
-import { TfjsLoader } from '../loader/TfjsLoader';
-import { KerasLoader } from "../loader/KerasLoader";
-import { TfLoader } from "../loader/TfLoader";
-import { LiveLoader } from "../loader/LiveLoader";
 import { ModelConfiguration } from "../configure/ModelConfiguration";
 import { HTMLUtils } from '../utils/HTMLUtils';
+import { LoaderFactory } from '../loader/LoaderFactory';
 
 /**
  * AbstractModel, abstract model, should not be initialized directly.
@@ -31,7 +28,7 @@ function AbstractModel( container, config ) {
 	this.container = undefined;
 	
 	/**
-	 * Store loader.
+	 * Store Loader reference.
 	 * Four kinds of loader: TfLoader, TfjsLoader, KerasLoader, LiveLoader.
 	 *
 	 * @type { Loader }
@@ -166,92 +163,20 @@ AbstractModel.prototype = {
 	},
 	
 	/**
-	 * load(), load prediction model based on "type" attribute in user's configuration.
+	 * load(), two steps:
+	 * 1. get Loader from LoaderFactory;
+	 * 2. store Loader in TensorSpace Model.
 	 *
-	 * @param config
+	 * Note:
+	 * The actual pre-trained model loading will be done in model's init() time.
+	 *
+	 * @param config, Loader configuration
 	 */
 	
 	load: function( config ) {
 		
-		if ( config.type === "tfjs" ) {
-			
-			this.loadTfjsModel( config );
-			
-		} else if ( config.type === "keras" ) {
-			
-			this.loadKerasModel( config );
-			
-		} else if ( config.type === "tensorflow" ) {
-			
-			this.loadTfModel( config );
-			
-		} else if ( config.type = "live" ) {
-			
-			this.loadLiveModel( config );
-			
-		} else {
-			
-			console.error( "Do not support to load model type " + config.type );
-			
-		}
-		
-	},
-	
-	/**
-	 * loadTfjsModel(), create TFJSLoader and execute preLoad.
-	 *
-	 * @param config, user's config for TfjsLoader.
-	 */
-	
-	loadTfjsModel: function( config ) {
-		
-		let loader = new TfjsLoader( this, config );
-		loader.preLoad();
-		
-	},
-	
-	/**
-	 * loadKerasModel(), create KerasLoader and execute preLoad.
-	 *
-	 * @param config, user's config for KerasLoader.
-	 */
-	
-	loadKerasModel: function( config ) {
-		
-		let loader = new KerasLoader( this, config );
-		loader.preLoad();
-		
-	},
-	
-	/**
-	 * loadTfModel(), create TfLoader and execute preLoad.
-	 *
-	 * @param config, user's config for TfLoader.
-	 */
-	
-	loadTfModel: function( config ) {
-		
-		let loader = new TfLoader( this, config );
-		loader.preLoad();
-		
-	},
-	
-	loadLiveModel: function( config ) {
-		
-		let loader = new LiveLoader( this, config );
-		loader.preLoad();
-		
-	},
-	
-	/**
-	 * Store loader.
-	 *
-	 * @param loader
-	 */
-	
-	setLoader: function( loader ) {
-		
-		this.loader = loader;
+		this.loader = LoaderFactory.getLoader( this, config );
+		this.hasLoader = true;
 		
 	},
 	

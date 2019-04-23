@@ -9,16 +9,16 @@ import { KerasPredictor } from "../predictor/KerasPredictor";
 /**
  * Load keras model for TensorSpace.
  *
- * @param model, model context
+ * @param tspModel, TensorSpace Model
  * @param config, user's configuration for Loader
  * @constructor
  */
 
-function KerasLoader( model, config ) {
+function KerasLoader( tspModel, config ) {
 
 	// "KerasLoader" inherits from abstract Loader "Loader".
 
-	Loader.call( this, model, config );
+	Loader.call( this, tspModel, config );
 
 	/**
 	 * Keras model's url (.json file's url).

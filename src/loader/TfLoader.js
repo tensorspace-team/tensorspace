@@ -9,16 +9,16 @@ import { TfPredictor } from "../predictor/TfPredictor";
 /**
  * Load tensorflow model for TensorSpace.
  *
- * @param model, model context
+ * @param tspModel, TensorSpace Model
  * @param config, user's configuration for Loader
  * @constructor
  */
 
-function TfLoader( model, config ) {
+function TfLoader( tspModel, config ) {
 
 	// "TfLoader" inherits from abstract Loader "Loader".
 
-	Loader.call( this, model, config );
+	Loader.call( this, tspModel, config );
 
 	/**
 	 * tensorflow model's url (.pb file's url).

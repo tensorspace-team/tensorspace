@@ -8,25 +8,25 @@
  *
  * Base class for KerasLoader, TfjsLoader, TfLoader.
  *
- * @param model, model context
+ * @param tspModel, TensorSpace Model
  * @param config, user's configuration for loader
  * @constructor
  */
 
-function Loader( model, config ) {
+function Loader( tspModel, config ) {
 
 	/**
-	 * Store model context.
+	 * Store TensorSpace Model reference.
 	 *
-	 * { Object }, model context
+	 * { Model }, TensorSpace Model
 	 */
 
-	this.model = model;
+	this.model = tspModel;
 
 	/**
 	 * Store loader config.
 	 *
-	 * { JSON }, user's configuration for loader.
+	 * { JSON }, user's configuration for Loader.
 	 */
 
 	this.config = config;
@@ -107,13 +107,11 @@ Loader.prototype = {
 
 	preLoad: function() {
 
-		// Prepare for actual load process.
-
-		this.model.loader = this;
-		this.model.hasLoader = true;
-
 		if ( this.model.isInitialized ) {
-
+			
+			this.model.loader = this;
+			this.model.hasLoader = true;
+			
 			// Execute actual load process.
 
 			this.load().then( function() {
