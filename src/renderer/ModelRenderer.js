@@ -17,6 +17,10 @@ ModelRenderer.prototype = {
 	
 	reset: function() {
 	
+	},
+	
+	getScene: function() {
+	
 	}
 	
 };

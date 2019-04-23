@@ -56,6 +56,12 @@ WebVRRenderer.prototype = Object.assign( Object.create( ModelRenderer.prototype 
 	
 	},
 	
+	getScene: function() {
+		
+		return this.scene;
+		
+	},
+	
 	createScene: function() {
 		
 		// Must include "viewport". Otherwise display of VR activation button will be incorrect

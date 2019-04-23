@@ -134,6 +134,16 @@ function AbstractModel( container, config ) {
 	
 	this.modelContext = new THREE.Object3D();
 	
+	/**
+	 * TensorSpace Model render strategy, based on `renderer` attribute in Configuration.
+	 * Two Types: Web3DRenderer, WebVRRenderer.
+	 * Default to Web3DRenderer.
+	 *
+	 * @type { ModelRenderer }
+	 */
+	
+	this.modelRenderer = undefined;
+	
 	this.loadConfiguration( container, config );
 	
 }
@@ -287,6 +297,18 @@ AbstractModel.prototype = {
 	getPredictionModel: function() {
 		
 		return this.resource;
+		
+	},
+	
+	/**
+	 * Get THREE's scene through ModelRenderer.
+	 *
+	 * @return { THREE.Scene }
+	 */
+	
+	getScene: function() {
+	
+		return this.modelRenderer.getScene();
 		
 	},
 	

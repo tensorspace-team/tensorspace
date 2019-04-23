@@ -62,6 +62,12 @@ Web3DRenderer.prototype = Object.assign( Object.create( ModelRenderer.prototype 
 		
 	},
 	
+	getScene: function() {
+	
+		return this.scene;
+		
+	},
+	
 	loadSceneConfig: function( config ) {
 		
 		this.hasStats = config.stats;
