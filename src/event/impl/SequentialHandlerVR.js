@@ -11,7 +11,15 @@ function SequentialHandlerVR( tspModel ) {
 }
 
 SequentialHandlerVR.prototype = Object.assign( Object.create( HandlerVR.prototype ), {
-
+	
+	handleClick: function( clickedElement ) {
+		
+		let selectedLayer = this.tspModel.layers[ clickedElement.layerIndex ];
+		
+		selectedLayer.handleClick( clickedElement );
+		
+	}
+	
 } );
 
 export { SequentialHandlerVR };
