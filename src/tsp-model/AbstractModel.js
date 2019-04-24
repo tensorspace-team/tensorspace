@@ -238,6 +238,25 @@ AbstractModel.prototype = {
 	},
 	
 	/**
+	 * setVRController(), add a controller object to VR scene.
+	 * Only take effect in WebVRRenderer mode.
+	 */
+	
+	setVRController: function( controllerObj ) {
+		
+		if ( this.configuration.renderer === "WebVR" ) {
+			
+			this.modelRenderer.controller.add( controllerObj );
+			
+		} else {
+			
+			console.error( "\"setVRController\" only take effect when using WebVRRenderer." );
+			
+		}
+		
+	},
+	
+	/**
 	 * init(), Init model,
 	 * As TSP is applying lazy initialization strategy, time-consuming work will be done in this process.
 	 * After init process, the model will be rendered onto container.
