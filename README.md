@@ -18,7 +18,7 @@
   <a href="https://gitter.im/tensorspacejs/Lobby#"><img src="https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg" alt="gitter"></a>
 </p>
 
-TensorSpace is a neural network 3D visualization framework built using TensorFlow.js, Three.js and Tween.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports to visualize pre-trained model from TensorFlow, Keras and TensorFlow.js.
+TensorSpace is a neural network 3D visualization framework built using TensorFlow.js, Three.js, and Tween.js. TensorSpace provides Keras-like APIs to build deep learning layers, load pre-trained models, and generate a 3D visualization  in the browser. From TensorSpace, it is intuitive to learn what the model structure is, how the model is trained and how the model predicts the results based on the intermediate information. After preprocessing the model, TensorSpace supports visualizing the pre-trained model from TensorFlow, Keras, and TensorFlow.js.
 
 <p align="center">
 <img width="100%" src="https://raw.githack.com/tensorspace-team/tensorspace/master/assets/tensorspace_lenet.gif">
@@ -42,13 +42,13 @@ TensorSpace is a neural network 3D visualization framework built using TensorFlo
 
 ## Motivation
 
-TensorSpace is a neural network 3D visualization framework designed for not only showing the basic model structure, but also presenting the processes of internal feature abstractions, intermediate data manipulations and final inference generations.
+TensorSpace is a neural network 3D visualization framework designed for not only showing the basic model structure but also presenting the processes of internal feature abstractions, intermediate data manipulations, and final inference generations.
 
-By applying TensorSpace API, it is more intuitive to visualize and understand any pre-trained models built by TensorFlow, Keras, TensorFlow.js, etc. TensorSpace introduces a way for front end developers to be involved in the deep learning ecosystem. As an open source library, TensorSpace team welcomes any further development on visualization applications.
+By applying TensorSpace API, it is more intuitive to visualize and understand any pre-trained models built by TensorFlow, Keras, TensorFlow.js, etc. TensorSpace introduces a way for front end developers to be involved in the deep learning ecosystem. As an open source library, the TensorSpace team welcomes any further development on visualization applications.
 
-* **Interactive** -- Use Layer API to build interactive model in browsers.
+* **Interactive** -- Use Layer API to build an interactive model in browsers.
 * **Intuitive** -- Visualize the information from intermediate inferences.
-* **Integrative** -- Support pre-trained models from TensorFlow, Keras, TensorFlow.js.
+* **Integrative** -- Support pre-trained models from TensorFlow, Keras, and TensorFlow.js.
 
 
 ## Getting Started
